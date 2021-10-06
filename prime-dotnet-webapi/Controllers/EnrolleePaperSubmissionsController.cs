@@ -305,6 +305,15 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> CreateLinkWithPotentialPaperEnrollee(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
         {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.MatchesUserIdOf(User))
+            {
+                return Forbid();
+            }
             await _enrolleePaperSubmissionService.CreateInitialLinkAsync(enrolleeId, payload.UserProvidedGpid);
             return Ok();
         }

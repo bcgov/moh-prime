@@ -250,13 +250,13 @@ namespace Prime.Services.Rules
 
             // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
 
-            // If there is no match then we don't need to worry about this rule
+            // *** If there is no match then we don't need to worry about this rule
             if (!paperEnrollees.Any())
             {
                 return true;
             }
 
-            // *** if yes and GPID is provided
+            // *** *** if yes and GPID is provided
             if (potentialPaperEnrolleeGpid != null)
             {
                 // *** *** Check if GPID match one of the paper enrolment
@@ -274,7 +274,7 @@ namespace Prime.Services.Rules
                 if (paperEnrolleeMatchId == -1)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
-                    await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId);
+                    // await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId);
                     return false;
                 }
                 // *** *** if match "auto enrol" and link to paper enrolment and confirm the linkage here
@@ -289,7 +289,7 @@ namespace Prime.Services.Rules
             // *** if yes and GPID not provided - flag with "Possible match with paper enrolment"
             else
             {
-                await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId);
+                // await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId);
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch);
                 return false;
             }
