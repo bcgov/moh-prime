@@ -37,7 +37,7 @@ export class EnrolmentRoutes {
   public static PHARMANET_TRANSACTIONS = 'pharmanet-transactions';
   public static ACCESS_TERMS = 'access-terms';
   public static ENROLMENT = 'enrolment';
-  public static PAPER_ENROLLEE_RETURNEE_DECLARATION = 'paper-enrollee-returnee-declaration'
+  public static PAPER_ENROLLEE_DECLARATION = 'paper-enrollee-declaration'
 
   public static routePath(route: string): string {
     return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
@@ -59,7 +59,7 @@ export class EnrolmentRoutes {
   // enrollee incrementally through creating their profile
   public static enrolmentProfileRoutes(): string[] {
     return [
-      EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION,
+      EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION,
       EnrolmentRoutes.BCEID_DEMOGRAPHIC,
       EnrolmentRoutes.BCSC_DEMOGRAPHIC,
       EnrolmentRoutes.CARE_SETTING,

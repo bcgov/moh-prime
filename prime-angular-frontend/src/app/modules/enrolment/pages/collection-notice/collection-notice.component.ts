@@ -6,7 +6,6 @@ import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 @Component({
   selector: 'app-collection-notice',
@@ -15,7 +14,6 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 })
 export class CollectionNoticeComponent implements OnInit {
   public isFull: boolean;
-  public bcscUser: BcscUser;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,7 +28,7 @@ export class CollectionNoticeComponent implements OnInit {
     this.authService.hasJustLoggedIn = false;
 
     const route = (!this.enrolmentService.isProfileComplete)
-      ? EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION
+      ? EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION
       : EnrolmentRoutes.OVERVIEW;
 
     this.router.navigate([route], { relativeTo: this.route.parent });

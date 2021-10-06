@@ -215,6 +215,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     this.bceidDemographicFormState = new BceidDemographicFormState(this.fb, this.formUtilsService);
     this.bcscDemographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
+    this.paperEnrolleeReturneeFormState = new PaperEnrolleeReturneeFormState(this.fb);
     this.regulatoryFormState = new RegulatoryFormState(this.fb, this.configService);
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.oboSitesForm = this.buildJobsForm();
@@ -223,7 +224,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
     this.accessAgreementForm = this.buildAccessAgreementForm();
-    this.paperEnrolleeReturneeFormState = new PaperEnrolleeReturneeFormState(this.fb);
   }
 
   /**

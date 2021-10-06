@@ -112,8 +112,8 @@
   </form>
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
-                   [hasSecondaryAction]="isProfileComplete || isPotentialPaperEnrolleeReturnee"
+                   [hasSecondaryAction]="isProfileComplete || isPotentialPaperEnrollee"
                    (save)="onSubmit()"
-                   (back)="onBack(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)"></app-page-footer>
+                   (back)="onBack(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)"></app-page-footer>
 
 </app-enrollee-page>

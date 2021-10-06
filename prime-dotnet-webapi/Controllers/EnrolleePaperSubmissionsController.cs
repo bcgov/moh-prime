@@ -322,13 +322,13 @@ namespace Prime.Controllers
         /// <summary>
         /// Updates the paper enrolment gpid that the user provided
         /// </summary>
-        [HttpPut("{enrolleeId}/linked-gpid", Name = nameof(UpdateGpidLinkToPaperEnrollee))]
+        [HttpPut("{enrolleeId}/linked-gpid", Name = nameof(UpdateLinkWithPotentialPaperEnrollee))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateGpidLinkToPaperEnrollee(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
+        public async Task<ActionResult> UpdateLinkWithPotentialPaperEnrollee(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -348,13 +348,13 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets the linked gpid
         /// </summary>
-        [HttpGet("{enrolleeId}/linked-gpid", Name = nameof(GetLinkedGpid))]
+        [HttpGet("{enrolleeId}/linked-gpid", Name = nameof(GetGpidFromLinkWithPotentialEnrollee))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetLinkedGpid(int enrolleeId)
+        public async Task<ActionResult> GetGpidFromLinkWithPotentialEnrollee(int enrolleeId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)

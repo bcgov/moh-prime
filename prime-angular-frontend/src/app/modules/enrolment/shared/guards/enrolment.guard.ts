@@ -56,9 +56,9 @@ export class EnrolmentGuard extends BaseGuard {
             .pipe(map((bcscUser: BcscUser) => [bcscUser, enrolment]))
         ),
         exhaustMap(([bcscUser, enrolment]: [BcscUser, Enrolment]) =>
-          this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(bcscUser.dateOfBirth)
+          this.enrolmentResource.getPotentialPaperEnrolleeStatus(bcscUser.dateOfBirth)
             .pipe(
-              tap((result: boolean) => this.enrolmentService.isPotentialPaperEnrolleeReturnee = result),
+              tap((result: boolean) => this.enrolmentService.isPotentialPaperEnrollee = result),
               map((_) => enrolment)
             )
         ),
@@ -68,7 +68,7 @@ export class EnrolmentGuard extends BaseGuard {
         ),
         map((params: [string, Enrolment, IdentityProviderEnum]) =>
           this.routeDestination(...params)
-        ),
+        )
       );
   }
 
@@ -84,10 +84,10 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     if (
-      this.enrolmentService.isPotentialPaperEnrolleeReturnee
-      && routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)
+      this.enrolmentService.isPotentialPaperEnrollee
+      && routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)
     ) {
-      return this.navigate(routePath, EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION);
+      return this.navigate(routePath, EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION);
     }
 
     if (!enrolment) {
@@ -285,9 +285,9 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     // Denined routes based on potential paper enrollees
-    if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION) && !this.enrolmentService.isPotentialPaperEnrolleeReturnee) {
+    if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION) && !this.enrolmentService.isPotentialPaperEnrollee) {
       return routePath.replace(
-        EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION,
+        EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION,
         EnrolmentRoutes.OVERVIEW
       );
     }

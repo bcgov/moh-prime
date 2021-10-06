@@ -282,7 +282,7 @@ namespace Prime.Services
                 );
         }
 
-        public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
+        public async Task<IEnumerable<string>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
         {
             var confirmedLinks = await _context.EnrolleeLinkedEnrolment
                 .AsNoTracking()
@@ -297,6 +297,7 @@ namespace Prime.Services
                     && e.DateOfBirth.Date == dateOfBirth.Date
                     && !confirmedLinks.Contains(e.Id)
                 )
+                .Select(e => e.GPID)
                 .ToListAsync();
         }
 
@@ -353,7 +354,7 @@ namespace Prime.Services
         public async Task UpdateLinkedGpidAsync(int enrolleeId, string userUpdatedGpid)
         {
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
-                .Where(ele => ele.EnrolleeId == enrolleeId)
+                .Where(ele => ele.EnrolleeId == enrolleeId && !ele.Confirmed)
                 .SingleOrDefaultAsync();
 
             enrolleeLinkedEnrolment.UserProvidedGpid = userUpdatedGpid;

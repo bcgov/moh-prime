@@ -69,7 +69,7 @@ const routes: Routes = [
       {
         // Declaration page to ask enrollees whether they previously
         // had enrolled through paper enrolment
-        path: EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION,
+        path: EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION,
         component: PaperEnrolleeReturneesPageComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }

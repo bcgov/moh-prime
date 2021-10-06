@@ -48,11 +48,11 @@ export class EnrolmentService implements IEnrolmentService {
     return this.enrolment && this.enrolment.profileCompleted;
   }
 
-  public get isPotentialPaperEnrolleeReturnee(): boolean {
+  public get isPotentialPaperEnrollee(): boolean {
     return this._isPotentialPaperEnrollee;
   }
 
-  public set isPotentialPaperEnrolleeReturnee(isPotentialPaperEnrollee: boolean) {
+  public set isPotentialPaperEnrollee(isPotentialPaperEnrollee: boolean) {
     this._isPotentialPaperEnrollee = isPotentialPaperEnrollee
   }
 

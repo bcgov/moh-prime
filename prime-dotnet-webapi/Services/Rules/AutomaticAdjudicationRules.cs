@@ -262,10 +262,7 @@ namespace Prime.Services.Rules
                 // *** *** Check if GPID match one of the paper enrolment
                 foreach (var PaperEnrollee in paperEnrollees)
                 {
-                    if (
-                            PaperEnrollee.DateOfBirth.Date == enrollee.DateOfBirth.Date
-                            && PaperEnrollee.GPID == potentialPaperEnrolleeGpid
-                        )
+                    if (PaperEnrollee.GPID == potentialPaperEnrolleeGpid)
                     {
                         paperEnrolleeMatchId = PaperEnrollee.Id;
                     }

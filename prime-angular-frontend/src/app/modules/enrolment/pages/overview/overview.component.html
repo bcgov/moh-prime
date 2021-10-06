@@ -119,20 +119,20 @@
     </ng-container>
   </app-alert>
 
-  <app-page-section *ngIf="isPotentialPaperEnrolleeReturnee">
+  <app-page-section *ngIf="isPotentialPaperEnrollee">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Paper Enrolment Declaration</ng-container>
 
       <button mat-icon-button
               matTooltip="Edit Paper Enrolment Declaration"
-              (click)="routeTo(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)">
+              (click)="routeTo(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)">
         <mat-icon>edit</mat-icon>
       </button>
     </app-page-subheader>
 
     <ng-container>
-      <app-enrollee-property [title]=" userProvidedGpid ? 'Paper enrolment GPID' : 'No manual enrolment GPID provided.'"
-                             [class.text-muted]="true">
+      <app-enrollee-property
+                             [title]=" userProvidedGpid ? 'Paper enrolment GPID' : 'No manual enrolment GPID provided.'">
         {{ userProvidedGpid }}
       </app-enrollee-property>
     </ng-container>

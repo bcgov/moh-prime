@@ -18,7 +18,6 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
-import { PaperEnrolleeReturneeFormComponent } from './paper-enrollee-returnee-form.component';
 import { PaperEnrolleeReturneesPageComponent } from './paper-enrollee-returnees-page.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -58,7 +57,7 @@ describe('PaperEnrolleeReturneesComponent', () => {
         },
         KeycloakService
       ],
-      declarations: [PaperEnrolleeReturneesPageComponent, PaperEnrolleeReturneeFormComponent]
+      declarations: [PaperEnrolleeReturneesPageComponent]
     })
       .compileComponents();
   });

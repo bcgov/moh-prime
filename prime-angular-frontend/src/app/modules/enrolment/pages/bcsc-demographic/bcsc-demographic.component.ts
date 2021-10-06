@@ -12,7 +12,7 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
-import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
+import { Enrolment } from '@shared/models/enrolment.model';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -43,7 +43,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
-  public isPotentialPaperEnrolleeReturnee: boolean;
+  public isPotentialPaperEnrollee: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -110,8 +110,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   }
 
   public ngOnInit(): void {
+    this.isPotentialPaperEnrollee = this.enrolmentService.isPotentialPaperEnrollee;
     this.createFormInstance();
-    this.isPotentialPaperEnrolleeReturnee = this.enrolmentService.isPotentialPaperEnrolleeReturnee;
     this.patchForm()
       .pipe(
         map(([bcscUser, enrolment]: [BcscUser, Enrolment]) => {

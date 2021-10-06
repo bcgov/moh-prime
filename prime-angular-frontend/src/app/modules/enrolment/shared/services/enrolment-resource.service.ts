@@ -65,7 +65,7 @@ export class EnrolmentResource {
       );
   }
 
-  public createLinkWithPotentialPaperEnrollee(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
+  public createInitialPaperEnrolleeLink(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
     const { id } = enrolment;
     const payload = { userProvidedGpid }
     return this.apiResource.post<NoContent>(`enrollees/${id}/potential-paper-enrollee`, payload)
@@ -78,7 +78,7 @@ export class EnrolmentResource {
       );
   }
 
-  public updateLinkedGpid(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
+  public updatePaperEnrolleeLink(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
     const { id } = enrolment;
     const payload = { userProvidedGpid }
     return this.apiResource.put<NoContent>(`enrollees/${id}/linked-gpid`, payload)
@@ -91,11 +91,11 @@ export class EnrolmentResource {
       );
   }
 
-  public getLinkedEnrolment(enrolment: Enrolment): Observable<String> {
+  public getGpidFromLinkWithPotentialEnrollee(enrolment: Enrolment): Observable<string> {
     const { id } = enrolment;
     return this.apiResource.get<String>(`enrollees/${id}/linked-gpid`)
       .pipe(
-        map((response: ApiHttpResponse<String>) => response.result),
+        map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
           this.logger.error('[Enrolment] EnrolmentResource::getLinkedEnrolment error has occurred: ', error);
           throw error;
@@ -158,7 +158,7 @@ export class EnrolmentResource {
       );
   }
 
-  public getPotentialPaperEnrolleeReturneeStatus(dateOfBirth: string): Observable<boolean> {
+  public getPotentialPaperEnrolleeStatus(dateOfBirth: string): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams({ dateOfBirth });
     return this.apiResource.head<boolean>('enrollees/paper-submissions', params)
       .pipe(
