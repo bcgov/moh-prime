@@ -67,21 +67,19 @@ export class AdjudicationResource {
   }
 
   public getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee> {
-    return forkJoin([
-      this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
-        .pipe(
-          map((response: ApiHttpResponse<HttpEnrollee>) => response.result)),
-      this.getAccessAgreementNotesByEnrolleeId(enrolleeId),
-      this.getCareSettingsByEnrolleeId(enrolleeId),
-      this.getCertificationsByEnrolleeId(enrolleeId),
-      this.getRemoteUsersByEnrolleeId(enrolleeId),
-      this.getOboSitesByEnrolleeId(enrolleeId),
-      this.getRemoteAccessLocationsByEnrolleeId(enrolleeId),
-      this.getRemoteAccessSitesByEnrolleeId(enrolleeId),
-      this.getSelfDeclarationsByEnrolleeId(enrolleeId),
-      this.getSelfDeclarationsDocumentsById(enrolleeId),
-    ]).pipe(
-      map(([enrollee, accessAgreementNote, enrolleeCareSettings, certifications, enrolleeRemoteUsers, oboSites, remoteAccessLocations, remoteAccessSites, selfDeclarations, selfDeclarationDocuments]: [HttpEnrollee, EnrolleeNote, CareSetting, CollegeCertification[], EnrolleeRemoteUser[], OboSite[], RemoteAccessLocation[], RemoteAccessSite[], SelfDeclaration[], SelfDeclarationDocument[]]) => {
+    return forkJoin({
+      enrollee: this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`).pipe(map((response: ApiHttpResponse<HttpEnrollee>) => response.result)),
+      accessAgreementNote: this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`).pipe(map((response: ApiHttpResponse<EnrolleeNote>) => response.result)),
+      enrolleeCareSettings: this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`).pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
+      certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`).pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+      enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`).pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
+      oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`).pipe(map((response: ApiHttpResponse<OboSite[]>) => response.result)),
+      remoteAccessLocations: this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrolleeId}/remote-locations`).pipe(map((response: ApiHttpResponse<RemoteAccessLocation[]>) => response.result)),
+      remoteAccessSites: this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrolleeId}/remote-sites`).pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
+      selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`).pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
+      selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`).pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result))
+    }).pipe(
+      map(({ enrollee, accessAgreementNote, enrolleeCareSettings, certifications, enrolleeRemoteUsers, oboSites, remoteAccessLocations, remoteAccessSites, selfDeclarations, selfDeclarationDocuments }) => {
         return { ...enrollee, accessAgreementNote, certifications, ...enrolleeCareSettings, enrolleeRemoteUsers, oboSites, remoteAccessLocations, remoteAccessSites, selfDeclarations, selfDeclarationDocuments }
       }),
       tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
@@ -92,123 +90,6 @@ export class AdjudicationResource {
         throw error;
       })
     );
-  }
-
-  public getAccessAgreementNotesByEnrolleeId(enrolleeId: number): Observable<EnrolleeNote> {
-    return this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`)
-      .pipe(
-        map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
-        tap((notes: EnrolleeNote) => this.logger.info('ENROLLEE AGREEMENT NOTES', notes)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee access agreement notes could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getAccessAgreementNotesByEnrolleeId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getCareSettingsByEnrolleeId(enrolleeId: number): Observable<CareSetting> {
-    return this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`)
-      .pipe(
-        map((response: ApiHttpResponse<CareSetting>) => response.result),
-        tap((careSettings: CareSetting) => this.logger.info('ENROLLEE CARE SETTINGS', careSettings)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getCareSettingsByEnrolleeId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getCertificationsByEnrolleeId(enrolleeId: number): Observable<CollegeCertification[]> {
-    return this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
-      .pipe(
-        map((response: ApiHttpResponse<CollegeCertification[]>) => response.result),
-        tap((certifications: CollegeCertification[]) => this.logger.info('ENROLLEE CERTIFICATIONS', certifications)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getCertificationsByEnrolleeId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getRemoteUsersByEnrolleeId(enrolleeId: number): Observable<EnrolleeRemoteUser[]> {
-    return this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
-      .pipe(
-        map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result),
-        tap((remoteUsers: EnrolleeRemoteUser[]) => this.logger.info('ENROLLEE REMOTE USERS', remoteUsers)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getRemoteUsersByEnrolleeId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getOboSitesByEnrolleeId(enrolleeId: number): Observable<OboSite[]> {
-    return this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`)
-      .pipe(
-        map((response: ApiHttpResponse<OboSite[]>) => response.result),
-        tap((oboSites: OboSite[]) => this.logger.info('ENROLLEE OBO SITES', oboSites)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getOboSitesByEnrolleeId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getRemoteAccessLocationsByEnrolleeId(enrolleeId: number): Observable<RemoteAccessLocation[]> {
-    return this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrolleeId}/remote-locations`)
-      .pipe(
-        map((response: ApiHttpResponse<RemoteAccessLocation[]>) => response.result),
-        tap((remoteAccessLocations: RemoteAccessLocation[]) => this.logger.info('ENROLLEE REMOTE ACCESS LOCATIONS', remoteAccessLocations)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getRemoteAccessLocationsByEnrolleeId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getRemoteAccessSitesByEnrolleeId(enrolleeId: number): Observable<RemoteAccessSite[]> {
-    return this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrolleeId}/remote-sites`)
-      .pipe(
-        map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result),
-        tap((remoteAccessSites: RemoteAccessSite[]) => this.logger.info('REMOTE ACCESS SITES', remoteAccessSites)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getRemoteAccessSitesByEnrolleeId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getSelfDeclarationsByEnrolleeId(enrolleeId: number): Observable<SelfDeclaration[]> {
-    return this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`)
-      .pipe(
-        map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result),
-        tap((selfDeclarations: SelfDeclaration[]) => this.logger.info('ENROLLEE SELF DECLARATIONS', selfDeclarations)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getSelfDeclarationsByEnrolleeId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getSelfDeclarationsDocumentsById(enrolleeId: number): Observable<SelfDeclarationDocument[]> {
-    return this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`)
-      .pipe(
-        map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result),
-        tap((SelfDeclarationsDocument: SelfDeclarationDocument[]) => this.logger.info('ENROLLEE SELF DECLARATIONS DOCUMENTS', SelfDeclarationsDocument)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getSelfDeclarationsDocumentsById error has occurred: ', error);
-          throw error;
-        })
-      );
   }
 
   public getPlrInfoByEnrolleeId(enrolleeId: number): Observable<PlrInfo[]> {

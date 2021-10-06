@@ -33,67 +33,6 @@
     <section class="mb-3">
 
       <p class="question">
-        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED] }}
-      </p>
-
-      <mat-radio-group formControlName="hasRegistrationSuspended">
-        <mat-radio-button class="mr-4"
-                          *ngFor="let decision of decisions"
-                          [value]="decision.code">
-          {{ decision.name }}
-        </mat-radio-button>
-      </mat-radio-group>
-
-      <div *ngIf="hasRegistrationSuspended.value"
-           class="row">
-        <div class="col pt-3">
-
-          <p class="mb-1">Provide these details:</p>
-          <ol class="mb-4 pl-3">
-            <li class="small">
-              Describe the events that resulted in limits, conditions or prohibitions being imposed, including when the
-              events occurred
-            </li>
-            <li class="small">
-              Provide the name and address of the organization where the events took place
-            </li>
-            <li class="small">
-              Provide the name of the organization that imposed limits, conditions or prohibitions
-            </li>
-            <li class="small">
-              Describe the limits, conditions or prohibitions imposed
-            </li>
-            <li class="small mb-2">
-              Provide the date that the limits, conditions or prohibitions were imposed and, if applicable, removed
-            </li>
-
-            <mat-form-field class="w-100">
-              <textarea matInput
-                        placeholder="Type Here"
-                        rows="5"
-                        #hasRegistrationSuspended
-                        formControlName="hasRegistrationSuspendedDetails"></textarea>
-              <mat-error *ngIf="hasRegistrationSuspendedDetails.hasError('required')">Required</mat-error>
-            </mat-form-field>
-
-            <li class="small mb-2">
-              Attach documents related to this self-declaration.
-            </li>
-
-            <app-document-upload componentName="has-registration-suspended"
-                                 [multiple]="true"
-                                 (completed)="onUpload('hasRegistrationSuspendedDocumentGuids', $event)"
-                                 (remove)="onRemove('hasRegistrationSuspendedDocumentGuids', $event)">
-            </app-document-upload>
-          </ol>
-        </div>
-      </div>
-
-    </section>
-
-    <section class="mb-3">
-
-      <p class="question">
         {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION] }}
       </p>
 
@@ -157,10 +96,10 @@
     <section class="mb-3">
 
       <p class="question">
-        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED] }}
+        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED] }}
       </p>
 
-      <mat-radio-group formControlName="hasPharmaNetSuspended">
+      <mat-radio-group formControlName="hasRegistrationSuspended">
         <mat-radio-button class="mr-4"
                           *ngFor="let decision of decisions"
                           [value]="decision.code">
@@ -168,42 +107,46 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="hasPharmaNetSuspended.value"
+      <div *ngIf="hasRegistrationSuspended.value"
            class="row">
         <div class="col pt-3">
 
           <p class="mb-1">Provide these details:</p>
           <ol class="mb-4 pl-3">
             <li class="small">
-              Describe the events that resulted in the discipline or termination, including when the events occurred
+              Describe the events that resulted in limits, conditions or prohibitions being imposed, including when the
+              events occurred
             </li>
             <li class="small">
-              Provide the name and address of the organization that issued the discipline or termination
+              Provide the name and address of the organization where the events took place
             </li>
             <li class="small">
-              Describe the discipline imposed
+              Provide the name of the organization that imposed limits, conditions or prohibitions
+            </li>
+            <li class="small">
+              Describe the limits, conditions or prohibitions imposed
             </li>
             <li class="small mb-2">
-              Provide the date that the discipline or termination was imposed and, if applicable, removed
+              Provide the date that the limits, conditions or prohibitions were imposed and, if applicable, removed
             </li>
 
             <mat-form-field class="w-100">
               <textarea matInput
                         placeholder="Type Here"
                         rows="5"
-                        #hasPharmaNetSuspended
-                        formControlName="hasPharmaNetSuspendedDetails"></textarea>
-              <mat-error *ngIf="hasPharmaNetSuspendedDetails.hasError('required')">Required</mat-error>
+                        #hasRegistrationSuspended
+                        formControlName="hasRegistrationSuspendedDetails"></textarea>
+              <mat-error *ngIf="hasRegistrationSuspendedDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
             <li class="small mb-2">
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload componentName="has-pharmanet-suspended"
+            <app-document-upload componentName="has-registration-suspended"
                                  [multiple]="true"
-                                 (completed)="onUpload('hasPharmaNetSuspendedDocumentGuids', $event)"
-                                 (remove)="onRemove('hasPharmaNetSuspendedDocumentGuids', $event)">
+                                 (completed)="onUpload('hasRegistrationSuspendedDocumentGuids', $event)"
+                                 (remove)="onRemove('hasRegistrationSuspendedDocumentGuids', $event)">
             </app-document-upload>
           </ol>
         </div>
@@ -262,6 +205,63 @@
                                  [multiple]="true"
                                  (completed)="onUpload('hasDisciplinaryActionDocumentGuids', $event)"
                                  (remove)="onRemove('hasDisciplinaryActionDocumentGuids', $event)">
+            </app-document-upload>
+          </ol>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="mb-3">
+
+      <p class="question">
+        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED] }}
+      </p>
+
+      <mat-radio-group formControlName="hasPharmaNetSuspended">
+        <mat-radio-button class="mr-4"
+                          *ngFor="let decision of decisions"
+                          [value]="decision.code">
+          {{ decision.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="hasPharmaNetSuspended.value"
+           class="row">
+        <div class="col pt-3">
+
+          <p class="mb-1">Provide these details:</p>
+          <ol class="mb-4 pl-3">
+            <li class="small">
+              Describe the events that resulted in the discipline or termination, including when the events occurred
+            </li>
+            <li class="small">
+              Provide the name and address of the organization that issued the discipline or termination
+            </li>
+            <li class="small">
+              Describe the discipline imposed
+            </li>
+            <li class="small mb-2">
+              Provide the date that the discipline or termination was imposed and, if applicable, removed
+            </li>
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Type Here"
+                        rows="5"
+                        #hasPharmaNetSuspended
+                        formControlName="hasPharmaNetSuspendedDetails"></textarea>
+              <mat-error *ngIf="hasPharmaNetSuspendedDetails.hasError('required')">Required</mat-error>
+            </mat-form-field>
+
+            <li class="small mb-2">
+              Attach documents related to this self-declaration.
+            </li>
+
+            <app-document-upload componentName="has-pharmanet-suspended"
+                                 [multiple]="true"
+                                 (completed)="onUpload('hasPharmaNetSuspendedDocumentGuids', $event)"
+                                 (remove)="onRemove('hasPharmaNetSuspendedDocumentGuids', $event)">
             </app-document-upload>
           </ol>
         </div>

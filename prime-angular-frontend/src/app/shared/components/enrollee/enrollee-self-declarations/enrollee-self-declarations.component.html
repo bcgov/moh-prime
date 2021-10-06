@@ -16,7 +16,7 @@
       {{ selfDeclarationComposite.selfDeclaration?.answered | yesNo: true }}
     </app-enrollee-property>
 
-    <app-enrollee-property *ngIf="selfDeclarationComposite.selfDeclaration"
+    <app-enrollee-property *ngIf="selfDeclarationComposite.selfDeclaration?.answered"
                            title="Description"
                            [makeBold]="false">
       {{ selfDeclarationComposite.selfDeclaration.selfDeclarationDetails }}
