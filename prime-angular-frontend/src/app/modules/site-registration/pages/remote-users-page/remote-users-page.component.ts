@@ -5,18 +5,18 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-import { noop, of } from 'rxjs';
+import { noop, Observable, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 // TODO move to @lib/models
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 
+import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -28,7 +28,7 @@ import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
   templateUrl: './remote-users-page.component.html',
   styleUrls: ['./remote-users-page.component.scss']
 })
-export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class RemoteUsersPageComponent extends AbstractSiteRegistrationPage implements OnInit {
   public formState: RemoteUsersPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -41,13 +41,13 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteService: SiteService,
-    private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService,
+    protected siteService: SiteService,
+    protected siteFormStateService: SiteFormStateService,
+    protected siteResource: SiteResource,
     private route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
     this.canDeactivateAllowlist = ['hasRemoteUsers'];
 
@@ -82,14 +82,18 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['../', SiteRoutes.HOURS_OPERATION]);
+    const nextRoute = (!this.isCompleted)
+      ? SiteRoutes.HOURS_OPERATION
+      : SiteRoutes.SITE_REVIEW;
+
+    this.routeUtils.routeRelativeTo(['../', nextRoute]);
   }
 
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
 
-    if (this.siteService.site.submittedDate) {
+    if (this.hasBeenSubmitted) {
       this.submitButtonText = 'Save and Submit';
     }
   }
@@ -106,7 +110,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
     // Remove query param from URL without refreshing
     this.routeUtils.removeQueryParams({ fromRemoteUser: null });
-    this.siteFormStateService.setForm(site, !fromRemoteUser);
+    this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
     this.formState.form.markAsPristine();
   }
 
@@ -141,7 +145,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     this.hasNoRemoteUserError = true;
   }
 
-  protected performSubmission(): NoContent {
+  protected submissionRequest(): NoContent {
     const payload = this.siteFormStateService.json;
     const site = this.siteService.site;
     const newRemoteUsers = this.siteFormStateService.remoteUsersPageFormState.json
@@ -172,11 +176,9 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
-    const routePath = (this.isCompleted)
-      ? SiteRoutes.SITE_REVIEW
-      : SiteRoutes.ADMINISTRATOR;
+    const routePath = (!this.isCompleted)
+      ? SiteRoutes.ADMINISTRATOR
+      : SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(['../', routePath]);
   }

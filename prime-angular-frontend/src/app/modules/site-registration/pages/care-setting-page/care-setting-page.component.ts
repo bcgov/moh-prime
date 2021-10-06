@@ -1,27 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { MatRadioChange } from '@angular/material/radio';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-import { EMPTY, noop, of } from 'rxjs';
+import { noop, of } from 'rxjs';
 import { exhaustMap, map, pairwise, startWith, tap } from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { VendorEnum } from '@shared/enums/vendor.enum';
 import { Role } from '@auth/shared/enum/role.enum';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { PermissionService } from '@auth/shared/services/permission.service';
 
+import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -33,7 +28,7 @@ import { CareSettingPageFormState } from './care-setting-page-form-state.class';
   templateUrl: './care-setting-page.component.html',
   styleUrls: ['./care-setting-page.component.scss']
 })
-export class CareSettingPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class CareSettingPageComponent extends AbstractSiteRegistrationPage implements OnInit {
   public formState: CareSettingPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -48,15 +43,15 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteService: SiteService,
-    private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService,
+    protected siteService: SiteService,
+    protected siteFormStateService: SiteFormStateService,
+    protected siteResource: SiteResource,
     private configService: ConfigService,
     private permissionService: PermissionService,
     private route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -80,7 +75,9 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   public onBack() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+    (!this.isCompleted)
+      ? this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT])
+      : this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }
 
   public ngOnInit() {
@@ -95,7 +92,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteFormStateService.setForm(site, true);
+    this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
   }
 
@@ -106,7 +103,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
         startWith([null]),
         pairwise(),
         exhaustMap(([prevCareSettingCode, nextCareSettingCode]: [number, number]) => {
-          const deferredLicenceReason = this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason;
+          const deferredLicenceReason = this.siteFormStateService.businessLicenceFormState.deferredLicenceReason;
 
           // Reset the deferred licence reason when changing from Community Pharmacist as
           // no other care setting allows for deferment of the business licence upload
@@ -124,12 +121,12 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
           return this.siteResource.updateBusinessLicence(id, businessLicence)
             .pipe(
               // When not reset prevents interaction with specific controls on business licence
-              tap(() => this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason.reset()),
+              tap(() => this.siteFormStateService.businessLicenceFormState.deferredLicenceReason.reset()),
               exhaustMap(() => {
                 // Do nothing if not completed, but when site is marked as completed reset it
                 // to force user through the wizard to ensure a business licence is uploaded
                 if (!completed) {
-                  return of(noop());
+                  return of(noop);
                 }
 
                 return this.siteResource.removeSiteCompleted(id)
@@ -162,14 +159,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     }
   }
 
-  protected performSubmission(): NoContent {
-    const payload = this.siteFormStateService.json;
-    return this.siteResource.updateSite(payload);
-  }
-
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
       : SiteRoutes.BUSINESS_LICENCE;

@@ -256,8 +256,18 @@ export class SiteResource {
       );
   }
 
-  public submitSite(site: Site): Observable<string> {
-    return this.apiResource.post<string>(`sites/${site.id}/submission`)
+  public submitSite(siteId: number, site: Site & { businessLicence: { documentGuid: string } }): Observable<string> {
+    if (site.businessHours?.length) {
+      site.businessHours = site.businessHours
+        .map((businessDay: BusinessDay) => {
+          businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
+          businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
+          return businessDay;
+        });
+    } else {
+      site.businessHours = null;
+    }
+    return this.apiResource.post<string>(`sites/${siteId}/submissions`, site)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been submitted')),
@@ -540,14 +550,12 @@ export class SiteResource {
       );
   }
 
-  public pecExists(pec: string): Observable<boolean> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ pec });
-    return this.apiResource.get(`sites/pec-exists`, params)
+  public pecAssignable(siteId: number, pec: string): Observable<boolean> {
+    return this.apiResource.post(`sites/${siteId}/pec/${pec}/assignable`)
       .pipe(
         map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Could not check PEC existence');
-          this.logger.error('[SiteRegistration] SiteResource::pecExists error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::pecAssignable error has occurred: ', error);
           throw error;
         })
       );
