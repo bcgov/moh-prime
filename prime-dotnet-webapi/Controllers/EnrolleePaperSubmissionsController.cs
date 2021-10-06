@@ -274,7 +274,7 @@ namespace Prime.Controllers
 
         // HEAD: api/Enrollees/paper-submissions?dateOfBirth=1
         /// <summary>
-        /// Gets all paper enrollees and checks whether or not there is a match in dateOfBirth with the current logged on enrollee.
+        /// Checks if there are any unclaimed paper Enrollees submissions with the supplied date of birth.
         /// </summary>
         /// <param name="dateOfBirth"></param>
         [HttpHead("paper-submissions")]
