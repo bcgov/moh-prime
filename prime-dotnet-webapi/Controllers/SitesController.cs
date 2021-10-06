@@ -1027,7 +1027,7 @@ namespace Prime.Controllers
                 return BadRequest("site registration notes can't be null or empty.");
             }
 
-            if (await _siteService.SiteExists(siteId))
+            if (!await _siteService.SiteExists(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
