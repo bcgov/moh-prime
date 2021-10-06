@@ -44,6 +44,7 @@ export class Site {
   status: SiteStatusType;
   pec: string;
   flagged: boolean;
+  activeBeforeRegistration: boolean;
 
   public static getExpiryDate(site: Site | SiteListViewModel): string | null {
     if (!site) {
