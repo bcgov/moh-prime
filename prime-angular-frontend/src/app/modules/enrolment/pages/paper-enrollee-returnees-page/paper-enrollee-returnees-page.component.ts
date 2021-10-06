@@ -102,13 +102,14 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
     this.patchForm$()
       .pipe(
         exhaustMap((enrolment: Enrolment) => {
-          // Patch form only if an enrolment is created on the
-          // bcsc-demographics page
+          // Patch form only if an enrolment is created
           if (enrolment) {
             return this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(enrolment)
               .pipe(
                 map((result: string) => result)
               )
+          } else {
+            return [];
           }
         })
       )
