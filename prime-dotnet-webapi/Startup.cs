@@ -26,7 +26,7 @@ using Wkhtmltopdf.NetCore;
 using IdentityModel.Client;
 using FluentValidation.AspNetCore;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Extensions;
 using Prime.Services;
 using Prime.Services.EmailInternal;
