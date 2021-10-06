@@ -151,6 +151,9 @@ services:
       - ./prime-dotnet-webapi/:/app
       - prime-dotnet-webapi-bin:/app/bin
       - prime-dotnet-webapi-obj:/app/obj
+      - ${APPDATA}/Microsoft/UserSecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81:/root/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81
+      # Use the following instead if developing on Mac/Linux:
+      # - ${HOME}/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81:/root/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81
     ports:
       - "5000:8080"
       - "5001:5001"
