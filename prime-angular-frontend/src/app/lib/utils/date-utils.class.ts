@@ -1,5 +1,7 @@
 import moment, { Moment } from 'moment';
 
+import { RENEWAL_PERIOD } from '@lib/constants';
+
 export class DateUtils {
   /**
    * @description
@@ -23,7 +25,7 @@ export class DateUtils {
    * Check that a date is within the 90 day renewal period.
    */
   public static withinRenewalPeriod(date: string | Moment | null): boolean {
-    return DateUtils.withinDaysBeforeDate(date, 90);
+    return DateUtils.withinDaysBeforeDate(date, RENEWAL_PERIOD);
   }
 
   /**

@@ -11,14 +11,18 @@ namespace Prime.Models
     {
         [Key]
         public int Id { get; set; }
+
         public int SiteId { get; set; }
+
         [JsonIgnore]
         public Site Site { get; set; }
+
         public string DeferredLicenceReason { get; set; }
 
         public DateTimeOffset? UploadedDate { get; set; }
 
         public DateTimeOffset? ExpiryDate { get; set; }
+
         public BusinessLicenceDocument BusinessLicenceDocument { get; set; }
 
         [NotMapped]

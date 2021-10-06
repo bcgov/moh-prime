@@ -20,9 +20,9 @@ namespace Prime.Auth
             services.AddAuthentication(Schemes.PrimeJwt)
             .AddJwtBearer(Schemes.PrimeJwt, options =>
             {
-                options.Authority = PrimeEnvironment.PrimeKeycloak.RealmUrl;
+                options.Authority = PrimeConfiguration.Current.PrimeKeycloak.RealmUrl;
                 options.Audience = AuthConstants.Audience;
-                options.MetadataAddress = PrimeEnvironment.PrimeKeycloak.WellKnownConfig;
+                options.MetadataAddress = PrimeConfiguration.Current.PrimeKeycloak.WellKnownConfig;
                 options.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
@@ -30,9 +30,9 @@ namespace Prime.Auth
             })
             .AddJwtBearer(Schemes.MohJwt, options =>
             {
-                options.Authority = PrimeEnvironment.MohKeycloak.RealmUrl;
+                options.Authority = PrimeConfiguration.Current.MohKeycloak.RealmUrl;
                 options.Audience = AuthConstants.Audience;
-                options.MetadataAddress = PrimeEnvironment.MohKeycloak.WellKnownConfig;
+                options.MetadataAddress = PrimeConfiguration.Current.MohKeycloak.WellKnownConfig;
                 options.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
