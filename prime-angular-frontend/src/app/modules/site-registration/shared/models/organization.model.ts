@@ -14,6 +14,8 @@ export interface Organization {
   completed: boolean;
   hasAcceptedAgreement: boolean;
   hasSubmittedSite: boolean;
+  hasClaim: boolean;
+  pendingTransfer: boolean;
   // Children -----
   sites: Site[];
 }

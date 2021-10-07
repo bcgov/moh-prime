@@ -15,6 +15,7 @@ import { CollectionNoticePageComponent } from './pages/collection-notice-page/co
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
 import { OrganizationSigningAuthorityPageComponent } from './pages/organization-signing-authority-page/organization-signing-authority-page.component';
 import { OrganizationNamePageComponent } from './pages/organization-name-page/organization-name-page.component';
+import { OrganizationClaimPageComponent } from './pages/organization-claim-page/organization-claim-page.component';
 import { OrganizationAgreementPageComponent } from './pages/organization-agreement-page/organization-agreement-page.component';
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
 import { BusinessLicencePageComponent } from './pages/business-licence-page/business-licence-page.component';
@@ -27,11 +28,15 @@ import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users
 import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
+import { OrganizationClaimConfirmationPageComponent } from './pages/organization-claim-confirmation-page/organization-claim-confirmation-page.component';
 import { BusinessLicenceRenewalPageComponent } from './pages/business-licence-renewal-page/business-licence-renewal-page.component';
+import { ElectronicOrganizationAgreementPageComponent } from './pages/electronic-organization-agreement-page/electronic-organization-agreement-page.component';
+import { ElectronicAgreementGuard } from './shared/guards/electronic-agreement.guard';
+import { PendingTransferGuard } from './shared/guards/pending-transfer.guard';
 
 const routes: Routes = [
   {
-    path: SiteRoutes.MODULE_PATH,
+    path: '',
     component: SiteRegistrationDashboardComponent,
     canActivate: [
       AuthenticationGuard,
@@ -68,6 +73,18 @@ const routes: Routes = [
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Signing Authority' }
               },
+              // { // ADD
+              //   path: SiteRoutes.ORGANIZATION_CLAIM,
+              //   component: OrganizationClaimPageComponent,
+              //   canDeactivate: [CanDeactivateFormGuard],
+              //   data: { title: 'Claim Organization' }
+              // },
+              {
+                path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
+                component: OrganizationClaimConfirmationPageComponent,
+                canDeactivate: [CanDeactivateFormGuard],
+                data: { title: 'Next Steps' }
+              },
               {
                 path: SiteRoutes.ORGANIZATION_NAME,
                 component: OrganizationNamePageComponent,
@@ -86,7 +103,14 @@ const routes: Routes = [
                 pathMatch: 'full'
               },
               {
+                path: `${SiteRoutes.CARE_SETTINGS}/:csid/${SiteRoutes.ORGANIZATION_AGREEMENT}`,
+                component: ElectronicOrganizationAgreementPageComponent,
+                canActivate: [ElectronicAgreementGuard],
+                data: { title: 'Organization Agreement' }
+              },
+              {
                 path: `${SiteRoutes.SITES}/:sid`,
+                canActivateChild: [PendingTransferGuard],
                 children: [
                   {
                     path: SiteRoutes.CARE_SETTING,
@@ -172,8 +196,8 @@ const routes: Routes = [
                   },
                   {
                     path: SiteRoutes.SITE_REVIEW,
-                    canActivate: [SiteGuard],
                     component: OverviewPageComponent,
+                    canActivate: [SiteGuard],
                     data: { title: 'Site Registration Review' }
                   },
                   {
@@ -206,4 +230,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SiteRegistrationRoutingModule { }
+export class SiteRegistrationRoutingModule {}

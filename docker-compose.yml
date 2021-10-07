@@ -49,9 +49,11 @@ services:
     networks:
       - prime-net
 
-####################### Verifiable Credential Agent Definition #######################
+###############################################################################
+##                      Verifiable Credential Agent Definition               ##
+###############################################################################
   # agent:
-  #   image: bcgovimages/aries-cloudagent:py36-1.15-1_0.6.0
+  #   image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.0
   #   environment:
   #     ACAPY_LABEL: ${AGENT_NAME}
   #     ACAPY_ENDPOINT: ${AGENT_ENDPOINT}
@@ -77,7 +79,7 @@ services:
   #     WALLET_USER: ${WALLET_USER}
   #     WALLET_PASSWORD: ${WALLET_PASSWORD}
   #   networks:
-  #     - primenet
+  #     - prime-net
   #   ports:
   #     - ${AGENT_HTTP_IN_PORT}:${AGENT_HTTP_IN_PORT}
   #     - ${AGENT_WS_IN_PORT}:${AGENT_WS_IN_PORT}
@@ -100,20 +102,24 @@ services:
   #       --${AGENT_ADMIN_MODE}",
   #     ]
 
-  ####################### Verifiable Credential Wallet Definition #######################
+#######################################################################################
+##                      Verifiable Credential Wallet Definition                      ##
+#######################################################################################
   # wallet:
   #   image: postgres:12-alpine
   #   environment:
   #     POSTGRES_USER: DB_USER
   #     POSTGRES_PASSWORD: DB_PASSWORD
   #   networks:
-  #     - primenet
+  #     - prime-net
   #   ports:
   #     - 5434:5432
   #   volumes:
-  #     - wallet-data:/var/lib/postgresql/data
+  #     - wallet:/var/lib/postgresql/data
 
-####################### API Backend Definition #######################
+###############################################################################
+##                        API Backend Definition                             ##
+###############################################################################
   dotnet-webapi:
     container_name: prime-webapi-backend
     restart: always
@@ -288,6 +294,6 @@ volumes:
   local_postgres_data:
   local_mongodb_data:
   db_backup_data:
-  wallet-data:
+  wallet:
   prime-dotnet-webapi-bin:
   prime-dotnet-webapi-obj:

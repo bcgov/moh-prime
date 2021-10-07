@@ -12,7 +12,8 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { AgreementType, AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
+import { PaperEnrolmentAgreementType, PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
+import { DocumentType } from '@shared/enums/document-type.enum';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
@@ -30,11 +31,11 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   public formState: UploadFormState;
   public agreementTypes: number[];
   public savedDocuments: EnrolleeAdjudicationDocument[];
-  public AgreementTypeNameMap = AgreementTypeNameMap;
+  public PaperEnrolmentAgreementTypeNameMap = PaperEnrolmentAgreementTypeNameMap;
   public hasNoUploadError: boolean;
 
   private routeUtils: RouteUtils;
-  private documentGuids: string[];
+  private documents: Pick<BaseDocument, 'documentGuid' | 'documentType'>[]
 
   constructor(
     protected dialog: MatDialog,
@@ -47,13 +48,18 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   ) {
     super(dialog, formUtilsService);
 
-    this.documentGuids = [];
-    this.agreementTypes = EnumUtils.values(AgreementType);
+    this.documents = [];
+    this.agreementTypes = EnumUtils.values(PaperEnrolmentAgreementType);
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public onUpload(document: BaseDocument): void {
-    this.documentGuids.push(document.documentGuid);
+  public onUpload({ documentGuid }: BaseDocument, componentName: string = ''): void {
+    var documentType = Object.values(DocumentType).includes(componentName)
+      ? DocumentType[componentName]
+      : DocumentType['NoType'];
+
+    this.documents.push({ documentGuid, documentType });
+
     this.hasNoUploadError = false;
   }
 
@@ -94,12 +100,14 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     this.paperEnrolmentResource.getAdjudicationDocuments(enrolleeId)
       .subscribe(documents => {
         this.savedDocuments = documents;
-        this.documentGuids = documents.map(d => d.documentGuid);
-      });
+        documents.forEach(({ documentGuid, documentType }) => {
+          this.documents.push({ documentGuid, documentType });
+        });
+      })
   }
 
   protected additionalValidityChecks(): boolean {
-    return !!this.documentGuids.length;
+    return !!this.documents.length;
   }
 
   protected performSubmission(): NoContent {
@@ -109,8 +117,8 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     return this.paperEnrolmentResource.updateAgreementType(enrolleeId, this.formState.json.assignedTOAType)
       .pipe(
         exhaustMap(() =>
-          (this.documentGuids.length > 0)
-            ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documentGuids)
+          (this.documents.length)
+            ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documents)
             : of(null)
         ),
         exhaustMap(() => this.paperEnrolmentResource.profileCompleted(enrolleeId))
@@ -122,7 +130,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   protected onSubmitFormIsInvalid(): void {
-    if (!this.documentGuids.length) {
+    if (!this.documents.length) {
       this.hasNoUploadError = true;
     }
   }

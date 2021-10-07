@@ -12,6 +12,7 @@ import { ToastService } from '@core/services/toast.service';
 
 import { LdapCredential } from '../models/ldap-credential.model';
 import { GisEnrolment } from '../models/gis-enrolment.model';
+import { LdapErrorResponse } from '../models/ldap-error-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +30,20 @@ export class GisEnrolmentResource {
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
-          this.toastService.openErrorToast('You could not be authenticated.');
           this.logger.error('[GisModule] GisResource::ldapLogin error has occurred: ', error);
+
+          if (error.status === 401) {
+            this.toastService.openErrorToast('You could not be authenticated.');
+            // Absence of unlocked assumed to be unknown and therefore unlocked
+            const unlocked = (error.headers.has('Unlocked'))
+              ? error.headers.get('Unlocked') === 'true'
+              : true;
+            return of(new LdapErrorResponse(null, !unlocked));
+          } else if (error.status === 403) {
+            this.toastService.openErrorToast('You could not be authorized.');
+            return of(new LdapErrorResponse(true, null));
+          }
+
           throw error;
         })
       );
@@ -41,7 +54,7 @@ export class GisEnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
-          // Allow for creation off of a new enrolment
+          // Allow for creation of a new enrolment
           if (error.status === 404) {
             return of(null);
           }

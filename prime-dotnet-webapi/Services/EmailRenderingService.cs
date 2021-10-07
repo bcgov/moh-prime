@@ -1,10 +1,11 @@
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-using Prime.Models;
 using Prime.HttpClients.Mail;
+using Prime.Models;
 using Prime.ViewModels.Emails;
+
 namespace Prime.Services.EmailInternal
 {
     public class EmailRenderingService : IEmailRenderingService
@@ -12,17 +13,17 @@ namespace Prime.Services.EmailInternal
         private const string PrimeEmail = "no-reply-prime@gov.bc.ca";
         private const string PrimeSupportEmail = "primesupport@gov.bc.ca";
         private const string MohEmail = "HLTH.HnetConnection@gov.bc.ca";
+        private const string ProviderEnrolmentTeamEmail = "Lori.Haggstrom@gov.bc.ca";
 
-        private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailTemplateService _emailTemplateService;
+        private readonly IRazorConverterService _razorConverterService;
 
         public EmailRenderingService(
-            IRazorConverterService razorConverterService,
-            IEmailTemplateService emailTemplateService
-        )
+            IEmailTemplateService emailTemplateService,
+            IRazorConverterService razorConverterService)
         {
-            _razorConverterService = razorConverterService;
             _emailTemplateService = emailTemplateService;
+            _razorConverterService = razorConverterService;
         }
 
         public async Task<Email> RenderBusinessLicenceUploadedEmailAsync(string recipientEmail, LinkedEmailViewModel viewModel)
@@ -144,14 +145,40 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel)
+        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode)
+        {
+            var recipientEmails = careSettingCode == CareSettingType.CommunityPharmacy
+                ? new[] { PrimeSupportEmail }
+                : new[] { MohEmail, PrimeSupportEmail };
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmails,
+                subject: "PRIME Site Registration Submission",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderSiteReviewedNotificationEmailAsync(SiteReviewedEmailViewModel viewModel)
         {
             return new Email
             (
                 from: PrimeEmail,
-                to: new[] { MohEmail, PrimeSupportEmail },
-                subject: "PRIME Site Registration Submission",
-                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
+                to: ProviderEnrolmentTeamEmail,
+                subject: "PRIME Site Registration review complete",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteReviewedNotification, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: newSigningAuthorityEmail,
+                subject: "Organization Claim was Approved",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.OrganizationClaimApprovalNotification, viewModel)
             );
         }
     }

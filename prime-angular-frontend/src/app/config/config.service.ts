@@ -107,6 +107,11 @@ export class ConfigService implements IConfigService {
       .sort(this.utilsService.sortByKey<Config<number>>('name'));
   }
 
+  public get securityGroups(): Config<number>[] {
+    return [...this.configuration.securityGroups]
+      .sort(this.utilsService.sortByKey<Config<number>>('name'));
+  }
+
   /**
    * @description
    * Load the runtime configuration.

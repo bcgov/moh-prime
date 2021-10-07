@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, of } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Party } from '@lib/models/party.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -29,8 +29,9 @@ import { OrganizationSigningAuthorityPageFormState } from './organization-signin
 export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OrganizationSigningAuthorityPageFormState;
   public title: string;
-  public isCompleted: boolean;
+  public organizationId: number;
   public organization: Organization;
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
   /**
    * @description
@@ -58,6 +59,8 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+
+    this.organizationId = +this.route.snapshot.params.oid;
   }
 
   public onPreferredNameChange({ checked }: { checked: boolean }): void {
@@ -76,8 +79,8 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.toggleAddressLineValidators(checked, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
-  public onBack(): void {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+  public onBack() {
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
   }
 
   public ngOnInit(): void {
@@ -135,48 +138,25 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.toggleAddressLineValidators(this.hasMailingAddress, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
-  protected performSubmission(): Observable<Organization> {
+  protected performSubmission(): Observable<Party> {
     const payload = this.formState.json;
-    const updateSigningAuthority$ = this.organizationResource.updateSigningAuthority(payload);
-    let request$ = updateSigningAuthority$
-      .pipe(map(() => this.organizationService.organization));
-
-    if (!this.organizationService.organization) {
-      // No organization indicates the possibility of no signing authority
-      request$ = this.organizationResource.getSigningAuthorityByUserId(this.bcscUser.userId)
-        .pipe(
-          exhaustMap((party: Party | null) =>
-            (!party)
-              // TODO BCSC email not sent and shouldn't be included in BcscUser model to prevent issues
-              // Allow override of BCSC email, but otherwise no other overlap exists
-              ? this.organizationResource.createSigningAuthority({ ...this.bcscUser, ...payload })
-              // Prevent issue where the creation of an organization fails, but the
-              // signing authority data is resubmitted possibly with alteration
-              : updateSigningAuthority$
-          ),
-          exhaustMap((party: Party) =>
-            this.organizationResource.createOrganization(party.id)
-          )
-        );
-    }
-
-    return request$;
+    return this.organizationResource.createSigningAuthority(payload);
   }
 
-  protected afterSubmitIsSuccessful(organization: Organization): void {
-    this.formState.form.markAsPristine();
-
+  protected afterSubmitIsSuccessful(party: Party): void {
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: (string | number)[];
+    const organization = this.organizationService.organization;
 
     if (redirectPath) {
       routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
     } else {
       routePath = (this.isCompleted)
         ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
-        : ['../', organization.id, SiteRoutes.ORGANIZATION_NAME];
+        : organization
+          ? ['../', organization.id, SiteRoutes.ORGANIZATION_NAME]
+          : ['../', 0, SiteRoutes.ORGANIZATION_NAME];
     }
-
     this.routeUtils.routeRelativeTo(routePath);
   }
 

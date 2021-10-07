@@ -8,21 +8,14 @@
 
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>
-    {{(editable) ? "Editing" : "Preview"}}
+    {{ (editable) ? 'Editing' : 'Preview' }}
   </ng-container>
 
-  <button *ngIf="(Role.SUPER_ADMIN | inRole) && !editable"
+  <button *ngIf="Role.MAINTENANCE | inRole"
           mat-icon-button
-          matTooltip="Edit Email Template"
-          (click)="toggleEdit(true)">
-    <mat-icon>edit</mat-icon>
-  </button>
-
-  <button *ngIf="(Role.SUPER_ADMIN | inRole) && editable"
-          mat-icon-button
-          matTooltip="Cancel Editing"
-          (click)="toggleEdit(false)">
-    <mat-icon>close</mat-icon>
+          [matTooltip]="(!editable) ? 'Edit Email Template' : 'Cancel Editing'"
+          (click)="toggleEdit(!editable)">
+    <mat-icon>{{ (!editable) ? 'edit' : 'close' }}</mat-icon>
   </button>
 </app-page-subheader>
 

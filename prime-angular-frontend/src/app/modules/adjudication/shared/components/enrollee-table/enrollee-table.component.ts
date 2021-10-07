@@ -1,4 +1,3 @@
-import { Router } from '@angular/router';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,7 +11,6 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { UtilsService } from '@core/services/utils.service';
-import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -21,7 +19,6 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
 @UntilDestroy()
@@ -56,6 +53,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public Role = Role;
+  public readonly paperEnrolleeGpidFilter = 'NOBCSC';
 
   constructor(
     private fb: FormBuilder,

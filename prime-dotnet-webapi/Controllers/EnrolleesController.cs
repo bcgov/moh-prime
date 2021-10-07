@@ -12,6 +12,7 @@ using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
+using Prime.ViewModels.Plr;
 
 namespace Prime.Controllers
 {
@@ -26,12 +27,14 @@ namespace Prime.Controllers
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
+        private readonly IPlrProviderService _plrProviderService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
+            IPlrProviderService plrProviderService,
             IDocumentService documentService)
         {
             _enrolleeService = enrolleeService;
@@ -39,6 +42,7 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
             _emailService = emailService;
             _documentService = documentService;
+            _plrProviderService = plrProviderService;
         }
 
         // GET: api/Enrollees
@@ -881,6 +885,46 @@ namespace Prime.Controllers
         {
             var emails = await _enrolleeService.GetEnrolleeEmails(bulkEmailType);
             return Ok(emails);
+        }
+
+        // GET: api/Enrollees/1/qrcode
+        /// <summary>
+        /// Gets and Enrollee's Verifiable Credential qrcode invitation
+        /// </summary>
+        [HttpGet("{enrolleeId}/qrcode", Name = nameof(GetQrCode))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetQrCode(int enrolleeId)
+        {
+            var result = await _enrolleeService.GetCredentialAsync(enrolleeId);
+            return Ok(result?.Base64QRCode);
+        }
+
+        // GET: api/Enrollees/5/plrs
+        /// <summary>
+        /// Gets all PLR data (matched by collegeId)
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/plrs", Name = nameof(GetPlrData))]
+        [Authorize(Roles = Roles.ViewEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<PlrViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetPlrData(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+
+            var collegeIds = enrollee.Certifications.Select(c => c.LicenseNumber);
+
+            var result = await _plrProviderService.GetPlrDataByCollegeIdsAsync(collegeIds);
+            return Ok(result);
         }
     }
 }

@@ -9,6 +9,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { KeycloakService } from 'keycloak-angular';
 
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { SiteRegistrationTabsComponent } from './site-registration-tabs.component';
 
 describe('SiteRegistrationTabsComponent', () => {
@@ -23,18 +24,18 @@ describe('SiteRegistrationTabsComponent', () => {
         RouterTestingModule,
         ReactiveFormsModule,
         NgxMaterialModule,
-        BrowserAnimationsModule,
+        BrowserAnimationsModule
       ],
       providers: [
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         },
-        KeycloakService
+        KeycloakService,
+        CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {

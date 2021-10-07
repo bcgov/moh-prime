@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
-import { AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
+import { PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
@@ -23,20 +23,12 @@ import { UploadForm } from './upload-form.model';
         </button>
       </app-page-subheader>
       <app-enrollee-property title="TOA Type">
-        {{ AgreementTypeNameMap[upload?.assignedTOAType] }}
+        {{ PaperEnrolmentAgreementTypeNameMap[upload?.assignedTOAType] }}
       </app-enrollee-property>
 
       <app-enrollee-property *ngIf="documents?.length"
-                             title="Filename">
-        <ng-container *ngFor="let document of documents">
-          <button mat-stroked-button
-                  color="primary"
-                  class="mb-2"
-                  (click)="downloadDocument(document.id)">
-            <mat-icon class="mr-2">attachment</mat-icon>
-            {{ document.filename | default }}
-          </button>
-        </ng-container>
+                             title="File(s)">
+        <app-document-attachments [documents]="documents"></app-document-attachments>
       </app-enrollee-property>
     </app-page-section>
   `,
@@ -50,7 +42,7 @@ export class UploadOverviewComponent extends AbstractOverview {
   @Input() public upload: UploadForm;
   @Input() public documents: BaseDocument[];
   @Output() public download: EventEmitter<{ documentId: number }>;
-  public AgreementTypeNameMap = AgreementTypeNameMap;
+  public PaperEnrolmentAgreementTypeNameMap = PaperEnrolmentAgreementTypeNameMap;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
 
   constructor(

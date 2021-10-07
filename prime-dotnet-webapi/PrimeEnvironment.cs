@@ -6,13 +6,15 @@ namespace Prime
 {
     public static class PrimeEnvironment
     {
-        public static readonly string Name = GetEnvironmentVariable("OC_APP") ?? "local";
+        // See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments
+        // As per documentation, "Development" refers to local machine
+        public static readonly string Name = GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
         public static readonly string FrontendUrl = GetEnvironmentVariable("FRONTEND_URL") ?? "localhost:4200";
         public static readonly string BackendUrl = GetEnvironmentVariable("BACKEND_URL") ?? "http://localhost:5000/api";
         public static readonly string LogFile = GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
-        public static bool IsProduction { get => Name == "prod"; }
-        public static bool IsLocal { get => Name == "local"; }
+        public static bool IsProduction { get => Name == "Production"; }
+        public static bool IsLocal { get => Name == "Development"; }
 
         public static class DocumentManager
         {
@@ -21,7 +23,7 @@ namespace Prime
             public static readonly string ClientSecret = GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_SECRET") ?? "b515de16-419b-49b1-bca9-f97eafc95d41";
         }
 
-        public static class Keycloak
+        public static class PrimeKeycloak
         {
             public static readonly string RealmUrl = GetEnvironmentVariable("KEYCLOAK_REALM_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas";
             public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
@@ -35,6 +37,12 @@ namespace Prime
         {
             public static readonly string RealmUrl = GetEnvironmentVariable("MOH_KEYCLOAK_REALM_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications";
             public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
+            public static readonly string TokenUrl = KeycloakUrls.Token(RealmUrl);
+            public static readonly string GisClientId = "GIS";
+            public static readonly string GisUserRole = "GISUSER";
+            public static readonly string AdministrationUrl = GetEnvironmentVariable("MOH_KEYCLOAK_ADMINISTRATION_URL") ?? "https://user-management-dev.api.hlth.gov.bc.ca";
+            public static readonly string AdministrationClientId = "PRIME-WEBAPP-ENROLLMENT-SERVICE";
+            public static readonly string AdministrationClientSecret = GetEnvironmentVariable("MOH_KEYCLOAK_ADMINISTRATION_CLIENT_SECRET") ?? "";
         }
 
         public static class MailServer
@@ -55,7 +63,7 @@ namespace Prime
         public static class ChesApi
         {
             public static readonly bool Enabled = bool.Parse(GetEnvironmentVariable("CHES_ENABLED") ?? "false");
-            public static readonly string Url = GetEnvironmentVariable("CHES_API_URL") ?? "https://ches-dev.pathfinder.gov.bc.ca/api/v1";
+            public static readonly string Url = GetEnvironmentVariable("CHES_API_URL") ?? "https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1";
             public static readonly string ClientId = "PRIME_SERVICE_CLIENT";
             public static readonly string ClientSecret = GetEnvironmentVariable("CHES_CLIENT_SECRET") ?? "88e123a6-80cb-46a0-96d3-e2edae076ae7";
             public static readonly string TokenUrl = GetEnvironmentVariable("CHES_TOKEN_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect";
@@ -69,6 +77,13 @@ namespace Prime
             public static readonly string Url = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "http://agent:8024/";
             public static readonly string Key = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_KEY") ?? "agent-api-key-dev";
             public static readonly string WebhookKey = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_WEBHOOK_KEY") ?? "0ce755d5-1fb1-483a-ba22-439061aa8f67";
+            // If schema changes, the following must be updated in all agents for each environment as the code changes are pushed so versions are the same
+            // and have verifier app updated by aries team in each environment (send them schema id, if claims change send them new attributes)
+            // Update the following through postman:
+            // 1. Add new schema, incrementing schema version -> schema_name = enrollee
+            // 2. Create a credential definition for schema -> support_revocation = true, tag = prime
+            public static readonly string SchemaName = "enrollee";
+            public static readonly string SchemaVersion = "2.2";
         }
 
         /// <summary>

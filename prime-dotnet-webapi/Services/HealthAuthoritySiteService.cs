@@ -1,11 +1,11 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
@@ -20,9 +20,9 @@ namespace Prime.Services
 
         public HealthAuthoritySiteService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<HealthAuthoritySiteService> logger,
             IMapper mapper)
-            : base(context, httpContext)
+            : base(context, logger)
         {
             _mapper = mapper;
         }
@@ -52,20 +52,21 @@ namespace Prime.Services
             return _mapper.Map<HealthAuthoritySiteViewModel>(site);
         }
 
+        public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetAllSitesAsync()
+        {
+            return await GetBaseSitesNoTrackingQuery().ToListAsync();
+        }
+
         public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId)
         {
-            return await _context.HealthAuthoritySites
+            return await GetBaseSitesNoTrackingQuery()
                 .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId)
-                .AsNoTracking()
-                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
         public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
         {
-            return await _context.HealthAuthoritySites
-                .AsNoTracking()
-                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+            return await GetBaseSitesNoTrackingQuery()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
@@ -133,19 +134,24 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-
-        public async Task UpdatePharmanetAdministratorAsync(int siteId, int contactId)
+        public async Task UpdatePharmanetAdministratorAsync(int siteId, int healthAuthorityContactId)
         {
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            var healthAuthorityPharmanetAdministratorId = await _context.HealthAuthorityContacts
-                .Where(hac => hac.ContactId == contactId)
-                .Select(hac => hac.Id)
-                .SingleOrDefaultAsync();
-
             // TODO check administrator exists on the HealthAuthority list of administrator(s)
-            site.HealthAuthorityPharmanetAdministratorId = healthAuthorityPharmanetAdministratorId;
+            site.HealthAuthorityPharmanetAdministratorId = healthAuthorityContactId;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateTechnicalSupportAsync(int siteId, int healthAuthorityContactId)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // TODO check technical support exists on the HealthAuthority list of technical support(s)
+            site.HealthAuthorityTechnicalSupportId = healthAuthorityContactId;
 
             await _context.SaveChangesAsync();
         }
@@ -170,6 +176,13 @@ namespace Prime.Services
             site.SubmittedDate = DateTimeOffset.Now;
 
             await _context.SaveChangesAsync();
+        }
+
+        private IQueryable<HealthAuthoritySiteViewModel> GetBaseSitesNoTrackingQuery()
+        {
+            return _context.HealthAuthoritySites
+                .AsNoTracking()
+                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider);
         }
     }
 }

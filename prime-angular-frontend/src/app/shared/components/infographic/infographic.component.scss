@@ -1,0 +1,55 @@
+@import 'bootstrap/bootstrap-imports';
+
+.info {
+  background-repeat: no-repeat;
+  // Position background to match grid gutter
+  background-position-x: 15px;
+  background-size: 75px 75px;
+  // Minimum height for backgrounds, and allow height to
+  // resize based on fluid content
+  min-height: 6rem;
+  // Constrain content length on larger viewports so it
+  // doesn't exceed background image length
+  max-width: 48rem;
+  margin-bottom: 2rem;
+  // Prevent overlapping of the background image
+  padding-left: 5rem;
+
+  h5 {
+    margin-bottom: 1rem;
+  }
+
+  p {
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  h5, p, a, div {
+    padding-left: 3rem;
+  }
+
+  @include media-breakpoint-up(md) {
+    background-size: auto;
+    min-height: 11rem;
+    padding-left: 9rem;
+    // Padding for content from the background image
+    padding-top: 2.5rem;
+  }
+}
+
+$assets:
+  'approval' '/assets/approval.svg' '/assets/approval-full.svg',
+  'notification' '/assets/notification.svg' '/assets/notification-full.svg',
+  'moa' '/assets/moa.svg' '/assets/moa-full.svg',
+  'global' '/assets/global.svg' '/assets/global-full.svg';
+
+  @each $name, $path, $full in $assets {
+    .#{$name} {
+      background-image: url($path);
+
+      @include media-breakpoint-up(md) {
+        background-image: url($full);
+      }
+    }
+  }

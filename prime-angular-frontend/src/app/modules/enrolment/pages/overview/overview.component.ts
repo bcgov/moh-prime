@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, Subscription, Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import { DateUtils } from '@lib/utils/date-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -37,6 +38,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
+  public withinDaysOfRenewal: boolean;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -65,31 +67,32 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       });
   }
 
-  public onSubmit() {
-    if (this.enrolmentFormStateService.isValid) {
-      const enrolment = this.enrolmentFormStateService.json;
-      const data: DialogOptions = {
-        title: 'Submit Enrolment',
-        message: 'When your enrolment is submitted for adjudication, it can no longer be updated. Are you ready to submit your enrolment?',
-        actionText: 'Submit Enrolment'
-      };
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? this.enrolmentResource.submitApplication(enrolment)
-              : EMPTY
-          )
-        )
-        .subscribe(() => {
-          this.toastService.openSuccessToast('Enrolment has been submitted');
-          this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
-        });
-    } else {
+  public onSubmit(): void {
+    if (!this.enrolmentFormStateService.isValid) {
       this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
+      return;
     }
+
+    const enrolment = this.enrolmentFormStateService.json;
+    const data: DialogOptions = {
+      title: 'Submit Enrolment',
+      message: 'When your enrolment is submitted for adjudication, it can no longer be updated. Are you ready to submit your enrolment?',
+      actionText: 'Submit Enrolment'
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          (result)
+            ? this.enrolmentResource.submitApplication(enrolment)
+            : EMPTY
+        )
+      )
+      .subscribe(() => {
+        this.toastService.openSuccessToast('Enrolment has been submitted');
+        this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
+      });
   }
 
   public canRequestRemoteAccess(): boolean {
@@ -112,6 +115,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     return (this.enrolmentFormStateService.isDirty && !this.allowRoutingWhenDirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
+  }
+
+  public get GPID(): string {
+    return this.enrolment?.enrollee?.gpid;
+  }
+
+  public onCopy() {
+    this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
   }
 
   public ngOnInit() {
@@ -153,6 +164,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.enrolmentFormStateService.setForm(enrolment);
 
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
+
+          this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
         })
       ).subscribe();
   }

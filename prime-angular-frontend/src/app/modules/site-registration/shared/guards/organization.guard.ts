@@ -1,13 +1,14 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router, Params } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { Party } from '@lib/models/party.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -37,14 +38,16 @@ export class OrganizationGuard extends BaseGuard {
         // Having no signing authority or organizations results in the same
         // redirection logic for the user, and therefore not handled individually
         exhaustMap((user: BcscUser) =>
-          this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
+          forkJoin([
+            this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
+              .pipe(
+                map((organizations: Organization[]) => (organizations?.length) ? organizations[0] : null)
+              ),
+            this.organizationResource.getSigningAuthorityByUserId(user.userId),
+            this.organizationResource.getOrganizationClaim({ userId: user.userId })
+          ])
         ),
-        map((organizations: Organization[] | null) =>
-          (organizations?.length)
-            ? organizations.shift()
-            : null
-        ),
-        map((organization: Organization | null) => {
+        map(([organization, party, claimed]: [Organization | null, Party, boolean]) => {
           // Store the organization for access throughout registration, which
           // will allows be the most up-to-date organization
           this.organizationService.organization = organization;
@@ -52,7 +55,7 @@ export class OrganizationGuard extends BaseGuard {
           // Determine the next route based on whether this is the initial
           // registration of an organization and site, or subsequent
           // registration of sites under an existing organization
-          return this.routeDestination(routePath, params, organization);
+          return this.routeDestination(routePath, params, organization, party, claimed);
         })
       );
   }
@@ -61,7 +64,7 @@ export class OrganizationGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the organization status.
    */
-  private routeDestination(routePath: string, params: Params, organization: Organization | null) {
+  private routeDestination(routePath: string, params: Params, organization: Organization | null, party: Party, hasOrgClaim: boolean) {
     // On login the user will always be redirected to the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
@@ -78,11 +81,11 @@ export class OrganizationGuard extends BaseGuard {
     if (organization) {
       return (organization.completed)
         ? this.manageCompleteOrganizationRouting(routePath, organization)
-        : this.manageIncompleteOrganizationRouting(routePath, organization);
+        : this.manageIncompleteOrganizationRouting(routePath, organization, party);
     }
 
     // Otherwise, no organization exists
-    return this.manageNoOrganizationRouting(routePath);
+    return this.manageNoOrganizationRouting(routePath, party, hasOrgClaim);
   }
 
   /**
@@ -116,10 +119,13 @@ export class OrganizationGuard extends BaseGuard {
    * Manage routing when an organization initial registration has
    * not been completed.
    */
-  private manageIncompleteOrganizationRouting(routePath: string, organization: Organization) {
+  private manageIncompleteOrganizationRouting(routePath: string, organization: Organization, party: Party) {
     // Provides a default of the initial site registration view unless the current view
     // can be determined through state of the organization
-    return this.manageRouting(routePath, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, organization);
+    const destPath = (party)
+      ? SiteRoutes.ORGANIZATION_NAME
+      : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
+    return this.manageRouting(routePath, destPath, organization);
   }
 
   /**
@@ -127,10 +133,14 @@ export class OrganizationGuard extends BaseGuard {
    * Manage routing when an organization does not exist, or initial
    * registration has not been completed.
    */
-  private manageNoOrganizationRouting(routePath: string) {
+  private manageNoOrganizationRouting(routePath: string, party: Party, hasOrgClaim: boolean) {
+    const destPath = (party)
+      ? SiteRoutes.ORGANIZATION_NAME
+      : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
+
     // During initial registration the ID will be set to zero indicating the
     // organization does not exist
-    return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, 0);
+    return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, destPath, 0);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {

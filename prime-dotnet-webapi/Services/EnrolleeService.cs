@@ -1,42 +1,42 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using DelegateDecompiler.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using DelegateDecompiler.EntityFrameworkCore;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 
 using Prime.Auth;
-using Prime.Models;
-using Prime.ViewModels;
-using Prime.Models.Api;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
-using System.Security.Claims;
-using System.Linq.Expressions;
-using Prime.ViewModels.PaperEnrollees;
+using Prime.Models;
+using Prime.Models.Api;
+using Prime.Models.VerifiableCredentials;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
     public class EnrolleeService : BaseService, IEnrolleeService
     {
-        private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly IMapper _mapper;
 
         public EnrolleeService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IMapper mapper,
+            ILogger<EnrolleeService> logger,
             IBusinessEventService businessEventService,
-            IDocumentManagerClient documentClient)
-            : base(context, httpContext)
+            IDocumentManagerClient documentClient,
+            IMapper mapper)
+            : base(context, logger)
         {
-            _mapper = mapper;
             _businessEventService = businessEventService;
             _documentClient = documentClient;
+            _mapper = mapper;
         }
 
         public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
@@ -80,7 +80,7 @@ namespace Prime.Services
                 query = query.Include(e => e.Adjudicator)
                     .Include(e => e.EnrolmentStatuses)
                         .ThenInclude(es => es.EnrolmentStatusReference)
-                            .ThenInclude(esan => esan.AdjudicatorNote)
+                            .ThenInclude(esr => esr.AdjudicatorNote)
                     .Include(e => e.EnrolmentStatuses)
                         .ThenInclude(es => es.EnrolmentStatusReference)
                             .ThenInclude(esr => esr.Adjudicator);
@@ -127,8 +127,13 @@ namespace Prime.Services
                     .SearchCollections(e => e.Certifications.Select(c => c.LicenseNumber))
                     .Containing(searchOptions.TextSearch)
                 )
-                .If(searchOptions.StatusCode.HasValue, q => q
+                .If(searchOptions.StatusCode.HasValue && searchOptions.StatusCode != 42, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
+                )
+                // MacGyver paper enrollee Filter into status Filter. arbitrarily chose 42.
+                // search-form.component.ts constructor() has other reference to this value.
+                .If(searchOptions.StatusCode.HasValue && searchOptions.StatusCode == 42, q => q
+                    .Where(e => e.GPID.StartsWith("NOBCSC"))
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
@@ -258,8 +263,7 @@ namespace Prime.Services
         private void UpdateAddress<T>(Enrollee dbEnrollee, T newAddress) where T : Address
         {
             var existingEnrolleeAddress = dbEnrollee.Addresses
-                .Where(ea => ea.Address is T)
-                .SingleOrDefault();
+                .SingleOrDefault(ea => ea.Address is T);
 
             if (existingEnrolleeAddress == null)
             {
@@ -557,9 +561,7 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.IdentificationDocuments)
-                .Include(e => e.Agreements)
-                .Include(e => e.EnrolleeCredentials)
-                    .ThenInclude(ec => ec.Credential);
+                .Include(e => e.Agreements);
         }
 
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
@@ -921,6 +923,13 @@ namespace Prime.Services
                 .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.UserId == user.GetPrimeUserId())
                 .Select(en => en.EnrolleeId)
                 .ToListAsync();
+        }
+
+        public async Task<Credential> GetCredentialAsync(int enrolleeId)
+        {
+            return await _context.Credentials
+                .OrderByDescending(c => c.Id)
+                .FirstOrDefaultAsync(c => c.EnrolleeId == enrolleeId);
         }
 
         public async Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType)

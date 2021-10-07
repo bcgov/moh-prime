@@ -7,14 +7,17 @@ import { FilePondPluginFileValidateSizeProps } from 'filepond-plugin-file-valida
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
 import tus from 'tus-js-client';
 
+import { EnumUtils } from '@lib/utils/enum-utils.class';
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { DocumentType } from '@shared/enums/document-type.enum';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
-import { APP_CONFIG, AppConfig } from '../../../../app-config.module';
 
 export class BaseDocument {
   id: number;
   filename: string;
   documentGuid: string;
+  documentType: DocumentType;
 
   constructor(filename: string, documentGuid: string) {
     this.filename = filename;
@@ -109,9 +112,9 @@ export class DocumentUploadComponent implements OnInit {
 
     const [initialFileType, ...fileTypes] = Object.values(allowedFileTypesMap);
     const allowedFileTypes = fileTypes.reduce((concat, fileType, index) =>
-        (index === fileTypes.length - 1)
-          ? `${concat}, or ${fileType}`
-          : `${concat}, ${fileType}`
+      (index === fileTypes.length - 1)
+        ? `${concat}, or ${fileType}`
+        : `${concat}, ${fileType}`
       , initialFileType);
 
     return `${this.labelMessage}. Files must be ${allowedFileTypes}`;

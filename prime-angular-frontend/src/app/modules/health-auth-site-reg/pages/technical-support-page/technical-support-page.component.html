@@ -1,0 +1,27 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+
+  <app-page-section>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Technical Support</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Choose the Technical Support for this Health Authority.
+      </ng-container>
+    </app-page-subheader2>
+
+    <app-options-form [form]="formState.form"
+                      fieldLabel="Technical Support"
+                      controlName="healthAuthorityTechnicalSupportId"
+                      optionKey="id"
+                      optionLabel="fullName"
+                      [availableOptions]="technicalSupports"></app-options-form>
+  </app-page-section>
+
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   primaryActionLabel="Save and Continue"
+                   (save)="onSubmit()"
+                   (back)="onBack()"
+                   (continue)="onBack()"></app-page-footer>
+</app-page>

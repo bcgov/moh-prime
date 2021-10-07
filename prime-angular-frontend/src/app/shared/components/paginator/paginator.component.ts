@@ -31,11 +31,19 @@ export class PaginatorComponent implements AfterContentInit {
   ) { }
 
   public get disabled(): boolean {
+    if (!this.paginator) {
+      return true;
+    }
+
     const value = +this.form.value;
     return value < 1 || value > this.paginator.getNumberOfPages();
   }
 
   public onChange(event): void {
+    if (!this.paginator) {
+      return;
+    }
+
     event.preventDefault();
     // Zero index the form value for comparison
     const value = +this.form.value - 1;
@@ -53,6 +61,10 @@ export class PaginatorComponent implements AfterContentInit {
   }
 
   public ngAfterContentInit(): void {
+    if (!this.paginator) {
+      return;
+    }
+
     const currentPage = this.paginator.pageIndex + 1;
     this.form = this.fb.control(currentPage, [
       Validators.required,

@@ -1,29 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 using Prime.Models;
+using Prime.Models.Plr;
+using Prime.ViewModels.Plr;
 
 namespace Prime.Services
 {
     public class PlrProviderService : BaseService, IPlrProviderService
     {
-        private readonly ILogger _logger;
-
         private readonly IMapper _mapper;
-
 
         public PlrProviderService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
             ILogger<PlrProviderService> logger,
             IMapper mapper)
-            : base(context, httpContext)
+            : base(context, logger)
         {
-            _logger = logger;
             _mapper = mapper;
         }
 
@@ -60,6 +59,25 @@ namespace Prime.Services
                 return -1;
             }
             return existingPlrProvider == null ? dataObject.Id : existingPlrProvider.Id;
+        }
+
+        public async Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdsAsync(IEnumerable<string> collegeIds)
+        {
+            IQueryable<PlrRoleType> plrRoleTypes = _context.Set<PlrRoleType>();
+            IQueryable<PlrStatusReason> plrStatusReasons = _context.Set<PlrStatusReason>();
+
+            var plr = await _context.PlrProviders
+                .AsNoTracking()
+                .Where(p => collegeIds.Contains(p.CollegeId))
+                .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
+                .ToListAsync();
+
+            // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manually before return
+            return plr.Select(p =>
+                {
+                    p.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e => p.ExpertiseCode.Contains(e.Code)).Select(e => e.Name));
+                    return p;
+                });
         }
 
         private async Task TranslateIdentifierTypeAsync(PlrProvider dataObject)

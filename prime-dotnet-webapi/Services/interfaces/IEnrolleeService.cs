@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.Models.VerifiableCredentials;
 using Prime.ViewModels;
 
 namespace Prime.Services
@@ -51,5 +51,6 @@ namespace Prime.Services
         Task RemoveNotificationsAsync(int enrolleeId);
         Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user);
         Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType);
+        Task<Credential> GetCredentialAsync(int enrolleeId);
     }
 }

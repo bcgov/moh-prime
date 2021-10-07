@@ -15,6 +15,8 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
+import { Job } from '@enrolment/shared/models/job.model';
+
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
   displayId?: number;
@@ -54,11 +56,13 @@ export interface HttpEnrollee extends Enrollee {
   gpid: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
+  // This is needed for legacy enrolments
+  jobs: Job[];
 }
 
 /**
  * @deprecated
- * With the Enrolent table being dropped this is artifact
+ * With the Enrolment table being dropped this is artifact
  * that needs to be removed to reduce confusion.
  *
  * NOTE: Enrolment contains equivalent data when compared to
@@ -105,6 +109,8 @@ export interface Enrolment {
   base64QRCode: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
+  // This is needed for legacy enrolments
+  jobs: Job[];
 }
 
 export interface EnrolleeListViewModel {
@@ -128,4 +134,5 @@ export interface EnrolleeListViewModel {
   hasNotification: boolean;
   requiresConfirmation: boolean;
   confirmed: boolean;
+  gpid: string;
 }

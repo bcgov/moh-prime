@@ -1,0 +1,40 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Organization Agreement</ng-container>
+    </app-page-subheader2>
+  </section>
+
+  <div class="organization-agreement"
+       [innerHTML]="organizationAgreement?.agreementContent | safe: 'html'"></div>
+
+  <div class="footer mb-4">
+    <mat-checkbox #accept>
+      <div class="pl-3">
+        By checking here I agree to the terms of this Agreement as the duly authorized representative of the
+        Organization.
+      </div>
+    </mat-checkbox>
+  </div>
+
+  <div class="row justify-content-end">
+    <div class="col">
+
+      <button mat-stroked-button
+              color="primary"
+              (click)="onBack()">Back</button>
+
+    </div>
+    <div class="col text-right">
+
+      <button mat-flat-button
+              color="primary"
+              [disabled]="!accepted?.checked"
+              (click)="onSubmit()">Accept Organization Agreement</button>
+
+    </div>
+  </div>
+
+</app-page>

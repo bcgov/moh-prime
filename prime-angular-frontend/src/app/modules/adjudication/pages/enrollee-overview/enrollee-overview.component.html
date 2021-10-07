@@ -14,10 +14,37 @@
                       (navigateEnrollee)="onNavigateEnrollee($event)"
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
-  <div class="row mt-4">
+  <div class="d-flex justify-content-between align-items-center mt-4">
+    <span *ngIf="enrolment?.enrollee.gpid"
+          class="mb-4 align-self-center">
+        <strong>GPID:</strong> {{ enrolment?.enrollee.gpid }}
+    </span>
 
+    <span>
+        <app-adjudicator-actions *ngIf="enrollees?.length"
+                                 [enrollee]="enrollees[0]"
+                                 (approve)="onApprove($event)"
+                                 (decline)="onDecline($event)"
+                                 (lock)="onLock($event)"
+                                 (unlock)="onUnlock($event)"
+                                 (delete)="onDelete($event)"
+                                 (route)="onRoute($event)"
+                                 (assignToa)="onAssignToa($event)"
+                                 (enableEnrollee)="onEnableEnrollee($event)"
+                                 (enableEditing)="onEnableEditing($event)"
+                                 (cancelToa)="onCancelToa($event)"
+                                 (rerunRules)="onRerunRules($event)"
+                                 (toggleManualAdj)="onToggleManualAdj($event)"
+                                 (reload)="onRefresh()"
+                                 mode='row'>
+        </app-adjudicator-actions>
+      </span>
+  </div>
+
+  <div class="row">
     <div class="col-6">
       <h2>Enrolment</h2>
+
       <mat-card id="enrolmentCard">
         <mat-card-content>
           <p class="text-success font-italic">
@@ -32,8 +59,10 @@
           </app-enrollee-review>
         </mat-card-content>
       </mat-card>
+
     </div>
     <div class="col-6">
+
       <ng-container *ngIf="showAdjudication">
         <h2>Adjudication</h2>
         <mat-card id="adjudicationCard">
@@ -41,28 +70,17 @@
             <app-review-status-content [enrollee]="enrollee"
                                        [hideStatusHistory]="true">
             </app-review-status-content>
+            <app-document-attachments *ngIf="documents"
+                                      [documents]="documents">
+            </app-document-attachments>
           </mat-card-content>
         </mat-card>
       </ng-container>
-
-      <app-adjudicator-actions *ngIf="enrollees?.length"
-                               class="float-right"
-                               [enrollee]="enrollees[0]"
-                               (approve)="onApprove($event)"
-                               (decline)="onDecline($event)"
-                               (lock)="onLock($event)"
-                               (unlock)="onUnlock($event)"
-                               (delete)="onDelete($event)"
-                               (route)="onRoute($event)"
-                               (assignToa)="onAssignToa($event)"
-                               (enableEnrollee)="onEnableEnrollee($event)"
-                               (enableEditing)="onEnableEditing($event)"
-                               (cancelToa)="onCancelToa($event)"
-                               (rerunRules)="onRerunRules($event)"
-                               (toggleManualAdj)="onToggleManualAdj($event)"
-                               (reload)="onRefresh()">
-      </app-adjudicator-actions>
-
+      <div *ngIf="plrInfo?.length">
+        <ng-container *ngFor="let plr of plrInfo">
+          <app-plr-info [plrData]="plr"></app-plr-info>
+        </ng-container>
+      </div>
     </div>
   </div>
 </app-page>

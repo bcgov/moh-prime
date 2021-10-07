@@ -17,7 +17,7 @@ module.exports = function (config) {
       clearContext: false,
     },
     coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, './coverage/angular-frontend'),
+      dir: require('path').join(__dirname, './coverage/'),
       reports: ['html', 'lcovonly', 'text-summary'],
       fixWebpackSourcePaths: true
     },
@@ -60,9 +60,15 @@ module.exports = function (config) {
       },
     },
     browserDisconnectTimeout: 10000,
-    browserDisconnectTolerance: 3,
+    browserDisconnectTolerance: 10,
     browserNoActivityTimeout: 60000,
     singleRun: false,
     restartOnFileChange: true,
+    customLaunchers: {
+      ChromeHeadlessCustom: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '--disable-gpu']
+      }
+    }
   });
 };

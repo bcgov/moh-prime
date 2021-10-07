@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
-import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { EmailUtils } from '@lib/utils/email-utils.class';
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { UtilsService } from '@core/services/utils.service';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { SiteAdjudicationAction } from '@registration/shared/enum/site-adjudication-action.enum';
 
@@ -27,8 +27,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public SiteAdjudicationAction = SiteAdjudicationAction;
 
   constructor(
-    private permissionService: PermissionService,
-    private utilsService: UtilsService
+    private permissionService: PermissionService
   ) {
     this.delete = new EventEmitter<{ [key: string]: number }>();
     this.approve = new EventEmitter<number>();
@@ -66,7 +65,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public onContactSigningAuthority() {
     const signingAuthority = this.siteRegistration?.signingAuthority;
     if (signingAuthority) {
-      this.utilsService.mailTo(
+      EmailUtils.openEmailClient(
         signingAuthority.email,
         `PRIME Site Registration - ${this.siteRegistration.name}`,
         `Dear ${signingAuthority.firstName} ${signingAuthority.lastName},`
@@ -79,7 +78,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
       this.flag.emit({
         siteId: this.siteRegistration.siteId,
         flagged: !this.siteRegistration.flagged
-      })
+      });
     }
   }
 
@@ -94,15 +93,18 @@ export class SiteRegistrationActionsComponent implements OnInit {
   }
 
   /**
-   * @param action
-   * @returns Whether the given action is valid according to the status of the site registration
+   * @description
+   * Check whether the given action is valid according to the status of the
+   * site registration.
    */
   public isActionAllowed(action: SiteAdjudicationAction): boolean {
     switch (this.siteRegistration.status) {
       case SiteStatusType.EDITABLE:
         return (action === SiteAdjudicationAction.REJECT);
       case SiteStatusType.IN_REVIEW:
-        return (action === SiteAdjudicationAction.REQUEST_CHANGES || action === SiteAdjudicationAction.APPROVE || action === SiteAdjudicationAction.REJECT);
+        return (action === SiteAdjudicationAction.REQUEST_CHANGES
+          || action === SiteAdjudicationAction.APPROVE
+          || action === SiteAdjudicationAction.REJECT);
       case SiteStatusType.LOCKED:
         return (action === SiteAdjudicationAction.UNREJECT);
       default:

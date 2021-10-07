@@ -30,13 +30,13 @@ namespace Prime.Models.HealthAuthorities
 
         public string SiteId { get; set; }
 
-        public string SecurityGroup { get; set; }
+        public int SecurityGroupCode { get; set; }
 
         public string CareType { get; set; }
 
         // TODO list of care types?
         // public int? HealthAuthorityCareTypeId { get; set; }
-        //
+
         // [JsonIgnore]
         // public HealthAuthorityCareType HealthAuthorityCareType { get; set; }
 
@@ -48,8 +48,11 @@ namespace Prime.Models.HealthAuthorities
 
         public int? HealthAuthorityPharmanetAdministratorId { get; set; }
 
-        [JsonIgnore]
         public HealthAuthorityPharmanetAdministrator HealthAuthorityPharmanetAdministrator { get; set; }
+
+        public int? HealthAuthorityTechnicalSupportId { get; set; }
+
+        public HealthAuthorityTechnicalSupport HealthAuthorityTechnicalSupport { get; set; }
 
         public bool Completed { get; set; }
 

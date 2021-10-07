@@ -1,6 +1,7 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+
 using Prime.Models;
 using Prime.ViewModels;
 
@@ -10,11 +11,11 @@ namespace Prime.Services
     {
         public ClientLogService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+            ILogger<ClientLogService> logger)
+            : base(context, logger)
         { }
 
-        public async Task CreateLogAsync(ClientLogViewModel log)
+        public async Task<int> CreateLogAsync(ClientLogViewModel log)
         {
             var newLog = new ClientLog
             {
@@ -27,6 +28,8 @@ namespace Prime.Services
             _context.ClientLogs.Add(newLog);
 
             await _context.SaveChangesAsync();
+
+            return newLog.Id;
         }
     }
 }

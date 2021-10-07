@@ -1,4 +1,7 @@
-import { AbstractControl, ValidatorFn, Validators, ValidationErrors } from '@angular/forms';
+import { AbstractControl, ValidatorFn, Validators, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
+
+import { EMPTY, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, first, map, switchMap } from 'rxjs/operators';
 
 export class FormControlValidators {
 
@@ -98,7 +101,7 @@ export class FormControlValidators {
    * @description
    * Checks the form control value is a float.
    */
-  public static float(control: AbstractControl, precision: number = 2): ValidationErrors | null {
+  public static float(control: AbstractControl, precision = 2): ValidationErrors | null {
     if (!control.value) { return null; }
     // Doesn't allow . or .# only .##+ or no decimal
     const regExp = /^[-+]?(0?|(?![0,])(,?[\d]{1,3})+)(\.[\d]{2,})?$/;

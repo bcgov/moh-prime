@@ -115,8 +115,6 @@ namespace Prime.Models
 
         public ICollection<OboSite> OboSites { get; set; }
 
-        public ICollection<EnrolleeCredential> EnrolleeCredentials { get; set; }
-
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
         [NotMapped]
@@ -144,15 +142,6 @@ namespace Prime.Models
                 .Select(a => a.Address)
                 .OfType<VerifiedAddress>()
                 .SingleOrDefault();
-        }
-
-        [NotMapped]
-        public string Base64QRCode
-        {
-            get => EnrolleeCredentials?
-                .OrderByDescending(s => s.Id)
-                .Select(ec => ec.Credential?.Base64QRCode)
-                .FirstOrDefault();
         }
 
         /// <summary>
@@ -331,7 +320,7 @@ namespace Prime.Models
         {
             if (Certifications == null)
             {
-                throw new InvalidOperationException($"{nameof(Certifications)} cannnot be null");
+                throw new InvalidOperationException($"{nameof(Certifications)} cannot be null");
             }
 
             return Certifications.Any(cert => cert.License?.NamedInImReg == true);

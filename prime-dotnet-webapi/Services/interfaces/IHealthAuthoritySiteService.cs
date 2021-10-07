@@ -11,6 +11,7 @@ namespace Prime.Services
     {
         Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId);
         Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode);
+        Task<IEnumerable<HealthAuthoritySiteViewModel>> GetAllSitesAsync();
         Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId);
         Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
         // TODO should we use a relationship but issues around deletion
@@ -24,7 +25,7 @@ namespace Prime.Services
         Task UpdateHoursOperationAsync(int siteId, ICollection<BusinessDay> businessHours);
         Task UpdateRemoteUsersAsync(int siteId, ICollection<RemoteUser> remoteUsers);
         Task UpdatePharmanetAdministratorAsync(int siteId, int healthAuthoritySiteAdministratorId);
-
+        Task UpdateTechnicalSupportAsync(int siteId, int technicalSupportId);
         Task SetSiteCompletedAsync(int siteId);
         Task SiteSubmissionAsync(int siteId);
     }

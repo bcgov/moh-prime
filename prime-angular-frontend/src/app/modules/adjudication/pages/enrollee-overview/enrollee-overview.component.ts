@@ -16,6 +16,10 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { AdjudicationContainerComponent } from '@adjudication/shared/components/adjudication-container/adjudication-container.component';
+import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
+
+import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -26,17 +30,21 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public enrollee: HttpEnrollee;
   public enrolment: Enrolment;
   public enrolleeNavigation: EnrolleeNavigation;
+  public plrInfo: PlrInfo[];
   public showAdjudication: boolean;
+  public documents: EnrolleeAdjudicationDocument[];
+
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,
     protected route: ActivatedRoute,
     protected router: Router,
     protected adjudicationResource: AdjudicationResource,
+    private paperEnrolmentResource: PaperEnrolmentResource,
     permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService,
-    toastService: ToastService
+    toastService: ToastService,
   ) {
     super(defaultOptions,
       route,
@@ -59,6 +67,14 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       .subscribe(params => this.loadEnrollee(params.id));
 
     this.action.subscribe(() => this.loadEnrollee(this.route.snapshot.params.id));
+
+    this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.id)
+      .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
+
+    this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id)
+      .subscribe(documents => {
+        this.documents = documents
+      });
   }
 
   private loadEnrollee(enrolleeId: number): void {
@@ -72,13 +88,15 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
               enrolment: this.enrolmentAdapter(enrollee)
             }))
           ),
-        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId)
+        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId),
+        plrInfo: this.adjudicationResource.getPlrInfoByEnrolleeId(enrolleeId)
       })
-        .subscribe(({ enrollee, enrolleeNavigation }) => {
+        .subscribe(({ enrollee, enrolleeNavigation, plrInfo }) => {
           this.enrollee = enrollee.enrollee;
           this.enrollees = [enrollee.enrolleeView];
           this.enrolment = enrollee.enrolment;
           this.enrolleeNavigation = enrolleeNavigation;
+          this.plrInfo = plrInfo;
           // hide the adjudication card if enrolment is editable and no 'reason for adjudication'
           this.showAdjudication = !(enrollee.enrollee.currentStatus.statusCode === EnrolmentStatusEnum.EDITABLE
             && !enrollee.enrollee.currentStatus.enrolmentStatusReasons?.length);

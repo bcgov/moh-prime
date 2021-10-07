@@ -82,7 +82,6 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
   constructor(
     private formUtilsService: FormUtilsService
   ) {
-    this.hasAddressToggle = true;
     this.excludeList = [];
   }
 
@@ -115,7 +114,11 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
    * Event handler for the address toggle.
    */
   public onAddressChange({ checked }: MatSlideToggleChange) {
-    if (!checked) {
+    if(!this.hasAddressToggle || this.excludeList.includes('physicalAddress')) {
+      return;
+    }
+
+    if (checked) {
       this.physicalAddress.reset();
     }
 
@@ -149,7 +152,7 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
           if (Address.isNotEmpty(contact.physicalAddress)) {
             // Change the validators based on the toggled value, otherwise
             // the default is required so the address should be displayed
-            this.toggleAddress(true);
+            this.toggleAddress();
             this.expandAddressFields();
           }
         });
@@ -160,7 +163,7 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
         .subscribe(() => {
           // Change the validators based on the toggled value, otherwise
           // the default is required so the address should be displayed
-          if (!this.toggle.checked) {
+          if (!this.toggle?.checked) {
             this.changeAddressValidators(this.physicalAddress);
           }
           this.expandAddressFields();

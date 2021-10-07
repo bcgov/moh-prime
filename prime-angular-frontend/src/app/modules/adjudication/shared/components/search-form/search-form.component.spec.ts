@@ -1,31 +1,32 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SearchFormComponent } from './search-form.component';
-import { AdjudicationModule } from '@adjudication/adjudication.module';
-import { ConfigService } from '@config/config.service';
-import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { MockConfigService } from 'test/mocks/mock-config.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
-import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { MockConfigService } from 'test/mocks/mock-config.service';
+
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { ConfigService } from '@config/config.service';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { SearchFormComponent } from './search-form.component';
 
 describe('SearchFormComponent', () => {
   let component: SearchFormComponent;
   let fixture: ComponentFixture<SearchFormComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
-        NgxBusyModule,
-        NgxContextualHelpModule,
-        NgxMaterialModule,
+        ReactiveFormsModule,
         RouterTestingModule,
-        AdjudicationModule
+        HttpClientTestingModule,
+        NgxMaterialModule,
+        BrowserAnimationsModule
+      ],
+      declarations: [
+        SearchFormComponent
       ],
       providers: [
         {
@@ -34,12 +35,12 @@ describe('SearchFormComponent', () => {
         },
         {
           provide: ConfigService,
-          useValue: MockConfigService
+          useClass: MockConfigService
         }
-      ]
-    })
-      .compileComponents();
-  }));
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchFormComponent);

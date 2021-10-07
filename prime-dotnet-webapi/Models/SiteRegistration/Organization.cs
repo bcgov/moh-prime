@@ -11,6 +11,13 @@ namespace Prime.Models
     [Table("Organization")]
     public class Organization : BaseAuditable, IAgreeable
     {
+        public Organization()
+        {
+            // Initialize collections to prevent null exception on computed properties
+            // like `HasClaim`
+            Claims = new List<OrganizationClaim>();
+        }
+
         public const int DISPLAY_OFFSET = 1000;
 
         [Key]
@@ -29,12 +36,17 @@ namespace Prime.Models
         public Party SigningAuthority { get; set; }
 
         public int SigningAuthorityId { get; set; }
+        
+        public bool PendingTransfer { get; set; }
 
         [JsonIgnore]
         public ICollection<Site> Sites { get; set; }
 
         [JsonIgnore]
         public ICollection<Agreement> Agreements { get; set; }
+
+        [JsonIgnore]
+        public ICollection<OrganizationClaim> Claims { get; set; }
 
         [NotMapped]
         [Computed]
@@ -53,6 +65,13 @@ namespace Prime.Models
         public bool HasSubmittedSite
         {
             get => Sites?.Any(s => s.SubmittedDate.HasValue) ?? false;
+        }
+
+        [NotMapped]
+        [Computed]
+        public bool HasClaim
+        {
+            get => Claims.Any();
         }
     }
 }

@@ -1,0 +1,11 @@
+<ng-container *ngIf="documents?.length">
+  <div *ngFor="let document of documents"
+       class="mb-2">
+    <button mat-stroked-button
+            color="primary"
+            (click)="onDownload(document.id)">
+      <mat-icon class="mr-2">attachment</mat-icon>
+      {{ document.filename | default }}
+    </button>
+  </div>
+</ng-container>

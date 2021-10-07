@@ -1,17 +1,17 @@
+using DelegateDecompiler.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using DelegateDecompiler.EntityFrameworkCore;
 
+using Prime.HttpClients.Mail;
+using Prime.HttpClients.Mail.ChesApiDefinitions;
 using Prime.Models;
 using Prime.Services.EmailInternal;
-using Prime.HttpClients.Mail;
 using Prime.ViewModels.Emails;
-using Prime.HttpClients.Mail.ChesApiDefinitions;
 
 namespace Prime.Services
 {
@@ -23,23 +23,23 @@ namespace Prime.Services
             public const string Smtp = "SMTP";
         }
 
+        private readonly IChesClient _chesClient;
         private readonly IEmailDocumentsService _emailDocumentService;
         private readonly IEmailRenderingService _emailRenderingService;
-        private readonly IChesClient _chesClient;
         private readonly ISmtpEmailClient _smtpEmailClient;
 
         public EmailService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<EmailService> logger,
+            IChesClient chesClient,
             IEmailDocumentsService emailDocumentService,
             IEmailRenderingService emailRenderingService,
-            IChesClient chesClient,
             ISmtpEmailClient smtpEmailClient)
-            : base(context, httpContext)
+            : base(context, logger)
         {
+            _chesClient = chesClient;
             _emailDocumentService = emailDocumentService;
             _emailRenderingService = emailRenderingService;
-            _chesClient = chesClient;
             _smtpEmailClient = smtpEmailClient;
         }
 
@@ -77,16 +77,32 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId)
+        public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(businessLicenceId);
 
-            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl));
+            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode);
             email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(siteId);
             await Send(email);
 
             var siteRegReviewPdf = email.Attachments.Single(a => a.Filename == "SiteRegistrationReview.pdf");
             await _emailDocumentService.SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
+        }
+
+        public async Task SendSiteReviewedNotificationAsync(int siteId, string note)
+        {
+
+            var viewModel = await _context.Sites
+                .Where(s => s.Id == siteId)
+                .Select(s => new SiteReviewedEmailViewModel
+                {
+                    Note = note,
+                    Pec = s.PEC
+                })
+                .SingleAsync();
+
+            var email = await _emailRenderingService.RenderSiteReviewedNotificationEmailAsync(viewModel);
+            await Send(email);
         }
 
         public async Task SendRemoteUsersUpdatedAsync(Site site)
@@ -206,6 +222,28 @@ namespace Prime.Services
                     await Send(email);
                 }
             }
+        }
+
+        public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
+        {
+            var orgName = await _context.Organizations
+                .Where(o => o.Id == organizationClaim.OrganizationId)
+                .Select(o => o.Name)
+                .SingleAsync();
+
+            var newSigningAuthorityEmail = await _context.Parties
+                .Where(p => p.Id == organizationClaim.NewSigningAuthorityId)
+                .Select(p => p.Email)
+                .SingleAsync();
+
+            var viewModel = new OrgClaimApprovalNotificationViewModel
+            {
+                OrganizationName = orgName,
+                ProvidedSiteId = organizationClaim.ProvidedSiteId
+            };
+
+            var email = await _emailRenderingService.RenderOrgClaimApprovalNotificationEmailAsync(newSigningAuthorityEmail, viewModel);
+            await Send(email);
         }
 
         public async Task<int> UpdateEmailLogStatuses(int limit)

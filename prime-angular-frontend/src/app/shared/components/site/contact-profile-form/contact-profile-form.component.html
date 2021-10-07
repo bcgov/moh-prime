@@ -112,38 +112,35 @@
     </div>
   </app-page-section>
 
-  <ng-container *ngIf="hasAddressToggle; else noToggle">
-    <!-- Must be hidden and not ngIf so that the toggle can be located by ViewChild -->
-    <div [hidden]="excludeList.includes('physicalAddress')">
-      <div class="mb-4">
-        <mat-slide-toggle #slider
-                          color="primary"
-                          (change)="onAddressChange($event)">
-          The {{ title }}'s mailing address is the same as the site’s address
-        </mat-slide-toggle>
-      </div>
-
-      <ng-container *ngIf="!slider.checked">
-        <ng-container *ngTemplateOutlet="address"></ng-container>
-      </ng-container>
+  <!-- Must bind to hidden instead of using *ngIf so toggle can be located by ViewChild -->
+  <div [hidden]="!hasAddressToggle">
+    <div class="mb-4">
+      <mat-slide-toggle #slider
+                        color="primary"
+                        (change)="onAddressChange($event)">
+        The {{ title }}'s mailing address is the same as the site’s address
+      </mat-slide-toggle>
     </div>
-  </ng-container>
 
-  <ng-template #noToggle>
+    <ng-container *ngIf="!slider.checked">
+      <ng-container *ngTemplateOutlet="address"></ng-container>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="!hasAddressToggle">
     <ng-container *ngTemplateOutlet="address"></ng-container>
-  </ng-template>
+  </ng-container>
 
   <ng-content select="app-page-footer"></ng-content>
 </ng-container>
 
 <ng-template #address>
-  <app-page-section>
+  <app-page-section *ngIf="!excludeList.includes('physicalAddress')">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Address</ng-container>
     </app-page-subheader2>
 
-    <app-address-form *ngIf="!excludeList.includes('physicalAddress')"
-                      [form]="physicalAddress"
+    <app-address-form [form]="physicalAddress"
                       [showManualButton]="true"
                       [showAddressFields]="showAddressFields"></app-address-form>
   </app-page-section>

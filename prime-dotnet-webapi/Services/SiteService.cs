@@ -1,41 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using LinqKit;
-
-using Prime.Models;
-using Prime.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using DelegateDecompiler.EntityFrameworkCore;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
+using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
     public class SiteService : BaseService, ISiteService
     {
-        private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
-        private readonly IOrganizationService _organizationService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly IMapper _mapper;
+        private readonly IOrganizationService _organizationService;
 
         public SiteService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IMapper mapper,
+            ILogger<SiteService> logger,
             IBusinessEventService businessEventService,
-            IOrganizationService organizationService,
-            IDocumentManagerClient documentClient)
-            : base(context, httpContext)
+            IDocumentManagerClient documentClient,
+            IMapper mapper,
+            IOrganizationService organizationService)
+            : base(context, logger)
         {
-            _mapper = mapper;
             _businessEventService = businessEventService;
-            _organizationService = organizationService;
             _documentClient = documentClient;
+            _mapper = mapper;
+            _organizationService = organizationService;
         }
 
         public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
@@ -94,10 +94,10 @@ namespace Prime.Services
 
             if (currentSite.SubmittedDate == null)
             {
-                UpdateAddress(currentSite, updatedSite);
                 UpdateVendors(currentSite, updatedSite);
             }
 
+            UpdateAddress(currentSite, updatedSite);
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
             UpdateRemoteUsers(currentSite, updatedSite);
@@ -112,6 +112,15 @@ namespace Prime.Services
             {
                 return 0;
             }
+        }
+
+        public async Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .Where(s => s.Id == siteId)
+                .Select(s => new PermissionsRecord { UserId = s.Organization.SigningAuthority.UserId })
+                .SingleOrDefaultAsync();
         }
 
         private void UpdateAddress(Site current, SiteUpdateModel updated)
@@ -363,6 +372,7 @@ namespace Prime.Services
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
             site.ApprovedDate = null;
+            site.SubmittedDate = null;
             site.AddStatus(SiteStatusType.Editable);
             await _context.SaveChangesAsync();
 
@@ -519,8 +529,11 @@ namespace Prime.Services
         public async Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId)
         {
             return await _context.Sites
+                .Include(s => s.BusinessLicences)
+                    .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Where(s => s.Id == siteId)
                 .Select(s => s.BusinessLicence)
+                .DecompileAsync()
                 .SingleOrDefaultAsync();
         }
 
@@ -601,7 +614,7 @@ namespace Prime.Services
         {
             return await _context.BusinessEvents
                 .Include(e => e.Admin)
-                .Where(e => e.SiteId == siteId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
+                .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode) && (e.SiteId == siteId || e.Organization.Sites.Any(s => s.Id == siteId)))
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
         }
@@ -662,7 +675,7 @@ namespace Prime.Services
             {
                 SiteRegistrationNoteId = siteRegistrationNoteId,
                 AdminId = adminId,
-                AssigneeId = assineeId,
+                AssigneeId = assineeId
             };
 
             _context.SiteNotifications.Add(notification);
@@ -727,6 +740,20 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<bool> SiteExists(int siteId)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .AnyAsync(s => s.Id == siteId);
+        }
+
+        public async Task<bool> PecAssignableAsync(string pec)
+        {
+            // TODO: Validate re: care settings and HA
+            return await _context.Sites
+                .AsNoTracking()
+                .AllAsync(s => s.PEC != pec);
+        }
 
         private IQueryable<Site> GetBaseSiteQuery()
         {

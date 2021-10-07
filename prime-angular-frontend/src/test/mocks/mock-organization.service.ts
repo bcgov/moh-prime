@@ -7,7 +7,7 @@ import { IOrganizationService } from '@registration/shared/services/organization
 import { Organization } from '@registration/shared/models/organization.model';
 
 export class MockOrganizationService implements IOrganizationService {
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _organization: BehaviorSubject<Organization>;
 
   constructor() {
@@ -46,7 +46,9 @@ export class MockOrganizationService implements IOrganizationService {
       completed: false,
       hasAcceptedAgreement: false,
       hasSubmittedSite: false,
-      sites: []
+      sites: [],
+      hasClaim: false,
+      pendingTransfer: false
     });
   }
 

@@ -15,7 +15,9 @@ import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationSearchListViewModel } from '@registration/shared/models/site-registration.model';
+import { OrganizationClaimFormModel } from '@registration/shared/models/organization-claim-form.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 
 @Injectable({
   providedIn: 'root'
@@ -143,6 +145,37 @@ export class OrganizationResource {
       );
   }
 
+  public getOrganizationClaim(queryParam: { pec?: string, userId?: string }): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
+    return this.apiResource.get<boolean>(`organizations/claims`, params)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        tap((result: boolean) => this.logger.info('ORGANIZATIONCLAIM', result)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast(error.errors.message);
+          this.logger.error('[Core] OrganizationResource::getOrganizationClaim error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getOrganizationClaimByOrgId(organizationId: number): Observable<OrganizationClaim> {
+    return this.apiResource.get<OrganizationClaim>(`organizations/${organizationId}/claims`)
+      .pipe(
+        map((response: ApiHttpResponse<OrganizationClaim>) => response.result),
+        tap((orgClaim: OrganizationClaim) => this.logger.info('OrganizationClaim', orgClaim)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('OrganizationClaim could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getOrganizationClaimByOrgId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public createOrganization(partyId: number): Observable<Organization> {
     return this.apiResource.post<Organization>('organizations', { partyId })
       .pipe(
@@ -154,6 +187,31 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be created');
           this.logger.error('[Core] OrganizationResource::createOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public claimOrganization(partyId: number, orgClaim: OrganizationClaimFormModel): Observable<number> {
+    return this.apiResource.post<number>(`organizations/claims`, { partyId, ...orgClaim })
+      .pipe(
+        map((response: ApiHttpResponse<number>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Organization claim has been submitted')),
+        catchError((error: any) => {
+          this.logger.error('[Core] OrganizationResource::claimOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public approveOrganizationClaim(organizationId: number, claimId: number): NoContent {
+    return this.apiResource.post<NoContent>(`organizations/${organizationId}/claims/${claimId}/approve`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('New Signing Authority Approved')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization Claim could not be approved');
+          this.logger.error('[Core] OrganizationResource::approveOrganizationClaim error has occurred: ', error);
           throw error;
         })
       );
@@ -204,15 +262,50 @@ export class OrganizationResource {
    * Check whether an organization agreement is needed, and create
    * the organization agreement
    */
-  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<OrganizationAgreement | NoContent> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ siteId });
-    return this.apiResource.get<OrganizationAgreement | NoContent>(`organizations/${organizationId}/agreements/update`, params)
+  public updateOrganizationAgreement(organizationId: number, careSettingCode: number): Observable<OrganizationAgreement | NoContent> {
+    return this.apiResource.post<OrganizationAgreement | NoContent>(`organizations/${organizationId}/agreements/care-settings/${careSettingCode}`)
       .pipe(
         map((response: ApiHttpResponse<OrganizationAgreement | NoContent>) => response?.result),
         tap((organizationAgreement: OrganizationAgreement) => this.logger.info('ORGANIZATION_AGREEMENT', organizationAgreement)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be updated');
           this.logger.error('[Core] OrganizationResource::updateOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+     * @description
+     * Get care setting codes that still require a signature on an oganization that is
+     * pending a transfer
+     */
+  public getCareSettingCodesForPendingTransfer(organizationId: number): Observable<CareSettingEnum[]> {
+    return this.apiResource.get<CareSettingEnum[]>(`organizations/${organizationId}/care-settings/pending-transfer`)
+      .pipe(
+        map((response: ApiHttpResponse<CareSettingEnum[]>) => response?.result),
+        tap((careSettingCodes: CareSettingEnum[]) => this.logger.info('CARE_SETTING_CODES', careSettingCodes)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Care Setting Codes For Orgnazition could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getCareSettingThatRequireAgreements error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+     * @description
+     * Clear pending transfer flag on an organization
+     *
+     */
+  public finalizeTransfer(organizationId: number): NoContent {
+    return this.apiResource.put(`organizations/${organizationId}/finalize-transfer`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization transfer has been finalized.')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Care Setting Codes For Orgnazition could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getCareSettingThatRequireAgreements error has occurred: ', error);
           throw error;
         })
       );

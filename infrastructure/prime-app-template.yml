@@ -15,12 +15,12 @@ parameters:
   displayName: Image Tag
   description: an identifier that labels which version an image belongs to.
   required: true
-- name: OC_NAMESPACE
+- name: OC_LICENSE_PLATE
   displayName: OpenShift License Plate
   description: Prepends your dev/test/prod URL
   required: true
   value: 9c33a9
-- name: OC_APP
+- name: OC_ENV
   displayName: Openshift Environment
   description: dev/test/prod
   required: true
@@ -64,11 +64,6 @@ parameters:
   description: Volume space available for Document Manager Backend data e.g. 512Mi, 2Gi.
   required: true
   value: 5Gi
-- name: DB_POD
-  displayName: Database Pod
-  description: Postgres database
-  required: true
-  value: postgres
 - name: REDIS_POD
   displayName: Redis Pod
   description: Redis in-memory database
@@ -88,25 +83,12 @@ parameters:
 - name: MAUTH_URL
   displayName: MUTUAL_AUTHENTICATION URL
   value: ""
-- description: Maximum amount of memory the container can use.
-  displayName: Postgres Memory Limit
-  name: POSTGRES_MEMORY_LIMIT
-  required: true
-  value: 2Gi
-- description: The OpenShift Namespace where the PostgreSQL ImageStream resides.
-  displayName: PostgreSQL Namespace
-  name: POSTGRES_NAMESPACE
-  value: openshift
-- description: Version of PostgreSQL image to be used (10-el7, 10-el8, or latest).
-  displayName: Version of PostgreSQL Image
-  name: POSTGRESQL_VERSION
-  required: true
-  value: 10-el8
-- description: Volume space available for data, e.g. 512Mi, 2Gi.
-  displayName: Postgres Volume Capacity
-  name: POSTGRESQL_VOLUME_CAPACITY
-  required: true
-  value: 8Gi
+- description: 'Reneal email sending cron schedule. Cron-like schedule expression. Default: Once a day at 11 PM'
+  name: CRON_SCHEDULE_RENEWALS
+  value: '0 23 * * *'
+- description: 'Email status update cron job. Cron-like schedule expression. Default: At minute 0 past every 6th hour.'
+  name: CRON_SCHEDULE_STATUSES
+  value: '0 */6 * * *'
 objects:
 ###########################################
 ###               Frontend              ###
@@ -114,13 +96,10 @@ objects:
 #   Frontend Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    annotations:
-      app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${API_POD}"}]  
     name: ${SVC_NAME}-${FRONTEND_POD}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: nginx
@@ -132,11 +111,11 @@ objects:
     strategy:
       type: Rolling
       rollingParams:
-        updatePeriodSeconds: 1 
-        intervalSeconds: 1 
-        timeoutSeconds: 120 
-        maxSurge: "20%" 
-        maxUnavailable: "10%" 
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "20%"
+        maxUnavailable: "10%"
     template:
       metadata:
         labels:
@@ -163,7 +142,7 @@ objects:
         containers:
           - name: ${SVC_NAME}-${FRONTEND_POD}
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-frontend:${IMAGE_TAG}
             ports:
               - containerPort: 80
                 protocol: TCP
@@ -219,15 +198,15 @@ objects:
             - ${SVC_NAME}-${FRONTEND_POD}
           from:
             kind: ImageStreamTag
-            namespace: "${OC_NAMESPACE}-tools"
+            namespace: "${OC_LICENSE_PLATE}-tools"
             name: 'prime-frontend:${IMAGE_TAG}'
 
 #   NGINX Configuration
 - apiVersion: v1
-  kind: ConfigMap  
+  kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-nginx-config
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   data:
@@ -415,8 +394,8 @@ objects:
           ssl_certificate certs/chained.crt;
           ssl_certificate_key certs/private.key;
           server_tokens off;
-          # `ssl_verify_client` should be `on` in production
           ssl_verify_client optional_no_ca;
+          ssl_client_certificate certs/plr/trusted-ca-certs.pem;
           root /opt/app-root/src;
           index index.html index.htm;
 
@@ -441,10 +420,10 @@ objects:
 #   Frontend Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -468,7 +447,7 @@ objects:
   apiVersion: route.openshift.io/v1
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -483,14 +462,14 @@ objects:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
-  
+
 #   Frontend Route (Health Practitioner Registration)
 - apiVersion: route.openshift.io/v1
   kind: Route
-  namespace: ${OC_NAMESPACE}-${OC_APP}
-  metadata: 
+  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+  metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}-hpr
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -508,10 +487,10 @@ objects:
 #   Frontend Route (Mutual Authentication)
 - apiVersion: route.openshift.io/v1
   kind: Route
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}-mutualauth
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -527,35 +506,16 @@ objects:
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
 
-#   Frontend NGINX Logs Persistent Volume Claim
-# - apiVersion: v1
-#   kind: PersistentVolumeClaim
-#   metadata:
-#     name: ${SVC_NAME}-nginx-logs
-#     namespace: ${OC_NAMESPACE}-${OC_APP}
-#     labels:
-#       app.kubernetes.io/part-of: ${SVC_NAME}
-#   spec:
-#     accessModes:
-#       - ReadWriteMany
-#     resources:
-#       requests:
-#         storage: 1Gi
-
 ###########################################
 ###           Backend Web API           ###
 ###########################################
 #   Backend Web API Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    annotations:
-      app.openshift.io/connects-to: >-
-        ["[{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DB_POD}"}]
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]"]
     name: ${SVC_NAME}-${API_POD}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: dotnet
@@ -567,11 +527,11 @@ objects:
     strategy:
       type: Rolling
       rollingParams:
-        updatePeriodSeconds: 1 
-        intervalSeconds: 1 
-        timeoutSeconds: 120 
-        maxSurge: "20%" 
-        maxUnavailable: "10%" 
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "20%"
+        maxUnavailable: "10%"
     template:
       metadata:
         labels:
@@ -581,30 +541,33 @@ objects:
         initContainers:
         - name: run-migrations
           image: >-
-            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
           env:
           - name: PGHOST
-            value: ${SVC_NAME}-postgres
+            valueFrom:
+              configMapKeyRef:
+                name: database-cm
+                key: database-host
           - name: PGUSER
             valueFrom:
               secretKeyRef:
-                name: ${SVC_NAME}-postgres                    
-                key: database-user
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-username
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
-                name: ${SVC_NAME}-postgres
-                key: database-password
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-password
           - name: PGDATABASE
             valueFrom:
               secretKeyRef:
-                name: ${SVC_NAME}-postgres
-                key: database-name
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-name
           command: ['psql', '-a', '-f', './databaseMigrations.sql']
         containers:
           - name: ${SVC_NAME}-${API_POD}
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
             command:
               - bash
               - '-c'
@@ -620,9 +583,10 @@ objects:
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
-                value: ${SVC_NAME}-postgres
-              - name: OC_APP
-                value: ${OC_APP}
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
               - name: BACKEND_URL
                 value: https://${VANITY_URL}/api/v1/
               - name: FRONTEND_URL
@@ -630,18 +594,18 @@ objects:
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
+                    name: ${SVC_NAME}-patroni-secret
+                    key: app-db-password
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-user
+                    name: ${SVC_NAME}-patroni-secret
+                    key: app-db-username
               - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
+                    name: ${SVC_NAME}-patroni-secret
+                    key: app-db-name
               - name: DB_CONNECTION_STRING
                 value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
             ports:
@@ -655,6 +619,7 @@ objects:
               httpGet:
                 path: /api/healthcheck
                 port: 8080
+              timeoutSeconds: 30
               failureThreshold: 30
               periodSeconds: 10
             readinessProbe:
@@ -721,18 +686,19 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-${API_POD}
+            - run-migrations
           from:
             kind: ImageStreamTag
-            namespace: "${OC_NAMESPACE}-tools"
+            namespace: "${OC_LICENSE_PLATE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
-  
+
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-${API_POD}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -749,218 +715,36 @@ objects:
 #   Document Manager (backend) Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-${DOCMAN_POD}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
-    annotations:
-      app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${REDIS_POD}"}]
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
       name: ${SVC_NAME}-${DOCMAN_POD}
     strategy:
-      type: Rolling
+      type: Recreate
       rollingParams:
-        updatePeriodSeconds: 1 
-        intervalSeconds: 1 
-        timeoutSeconds: 120 
-        maxSurge: "20%" 
-        maxUnavailable: "10%" 
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "20%"
+        maxUnavailable: "10%"
     template:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
           name: ${SVC_NAME}-${DOCMAN_POD}
       spec:
-        containers:
-          - name: ${SVC_NAME}-${DOCMAN_POD}
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
-            env:
-              - name: CACHE_REDIS_HOST
-                value: ${SVC_NAME}-${REDIS_POD}
-              - name: CACHE_REDIS_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: redis
-                    key: database-password
-              - name: CACHE_REDIS_PORT
-                value: "6379"
-              - name: DB_HOST
-                value: ${SVC_NAME}-postgres
-              - name: DB_NAME
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
-              - name: DB_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
-              - name: DB_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: postgresql
-                    key: postgresql_database_port
-              - name: DB_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-user
-              - name: DOCUMENT_MANAGER_URL
-                value: "https://${VANITY_URL}/api/docman/"
-              - name: FLASK_ENV
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_ENV
-              - name: FLASK_RUN_HOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_RUN_HOST
-              - name: FLASK_DEBUG
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_DEBUG
-              - name: FLASK_APP
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_APP
-              - name: FLASK_RUN_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_RUN_PORT
-              - name: JWT_OIDC_WELL_KNOWN_CONFIG
-                valueFrom:
-                  configMapKeyRef:
-                    name: keycloak
-                    key: JWT_WELL_KNOWN_CONFIG
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
-            volumeMounts:
-            # Mount Document Manager to PVC
-              - mountPath: /app/
-                name: ${SVC_NAME}-${DOCMAN_POD}-pvc
-            ports:
-              - containerPort: 6001
-                protocol: TCP
-              - containerPort: 9191
-                protocol: TCP
-            startupProbe:
-              httpGet:
-                path: /healthcheck
-                port: 6001
-              failureThreshold: 30
-              periodSeconds: 10
-            readinessProbe:
-              httpGet:
-                path: /healthcheck
-                port: 6001
-              initialDelaySeconds: 5
-              periodSeconds: 5
-        volumes:
-          - name: ${SVC_NAME}-${DOCMAN_POD}-pvc
-            persistentVolumeClaim:
-              claimName: '${SVC_NAME}-${DOCMAN_POD}-pvc'
-    triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-${DOCMAN_POD}
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-document-manager:${IMAGE_TAG}'
-  
-#   Document Manager (backend) Service
-- apiVersion: v1
-  kind: Service
-  namespace: ${OC_NAMESPACE}-${OC_APP}
-  metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
-    labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
-    annotations:
-      app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]
-  spec:
-    ports:
-      - name: ${SVC_NAME}-${DOCMAN_POD}
-        port: 6001
-        targetPort: 6001
-    selector:
-      name: ${SVC_NAME}-${DOCMAN_POD}
-#   Document Manager (backend) Persistent Volume Claim
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-pvc
-    namespace: ${OC_NAMESPACE}-${OC_APP}
-    labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
-  spec:
-    accessModes:
-      - ReadWriteOnce
-    resources:
-      requests:
-        storage: ${DOCMAN_VOLUME_CAPACITY}
-
-###########################################
-###     Document Manager (Migration)    ###
-###########################################
-### Document Manager (Migration) Deployment Config
-### Used for Alembic to run database migrations against the PostgreSQL database 
-### for all Document Manager related tables. This pod will run once PostgreSQL 
-### is verified to be open to query connections.
-- apiVersion: batch/v1
-  kind: Job
-  namespace: ${OC_NAMESPACE}-${OC_APP}
-  metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-migration
-    namespace: ${OC_NAMESPACE}-${OC_APP}
-    labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
-      app.openshift.io/runtime: python
-    annotations:
-      app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]
-  spec:
-    ttlSecondsAfterFinished: 100
-    template:
-      metadata:
-        labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${DOCMAN_POD}-migration
-      spec:
-        restartPolicy: OnFailure
-        backoffLimit: 5
-        containers:
-        - name: ${SVC_NAME}-${DOCMAN_POD}-migration
+        initContainers:
+        - name: run-migrations
           image: >-
-            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
-          command:
-            # Script force waits migration pod execution until PostgreSQL is verified to 
-            # be open to query connections.
-            - /opt/app-root/src/app.sh
-          args: 
-            - migrate
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
           env:
             - name: CACHE_REDIS_HOST
               value: redis
@@ -972,27 +756,30 @@ objects:
             - name: CACHE_REDIS_PORT
               value: "6379"
             - name: DB_HOST
-              value: ${SVC_NAME}-postgres
+              valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
-                  key: database-name
+                  name: ${SVC_NAME}-patroni-secret
+                  key: app-db-name
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
-                  key: database-password
+                  name: ${SVC_NAME}-patroni-secret
+                  key: app-db-password
             - name: DB_PORT
               valueFrom:
-                configMapKeyRef:
-                  name: postgresql
-                  key: postgresql_database_port
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-port
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
-                  key: database-user
+                  name: ${SVC_NAME}-patroni-secret
+                  key: app-db-username
             - name: DOCUMENT_MANAGER_URL
               value: "https://${VANITY_URL}/api/docman/"
             - name: FLASK_ENV
@@ -1028,140 +815,150 @@ objects:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
-                  key: database-password
-
-###########################################
-###         PostgreSQL Database         ###
-###########################################
-#   PostgreSQL database Deployment Config
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
-  namespace: ${OC_NAMESPACE}-${OC_APP}
-  metadata:
-    name: ${SVC_NAME}-postgres
-    namespace: ${OC_NAMESPACE}-${OC_APP}
-    labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
-      app.openshift.io/runtime: postgresql
-  spec:
-    replicas: 1
-    selector:
-      name: ${SVC_NAME}-postgres
-    strategy:
-      type: Rolling
-      rollingParams:
-        updatePeriodSeconds: 1 
-        intervalSeconds: 1 
-        timeoutSeconds: 120 
-        maxSurge: "20%" 
-        maxUnavailable: "10%" 
-    template:
-      metadata:
-        labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-postgres
-      spec:
+                  name: ${SVC_NAME}-patroni-secret
+                  key: app-db-password
+          command:
+            # Script force waits migration pod execution until PostgreSQL is verified to
+            # be open to query connections.
+            - /opt/app-root/src/app.sh
+          args:
+            - migrate
         containers:
-          - capabilities: {}
+          - name: ${SVC_NAME}-${DOCMAN_POD}
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
             env:
+              - name: CACHE_REDIS_HOST
+                value: ${SVC_NAME}-${REDIS_POD}
+              - name: CACHE_REDIS_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: redis
+                    key: database-password
+              - name: CACHE_REDIS_PORT
+                value: "6379"
               - name: DB_HOST
-                value: ${SVC_NAME}-postgres
-              # PostgreSQL environment variables
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+              - name: DB_NAME
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-patroni-secret
+                    key: app-db-name
+              - name: DB_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-patroni-secret
+                    key: app-db-password
+              - name: DB_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-port
+              - name: DB_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-patroni-secret
+                    key: app-db-username
+              - name: DOCUMENT_MANAGER_URL
+                value: "https://${VANITY_URL}/api/docman/"
+              - name: FLASK_ENV
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_ENV
+              - name: FLASK_RUN_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_RUN_HOST
+              - name: FLASK_DEBUG
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_DEBUG
+              - name: FLASK_APP
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_APP
+              - name: FLASK_RUN_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_RUN_PORT
+              - name: JWT_OIDC_WELL_KNOWN_CONFIG
+                valueFrom:
+                  configMapKeyRef:
+                    name: keycloak
+                    key: JWT_WELL_KNOWN_CONFIG
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
-              - name: POSTGRESQL_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres                    
-                    key: database-user
-              - name: POSTGRESQL_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
-              - name: POSTGRESQL_DATABASE
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
-              - name: POSTGRESQL_ADMIN_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: admin-password
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${POSTGRES_NAMESPACE}/postgresql:${POSTGRESQL_VERSION}
-            imagePullPolicy: IfNotPresent
-            lifecycle:
-              preStop:
-                exec:
-                  command: ['pg_ctl', 'stop']
-            livenessProbe:
-              exec:
-                command:
-                - /usr/libexec/check-container
-                - --live
-              initialDelaySeconds: 120
-              timeoutSeconds: 10
-            readinessProbe:
-              exec:
-                command:
-                - /usr/libexec/check-container
-              initialDelaySeconds: 5
-              timeoutSeconds: 1
-            name: ${SVC_NAME}-postgres
-            ports:
-              - containerPort: 5432
-                protocol: TCP
-                name: postgresql
-            resources:
-              limits:
-                memory: ${POSTGRES_MEMORY_LIMIT}
-            securityContext:
-              capabilities: {}
-              privileged: false
-            terminationMessagePath: /dev/termination-log
+                    name: ${SVC_NAME}-patroni-secret
+                    key: app-db-password
             volumeMounts:
-              - mountPath: /var/lib/pgsql/data
-                name: ${SVC_NAME}-postgres-data
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
+            # Mount Document Manager to PVC
+              - mountPath: /app/
+                name: ${SVC_NAME}-${DOCMAN_POD}-pvc
+            ports:
+              - containerPort: 6001
+                protocol: TCP
+              - containerPort: 9191
+                protocol: TCP
+            startupProbe:
+              httpGet:
+                path: /healthcheck
+                port: 6001
+              failureThreshold: 30
+              periodSeconds: 10
+            readinessProbe:
+              httpGet:
+                path: /healthcheck
+                port: 6001
+              initialDelaySeconds: 5
+              periodSeconds: 5
         volumes:
-          - name: ${SVC_NAME}-postgres-data
+          - name: ${SVC_NAME}-${DOCMAN_POD}-pvc
             persistentVolumeClaim:
-              claimName: ${SVC_NAME}-postgres-data
-  
-#   PostgreSQL Service
+              claimName: '${SVC_NAME}-${DOCMAN_POD}-pvc'
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${SVC_NAME}-${DOCMAN_POD}
+            - run-migrations
+          from:
+            kind: ImageStreamTag
+            namespace: "${OC_LICENSE_PLATE}-tools"
+            name: 'prime-document-manager:${IMAGE_TAG}'
+
+#   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    name: ${SVC_NAME}-postgres
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    name: ${SVC_NAME}-${DOCMAN_POD}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${SVC_NAME}-postgres
-        nodePort: 0
-        port: 5432
-        protocol: TCP
-        targetPort: 5432
+      - name: ${SVC_NAME}-${DOCMAN_POD}
+        port: 6001
+        targetPort: 6001
     selector:
-      name: ${SVC_NAME}-postgres
-    sessionAffinity: None
-    type: ClusterIP
-  
-#   Database Persistent Volume Claim
+      name: ${SVC_NAME}-${DOCMAN_POD}
+#   Document Manager (backend) Persistent Volume Claim
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: ${SVC_NAME}-postgres-data
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    name: ${SVC_NAME}-${DOCMAN_POD}-pvc
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -1169,7 +966,7 @@ objects:
       - ReadWriteOnce
     resources:
       requests:
-        storage: ${POSTGRESQL_VOLUME_CAPACITY}
+        storage: ${DOCMAN_VOLUME_CAPACITY}
 
 ###########################################
 ###                Redis                ###
@@ -1177,10 +974,10 @@ objects:
 #   Redis Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-${REDIS_POD}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: redis
@@ -1192,11 +989,11 @@ objects:
     strategy:
       type: Rolling
       rollingParams:
-        updatePeriodSeconds: 1 
-        intervalSeconds: 1 
-        timeoutSeconds: 120 
-        maxSurge: "20%" 
-        maxUnavailable: "10%" 
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "20%"
+        maxUnavailable: "10%"
       activeDeadlineSeconds: 21600
     template:
       metadata:
@@ -1255,7 +1052,7 @@ objects:
                 mountPath: /var/lib/redis/data
             terminationMessagePolicy: File
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/redis-6:latest
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:latest
         restartPolicy: Always
         dnsPolicy: ClusterFirst
 
@@ -1264,7 +1061,7 @@ objects:
   apiVersion: v1
   metadata:
     name: ${SVC_NAME}-${REDIS_POD}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -1275,3 +1072,156 @@ objects:
         targetPort: 6379
     selector:
       name: ${SVC_NAME}-${REDIS_POD}
+
+###########################################
+###              Cron Jobs              ###
+###########################################
+#   Template for job that activates api to update email statuses
+- apiVersion: batch/v1beta1
+  kind: CronJob
+  metadata:
+    name: ${SVC_NAME}-update-email-statuses
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  spec:
+    concurrencyPolicy: Forbid
+    jobTemplate:
+      spec:
+        template:
+          spec:
+            containers:
+              - name: ${SVC_NAME}-update-email-statuses
+                image: >-
+                  public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
+                command:
+                - bash
+                - '-c'
+                - >-
+                  echo -e "-------- STARTING CRON --------\n"
+
+                  echo -e "-------- Getting access_token --------\n"
+
+                  TOKEN=$(curl -X POST
+                  "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token"
+                  \
+                    -H "Content-Type: application/x-www-form-urlencoded" \
+                    -d "grant_type=client_credentials" \
+                    -d "client_id=${KEYCLOAK_CLIENT_ID}" \
+                    -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token' )
+
+                  echo -e ${TOKEN}
+
+                  echo -e "-------- Calling PRIME API --------\n"
+
+                  curl -v -X POST
+                  http://${SVC_NAME}-webapi:8080/api/Emails/management/statuses
+                  \
+                    -H "Authorization: Bearer ${TOKEN}" \
+                    -H "Content-Length: 0"
+
+                  echo -e "-------- CRON COMPLETE --------\n"
+                env:
+                  - name: KEYCLOAK_CLIENT_SECRET
+                    valueFrom:
+                      secretKeyRef:
+                        key: prime_service_account_client_secret
+                        name: prime-service-account
+                  - name: KEYCLOAK_CLIENT_ID
+                    valueFrom:
+                      secretKeyRef:
+                        key: prime_service_account_client_id
+                        name: prime-service-account
+                  - name: KEYCLOAK_URL
+                    valueFrom:
+                      secretKeyRef:
+                        key: KEYCLOAK_URL
+                        name: keycloak
+                  - name: KEYCLOAK_REALM
+                    valueFrom:
+                      secretKeyRef:
+                        key: KEYCLOAK_REALM
+                        name: keycloak
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 2Gi
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+            restartPolicy: Never
+    schedule: '${CRON_SCHEDULE_STATUSES}'
+
+#   Template for job that activates api to send renewal emails 
+- apiVersion: batch/v1beta1
+  kind: CronJob
+  metadata:
+    name: ${SVC_NAME}-send-renewal-emails
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  spec:
+    concurrencyPolicy: Forbid
+    jobTemplate:
+      spec:
+        template:
+          spec:
+            containers:
+              - name: ${SVC_NAME}-send-renewal-emails
+                image: >-
+                  public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
+                command:
+                - bash
+                - '-c'
+                - >-
+                  echo -e "-------- STARTING CRON --------\n"
+
+                  echo -e "-------- Getting access_token --------\n"
+
+                  TOKEN=$(curl -X POST
+                  "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token"
+                  \
+                    -H "Content-Type: application/x-www-form-urlencoded" \
+                    -d "grant_type=client_credentials" \
+                    -d "client_id=${KEYCLOAK_CLIENT_ID}" \
+                    -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token' )
+
+                  echo -e ${TOKEN}
+
+                  echo -e "-------- Calling PRIME API --------\n"
+
+                  curl -v -X POST
+                  http://${SVC_NAME}-webapi:8080/api/Emails/management/enrollees/renewal
+                  \
+                    -H "Authorization: Bearer ${TOKEN}" \
+                    -H "Content-Length: 0"
+
+                  echo -e "-------- CRON COMPLETE --------\n"
+                env:
+                  - name: KEYCLOAK_CLIENT_SECRET
+                    valueFrom:
+                      secretKeyRef:
+                        key: prime_service_account_client_secret
+                        name: prime-service-account
+                  - name: KEYCLOAK_CLIENT_ID
+                    valueFrom:
+                      secretKeyRef:
+                        key: prime_service_account_client_id
+                        name: prime-service-account
+                  - name: KEYCLOAK_URL
+                    valueFrom:
+                      secretKeyRef:
+                        key: KEYCLOAK_URL
+                        name: keycloak
+                  - name: KEYCLOAK_REALM
+                    valueFrom:
+                      secretKeyRef:
+                        key: KEYCLOAK_REALM
+                        name: keycloak
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 2Gi
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+            restartPolicy: Never
+    schedule: '${CRON_SCHEDULE_RENEWALS}'

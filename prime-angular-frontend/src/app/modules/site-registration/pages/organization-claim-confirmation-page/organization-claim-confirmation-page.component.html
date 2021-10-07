@@ -1,0 +1,27 @@
+<app-page>
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+
+  <div class="mb-4">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        You have claimed an existing Organization
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
+        <p>
+          You have claimed an existing organization as the new Signing Authority. If you are approved, you will be able
+          to update site information and add new sites for your organization. It may take several business days for
+          approval. You will be notified via the email address you provided.
+        </p>
+      </ng-container>
+    </app-page-subheader2>
+  </section>
+</app-page>

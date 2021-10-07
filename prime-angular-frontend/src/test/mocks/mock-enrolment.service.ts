@@ -11,7 +11,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 export class MockEnrolmentService implements IEnrolmentService {
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _enrolment: BehaviorSubject<Enrolment>;
 
   constructor() {
@@ -126,7 +126,10 @@ export class MockEnrolmentService implements IEnrolmentService {
       alwaysManual: false,
       adjudicatorId: null,
       adjudicator: null,
-      base64QRCode: null
+      base64QRCode: null,
+      confirmed: false,
+      requiresConfirmation: false,
+      jobs: [{ title: faker.name.jobTitle() }]
     });
   }
 

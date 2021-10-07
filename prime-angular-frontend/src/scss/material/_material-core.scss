@@ -1,11 +1,11 @@
 //
+@use '~@angular/material' as mat;
 // MATERIAL CORE THEME
 //
 
-@import '~@angular/material/theming';
 
 // Include the common styles for Angular Material, which provides a single CSS
 // file for Angular Material in the application.
 // ---
 // NOTE: Be sure that to ONLY include this mixin once!
-@include mat-core;
+@include mat.core;

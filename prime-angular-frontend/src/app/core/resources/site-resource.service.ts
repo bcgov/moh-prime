@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
+import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -71,6 +72,27 @@ export class SiteResource {
           this.logger.error('[SiteRegistration] SiteResource::getSiteById error has occurred: ', error);
           throw error;
         })
+      );
+  }
+
+  public getSiteContacts(siteId: number): Observable<{ label: string, email: string }[]> {
+    return this.getSiteById(siteId)
+      .pipe(
+        map((site: Site) => [
+          { label: 'Signing Authority', email: site.provisioner.email },
+          ...ArrayUtils.insertIf(site?.administratorPharmaNet, {
+            label: 'PharmaNet Administrator',
+            email: site?.administratorPharmaNet.email
+          }),
+          ...ArrayUtils.insertIf(site?.privacyOfficer.email, {
+            label: 'Privacy Officer',
+            email: site?.privacyOfficer.email
+          }),
+          ...ArrayUtils.insertIf(site?.technicalSupport.email, {
+            label: 'Technical Support Contact',
+            email: site?.technicalSupport.email
+          })
+        ])
       );
   }
 
@@ -159,6 +181,19 @@ export class SiteResource {
       );
   }
 
+  public sendSiteReviewedEmailUser(siteId: number, note: string): NoContent {
+    const payload = { data: note };
+    return this.apiResource.post<NoContent>(`sites/${siteId}/site-reviewed-email`, payload)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site reviewed notification email could not be sent');
+          this.logger.error('[SiteRegistration] SiteResource::sendSiteReviewedEmailUser error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
     const payload = { data: pecCode };
     return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
@@ -221,8 +256,18 @@ export class SiteResource {
       );
   }
 
-  public submitSite(site: Site): Observable<string> {
-    return this.apiResource.post<string>(`sites/${site.id}/submission`)
+  public submitSite(siteId: number, site: Site & { businessLicence: { documentGuid: string } }): Observable<string> {
+    if (site.businessHours?.length) {
+      site.businessHours = site.businessHours
+        .map((businessDay: BusinessDay) => {
+          businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
+          businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
+          return businessDay;
+        });
+    } else {
+      site.businessHours = null;
+    }
+    return this.apiResource.post<string>(`sites/${siteId}/submissions`, site)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been submitted')),
@@ -500,6 +545,17 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site business events could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSiteBusinessEvents error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public pecAssignable(siteId: number, pec: string): Observable<boolean> {
+    return this.apiResource.post(`sites/${siteId}/pec/${pec}/assignable`)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::pecAssignable error has occurred: ', error);
           throw error;
         })
       );

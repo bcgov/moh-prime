@@ -2,19 +2,22 @@
   <app-page-header>PRIME Profile</app-page-header>
   <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
 
+
+  <ng-container *ngIf="savedDocuments?.length">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Saved Documents</ng-container>
+    </app-page-subheader2>
+    <app-document-attachments [documents]="savedDocuments"></app-document-attachments>
+  </ng-container>
+
+
   <app-page-section>
     <app-page-subheader2>
-      <ng-container appPageSubheader2Title>Upload Information</ng-container>
+      <ng-container appPageSubheader2Title>Upload Documents</ng-container>
       <ng-container appPageSubheader2Summary>
-        Upload the documents associated with this enrolment including the TOA.
+        Upload the documents associated with this enrolment.
       </ng-container>
     </app-page-subheader2>
-
-    <app-document-upload #documentUpload
-                         componentName="adjudication-document"
-                         labelMessage="Drag and drop your documents or click to browse"
-                         [multiple]="true"
-                         (completed)="onUpload($event)"></app-document-upload>
 
     <app-alert *ngIf="hasNoUploadError"
                type="danger"
@@ -24,27 +27,22 @@
         No files have been uploaded.
       </ng-container>
     </app-alert>
-
-    <ng-container *ngIf="savedDocuments?.length">
-      <div *ngFor="let document of savedDocuments"
-           class="mb-2">
-        <button mat-stroked-button
-                color="primary"
-                (click)="getDocument(document.id)">
-          <mat-icon class="mr-2">attachment</mat-icon>
-          {{ document.filename | default }}
-        </button>
-      </div>
-    </ng-container>
   </app-page-section>
 
   <app-page-section>
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Terms of Access</ng-container>
       <ng-container appPageSubheader2Summary>
-        Select which TOA this user signed.
+        Upload the Terms of Access
       </ng-container>
     </app-page-subheader2>
+
+
+    <app-document-upload #documentUploadTOA
+                         componentName="TOA"
+                         labelMessage="Drag and drop your documents or click to browse"
+                         [multiple]="true"
+                         (completed)="onUpload($event, documentUploadTOA.componentName)"></app-document-upload>
 
     <form (ngSubmit)="onSubmit()"
           [formGroup]="formState.form"
@@ -56,12 +54,43 @@
         <mat-select [formControl]="formState.assignedTOAType">
           <mat-option *ngFor="let type of agreementTypes"
                       [value]="type">
-            {{ AgreementTypeNameMap[type] }}
+            {{ PaperEnrolmentAgreementTypeNameMap[type] }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
     </form>
+  </app-page-section>
+
+  <app-page-section>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Supporting ID</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Upload any supporting documents included in the submission
+      </ng-container>
+    </app-page-subheader2>
+
+    <app-document-upload #documentUploadSupportingId
+                         componentName="SupportingID"
+                         labelMessage="Drag and drop your documents or click to browse"
+                         [multiple]="true"
+                         (completed)="onUpload($event, documentUploadSupportingId.componentName)">
+    </app-document-upload>
+  </app-page-section>
+
+  <app-page-section>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Paper Form</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Upload the paper form submitted by the user
+      </ng-container>
+    </app-page-subheader2>
+
+    <app-document-upload #documentUploadPaperForm
+                         componentName="PaperForm"
+                         labelMessage="Drag and drop your documents or click to browse"
+                         [multiple]="true"
+                         (completed)="onUpload($event, documentUploadPaperForm.componentName)"></app-document-upload>
   </app-page-section>
 
   <app-page-footer [isInitialEnrolment]="true"

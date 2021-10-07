@@ -1,41 +1,44 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using DelegateDecompiler.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using DelegateDecompiler.EntityFrameworkCore;
 
+using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.ViewModels;
-using Prime.HttpClients;
-using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.Services
 {
     public class OrganizationService : BaseService, IOrganizationService
     {
         private readonly IBusinessEventService _businessEventService;
-        private readonly IPartyService _partyService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
+        private readonly IOrganizationClaimService _organizationClaimService;
+        private readonly IPartyService _partyService;
 
         public OrganizationService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<OrganizationService> logger,
             IBusinessEventService businessEventService,
-            IPartyService partyService,
+            IDocumentManagerClient documentClient,
             IMapper mapper,
-            IDocumentManagerClient documentClient)
-            : base(context, httpContext)
+            IOrganizationClaimService organizationClaimService,
+            IPartyService partyService)
+            : base(context, logger)
         {
             _businessEventService = businessEventService;
-            _partyService = partyService;
             _documentClient = documentClient;
             _mapper = mapper;
+            _organizationClaimService = organizationClaimService;
+            _partyService = partyService;
         }
 
         public async Task<bool> OrganizationExistsAsync(int organizationId)
@@ -76,8 +79,8 @@ namespace Prime.Services
         {
             return await _context.Organizations
                 .Include(o => o.SigningAuthority)
-                        .ThenInclude(sa => sa.Addresses)
-                            .ThenInclude(pa => pa.Address)
+                    .ThenInclude(sa => sa.Addresses)
+                        .ThenInclude(pa => pa.Address)
                 .Where(o => o.SigningAuthorityId == partyId)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
@@ -90,6 +93,23 @@ namespace Prime.Services
                 .Include(o => o.Sites)
                     .ThenInclude(s => s.SiteStatuses)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
+        }
+
+        public async Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId)
+        {
+            return await _context.Organizations
+                .AsNoTracking()
+                .Where(o => o.Id == organizationId)
+                .Select(o => o.SigningAuthorityId)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<Organization> GetOrganizationByPecAsync(string pec)
+        {
+            return await GetBaseOrganizationQuery()
+                .Include(o => o.Sites)
+                .Where(o => o.Sites.Any(s => s.PEC == pec))
+                .SingleOrDefaultAsync();
         }
 
         public async Task<int> CreateOrganizationAsync(int partyId)
@@ -117,6 +137,7 @@ namespace Prime.Services
 
             return organization.Id;
         }
+
 
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
@@ -180,20 +201,19 @@ namespace Prime.Services
         /// Otherwise, returns the newest existing Agreement of that type.
         /// Returns null if the Site doesn't exist on the Organization.
         /// </summary>
-        public async Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int siteId)
+        public async Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int careSettingCode, int signingAuthorityId)
         {
-            var siteSetting = await _context.Sites
+            var siteExists = await _context.Sites
                 .AsNoTracking()
-                .Where(s => s.Id == siteId && s.OrganizationId == organizationId)
-                .Select(s => s.CareSettingCode)
-                .SingleOrDefaultAsync();
+                .Where(s => s.CareSettingCode == careSettingCode && s.OrganizationId == organizationId)
+                .AnyAsync();
 
-            if (!siteSetting.HasValue)
+            if (!siteExists)
             {
                 return null;
             }
 
-            var agreementType = OrgAgreementTypeForSiteSetting(siteSetting.Value);
+            var agreementType = OrgAgreementTypeForSiteSetting(careSettingCode);
 
             var newestVersionId = await _context.AgreementVersions
                 .AsNoTracking()
@@ -204,7 +224,7 @@ namespace Prime.Services
 
             var newestAgreement = await _context.Agreements
                 .OrderByDescending(a => a.CreatedDate)
-                .FirstOrDefaultAsync(a => a.OrganizationId == organizationId && a.AgreementVersionId == newestVersionId);
+                .FirstOrDefaultAsync(a => a.OrganizationId == organizationId && a.AgreementVersionId == newestVersionId && a.PartyId == signingAuthorityId);
 
             if (newestAgreement != null)
             {
@@ -217,13 +237,39 @@ namespace Prime.Services
                 {
                     OrganizationId = organizationId,
                     AgreementVersionId = newestVersionId,
-                    CreatedDate = DateTimeOffset.Now
+                    CreatedDate = DateTimeOffset.Now,
+                    PartyId = signingAuthorityId
                 };
 
                 _context.Agreements.Add(newAgreement);
                 await _context.SaveChangesAsync();
                 return newAgreement;
             }
+        }
+
+        public async Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId)
+        {
+            var agreements = await _context.Agreements
+                .Include(a => a.AgreementVersion)
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.OrganizationId == organizationId)
+                .ToListAsync();
+
+            var siteSettings = await _context.Sites.Where(s => s.OrganizationId == organizationId).Select(s => s.CareSettingCode).ToListAsync();
+
+            var agreementSettings = agreements
+                .GroupBy(a => a.AgreementVersion.AgreementType)
+                .Select(a => a.FirstOrDefault())
+                .Where(a => a.PartyId != signingAuthorityId || (a.PartyId == signingAuthorityId && a.AcceptedDate == null)).Select(a => SiteSettingForOrgAgreementType(a.AgreementVersion.AgreementType)).ToList();
+
+            return agreementSettings.Where(code => siteSettings.Contains((int)code)).ToList();
+        }
+
+        public async Task FinalizeTransferAsync(int organizationId)
+        {
+            var organization = await _context.Organizations.SingleOrDefaultAsync(o => o.Id == organizationId);
+            organization.PendingTransfer = false;
+            await _context.SaveChangesAsync();
         }
 
         public async Task AcceptOrgAgreementAsync(int organizationId, int agreementId)
@@ -281,6 +327,17 @@ namespace Prime.Services
             };
         }
 
+        public CareSettingType SiteSettingForOrgAgreementType(AgreementType agreementTypeCode)
+        {
+            return (agreementTypeCode) switch
+            {
+                AgreementType.CommunityPharmacyOrgAgreement => CareSettingType.CommunityPharmacy,
+                AgreementType.CommunityPracticeOrgAgreement => CareSettingType.CommunityPractice,
+                AgreementType.DeviceProviderOrgAgreement => CareSettingType.DeviceProvider,
+                _ => throw new InvalidOperationException($"Did not recognize agreement type code {agreementTypeCode} in {nameof(SiteSettingForOrgAgreementType)}"),
+            };
+        }
+
         private IQueryable<Organization> GetBaseOrganizationQuery()
         {
             return _context.Organizations
@@ -288,7 +345,30 @@ namespace Prime.Services
                     .ThenInclude(a => a.SignedAgreement)
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(sa => sa.Addresses)
-                        .ThenInclude(pa => pa.Address);
+                        .ThenInclude(pa => pa.Address)
+                .Include(o => o.Claims);
+        }
+
+        public async Task SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId)
+        {
+            var organization = await _context.Organizations
+                .SingleAsync(o => o.Id == organizationId);
+
+            organization.SigningAuthorityId = newSigningAuthorityId;
+            organization.PendingTransfer = true;
+
+            // Delete all non-accepted agreements
+            var pendingAgreements = await _context.Agreements
+                .Where(a => a.OrganizationId == organizationId && a.AcceptedDate == null)
+                .ToListAsync();
+            _context.RemoveRange(pendingAgreements);
+
+            var hasAcceptedAgreements = await _context.Agreements
+                .Where(a => a.OrganizationId == organizationId && a.AcceptedDate != null)
+                .AnyAsync();
+            organization.PendingTransfer = hasAcceptedAgreements;
+
+            await _context.SaveChangesAsync();
         }
     }
 }

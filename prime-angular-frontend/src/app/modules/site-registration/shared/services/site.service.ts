@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { SiteResource } from '@core/resources/site-resource.service';
 import { Site } from '@registration/shared/models/site.model';
 
 /**
@@ -13,10 +14,12 @@ import { Site } from '@registration/shared/models/site.model';
   providedIn: 'root'
 })
 export class SiteService {
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _site: BehaviorSubject<Site>;
 
-  constructor() {
+  constructor(
+    private siteResource: SiteResource
+  ) {
     this._site = new BehaviorSubject<Site>(null);
   }
 

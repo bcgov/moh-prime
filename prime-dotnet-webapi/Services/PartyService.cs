@@ -1,10 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+
 using Prime.Models;
 using Prime.ViewModels.Parties;
 
@@ -14,8 +15,8 @@ namespace Prime.Services
     {
         public PartyService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+            ILogger<PartyService> logger)
+            : base(context, logger)
         { }
 
         public async Task<bool> PartyExistsAsync(int partyId, PartyType? withType = null)
@@ -110,6 +111,19 @@ namespace Prime.Services
 
                 newAddress.Id = existingPartyAddress.AddressId;
                 _context.Entry(existingPartyAddress.Address).CurrentValues.SetValues(newAddress);
+            }
+        }
+
+        public async Task RemovePartyEnrolmentAsync(int partyId, PartyType partyType)
+        {
+            var partyEnrolment = _context.Set<PartyEnrolment>()
+                .SingleOrDefault(pe => pe.PartyId == partyId && pe.PartyType == partyType);
+
+            if (partyEnrolment != null)
+            {
+                _context.Set<PartyEnrolment>().Remove(partyEnrolment);
+
+                await _context.SaveChangesAsync();
             }
         }
 

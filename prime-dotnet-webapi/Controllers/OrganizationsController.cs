@@ -26,19 +26,32 @@ namespace Prime.Controllers
         private readonly IPartyService _partyService;
         private readonly IDocumentService _documentService;
         private readonly ISiteService _siteService;
+        private readonly IOrganizationClaimService _organizationClaimService;
+        private readonly IBusinessEventService _businessEventService;
+        private readonly IAdminService _adminService;
+        private readonly IEmailService _emailService;
+
 
         public OrganizationsController(
             IOrganizationService organizationService,
             IOrganizationAgreementService organizationAgreementService,
             IPartyService partyService,
             IDocumentService documentService,
-            ISiteService siteService)
+            ISiteService siteService,
+            IOrganizationClaimService organizationClaimService,
+            IBusinessEventService businessEventService,
+            IAdminService adminService,
+            IEmailService emailService)
         {
             _organizationService = organizationService;
             _organizationAgreementService = organizationAgreementService;
             _partyService = partyService;
             _documentService = documentService;
             _siteService = siteService;
+            _organizationClaimService = organizationClaimService;
+            _businessEventService = businessEventService;
+            _adminService = adminService;
+            _emailService = emailService;
         }
 
         // GET: api/Organizations
@@ -108,6 +121,113 @@ namespace Prime.Controllers
                 new { organizationId = createdOrganizationId },
                 createdOrganization
             );
+        }
+
+        // POST: api/Organizations/claim
+        /// <summary>
+        /// Claim an existing Organization.
+        /// </summary>
+        [HttpPost("claims", Name = nameof(ClaimOrganization))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> ClaimOrganization(OrganizationClaimViewModel organizationClaim)
+        {
+            var party = await _partyService.GetPartyAsync(organizationClaim.PartyId, PartyType.SigningAuthority);
+            if (party == null)
+            {
+                return BadRequest("Could not claim an organization, the passed in SigningAuthority does not exist.");
+            }
+
+            if (party.UserId != User.GetPrimeUserId())
+            {
+                return BadRequest("Could not claim an organization, the passed in party does not match current user.");
+            }
+
+            var organization = await _organizationService.GetOrganizationByPecAsync(organizationClaim.PEC);
+            if (organization == null)
+            {
+                return BadRequest("Could not claim an organization, the passed in PEC did not locate an organization.");
+            }
+
+            var orgClaim = await _organizationClaimService.GetOrganizationClaimByOrgIdAsync(organization.Id);
+            if (orgClaim != null)
+            {
+                return BadRequest("Could not claim an organization which has already been claimed.");
+            }
+
+            var organizationId = await _organizationClaimService.CreateOrganizationClaimAsync(organizationClaim, organization);
+
+            return Ok(organizationId);
+        }
+
+        // GET: api/Organizations/claims
+        /// <summary>
+        /// Check if organization claim exists by a given search criteria.
+        /// </summary>
+        [HttpGet("claims", Name = nameof(OrganizationClaimExists))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> OrganizationClaimExists([FromQuery] OrganizationClaimSearchOptions search)
+        {
+            var result = await _organizationClaimService.OrganizationClaimExistsAsync(search);
+
+            return Ok(result);
+        }
+
+        // GET: api/Organizations/5/claims
+        /// <summary>
+        /// Find OrganizationClaim by Organization ID.
+        /// </summary>
+        [HttpGet("{organizationId}/claims", Name = nameof(GetOrganizationClaimByOrgId))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetOrganizationClaimByOrgId(int organizationId)
+        {
+            var claim = await _organizationClaimService.GetOrganizationClaimByOrgIdAsync(organizationId);
+            if (claim == null)
+            {
+                return NotFound("No claim by a SigningAuthority exists for given Organization.");
+            }
+            return Ok(claim);
+        }
+
+        // POST: api/Organizations/5/claims/1/approve
+        /// <summary>
+        /// Approve claim for an existing Organization.
+        /// </summary>
+        [HttpPost("{organizationId}/claims/{claimId}/approve", Name = nameof(ApproveOrganizationClaim))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> ApproveOrganizationClaim(int organizationId, int claimId)
+        {
+            var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(claimId);
+            if (orgClaim == null || organizationId != orgClaim.OrganizationId)
+            {
+                return NotFound("Cannot locate Claim for given Organization.");
+            }
+
+            var existingSigningAuthorityId = await _organizationService.GetOrganizationSigningAuthorityIdAsync(organizationId);
+            var notificationRequired = existingSigningAuthorityId != orgClaim.NewSigningAuthorityId;
+
+            await _organizationService.SwitchSigningAuthorityAsync(organizationId, orgClaim.NewSigningAuthorityId);
+            await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
+
+            if (notificationRequired)
+            {
+                await _partyService.RemovePartyEnrolmentAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
+                await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
+                await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
+            }
+
+            return NoContent();
         }
 
         // PUT: api/Organizations/5
@@ -210,18 +330,19 @@ namespace Prime.Controllers
 
         // POST: api/Organizations/5/agreements/update
         /// <summary>
-        /// Creates a new un-accepted Organization Agreement based on the type of Site supplied, if a newer version exits.
+        /// Creates a new un-accepted Organization Agreement based on the Care Setting supplied, if a newer version exits
+        /// or if the signing authority has changed.
         /// Will return a reference to any existing un-accepted agreement instead of creating a new one, if able.
         /// </summary>
         /// <param name="organizationId"></param>
-        /// <param name="siteId"></param>
-        [HttpGet("{organizationId}/agreements/update", Name = nameof(UpdateOrganizationAgreement))]
+        /// <param name="careSettingCode"></param>
+        [HttpPost("{organizationId}/agreements/care-settings/{careSettingCode}", Name = nameof(UpdateOrganizationAgreement))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateOrganizationAgreement(int organizationId, [FromQuery] int siteId)
+        public async Task<ActionResult> UpdateOrganizationAgreement(int organizationId, int careSettingCode)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
@@ -233,10 +354,10 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var agreement = await _organizationService.EnsureUpdatedOrgAgreementAsync(organizationId, siteId);
+            var agreement = await _organizationService.EnsureUpdatedOrgAgreementAsync(organizationId, careSettingCode, organization.SigningAuthorityId);
             if (agreement == null)
             {
-                return NotFound($"Site with ID {siteId} not found on Organization {organizationId}");
+                return NotFound($"Care Setting Code {careSettingCode} not found on any site on Organization {organizationId}");
             }
 
             if (agreement.AcceptedDate.HasValue)
@@ -251,6 +372,62 @@ namespace Prime.Controllers
                     agreement
                 );
             }
+        }
+
+        // GET: api/Organizations/5/care-settings/pending-transfer
+        /// <summary>
+        /// Get the care setting codes for an organization that require agreements
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpGet("{organizationId}/care-settings/pending-transfer", Name = nameof(GetCareSettingForPendingTransferAgreements))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<CareSettingType>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetCareSettingForPendingTransferAgreements(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound($"Organization not found with id {organizationId}");
+            }
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var careSettingCodes = await _organizationService.GetCareSettingCodesForPendingTransferAsync(organizationId, organization.SigningAuthorityId);
+
+            return Ok(careSettingCodes);
+        }
+
+        // PUT: api/Organizations/5/finalize-transfer
+        /// <summary>
+        /// Clear Pending Transfer Flag on an organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpPut("{organizationId}/finalize-transfer", Name = nameof(FinalizeTransfer))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> FinalizeTransfer(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound($"Organization not found with id {organizationId}");
+            }
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _organizationService.FinalizeTransferAsync(organizationId);
+
+            return NoContent();
         }
 
         // GET: api/Organizations/5/agreements/7

@@ -136,7 +136,12 @@
       {
         "id": "a6623ca5-3983-4b07-ae46-4c2617301c63",
         "name": "prime_super_admin",
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "realm": [
+            "prime_maintenance"
+          ]
+        },
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -196,6 +201,14 @@
       {
         "id": "475e42c5-9162-4288-9178-2474933bc98d",
         "name": "enrollee_elevated_management",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "18afd893-b0c7-4285-902f-4b1cb4a6c219",
+        "name": "prime_maintenance",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -434,6 +447,7 @@
       "prime-document-manager": [],
       "prime-pos-gpid": [],
       "keycloak-service-account": [],
+      "prime-application-service-account": [],
       "admin-cli": [],
       "prime-application-test": [],
       "account": [
@@ -645,6 +659,28 @@
           "manage-users",
           "view-realm"
         ],
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "3c6ac29e-3fb0-4f0f-8bc6-11319284b556",
+      "createdTimestamp": 1632438761984,
+      "username": "service-account-prime-application-service-account",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "serviceAccountClientId": "prime-application-service-account",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "prime_api_service_account"
+      ],
+      "clientRoles": {
         "account": [
           "manage-account",
           "view-profile"
@@ -1112,6 +1148,107 @@
       "optionalClientScopes": []
     },
     {
+      "id": "cc21424c-d2e9-43e0-838e-73071bc57426",
+      "clientId": "prime-application-service-account",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [],
+      "webOrigins": [],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "client_credentials.use_refresh_token": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "3bc8c57e-9246-4f6a-90d6-9622c1498b4b",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "f370c19b-ea00-448b-8472-4719fca00a33",
+          "name": "set audience to prime-web-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "included.custom.audience": "prime-web-api"
+          }
+        },
+        {
+          "id": "d9eb714b-9cdb-4d95-80b8-66f2a6f492b6",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientId",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientId",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "34fc2214-1031-4a54-b072-51266690b995",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "roles"
+      ],
+      "optionalClientScopes": []
+    },
+    {
       "id": "c16dce58-3ef3-432e-b43d-8cece1e2fcf2",
       "clientId": "prime-application-test",
       "rootUrl": "",
@@ -1128,7 +1265,8 @@
         "https://demo.pharmanetenrolment.gov.bc.ca/*",
         "https://demo.healthpractionerregistration.pathfinder.gov.bc.ca/*",
         "https://test.healthpractionerregistration.pathfinder.gov.bc.ca/*",
-        "https://healthpractionerregistration-test.pathfinder.gov.bc.ca/*"
+        "https://healthpractionerregistration-test.pathfinder.gov.bc.ca/*",
+        "https://test-9c33a9-test.apps.silver.devops.gov.bc.ca/*"
       ],
       "webOrigins": [
         "*"
@@ -1152,6 +1290,7 @@
         "saml.server.signature": "false",
         "saml.server.signature.keyinfo.ext": "false",
         "exclude.session.state.from.auth.response": "false",
+        "client_credentials.use_refresh_token": "false",
         "saml_force_name_id_format": "false",
         "saml.client.signature": "false",
         "tls.client.certificate.bound.access.tokens": "false",

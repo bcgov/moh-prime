@@ -414,7 +414,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   private convertCareSettingFormToJson(enrolleeId: number): any {
     // Variable names must match keys for FormArrays in the FormGroup to get values
-    // tslint:disable-next-line:prefer-const
+    // eslint-disable-next-line prefer-const
     let { careSettings, enrolleeHealthAuthorities } = this.careSettingsForm.getRawValue();
 
     // Any checked HA is converted into an enrollee health authority object literal,

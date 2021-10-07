@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 
+import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 import { HoursOperationOverviewComponent } from './hours-operation-overview.component';
 
 describe('HoursOperationOverviewComponent', () => {
@@ -8,9 +11,16 @@ describe('HoursOperationOverviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HoursOperationOverviewComponent ]
-    })
-    .compileComponents();
+      imports: [
+        RouterTestingModule
+      ],
+      declarations: [
+        HoursOperationOverviewComponent,
+        WeekdayPipe
+      ],
+      providers: [],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   });
 
   beforeEach(() => {
