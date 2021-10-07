@@ -1,15 +1,15 @@
-using System;
-using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.Extensions.Hosting;
-
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
+using System;
+using System.IO;
+using System.Reflection;
+
+using Prime.Configuration.Environment;
 
 namespace Prime
 {
@@ -41,7 +41,18 @@ namespace Prime
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
+            // By default, .CreateDefaultBuilder() adds Configuration from the following, in order:
+            // 1. appsettings.json
+            // 2. appsettings.{EnvironmentName}.json,
+            // 3. user secrets (only in local development)
+            // 4. environment variables
+            // 5. command line arguments
+            // See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-5.0
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.Add(new PrimeEnvironmentVariablesConfigurationSource());
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
@@ -50,11 +61,11 @@ namespace Prime
 
         private static void CreateLogger()
         {
-            var path = PrimeEnvironment.LogFile;
+            var path = PrimeConfiguration.LogFilePath;
 
             try
             {
-                if (PrimeEnvironment.IsLocal)
+                if (PrimeConfiguration.IsDevelopment())
                 {
                     Directory.CreateDirectory(path);
                 }
