@@ -1,6 +1,7 @@
 using System;
 using System.Security.Claims;
 using FluentValidation;
+using Prime.Auth;
 using Prime.Models;
 using Prime.ViewModels.Parties;
 
@@ -14,7 +15,7 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
         public Guid UserId { get; set; }
 
         /// <summary>
-        /// Identifier from BCSC
+        /// Identifier from BCSC.  Health Practitioner Direct Identifier
         /// </summary>
         public string HPDID { get; set; }
 
@@ -103,6 +104,17 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
             party.SetPartyTypes(PartyType.SatEnrollee);
 
             return party;
+        }
+
+        // TODO: Don't duplicate code from `AuthorizedUserChangeModel`
+        public bool Validate(ClaimsPrincipal user)
+        {
+            return UserId == user.GetPrimeUserId()
+               && HPDID == user.FindFirstValue(Claims.PreferredUsername)
+               && FirstName == user.FindFirstValue(Claims.GivenName)
+               && LastName == user.FindFirstValue(Claims.FamilyName)
+               && GivenNames == user.FindFirstValue(Claims.GivenNames)
+               && DateOfBirth == user.GetDateOfBirth();
         }
     }
 
