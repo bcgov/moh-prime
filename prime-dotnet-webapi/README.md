@@ -154,3 +154,7 @@ pm.environment.set('hpdid', `${Date.now()}555555${Date.now()}`);
 - Start the Debugger, and choose the `prime` process from the dropdown menu that appears in VSCode
 - Add breakpoints to the code and start debugging
 
+
+## Adjust logging level
+
+Although not particularly useful during local development as one can debug with the IDE, when deployed to an OpenShift environment, one can enable more logging to display by setting the `LOG_LEVEL` environment variable to a number corresponding to a `Serilog.Events.LogEventLevel` number.  A lower number means more log messages are displayed.
