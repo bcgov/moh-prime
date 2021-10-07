@@ -30,7 +30,6 @@ namespace Prime.Configuration.Environment
                 "BACKEND_URL" => "BackendUrl",
 
                 "DOCUMENT_MANAGER_URL" => "DocumentManager__Url",
-                "DOCUMENT_MANAGER_CLIENT_ID" => "DocumentManager__ClientId",
                 "DOCUMENT_MANAGER_CLIENT_SECRET" => "DocumentManager__ClientSecret",
 
                 "KEYCLOAK_REALM_URL" => "PrimeKeycloak__RealmUrl",
