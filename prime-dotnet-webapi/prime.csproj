@@ -46,23 +46,23 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.3" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v4.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v5.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v4.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v5.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-practice-org-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-pharmacy-org-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\pharmacy-obo-toa-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\device-provider-org-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharm-terms-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharm-terms-v2.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharm-terms-v3.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v2.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v3.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v4.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v5.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v2.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v3.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v4.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v5.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-practice-org-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharmacy-org-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\pharmacy-obo-toa-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\device-provider-org-v1.html" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">

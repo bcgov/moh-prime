@@ -2,7 +2,7 @@ using System.Security.Claims;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Infrastructure;
 
