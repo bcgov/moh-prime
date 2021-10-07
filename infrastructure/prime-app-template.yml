@@ -64,11 +64,11 @@ parameters:
 - name: MAUTH_URL
   displayName: MUTUAL_AUTHENTICATION URL
   value: ""
-- description: 'Reneal email sending cron schedule. Cron-like schedule expression. Default: Once a day at 11 PM'
-  name: CRON_SCHEDULE_RENEWALS
+- name: CRON_SCHEDULE_RENEWALS
+  description: 'Renewal email sending cron schedule. Cron-like schedule expression. Default: Once a day at 11 PM'
   value: '0 23 * * *'
-- description: 'Email status update cron job. Cron-like schedule expression. Default: At minute 0 past every 6th hour.'
-  name: CRON_SCHEDULE_STATUSES
+- name: CRON_SCHEDULE_STATUSES
+  description: 'Email status update cron job. Cron-like schedule expression. Default: At minute 0 past every 6th hour.'
   value: '0 */6 * * *'
 objects:
 ###########################################
