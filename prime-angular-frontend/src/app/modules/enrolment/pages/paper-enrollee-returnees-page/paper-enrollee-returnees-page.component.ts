@@ -85,7 +85,7 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
     // then updates the paper enrolment gpid through the form field
     if ((!!this.userProvidedGpid && (this.userProvidedGpid !== this.formUserProvidedGpid.value))
       || (this.enrolment && !this.userProvidedGpid)) {
-      this.enrolmentResource.createInitialPaperEnrolleeLink(this.enrolment, this.formUserProvidedGpid.value)
+      this.enrolmentResource.createOrUpdateInitialPaperEnrolleeLink(this.enrolment, this.formUserProvidedGpid.value)
         .subscribe();
     }
 
@@ -124,7 +124,7 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
           // Populate the new enrolment within the form state by force patching
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
-          exhaustMap((newEnrolment: Enrolment) => this.enrolmentResource.createInitialPaperEnrolleeLink(newEnrolment, this.formUserProvidedGpid.value)),
+          exhaustMap((newEnrolment: Enrolment) => this.enrolmentResource.createOrUpdateInitialPaperEnrolleeLink(newEnrolment, this.formUserProvidedGpid.value)),
           this.handleResponse()
         );
     } else {

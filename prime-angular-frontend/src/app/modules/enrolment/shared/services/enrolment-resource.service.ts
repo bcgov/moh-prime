@@ -65,7 +65,7 @@ export class EnrolmentResource {
       );
   }
 
-  public createInitialPaperEnrolleeLink(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
+  public createOrUpdateInitialPaperEnrolleeLink(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
     const { id } = enrolment;
     const payload = { userProvidedGpid }
     return this.apiResource.post<NoContent>(`enrollees/${id}/potential-paper-enrollee`, payload)
@@ -73,19 +73,6 @@ export class EnrolmentResource {
         map((response: ApiHttpResponse<NoContent>) => response.result),
         catchError((error: any) => {
           this.logger.error('[Enrolment] EnrolmentResource::createLinkWithPotentialPaperEnrollee error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public updatePaperEnrolleeLink(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
-    const { id } = enrolment;
-    const payload = { userProvidedGpid }
-    return this.apiResource.put<NoContent>(`enrollees/${id}/linked-gpid`, payload)
-      .pipe(
-        map((response: ApiHttpResponse<NoContent>) => response.result),
-        catchError((error: any) => {
-          this.logger.error('[Enrolment] EnrolmentResource::updateLinkedGpid error has occurred: ', error);
           throw error;
         })
       );
