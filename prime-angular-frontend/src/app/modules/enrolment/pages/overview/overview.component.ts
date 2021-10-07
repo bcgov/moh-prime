@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { EMPTY, Subscription, Observable } from 'rxjs';
+import { EMPTY, Subscription, Observable, of, noop } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { DateUtils } from '@lib/utils/date-utils.class';
@@ -170,16 +170,12 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
         }),
-        exhaustMap((_) => {
-          let enrolment = this.enrolmentService.enrolment;
-
-          if (this.isPotentialPaperEnrollee) {
-            return this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(enrolment)
-              .pipe(
-                exhaustMap((result) => this.userProvidedGpid = result)
-              );
-          }
-        })
+        exhaustMap((_) =>
+          (this.isPotentialPaperEnrollee)
+            ? this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(this.enrolmentService.enrolment)
+              .pipe(tap((result: string) => this.userProvidedGpid = result))
+            : of(noop)
+        )
       ).subscribe();
   }
 

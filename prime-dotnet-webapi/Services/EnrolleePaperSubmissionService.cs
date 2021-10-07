@@ -330,34 +330,26 @@ namespace Prime.Services
             return true;
         }
 
-        public async Task CreateInitialLinkAsync(int enrolleeId, string userProvidedGpid)
+        public async Task CreateOrUpdateInitialLinkAsync(int enrolleeId, string userProvidedGpid)
         {
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
-                .SingleOrDefaultAsync(ele => ele.EnrolleeId == enrolleeId);
+                .SingleOrDefaultAsync(ele => ele.EnrolleeId == enrolleeId && !ele.Confirmed);
 
             if (enrolleeLinkedEnrolment != null)
             {
-                return;
+                enrolleeLinkedEnrolment.UserProvidedGpid = userProvidedGpid;
+            }
+            else
+            {
+                var newLinkedEnrolment = new EnrolleeLinkedEnrolment
+                {
+                    EnrolleeId = enrolleeId,
+                    UserProvidedGpid = userProvidedGpid,
+                };
+                _context.Add(newLinkedEnrolment);
             }
 
-            var newLinkedEnrolment = new EnrolleeLinkedEnrolment
-            {
-                EnrolleeId = enrolleeId,
-                UserProvidedGpid = userProvidedGpid,
-            };
-
-            _context.Add(newLinkedEnrolment);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateLinkedGpidAsync(int enrolleeId, string userUpdatedGpid)
-        {
-            var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
-                .Where(ele => ele.EnrolleeId == enrolleeId && !ele.Confirmed)
-                .SingleOrDefaultAsync();
-
-            enrolleeLinkedEnrolment.UserProvidedGpid = userUpdatedGpid;
-            _context.SaveChanges();
         }
 
         public async Task<string> GetLinkedGpidAsync(int enrolleeId)

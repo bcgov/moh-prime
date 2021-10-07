@@ -298,12 +298,12 @@ namespace Prime.Controllers
         /// <summary>
         /// Creates a new Enrollee who may have a a previous paper enrolment.
         /// </summary>
-        [HttpPost("{enrolleeId}/potential-paper-enrollee", Name = nameof(CreateInitialPaperEnrolleeLink))]
+        [HttpPost("{enrolleeId}/potential-paper-enrollee", Name = nameof(CreateOrUpdateInitialPaperEnrolleeLink))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CreateInitialPaperEnrolleeLink(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
+        public async Task<ActionResult> CreateOrUpdateInitialPaperEnrolleeLink(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -314,33 +314,7 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            await _enrolleePaperSubmissionService.CreateInitialLinkAsync(enrolleeId, payload.UserProvidedGpid);
-            return Ok();
-        }
-
-        // PUT: api/Enrollees/5/linked-gpid
-        /// <summary>
-        /// Updates the paper enrolment gpid that the user provided
-        /// </summary>
-        [HttpPut("{enrolleeId}/linked-gpid", Name = nameof(UpdateLinkWithPotentialPaperEnrollee))]
-        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateLinkWithPotentialPaperEnrollee(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
-        {
-            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
-            if (record == null)
-            {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
-            }
-            if (!record.MatchesUserIdOf(User))
-            {
-                return Forbid();
-            }
-
-            await _enrolleePaperSubmissionService.UpdateLinkedGpidAsync(enrolleeId, payload.UserProvidedGpid);
+            await _enrolleePaperSubmissionService.CreateOrUpdateInitialLinkAsync(enrolleeId, payload.UserProvidedGpid);
             return Ok();
         }
 

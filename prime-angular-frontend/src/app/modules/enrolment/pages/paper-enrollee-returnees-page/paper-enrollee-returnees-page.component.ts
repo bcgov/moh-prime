@@ -5,7 +5,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { exhaustMap, map, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ToastService } from '@core/services/toast.service';
@@ -83,14 +83,10 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
 
     // Only update if the user had previously provided a paper enrolment gpid and
     // then updates the paper enrolment gpid through the form field
-    if (!!this.userProvidedGpid && (this.userProvidedGpid !== this.formUserProvidedGpid.value)) {
-      this.updateUserProvidedGpid();
-    } else {
-      // This is the case where user did not enter paper enrolment GPID but came back later to add it
-      if (this.enrolment && !this.userProvidedGpid) {
-        this.enrolmentResource.createInitialPaperEnrolleeLink(this.enrolment, this.formUserProvidedGpid.value)
-          .subscribe();
-      }
+    if ((!!this.userProvidedGpid && (this.userProvidedGpid !== this.formUserProvidedGpid.value))
+      || (this.enrolment && !this.userProvidedGpid)) {
+      this.enrolmentResource.createInitialPaperEnrolleeLink(this.enrolment, this.formUserProvidedGpid.value)
+        .subscribe();
     }
 
     // Continue the normal flow
@@ -101,17 +97,12 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
     this.createFormInstance();
     this.patchForm$()
       .pipe(
-        exhaustMap((enrolment: Enrolment) => {
-          // Patch form only if an enrolment is created
-          if (enrolment) {
-            return this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(enrolment)
-              .pipe(
-                map((result: string) => result)
-              )
-          } else {
-            return [];
-          }
-        })
+        exhaustMap((enrolment: Enrolment) =>
+          (enrolment)
+            ? this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(enrolment)
+              .pipe(map((result: string) => result))
+            : of(null)
+        )
       )
       .subscribe((result) => {
         this.userProvidedGpid = result ? result : null;
@@ -139,11 +130,6 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
     } else {
       return super.performHttpRequest(enrolment, beenThroughTheWizard);
     }
-  }
-
-  protected updateUserProvidedGpid() {
-    this.enrolmentResource.updatePaperEnrolleeLink(this.enrolment, this.formUserProvidedGpid.value)
-      .subscribe();
   }
 
   protected createFormInstance(): void {
