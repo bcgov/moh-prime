@@ -37,7 +37,10 @@ namespace Prime.Services
             var currentParty = await _partyService.GetPartyForUserIdAsync(user.GetPrimeUserId());
             if (currentParty == null)
             {
-                currentParty = new Party();
+                currentParty = new Party
+                {
+                    Addresses = new List<PartyAddress>()
+                };
                 _context.Parties.Add(currentParty);
             }
             currentParty = changeModel.UpdateParty(currentParty, user);
@@ -56,20 +59,13 @@ namespace Prime.Services
 
         public async Task<Party> GetEnrolleeAsync(int satId)
         {
-            return await _context.Parties
-                .AsNoTracking()
-                .SingleOrDefaultAsync(p => p.Id == satId);
+            return await _partyService.GetPartyAsync(satId);
         }
 
-        public async Task UpdateDemographicsAsync(int satId, SatEnrolleeDemographicChangeModel viewModel)
+        public async Task UpdateDemographicsAsync(int satId, SatEnrolleeDemographicChangeModel viewModel, ClaimsPrincipal user)
         {
-            var enrollee = await _context.Parties
-                .Include(p => p.Addresses)
-                    .ThenInclude(a => a.Address)
-                .SingleOrDefaultAsync(p => p.Id == satId);
-
-            _mapper.Map(viewModel, enrollee);
-            _mapper.Map(viewModel.PhysicalAddress, enrollee.PhysicalAddress);
+            var enrollee = await _partyService.GetPartyAsync(satId);
+            viewModel.UpdateParty(enrollee, user);
 
             await _context.SaveChangesAsync();
         }
