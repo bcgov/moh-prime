@@ -657,7 +657,7 @@ objects:
                 port: 8080
               timeoutSeconds: 30
               failureThreshold: 30
-              periodSeconds: 10
+              periodSeconds: 35
             readinessProbe:
               httpGet:
                 path: /api/healthcheck
@@ -915,7 +915,7 @@ objects:
                 path: /healthcheck
                 port: 6001
               failureThreshold: 30
-              periodSeconds: 10
+              periodSeconds: 35
             readinessProbe:
               httpGet:
                 path: /healthcheck
