@@ -284,37 +284,26 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
         {
-            var confirmedLinks = await _context.EnrolleeLinkedEnrolment
-                .AsNoTracking()
-                .Where(cl => cl.Confirmed)
-                .Select(cl => cl.PaperEnrolleeId)
-                .ToListAsync();
-
+            // We want all paper enrollees with a matching DOB
+            // Handle the linkage in the LinkEnrolmentToPaperEnrolmentAsync
             return await _context.Enrollees
                 .AsNoTracking()
                 .Where(
                     e => e.GPID.StartsWith(PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
-                    && !confirmedLinks.Contains(e.Id)
                 )
                 .ToListAsync();
         }
 
         public async Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId, bool isConfirmed = false)
         {
-            var paperEnrollee = await _context.Enrollees
-                .Where(
-                    pe => pe.GPID.StartsWith(PaperGpidPrefix)
-                    && pe.Id == paperEnrolleeId
-                    && _context.EnrolleeLinkedEnrolment.Any(
-                        link => link.PaperEnrolleeId == pe.Id
-                        )
-                )
-                .AnyAsync();
+            var link = await _context.EnrolleeLinkedEnrolment
+                .Where(ele => ele.PaperEnrolleeId == paperEnrolleeId)
+                .SingleOrDefaultAsync();
 
-            if (paperEnrollee)
+            if (link.Confirmed)
             {
-                return false;
+                return true;
             }
 
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
