@@ -108,9 +108,9 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // PUT: api/enrollees/5/paper-submissions/certifications
+        // PUT: api/parties/sat/5/certifications
         /// <summary>
-        /// Updates a Paper Submission's Certifications.
+        /// Updates a SAT Enrollee's Certifications.
         /// </summary>
         [HttpPut("{satId}/certifications", Name = nameof(UpdateSatEnrolleeCertifications))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
