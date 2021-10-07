@@ -380,21 +380,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
     };
-    // return Object.keys(selfDeclarationsTypes)
-    //   .reduce((sds: SelfDeclaration[], sd: string) => {
-    //     if (selfDeclarations[sd]) {
-    //       sds.push(
-    //         new SelfDeclaration(
-    //           selfDeclarationsTypes[sd],
-    //           selfDeclarations[`${sd}Details`],
-    //           selfDeclarations[`${sd}DocumentGuids`],
-    //           this.enrolleeId
-    //         )
-    //       );
-    //     }
-    //     return sds;
-    //   }, []);
+
     const sds = [];
+
     Object.keys(selfDeclarationsTypes)
       .forEach((sd) => {
         sds.push(
