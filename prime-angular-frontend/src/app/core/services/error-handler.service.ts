@@ -44,7 +44,6 @@ export class ErrorHandlerService implements ErrorHandler {
         .subscribe(logId => dialogLogger.log(logId));
     }
 
-    // logger.error(message, { url });
-    throw error;
+    logger.error(message, { url });
   }
 }
