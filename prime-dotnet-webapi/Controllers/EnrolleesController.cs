@@ -947,6 +947,10 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
 
             var currentOrFutureAbsences = await _enrolleeService.GetEnrolleeAbsencesAsync(enrolleeId, false);
             if (currentOrFutureAbsences.Any())
