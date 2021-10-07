@@ -982,6 +982,10 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
 
             var absences = await _enrolleeService.GetEnrolleeAbsencesAsync(enrolleeId, includesPast);
 
@@ -1032,6 +1036,10 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
 
             await _enrolleeService.EndEnrolleeAbsenceAsync(enrolleeId);
 
@@ -1056,6 +1064,10 @@ namespace Prime.Controllers
             if (record == null)
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
             }
 
             await _enrolleeService.DeleteFutureEnrolleeAbsenceAsync(enrolleeId, absenceId);
