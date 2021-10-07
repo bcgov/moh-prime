@@ -996,11 +996,11 @@ namespace Prime.Services
         public async Task EndCurrentEnrolleeAbsenceAsync(int enrolleeId)
         {
             var rightNow = DateTime.UtcNow;
-            var enrollee = await _context.Enrollees
-                .Include(e => e.EnrolleeAbsences)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-            var absence = enrollee.EnrolleeAbsences
-                .SingleOrDefault(ea => ea.StartTimestamp <= rightNow && rightNow <= ea.EndTimestamp);
+            var absence = await _context.EnrolleeAbsences
+                .SingleOrDefaultAsync(ea => ea.EnrolleeId == enrolleeId
+                    && ea.StartTimestamp <= rightNow
+                    && rightNow <= ea.EndTimestamp);
+
             if (absence != null)
             {
                 absence.EndTimestamp = rightNow;
@@ -1011,17 +1011,16 @@ namespace Prime.Services
         public async Task DeleteFutureEnrolleeAbsenceAsync(int enrolleeId, int absenceId)
         {
             var rightNow = DateTime.UtcNow;
+            var absence = await _context.EnrolleeAbsences
+                .SingleOrDefaultAsync(ea => ea.Id == absenceId
+                    && ea.EnrolleeId == enrolleeId
+                    && ea.StartTimestamp > rightNow);
 
-            var enrollee = await _context.Enrollees
-                .Include(e => e.EnrolleeAbsences)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            var absence = enrollee.EnrolleeAbsences
-                .Single(ea => ea.Id == absenceId && ea.StartTimestamp > rightNow);
-
-            enrollee.EnrolleeAbsences.Remove(absence);
-            await _context.SaveChangesAsync();
-
+            if (absence != null)
+            {
+                _context.EnrolleeAbsences.Remove(absence);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
