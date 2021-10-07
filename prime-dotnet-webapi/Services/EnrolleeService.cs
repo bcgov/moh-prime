@@ -986,12 +986,14 @@ namespace Prime.Services
         {
             var rightNow = DateTime.UtcNow;
             return await _context.EnrolleeAbsences
-                .Where(ea => ea.StartTimestamp <= rightNow && rightNow <= ea.EndTimestamp && ea.EnrolleeId == enrolleeId)
+                .Where(ea => ea.EnrolleeId == enrolleeId
+                    && ea.StartTimestamp <= rightNow
+                    && rightNow <= ea.EndTimestamp)
                 .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
 
-        public async Task EndEnrolleeAbsenceAsync(int enrolleeId)
+        public async Task EndCurrentEnrolleeAbsenceAsync(int enrolleeId)
         {
             var rightNow = DateTime.UtcNow;
             var enrollee = await _context.Enrollees

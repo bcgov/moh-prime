@@ -321,9 +321,9 @@ export class EnrolmentResource {
       );
   }
 
-  public endEnrolleeAbsence(enrolleeId: number): Observable<NoContent> {
+  public endCurrentEnrolleeAbsence(enrolleeId: number): Observable<NoContent> {
     return this
-      .apiResource.put<NoContent>(`enrollees/${enrolleeId}/absences/end-absence`)
+      .apiResource.put<NoContent>(`enrollees/${enrolleeId}/absences/current/end`)
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         tap(() => this.toastService.openSuccessToast('Enrollee Absence has been ended.')),

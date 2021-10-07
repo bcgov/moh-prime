@@ -1018,18 +1018,18 @@ namespace Prime.Controllers
             return Ok(absence);
         }
 
-        // PUT: api/Enrollees/5/absences/end-absence
+        // PUT: api/Enrollees/5/absences/current/end
         /// <summary>
         /// Ends an current enrollee absence.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPut("{enrolleeId}/absences/end-absence", Name = nameof(EndEnrolleeAbsence))]
+        [HttpPut("{enrolleeId}/absences/current/end", Name = nameof(EndCurrentEnrolleeAbsence))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> EndEnrolleeAbsence(int enrolleeId)
+        public async Task<ActionResult> EndCurrentEnrolleeAbsence(int enrolleeId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -1041,7 +1041,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _enrolleeService.EndEnrolleeAbsenceAsync(enrolleeId);
+            await _enrolleeService.EndCurrentEnrolleeAbsenceAsync(enrolleeId);
 
             return NoContent();
         }

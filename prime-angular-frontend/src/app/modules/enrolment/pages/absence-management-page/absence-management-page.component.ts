@@ -47,7 +47,7 @@ export class AbsenceManagementPageComponent extends AbstractEnrolmentPage implem
   }
 
   public endAbsence(): void {
-    this.busy = this.enrolmentResource.endEnrolleeAbsence(this.enrolmentService.enrolment.id)
+    this.busy = this.enrolmentResource.endCurrentEnrolleeAbsence(this.enrolmentService.enrolment.id)
       .subscribe(() => this.absence = null);
   }
 
