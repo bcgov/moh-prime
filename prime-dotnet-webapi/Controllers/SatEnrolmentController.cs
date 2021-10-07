@@ -37,6 +37,11 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateSatEnrollee(SatEnrolleeDemographicChangeModel payload)
         {
+            if (!payload.Validate(User))
+            {
+                return BadRequest("One or more Properties did not match the information on the BCSC.");
+            }
+
             int enrolleeId = await _satEnrolmentService.CreateOrUpdateEnrolleeAsync(payload, User);
             Party satParty = await _satEnrolmentService.GetEnrolleeAsync(enrolleeId);
             return CreatedAtAction(
@@ -79,7 +84,6 @@ namespace Prime.Controllers
         [HttpPut("{satId}/demographics", Name = nameof(UpdateSatEnrolleeDemographics))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        // TODO: necessary?
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -90,8 +94,16 @@ namespace Prime.Controllers
             {
                 return NotFound($"SAT Enrollee not found with id {satId}");
             }
+            if (!satEnrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+            if (!payload.Validate(User))
+            {
+                return BadRequest("One or more Properties did not match the information on the BCSC.");
+            }
 
-            await _satEnrolmentService.UpdateDemographicsAsync(satId, payload);
+            await _satEnrolmentService.UpdateDemographicsAsync(satId, payload, User);
             return Ok();
         }
 
@@ -101,7 +113,6 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPut("{satId}/certifications", Name = nameof(UpdateSatEnrolleeCertifications))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        // TODO: necessary?
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -111,6 +122,10 @@ namespace Prime.Controllers
             if (satEnrollee == null)
             {
                 return NotFound($"SAT Enrollee not found with id {satId}");
+            }
+            if (!satEnrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
             }
 
             await _satEnrolmentService.UpdateCertificationsAsync(satId, payload);
