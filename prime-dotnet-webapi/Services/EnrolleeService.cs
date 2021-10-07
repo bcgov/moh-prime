@@ -970,13 +970,16 @@ namespace Prime.Services
             return absence;
         }
 
-        public async Task<EnrolleeAbsenceViewModel> GetEnrolleeAbsenceAsync(int enrolleeId)
+        public async Task<IEnumerable<EnrolleeAbsenceViewModel>> GetEnrolleeAbsencesAsync(int enrolleeId, bool includesPast)
         {
             var rightNow = DateTime.UtcNow;
             return await _context.EnrolleeAbsences
-                .Where(ea => rightNow <= ea.EndTimestamp && ea.EnrolleeId == enrolleeId)
+                .Where(ea => ea.EnrolleeId == enrolleeId)
+                .If(!includesPast,
+                    absences => absences.Where(ea => rightNow <= ea.EndTimestamp)
+                )
                 .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
+                .ToListAsync();
         }
 
         public async Task<EnrolleeAbsenceViewModel> GetCurrentEnrolleeAbsenceAsync(int enrolleeId)

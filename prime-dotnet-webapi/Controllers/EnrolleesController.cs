@@ -935,6 +935,7 @@ namespace Prime.Controllers
         /// <param name="createModel"></param>
         [HttpPost("{enrolleeId}/absences", Name = nameof(CreateEnrolleeAbsence))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -947,23 +948,30 @@ namespace Prime.Controllers
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
+            var currentOrFutureAbsences = await _enrolleeService.GetEnrolleeAbsencesAsync(enrolleeId, false);
+            if (currentOrFutureAbsences.Any())
+            {
+                return BadRequest("Cannot Create Enrollee Absence when a current or future one exists.");
+            }
+
             await _enrolleeService.CreateEnrolleeAbsenceAsync(enrolleeId, createModel);
 
             return NoContent();
         }
 
-        // GET: api/Enrollees/5/absences
+        // GET: api/Enrollees/5/absences?includesPast=false
         /// <summary>
-        /// Gets your current or future absence
+        /// Gets enrollee absences
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/absences", Name = nameof(GetAbsence))]
+        /// <param name="includesPast"></param>
+        [HttpGet("{enrolleeId}/absences", Name = nameof(GetAbsences))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAbsenceViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAbsence(int enrolleeId)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeAbsenceViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAbsences(int enrolleeId, [FromQuery] bool includesPast)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -971,9 +979,9 @@ namespace Prime.Controllers
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
-            var absence = await _enrolleeService.GetEnrolleeAbsenceAsync(enrolleeId);
+            var absences = await _enrolleeService.GetEnrolleeAbsencesAsync(enrolleeId, includesPast);
 
-            return Ok(absence);
+            return Ok(absences);
         }
 
         // GET: api/Enrollees/5/absences/current
@@ -999,13 +1007,12 @@ namespace Prime.Controllers
             }
 
             var absence = await _enrolleeService.GetCurrentEnrolleeAbsenceAsync(enrolleeId);
-
             return Ok(absence);
         }
 
         // PUT: api/Enrollees/5/absences/end-absence
         /// <summary>
-        /// Ends an enrollee absence.
+        /// Ends an current enrollee absence.
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPut("{enrolleeId}/absences/end-absence", Name = nameof(EndEnrolleeAbsence))]

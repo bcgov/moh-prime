@@ -53,7 +53,7 @@ namespace Prime.Services
         Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType);
         Task<Credential> GetCredentialAsync(int enrolleeId);
         Task<EnrolleeAbsence> CreateEnrolleeAbsenceAsync(int enrolleeId, EnrolleeAbsenceViewModel createModel);
-        Task<EnrolleeAbsenceViewModel> GetEnrolleeAbsenceAsync(int enrolleeId);
+        Task<IEnumerable<EnrolleeAbsenceViewModel>> GetEnrolleeAbsencesAsync(int enrolleeId, bool includesPast);
         Task<EnrolleeAbsenceViewModel> GetCurrentEnrolleeAbsenceAsync(int enrolleeId);
         Task EndEnrolleeAbsenceAsync(int enrolleeId);
         Task DeleteFutureEnrolleeAbsenceAsync(int enrolleeId, int absenceId);

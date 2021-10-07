@@ -349,15 +349,16 @@ export class EnrolmentResource {
       );
   }
 
-  public getEnrolleeAbsence(enrolleeId: number): Observable<EnrolleeAbsence> {
+  public getEnrolleeAbsences(enrolleeId: number): Observable<EnrolleeAbsence[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ includesPast: false });
     return this.apiResource
-      .get<EnrolleeAbsence>(`enrollees/${enrolleeId}/absences`)
+      .get<EnrolleeAbsence[]>(`enrollees/${enrolleeId}/absences`, params)
       .pipe(
-        map((response: ApiHttpResponse<EnrolleeAbsence>) => response.result),
-        tap((absence: EnrolleeAbsence) => this.logger.info('ENROLLEE_ABSENCE', absence)),
+        map((response: ApiHttpResponse<EnrolleeAbsence[]>) => response.result),
+        tap((absences: EnrolleeAbsence[]) => this.logger.info('ENROLLEE_ABSENCES', absences)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee absence could not be retrieved.');
-          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAbsence error has occurred: ', error);
+          this.toastService.openErrorToast('Enrollee absences could not be retrieved.');
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAbsences error has occurred: ', error);
           throw error;
         })
       );

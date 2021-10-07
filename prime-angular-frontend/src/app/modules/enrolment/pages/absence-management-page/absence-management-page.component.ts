@@ -106,8 +106,10 @@ export class AbsenceManagementPageComponent extends AbstractEnrolmentPage implem
 
   private getEnrolleeAbsence(): void {
     const enrolleeId = this.enrolmentService.enrolment.id;
-    this.busy = this.enrolmentResource.getEnrolleeAbsence(enrolleeId)
-      .subscribe((absence: EnrolleeAbsence) => this.absence = absence);
+    this.busy = this.enrolmentResource.getEnrolleeAbsences(enrolleeId)
+      .subscribe((absences: EnrolleeAbsence[]) => {
+        this.absence = absences?.[0];
+      });
   }
 
 }
