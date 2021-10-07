@@ -51,7 +51,7 @@ namespace Prime.Services
         Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId);
         Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user);
         Task<bool> SiteExists(int siteId);
-        Task<bool> PecExistsAsync(string pec);
+        Task<bool> PecAssignableAsync(string pec);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId);
     }
 }

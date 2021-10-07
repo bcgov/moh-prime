@@ -2,7 +2,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Collections.Generic;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 
 namespace Prime.ViewModels.Parties

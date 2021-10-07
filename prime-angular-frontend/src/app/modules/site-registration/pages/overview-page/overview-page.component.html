@@ -22,8 +22,8 @@
     </app-page-subheader2>
   </div>
 
-  <app-overview-container [showEditRedirect]="isSiteReview || (isOrganizationReview && !organization.hasSubmittedSite) || site.status == SiteStatusType.EDITABLE"
-                          [organization]="(isOrganizationReview || (isSiteReview && !organization.hasSubmittedSite)) ? organization : null"
+  <app-overview-container [showEditRedirect]="showEditRedirect"
+                          [organization]="organization"
                           [site]="site"></app-overview-container>
 
   <ng-container *ngIf="showSubmissionAction; else showBack">

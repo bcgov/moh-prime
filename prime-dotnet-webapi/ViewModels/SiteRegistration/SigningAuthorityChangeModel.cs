@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 
 namespace Prime.ViewModels.Parties
