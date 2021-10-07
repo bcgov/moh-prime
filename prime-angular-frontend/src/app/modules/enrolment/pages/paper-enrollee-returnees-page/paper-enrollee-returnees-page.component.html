@@ -41,6 +41,8 @@
 
   <app-page-footer primaryActionLabel="Continue"
                    [hasSecondaryAction]="isProfileComplete"
-                   (save)="onSubmit()"></app-page-footer>
+                   (save)="onSubmit()"
+                   (back)="onBack(EnrolmentRoutes.OVERVIEW)"></app-page-footer>
+
 
 </app-enrollee-page>

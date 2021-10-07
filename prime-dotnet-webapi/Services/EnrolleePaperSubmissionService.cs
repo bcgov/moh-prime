@@ -301,7 +301,7 @@ namespace Prime.Services
                 .Where(ele => ele.PaperEnrolleeId == paperEnrolleeId)
                 .SingleOrDefaultAsync();
 
-            if (link.Confirmed)
+            if (link != null && link.Confirmed)
             {
                 return true;
             }
