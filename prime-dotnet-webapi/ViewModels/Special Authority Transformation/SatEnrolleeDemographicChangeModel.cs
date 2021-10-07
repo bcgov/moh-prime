@@ -1,7 +1,7 @@
 using System;
 using System.Security.Claims;
 using FluentValidation;
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.ViewModels.Parties;
 
