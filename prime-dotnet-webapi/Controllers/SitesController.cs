@@ -1092,7 +1092,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessEvent>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSiteBusinessEvents(int siteId, [FromQuery] IEnumerable<int> businessEventTypeCodes)
         {
-            if (await _siteService.SiteExists(siteId))
+            if (!await _siteService.SiteExists(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
@@ -1141,7 +1141,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<SiteNotification>), StatusCodes.Status200OK)]
         public async Task<ActionResult> CreateSiteNotification(int siteId, int siteRegistrationNoteId, FromBodyData<int> assigneeId)
         {
-            if (await _siteService.SiteExists(siteId))
+            if (!await _siteService.SiteExists(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
@@ -1172,7 +1172,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult> DeleteSiteNotification(int siteId, int siteRegistrationNoteId)
         {
-            if (await _siteService.SiteExists(siteId))
+            if (!await _siteService.SiteExists(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
@@ -1201,7 +1201,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<SiteRegistrationNoteViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSiteNotifications(int siteId)
         {
-            if (await _siteService.SiteExists(siteId))
+            if (!await _siteService.SiteExists(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
@@ -1226,7 +1226,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult> DeleteSiteNotifications(int siteId)
         {
-            if (await _siteService.SiteExists(siteId))
+            if (!await _siteService.SiteExists(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }

@@ -536,7 +536,6 @@ export class AdjudicationResource {
     return this.apiResource.delete(`sites/${siteId}/notifications`)
       .pipe(
         catchError((error: any) => {
-          this.toastService.openErrorToast('Site Notifications could not be deleted');
           this.logger.error('[Adjudication] AdjudicationResource::deleteSiteNotifications error has occurred: ', error);
           throw error;
         })
