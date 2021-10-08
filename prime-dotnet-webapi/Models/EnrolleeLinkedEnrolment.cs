@@ -24,7 +24,5 @@ namespace Prime.Models
         public string UserProvidedGpid { get; set; }
 
         public DateTime EnrolmentLinkDate { get; set; }
-
-        public bool Confirmed { get; set; }
     }
 }

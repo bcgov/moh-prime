@@ -2,7 +2,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, pipe, from, EMPTY, of } from 'rxjs';
+import { Observable, pipe, from, EMPTY, of, noop } from 'rxjs';
 import { catchError, exhaustMap, map } from 'rxjs/operators';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
@@ -89,7 +89,6 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
 
     this.allowRoutingWhenDirty = false;
     this.routeUtils = new RouteUtils(route, router, EnrolmentRoutes.MODULE_PATH);
-
   }
 
   public onSubmit(beenThroughTheWizard: boolean = false): void {

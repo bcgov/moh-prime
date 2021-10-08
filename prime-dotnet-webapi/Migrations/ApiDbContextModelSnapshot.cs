@@ -11944,9 +11944,6 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<bool>("Confirmed")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 

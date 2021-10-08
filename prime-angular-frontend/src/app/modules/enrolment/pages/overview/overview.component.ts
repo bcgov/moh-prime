@@ -127,7 +127,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.isPotentialPaperEnrollee = this.enrolmentService.isPotentialPaperEnrollee;
     this.authService.getUser$()
       .pipe(
@@ -172,9 +172,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         }),
         exhaustMap((_) =>
           (this.isPotentialPaperEnrollee)
-            ? this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(this.enrolmentService.enrolment)
+            ? this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(this.enrolmentService.enrolment.id)
               .pipe(tap((result: string) => this.userProvidedGpid = result))
-            : of(noop)
+            : of(noop())
         )
       ).subscribe();
   }

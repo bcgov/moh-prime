@@ -275,9 +275,8 @@ namespace Prime.Services.Rules
                     return false;
                 }
                 // *** *** if match "auto enrol" and link to paper enrolment and confirm the linkage here
-                if (!await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId, isConfirmed: true))
+                if (!await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId))
                 {
-                    // If for any reason the database call fails, send to manual adjudication with reason "Unable to link enrollee to paper enrollee"
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.UnableToLinkToPpaperEnrolment, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
                     return false;
                 }
@@ -286,7 +285,6 @@ namespace Prime.Services.Rules
             // *** if yes and GPID not provided - flag with "Possible match with paper enrolment"
             else
             {
-                // await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId);
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch);
                 return false;
             }

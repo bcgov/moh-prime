@@ -7,6 +7,5 @@ namespace Prime.ViewModels.PaperEnrollees
         public int? PaperEnrolleeId { get; set; }
         public string UserProvidedGpid { get; set; }
         public DateTime? EnrolmentLinkDate { get; set; }
-        public bool IsConfirmed { get; set; }
     }
 }

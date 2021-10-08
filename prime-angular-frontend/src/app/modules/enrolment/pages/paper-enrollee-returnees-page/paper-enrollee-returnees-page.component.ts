@@ -35,7 +35,7 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
   public form: FormGroup;
   public bcscUser: BcscUser;
   public formControlConfig: { label: string, name: string }[];
-  public userProvidedGpid: String;
+  public userProvidedGpid: string;
 
   constructor(
     protected route: ActivatedRoute,
@@ -64,71 +64,65 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
       authService
     );
     this.formControlConfig = [
-      { label: 'GPID', name: 'formUserProvidedGpid' }
+      { label: 'GPID', name: 'gpid' }
     ];
   }
 
   public get formUserProvidedGpid(): FormControl {
-    return this.form.get('formUserProvidedGpid') as FormControl;
+    return this.form.get('gpid') as FormControl;
   }
 
   public onChangeRequestedOfflineAccess({ checked }: MatSlideToggleChange): void {
     this.togglePaperEnrolleeReturneeValidator(checked, this.formUserProvidedGpid);
   }
 
-  public onSubmit(beenThroughTheWizard: boolean = false): void {
-    // For this page we always want to check for changes in the user provided GPID
-    // before hitting the super onSubmit since this page's submission will be skipped
-    // by the super.onSubmit after the profile is complete however users can still update / provide their gpids
-
-    // Only update if the user had previously provided a paper enrolment gpid and
-    // then updates the paper enrolment gpid through the form field
-    if ((!!this.userProvidedGpid && (this.userProvidedGpid !== this.formUserProvidedGpid.value))
-      || (this.enrolment && !this.userProvidedGpid)) {
-      this.enrolmentResource.createOrUpdateInitialPaperEnrolleeLink(this.enrolment, this.formUserProvidedGpid.value)
-        .subscribe();
-    }
-
-    // Continue the normal flow
-    super.onSubmit(beenThroughTheWizard);
-  }
-
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm$()
+    this.patchForm()
       .pipe(
-        exhaustMap((enrolment: Enrolment) =>
+        exhaustMap(([_, enrolment]: [BcscUser, Enrolment]) =>
           (enrolment)
-            ? this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(enrolment)
+            ? this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(enrolment.id)
               .pipe(map((result: string) => result))
             : of(null)
         )
       )
-      .subscribe((result) => {
+      .subscribe((result: string) => {
         this.userProvidedGpid = result ? result : null;
         this.form.patchValue({ formUserProvidedGpid: this.userProvidedGpid })
         this.initForm()
       });
   }
 
-  protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
-    if (!enrolment.id && this.isInitialEnrolment) {
+  protected handleSubmission(): void {
+    if (!this.enrolment.id && this.isInitialEnrolment) {
       // If yes and user provides a GPID, create enrollee here.
-      return this.getUser$()
+      this.getUser$()
         .pipe(
           map((enrollee: Enrollee) => {
             const { firstName, lastName, givenNames, verifiedAddress, ...remainder } = enrollee;
-            const { userId, ...demographic } = enrolment.enrollee;
+            const { userId, ...demographic } = this.enrolment.enrollee;
             return { ...remainder, ...demographic, firstName, lastName, givenNames, verifiedAddress };
           }),
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
           // Populate the new enrolment within the form state by force patching
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
-          exhaustMap((newEnrolment: Enrolment) => this.enrolmentResource.createOrUpdateInitialPaperEnrolleeLink(newEnrolment, this.formUserProvidedGpid.value)),
+          exhaustMap((newEnrolment: Enrolment) => this.enrolmentResource.createOrUpdateInitialPaperEnrolleeLink(newEnrolment.id, this.formUserProvidedGpid.value)),
           this.handleResponse()
-        );
+        )
+        .subscribe();
+    } else if ((!this.userProvidedGpid) || (this.userProvidedGpid !== this.formUserProvidedGpid.value)) {
+      // For this page we always want to check for changes in the user provided GPID
+      // before hitting the super onSubmit since this page's submission will be skipped
+      // by the super.onSubmit after the profile is complete however users can still update / provide their gpids
+
+      // Only update if the user had previously provided a paper enrolment gpid and
+      // then updates the paper enrolment gpid through the form field
+      this.enrolmentResource.createOrUpdateInitialPaperEnrolleeLink(this.enrolment.id, this.formUserProvidedGpid.value)
+        .pipe(this.handleResponse())
+        .subscribe();
     } else {
-      return super.performHttpRequest(enrolment, beenThroughTheWizard);
+      this.nextRouteAfterSubmit();
     }
   }
 
@@ -140,7 +134,7 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
   protected initForm(): void {
     this.isOfflineFormAccessRequested = !!(this.userProvidedGpid);
 
-    this.togglePaperEnrolleeReturneeValidator(this.isOfflineFormAccessRequested, this.formUserProvidedGpid);
+    this.togglePaperEnrolleeReturneeValidator(!!(this.userProvidedGpid), this.formUserProvidedGpid);
   }
 
   private togglePaperEnrolleeReturneeValidator(isPaperEnrolmentReturnee: boolean, paperEnrolmentGpid: FormControl): void {
@@ -169,14 +163,5 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
           } as Enrollee;
         })
       );
-  }
-
-  private patchForm$(): Observable<Enrolment> {
-    return this.patchForm()
-      .pipe(
-        // We only want the actual enrolment with the enrolment ID and not
-        // the derived one (BcscUser)
-        map((enrolment: Enrolment) => enrolment[1]),
-      )
   }
 }

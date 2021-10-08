@@ -65,8 +65,7 @@ export class EnrolmentResource {
       );
   }
 
-  public createOrUpdateInitialPaperEnrolleeLink(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
-    const { id } = enrolment;
+  public createOrUpdateInitialPaperEnrolleeLink(id: number, userProvidedGpid: string): Observable<NoContent> {
     const payload = { userProvidedGpid }
     return this.apiResource.post<NoContent>(`enrollees/${id}/potential-paper-enrollee`, payload)
       .pipe(
@@ -78,8 +77,7 @@ export class EnrolmentResource {
       );
   }
 
-  public getGpidFromLinkWithPotentialEnrollee(enrolment: Enrolment): Observable<string> {
-    const { id } = enrolment;
+  public getGpidFromLinkWithPotentialEnrollee(id: number): Observable<string> {
     return this.apiResource.get<string>(`enrollees/${id}/linked-gpid`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
@@ -145,7 +143,7 @@ export class EnrolmentResource {
       );
   }
 
-  public getPotentialPaperEnrolleeStatus(dateOfBirth: string): Observable<boolean> {
+  public getIsPotentialPaperEnrollee(dateOfBirth: string): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams({ dateOfBirth });
     return this.apiResource.head<boolean>('enrollees/paper-submissions', params)
       .pipe(

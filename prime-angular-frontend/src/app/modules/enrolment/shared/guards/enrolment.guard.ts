@@ -56,7 +56,7 @@ export class EnrolmentGuard extends BaseGuard {
             .pipe(map((bcscUser: BcscUser) => [bcscUser, enrolment]))
         ),
         exhaustMap(([bcscUser, enrolment]: [BcscUser, Enrolment]) =>
-          this.enrolmentResource.getPotentialPaperEnrolleeStatus(bcscUser.dateOfBirth)
+          this.enrolmentResource.getIsPotentialPaperEnrollee(bcscUser.dateOfBirth)
             .pipe(
               tap((result: boolean) => this.enrolmentService.isPotentialPaperEnrollee = result),
               map((_) => enrolment)

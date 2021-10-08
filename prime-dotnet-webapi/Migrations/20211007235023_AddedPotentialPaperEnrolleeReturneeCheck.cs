@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class AddedPotentialPaperEnrolmentReturneeCheck : Migration
+    public partial class AddedPotentialPaperEnrolleeReturneeCheck : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,8 +21,7 @@ namespace Prime.Migrations
                     EnrolleeId = table.Column<int>(nullable: false),
                     PaperEnrolleeId = table.Column<int>(nullable: true),
                     UserProvidedGpid = table.Column<string>(nullable: true),
-                    EnrolmentLinkDate = table.Column<DateTime>(nullable: false),
-                    Confirmed = table.Column<bool>(nullable: false)
+                    EnrolmentLinkDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

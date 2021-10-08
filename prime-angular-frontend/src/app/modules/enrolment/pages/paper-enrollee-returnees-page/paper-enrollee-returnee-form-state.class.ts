@@ -29,7 +29,7 @@ export class PaperEnrolleeReturneeFormState extends AbstractFormState<String> {
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      formUserProvidedGpid: [null],
+      gpid: [null],
     });
   }
 }

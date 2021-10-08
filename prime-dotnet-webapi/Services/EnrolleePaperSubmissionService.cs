@@ -269,7 +269,7 @@ namespace Prime.Services
         {
             var confirmedLinks = await _context.EnrolleeLinkedEnrolment
                 .AsNoTracking()
-                .Where(cl => cl.Confirmed)
+                .Where(cl => cl.PaperEnrolleeId != null)
                 .Select(cl => cl.PaperEnrolleeId)
                 .ToListAsync();
 
@@ -295,13 +295,13 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId, bool isConfirmed = false)
+        public async Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId)
         {
             var link = await _context.EnrolleeLinkedEnrolment
                 .Where(ele => ele.PaperEnrolleeId == paperEnrolleeId)
                 .SingleOrDefaultAsync();
 
-            if (link != null && link.Confirmed)
+            if (link != null)
             {
                 return true;
             }
@@ -312,7 +312,6 @@ namespace Prime.Services
 
             enrolleeLinkedEnrolment.PaperEnrolleeId = paperEnrolleeId;
             enrolleeLinkedEnrolment.EnrolmentLinkDate = DateTime.Now;
-            enrolleeLinkedEnrolment.Confirmed = isConfirmed;
 
             await _context.SaveChangesAsync();
 
@@ -322,7 +321,7 @@ namespace Prime.Services
         public async Task CreateOrUpdateInitialLinkAsync(int enrolleeId, string userProvidedGpid)
         {
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
-                .SingleOrDefaultAsync(ele => ele.EnrolleeId == enrolleeId && !ele.Confirmed);
+                .SingleOrDefaultAsync(ele => ele.EnrolleeId == enrolleeId && ele.PaperEnrolleeId == null);
 
             if (enrolleeLinkedEnrolment != null)
             {
