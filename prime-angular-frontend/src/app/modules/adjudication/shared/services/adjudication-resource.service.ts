@@ -79,8 +79,8 @@ export class AdjudicationResource {
       selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`).pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
       selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`).pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result))
     }).pipe(
-      map(({ enrollee, accessAgreementNote, enrolleeCareSettings, certifications, enrolleeRemoteUsers, oboSites, remoteAccessLocations, remoteAccessSites, selfDeclarations, selfDeclarationDocuments }) => {
-        return { ...enrollee, accessAgreementNote, certifications, ...enrolleeCareSettings, enrolleeRemoteUsers, oboSites, remoteAccessLocations, remoteAccessSites, selfDeclarations, selfDeclarationDocuments }
+      map(({ enrollee, enrolleeCareSettings, ...remainder }) => {
+        return { ...enrollee, ...enrolleeCareSettings, remainder }
       }),
       tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
       map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),

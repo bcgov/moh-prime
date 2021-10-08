@@ -381,10 +381,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
     };
 
-    const sds = [];
-
-    Object.keys(selfDeclarationsTypes)
-      .forEach((sd) => {
+    return Object.keys(selfDeclarationsTypes)
+      .reduce((sds: SelfDeclaration[], sd: string) => {
         sds.push(
           new SelfDeclaration(
             selfDeclarationsTypes[sd],
@@ -393,9 +391,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
             this.enrolleeId,
             selfDeclarations[sd]
           )
-        )
-      });
-    return sds;
+        );
+        return sds;
+      }, []);
   }
 
   private convertRemoteAccessSitesToJson(): RemoteAccessSite[] {
