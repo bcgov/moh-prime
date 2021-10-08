@@ -954,5 +954,73 @@ namespace Prime.Services
                 .DecompileAsync()
                 .ToListAsync();
         }
+
+        public async Task<EnrolleeAbsence> CreateEnrolleeAbsenceAsync(int enrolleeId, EnrolleeAbsenceViewModel createModel)
+        {
+            var absence = new EnrolleeAbsence
+            {
+                EnrolleeId = enrolleeId,
+                StartTimestamp = createModel.StartTimestamp.ToUniversalTime(),
+                EndTimestamp = createModel.EndTimestamp.ToUniversalTime()
+            };
+
+            _context.EnrolleeAbsences.Add(absence);
+            await _context.SaveChangesAsync();
+
+            return absence;
+        }
+
+        public async Task<IEnumerable<EnrolleeAbsenceViewModel>> GetEnrolleeAbsencesAsync(int enrolleeId, bool includesPast)
+        {
+            var rightNow = DateTime.UtcNow;
+            return await _context.EnrolleeAbsences
+                .Where(ea => ea.EnrolleeId == enrolleeId)
+                .If(!includesPast,
+                    absences => absences.Where(ea => rightNow <= ea.EndTimestamp)
+                )
+                .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<EnrolleeAbsenceViewModel> GetCurrentEnrolleeAbsenceAsync(int enrolleeId)
+        {
+            var rightNow = DateTime.UtcNow;
+            return await _context.EnrolleeAbsences
+                .Where(ea => ea.EnrolleeId == enrolleeId
+                    && ea.StartTimestamp <= rightNow
+                    && rightNow <= ea.EndTimestamp)
+                .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task EndCurrentEnrolleeAbsenceAsync(int enrolleeId)
+        {
+            var rightNow = DateTime.UtcNow;
+            var absence = await _context.EnrolleeAbsences
+                .SingleOrDefaultAsync(ea => ea.EnrolleeId == enrolleeId
+                    && ea.StartTimestamp <= rightNow
+                    && rightNow <= ea.EndTimestamp);
+
+            if (absence != null)
+            {
+                absence.EndTimestamp = rightNow;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteFutureEnrolleeAbsenceAsync(int enrolleeId, int absenceId)
+        {
+            var rightNow = DateTime.UtcNow;
+            var absence = await _context.EnrolleeAbsences
+                .SingleOrDefaultAsync(ea => ea.Id == absenceId
+                    && ea.EnrolleeId == enrolleeId
+                    && ea.StartTimestamp > rightNow);
+
+            if (absence != null)
+            {
+                _context.EnrolleeAbsences.Remove(absence);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
