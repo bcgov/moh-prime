@@ -294,11 +294,11 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // POST: api/Enrollees/5/potential-paper-enrollee
+        // POST: api/Enrollees/5/links
         /// <summary>
         /// Creates a new Enrollee who may have a a previous paper enrolment.
         /// </summary>
-        [HttpPost("{enrolleeId}/potential-paper-enrollee", Name = nameof(CreateOrUpdateInitialPaperEnrolleeLink))]
+        [HttpPost("{enrolleeId}/links", Name = nameof(CreateOrUpdateInitialPaperEnrolleeLink))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -318,17 +318,17 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // GET: api/Enrollees/5/linked-gpid
+        // GET: api/Enrollees/5/links/gpid
         /// <summary>
         /// Gets the linked gpid
         /// </summary>
-        [HttpGet("{enrolleeId}/linked-gpid", Name = nameof(GetGpidFromLinkWithPotentialEnrollee))]
+        [HttpGet("{enrolleeId}/links/gpid", Name = nameof(GetPaperSubmissionGpid))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetGpidFromLinkWithPotentialEnrollee(int enrolleeId)
+        public async Task<ActionResult> GetPaperSubmissionGpid(int enrolleeId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
