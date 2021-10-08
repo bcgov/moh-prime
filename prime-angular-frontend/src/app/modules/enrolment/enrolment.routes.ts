@@ -38,6 +38,7 @@ export class EnrolmentRoutes {
   public static ACCESS_TERMS = 'access-terms';
   public static ENROLMENT = 'enrolment';
   public static PAPER_ENROLLEE_DECLARATION = 'paper-enrollee-declaration'
+  public static ABSENCE_MANAGEMENT = 'absence-management';
 
   public static routePath(route: string): string {
     return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;

@@ -37,6 +37,7 @@ import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.
 import { HeaderComponent } from './shared/components/header/header.component';
 import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
 import { PaperEnrolleeReturneesPageComponent } from './pages/paper-enrollee-returnees-page/paper-enrollee-returnees-page.component';
+import { AbsenceManagementPageComponent } from './pages/absence-management-page/absence-management-page.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { PaperEnrolleeReturneesPageComponent } from './pages/paper-enrollee-retu
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
     RemoteAccessAddressesComponent,
-    PaperEnrolleeReturneesPageComponent
+    PaperEnrolleeReturneesPageComponent,
+    AbsenceManagementPageComponent
   ],
   imports: [
     SharedModule,

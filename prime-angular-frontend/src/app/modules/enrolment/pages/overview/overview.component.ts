@@ -23,6 +23,7 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.clas
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
 @Component({
   selector: 'app-overview',
@@ -41,6 +42,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public withinDaysOfRenewal: boolean;
   public isPotentialPaperEnrollee: boolean;
   public userProvidedGpid: string;
+  public absence: EnrolleeAbsence;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -105,7 +107,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       .canRequestRemoteAccess(certifications, careSettings);
   }
 
-  public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {
+  public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}): void {
     this.allowRoutingWhenDirty = true;
     super.routeTo(routePath, navigationExtras);
   }
@@ -123,7 +125,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     return this.enrolment?.enrollee?.gpid;
   }
 
-  public onCopy() {
+  public onCopy(): void {
     this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
   }
 
@@ -175,8 +177,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
             ? this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(this.enrolmentService.enrolment.id)
               .pipe(tap((result: string) => this.userProvidedGpid = result))
             : of(noop())
-        )
-      ).subscribe();
+        ),
+        exhaustMap(() => this.enrolmentResource.getCurrentEnrolleeAbsence(this.enrolment.id))
+      ).subscribe((absence: EnrolleeAbsence) => this.absence = absence);
   }
 
   /**

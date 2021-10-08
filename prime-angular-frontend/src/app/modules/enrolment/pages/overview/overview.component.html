@@ -17,6 +17,23 @@
       </ng-container>
     </app-expiry-alert>
 
+    <app-alert *ngIf="absence"
+               type="danger"
+               icon="warning">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Reported Absent
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        You are currently reported absent from
+        <strong>{{absence.startTimestamp | formatDate}} - {{absence.endTimestamp | formatDate}}</strong>,
+        click the link below if you would like to end your absence.
+        <br/>
+        <a [routerLink]="" (click)="routeTo(EnrolmentRoutes.ABSENCE_MANAGEMENT)">Absence Management</a>
+      </ng-container>
+    </app-alert>
+
     <ng-container *ngIf="!isInitialEnrolment && enrolment?.expiryDate">
 
       <app-alert type="success"

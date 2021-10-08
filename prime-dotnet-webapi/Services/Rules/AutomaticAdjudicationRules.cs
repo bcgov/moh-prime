@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
+using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.HttpClients;
 using Prime.HttpClients.PharmanetCollegeApiDefinitions;
@@ -224,7 +225,7 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.IdentityProvider != Auth.AuthConstants.BCServicesCard)
+            if (enrollee.IdentityProvider != AuthConstants.BCServicesCard)
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.IdentityProvider, $"Method used: {enrollee.IdentityProvider}");
                 return Task.FromResult(false);

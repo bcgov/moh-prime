@@ -35,6 +35,7 @@ import { AccessDeclinedComponent } from './pages/access-declined/access-declined
 import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 import { PaperEnrolleeReturneesPageComponent } from './pages/paper-enrollee-returnees-page/paper-enrollee-returnees-page.component';
+import { AbsenceManagementPageComponent } from './pages/absence-management-page/absence-management-page.component';
 
 const routes: Routes = [
   {
@@ -190,6 +191,11 @@ const routes: Routes = [
         path: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
         component: PharmanetEnrolmentSummaryComponent,
         data: { title: 'Share GPID/Approval' }
+      },
+      {
+        path: EnrolmentRoutes.ABSENCE_MANAGEMENT,
+        component: AbsenceManagementPageComponent,
+        data: { title: 'Absence Management' }
       },
       {
         path: EnrolmentRoutes.ACCESS_TERMS,
