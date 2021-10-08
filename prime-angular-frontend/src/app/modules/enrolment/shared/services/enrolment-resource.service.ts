@@ -23,6 +23,7 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
 @Injectable({
   providedIn: 'root'
@@ -296,6 +297,82 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Document could not be deleted');
           this.logger.error('[Adjudication] EnrolmentResource::deleteEnrolleeAdjudicationDocument error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  // ---
+  // Enrollee Absesnces
+  // ---
+
+  public createEnrolleeAbsence(enrolleeId: number, startTimestamp: string, endTimestamp: string): Observable<NoContent> {
+    const payload = { startTimestamp, endTimestamp };
+    return this
+      .apiResource.post<NoContent>(`enrollees/${enrolleeId}/absences`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Enrollee Absence has been created.')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee Absence could not be created.');
+          this.logger.error('[Enrolment] EnrolmentResource::createEnrolleeAbsence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public endCurrentEnrolleeAbsence(enrolleeId: number): Observable<NoContent> {
+    return this
+      .apiResource.put<NoContent>(`enrollees/${enrolleeId}/absences/current/end`)
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Enrollee Absence has been ended.')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee Absence could not be ended.');
+          this.logger.error('[Enrolment] EnrolmentResource::endEnrolleeAbsence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteFutureEnrolleeAbsence(enrolleeId: number, absenceId: number): Observable<NoContent> {
+    return this
+      .apiResource.delete<NoContent>(`enrollees/${enrolleeId}/absences/${absenceId}`)
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Enrollee Absence has been removed.')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee Absence could not be removed.');
+          this.logger.error('[Enrolment] EnrolmentResource::deleteFutureEnrolleeAbsence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolleeAbsences(enrolleeId: number): Observable<EnrolleeAbsence[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ includesPast: false });
+    return this.apiResource
+      .get<EnrolleeAbsence[]>(`enrollees/${enrolleeId}/absences`, params)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAbsence[]>) => response.result),
+        tap((absences: EnrolleeAbsence[]) => this.logger.info('ENROLLEE_ABSENCES', absences)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee absences could not be retrieved.');
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAbsences error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getCurrentEnrolleeAbsence(enrolleeId: number): Observable<EnrolleeAbsence> {
+    return this.apiResource
+      .get<EnrolleeAbsence>(`enrollees/${enrolleeId}/absences/current`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAbsence>) => response.result),
+        tap((absence: EnrolleeAbsence) => this.logger.info('CURRENT_ENROLLEE_ABSENCE', absence)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Current enrollee absence could not be retrieved.');
+          this.logger.error('[Enrolment] EnrolmentResource::getCurrentEnrolleeAbsence error has occurred: ', error);
           throw error;
         })
       );
