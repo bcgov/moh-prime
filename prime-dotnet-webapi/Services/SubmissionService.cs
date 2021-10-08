@@ -26,6 +26,15 @@ namespace Prime.Services
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IVerifiableCredentialService _verifiableCredentialService;
 
+        private readonly int[] PharmanetSpecificStatusReasons = new[]
+            {
+                (int) StatusReasonType.PharmanetError,
+                (int) StatusReasonType.NotInPharmanet,
+                (int) StatusReasonType.BirthdateDiscrepancy,
+                (int) StatusReasonType.NameDiscrepancy,
+                (int) StatusReasonType.Practicing
+            };
+
         public SubmissionService(
             ApiDbContext context,
             ILogger<SubmissionService> logger,
@@ -302,19 +311,10 @@ namespace Prime.Services
 
         public async Task RerunRulesAsync()
         {
-            var pharmanetReasons = new[]
-            {
-                (int)StatusReasonType.PharmanetError,
-                (int)StatusReasonType.NotInPharmanet,
-                (int)StatusReasonType.BirthdateDiscrepancy,
-                (int)StatusReasonType.NameDiscrepancy,
-                (int)StatusReasonType.Practicing
-            };
-
             var enrollees = GetBaseQueryForEnrolleeApplicationRules()
                 .Where(e => e.Adjudicator == null)
                 .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview)
-                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => pharmanetReasons.Contains(esr.StatusReasonCode)))
+                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => PharmanetSpecificStatusReasons.Contains(esr.StatusReasonCode)))
                 // Need `DecompileAsync` due to computed property `CurrentStatus`
                 .DecompileAsync()
                 .ToList();
@@ -377,7 +377,7 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, businessEventDesc);
         }
 
-        IQueryable<Enrollee> GetBaseQueryForEnrolleeApplicationRules()
+        private IQueryable<Enrollee> GetBaseQueryForEnrolleeApplicationRules()
         {
             return _context.Enrollees
                 .Include(e => e.Submissions)
