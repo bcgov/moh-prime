@@ -30,7 +30,7 @@ namespace Prime.Services
                     throw new ArgumentException("Client certificate not received.");
                 }
 
-                if (PrimeEnvironment.PlrIntegration.ClientCertThumbprint == null)
+                if (PrimeConfiguration.Current.PlrIntegration.ClientCertThumbprint == null)
                 {
                     throw new SystemException("Receiving system is not configured properly; please advise system administrator.");
                 }

@@ -12,7 +12,7 @@ using IdentityModel.Client;
 using Bogus;
 
 using Prime;
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 using PrimeTests.Utils.Auth;
 

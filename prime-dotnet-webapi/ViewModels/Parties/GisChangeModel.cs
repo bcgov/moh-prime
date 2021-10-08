@@ -2,7 +2,7 @@ using System;
 using System.Security.Claims;
 using Newtonsoft.Json;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 
 namespace Prime.ViewModels.Parties

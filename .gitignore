@@ -21,14 +21,6 @@ BuildReports/
 # Ignore test coverage files and directories
 **/**/coverage
 **/lcov.info
-**/coverage.cobertura.xml 
 
-# Windows
-Thumbs.db
-desktop.ini
-
-# OS X
-.DS_Store
-.Spotlight-V100
-.Trashes
-._*
+# Ignore any secrets file accedentally left in the repo
+secrets.json
