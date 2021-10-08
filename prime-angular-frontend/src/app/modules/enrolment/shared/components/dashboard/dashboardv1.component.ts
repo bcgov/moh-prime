@@ -203,6 +203,19 @@ export class DashboardV1Component implements OnInit {
                 EnrolmentStatusEnum.DECLINED
               ].includes(enrolmentStatus)
             )
+          },
+          {
+            name: 'Absence Management',
+            icon: statusIcons.absence,
+            route: EnrolmentRoutes.ABSENCE_MANAGEMENT,
+            showItem: true,
+            disabled: (
+              !hasAcceptedAtLeastOneToa ||
+              [
+                EnrolmentStatusEnum.LOCKED,
+                EnrolmentStatusEnum.DECLINED
+              ].includes(enrolmentStatus)
+            )
           }
         ]
       },
@@ -239,11 +252,13 @@ export class DashboardV1Component implements OnInit {
     let enrollee = 'assignment_ind';
     let accessAgreement = 'assignment';
     let certificate = 'mail';
+    let absence = 'work_off';
 
     if (!hasAcceptedAtLeastOneToa) {
       // Default icons when performing initial enrolment
       accessAgreement = 'lock';
       certificate = 'lock';
+      absence = 'lock';
 
       switch (enrolmentStatus) {
         case EnrolmentStatusEnum.EDITABLE:
@@ -274,12 +289,13 @@ export class DashboardV1Component implements OnInit {
           enrollee = 'lock';
           accessAgreement = 'lock';
           certificate = 'lock';
+          absence = 'lock';
           break;
       }
 
     }
 
-    return { enrollee, accessAgreement, certificate };
+    return { enrollee, accessAgreement, certificate, absence };
   }
 
   private setSideNavProps(device: string) {

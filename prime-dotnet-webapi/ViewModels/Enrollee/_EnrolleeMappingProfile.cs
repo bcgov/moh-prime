@@ -36,6 +36,7 @@ namespace Prime.ViewModels.Profiles
                 .AfterMap((src, dest) => dest.IsRegulatedUser = src.IsRegulatedUser());
 
             CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
+            CreateMap<EnrolleeAbsence, EnrolleeAbsenceViewModel>();
 
             CreateMap<Enrollee, AgreementEngineDto>()
                 .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
