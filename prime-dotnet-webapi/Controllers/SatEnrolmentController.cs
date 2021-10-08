@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-using Prime.Auth;
-using Prime.Services;
+using Prime.Configuration.Auth;
 using Prime.Models;
+using Prime.Services;
 using Prime.ViewModels.SpecialAuthorityTransformation;
+
 
 namespace Prime.Controllers
 {
@@ -15,8 +16,7 @@ namespace Prime.Controllers
     /// "Special Authority Transformation" Controller
     /// </summary>
     [Produces("application/json")]
-    // TODO: Enable
-    //    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
+    [Authorize(Roles = Roles.PrimeEnrollee)]
     [Route("api/parties/sat")]
     [ApiController]
     public class SatEnrolmentController : PrimeControllerBase
@@ -40,16 +40,21 @@ namespace Prime.Controllers
         [HttpPost(Name = nameof(CreateSatEnrollee))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status201Created)]
-        public async Task<ActionResult> CreateSatEnrollee(SatEnrolleeDemographicViewModel payload)
+        public async Task<ActionResult> CreateSatEnrollee(SatEnrolleeDemographicChangeModel payload)
         {
-            Party createdEnrollee = await _satEnrolmentService.CreateEnrolleeAsync(payload);
+            if (!payload.Validate(User))
+            {
+                return BadRequest("One or more Properties did not match the information on the BCSC.");
+            }
 
+            int enrolleeId = await _satEnrolmentService.CreateOrUpdateEnrolleeAsync(payload, User);
+            Party satParty = await _satEnrolmentService.GetEnrolleeAsync(enrolleeId);
             return CreatedAtAction(
-                nameof(EnrolleesController.GetEnrolleeById),
-                "enrollees",
-                new { enrolleeId = createdEnrollee.Id },
-                createdEnrollee
+                nameof(GetSatEnrolleeById),
+                new { satId = satParty.Id },
+                satParty
             );
         }
 
@@ -63,7 +68,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<SatEnrolleeDemographicViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<SatEnrolleeDemographicChangeModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSatEnrolleeById(int satId)
         {
             var satEnrollee = await _satEnrolmentService.GetEnrolleeAsync(satId);
@@ -86,29 +91,35 @@ namespace Prime.Controllers
         [HttpPut("{satId}/demographics", Name = nameof(UpdateSatEnrolleeDemographics))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        // TODO: necessary?
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateSatEnrolleeDemographics(int satId, SatEnrolleeDemographicViewModel payload)
+        public async Task<ActionResult> UpdateSatEnrolleeDemographics(int satId, SatEnrolleeDemographicChangeModel payload)
         {
             var satEnrollee = await _satEnrolmentService.GetEnrolleeAsync(satId);
             if (satEnrollee == null)
             {
                 return NotFound($"SAT Enrollee not found with id {satId}");
             }
+            if (!satEnrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+            if (!payload.Validate(User))
+            {
+                return BadRequest("One or more Properties did not match the information on the BCSC.");
+            }
 
-            await _satEnrolmentService.UpdateDemographicsAsync(satId, payload);
+            await _satEnrolmentService.UpdateDemographicsAsync(satId, payload, User);
             return Ok();
         }
 
-        // PUT: api/enrollees/5/paper-submissions/certifications
+        // PUT: api/parties/sat/5/certifications
         /// <summary>
-        /// Updates a Paper Submission's Certifications.
+        /// Updates a SAT Enrollee's Certifications.
         /// </summary>
         [HttpPut("{satId}/certifications", Name = nameof(UpdateSatEnrolleeCertifications))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        // TODO: necessary?
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -118,6 +129,10 @@ namespace Prime.Controllers
             if (satEnrollee == null)
             {
                 return NotFound($"SAT Enrollee not found with id {satId}");
+            }
+            if (!satEnrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
             }
 
             await _satEnrolmentService.UpdateCertificationsAsync(satId, payload);

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.HttpClients;
 
 namespace Prime.Controllers

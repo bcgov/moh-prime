@@ -8,7 +8,7 @@ namespace Prime.ViewModels.Profiles
     {
         public SatEnrolleeMappingProfile()
         {
-            CreateMap<SatEnrolleeDemographicViewModel, Party>();
+            CreateMap<SatEnrolleeDemographicChangeModel, Party>();
             CreateMap<SatEnrolleeCertificationViewModel, PartyCertification>();
         }
     }

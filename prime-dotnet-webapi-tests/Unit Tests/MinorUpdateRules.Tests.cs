@@ -4,13 +4,12 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Xunit;
 
-using Prime;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
 using PrimeTests.ModelFactories;
-using Prime.Configuration;
+using Prime.Configuration.Database;
 
 namespace PrimeTests.UnitTests
 {

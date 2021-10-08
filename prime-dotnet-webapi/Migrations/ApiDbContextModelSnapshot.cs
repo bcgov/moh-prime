@@ -11788,6 +11788,41 @@ namespace Prime.Migrations
                     b.ToTable("Enrollee");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeAbsence", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("EndTimestamp")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartTimestamp")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("EnrolleeAbsence");
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolleeAddress", b =>
                 {
                     b.Property<int>("Id")
@@ -18534,6 +18569,15 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
                         .WithMany("Enrollees")
                         .HasForeignKey("AdjudicatorId");
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolleeAbsence", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany("EnrolleeAbsences")
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeAddress", b =>

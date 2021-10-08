@@ -4,7 +4,7 @@ using System.Security.Claims;
 using Newtonsoft.Json;
 
 using Prime.Models;
-using Prime.Auth;
+using Prime.Configuration.Auth;
 
 namespace Prime
 {
