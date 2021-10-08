@@ -23,6 +23,7 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.clas
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
 @Component({
   selector: 'app-overview',
@@ -39,6 +40,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public withinDaysOfRenewal: boolean;
+  public absence: EnrolleeAbsence;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -103,7 +105,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       .canRequestRemoteAccess(certifications, careSettings);
   }
 
-  public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {
+  public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}): void {
     this.allowRoutingWhenDirty = true;
     super.routeTo(routePath, navigationExtras);
   }
@@ -121,11 +123,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     return this.enrolment?.enrollee?.gpid;
   }
 
-  public onCopy() {
+  public onCopy(): void {
     this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.authService.getUser$()
       .pipe(
         map(({ firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
@@ -166,8 +168,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
-        })
-      ).subscribe();
+        }),
+        exhaustMap(() => this.enrolmentResource.getCurrentEnrolleeAbsence(this.enrolment.id))
+      ).subscribe((absence: EnrolleeAbsence) => this.absence = absence);
   }
 
   /**

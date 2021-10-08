@@ -474,5 +474,153 @@ namespace Prime.Controllers
 
             return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId));
         }
+
+        // POST: api/Enrollees/5/absences
+        /// <summary>
+        /// Creates a new enrollee absence.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="createModel"></param>
+        [HttpPost("{enrolleeId}/absences", Name = nameof(CreateEnrolleeAbsence))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> CreateEnrolleeAbsence(int enrolleeId, EnrolleeAbsenceViewModel createModel)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var currentOrFutureAbsences = await _enrolleeService.GetEnrolleeAbsencesAsync(enrolleeId, false);
+            if (currentOrFutureAbsences.Any())
+            {
+                return BadRequest("Cannot Create Enrollee Absence when a current or future one exists.");
+            }
+
+            await _enrolleeService.CreateEnrolleeAbsenceAsync(enrolleeId, createModel);
+
+            return NoContent();
+        }
+
+        // GET: api/Enrollees/5/absences?includesPast=false
+        /// <summary>
+        /// Gets enrollee absences
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="includesPast"></param>
+        [HttpGet("{enrolleeId}/absences", Name = nameof(GetAbsences))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeAbsenceViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAbsences(int enrolleeId, [FromQuery] bool includesPast)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var absences = await _enrolleeService.GetEnrolleeAbsencesAsync(enrolleeId, includesPast);
+
+            return Ok(absences);
+        }
+
+        // GET: api/Enrollees/5/absences/current
+        /// <summary>
+        /// Gets your current absence
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/absences/current", Name = nameof(GetCurrentAbsence))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAbsenceViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetCurrentAbsence(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var absence = await _enrolleeService.GetCurrentEnrolleeAbsenceAsync(enrolleeId);
+            return Ok(absence);
+        }
+
+        // PUT: api/Enrollees/5/absences/current/end
+        /// <summary>
+        /// Ends an current enrollee absence.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPut("{enrolleeId}/absences/current/end", Name = nameof(EndCurrentEnrolleeAbsence))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> EndCurrentEnrolleeAbsence(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _enrolleeService.EndCurrentEnrolleeAbsenceAsync(enrolleeId);
+
+            return NoContent();
+        }
+
+        // DELETE: api/Enrollees/5/absences/1
+        /// <summary>
+        /// Deletes a specific Enrollee absence.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="absenceId"></param>
+        [HttpDelete("{enrolleeId}/absences/{absenceId}", Name = nameof(DeleteFutureEnrolleeAbsence))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteFutureEnrolleeAbsence(int enrolleeId, int absenceId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _enrolleeService.DeleteFutureEnrolleeAbsenceAsync(enrolleeId, absenceId);
+
+            return NoContent();
+        }
     }
 }

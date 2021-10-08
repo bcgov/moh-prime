@@ -80,5 +80,10 @@ namespace Prime.Services
         Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user);
         Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType);
         Task<Credential> GetCredentialAsync(int enrolleeId);
+        Task<EnrolleeAbsence> CreateEnrolleeAbsenceAsync(int enrolleeId, EnrolleeAbsenceViewModel createModel);
+        Task<IEnumerable<EnrolleeAbsenceViewModel>> GetEnrolleeAbsencesAsync(int enrolleeId, bool includesPast);
+        Task<EnrolleeAbsenceViewModel> GetCurrentEnrolleeAbsenceAsync(int enrolleeId);
+        Task EndCurrentEnrolleeAbsenceAsync(int enrolleeId);
+        Task DeleteFutureEnrolleeAbsenceAsync(int enrolleeId, int absenceId);
     }
 }
