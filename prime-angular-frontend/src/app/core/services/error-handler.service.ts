@@ -41,7 +41,16 @@ export class ErrorHandlerService implements ErrorHandler {
     } else {
       // Client error has occurred (Angular Error, ReferenceError...)
       webApiLogger.error(message, { url })
-        .subscribe(logId => dialogLogger.log(logId));
+        .subscribe(logId => {
+          // Temporary fix to stop the dialog from showing in /provisioner-access
+          // where users are not authenticated
+          // TODO investigate keycloak initialization for specific modules only using CanLoad
+          if(message.includes('user profile was not loaded')) {
+            return;
+          }
+
+          dialogLogger.log(logId);
+        });
     }
 
     logger.error(message, { url });
