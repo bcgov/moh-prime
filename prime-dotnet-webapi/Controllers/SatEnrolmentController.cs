@@ -35,6 +35,7 @@ namespace Prime.Controllers
         [HttpPost(Name = nameof(CreateSatEnrollee))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateSatEnrollee(SatEnrolleeDemographicChangeModel payload)
         {
