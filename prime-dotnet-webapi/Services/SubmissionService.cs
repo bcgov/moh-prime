@@ -302,15 +302,19 @@ namespace Prime.Services
 
         public async Task RerunRulesAsync()
         {
+            var pharmanetReasons = new[]
+            {
+                (int)StatusReasonType.PharmanetError,
+                (int)StatusReasonType.NotInPharmanet,
+                (int)StatusReasonType.BirthdateDiscrepancy,
+                (int)StatusReasonType.NameDiscrepancy,
+                (int)StatusReasonType.Practicing
+            };
+
             var enrollees = GetBaseQueryForEnrolleeApplicationRules()
                 .Where(e => e.Adjudicator == null)
                 .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview)
-                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr =>
-                    esr.StatusReasonCode == (int)StatusReasonType.PharmanetError
-                    || esr.StatusReasonCode == (int)StatusReasonType.NotInPharmanet
-                    || esr.StatusReasonCode == (int)StatusReasonType.BirthdateDiscrepancy
-                    || esr.StatusReasonCode == (int)StatusReasonType.NameDiscrepancy
-                    || esr.StatusReasonCode == (int)StatusReasonType.Practicing))
+                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => pharmanetReasons.Contains(esr.StatusReasonCode)))
                 // Need `DecompileAsync` due to computed property `CurrentStatus`
                 .DecompileAsync()
                 .ToList();
