@@ -122,9 +122,7 @@ export class OrganizationGuard extends BaseGuard {
   private manageIncompleteOrganizationRouting(routePath: string, organization: Organization, party: Party) {
     // Provides a default of the initial site registration view unless the current view
     // can be determined through state of the organization
-    const destPath = (party)
-      ? SiteRoutes.ORGANIZATION_NAME
-      : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
+    const destPath = party ? SiteRoutes.ORGANIZATION_CLAIM : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
     return this.manageRouting(routePath, destPath, organization);
   }
 
@@ -134,9 +132,18 @@ export class OrganizationGuard extends BaseGuard {
    * registration has not been completed.
    */
   private manageNoOrganizationRouting(routePath: string, party: Party, hasOrgClaim: boolean) {
-    const destPath = (party)
-      ? SiteRoutes.ORGANIZATION_NAME
-      : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
+    // allow navigation from the CLAIM page to SIGNING_AUTHORITY, ORGANIZATION_NAME, or CLAIM_CONFIRMATION page
+    if (this.router.url.includes(SiteRoutes.ORGANIZATION_CLAIM)
+      && (routePath.includes(SiteRoutes.ORGANIZATION_NAME)
+        || routePath.includes(SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION)
+        || routePath.includes(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY))) {
+      return true;
+    }
+    const destPath = hasOrgClaim
+      ? SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION
+      : party
+        ? SiteRoutes.ORGANIZATION_CLAIM
+        : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
 
     // During initial registration the ID will be set to zero indicating the
     // organization does not exist
