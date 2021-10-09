@@ -284,25 +284,25 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> CheckForMatchingPaperSubmission([FromQuery] DateTime dateOfBirth)
         {
-            var result = await _enrolleePaperSubmissionService.MatchingSubmissionExistsAsync(dateOfBirth);
-
-            if (!result)
+            if (await _enrolleePaperSubmissionService.MatchingSubmissionExistsAsync(dateOfBirth))
             {
-                return NotFound();
+                return Ok();
             }
 
-            return Ok();
+            return NotFound();
         }
 
         // PUT: api/Enrollees/5/linked-gpid
         /// <summary>
         /// User supplied GPID to match with a previously submitted Paper Enrolment.
+        /// Cannot set a linked GPID on Paper Submissions or on Enrollees already linked to a Paper Submission.
         /// </summary>
         [HttpPut("{enrolleeId}/linked-gpid", Name = nameof(CreateOrUpdateLinkedGpid))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> CreateOrUpdateLinkedGpid(int enrolleeId, FromBodyText gpid)
         {
@@ -316,13 +316,17 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _enrolleePaperSubmissionService.CreateOrUpdateInitialLinkAsync(enrolleeId, gpid);
-            return NoContent();
+            if (await _enrolleePaperSubmissionService.CreateOrUpdateInitialLinkAsync(enrolleeId, gpid))
+            {
+                return NoContent();
+            }
+
+            return Conflict($"Could not create/update linked GPID. Enrollee with id {enrolleeId} is either a Paper Submission or is already linked to a Paper Submission.");
         }
 
         // GET: api/Enrollees/5/linked-gpid
         /// <summary>
-        /// Gets the linked gpid
+        /// Gets the linked GPID
         /// </summary>
         [HttpGet("{enrolleeId}/linked-gpid", Name = nameof(GetLinkedGpid))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
@@ -342,8 +346,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            string gpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrolleeId);
-            return Ok(gpid);
+            return Ok(await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrolleeId));
         }
     }
 }

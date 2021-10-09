@@ -318,7 +318,7 @@ namespace Prime.Services
             return true;
         }
 
-        public async Task CreateOrUpdateInitialLinkAsync(int enrolleeId, string userProvidedGpid)
+        public async Task<bool> CreateOrUpdateInitialLinkAsync(int enrolleeId, string userProvidedGpid)
         {
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
                 .SingleOrDefaultAsync(ele => ele.EnrolleeId == enrolleeId && ele.PaperEnrolleeId == null);
@@ -338,6 +338,9 @@ namespace Prime.Services
             }
 
             await _context.SaveChangesAsync();
+
+            //TODO placeholder
+            return true;
         }
 
         public async Task<string> GetLinkedGpidAsync(int enrolleeId)
