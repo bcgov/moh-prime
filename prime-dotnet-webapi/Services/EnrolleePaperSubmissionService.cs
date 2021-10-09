@@ -267,7 +267,7 @@ namespace Prime.Services
 
         public async Task<bool> MatchingSubmissionExistsAsync(DateTime dateOfBirth)
         {
-            var confirmedLinks = await _context.EnrolleeLinkedEnrolment
+            var confirmedLinks = await _context.EnrolleeLinkedEnrolments
                 .AsNoTracking()
                 .Where(cl => cl.PaperEnrolleeId != null)
                 .Select(cl => cl.PaperEnrolleeId)
@@ -297,7 +297,7 @@ namespace Prime.Services
 
         public async Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId)
         {
-            var link = await _context.EnrolleeLinkedEnrolment
+            var link = await _context.EnrolleeLinkedEnrolments
                 .Where(ele => ele.PaperEnrolleeId == paperEnrolleeId)
                 .SingleOrDefaultAsync();
 
@@ -306,7 +306,7 @@ namespace Prime.Services
                 return true;
             }
 
-            var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
+            var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolments
                 .Where(ele => ele.EnrolleeId == enrolleeId)
                 .SingleOrDefaultAsync();
 
@@ -320,36 +320,42 @@ namespace Prime.Services
 
         public async Task<bool> CreateOrUpdateInitialLinkAsync(int enrolleeId, string userProvidedGpid)
         {
-            var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
-                .SingleOrDefaultAsync(ele => ele.EnrolleeId == enrolleeId && ele.PaperEnrolleeId == null);
+            var linkedEnrolment = await _context.EnrolleeLinkedEnrolments
+                .SingleOrDefaultAsync(link => link.EnrolleeId == enrolleeId);
 
-            if (enrolleeLinkedEnrolment != null)
+            var enrolleeIsPaper = await _context.Enrollees
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == enrolleeId
+                    && e.GPID.StartsWith(PaperGpidPrefix));
+
+            if (enrolleeIsPaper || linkedEnrolment?.PaperEnrolleeId != null)
             {
-                enrolleeLinkedEnrolment.UserProvidedGpid = userProvidedGpid;
+                // Cannot set linked GPID on Paper Enrollees or Enrollees that are already linked.
+                return false;
             }
-            else
+
+            if (linkedEnrolment == null)
             {
-                var newLinkedEnrolment = new EnrolleeLinkedEnrolment
+                linkedEnrolment = new EnrolleeLinkedEnrolment
                 {
                     EnrolleeId = enrolleeId,
-                    UserProvidedGpid = userProvidedGpid,
                 };
-                _context.Add(newLinkedEnrolment);
+                _context.EnrolleeLinkedEnrolments.Add(linkedEnrolment);
             }
 
+            linkedEnrolment.UserProvidedGpid = userProvidedGpid;
             await _context.SaveChangesAsync();
 
-            //TODO placeholder
             return true;
         }
 
         public async Task<string> GetLinkedGpidAsync(int enrolleeId)
         {
-            var linkedGpid = await _context.EnrolleeLinkedEnrolment
-            .AsNoTracking()
-            .Where(ele => ele.EnrolleeId == enrolleeId)
-            .Select(ele => ele.UserProvidedGpid)
-            .SingleOrDefaultAsync();
+            var linkedGpid = await _context.EnrolleeLinkedEnrolments
+                .AsNoTracking()
+                .Where(link => link.EnrolleeId == enrolleeId)
+                .Select(link => link.UserProvidedGpid)
+                .SingleOrDefaultAsync();
 
             return linkedGpid;
         }
