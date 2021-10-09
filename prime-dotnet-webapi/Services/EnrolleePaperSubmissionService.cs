@@ -298,8 +298,7 @@ namespace Prime.Services
         public async Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId)
         {
             var link = await _context.EnrolleeLinkedEnrolments
-                .Where(ele => ele.PaperEnrolleeId == paperEnrolleeId)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(link => link.PaperEnrolleeId == paperEnrolleeId);
 
             if (link != null)
             {
