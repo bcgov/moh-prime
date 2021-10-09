@@ -271,7 +271,7 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // HEAD: api/Enrollees/paper-submissions?dateOfBirth=1
+        // HEAD: api/Enrollees/paper-submissions?dateOfBirth=1977-09-22
         /// <summary>
         /// Checks if there are any unclaimed paper Enrollees submissions with the supplied date of birth.
         /// </summary>
