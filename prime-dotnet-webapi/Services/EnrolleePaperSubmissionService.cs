@@ -1,12 +1,12 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using AutoMapper;
 using DelegateDecompiler.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Prime.Engines;
 using Prime.HttpClients;
@@ -267,19 +267,12 @@ namespace Prime.Services
 
         public async Task<bool> MatchingSubmissionExistsAsync(DateTime dateOfBirth)
         {
-            var confirmedLinks = await _context.EnrolleeLinkedEnrolments
-                .AsNoTracking()
-                .Where(cl => cl.PaperEnrolleeId != null)
-                .Select(cl => cl.PaperEnrolleeId)
-                .ToListAsync();
-
             return await _context.Enrollees
                 .AsNoTracking()
-                .AnyAsync(
-                    e => e.GPID.StartsWith(PaperGpidPrefix)
-                    && !confirmedLinks.Contains(e.Id)
+                .AnyAsync(e => e.GPID.StartsWith(PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
-                );
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id));
         }
 
         public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
