@@ -40,8 +40,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public withinDaysOfRenewal: boolean;
-  public isPotentialPaperEnrollee: boolean;
-  public userProvidedGpid: string;
+  public isMatchingPaperEnrollee: boolean;
+  public paperEnrolleeGpid: string;
   public absence: EnrolleeAbsence;
 
   protected allowRoutingWhenDirty: boolean;
@@ -130,7 +130,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.isPotentialPaperEnrollee = this.enrolmentService.isPotentialPaperEnrollee;
+    this.isMatchingPaperEnrollee = this.enrolmentService.isMatchingPaperEnrollee;
     this.authService.getUser$()
       .pipe(
         map(({ firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
@@ -173,9 +173,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
         }),
         exhaustMap((_) =>
-          (this.isPotentialPaperEnrollee)
-            ? this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(this.enrolmentService.enrolment.id)
-              .pipe(tap((result: string) => this.userProvidedGpid = result))
+          (this.isMatchingPaperEnrollee)
+            ? this.enrolmentResource.getLinkedGpid(this.enrolmentService.enrolment.id)
+              .pipe(tap((result: string) => this.paperEnrolleeGpid = result))
             : of(noop())
         ),
         exhaustMap(() => this.enrolmentResource.getCurrentEnrolleeAbsence(this.enrolment.id))

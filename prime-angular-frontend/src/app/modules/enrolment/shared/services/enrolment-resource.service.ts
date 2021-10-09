@@ -66,24 +66,38 @@ export class EnrolmentResource {
       );
   }
 
-  public createOrUpdateInitialPaperEnrolleeLink(id: number, userProvidedGpid: string): Observable<NoContent> {
-    const payload = { userProvidedGpid }
-    return this.apiResource.post<NoContent>(`enrollees/${id}/potential-paper-enrollee`, payload)
+  public checkForMatchingPaperSubmission(dateOfBirth: string): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ dateOfBirth });
+    return this.apiResource.head<boolean>('enrollees/paper-submissions', params)
       .pipe(
-        map((response: ApiHttpResponse<NoContent>) => response.result),
+        map(() => true),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] EnrolmentResource::createLinkWithPotentialPaperEnrollee error has occurred: ', error);
+          if (error.status === 404) {
+            return of(false);
+          }
+          this.logger.error('[Enrolment] EnrolmentResource::checkForMatchingPaperSubmission error has occurred:  ', error);
           throw error;
         })
       );
   }
 
-  public getGpidFromLinkWithPotentialEnrollee(id: number): Observable<string> {
-    return this.apiResource.get<string>(`enrollees/${id}/linked-gpid`)
+  public createOrUpdateLinkedGpid(enrolleeId: number, paperEnrolleeGpid: string): Observable<NoContent> {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/linked-gpid`, { data: paperEnrolleeGpid})
       .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
+        map((response: ApiHttpResponse<NoContent>) => response.result),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] EnrolmentResource::getLinkedEnrolment error has occurred: ', error);
+          this.logger.error('[Enrolment] EnrolmentResource::createOrUpdateLinkedGpid error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getLinkedGpid(enrolleeId: number): Observable<string | null> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/linked-gpid`)
+      .pipe(
+        map((response: ApiHttpResponse<string | null>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getLinkedGpid error has occurred: ', error);
           throw error;
         })
       );
@@ -139,21 +153,6 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee current status could not be found.');
           this.logger.error('[Enrolment] EnrolmentResource::getCurrentStatus error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getIsPotentialPaperEnrollee(dateOfBirth: string): Observable<boolean> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ dateOfBirth });
-    return this.apiResource.head<boolean>('enrollees/paper-submissions', params)
-      .pipe(
-        map(() => true),
-        catchError((error: any) => {
-          if (error.status === 404) {
-            return of(false);
-          }
-          this.logger.error('[Enrolment] EnrolmentResource::getPotentialPaperEnrolleeReturneeStatus error has occurred:  ', error);
           throw error;
         })
       );

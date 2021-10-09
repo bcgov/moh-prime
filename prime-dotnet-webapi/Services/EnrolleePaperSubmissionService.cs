@@ -343,10 +343,10 @@ namespace Prime.Services
         public async Task<string> GetLinkedGpidAsync(int enrolleeId)
         {
             var linkedGpid = await _context.EnrolleeLinkedEnrolment
-            .AsNoTracking()
-            .Where(ele => ele.EnrolleeId == enrolleeId)
-            .Select(ele => ele.UserProvidedGpid)
-            .SingleOrDefaultAsync();
+                .AsNoTracking()
+                .Where(ele => ele.EnrolleeId == enrolleeId)
+                .Select(ele => ele.UserProvidedGpid)
+                .SingleOrDefaultAsync();
 
             return linkedGpid;
         }

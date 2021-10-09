@@ -12,9 +12,11 @@
     PharmaNet without a Mobile BC Services Card)?
   </p>
 
-  <form [formGroup]="form">
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="formState.form"
+        novalidate>
     <app-toggle-content label="I requested access via the offline form"
-                        [checked]="isOfflineFormAccessRequested"
+                        [checked]="!!paperEnrolleeGpid"
                         (toggle)="onChangeRequestedOfflineAccess($event)">
       <section>
         <app-page-subheader2>
@@ -25,16 +27,12 @@
           </ng-container>
         </app-page-subheader2>
 
-        <div [formGroup]="form">
-          <div *ngFor="let control of formControlConfig">
-            <mat-form-field class="w-100">
-              <input matInput
-                     [placeholder]="control.label"
-                     [formControlName]="control.name">
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-          </div>
-        </div>
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="GPID"
+                 formControlName="paperEnrolleeGpid">
+          <mat-error>Required</mat-error>
+        </mat-form-field>
       </section>
     </app-toggle-content>
   </form>

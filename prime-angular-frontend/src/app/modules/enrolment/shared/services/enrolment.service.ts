@@ -23,8 +23,8 @@ export interface IEnrolmentService {
 })
 export class EnrolmentService implements IEnrolmentService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
-  private _enrolment: BehaviorSubject<Enrolment>;
-  private _isPotentialPaperEnrollee: boolean;
+  private readonly _enrolment: BehaviorSubject<Enrolment>;
+  private _isMatchingPaperEnrollee: boolean;
 
   constructor(
     private configService: ConfigService
@@ -40,20 +40,20 @@ export class EnrolmentService implements IEnrolmentService {
     return this._enrolment.value;
   }
 
+  public get isMatchingPaperEnrollee(): boolean {
+    return this._isMatchingPaperEnrollee;
+  }
+
+  public set isMatchingPaperEnrollee(isMatchingPaperEnrollee: boolean) {
+    this._isMatchingPaperEnrollee = isMatchingPaperEnrollee;
+  }
+
   public get isInitialEnrolment(): boolean {
     return !this.enrolment || (this.enrolment && !this.enrolment.expiryDate);
   }
 
   public get isProfileComplete(): boolean {
     return this.enrolment && this.enrolment.profileCompleted;
-  }
-
-  public get isPotentialPaperEnrollee(): boolean {
-    return this._isPotentialPaperEnrollee;
-  }
-
-  public set isPotentialPaperEnrollee(isPotentialPaperEnrollee: boolean) {
-    this._isPotentialPaperEnrollee = isPotentialPaperEnrollee
   }
 
   /**

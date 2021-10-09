@@ -88,9 +88,11 @@
     <app-page-subheader divider="false">
       <ng-container appPageSubheaderTitle>
         {{
-        isInitialEnrolment ? 'Enrolment Review'
-        : (withinDaysOfRenewal) ? 'Renew Enrolment'
-        : 'Enrolment Information'
+          (isInitialEnrolment)
+            ? 'Enrolment Review'
+            : (withinDaysOfRenewal)
+              ? 'Renew Enrolment'
+              : 'Enrolment Information'
         }}
       </ng-container>
 
@@ -136,7 +138,7 @@
     </ng-container>
   </app-alert>
 
-  <app-page-section *ngIf="isPotentialPaperEnrollee">
+  <app-page-section *ngIf="isMatchingPaperEnrollee">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Paper Enrolment Declaration</ng-container>
 
@@ -149,8 +151,8 @@
 
     <ng-container>
       <app-enrollee-property
-                             [title]=" userProvidedGpid ? 'Paper enrolment GPID' : 'No manual enrolment GPID provided.'">
-        {{ userProvidedGpid }}
+        [title]=" (paperEnrolleeGpid) ? 'Paper enrolment GPID' : 'No manual enrolment GPID provided.'">
+        {{ paperEnrolleeGpid }}
       </app-enrollee-property>
     </ng-container>
   </app-page-section>

@@ -1,4 +1,5 @@
 using System;
+
 namespace Prime.ViewModels.PaperEnrollees
 {
     public class EnrolleeLinkedEnrolmentViewModel

@@ -1,15 +1,14 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
-import { exhaustMap, map, tap, startWith, concatMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { Enrollee } from '@shared/models/enrollee.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
@@ -52,15 +51,17 @@ export class EnrolmentGuard extends BaseGuard {
           this.enrolmentService.enrolment$.next(enrolment);
         }),
         exhaustMap((enrolment: Enrolment) =>
-          this.getUser$()
-            .pipe(map((bcscUser: BcscUser) => [bcscUser, enrolment]))
+          this.authService.getUser$()
+            .pipe(map(({ dateOfBirth }: BcscUser) => [dateOfBirth, enrolment]))
         ),
-        exhaustMap(([bcscUser, enrolment]: [BcscUser, Enrolment]) =>
-          this.enrolmentResource.getIsPotentialPaperEnrollee(bcscUser.dateOfBirth)
-            .pipe(
-              tap((result: boolean) => this.enrolmentService.isPotentialPaperEnrollee = result),
-              map((_) => enrolment)
-            )
+        exhaustMap(([dateOfBirth, enrolment]: [string, Enrolment]) =>
+          (dateOfBirth && this.enrolmentService.isInitialEnrolment)
+            ? this.enrolmentResource.checkForMatchingPaperSubmission(dateOfBirth)
+              .pipe(
+                tap((result: boolean) => this.enrolmentService.isMatchingPaperEnrollee = result),
+                map(_ => enrolment),
+              )
+            : of(enrolment)
         ),
         exhaustMap((enrolment: Enrolment) =>
           this.authService.identityProvider$()
@@ -84,8 +85,8 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     if (
-      this.enrolmentService.isPotentialPaperEnrollee
-      && routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)
+      this.enrolmentService.isMatchingPaperEnrollee &&
+      routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)
     ) {
       return this.navigate(routePath, EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION);
     }
@@ -284,8 +285,8 @@ export class EnrolmentGuard extends BaseGuard {
       );
     }
 
-    // Denined routes based on potential paper enrollees
-    if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION) && !this.enrolmentService.isPotentialPaperEnrollee) {
+    // Denied routes based on potential paper enrollees
+    if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION) && !this.enrolmentService.isMatchingPaperEnrollee) {
       return routePath.replace(
         EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION,
         EnrolmentRoutes.OVERVIEW
@@ -293,19 +294,5 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     return routePath;
-  }
-
-  private getUser$(): Observable<Enrollee> {
-    return this.authService.getUser$()
-      .pipe(
-        map(({ dateOfBirth }: BcscUser) => {
-          // We only need the date of birth to check for potential link
-          // to paper enrolments
-          return {
-            // Providing only the minimum required fields for creating an enrollee
-            dateOfBirth,
-          } as Enrollee;
-        })
-      );
   }
 }
