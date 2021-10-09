@@ -276,15 +276,15 @@ namespace Prime.Controllers
         /// Checks if there are any unclaimed paper Enrollees submissions with the supplied date of birth.
         /// </summary>
         /// <param name="dateOfBirth"></param>
-        [HttpHead("paper-submissions", Name = nameof(CheckForPotentialPaperEnrolleeReturnee))]
+        [HttpHead("paper-submissions", Name = nameof(CheckForMatchingPaperSubmission))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CheckForPotentialPaperEnrolleeReturnee([FromQuery] DateTime dateOfBirth)
+        public async Task<ActionResult> CheckForMatchingPaperSubmission([FromQuery] DateTime dateOfBirth)
         {
-            var result = await _enrolleePaperSubmissionService.PotentialReturneeExistsAsync(dateOfBirth);
+            var result = await _enrolleePaperSubmissionService.MatchingSubmissionExistsAsync(dateOfBirth);
 
             if (!result)
             {
@@ -294,16 +294,17 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // POST: api/Enrollees/5/links
+        // PUT: api/Enrollees/5/linked-gpid
         /// <summary>
-        /// Creates a new Enrollee who may have a a previous paper enrolment.
+        /// User supplied GPID to match with a previously submitted Paper Enrolment.
         /// </summary>
-        [HttpPost("{enrolleeId}/links", Name = nameof(CreateOrUpdateInitialPaperEnrolleeLink))]
+        [HttpPut("{enrolleeId}/linked-gpid", Name = nameof(CreateOrUpdateLinkedGpid))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CreateOrUpdateInitialPaperEnrolleeLink(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> CreateOrUpdateLinkedGpid(int enrolleeId, FromBodyText gpid)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -314,21 +315,22 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            await _enrolleePaperSubmissionService.CreateOrUpdateInitialLinkAsync(enrolleeId, payload.UserProvidedGpid);
-            return Ok();
+
+            await _enrolleePaperSubmissionService.CreateOrUpdateInitialLinkAsync(enrolleeId, gpid);
+            return NoContent();
         }
 
-        // GET: api/Enrollees/5/links/gpid
+        // GET: api/Enrollees/5/linked-gpid
         /// <summary>
         /// Gets the linked gpid
         /// </summary>
-        [HttpGet("{enrolleeId}/links/gpid", Name = nameof(GetPaperSubmissionGpid))]
+        [HttpGet("{enrolleeId}/linked-gpid", Name = nameof(GetLinkedGpid))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetPaperSubmissionGpid(int enrolleeId)
+        public async Task<ActionResult> GetLinkedGpid(int enrolleeId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)

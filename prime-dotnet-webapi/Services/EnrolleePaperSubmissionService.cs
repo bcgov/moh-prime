@@ -265,7 +265,7 @@ namespace Prime.Services
             _context.Set<T>().AddRange(itemList);
         }
 
-        public async Task<bool> PotentialReturneeExistsAsync(DateTime dateOfBirth)
+        public async Task<bool> MatchingSubmissionExistsAsync(DateTime dateOfBirth)
         {
             var confirmedLinks = await _context.EnrolleeLinkedEnrolment
                 .AsNoTracking()
