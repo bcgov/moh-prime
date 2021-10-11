@@ -59,12 +59,6 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
             party.Email = Email;
             party.Phone = Phone;
 
-            // Values from ClaimsPrincipal have precedence over the change model
-            party.UserId = user.GetPrimeUserId();
-            party.FirstName = user.GetFirstName();
-            party.LastName = user.GetLastName();
-            party.DateOfBirth = user.GetDateOfBirth().Value;
-
             if (PhysicalAddress != null)
             {
                 // Add/Update PhysicalAddress
