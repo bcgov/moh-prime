@@ -33,7 +33,10 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
 
         public DateTime DateOfBirth { get; set; }
 
-        public PhysicalAddress PhysicalAddress { get; set; }
+        /// <summary>
+        /// Originating from BCSC
+        /// </summary>
+        public PhysicalAddress VerifiedAddress { get; set; }
 
         public MailingAddress PreferredAddress { get; set; }
 
@@ -59,7 +62,7 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
             party.Email = Email;
             party.Phone = Phone;
 
-            if (PhysicalAddress != null)
+            if (VerifiedAddress != null)
             {
                 // Add/Update PhysicalAddress
                 if (party.PhysicalAddress == null)
@@ -67,13 +70,13 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
                     party.Addresses.Add(new PartyAddress
                     {
                         Party = party,
-                        Address = PhysicalAddress,
+                        Address = VerifiedAddress,
                     });
                 }
                 else
                 {
-                    PhysicalAddress.Id = party.PhysicalAddress.Id;
-                    party.PhysicalAddress.SetValues(PhysicalAddress);
+                    VerifiedAddress.Id = party.PhysicalAddress.Id;
+                    party.PhysicalAddress.SetValues(VerifiedAddress);
                 }
             }
 
@@ -119,7 +122,7 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
             RuleFor(x => x.FirstName).NotEmpty();
             RuleFor(x => x.LastName).NotEmpty();
             RuleFor(x => x.DateOfBirth).NotEmpty();
-            RuleFor(x => x.PhysicalAddress).NotNull();
+            RuleFor(x => x.VerifiedAddress).NotNull();
             RuleFor(x => x.Email).NotEmpty();
             RuleFor(x => x.Phone).NotEmpty();
         }
