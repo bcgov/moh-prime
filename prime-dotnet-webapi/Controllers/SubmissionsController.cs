@@ -225,7 +225,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> RerunAutomaticAdjudicationRules()
         {
-            await _submissionService.RerunRulesAsync();
+            await _submissionService.RerunRulesForEnrolleesAsync();
             return Ok();
         }
 

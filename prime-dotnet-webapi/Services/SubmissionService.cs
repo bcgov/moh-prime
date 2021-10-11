@@ -309,7 +309,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task RerunRulesAsync()
+        public async Task RerunRulesForEnrolleesAsync()
         {
             var enrollees = GetBaseQueryForEnrolleeApplicationRules()
                 .Where(e => e.Adjudicator == null)
