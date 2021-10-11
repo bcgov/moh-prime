@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Services;
+using Prime.ViewModels.Parties;
 using Prime.ViewModels.SpecialAuthorityTransformation;
 
 
@@ -118,7 +119,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateSatEnrolleeCertifications(int satId, ICollection<SatEnrolleeCertificationViewModel> payload)
+        public async Task<ActionResult> UpdateSatEnrolleeCertifications(int satId, ICollection<PartyCertificationViewModel> payload)
         {
             var satEnrollee = await _satEnrolmentService.GetEnrolleeAsync(satId);
             if (satEnrollee == null)

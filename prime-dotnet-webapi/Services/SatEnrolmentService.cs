@@ -9,6 +9,7 @@ using AutoMapper;
 
 using Prime.Models;
 using Prime.ViewModels.SpecialAuthorityTransformation;
+using Prime.ViewModels.Parties;
 
 namespace Prime.Services
 {
@@ -70,7 +71,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCertificationsAsync(int satId, IEnumerable<SatEnrolleeCertificationViewModel> viewModels)
+        public async Task UpdateCertificationsAsync(int satId, IEnumerable<PartyCertificationViewModel> viewModels)
         {
             var newCerts = _mapper.Map<IEnumerable<PartyCertification>>(viewModels);
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Prime.Models;
+using Prime.ViewModels.Parties;
 using Prime.ViewModels.SpecialAuthorityTransformation;
 
 namespace Prime.Services
@@ -14,6 +15,6 @@ namespace Prime.Services
 
         Task UpdateDemographicsAsync(int satId, SatEnrolleeDemographicChangeModel viewModel, ClaimsPrincipal user);
 
-        Task UpdateCertificationsAsync(int satId, IEnumerable<SatEnrolleeCertificationViewModel> viewModels);
+        Task UpdateCertificationsAsync(int satId, IEnumerable<PartyCertificationViewModel> viewModels);
     }
 }
