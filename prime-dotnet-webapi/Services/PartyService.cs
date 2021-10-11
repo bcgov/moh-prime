@@ -182,7 +182,8 @@ namespace Prime.Services
             return _context.Parties
                 .Include(e => e.Addresses)
                     .ThenInclude(pa => pa.Address)
-                .Include(p => p.PartyEnrolments);
+                .Include(p => p.PartyEnrolments)
+                .Include(p => p.PartyCertifications);
         }
     }
 }
