@@ -155,7 +155,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
         ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
         : organization
           ? ['../', organization.id, SiteRoutes.ORGANIZATION_NAME]
-          : ['../', 0, SiteRoutes.ORGANIZATION_NAME];
+          : ['../', 0, SiteRoutes.ORGANIZATION_CLAIM];
     }
     this.routeUtils.routeRelativeTo(routePath);
   }
