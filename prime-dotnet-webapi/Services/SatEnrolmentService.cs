@@ -71,21 +71,5 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCertificationsAsync(int satId, IEnumerable<PartyCertificationViewModel> viewModels)
-        {
-            var newCerts = _mapper.Map<IEnumerable<PartyCertification>>(viewModels);
-
-            var oldItems = await _context.PartyCertifications
-                .Where(x => x.PartyId == satId)
-                .ToListAsync();
-
-            var itemList = newCerts.ToList();
-            itemList.ForEach(x => x.PartyId = satId);
-
-            _context.PartyCertifications.RemoveRange(oldItems);
-            _context.PartyCertifications.AddRange(itemList);
-
-            await _context.SaveChangesAsync();
-        }
     }
 }
