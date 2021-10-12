@@ -18,7 +18,7 @@ namespace Prime
         public static int Main(string[] args)
         {
             CreateLogger();
-            Log.Information($"LOG_LEVEL={Environment.GetEnvironmentVariable("LOG_LEVEL")}");
+            Log.Information($"LOG_LEVEL={(int)PrimeConfiguration.LogLevel}");
 
             try
             {
@@ -78,20 +78,8 @@ namespace Prime
             var name = Assembly.GetExecutingAssembly().GetName();
             var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
-            // Default is Information but can be overridden by LOG_LEVEL environment variable, 
-            // (expecting a number) 
-            int minimumLogLevel = (int)LogEventLevel.Information;
-            if (Int32.TryParse(Environment.GetEnvironmentVariable("LOG_LEVEL"), out int dynamicLogLevel))
-            {
-                minimumLogLevel = dynamicLogLevel;
-            }
-
-            var logLevelSwitch = new LoggingLevelSwitch()
-            {
-                MinimumLevel = (LogEventLevel)minimumLogLevel
-            };
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.ControlledBy(logLevelSwitch)
+                .MinimumLevel.ControlledBy(new LoggingLevelSwitch() { MinimumLevel = PrimeConfiguration.LogLevel })
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
