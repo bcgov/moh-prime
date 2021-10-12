@@ -6,6 +6,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { exhaustMap } from 'rxjs/operators';
 import { noop, Observable, of } from 'rxjs';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
@@ -115,7 +116,7 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
           )
         );
 
-    return request$.pipe(this.handleResponse())
+    return request$.pipe(this.handleResponse());
   }
 
   private createOrUpdateLinkedGpid(enrolmentId: number, paperEnrolleeGpid: string) {
@@ -125,7 +126,11 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
 
   private togglePaperEnrolleeReturneeValidator(isMatchingPaperEnrollee: boolean, paperEnrolmentGpid: FormControl): void {
     (isMatchingPaperEnrollee)
-      ? this.formUtilsService.setValidators(paperEnrolmentGpid, [Validators.required])
+      ? this.formUtilsService.setValidators(paperEnrolmentGpid, [
+        Validators.required,
+        FormControlValidators.startsWith('NOBCSC'),
+        FormControlValidators.requiredLength(20)
+      ])
       : this.formUtilsService.resetAndClearValidators(paperEnrolmentGpid);
   }
 }

@@ -1,6 +1,7 @@
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 import { PaperEnrolleeForm } from './paper-enrollee-returnee-form.model';
 
@@ -30,12 +31,15 @@ export class PaperEnrolleeReturneeFormState extends AbstractFormState<PaperEnrol
       return;
     }
 
-    this.formInstance.patchValue(model );
+    this.formInstance.patchValue(model);
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      paperEnrolleeGpid: [null, []],
+      paperEnrolleeGpid: [
+        null,
+        []
+      ],
     });
   }
 }
