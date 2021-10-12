@@ -310,7 +310,13 @@ namespace Prime.Services
             return true;
         }
 
-        public async Task<bool> CreateOrUpdateInitialLinkAsync(int enrolleeId, string userProvidedGpid)
+        /// <summary>
+        /// Sets the GPID on the Enrollee's EnrolleeLinkedEnrolment, creating one if necessary.
+        /// Cannot set the Linked GPID on a paper Enrollee or on an Enrollee that has already been linked to a paper Enrolment.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="userProvidedGpid"></param>
+        public async Task<bool> SetLinkedGpidAsync(int enrolleeId, string userProvidedGpid)
         {
             var linkedEnrolment = await _context.EnrolleeLinkedEnrolments
                 .SingleOrDefaultAsync(link => link.EnrolleeId == enrolleeId);

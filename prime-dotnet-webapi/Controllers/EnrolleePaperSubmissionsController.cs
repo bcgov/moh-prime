@@ -316,7 +316,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (await _enrolleePaperSubmissionService.CreateOrUpdateInitialLinkAsync(enrolleeId, gpid))
+            if (await _enrolleePaperSubmissionService.SetLinkedGpidAsync(enrolleeId, gpid))
             {
                 return NoContent();
             }
