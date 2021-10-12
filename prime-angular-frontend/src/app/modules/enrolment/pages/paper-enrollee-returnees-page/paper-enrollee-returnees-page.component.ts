@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
-import { exhaustMap, map, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
+import { noop, Observable, of } from 'rxjs';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { Enrollee } from '@shared/models/enrollee.model';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -34,6 +32,11 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
   public isOfflineFormAccessRequested: boolean;
   public formState: PaperEnrolleeReturneeFormState;
   public bcscUser: BcscUser;
+  /**
+   * @description
+   * Paper enrollee GPID extracted from
+   * API request (source of truth).
+   */
   public paperEnrolleeGpid: string | null;
 
   constructor(
@@ -95,16 +98,29 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
-    return (!enrolment.id && this.isInitialEnrolment)
+    const paperEnrolleeGpid = this.formState.paperEnrolleeGpid.value;
+    const request$ = (!enrolment.id && this.isInitialEnrolment)
       ? this.createEnrolment(enrolment)
         .pipe(
           exhaustMap((newEnrolment: Enrolment) =>
-            this.enrolmentResource
-              .createOrUpdateLinkedGpid(newEnrolment.id, this.formState.paperEnrolleeGpid.value)
-          ),
-          this.handleResponse()
+            this.createOrUpdateLinkedGpid(newEnrolment.id, paperEnrolleeGpid)
+          )
         )
-      : super.performHttpRequest(enrolment, beenThroughTheWizard);
+      : of(enrolment)
+        .pipe(
+          exhaustMap((enrolment: Enrolment) =>
+            (paperEnrolleeGpid || paperEnrolleeGpid !== this.paperEnrolleeGpid)
+              ? this.createOrUpdateLinkedGpid(enrolment.id, paperEnrolleeGpid)
+              : of(noop())
+          )
+        );
+
+    return request$.pipe(this.handleResponse())
+  }
+
+  private createOrUpdateLinkedGpid(enrolmentId: number, paperEnrolleeGpid: string) {
+    return this.enrolmentResource
+      .createOrUpdateLinkedGpid(enrolmentId, paperEnrolleeGpid);
   }
 
   private togglePaperEnrolleeReturneeValidator(isMatchingPaperEnrollee: boolean, paperEnrolmentGpid: FormControl): void {
