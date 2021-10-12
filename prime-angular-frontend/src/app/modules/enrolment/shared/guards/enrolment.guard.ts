@@ -55,10 +55,12 @@ export class EnrolmentGuard extends BaseGuard {
             .pipe(map(({ dateOfBirth }: BcscUser) => [dateOfBirth, enrolment]))
         ),
         exhaustMap(([dateOfBirth, enrolment]: [string, Enrolment]) =>
-          (dateOfBirth && this.enrolmentService.isInitialEnrolment)
+          (dateOfBirth && this.enrolmentService.isInitialEnrolment && this.enrolmentService.isMatchingPaperEnrollee === null)
             ? this.enrolmentResource.checkForMatchingPaperSubmission(dateOfBirth)
               .pipe(
-                tap((result: boolean) => this.enrolmentService.isMatchingPaperEnrollee = result),
+                tap((isMatchingPaperEnrollee: boolean) =>
+                  this.enrolmentService.isMatchingPaperEnrollee = isMatchingPaperEnrollee
+                ),
                 map(_ => enrolment),
               )
             : of(enrolment)
@@ -285,7 +287,7 @@ export class EnrolmentGuard extends BaseGuard {
       );
     }
 
-    // Denied routes based on potential paper enrollees
+    // Denied routes based on matching paper enrolment
     if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION) && !this.enrolmentService.isMatchingPaperEnrollee) {
       return routePath.replace(
         EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION,

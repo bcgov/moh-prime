@@ -24,12 +24,14 @@ export interface IEnrolmentService {
 export class EnrolmentService implements IEnrolmentService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private readonly _enrolment: BehaviorSubject<Enrolment>;
-  private _isMatchingPaperEnrollee: boolean;
+  private _isMatchingPaperEnrollee: boolean | null;
 
   constructor(
     private configService: ConfigService
   ) {
     this._enrolment = new BehaviorSubject<Enrolment>(null);
+    // Default indicates value has never been set
+    this._isMatchingPaperEnrollee = null;
   }
 
   public get enrolment$(): BehaviorSubject<Enrolment> {

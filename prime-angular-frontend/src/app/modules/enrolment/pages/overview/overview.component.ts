@@ -37,12 +37,12 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public currentStatus: EnrolmentStatusEnum;
   public demographicRoutePath: string;
   public identityProvider: IdentityProviderEnum;
-  public IdentityProviderEnum = IdentityProviderEnum;
-  public EnrolmentStatus = EnrolmentStatusEnum;
   public withinDaysOfRenewal: boolean;
   public isMatchingPaperEnrollee: boolean;
   public paperEnrolleeGpid: string;
-  public absence: EnrolleeAbsence;
+  public enrolleeAbsence: EnrolleeAbsence;
+  public IdentityProviderEnum = IdentityProviderEnum;
+  public EnrolmentStatus = EnrolmentStatusEnum;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -172,14 +172,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
         }),
-        exhaustMap((_) =>
+        exhaustMap(_ =>
           (this.isMatchingPaperEnrollee)
             ? this.enrolmentResource.getLinkedGpid(this.enrolmentService.enrolment.id)
-              .pipe(tap((result: string) => this.paperEnrolleeGpid = result))
+              .pipe(tap((paperEnrolleeGpid: string) => this.paperEnrolleeGpid = paperEnrolleeGpid))
             : of(noop())
         ),
         exhaustMap(() => this.enrolmentResource.getCurrentEnrolleeAbsence(this.enrolment.id))
-      ).subscribe((absence: EnrolleeAbsence) => this.absence = absence);
+      ).subscribe((enrolleeAbsence: EnrolleeAbsence) => this.enrolleeAbsence = enrolleeAbsence);
   }
 
   /**
