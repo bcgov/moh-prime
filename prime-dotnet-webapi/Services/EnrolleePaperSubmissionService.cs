@@ -288,22 +288,38 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId)
+        /// <summary>
+        /// Links an Enrollee to a Paper Enrollee.
+        /// Requires that the EnrolleeLinkedEnrolment already exist (see SetLinkedGpidAsync)
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="paperEnrolleeId"></param>
+        public async Task<bool> LinkEnrolleeToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId)
         {
-            var link = await _context.EnrolleeLinkedEnrolments
-                .SingleOrDefaultAsync(link => link.PaperEnrolleeId == paperEnrolleeId);
+            var linkedEnrolment = await _context.EnrolleeLinkedEnrolments
+                .SingleOrDefaultAsync(link => link.EnrolleeId == enrolleeId);
 
-            if (link != null)
+            var enrolleeIsPaper = await _context.Enrollees
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == enrolleeId
+                    && e.GPID.StartsWith(PaperGpidPrefix));
+
+            var paperIsPaper = await _context.Enrollees
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == paperEnrolleeId
+                    && e.GPID.StartsWith(PaperGpidPrefix));
+
+            if (enrolleeIsPaper
+                || !paperIsPaper
+                || linkedEnrolment == null
+                || linkedEnrolment.PaperEnrolleeId.HasValue)
             {
-                return true;
+                // Cannot create link from a Paper Enrollee, to a regular Enrollee, or from an Enrollee that is already linked.
+                return false;
             }
 
-            var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolments
-                .Where(ele => ele.EnrolleeId == enrolleeId)
-                .SingleOrDefaultAsync();
-
-            enrolleeLinkedEnrolment.PaperEnrolleeId = paperEnrolleeId;
-            enrolleeLinkedEnrolment.EnrolmentLinkDate = DateTime.Now;
+            linkedEnrolment.PaperEnrolleeId = paperEnrolleeId;
+            linkedEnrolment.EnrolmentLinkDate = DateTime.Now;
 
             await _context.SaveChangesAsync();
 
@@ -312,7 +328,7 @@ namespace Prime.Services
 
         /// <summary>
         /// Sets the GPID on the Enrollee's EnrolleeLinkedEnrolment, creating one if necessary.
-        /// Cannot set the Linked GPID on a paper Enrollee or on an Enrollee that has already been linked to a paper Enrolment.
+        /// Cannot set the Linked GPID on a Paper Enrollee or on an Enrollee that has already been linked to a Paper Enrolment.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="userProvidedGpid"></param>

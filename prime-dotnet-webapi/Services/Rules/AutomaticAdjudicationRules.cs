@@ -276,7 +276,7 @@ namespace Prime.Services.Rules
                     return false;
                 }
                 // *** *** if match "auto enrol" and link to paper enrolment and confirm the linkage here
-                if (!await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId))
+                if (!await _enrolleePaperSubmissionService.LinkEnrolleeToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId))
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.UnableToLinkToPpaperEnrolment, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
                     return false;

@@ -27,7 +27,7 @@ namespace Prime.Services
         Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId);
         Task<bool> MatchingSubmissionExistsAsync(DateTime dateOfBirth);
         Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth);
-        Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId);
+        Task<bool> LinkEnrolleeToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId);
         Task<bool> SetLinkedGpidAsync(int enrolleeId, string userProvidedGpid);
         Task<string> GetLinkedGpidAsync(int enrolleeId);
     }
