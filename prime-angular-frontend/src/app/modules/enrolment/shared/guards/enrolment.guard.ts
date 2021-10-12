@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, pipe, UnaryFunction } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -54,17 +54,7 @@ export class EnrolmentGuard extends BaseGuard {
           this.authService.getUser$()
             .pipe(map(({ dateOfBirth }: BcscUser) => [dateOfBirth, enrolment]))
         ),
-        exhaustMap(([dateOfBirth, enrolment]: [string, Enrolment]) =>
-          (dateOfBirth && this.enrolmentService.isInitialEnrolment && this.enrolmentService.isMatchingPaperEnrollee === null)
-            ? this.enrolmentResource.checkForMatchingPaperSubmission(dateOfBirth)
-              .pipe(
-                tap((isMatchingPaperEnrollee: boolean) =>
-                  this.enrolmentService.isMatchingPaperEnrollee = isMatchingPaperEnrollee
-                ),
-                map(_ => enrolment),
-              )
-            : of(enrolment)
-        ),
+        this.onInitialEnrolmentCheckForMatchingPaperEnrollee(),
         exhaustMap((enrolment: Enrolment) =>
           this.authService.identityProvider$()
             .pipe(map((identityProvider: IdentityProviderEnum) => [routePath, enrolment, identityProvider]))
@@ -288,7 +278,13 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     // Denied routes based on matching paper enrolment
-    if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION) && !this.enrolmentService.isMatchingPaperEnrollee) {
+    if (
+      // TODO would be better to add this route based on need instead of removing it since:
+      //  1) 99.9% of enrollees aren't paper enrollees, and
+      //  2) <1% of the enrolment lifecycle enrolments is the initial enrolment
+      !this.enrolmentService.isInitialEnrolment ||
+      (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION) && !this.enrolmentService.isMatchingPaperEnrollee)
+    ) {
       return routePath.replace(
         EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION,
         EnrolmentRoutes.OVERVIEW
@@ -296,5 +292,25 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     return routePath;
+  }
+
+  /**
+   * @description
+   * Check for a matching paper enrollee on a new enrolment.
+   */
+  private onInitialEnrolmentCheckForMatchingPaperEnrollee(): UnaryFunction<Observable<[string, Enrolment]>, Observable<Enrolment>> {
+    return pipe(
+      exhaustMap(([dateOfBirth, enrolment]: [string, Enrolment]) =>
+        (this.enrolmentService.isInitialEnrolment && dateOfBirth && this.enrolmentService.isMatchingPaperEnrollee === null)
+          ? this.enrolmentResource.checkForMatchingPaperSubmission(dateOfBirth)
+            .pipe(
+              map((isMatchingPaperEnrollee: boolean) => {
+                this.enrolmentService.isMatchingPaperEnrollee = isMatchingPaperEnrollee;
+                return enrolment;
+              })
+            )
+          : of(enrolment)
+      )
+    );
   }
 }

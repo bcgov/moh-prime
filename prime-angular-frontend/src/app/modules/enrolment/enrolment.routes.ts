@@ -11,6 +11,7 @@ export class EnrolmentRoutes {
   public static ACCESS_CODE = 'access-code';
   public static ID_SUBMISSION = 'id-submission';
   // Enrollee profile:
+  public static PAPER_ENROLLEE_DECLARATION = 'paper-enrollee-declaration';
   public static BCEID_DEMOGRAPHIC = 'bceid-demographic';
   public static BCSC_DEMOGRAPHIC = 'bcsc-demographic';
   // Enrollee enrolment:
@@ -37,7 +38,6 @@ export class EnrolmentRoutes {
   public static PHARMANET_TRANSACTIONS = 'pharmanet-transactions';
   public static ACCESS_TERMS = 'access-terms';
   public static ENROLMENT = 'enrolment';
-  public static PAPER_ENROLLEE_DECLARATION = 'paper-enrollee-declaration'
   public static ABSENCE_MANAGEMENT = 'absence-management';
 
   public static routePath(route: string): string {
