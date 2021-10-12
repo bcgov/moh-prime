@@ -26,15 +26,6 @@ namespace Prime.Services
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IVerifiableCredentialService _verifiableCredentialService;
 
-        private readonly int[] PharmanetSpecificStatusReasons = new[]
-            {
-                (int) StatusReasonType.PharmanetError,
-                (int) StatusReasonType.NotInPharmanet,
-                (int) StatusReasonType.BirthdateDiscrepancy,
-                (int) StatusReasonType.NameDiscrepancy,
-                (int) StatusReasonType.Practicing
-            };
-
         public SubmissionService(
             ApiDbContext context,
             ILogger<SubmissionService> logger,
@@ -309,15 +300,25 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task RerunRulesForEnrolleesAsync()
+        public async Task BulkRerunRulesAsync()
         {
+            var pharmanetStatusReasons = new[]
+            {
+                (int) StatusReasonType.PharmanetError,
+                (int) StatusReasonType.NotInPharmanet,
+                (int) StatusReasonType.BirthdateDiscrepancy,
+                (int) StatusReasonType.NameDiscrepancy,
+                (int) StatusReasonType.Practicing
+            };
+
             var enrollees = GetBaseQueryForEnrolleeApplicationRules()
                 .Where(e => e.Adjudicator == null)
                 .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview)
-                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => PharmanetSpecificStatusReasons.Contains(esr.StatusReasonCode)))
+                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => pharmanetStatusReasons.Contains(esr.StatusReasonCode)))
                 // Need `DecompileAsync` due to computed property `CurrentStatus`
                 .DecompileAsync()
                 .ToList();
+
             foreach (var enrollee in enrollees)
             {
                 // Group results of the rules under a new enrollment status
