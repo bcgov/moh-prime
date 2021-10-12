@@ -151,6 +151,41 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task BulkRerunRulesAsync()
+        {
+            var pharmanetStatusReasons = new[]
+            {
+                (int) StatusReasonType.PharmanetError,
+                (int) StatusReasonType.NotInPharmanet,
+                (int) StatusReasonType.BirthdateDiscrepancy,
+                (int) StatusReasonType.NameDiscrepancy,
+                (int) StatusReasonType.Practicing
+            };
+
+            var enrollees = GetBaseQueryForEnrolleeApplicationRules()
+                .Where(e => e.Adjudicator == null)
+                .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview)
+                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => pharmanetStatusReasons.Contains(esr.StatusReasonCode)))
+                // Need `DecompileAsync` due to computed property `CurrentStatus`
+                .DecompileAsync()
+                .ToList();
+
+            foreach (var enrollee in enrollees)
+            {
+                // Group results of the rules under a new enrollment status
+                enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Cron Job running the enrollee application rules");
+
+                _logger.LogDebug($"RerunRulesAsync on {enrollee.FullName} (Id {enrollee.Id})");
+                if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
+                {
+                    await AdjudicatedAutomatically(enrollee, "Cron Job Automatically Approved");
+                }
+                // We don't perform a `_enrolleeService.RemoveNotificationsAsync`
+            }
+            await _context.SaveChangesAsync();
+        }
+
         private async Task<bool> HandleEnrolleeStatusActionAsync(EnrolleeStatusAction action, Enrollee enrollee, object additionalParameters)
         {
             switch (action)
@@ -297,41 +332,6 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator manually ran the enrollee application rules");
             await ProcessEnrolleeApplicationRules(enrollee.Id);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task BulkRerunRulesAsync()
-        {
-            var pharmanetStatusReasons = new[]
-            {
-                (int) StatusReasonType.PharmanetError,
-                (int) StatusReasonType.NotInPharmanet,
-                (int) StatusReasonType.BirthdateDiscrepancy,
-                (int) StatusReasonType.NameDiscrepancy,
-                (int) StatusReasonType.Practicing
-            };
-
-            var enrollees = GetBaseQueryForEnrolleeApplicationRules()
-                .Where(e => e.Adjudicator == null)
-                .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview)
-                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => pharmanetStatusReasons.Contains(esr.StatusReasonCode)))
-                // Need `DecompileAsync` due to computed property `CurrentStatus`
-                .DecompileAsync()
-                .ToList();
-
-            foreach (var enrollee in enrollees)
-            {
-                // Group results of the rules under a new enrollment status
-                enrollee.AddEnrolmentStatus(StatusType.UnderReview);
-                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Cron Job running the enrollee application rules");
-
-                _logger.LogDebug($"RerunRulesAsync on {enrollee.FullName} (Id {enrollee.Id})");
-                if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
-                {
-                    await AdjudicatedAutomatically(enrollee, "Cron Job Automatically Approved");
-                }
-                // We don't perform a `_enrolleeService.RemoveNotificationsAsync`
-            }
             await _context.SaveChangesAsync();
         }
 
