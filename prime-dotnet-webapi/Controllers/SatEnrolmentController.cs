@@ -25,8 +25,10 @@ namespace Prime.Controllers
         private readonly IPartyService _partyService;
         private readonly IPlrProviderService _plrProviderService;
 
-        public SatEnrolmentController(IPartyService partyService)
-            IPlrProviderService plrProviderService,
+        public SatEnrolmentController(
+            IPartyService partyService,
+            IPlrProviderService plrProviderService
+        )
         {
             _partyService = partyService;
             _plrProviderService = plrProviderService;
