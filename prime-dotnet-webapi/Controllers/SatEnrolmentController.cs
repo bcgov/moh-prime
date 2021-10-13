@@ -175,7 +175,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<PartySubmission>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<PartySubmissionViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> SubmitSatEnrollee(int satId)
         {
             var satEnrollee = await _partyService.GetPartyAsync(satId, PartyType.SatEnrollee);
@@ -188,8 +188,6 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            // TODO: naming discussion on the following call, not sure if should be more desciptive
-            // with what it "matches" on
             var existsInPlr = await _plrProviderService.PartyExistsWithCollegeIdAndNameInPlrAsync(satId);
             var submission = await _partyService.CreateSubmissionAsync(satId, SubmissionType.SatEnrollee, existsInPlr);
 

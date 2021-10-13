@@ -177,7 +177,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<PartySubmission> CreateSubmissionAsync(int partyId, SubmissionType type, bool approved)
+        public async Task<PartySubmissionViewModel> CreateSubmissionAsync(int partyId, SubmissionType type, bool approved)
         {
             var submission = new PartySubmission
             {
@@ -189,7 +189,7 @@ namespace Prime.Services
 
             _context.PartySubmissions.Add(submission);
             await _context.SaveChangesAsync();
-            return submission;
+            return _mapper.Map<PartySubmissionViewModel>(submission);
         }
 
         private IQueryable<Party> GetBasePartyQuery()
