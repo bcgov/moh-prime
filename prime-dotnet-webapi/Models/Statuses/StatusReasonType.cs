@@ -22,6 +22,6 @@ namespace Prime.Models
         PaperEnrollee = 18,
         PaperEnrolmentMismatch = 19,
         PossiblePaperEnrolmentMatch = 20,
-        UnableToLinkToPpaperEnrolment = 21
+        UnableToLinkToPaperEnrolment = 21
     }
 }
