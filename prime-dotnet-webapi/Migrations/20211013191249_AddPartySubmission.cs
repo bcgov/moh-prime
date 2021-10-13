@@ -9,7 +9,7 @@ namespace Prime.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PartySubmissions",
+                name: "PartySubmission",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -25,9 +25,9 @@ namespace Prime.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PartySubmissions", x => x.Id);
+                    table.PrimaryKey("PK_PartySubmission", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PartySubmissions_Party_PartyId",
+                        name: "FK_PartySubmission_Party_PartyId",
                         column: x => x.PartyId,
                         principalTable: "Party",
                         principalColumn: "Id",
@@ -35,15 +35,15 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PartySubmissions_PartyId",
-                table: "PartySubmissions",
+                name: "IX_PartySubmission_PartyId",
+                table: "PartySubmission",
                 column: "PartyId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PartySubmissions");
+                name: "PartySubmission");
         }
     }
 }
