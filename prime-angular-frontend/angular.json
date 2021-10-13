@@ -186,7 +186,7 @@
   "defaultProject": "angular-frontend",
   "cli": {
     "analytics": false,
-    "packageManager": "npm",
+    "packageManager": "yarn",
     "defaultCollection": "@angular-eslint/schematics"
   }
 }
