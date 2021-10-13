@@ -2,16 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subject } from 'rxjs';
-
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { NoContent } from '@core/resources/abstract-resource';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Address } from '@shared/models/address.model';
 
+import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -23,7 +20,7 @@ import { PrivacyOfficerPageFormState } from './privacy-officer-page-form-state.c
   templateUrl: './privacy-officer-page.component.html',
   styleUrls: ['./privacy-officer-page.component.scss']
 })
-export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class PrivacyOfficerPageComponent extends AbstractSiteRegistrationPage implements OnInit {
   public formState: PrivacyOfficerPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -35,13 +32,13 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteService: SiteService,
-    private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService,
+    protected siteService: SiteService,
+    protected siteFormStateService: SiteFormStateService,
+    protected siteResource: SiteResource,
     route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
@@ -52,10 +49,15 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
       contact.physicalAddress = new Address();
     }
     this.formState.form.patchValue(contact);
+    this.formState.form.markAsDirty();
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
+    const nextRoute = (!this.isCompleted)
+      ? SiteRoutes.ADMINISTRATOR
+      : SiteRoutes.SITE_REVIEW;
+
+    this.routeUtils.routeRelativeTo(nextRoute);
   }
 
   public ngOnInit() {
@@ -70,18 +72,11 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
-    this.siteFormStateService.setForm(this.site, true);
+    this.siteFormStateService.setForm(this.site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
-  }
-
-  protected performSubmission(): NoContent {
-    const payload = this.siteFormStateService.json;
-    return this.siteResource.updateSite(payload);
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
       : SiteRoutes.TECHNICAL_SUPPORT;

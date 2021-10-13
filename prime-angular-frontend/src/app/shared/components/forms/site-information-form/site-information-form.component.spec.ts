@@ -39,7 +39,7 @@ describe('SiteInformationFormComponent', () => {
   beforeEach(inject([SiteFormStateService], (siteFormStateService: SiteFormStateService) => {
     fixture = TestBed.createComponent(SiteInformationFormComponent);
     component = fixture.componentInstance;
-    component.form = siteFormStateService.businessLicencePageFormState.form;
+    component.form = siteFormStateService.businessLicenceFormState.form;
     fixture.detectChanges();
   }));
 

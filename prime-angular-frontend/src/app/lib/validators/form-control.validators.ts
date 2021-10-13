@@ -145,6 +145,18 @@ export class FormControlValidators {
 
   /**
    * @description
+   * Checks the form control value starts with a specific string.
+   */
+  public static startsWith(value: string): ValidatorFn {
+    const regexp = new RegExp(`^(${value})`);
+    return (control: AbstractControl) => {
+      const startsWith = (control.valid && regexp.test(control.value));
+      return (startsWith) ? null : { startsWith: true };
+    };
+  }
+
+  /**
+   * @description
    * Checks a form control is a non-zero index (eg. database record ID).
    */
   public static requiredIndex(control: AbstractControl): ValidationErrors | null {
@@ -205,36 +217,5 @@ export class FormControlValidators {
       const valid = allowedValues.includes(control.value);
       return valid ? null : { requiredIn: true };
     };
-  }
-
-  /**
-   * @description
-   * Check that a value is unique asynchronously.
-   *
-   * @example
-   * FormControlValidators.uniqueAsync(this.httpResource.methodName);
-   */
-  public static uniqueAsync(request: (value: string) => Observable<boolean>, errorKey = 'unique'): AsyncValidatorFn {
-    return this.createAsyncValidator(request, { errorKey });
-  }
-
-  /**
-   * @description
-   * Create an asynchronous validator.
-   */
-  private static createAsyncValidator(
-    request: (value: string) => Observable<boolean>,
-    { errorKey, dueTime }: { errorKey: string, dueTime?: number }
-  ): AsyncValidatorFn {
-    return control => control.valueChanges
-      .pipe(
-        distinctUntilChanged(),
-        debounceTime(dueTime ?? 400),
-        switchMap((value: string) =>
-          (value) ? request(value) : EMPTY
-        ),
-        map((result: boolean) => (result) ? { [errorKey]: result } : null),
-        first() // important, the observable returned must be finite required by asyncValidator
-      );
   }
 }

@@ -12,6 +12,7 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
+import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
@@ -21,7 +22,6 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationSigningAuthorityPageFormState } from './organization-signing-authority-page-form-state.class';
 
-
 @Component({
   selector: 'app-organization-signing-authority-page',
   templateUrl: './organization-signing-authority-page.component.html',
@@ -30,8 +30,9 @@ import { OrganizationSigningAuthorityPageFormState } from './organization-signin
 export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OrganizationSigningAuthorityPageFormState;
   public title: string;
-  public isCompleted: boolean;
+  public organizationId: number;
   public organization: Organization;
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
   /**
    * @description
@@ -59,9 +60,11 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+
+    this.organizationId = +this.route.snapshot.params.oid;
   }
 
-  public onPreferredNameChange({ checked }: { checked: boolean }): void {
+  public onPreferredNameChange({ checked }: ToggleContentChange): void {
     if (!this.hasPreferredName) {
       this.formState.form.get('preferredMiddleName').reset();
     }
@@ -69,12 +72,16 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.togglePreferredNameValidators(checked, this.formState.preferredFirstName, this.formState.preferredLastName);
   }
 
-  public onPhysicalAddressChange({ checked }: { checked: boolean }): void {
+  public onPhysicalAddressChange({ checked }: ToggleContentChange): void {
     this.toggleAddressLineValidators(checked, this.formState.physicalAddress);
   }
 
-  public onMailingAddressChange({ checked }: { checked: boolean }): void {
+  public onMailingAddressChange({ checked }: ToggleContentChange): void {
     this.toggleAddressLineValidators(checked, this.formState.mailingAddress, this.hasVerifiedAddress);
+  }
+
+  public onBack() {
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
   }
 
   public ngOnInit(): void {
@@ -138,8 +145,6 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   }
 
   protected afterSubmitIsSuccessful(party: Party): void {
-    this.formState.form.markAsPristine();
-
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: (string | number)[];
     const organization = this.organizationService.organization;
@@ -151,7 +156,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
         ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
         : organization
           ? ['../', organization.id, SiteRoutes.ORGANIZATION_NAME]
-          : ['../', 0, SiteRoutes.ORGANIZATION_NAME];
+          : ['../', 0, SiteRoutes.ORGANIZATION_CLAIM];
     }
     this.routeUtils.routeRelativeTo(routePath);
   }

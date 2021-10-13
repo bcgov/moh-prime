@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Prime.Configuration;
+using Prime.Configuration.Database;
 using Prime.Models;
 
 namespace PrimeTests.ModelFactories
@@ -8,6 +8,6 @@ namespace PrimeTests.ModelFactories
     {
         private static IEnumerable<Facility> _seedData = new FacilityConfiguration().SeedData;
 
-        public static IEnumerable<Facility> All  { get { return _seedData; }  }
+        public static IEnumerable<Facility> All { get { return _seedData; } }
     }
 }
