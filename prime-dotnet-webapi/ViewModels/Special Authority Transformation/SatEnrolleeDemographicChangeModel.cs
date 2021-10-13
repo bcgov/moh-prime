@@ -36,7 +36,7 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
         /// <summary>
         /// Originating from BCSC
         /// </summary>
-        public PhysicalAddress VerifiedAddress { get; set; }
+        public VerifiedAddress VerifiedAddress { get; set; }
 
         public MailingAddress PreferredAddress { get; set; }
 
@@ -64,8 +64,8 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
 
             if (VerifiedAddress != null)
             {
-                // Add/Update PhysicalAddress
-                if (party.PhysicalAddress == null)
+                // Add/Update VerifiedAddress of given Party object
+                if (party.VerifiedAddress == null)
                 {
                     party.Addresses.Add(new PartyAddress
                     {
@@ -75,8 +75,8 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
                 }
                 else
                 {
-                    VerifiedAddress.Id = party.PhysicalAddress.Id;
-                    party.PhysicalAddress.SetValues(VerifiedAddress);
+                    VerifiedAddress.Id = party.VerifiedAddress.Id;
+                    party.VerifiedAddress.SetValues(VerifiedAddress);
                 }
             }
 
