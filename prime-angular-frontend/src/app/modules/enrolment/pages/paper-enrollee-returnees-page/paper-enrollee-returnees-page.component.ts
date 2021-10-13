@@ -11,6 +11,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
@@ -119,7 +120,7 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
     return request$.pipe(this.handleResponse());
   }
 
-  private createOrUpdateLinkedGpid(enrolmentId: number, paperEnrolleeGpid: string) {
+  private createOrUpdateLinkedGpid(enrolmentId: number, paperEnrolleeGpid: string): Observable<NoContent> {
     return this.enrolmentResource
       .createOrUpdateLinkedGpid(enrolmentId, paperEnrolleeGpid);
   }
