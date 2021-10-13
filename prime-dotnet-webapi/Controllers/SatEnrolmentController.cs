@@ -23,15 +23,10 @@ namespace Prime.Controllers
     public class SatEnrolmentController : PrimeControllerBase
     {
         private readonly IPartyService _partyService;
-        private readonly IPlrProviderService _plrProviderService;
 
-        public SatEnrolmentController(
-            IPartyService partyService,
-            IPlrProviderService plrProviderService
-        )
+        public SatEnrolmentController(IPartyService partyService)
         {
             _partyService = partyService;
-            _plrProviderService = plrProviderService;
         }
 
         // POST: api/parties/sat
