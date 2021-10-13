@@ -270,17 +270,14 @@ namespace Prime.Services
 
         public async Task<bool> IsOrganizationTransferCompleteAsync(int organizationId)
         {
-            var signingAuthorityId = _context.Organizations.Where(o => o.Id == organizationId).Select(o => o.SigningAuthorityId).SingleOrDefault();
-            var careSettingsRequiringOrgAgreements = await GetCareSettingCodesForPendingTransferAsync(organizationId, signingAuthorityId);
+            var signingAuthorityId = await _context.Organizations
+                .Where(o => o.Id == organizationId)
+                .Select(o => o.SigningAuthorityId)
+                .SingleOrDefaultAsync();
 
-            return careSettingsRequiringOrgAgreements.Count() == 0;
-        }
+            var pendingCodes = await GetCareSettingCodesForPendingTransferAsync(organizationId, signingAuthorityId);
 
-        private async Task<IEnumerable<int>> GetCareSettingsFromOrganizationAsync(int organizationId)
-        {
-            return await _context.Sites
-                .Where(s => s.OrganizationId == organizationId && s.CareSettingCode != null)
-                .Select(s => (int)s.CareSettingCode).ToListAsync();
+            return !pendingCodes.Any();
         }
 
         public async Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(int organizationId)
