@@ -190,7 +190,7 @@ namespace Prime.Controllers
 
             // TODO: naming discussion on the following call, not sure if should be more desciptive
             // with what it "matches" on
-            var existsInPlr = await _plrProviderService.PartyExistsInPlrAsync(satId);
+            var existsInPlr = await _plrProviderService.PartyExistsWithCollegeIdAndNameInPlrAsync(satId);
             var submission = await _partyService.CreateSubmissionAsync(satId, SubmissionType.SatEnrollee, existsInPlr);
 
             return Ok(submission);
