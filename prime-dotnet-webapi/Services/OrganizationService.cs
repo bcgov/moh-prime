@@ -250,22 +250,34 @@ namespace Prime.Services
         public async Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId)
         {
             // Get a list of the care settings used on sites that exist for an organization
-            var oganizationCareSettings = await _context.Sites.Where(s => s.OrganizationId == organizationId).Select(s => s.CareSettingCode).ToListAsync();
+            var oganizationCareSettings = await _context.Sites
+                .AsNoTracking()
+                .Where(s => s.OrganizationId == organizationId)
+                .Select(s => s.CareSettingCode)
+                .ToListAsync();
 
             var agreements = await _context.Agreements
-                .Include(a => a.AgreementVersion)
-                .OrderByDescending(a => a.CreatedDate)
+                .AsNoTracking()
                 .Where(a => a.OrganizationId == organizationId)
+                .OrderByDescending(a => a.CreatedDate)
+                .Select(a => new
+                {
+                    a.AgreementVersion.AgreementType,
+                    a.PartyId,
+                    a.AcceptedDate
+                })
                 .ToListAsync();
 
             // Get Care Settings for agreements signed by previous signing authority and unsigned agreements from current signing authority
             var agreementSettings = agreements
-                .GroupBy(a => a.AgreementVersion.AgreementType)
+                .GroupBy(a => a.AgreementType)
                 .Select(a => a.FirstOrDefault())
                 .Where(a => a.PartyId != signingAuthorityId || (a.PartyId == signingAuthorityId && a.AcceptedDate == null))
-                .Select(a => SiteSettingForOrgAgreementType(a.AgreementVersion.AgreementType)).ToList();
+                .Select(a => SiteSettingForOrgAgreementType(a.AgreementType));
 
-            return agreementSettings.Where(code => oganizationCareSettings.Contains((int)code)).ToList();
+            return agreementSettings
+                .Where(code => oganizationCareSettings.Contains((int)code))
+                .ToList();
         }
 
         public async Task<bool> IsOrganizationTransferCompleteAsync(int organizationId)
