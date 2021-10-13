@@ -1,8 +1,8 @@
 using System;
 
-namespace Prime.ViewModels.SpecialAuthorityTransformation
+namespace Prime.ViewModels.Parties
 {
-    public class SatEnrolleeCertificationViewModel
+    public class PartyCertificationViewModel
     {
         public int CollegeCode { get; set; }
 

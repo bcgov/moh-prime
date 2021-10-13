@@ -85,7 +85,6 @@ namespace Prime
             services.AddScoped<IPlrProviderService, PlrProviderService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
-            services.AddScoped<ISatEnrolmentService, SatEnrolmentService>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<ISoapService, SoapService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();

@@ -82,6 +82,8 @@ namespace Prime.Models
         public ICollection<PartyEnrolment> PartyEnrolments { get; set; }
         public ICollection<PartySubmission> PartySubmissions { get; set; }
 
+        public ICollection<PartyCertification> PartyCertifications { get; set; }
+
         /// <summary>
         /// Adds new PartyEnrolments with the given PartyTypes if not already present.
         /// </summary>

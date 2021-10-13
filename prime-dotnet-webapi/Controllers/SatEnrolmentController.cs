@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -7,8 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Services;
+using Prime.ViewModels.Parties;
 using Prime.ViewModels.SpecialAuthorityTransformation;
-
 
 namespace Prime.Controllers
 {
@@ -21,19 +22,14 @@ namespace Prime.Controllers
     [ApiController]
     public class SatEnrolmentController : PrimeControllerBase
     {
-        private readonly ISatEnrolmentService _satEnrolmentService;
-        private readonly IPlrProviderService _plrProviderService;
         private readonly IPartyService _partyService;
+        private readonly IPlrProviderService _plrProviderService;
 
-        public SatEnrolmentController(
-            ISatEnrolmentService satEnrolmentService,
+        public SatEnrolmentController(IPartyService partyService)
             IPlrProviderService plrProviderService,
-            IPartyService partyService
-            )
         {
-            _satEnrolmentService = satEnrolmentService;
-            _plrProviderService = plrProviderService;
             _partyService = partyService;
+            _plrProviderService = plrProviderService;
         }
 
         // POST: api/parties/sat
@@ -52,8 +48,8 @@ namespace Prime.Controllers
                 return BadRequest("One or more Properties did not match the information on the BCSC.");
             }
 
-            int enrolleeId = await _satEnrolmentService.CreateOrUpdateEnrolleeAsync(payload, User);
-            Party satParty = await _satEnrolmentService.GetEnrolleeAsync(enrolleeId);
+            int enrolleeId = await _partyService.CreateOrUpdatePartyAsync(payload, User);
+            Party satParty = await _partyService.GetPartyAsync(enrolleeId, PartyType.SatEnrollee);
             return CreatedAtAction(
                 nameof(GetSatEnrolleeById),
                 new { satId = satParty.Id },
@@ -71,13 +67,39 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<SatEnrolleeDemographicChangeModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSatEnrolleeById(int satId)
         {
-            var satEnrollee = await _satEnrolmentService.GetEnrolleeAsync(satId);
+            var satEnrollee = await _partyService.GetPartyAsync(satId, PartyType.SatEnrollee);
             if (satEnrollee == null)
             {
                 return NotFound($"SAT Enrollee not found with id {satId}");
+            }
+            if (!satEnrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(satEnrollee);
+        }
+
+        // GET: api/parties/sat/5fdd17a6-1797-47a4-97b7-5b27949dd614
+        /// <summary>
+        /// Gets a specific SAT Enrolment by userId
+        /// </summary>
+        /// /// <param name="userId"></param>
+        [HttpGet("{userId:guid}", Name = nameof(GetSatEnrolleeByUserId))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSatEnrolleeByUserId(Guid userId)
+        {
+            var satEnrollee = await _partyService.GetPartyForUserIdAsync(userId, PartyType.SatEnrollee);
+            if (satEnrollee == null)
+            {
+                return NotFound($"SAT Enrollee not found with id {userId}");
             }
             if (!satEnrollee.PermissionsRecord().AccessableBy(User))
             {
@@ -99,7 +121,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateSatEnrolleeDemographics(int satId, SatEnrolleeDemographicChangeModel payload)
         {
-            var satEnrollee = await _satEnrolmentService.GetEnrolleeAsync(satId);
+            var satEnrollee = await _partyService.GetPartyAsync(satId, PartyType.SatEnrollee);
             if (satEnrollee == null)
             {
                 return NotFound($"SAT Enrollee not found with id {satId}");
@@ -113,7 +135,7 @@ namespace Prime.Controllers
                 return BadRequest("One or more Properties did not match the information on the BCSC.");
             }
 
-            await _satEnrolmentService.UpdateDemographicsAsync(satId, payload, User);
+            await _partyService.CreateOrUpdatePartyAsync(payload, User);
             return Ok();
         }
 
@@ -126,9 +148,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateSatEnrolleeCertifications(int satId, ICollection<SatEnrolleeCertificationViewModel> payload)
+        public async Task<ActionResult> UpdateSatEnrolleeCertifications(int satId, ICollection<PartyCertificationViewModel> payload)
         {
-            var satEnrollee = await _satEnrolmentService.GetEnrolleeAsync(satId);
+            var satEnrollee = await _partyService.GetPartyAsync(satId, PartyType.SatEnrollee);
             if (satEnrollee == null)
             {
                 return NotFound($"SAT Enrollee not found with id {satId}");
@@ -138,7 +160,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _satEnrolmentService.UpdateCertificationsAsync(satId, payload);
+            await _partyService.UpdateCertificationsAsync(satId, payload);
             return Ok();
         }
 

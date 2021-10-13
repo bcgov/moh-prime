@@ -33,7 +33,10 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
 
         public DateTime DateOfBirth { get; set; }
 
-        public PhysicalAddress PhysicalAddress { get; set; }
+        /// <summary>
+        /// Originating from BCSC
+        /// </summary>
+        public VerifiedAddress VerifiedAddress { get; set; }
 
         public MailingAddress PreferredAddress { get; set; }
 
@@ -59,27 +62,21 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
             party.Email = Email;
             party.Phone = Phone;
 
-            // Values from ClaimsPrincipal have precedence over the change model
-            party.UserId = user.GetPrimeUserId();
-            party.FirstName = user.GetFirstName();
-            party.LastName = user.GetLastName();
-            party.DateOfBirth = user.GetDateOfBirth().Value;
-
-            if (PhysicalAddress != null)
+            if (VerifiedAddress != null)
             {
-                // Add/Update PhysicalAddress
-                if (party.PhysicalAddress == null)
+                // Add/Update VerifiedAddress of given Party object
+                if (party.VerifiedAddress == null)
                 {
                     party.Addresses.Add(new PartyAddress
                     {
                         Party = party,
-                        Address = PhysicalAddress,
+                        Address = VerifiedAddress,
                     });
                 }
                 else
                 {
-                    PhysicalAddress.Id = party.PhysicalAddress.Id;
-                    party.PhysicalAddress.SetValues(PhysicalAddress);
+                    VerifiedAddress.Id = party.VerifiedAddress.Id;
+                    party.VerifiedAddress.SetValues(VerifiedAddress);
                 }
             }
 
@@ -125,7 +122,7 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
             RuleFor(x => x.FirstName).NotEmpty();
             RuleFor(x => x.LastName).NotEmpty();
             RuleFor(x => x.DateOfBirth).NotEmpty();
-            RuleFor(x => x.PhysicalAddress).NotNull();
+            RuleFor(x => x.VerifiedAddress).NotNull();
             RuleFor(x => x.Email).NotEmpty();
             RuleFor(x => x.Phone).NotEmpty();
         }
