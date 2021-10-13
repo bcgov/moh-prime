@@ -29,7 +29,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Set environment variables
-COPY package.json package-lock.json ./
+COPY package.json yarn.lock ./
 
 COPY . .
 
