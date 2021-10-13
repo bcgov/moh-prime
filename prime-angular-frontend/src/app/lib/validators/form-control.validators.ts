@@ -145,6 +145,18 @@ export class FormControlValidators {
 
   /**
    * @description
+   * Checks the form control value starts with a specific string.
+   */
+  public static startsWith(value: string): ValidatorFn {
+    const regexp = new RegExp(`^(${value})`);
+    return (control: AbstractControl) => {
+      const startsWith = (control.valid && regexp.test(control.value));
+      return (startsWith) ? null : { startsWith: true };
+    };
+  }
+
+  /**
+   * @description
    * Checks a form control is a non-zero index (eg. database record ID).
    */
   public static requiredIndex(control: AbstractControl): ValidationErrors | null {

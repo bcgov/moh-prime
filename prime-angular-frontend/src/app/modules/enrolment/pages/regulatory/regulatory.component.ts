@@ -85,10 +85,6 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.certifications.removeAt(index);
   }
 
-  public routeBackTo() {
-    this.routeTo(EnrolmentRoutes.CARE_SETTING);
-  }
-
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());

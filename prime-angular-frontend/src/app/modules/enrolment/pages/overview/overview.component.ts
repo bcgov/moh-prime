@@ -3,8 +3,8 @@ import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { EMPTY, Subscription, Observable } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { EMPTY, Subscription, Observable, of, noop } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { ToastService } from '@core/services/toast.service';
@@ -37,10 +37,12 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public currentStatus: EnrolmentStatusEnum;
   public demographicRoutePath: string;
   public identityProvider: IdentityProviderEnum;
+  public withinDaysOfRenewal: boolean;
+  public isMatchingPaperEnrollee: boolean;
+  public paperEnrolleeGpid: string;
+  public enrolleeAbsence: EnrolleeAbsence;
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
-  public withinDaysOfRenewal: boolean;
-  public absence: EnrolleeAbsence;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -128,6 +130,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.isMatchingPaperEnrollee = this.enrolmentService.isMatchingPaperEnrollee;
     this.authService.getUser$()
       .pipe(
         map(({ firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
@@ -169,8 +172,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
         }),
+        exhaustMap(_ =>
+          (this.isMatchingPaperEnrollee)
+            ? this.enrolmentResource.getLinkedGpid(this.enrolmentService.enrolment.id)
+              .pipe(tap((paperEnrolleeGpid: string) => this.paperEnrolleeGpid = paperEnrolleeGpid))
+            : of(noop())
+        ),
         exhaustMap(() => this.enrolmentResource.getCurrentEnrolleeAbsence(this.enrolment.id))
-      ).subscribe((absence: EnrolleeAbsence) => this.absence = absence);
+      ).subscribe((enrolleeAbsence: EnrolleeAbsence) => this.enrolleeAbsence = enrolleeAbsence);
   }
 
   /**

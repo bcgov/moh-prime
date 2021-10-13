@@ -32,6 +32,16 @@ export class ApiResource extends AbstractResource {
       .pipe(this.handleResponse<T>());
   }
 
+  public head<T>(
+    path: string,
+    params: HttpParams = new HttpParams(),
+    options: { [key: string]: any } = {}
+  ): Observable<ApiHttpResponse<T> | ApiHttpErrorResponse> {
+    return this.http
+      .head(`${this.config.apiEndpoint}/${path}`, { params, observe: 'response', ...options })
+      .pipe(this.handleResponse<T>());
+  }
+
   public post<T>(
     path: string,
     body: any = {},

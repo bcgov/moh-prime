@@ -11,6 +11,7 @@ export class EnrolmentRoutes {
   public static ACCESS_CODE = 'access-code';
   public static ID_SUBMISSION = 'id-submission';
   // Enrollee profile:
+  public static PAPER_ENROLLEE_DECLARATION = 'paper-enrollee-declaration';
   public static BCEID_DEMOGRAPHIC = 'bceid-demographic';
   public static BCSC_DEMOGRAPHIC = 'bcsc-demographic';
   // Enrollee enrolment:
@@ -59,6 +60,7 @@ export class EnrolmentRoutes {
   // enrollee incrementally through creating their profile
   public static enrolmentProfileRoutes(): string[] {
     return [
+      EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION,
       EnrolmentRoutes.BCEID_DEMOGRAPHIC,
       EnrolmentRoutes.BCSC_DEMOGRAPHIC,
       EnrolmentRoutes.CARE_SETTING,
