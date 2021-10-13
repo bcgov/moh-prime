@@ -1,10 +1,10 @@
+using DelegateDecompiler;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
-using DelegateDecompiler;
+using System.Linq;
 
 namespace Prime.Models
 {
@@ -291,29 +291,6 @@ namespace Prime.Models
             }
 
             return EnrolleeCareSettings.Any(o => o.IsType(type));
-        }
-
-        /// <summary>
-        /// Returns true if the Enrollee's most recently accepted Agreement has no newer versions.
-        /// Makes no determination if said Agreement is of the correct type for the Enrollee.
-        /// </summary>
-        public bool HasLatestAgreement()
-        {
-            if (Agreements == null)
-            {
-                throw new InvalidOperationException($"Cannot determine latest agreement, {nameof(Agreements)} is null");
-            }
-
-            var currentAgreement = Agreements
-                .OrderByDescending(a => a.CreatedDate)
-                .FirstOrDefault(a => a.AcceptedDate != null);
-
-            if (currentAgreement == null)
-            {
-                return false;
-            }
-
-            return AgreementVersion.NewestAgreementVersionIds().Contains(currentAgreement.AgreementVersionId);
         }
 
         /// <summary>

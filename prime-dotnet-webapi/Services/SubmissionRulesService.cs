@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Prime.HttpClients;
@@ -11,6 +12,7 @@ namespace Prime.Services
 {
     public class SubmissionRulesService : BaseService, ISubmissionRulesService
     {
+        private readonly IAgreementService _agreementService;
         private readonly IBusinessEventService _businessEventService;
         private readonly ICollegeLicenceClient _collegeLicenceClient;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
@@ -18,11 +20,13 @@ namespace Prime.Services
         public SubmissionRulesService(
             ApiDbContext context,
             ILogger<SubmissionRulesService> logger,
+            IAgreementService agreementService,
             IBusinessEventService businessEventService,
             ICollegeLicenceClient collegeLicenceClient,
             IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
             : base(context, logger)
         {
+            _agreementService = agreementService;
             _businessEventService = businessEventService;
             _collegeLicenceClient = collegeLicenceClient;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
@@ -58,17 +62,19 @@ namespace Prime.Services
         /// </summary>
         public async Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate)
         {
+            var newestAgreements = await _agreementService.GetLatestAgreementVersionsAsync(AgreementGroup.Enrollee);
+
             var rules = new List<MinorUpdateRule>
             {
                 new DateRule(),
-                new CurrentToaRule(),
+                new CurrentToaRule(newestAgreements.Select(x => x.Id)),
                 new AllowableChangesRule(profileUpdate)
             };
 
             return await ProcessRules(rules, enrollee);
         }
 
-        private async Task<bool> ProcessRules(IEnumerable<IEnrolleeRule> rules, Enrollee enrollee)
+        private static async Task<bool> ProcessRules(IEnumerable<IEnrolleeRule> rules, Enrollee enrollee)
         {
             bool passed = true;
             foreach (var rule in rules)

@@ -23,14 +23,21 @@ namespace Prime.Services.Rules
     /// </summary>
     public class CurrentToaRule : MinorUpdateRule
     {
+        public IEnumerable<int> NewstAgreementIds { get; set; }
+
+        public CurrentToaRule(IEnumerable<int> newestAgreementIds)
+        {
+            NewstAgreementIds = newestAgreementIds;
+        }
+
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.Agreements == null)
+            if (enrollee.CurrentAgreementId == null)
             {
                 return Task.FromResult(false);
             }
 
-            return Task.FromResult(enrollee.HasLatestAgreement());
+            return Task.FromResult(NewstAgreementIds.Contains(enrollee.CurrentAgreementId.Value));
         }
     }
 
