@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,6 +9,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { UtilsService } from '@core/services/utils.service';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
+import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -65,11 +65,11 @@ export class BcscDemographicComponent implements OnInit {
     }
   }
 
-  public onPhysicalAddressChange({ checked }: MatSlideToggleChange): void {
+  public onPhysicalAddressChange({ checked }: ToggleContentChange): void {
     this.toggleAddressLineValidators(checked, this.physicalAddress);
   }
 
-  public onMailingAddressChange({ checked }: MatSlideToggleChange): void {
+  public onMailingAddressChange({ checked }: ToggleContentChange): void {
     this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasVerifiedAddress);
   }
 
