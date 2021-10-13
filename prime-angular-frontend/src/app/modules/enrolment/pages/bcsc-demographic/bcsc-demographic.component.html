@@ -4,7 +4,7 @@
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
+        [formGroup]="formState.form"
         novalidate>
 
     <section class="mb-3">
@@ -67,7 +67,7 @@
               <ng-container appPageSubheader2Title>Physical Address</ng-container>
             </app-page-subheader2>
 
-            <app-address-form [form]="physicalAddress"
+            <app-address-form [form]="formState.physicalAddress"
                               [showManualButton]="true"
                               [showAddressFields]="hasPhysicalAddress"></app-address-form>
           </section>
@@ -83,7 +83,7 @@
           </ng-container>
         </app-page-subheader2>
 
-        <app-address-form [form]="physicalAddress"
+        <app-address-form [form]="formState.physicalAddress"
                           [inBc]="true"
                           [showManualButton]="true"
                           [showAddressFields]="hasPhysicalAddress"></app-address-form>
@@ -98,7 +98,7 @@
             <ng-container appPageSubheader2Title>Mailing Address</ng-container>
           </app-page-subheader2>
 
-          <app-address-form [form]="mailingAddress"
+          <app-address-form [form]="formState.mailingAddress"
                             [inBc]="true"
                             [showManualButton]="true"
                             [showAddressFields]="hasMailingAddress"></app-address-form>
@@ -112,7 +112,8 @@
   </form>
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
-                   [hasSecondaryAction]="isProfileComplete"
-                   (save)="onSubmit()"></app-page-footer>
+                   [hasSecondaryAction]="isProfileComplete || isMatchingPaperEnrollee"
+                   (save)="onSubmit()"
+                   (back)="onBack(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)"></app-page-footer>
 
 </app-enrollee-page>

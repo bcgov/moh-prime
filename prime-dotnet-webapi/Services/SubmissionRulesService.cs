@@ -13,16 +13,19 @@ namespace Prime.Services
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly ICollegeLicenceClient _collegeLicenceClient;
+        private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
 
         public SubmissionRulesService(
             ApiDbContext context,
             ILogger<SubmissionRulesService> logger,
             IBusinessEventService businessEventService,
-            ICollegeLicenceClient collegeLicenceClient)
+            ICollegeLicenceClient collegeLicenceClient,
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
             _collegeLicenceClient = collegeLicenceClient;
+            _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
         }
 
         /// <summary>
@@ -43,6 +46,7 @@ namespace Prime.Services
                 new IdentityAssuranceLevelRule(),
                 new IdentityProviderRule(),
                 new NoAssignedAgreementRule(),
+                new IsPotentialPaperEnrolleeReturnee(_enrolleePaperSubmissionService),
             };
 
             return await ProcessRules(rules, enrollee);

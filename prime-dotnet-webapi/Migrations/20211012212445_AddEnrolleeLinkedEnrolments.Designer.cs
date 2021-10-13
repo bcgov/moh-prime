@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211012212445_AddEnrolleeLinkedEnrolments")]
+    partial class AddEnrolleeLinkedEnrolments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -14066,60 +14068,6 @@ namespace Prime.Migrations
                     b.ToTable("PartyAddress");
                 });
 
-            modelBuilder.Entity("Prime.Models.PartyCertification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("CollegeCode")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("LicenseCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("LicenseNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("PartyId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("PracticeCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("PractitionerId")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("RenewalDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CollegeCode");
-
-                    b.HasIndex("LicenseCode");
-
-                    b.HasIndex("PartyId");
-
-                    b.HasIndex("PracticeCode");
-
-                    b.ToTable("PartyCertification");
-                });
-
             modelBuilder.Entity("Prime.Models.PartyEnrolment", b =>
                 {
                     b.Property<int>("Id")
@@ -14150,44 +14098,6 @@ namespace Prime.Migrations
                     b.HasIndex("PartyId");
 
                     b.ToTable("PartyEnrolment");
-                });
-
-            modelBuilder.Entity("Prime.Models.PartySubmission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<bool>("Approved")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("PartyId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SubmissionType")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PartyId");
-
-                    b.ToTable("PartySubmissions");
                 });
 
             modelBuilder.Entity("Prime.Models.PharmanetTransactionLog", b =>
@@ -19015,44 +18925,10 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.PartyCertification", b =>
-                {
-                    b.HasOne("Prime.Models.College", "College")
-                        .WithMany()
-                        .HasForeignKey("CollegeCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.License", "License")
-                        .WithMany()
-                        .HasForeignKey("LicenseCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Party", "Party")
-                        .WithMany("PartyCertifications")
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Practice", "Practice")
-                        .WithMany()
-                        .HasForeignKey("PracticeCode");
-                });
-
             modelBuilder.Entity("Prime.Models.PartyEnrolment", b =>
                 {
                     b.HasOne("Prime.Models.Party", "Party")
                         .WithMany("PartyEnrolments")
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.PartySubmission", b =>
-                {
-                    b.HasOne("Prime.Models.Party", "Party")
-                        .WithMany("PartySubmissions")
                         .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
