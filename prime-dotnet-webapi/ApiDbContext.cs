@@ -76,7 +76,6 @@ namespace Prime
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
-        public DbSet<Party> Parties { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
@@ -112,6 +111,10 @@ namespace Prime
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<Banner> Banners { get; set; }
 
+        // Parties
+        public DbSet<Party> Parties { get; set; }
+        public DbSet<PartySubmission> PartySubmissions { get; set; }
+        public DbSet<PartyCertification> PartyCertifications { get; set; }
 
         // PLR Integration
         public DbSet<PlrProvider> PlrProviders { get; set; }
@@ -119,11 +122,6 @@ namespace Prime
 
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
-
-
-        public DbSet<PartyCertification> PartyCertifications { get; set; }
-
-
 
         public override int SaveChanges()
         {

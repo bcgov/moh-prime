@@ -23,14 +23,17 @@ namespace Prime.Controllers
     {
         private readonly ISatEnrolmentService _satEnrolmentService;
         private readonly IPlrProviderService _plrProviderService;
+        private readonly IPartyService _partyService;
 
         public SatEnrolmentController(
             ISatEnrolmentService satEnrolmentService,
-            IPlrProviderService plrProviderService
+            IPlrProviderService plrProviderService,
+            IPartyService partyService
             )
         {
             _satEnrolmentService = satEnrolmentService;
             _plrProviderService = plrProviderService;
+            _partyService = partyService;
         }
 
         // POST: api/parties/sat
@@ -148,10 +151,10 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> FinalizeSatEnrollee(int satId)
+        [ProducesResponseType(typeof(ApiResultResponse<PartySubmission>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> SubmitSatEnrollee(int satId)
         {
-            var satEnrollee = await _satEnrolmentService.GetEnrolleeAsync(satId);
+            var satEnrollee = await _partyService.GetPartyAsync(satId, PartyType.SatEnrollee);
             if (satEnrollee == null)
             {
                 return NotFound($"SAT Enrollee not found with id {satId}");
@@ -161,17 +164,12 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            // TODO: Currently just checks if party exists in PLR with
-            // matching College Id, First Name, and Last Name.
-            // Need more talks as to what finalizing a Sat Enrollee entails.
-            var found = await _plrProviderService.CheckPartyValidityAsync(satId);
+            // TODO: naming discussion on the following call, not sure if should be more desciptive
+            // with what it "matches" on
+            var existsInPlr = await _plrProviderService.PartyExistsInPlrAsync(satId);
+            var submission = await _partyService.CreateSubmissionAsync(satId, SubmissionType.SatEnrollee, existsInPlr);
 
-            if (!found)
-            {
-                return NotFound($"No matching PLR data found.");
-            }
-
-            return NoContent();
+            return Ok(submission);
         }
     }
 }

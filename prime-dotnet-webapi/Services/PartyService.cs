@@ -153,6 +153,21 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<PartySubmission> CreateSubmissionAsync(int partyId, SubmissionType type, bool approved)
+        {
+            var submission = new PartySubmission
+            {
+                PartyId = partyId,
+                SubmissionType = type,
+                Approved = approved,
+                CreatedDate = DateTimeOffset.Now
+            };
+
+            _context.PartySubmissions.Add(submission);
+            await _context.SaveChangesAsync();
+            return submission;
+        }
+
         private IQueryable<Party> GetBasePartyQuery()
         {
             return _context.Parties

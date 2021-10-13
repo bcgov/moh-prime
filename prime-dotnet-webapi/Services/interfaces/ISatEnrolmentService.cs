@@ -15,6 +15,5 @@ namespace Prime.Services
         Task UpdateDemographicsAsync(int satId, SatEnrolleeDemographicChangeModel viewModel, ClaimsPrincipal user);
 
         Task UpdateCertificationsAsync(int satId, IEnumerable<SatEnrolleeCertificationViewModel> viewModels);
-        Task FinalizeEnrolleeAsync(int satId);
     }
 }

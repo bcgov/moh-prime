@@ -86,10 +86,5 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
         }
-
-        public Task FinalizeEnrolleeAsync(int satId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

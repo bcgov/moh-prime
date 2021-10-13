@@ -81,7 +81,7 @@ namespace Prime.Services
         }
 
 
-        public async Task<bool> CheckPartyValidityAsync(int partyId)
+        public async Task<bool> PartyExistsInPlrAsync(int partyId)
         {
             var party = await _context.Parties
                 .Where(p => p.Id == partyId)
