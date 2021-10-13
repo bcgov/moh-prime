@@ -51,19 +51,28 @@ export class EnrolmentResource {
         tap((enrollee) => this.logger.info('ENROLLEE', enrollee)),
         exhaustMap((enrollee) =>
           forkJoin({
-            enrolleeCareSettings: this.apiResource.get<CareSetting>(`enrollees/${enrollee.id}/care-settings`).pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
-            certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrollee.id}/certifications`).pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
-            enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrollee.id}/remote-users`).pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
-            oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrollee.id}/obo-sites`).pipe(map((response: ApiHttpResponse<OboSite[]>) => response.result)),
-            remoteAccessLocations: this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrollee.id}/remote-locations`).pipe(map((response: ApiHttpResponse<RemoteAccessLocation[]>) => response.result)),
-            remoteAccessSites: this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrollee.id}/remote-sites`).pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
-            selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrollee.id}/self-declarations`).pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
-            selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrollee.id}/self-declarations/documents`).pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result))
-          }).pipe(
-            map(({ enrolleeCareSettings, ...remainder }) => {
-              return { ...enrollee, ...enrolleeCareSettings, remainder }
-            }),
-          ),
+            enrolleeCareSettings: this.apiResource.get<CareSetting>(`enrollees/${enrollee.id}/care-settings`)
+              .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
+            certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrollee.id}/certifications`)
+              .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+            enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrollee.id}/remote-users`)
+              .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
+            oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrollee.id}/obo-sites`)
+              .pipe(map((response: ApiHttpResponse<OboSite[]>) => response.result)),
+            remoteAccessLocations: this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrollee.id}/remote-locations`)
+              .pipe(map((response: ApiHttpResponse<RemoteAccessLocation[]>) => response.result)),
+            remoteAccessSites: this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrollee.id}/remote-sites`)
+              .pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
+            selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrollee.id}/self-declarations`)
+              .pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
+            selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrollee.id}/self-declarations/documents`)
+              .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result))
+          })
+            .pipe(
+              map(({ enrolleeCareSettings, ...remainder }) => {
+                return { ...enrollee, ...enrolleeCareSettings, remainder }
+              }),
+            ),
         ),
         map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
         catchError((error: any) => {
