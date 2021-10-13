@@ -9,12 +9,14 @@ import { ActivatedRoute } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 
 import { MockSiteService } from 'test/mocks/mock-site.service';
+import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
 import { OverviewPageComponent } from './overview-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 describe('OverviewPageComponent', () => {
   let component: OverviewPageComponent;
@@ -50,7 +52,11 @@ describe('OverviewPageComponent', () => {
           provide: SiteService,
           useClass: MockSiteService
         },
-        KeycloakService
+        {
+          provide: OrganizationService,
+          useClass: MockOrganizationService
+        },
+        KeycloakService,
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

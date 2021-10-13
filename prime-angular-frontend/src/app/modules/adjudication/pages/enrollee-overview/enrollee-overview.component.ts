@@ -20,6 +20,8 @@ import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -33,7 +35,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public plrInfo: PlrInfo[];
   public showAdjudication: boolean;
   public documents: EnrolleeAdjudicationDocument[];
-
+  public absence: EnrolleeAbsence;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,
@@ -41,6 +43,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     protected router: Router,
     protected adjudicationResource: AdjudicationResource,
     private paperEnrolmentResource: PaperEnrolmentResource,
+    private enrolmentResource: EnrolmentResource,
     permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService,
@@ -66,7 +69,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     this.route.params
       .subscribe(params => this.loadEnrollee(params.id));
 
-    this.action.subscribe(() => this.loadEnrollee(this.route.snapshot.params.id));
+    this.action.subscribe(() => this.loadEnrollee(+this.route.snapshot.params.id));
 
     this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.id)
       .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
@@ -74,6 +77,11 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id)
       .subscribe(documents => {
         this.documents = documents
+      });
+
+    this.enrolmentResource.getCurrentEnrolleeAbsence(+this.route.snapshot.params.id)
+      .subscribe((absence: EnrolleeAbsence) => {
+        this.absence = absence
       });
   }
 

@@ -532,8 +532,7 @@
           "containerId": "f8df3aeb-6e65-406d-b172-02bce11e4298",
           "attributes": {}
         }
-      ],
-      "prime-document-manager-local": []
+      ]
     }
   },
   "groups": [
@@ -754,30 +753,6 @@
       "emailVerified": false,
       "email": "service-account-prime-document-manager@placeholder.org",
       "serviceAccountClientId": "prime-document-manager",
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "realmRoles": [
-        "offline_access",
-        "uma_authorization"
-      ],
-      "clientRoles": {
-        "account": [
-          "manage-account",
-          "view-profile"
-        ]
-      },
-      "notBefore": 0,
-      "groups": []
-    },
-    {
-      "id": "7a1aff18-df34-4c5d-a8e8-6b20155889c0",
-      "createdTimestamp": 1591329514112,
-      "username": "service-account-prime-document-manager-local",
-      "enabled": true,
-      "totp": false,
-      "emailVerified": false,
-      "email": "service-account-prime-document-manager-local@placeholder.org",
-      "serviceAccountClientId": "prime-document-manager-local",
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
@@ -1933,106 +1908,6 @@
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientHost",
-            "jsonType.label": "String"
-          }
-        }
-      ],
-      "defaultClientScopes": [],
-      "optionalClientScopes": [
-        "microprofile-jwt"
-      ]
-    },
-    {
-      "id": "1d0f11cd-90de-4e80-94eb-d1427628ddc4",
-      "clientId": "prime-document-manager-local",
-      "description": "Service account used by the PRIME API to access the document manager in local development",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
-      "redirectUris": [],
-      "webOrigins": [],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": false,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": true,
-      "publicClient": false,
-      "frontchannelLogout": false,
-      "protocol": "openid-connect",
-      "attributes": {
-        "saml.assertion.signature": "false",
-        "saml.multivalued.roles": "false",
-        "saml.force.post.binding": "false",
-        "saml.encrypt": "false",
-        "saml.server.signature": "false",
-        "saml.server.signature.keyinfo.ext": "false",
-        "exclude.session.state.from.auth.response": "false",
-        "saml_force_name_id_format": "false",
-        "saml.client.signature": "false",
-        "tls.client.certificate.bound.access.tokens": "false",
-        "saml.authnstatement": "false",
-        "display.on.consent.screen": "false",
-        "saml.onetimeuse.condition": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "protocolMappers": [
-        {
-          "id": "f5dad2e9-01eb-4891-b1f0-cbe045a03906",
-          "name": "Client ID",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientId",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientId",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "c3455bdb-1211-44d5-92e5-0371ea78de56",
-          "name": "Client Host",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientHost",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientHost",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "e1027e9d-7295-447d-b10f-295fe87d000c",
-          "name": "set audience to prime-document-manager-local",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-audience-mapper",
-          "consentRequired": false,
-          "config": {
-            "included.client.audience": "prime-document-manager-local",
-            "id.token.claim": "false",
-            "access.token.claim": "true"
-          }
-        },
-        {
-          "id": "1f6e8de7-dda1-4686-a0de-fce3a7ccd8ea",
-          "name": "Client IP Address",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientAddress",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientAddress",
             "jsonType.label": "String"
           }
         }

@@ -19,6 +19,26 @@ System.ComponentModel.Win32Exception (13): Permission denied
 make sure you enable execution permissions for `wkhtmltopdf`, i.e. `/moh-prime/prime-dotnet-webapi/Resources/wkhtmltopdf/Linux$ chmod +x wkhtmltopdf`.
 If you have already built the binaries, you will need to re-build to include `wkhtmltopdf` with the correct permissions.
 
+### Local Development Secrets
+
+[ASP.NET Core User Secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-5.0&tabs=windows)
+
+After aquiring the secrets.json file from the appropriate source, open a terminal in the the prime-dotnet-webapi folder and run
+`type .\secrets.json | dotnet user-secrets set` on Windows or
+`cat ./secrets.json | dotnet user-secrets set` on macOS / Linux
+to set the secrets for local development.
+On Windows, they are stored at `%APPDATA%\Microsoft\UserSecrets\<user_secrets_id>\secrets.json`. On macOS / Linux, they are stored at `~/.microsoft/usersecrets/<user_secrets_id>/secrets.json`.
+
+Running the application in Visual Studio Code should be OS agnostic. The local Docker container for the API, however, mounts the secrets file when brought up using `docker-compose`. Since they are stored at a different location for macOS / Linux, review the following lines in the main `docker-compose.yml`:
+```yaml
+volumes:
+  - ./prime-dotnet-webapi/:/app
+  - prime-dotnet-webapi-bin:/app/bin
+  - prime-dotnet-webapi-obj:/app/obj
+  - ${APPDATA}/Microsoft/UserSecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81:/root/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81
+  # Use the following instead if developing on Mac/Linux:
+  # - ${HOME}/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81:/root/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81
+```
 
 ## Database (PostgreSQL + .NET Core EF)
 
@@ -58,13 +78,13 @@ Note: you will have to bring down your api if you are running it in debug mode t
 
 To seed the database for local development use Postman's runner
 
-#### Example: Seeding New Enrollees 
- 
-For this example a custom endpoint was not created as only 1500+ enrollees were required, and the status of their enrolment was irrelevant so the `CreateEnrollee` endpoint was used.  For this to work the `CreateEnrollee` endpoint was temporarily updated where the authentication and all the checks were commented out in the controller. 
+#### Example: Seeding New Enrollees
+
+For this example a custom endpoint was not created as only 1500+ enrollees were required, and the status of their enrolment was irrelevant so the `CreateEnrollee` endpoint was used.  For this to work the `CreateEnrollee` endpoint was temporarily updated where the authentication and all the checks were commented out in the controller.
 
 1. Import the latest JSON from Swagger into Postman by either:
-   * Copying it from Swagger at [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html), or 
-   * Using this link [http://localhost:5000/swagger/v1/swagger.json](http://localhost:5000/swagger/v1/swagger.json) 
+   * Copying it from Swagger at [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html), or
+   * Using this link [http://localhost:5000/swagger/v1/swagger.json](http://localhost:5000/swagger/v1/swagger.json)
 1. Create a new Runner in Postman, and pull over the `Enrollees` collection from within the `PRIME Web API` Collection that was created from the import
 1. Deselect everything but `CreateEnrollee` endpoint
 1. View the `CreateEnrollee` endpoint in Postman where the request body will already be prefilled, and make adjustments as needed. For example, `countryCode` and `provinceCode` will not be correct. See the example request body provided.
