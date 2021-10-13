@@ -1,12 +1,12 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using AutoMapper;
 using DelegateDecompiler.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Prime.Engines;
 using Prime.HttpClients;
@@ -263,6 +263,115 @@ namespace Prime.Services
 
             _context.Set<T>().RemoveRange(oldItems);
             _context.Set<T>().AddRange(itemList);
+        }
+
+        public async Task<bool> MatchingSubmissionExistsAsync(DateTime dateOfBirth)
+        {
+            return await _context.Enrollees
+                .AsNoTracking()
+                .AnyAsync(e => e.GPID.StartsWith(PaperGpidPrefix)
+                    && e.DateOfBirth.Date == dateOfBirth.Date
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id));
+        }
+
+        public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
+        {
+            // We want all paper enrollees with a matching DOB
+            // Handle the linkage in the LinkEnrolmentToPaperEnrolmentAsync
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(
+                    e => e.GPID.StartsWith(PaperGpidPrefix)
+                    && e.DateOfBirth.Date == dateOfBirth.Date
+                )
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Links an Enrollee to a Paper Enrollee.
+        /// Requires that the EnrolleeLinkedEnrolment already exist (see SetLinkedGpidAsync)
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="paperEnrolleeId"></param>
+        public async Task<bool> LinkEnrolleeToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId)
+        {
+            var linkedEnrolment = await _context.EnrolleeLinkedEnrolments
+                .SingleOrDefaultAsync(link => link.EnrolleeId == enrolleeId);
+
+            var enrolleeIsPaper = await _context.Enrollees
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == enrolleeId
+                    && e.GPID.StartsWith(PaperGpidPrefix));
+
+            var paperIsPaper = await _context.Enrollees
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == paperEnrolleeId
+                    && e.GPID.StartsWith(PaperGpidPrefix));
+
+            if (enrolleeIsPaper
+                || !paperIsPaper
+                || linkedEnrolment == null
+                || linkedEnrolment.PaperEnrolleeId.HasValue)
+            {
+                // Cannot create link from a Paper Enrollee, to a regular Enrollee, or from an Enrollee that is already linked.
+                return false;
+            }
+
+            linkedEnrolment.PaperEnrolleeId = paperEnrolleeId;
+            linkedEnrolment.EnrolmentLinkDate = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        /// <summary>
+        /// Sets the GPID on the Enrollee's EnrolleeLinkedEnrolment, creating one if necessary.
+        /// Cannot set the Linked GPID on a Paper Enrollee or on an Enrollee that has already been linked to a Paper Enrolment.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="userProvidedGpid"></param>
+        public async Task<bool> SetLinkedGpidAsync(int enrolleeId, string userProvidedGpid)
+        {
+            var linkedEnrolment = await _context.EnrolleeLinkedEnrolments
+                .SingleOrDefaultAsync(link => link.EnrolleeId == enrolleeId);
+
+            var enrolleeIsPaper = await _context.Enrollees
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == enrolleeId
+                    && e.GPID.StartsWith(PaperGpidPrefix));
+
+            if (enrolleeIsPaper || linkedEnrolment?.PaperEnrolleeId != null)
+            {
+                // Cannot set linked GPID on Paper Enrollees or Enrollees that are already linked.
+                return false;
+            }
+
+            if (linkedEnrolment == null)
+            {
+                linkedEnrolment = new EnrolleeLinkedEnrolment
+                {
+                    EnrolleeId = enrolleeId,
+                };
+                _context.EnrolleeLinkedEnrolments.Add(linkedEnrolment);
+            }
+
+            linkedEnrolment.UserProvidedGpid = userProvidedGpid;
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<string> GetLinkedGpidAsync(int enrolleeId)
+        {
+            var linkedGpid = await _context.EnrolleeLinkedEnrolments
+                .AsNoTracking()
+                .Where(link => link.EnrolleeId == enrolleeId)
+                .Select(link => link.UserProvidedGpid)
+                .SingleOrDefaultAsync();
+
+            return linkedGpid;
         }
     }
 }
