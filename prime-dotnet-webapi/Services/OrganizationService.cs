@@ -297,8 +297,8 @@ namespace Prime.Services
             var organization = await _context.Organizations
                 .SingleAsync(o => o.Id == organizationId);
 
-            var careSettingsRequiringOrgAgreements = await GetCareSettingCodesForPendingTransferAsync(organizationId, organization.SigningAuthorityId);
-            if (careSettingsRequiringOrgAgreements.Count() > 0)
+            var pendingCodes = await GetCareSettingCodesForPendingTransferAsync(organizationId, organization.SigningAuthorityId);
+            if (pendingCodes.Any())
             {
                 organization.PendingTransfer = true;
             }
@@ -308,7 +308,9 @@ namespace Prime.Services
 
         public async Task FinalizeTransferAsync(int organizationId)
         {
-            var organization = await _context.Organizations.SingleOrDefaultAsync(o => o.Id == organizationId);
+            var organization = await _context.Organizations
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
+
             organization.PendingTransfer = false;
             await _context.SaveChangesAsync();
         }
@@ -359,7 +361,7 @@ namespace Prime.Services
 
         public AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode)
         {
-            return ((CareSettingType)careSettingCode) switch
+            return (CareSettingType)careSettingCode switch
             {
                 CareSettingType.CommunityPractice => AgreementType.CommunityPracticeOrgAgreement,
                 CareSettingType.CommunityPharmacy => AgreementType.CommunityPharmacyOrgAgreement,
@@ -370,7 +372,7 @@ namespace Prime.Services
 
         public CareSettingType SiteSettingForOrgAgreementType(AgreementType agreementTypeCode)
         {
-            return (agreementTypeCode) switch
+            return agreementTypeCode switch
             {
                 AgreementType.CommunityPharmacyOrgAgreement => CareSettingType.CommunityPharmacy,
                 AgreementType.CommunityPracticeOrgAgreement => CareSettingType.CommunityPractice,
@@ -406,6 +408,7 @@ namespace Prime.Services
             var pendingAgreements = await _context.Agreements
                 .Where(a => a.OrganizationId == organizationId && a.AcceptedDate == null)
                 .ToListAsync();
+
             _context.RemoveRange(pendingAgreements);
             await _context.SaveChangesAsync();
         }
