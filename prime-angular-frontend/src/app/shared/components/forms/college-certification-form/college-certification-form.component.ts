@@ -196,6 +196,9 @@ export class CollegeCertificationFormComponent implements OnInit {
       return;
     }
 
+    // In case previous selecting was BCCNM clear old validators
+    this.formUtilsService.setValidators(this.nurseCategory, []);
+
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
     this.setCollegeCertificationValidators();
