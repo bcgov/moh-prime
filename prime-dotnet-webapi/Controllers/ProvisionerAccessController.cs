@@ -93,7 +93,7 @@ namespace Prime.Controllers
                 return BadRequest("The email(s) provided are not valid.");
             }
 
-            var enrollee = await _enrolleeService.GetEnrolleeNoTrackingAsync(enrolleeId);
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             if (enrollee == null)
             {
                 return NotFound("No enrollee exists for this User Id.");

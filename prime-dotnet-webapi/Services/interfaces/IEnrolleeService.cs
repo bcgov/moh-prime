@@ -19,7 +19,6 @@ namespace Prime.Services
         Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
         Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false);
         Task<Enrollee> GetEnrolleeAsync(Guid userId, bool excludeDecline = false);
-        Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
         Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
         Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId);
         Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);

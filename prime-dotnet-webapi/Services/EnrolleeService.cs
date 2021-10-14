@@ -690,21 +690,6 @@ namespace Prime.Services
                 .Include(e => e.Agreements);
         }
 
-        public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
-        {
-            var entity = await GetBaseEnrolleeQuery()
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(site => site.PhysicalAddress)
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(site => site.SiteVendors)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            return entity;
-        }
-
         public async Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId)
         {
             return await _context.EnrolleeNotes
