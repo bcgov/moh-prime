@@ -37,7 +37,7 @@ COPY . .
 RUN npm set unsafe-perm true
 RUN npm install -g @angular/cli
 # Install dependencies
-RUN npm ci
+RUN yarn ci
 # Add application
 RUN ng build --configuration=production
 
