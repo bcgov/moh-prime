@@ -110,6 +110,7 @@ namespace Prime.Controllers
             {
                 return BadRequest("The enrollee for this User Id is not in an editable state.");
             }
+
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
 
             await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
