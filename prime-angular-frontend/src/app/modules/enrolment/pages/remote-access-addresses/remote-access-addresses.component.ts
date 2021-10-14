@@ -75,9 +75,9 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
     }
   }
 
-  public onBack() {
+  public onBack(route: string) {
     this.removeIncompleteLocations();
-    this.routeTo(this.EnrolmentRoutes.REMOTE_ACCESS);
+    super.onBack(route)
   }
 
   /**

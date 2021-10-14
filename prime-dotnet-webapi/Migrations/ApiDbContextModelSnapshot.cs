@@ -11788,6 +11788,41 @@ namespace Prime.Migrations
                     b.ToTable("Enrollee");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeAbsence", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("EndTimestamp")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartTimestamp")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("EnrolleeAbsence");
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolleeAddress", b =>
                 {
                     b.Property<int>("Id")
@@ -11935,6 +11970,46 @@ namespace Prime.Migrations
                     b.HasIndex("HealthAuthorityCode");
 
                     b.ToTable("EnrolleeHealthAuthority");
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("EnrolmentLinkDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int?>("PaperEnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("UserProvidedGpid")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.HasIndex("PaperEnrolleeId");
+
+                    b.ToTable("EnrolleeLinkedEnrolment");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
@@ -13989,6 +14064,60 @@ namespace Prime.Migrations
                         .IsUnique();
 
                     b.ToTable("PartyAddress");
+                });
+
+            modelBuilder.Entity("Prime.Models.PartyCertification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("CollegeCode")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("LicenseCode")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LicenseNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PracticeCode")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PractitionerId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("RenewalDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollegeCode");
+
+                    b.HasIndex("LicenseCode");
+
+                    b.HasIndex("PartyId");
+
+                    b.HasIndex("PracticeCode");
+
+                    b.ToTable("PartyCertification");
                 });
 
             modelBuilder.Entity("Prime.Models.PartyEnrolment", b =>
@@ -17817,6 +17946,21 @@ namespace Prime.Migrations
                         {
                             Code = 18,
                             Name = "Manually entered paper enrolment"
+                        },
+                        new
+                        {
+                            Code = 19,
+                            Name = "PRIME enrolment does not match paper enrollee record"
+                        },
+                        new
+                        {
+                            Code = 20,
+                            Name = "Possible match with paper enrolment"
+                        },
+                        new
+                        {
+                            Code = 21,
+                            Name = "Unable to link enrollee to paper enrolment"
                         });
                 });
 
@@ -18482,6 +18626,15 @@ namespace Prime.Migrations
                         .HasForeignKey("AdjudicatorId");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeAbsence", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany("EnrolleeAbsences")
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolleeAddress", b =>
                 {
                     b.HasOne("Prime.Models.Address", "Address")
@@ -18540,6 +18693,19 @@ namespace Prime.Migrations
                         .HasForeignKey("HealthAuthorityCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolment", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany()
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Enrollee", "PaperEnrollee")
+                        .WithMany()
+                        .HasForeignKey("PaperEnrolleeId");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
@@ -18809,6 +18975,31 @@ namespace Prime.Migrations
                         .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.PartyCertification", b =>
+                {
+                    b.HasOne("Prime.Models.College", "College")
+                        .WithMany()
+                        .HasForeignKey("CollegeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.License", "License")
+                        .WithMany()
+                        .HasForeignKey("LicenseCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Practice", "Practice")
+                        .WithMany()
+                        .HasForeignKey("PracticeCode");
                 });
 
             modelBuilder.Entity("Prime.Models.PartyEnrolment", b =>
