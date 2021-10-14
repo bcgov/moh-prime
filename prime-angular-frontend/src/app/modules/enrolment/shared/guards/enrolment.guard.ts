@@ -9,7 +9,6 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
