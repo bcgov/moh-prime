@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Prime</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <UserSecretsId>2144bc8e-373b-4888-a0ca-b0ff7798bd81</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="3.0.0" />
@@ -16,6 +17,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.4" />
@@ -45,25 +49,28 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.3" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v4.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v5.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v4.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v5.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-practice-org-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-pharmacy-org-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\pharmacy-obo-toa-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\device-provider-org-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharm-terms-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharm-terms-v2.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharm-terms-v3.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v2.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v3.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v4.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v5.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v2.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v3.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v4.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v5.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-practice-org-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharmacy-org-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\pharmacy-obo-toa-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\device-provider-org-v1.html" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\wkhtmltopdf\Linux\wkhtmltopdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

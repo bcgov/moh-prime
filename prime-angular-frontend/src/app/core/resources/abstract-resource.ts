@@ -12,7 +12,7 @@ export type NoContent = Observable<void>;
 export const NoContentResponse = pipe(map(() => void 0));
 
 export abstract class AbstractResource {
-  constructor(
+  protected constructor(
     protected logger: ConsoleLoggerService
   ) { }
 

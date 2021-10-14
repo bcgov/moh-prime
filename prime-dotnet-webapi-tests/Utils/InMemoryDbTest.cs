@@ -9,8 +9,7 @@ using System.Linq;
 using System.Reflection;
 
 using Prime;
-using Prime.Configuration;
-using Prime.Configuration.Agreements;
+using Prime.Configuration.Database;
 using Prime.Services;
 using Prime.ViewModels.Profiles;
 

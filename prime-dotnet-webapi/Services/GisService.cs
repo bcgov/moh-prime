@@ -11,7 +11,6 @@ using Prime.HttpClients;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.ViewModels.Parties;
-using static Prime.PrimeEnvironment.MohKeycloak;
 
 namespace Prime.Services
 {
@@ -125,7 +124,7 @@ namespace Prime.Services
 
             // Also update MOH Keycloak now that the application has been completed.
             await UpdateMohKeycloakUserInfo(gisEnrolment.Party);
-            await _mohKeycloakClient.AssignClientRole(gisEnrolment.Party.UserId, GisClientId, GisUserRole);
+            await _mohKeycloakClient.AssignClientRole(gisEnrolment.Party.UserId, PrimeConfiguration.Current.MohKeycloak.GisClientId, PrimeConfiguration.Current.MohKeycloak.GisUserRole);
         }
 
         /// <summary>
@@ -141,7 +140,7 @@ namespace Prime.Services
             }
 
             user.Email = party.Email;
-            user.SetPhoneNumber(party.Phone);
+            user.SetPhone(party.Phone);
 
             await _mohKeycloakClient.UpdateUser(party.UserId, user);
         }

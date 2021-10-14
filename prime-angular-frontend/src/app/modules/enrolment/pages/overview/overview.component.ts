@@ -23,6 +23,7 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.clas
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
 @Component({
   selector: 'app-overview',
@@ -39,6 +40,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public withinDaysOfRenewal: boolean;
+  public absence: EnrolleeAbsence;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -67,31 +69,32 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       });
   }
 
-  public onSubmit() {
-    if (this.enrolmentFormStateService.isValid) {
-      const enrolment = this.enrolmentFormStateService.json;
-      const data: DialogOptions = {
-        title: 'Submit Enrolment',
-        message: 'When your enrolment is submitted for adjudication, it can no longer be updated. Are you ready to submit your enrolment?',
-        actionText: 'Submit Enrolment'
-      };
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? this.enrolmentResource.submitApplication(enrolment)
-              : EMPTY
-          )
-        )
-        .subscribe(() => {
-          this.toastService.openSuccessToast('Enrolment has been submitted');
-          this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
-        });
-    } else {
+  public onSubmit(): void {
+    if (!this.enrolmentFormStateService.isValid) {
       this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
+      return;
     }
+
+    const enrolment = this.enrolmentFormStateService.json;
+    const data: DialogOptions = {
+      title: 'Submit Enrolment',
+      message: 'When your enrolment is submitted for adjudication, it can no longer be updated. Are you ready to submit your enrolment?',
+      actionText: 'Submit Enrolment'
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          (result)
+            ? this.enrolmentResource.submitApplication(enrolment)
+            : EMPTY
+        )
+      )
+      .subscribe(() => {
+        this.toastService.openSuccessToast('Enrolment has been submitted');
+        this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
+      });
   }
 
   public canRequestRemoteAccess(): boolean {
@@ -102,7 +105,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       .canRequestRemoteAccess(certifications, careSettings);
   }
 
-  public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {
+  public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}): void {
     this.allowRoutingWhenDirty = true;
     super.routeTo(routePath, navigationExtras);
   }
@@ -120,11 +123,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     return this.enrolment?.enrollee?.gpid;
   }
 
-  public onCopy() {
+  public onCopy(): void {
     this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.authService.getUser$()
       .pipe(
         map(({ firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
@@ -165,8 +168,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
-        })
-      ).subscribe();
+        }),
+        exhaustMap(() => this.enrolmentResource.getCurrentEnrolleeAbsence(this.enrolment.id))
+      ).subscribe((absence: EnrolleeAbsence) => this.absence = absence);
   }
 
   /**
