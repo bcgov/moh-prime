@@ -1,0 +1,16 @@
+[13:17:10 INF] Starting web host
+[13:17:11 INF] ###App Version:1.0.0.0###
+[13:17:11 INF] ###Pip Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[13:17:12 INF] Now listening on: https://localhost:5051
+[13:17:12 INF] Now listening on: http://localhost:5050
+[13:17:12 INF] Application started. Press Ctrl+C to shut down.
+[13:17:12 INF] Hosting environment: Development
+[13:17:12 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[13:18:37 INF] Starting web host
+[13:18:39 INF] ###App Version:1.0.0.0###
+[13:18:39 INF] ###Pip Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[13:18:41 INF] Now listening on: https://localhost:5051
+[13:18:41 INF] Now listening on: http://localhost:5050
+[13:18:41 INF] Application started. Press Ctrl+C to shut down.
+[13:18:41 INF] Hosting environment: Development
+[13:18:41 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
