@@ -1,6 +1,3 @@
-using Microsoft.Extensions.Hosting;
-using System;
-
 using Pip.Configuration.Internal;
 
 namespace Pip

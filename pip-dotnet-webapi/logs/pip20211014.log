@@ -90,3 +90,11 @@ System.Xml.XmlException: Root element is missing.
 [14:28:21 INF] Application started. Press Ctrl+C to shut down.
 [14:28:21 INF] Hosting environment: Development
 [14:28:21 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[14:29:22 INF] Starting web host
+[14:29:23 INF] ###App Version:1.0.0.0###
+[14:29:23 INF] ###Pip Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[14:29:24 INF] Now listening on: https://localhost:5051
+[14:29:24 INF] Now listening on: http://localhost:5050
+[14:29:24 INF] Application started. Press Ctrl+C to shut down.
+[14:29:24 INF] Hosting environment: Development
+[14:29:24 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
