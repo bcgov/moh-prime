@@ -12,6 +12,7 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
+import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
@@ -63,7 +64,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.organizationId = +this.route.snapshot.params.oid;
   }
 
-  public onPreferredNameChange({ checked }: { checked: boolean }): void {
+  public onPreferredNameChange({ checked }: ToggleContentChange): void {
     if (!this.hasPreferredName) {
       this.formState.form.get('preferredMiddleName').reset();
     }
@@ -71,11 +72,11 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.togglePreferredNameValidators(checked, this.formState.preferredFirstName, this.formState.preferredLastName);
   }
 
-  public onPhysicalAddressChange({ checked }: { checked: boolean }): void {
+  public onPhysicalAddressChange({ checked }: ToggleContentChange): void {
     this.toggleAddressLineValidators(checked, this.formState.physicalAddress);
   }
 
-  public onMailingAddressChange({ checked }: { checked: boolean }): void {
+  public onMailingAddressChange({ checked }: ToggleContentChange): void {
     this.toggleAddressLineValidators(checked, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
@@ -155,7 +156,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
         ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
         : organization
           ? ['../', organization.id, SiteRoutes.ORGANIZATION_NAME]
-          : ['../', 0, SiteRoutes.ORGANIZATION_NAME];
+          : ['../', 0, SiteRoutes.ORGANIZATION_CLAIM];
     }
     this.routeUtils.routeRelativeTo(routePath);
   }
