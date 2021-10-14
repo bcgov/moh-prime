@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
@@ -61,6 +61,43 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be created.');
           this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public checkForMatchingPaperSubmission(dateOfBirth: string): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ dateOfBirth });
+    return this.apiResource.head<boolean>('enrollees/paper-submissions', params)
+      .pipe(
+        map(() => true),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(false);
+          }
+          this.logger.error('[Enrolment] EnrolmentResource::checkForMatchingPaperSubmission error has occurred:  ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createOrUpdateLinkedGpid(enrolleeId: number, paperEnrolleeGpid: string): Observable<NoContent> {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/linked-gpid`, { data: paperEnrolleeGpid})
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::createOrUpdateLinkedGpid error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getLinkedGpid(enrolleeId: number): Observable<string | null> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/linked-gpid`)
+      .pipe(
+        map((response: ApiHttpResponse<string | null>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getLinkedGpid error has occurred: ', error);
           throw error;
         })
       );

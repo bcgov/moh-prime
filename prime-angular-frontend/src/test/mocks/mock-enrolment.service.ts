@@ -13,6 +13,7 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 export class MockEnrolmentService implements IEnrolmentService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _enrolment: BehaviorSubject<Enrolment>;
+  private _isPotentialPaperEnrollee: boolean;
 
   constructor() {
     // TODO default enrolment should be refactored into methods to provide enrolments with different statuses
@@ -151,5 +152,9 @@ export class MockEnrolmentService implements IEnrolmentService {
 
   public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
     return true;
+  }
+
+  public get isPotentialPaperEnrollee(): boolean {
+    return this._isPotentialPaperEnrollee;
   }
 }
