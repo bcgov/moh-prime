@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, of, pipe, UnaryFunction } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -9,6 +9,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -23,6 +24,7 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
   providedIn: 'root'
 })
 export class EnrolmentGuard extends BaseGuard {
+
   constructor(
     protected authService: AuthService,
     protected logger: ConsoleLoggerService,
@@ -51,6 +53,11 @@ export class EnrolmentGuard extends BaseGuard {
           this.enrolmentService.enrolment$.next(enrolment);
         }),
         exhaustMap((enrolment: Enrolment) =>
+          this.authService.getUser$()
+            .pipe(map(({ dateOfBirth }: BcscUser) => [dateOfBirth, enrolment]))
+        ),
+        this.onInitialEnrolmentCheckForMatchingPaperEnrollee(),
+        exhaustMap((enrolment: Enrolment) =>
           this.authService.identityProvider$()
             .pipe(map((identityProvider: IdentityProviderEnum) => [routePath, enrolment, identityProvider]))
         ),
@@ -71,13 +78,20 @@ export class EnrolmentGuard extends BaseGuard {
       return true;
     }
 
+    if (
+      this.enrolmentService.isMatchingPaperEnrollee &&
+      routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)
+    ) {
+      return this.navigate(routePath, EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION);
+    }
+
     if (!enrolment) {
       // Route based on identity provider to determine sequence of routing
       // required to create a new enrolment
       return this.identityProviderRouting(routePath, enrolment, identityProvider);
     }
 
-    routePath = this.checkBlacklistedRoutes(routePath, identityProvider);
+    routePath = this.checkDeniedRoutes(routePath, identityProvider);
 
     // Otherwise, routes are dictated based on enrolment status
     return this.enrolmentStatusRouting(routePath, enrolment, identityProvider);
@@ -160,13 +174,13 @@ export class EnrolmentGuard extends BaseGuard {
         : EnrolmentRoutes.BCSC_DEMOGRAPHIC
       : EnrolmentRoutes.OVERVIEW;
 
-    const blacklistedRoutes = [
+    const deniedRoutes = [
       ...EnrolmentRoutes.enrolmentSubmissionRoutes()
     ];
 
     if (hasNotCompletedProfile) {
       // No access to overview if you've not completed the wizard
-      blacklistedRoutes.push(EnrolmentRoutes.OVERVIEW);
+      deniedRoutes.push(EnrolmentRoutes.OVERVIEW);
     }
 
     let certifications = enrolment.certifications;
@@ -181,11 +195,11 @@ export class EnrolmentGuard extends BaseGuard {
 
     if (!this.enrolmentService.canRequestRemoteAccess(certifications, careSettings)) {
       // No access to remote access if OBO or pharmacist
-      blacklistedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
+      deniedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }
 
-    return (blacklistedRoutes.includes(route))
-      // Prevent access to post enrolment/blacklisted routes
+    return (deniedRoutes.includes(route))
+      // Prevent access to post enrolment/denied routes
       ? this.navigate(routePath, redirectionRoute)
       // Otherwise, allow the route to resolve
       : true;
@@ -236,10 +250,10 @@ export class EnrolmentGuard extends BaseGuard {
 
   /**
    * @description
-   * General blacklisted routes based on enrolment existence and provider.
+   * General denied routes based on enrolment existence and provider.
    */
-  private checkBlacklistedRoutes(routePath: string, identityProvider: IdentityProviderEnum): string {
-    // Blacklisted routes if an enrolment exists regardless of provider
+  private checkDeniedRoutes(routePath: string, identityProvider: IdentityProviderEnum): string {
+    // Denied routes if an enrolment exists regardless of provider
     if (
       [
         EnrolmentRoutes.ACCESS_CODE,
@@ -252,7 +266,7 @@ export class EnrolmentGuard extends BaseGuard {
       );
     }
 
-    // Blacklisted routes based on provider
+    // Denied routes based on provider
     if (routePath.includes(EnrolmentRoutes.BCSC_DEMOGRAPHIC) && identityProvider === IdentityProviderEnum.BCEID) {
       return routePath.replace(
         EnrolmentRoutes.BCSC_DEMOGRAPHIC,
@@ -265,6 +279,40 @@ export class EnrolmentGuard extends BaseGuard {
       );
     }
 
+    // Denied routes based on matching paper enrolment
+    if (
+      // TODO would be better to add this route based on need instead of removing it since:
+      //  1) 99.9% of enrollees aren't paper enrollees, and
+      //  2) <1% of the enrolment lifecycle enrolments is the initial enrolment
+      !this.enrolmentService.isInitialEnrolment ||
+      (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION) && !this.enrolmentService.isMatchingPaperEnrollee)
+    ) {
+      return routePath.replace(
+        EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION,
+        EnrolmentRoutes.OVERVIEW
+      );
+    }
+
     return routePath;
+  }
+
+  /**
+   * @description
+   * Check for a matching paper enrollee on a new enrolment.
+   */
+  private onInitialEnrolmentCheckForMatchingPaperEnrollee(): UnaryFunction<Observable<[string, Enrolment]>, Observable<Enrolment>> {
+    return pipe(
+      exhaustMap(([dateOfBirth, enrolment]: [string, Enrolment]) =>
+        (this.enrolmentService.isInitialEnrolment && dateOfBirth && this.enrolmentService.isMatchingPaperEnrollee === null)
+          ? this.enrolmentResource.checkForMatchingPaperSubmission(dateOfBirth)
+            .pipe(
+              map((isMatchingPaperEnrollee: boolean) => {
+                this.enrolmentService.isMatchingPaperEnrollee = isMatchingPaperEnrollee;
+                return enrolment;
+              })
+            )
+          : of(enrolment)
+      )
+    );
   }
 }

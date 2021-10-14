@@ -99,6 +99,43 @@ export class EnrolmentResource {
       );
   }
 
+  public checkForMatchingPaperSubmission(dateOfBirth: string): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ dateOfBirth });
+    return this.apiResource.head<boolean>('enrollees/paper-submissions', params)
+      .pipe(
+        map(() => true),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(false);
+          }
+          this.logger.error('[Enrolment] EnrolmentResource::checkForMatchingPaperSubmission error has occurred:  ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createOrUpdateLinkedGpid(enrolleeId: number, paperEnrolleeGpid: string): Observable<NoContent> {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/linked-gpid`, { data: paperEnrolleeGpid})
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::createOrUpdateLinkedGpid error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getLinkedGpid(enrolleeId: number): Observable<string | null> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/linked-gpid`)
+      .pipe(
+        map((response: ApiHttpResponse<string | null>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getLinkedGpid error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): NoContent {
     const { id } = enrolment;
     const params = this.apiResourceUtilsService.makeHttpParams({ beenThroughTheWizard });
