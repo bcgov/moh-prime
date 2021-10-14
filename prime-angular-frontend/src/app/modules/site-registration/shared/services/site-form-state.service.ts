@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, AbstractControl, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, AbstractControl, Validators } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
