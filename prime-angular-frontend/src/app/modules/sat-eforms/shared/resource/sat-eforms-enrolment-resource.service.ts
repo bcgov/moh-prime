@@ -9,11 +9,11 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 // TODO move to lib
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
 import { DemographicForm } from '@sat/pages/demographic-page/demographic-form.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,90 +26,81 @@ export class SatEformsEnrolmentResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public getEnrolleeByUserId(userId: string): Observable<HttpEnrollee> {
-    return this.apiResource.get<HttpEnrollee>(`parties/enrollee/${userId}`)
+  public createSatEnrollee(enrollee: SatEnrollee): Observable<SatEnrollee> {
+    return this.apiResource.post<SatEnrollee>('parties/sat', enrollee)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+        map((response: ApiHttpResponse<SatEnrollee>) => response.result),
+        tap((enrollee: SatEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         catchError((error: any) => {
-          return of(null);
-
-          this.logger.error('[SatEforms] SatEformsEnrolmentResource::getEnrolleeByUserId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee> {
-    return this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
-      .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
-        catchError((error: any) => {
-          return of(null);
-
-          this.logger.error('[SatEforms] SatEformsEnrolmentResource::getEnrolleeById error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public createEnrollee(payload: DemographicForm): Observable<HttpEnrollee> {
-    return this.apiResource.post<HttpEnrollee>('enrollees/sat-eforms', payload)
-      .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
-        catchError((error: any) => {
-          return of(null);
-
           this.toastService.openErrorToast('Enrollee could not be created.');
-          this.logger.error('[SatEforms] SatEformsEnrolmentResource::createEnrollee error has occurred: ', error);
+          this.logger.error('[SatEforms] SatEformsEnrolmentResource::createSatEnrollee error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  public updateDemographic(enrolleeId: number, demographic: DemographicForm): NoContent {
-    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/sat-eforms/demographics`, demographic)
+  public getSatEnrolleeByUserId(userId: string): Observable<SatEnrollee> {
+    return this.apiResource.get<SatEnrollee>(`parties/sat/${userId}`)
       .pipe(
-        NoContentResponse,
+        map((response: ApiHttpResponse<SatEnrollee>) => response.result),
+        tap((enrollee: SatEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         catchError((error: any) => {
-          return of(null);
+          // Allow for creation of a new enrolment
+          if (error.status === 404) {
+            return of(null);
+          }
 
-          this.toastService.openErrorToast('SAT e-Forms enrolment demographic could not be updated');
-          this.logger.error('[SatEforms] SatEformsEnrolmentResource::updateDemographic error has occurred: ', error);
+          this.toastService.openErrorToast('Enrollee could not be retrieved.');
+          this.logger.error('[SatEforms] SatEformsEnrolmentResource::getSatEnrolleeByUserId error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  public updateCertifications(enrolleeId: number, certifications: CollegeCertification[]): NoContent {
-    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/sat-eforms/certifications`, certifications)
+  public getSatEnrolleeById(enrolleeId: number): Observable<SatEnrollee> {
+    return this.apiResource.get<SatEnrollee>(`parties/sat/${enrolleeId}`)
       .pipe(
-        NoContentResponse,
+        map((response: ApiHttpResponse<SatEnrollee>) => response.result),
+        tap((enrollee: SatEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         catchError((error: any) => {
-          return of(null);
-
-          this.toastService.openErrorToast('SAT e-Forms enrolment certifications could not be updated');
-          this.logger.error('[SatEforms] SatEformsEnrolmentResource::updateCertifications error has occurred: ', error);
+          this.toastService.openErrorToast('Enrollee could not be retrieved.');
+          this.logger.error('[SatEforms] SatEformsEnrolmentResource::getSatEnrolleeById error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  /**
-   * @description
-   * Finalize the paper enrolment submission.
-   */
-  public finalize(enrolleeId: number): NoContent {
-    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/sat-eforms/finalize`)
+  public updateSatEnrollee(enrolleeId: number, enrollee: SatEnrollee): NoContent {
+    return this.apiResource.put<NoContent>(`parties/sat/${enrolleeId}`, enrollee)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
-          return of(null);
+          this.toastService.openErrorToast('Enrollee could not be updated');
+          this.logger.error('[SatEforms] SatEformsEnrolmentResource::updateSatEnrollee error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
-          this.toastService.openErrorToast('SAT e-Forms enrolment could not be finalized');
-          this.logger.error('[SatEforms] SatEformsEnrolmentResource::finalize error has occurred: ', error);
+  public updateSatEnrolleeCertifications(enrolleeId: number, certifications: CollegeCertification[]): NoContent {
+    return this.apiResource.put<NoContent>(`parties/sat/${enrolleeId}/certifications`, certifications)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee certifications could not be updated');
+          this.logger.error('[SatEforms] SatEformsEnrolmentResource::updateSatEnrolleeCertifications error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public submitSatEnrollee(enrolleeId: number): NoContent {
+    return this.apiResource.post<NoContent>(`parties/sat/${enrolleeId}/submissions`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment could not be submitted');
+          this.logger.error('[SatEforms] SatEformsEnrolmentResource::submitSatEnrollee error has occurred: ', error);
           throw error;
         })
       );

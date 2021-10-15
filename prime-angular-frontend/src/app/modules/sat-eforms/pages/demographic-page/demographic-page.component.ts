@@ -2,23 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { Location } from '@angular/common';
 
-import { map } from 'rxjs/operators';
+import { iif, Observable } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 // TODO move to a bcsc module
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SatEformsRoutes } from '@sat/sat-eforms.routes';
-import { SatEformsEnrollee } from '@sat/shared/models/sat-enrollee.model';
+import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
 import { SatEformsEnrolmentResource } from '@sat/shared/resource/sat-eforms-enrolment-resource.service';
-import { DemographicFormState } from '@sat/pages/demographic-page/demographic-form-state.class';
+import { SatEnrolleeService } from '@sat/shared/services/sat-enrollee.service';
+import { DemographicFormState } from './demographic-form-state.class';
 
 // TODO create inheritable demographic class + mixins for reuse
 @Component({
@@ -29,7 +30,7 @@ import { DemographicFormState } from '@sat/pages/demographic-page/demographic-fo
 export class DemographicPageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;
   public formState: DemographicFormState;
-  public enrollee: SatEformsEnrollee;
+  public enrollee: SatEnrollee;
   public routeUtils: RouteUtils;
   /**
    * @description
@@ -45,7 +46,9 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
+    private location: Location,
     private enrolmentResource: SatEformsEnrolmentResource,
+    private enrolleeService: SatEnrolleeService,
     private authService: AuthService,
     private route: ActivatedRoute,
     router: Router
@@ -55,10 +58,6 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SatEformsRoutes.MODULE_PATH);
   }
-
-  // public onSubmit() {
-  //   this.routeUtils.routeRelativeTo(SatEformsRoutes.REGULATORY);
-  // }
 
   public onPreferredNameChange({ checked }: { checked: boolean }): void {
     if (!this.hasPreferredName) {
@@ -74,26 +73,10 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
 
   public ngOnInit(): void {
     this.createFormInstance();
-
-    // Ensure that the identity provider user information is loaded
-    // prior to initialization of the form override form values, and
-    // control the validation management
-    this.authService.getUser$()
+    this.getUser$()
       .pipe(
         map((bcscUser: BcscUser) => this.bcscUser = bcscUser),
-        // Patch the form using the stored enrolment information
-        map((bcscUser: BcscUser) => {
-          this.patchForm();
-          return bcscUser;
-        }),
-        // BCSC information should always use identity provider profile
-        // information as the source of truth, and patch the form to
-        // have it save any changes
-        map((bcscUser: BcscUser) => {
-          const { firstName, lastName, givenNames } = bcscUser;
-          const verifiedAddress = bcscUser.verifiedAddress ?? new Address();
-          this.formState.form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
-        })
+        map(_ => this.patchForm())
       )
       .subscribe(() => this.initForm());
   }
@@ -109,43 +92,8 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
       return;
     }
 
-    // TODO provide through service initialized through guard
-    this.enrolmentResource.getEnrolleeById(enrolleeId)
-      .subscribe((enrollee: HttpEnrollee) => {
-        if (enrollee) {
-          this.enrollee = enrollee;
-
-          // TODO patch the entire enrollee don't destructure
-          const {
-            firstName,
-            givenNames,
-            lastName,
-            preferredFirstName,
-            preferredMiddleName,
-            preferredLastName,
-            dateOfBirth,
-            verifiedAddress,
-            physicalAddress,
-            email,
-            phone
-          } = enrollee;
-
-          // Attempt to patch the form if not already patched
-          this.formState.patchValue({
-            firstName,
-            givenNames,
-            lastName,
-            preferredFirstName,
-            preferredMiddleName,
-            preferredLastName,
-            dateOfBirth,
-            verifiedAddress,
-            physicalAddress,
-            email,
-            phone
-          });
-        }
-      });
+    this.enrollee = this.enrolleeService.enrollee;
+    this.formState.patchValue(this.enrollee);
   }
 
   protected initForm() {
@@ -162,13 +110,38 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     }
   }
 
-  protected performSubmission(): NoContent {
+  protected performSubmission(): Observable<number> {
+    const demographic = this.formState.json;
     const enrolleeId = +this.route.snapshot.params.eid;
-    return this.enrolmentResource.updateDemographic(enrolleeId, this.formState.json);
+
+    return this.getUser$()
+      .pipe(
+        map((user: BcscUser) => {
+          // Ensure BCSC user information is never overwritten
+          const { firstName, lastName, givenNames, verifiedAddress, ...remainder } = user;
+          return { ...remainder, ...demographic, firstName, lastName, givenNames, verifiedAddress };
+        }),
+        exhaustMap((enrollee: SatEnrollee) =>
+          (!enrolleeId)
+            ? this.enrolmentResource.createSatEnrollee(enrollee)
+              .pipe(
+                map((enrollee: SatEnrollee) => {
+                  // Replace the URL with redirection, and prevent initial
+                  // ID of zero being pushed onto browser history
+                  this.location.replaceState([SatEformsRoutes.MODULE_PATH, enrollee.id, SatEformsRoutes.DEMOGRAPHIC].join('/'));
+                  return enrollee.id;
+                })
+              )
+            : this.enrolmentResource.updateSatEnrollee(enrolleeId, enrollee)
+              .pipe(map(() => enrolleeId))
+        )
+      );
   }
 
-  protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo(SatEformsRoutes.REGULATORY);
+  protected afterSubmitIsSuccessful(enrolleeId: number): void {
+    // Must go up a route-level and down with newly minted or existing
+    // enrollee ID to override the replaced route state during submission
+    this.routeUtils.routeRelativeTo(['../', enrolleeId, SatEformsRoutes.REGULATORY]);
   }
 
   private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {
@@ -197,5 +170,15 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
 
   private setAddressValidator(addressLine: FormGroup): void {
     this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
+  }
+
+  /**
+   * @description
+   * Get an enrollee from a BCSC user with appropriate default
+   * for properties that are not currently provided.
+   */
+  private getUser$(): Observable<BcscUser> {
+    return this.authService.getUser$()
+      .pipe(map((user: BcscUser) => ({ ...user, email: null })));
   }
 }

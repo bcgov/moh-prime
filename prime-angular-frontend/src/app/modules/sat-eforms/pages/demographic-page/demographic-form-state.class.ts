@@ -62,18 +62,10 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
   }
 
   public buildForm(): void {
-    // Prevent BCSC information from being changed
     this.formInstance = this.fb.group({
-      firstName: [{ value: null, disabled: true }, [Validators.required]],
-      lastName: [{ value: null, disabled: true }, [Validators.required]],
-      givenNames: [{ value: null, disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
-      verifiedAddress: this.formUtilsService.buildAddressForm({
-        areRequired: ['countryCode', 'provinceCode', 'city', 'street', 'postal']
-      }),
       physicalAddress: this.formUtilsService.buildAddressForm(),
       email: [null, [
         Validators.required,
@@ -92,8 +84,8 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
    */
   private jsonToForm(formGroup: FormGroup, data: DemographicForm): void {
     if (data) {
-      const { verifiedAddress, physicalAddress, ...remainder } = data;
-      const addresses = { verifiedAddress, physicalAddress };
+      const { physicalAddress, ...remainder } = data;
+      const addresses = { physicalAddress };
 
       formGroup.patchValue(remainder);
 
@@ -113,12 +105,6 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
    * Sanitize form value into JSON.
    */
   private formToJson(demographic: DemographicForm): DemographicForm {
-    // Minimal check that authorized user is invalid based on
-    // a field that is always required
-    if (!demographic.firstName) {
-      return null;
-    }
-
     addressTypes
       .forEach((addressType: AddressType) => {
         const address = demographic[addressType];

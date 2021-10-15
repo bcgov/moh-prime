@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -22,31 +23,36 @@ namespace Prime.Controllers
     [ApiController]
     public class SatEnrolmentController : PrimeControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IPartyService _partyService;
 
-        public SatEnrolmentController(IPartyService partyService)
+        public SatEnrolmentController(
+            IMapper mapper,
+            IPartyService partyService)
         {
+            _mapper = mapper;
             _partyService = partyService;
         }
 
         // POST: api/parties/sat
         /// <summary>
-        /// Creates a new SAT Enrolment
+        /// Creates a new SAT Enrollee
         /// </summary>
         [HttpPost(Name = nameof(CreateSatEnrollee))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status201Created)]
-        public async Task<ActionResult> CreateSatEnrollee(SatEnrolleeDemographicChangeModel payload)
+        [ProducesResponseType(typeof(ApiResultResponse<SatViewModel>), StatusCodes.Status201Created)]
+        public async Task<ActionResult> CreateSatEnrollee(SatEnrolleeChangeModel payload)
         {
             if (!payload.Validate(User))
             {
                 return BadRequest("One or more Properties did not match the information on the BCSC.");
             }
 
-            int enrolleeId = await _partyService.CreateOrUpdatePartyAsync(payload, User);
-            Party satParty = await _partyService.GetPartyAsync(enrolleeId, PartyType.SatEnrollee);
+            var enrolleeId = await _partyService.CreateOrUpdatePartyAsync(payload, User);
+            var satParty = await _partyService.GetPartyAsync(enrolleeId, PartyType.SatEnrollee);
+
             return CreatedAtAction(
                 nameof(GetSatEnrolleeById),
                 new { satId = satParty.Id },
@@ -54,43 +60,17 @@ namespace Prime.Controllers
             );
         }
 
-        // GET: api/parties/sat/5
-        /// <summary>
-        /// Gets a specific SAT Enrolment
-        /// </summary>
-        /// <param name="satId"></param>
-        [HttpGet("{satId}", Name = nameof(GetSatEnrolleeById))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetSatEnrolleeById(int satId)
-        {
-            var satEnrollee = await _partyService.GetPartyAsync(satId, PartyType.SatEnrollee);
-            if (satEnrollee == null)
-            {
-                return NotFound($"SAT Enrollee not found with id {satId}");
-            }
-            if (!satEnrollee.PermissionsRecord().AccessableBy(User))
-            {
-                return Forbid();
-            }
-
-            return Ok(satEnrollee);
-        }
-
         // GET: api/parties/sat/5fdd17a6-1797-47a4-97b7-5b27949dd614
         /// <summary>
-        /// Gets a specific SAT Enrolment by userId
+        /// Gets a specific SAT Enrollee by userId
         /// </summary>
-        /// /// <param name="userId"></param>
+        /// <param name="userId"></param>
         [HttpGet("{userId:guid}", Name = nameof(GetSatEnrolleeByUserId))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<SatViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSatEnrolleeByUserId(Guid userId)
         {
             var satEnrollee = await _partyService.GetPartyForUserIdAsync(userId, PartyType.SatEnrollee);
@@ -106,17 +86,43 @@ namespace Prime.Controllers
             return Ok(satEnrollee);
         }
 
-        // PUT: api/parties/sat/5/demographics
+        // GET: api/parties/sat/5
         /// <summary>
-        /// Updates a SAT Enrollee's demographic information.
+        /// Gets a specific SAT Enrolment
         /// </summary>
-        [HttpPut("{satId}/demographics", Name = nameof(UpdateSatEnrolleeDemographics))]
+        /// <param name="satId"></param>
+        [HttpGet("{satId}", Name = nameof(GetSatEnrolleeById))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<SatViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSatEnrolleeById(int satId)
+        {
+            var satEnrollee = await _partyService.GetPartyAsync(satId, PartyType.SatEnrollee);
+            if (satEnrollee == null)
+            {
+                return NotFound($"SAT Enrollee not found with id {satId}");
+            }
+            if (!satEnrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(satEnrollee);
+        }
+
+        // PUT: api/parties/sat/5
+        /// <summary>
+        /// Updates a SAT Enrollee's information.
+        /// </summary>
+        [HttpPut("{satId}", Name = nameof(UpdateSatEnrollee))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateSatEnrolleeDemographics(int satId, SatEnrolleeDemographicChangeModel payload)
+        public async Task<ActionResult> UpdateSatEnrollee(int satId, SatEnrolleeChangeModel payload)
         {
             var satEnrollee = await _partyService.GetPartyAsync(satId, PartyType.SatEnrollee);
             if (satEnrollee == null)

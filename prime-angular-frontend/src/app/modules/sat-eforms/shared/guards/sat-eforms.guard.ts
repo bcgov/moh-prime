@@ -1,29 +1,31 @@
 import { Inject, Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Router } from '@angular/router';
 
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+
 import { AuthService } from '@auth/shared/services/auth.service';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { SatEformsRoutes } from '@sat/sat-eforms.routes';
+import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
 import { SatEformsEnrolmentResource } from '@sat/shared/resource/sat-eforms-enrolment-resource.service';
-import { exhaustMap, map } from 'rxjs/operators';
-import { BcscUser } from '@auth/shared/models/bcsc-user.model';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { SatEnrolleeService } from '@sat/shared/services/sat-enrollee.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SatEformsGuard extends BaseGuard {
-
   public constructor(
     protected authService: AuthService,
     protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
+    private enrolleeService: SatEnrolleeService,
     private enrolmentResource: SatEformsEnrolmentResource,
     private router: Router
   ) {
@@ -37,9 +39,9 @@ export class SatEformsGuard extends BaseGuard {
 
     return this.authService.getUser$()
       .pipe(
-        exhaustMap(({ userId }: BcscUser) => this.enrolmentResource.getEnrolleeByUserId(userId)),
-        // TODO store enrollee in service for use within views
-        map((enrollee: HttpEnrollee) => enrollee?.id ?? 0),
+        exhaustMap(({ userId }: BcscUser) => this.enrolmentResource.getSatEnrolleeByUserId(userId)),
+        tap((enrollee: SatEnrollee) => this.enrolleeService.enrollee = enrollee),
+        map((enrollee: SatEnrollee) => enrollee?.id ?? 0),
         map((enrolleeId: number) => {
           if (
             currentRoutePath === SatEformsRoutes.DEMOGRAPHIC &&
@@ -65,7 +67,7 @@ export class SatEformsGuard extends BaseGuard {
     if (routePath === `/${satRoutePath}/${SatEformsRoutes.ENROLMENTS}/${enrolleeId}/${destinationPath}`) {
       return true;
     } else {
-      this.router.navigate([satRoutePath, destinationPath]);
+      this.router.navigate([satRoutePath, SatEformsRoutes.ENROLMENTS, enrolleeId, destinationPath]);
       return false;
     }
   }
