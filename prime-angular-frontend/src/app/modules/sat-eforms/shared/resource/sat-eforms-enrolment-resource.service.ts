@@ -9,11 +9,10 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
-
-// TODO move to lib
-import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
-import { DemographicForm } from '@sat/pages/demographic-page/demographic-form.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+
+import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
+import { RegulatoryForm } from '@sat/pages/regulatory-page/regulatory-form.model';
 
 @Injectable({
   providedIn: 'root'

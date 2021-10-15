@@ -21,7 +21,7 @@ namespace Prime.ViewModels.Parties
         public PhysicalAddress PhysicalAddress { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public ICollection<PartyCertificationViewModel> Certifications { get; set; }
+        public ICollection<PartyCertification> PartyCertifications { get; set; }
         public DateTimeOffset? SubmittedDate { get; set; }
 
         [JsonIgnore]

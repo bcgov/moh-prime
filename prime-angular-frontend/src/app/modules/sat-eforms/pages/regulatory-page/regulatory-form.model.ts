@@ -1,3 +1,3 @@
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
 
-export interface RegulatoryForm extends Pick<HttpEnrollee, 'certifications'> {}
+export interface RegulatoryForm extends Pick<SatEnrollee, 'partyCertifications'> {}

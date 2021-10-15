@@ -9,5 +9,6 @@ export interface SatEnrollee extends BcscUser {
   preferredMiddleName?: string | null;
   preferredLastName?: string | null;
   physicalAddress?: Address | null;
-  certifications: CollegeCertification[];
+  partyCertifications: CollegeCertification[];
+  submittedDate: string;
 }

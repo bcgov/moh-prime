@@ -10,12 +10,12 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigService } from '@config/config.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { SatEformsRoutes } from '@sat/sat-eforms.routes';
-import { SatEformsEnrollee } from '@sat/shared/models/sat-enrollee.model';
+import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
 import { RegulatoryFormState } from '@sat/pages/regulatory-page/regulatory-form-state';
 import { SatEformsEnrolmentResource } from '@sat/shared/resource/sat-eforms-enrolment-resource.service';
+import { SatEnrolleeService } from '@sat/shared/services/sat-enrollee.service';
 
 @Component({
   selector: 'app-regulatory-page',
@@ -26,7 +26,8 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   public title: string;
   public formState: RegulatoryFormState;
   public routeUtils: RouteUtils;
-  public enrollee: SatEformsEnrollee;
+  public enrollee: SatEnrollee;
+  public readonly certificationsKey: string;
 
   constructor(
     protected dialog: MatDialog,
@@ -34,6 +35,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     private configService: ConfigService,
     private fb: FormBuilder,
     private enrolmentResource: SatEformsEnrolmentResource,
+    private enrolleeService: SatEnrolleeService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -41,6 +43,8 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SatEformsRoutes.MODULE_PATH);
+
+    this.certificationsKey = 'partyCertifications';
   }
 
   public onBack(): void {
@@ -58,7 +62,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected createFormInstance(): void {
-    this.formState = new RegulatoryFormState(this.fb, this.configService);
+    this.formState = new RegulatoryFormState(this.fb, this.configService, this.certificationsKey);
   }
 
   protected initForm(): void {
@@ -75,21 +79,16 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
       throw new Error('No enrollee ID was provided');
     }
 
-    this.enrolmentResource.getEnrolleeById(enrolleeId)
-      .subscribe((enrollee: HttpEnrollee) => {
-        if (enrollee) {
-          this.enrollee = enrollee;
-          this.formState.patchValue(enrollee.certifications);
-        }
-      });
+    this.enrollee = this.enrolleeService.enrollee;
+    this.formState.patchValue(this.enrollee);
   }
 
   protected performSubmission(): NoContent {
     const enrolleeId = +this.route.snapshot.params.eid;
     this.formState.removeIncompleteCertifications(true);
-    return this.enrolmentResource.updateCertifications(enrolleeId, this.formState.json)
+    return this.enrolmentResource.updateSatEnrolleeCertifications(enrolleeId, this.formState.json.partyCertifications)
       .pipe(
-        exhaustMap(() => this.enrolmentResource.finalize(enrolleeId))
+        // exhaustMap(() => this.enrolmentResource.submitSatEnrollee(enrolleeId))
       );
   }
 

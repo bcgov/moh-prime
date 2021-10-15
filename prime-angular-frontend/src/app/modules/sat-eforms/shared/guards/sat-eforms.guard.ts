@@ -41,8 +41,13 @@ export class SatEformsGuard extends BaseGuard {
       .pipe(
         exhaustMap(({ userId }: BcscUser) => this.enrolmentResource.getSatEnrolleeByUserId(userId)),
         tap((enrollee: SatEnrollee) => this.enrolleeService.enrollee = enrollee),
-        map((enrollee: SatEnrollee) => enrollee?.id ?? 0),
-        map((enrolleeId: number) => {
+        map((enrollee: SatEnrollee) => {
+          const enrolleeId = enrollee?.id ?? 0;
+
+          if(enrollee.submittedDate) {
+            return this.navigate(routePath, enrolleeId, SatEformsRoutes.SUBMISSION_CONFIRMATION);
+          }
+
           if (
             currentRoutePath === SatEformsRoutes.DEMOGRAPHIC &&
             nextRoutePath === SatEformsRoutes.REGULATORY
