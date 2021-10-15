@@ -746,7 +746,7 @@ objects:
           failurePolicy: Ignore
           execNewPod:
             command:
-              - /bin/zsh
+              - /bin/ash
               - -c
               - createdb -O $(APPUSER) pip-${SVC_NAME}
             env:
@@ -806,7 +806,7 @@ objects:
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/pip-dotnet-webapi:${IMAGE_TAG}
             command:
-              - /bin/zsh
+              - /bin/ash
               - '-c'
               - dotnet ./prime.dll -v 2>&1> /dev/stdout
             env:
