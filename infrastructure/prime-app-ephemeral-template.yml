@@ -720,6 +720,181 @@ objects:
       name: ${SVC_NAME}-webapi
 
 ###########################################
+###           PIP API           ###
+###########################################
+#   PIP API Deployment Config
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  namespace: ${OC_LICENSE_PLATE}-dev
+  metadata:
+    name: ${SVC_NAME}-pip
+    namespace: ${OC_LICENSE_PLATE}-dev
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.openshift.io/runtime: dotnet
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      name: ${SVC_NAME}-pip
+    strategy:
+      type: Recreate
+      maxSurge: 50%
+      maxUnavailable: 0
+      recreateParams:
+        pre:
+          failurePolicy: Ignore
+          execNewPod:
+            command:
+              - /bin/bash
+              - -c
+              - createdb -O $(APPUSER) pip-${SVC_NAME}
+            env:
+              - name: PGHOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+              - name: PGDATABASE
+                value: postgres
+              - name: APPUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: app-db-username
+              - name: PGUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: superuser-username
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: superuser-password
+    template:
+      metadata:
+        labels:
+          dev-app: ${SVC_NAME}
+          name: ${SVC_NAME}-pip
+      spec:
+        initContainers:
+        - name: run-migrations
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-pip-backend:${IMAGE_TAG}
+          env:
+          - name: PGHOST
+            valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: dev-patroni-secret
+                key: app-db-username
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: dev-patroni-secret
+                key: app-db-password
+          - name: PGDATABASE
+            value: prime-${SVC_NAME}
+          command: ['psql', '-a', '-f', './databaseMigrations.sql']
+        containers:
+          - name: ${SVC_NAME}-pip
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-pip-backend:${IMAGE_TAG}
+            command:
+              - bash
+              - '-c'
+              - dotnet ./prime.dll -v 2>&1> /dev/stdout
+            env:
+              - name: DB_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+              - name: BACKEND_URL
+                value: https://${SVC_NAME}${URL_STUB}/api/v1/
+              - name: FRONTEND_URL
+                value: https://${SVC_NAME}${URL_STUB}
+              - name: POSTGRESQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: app-db-username
+              - name: POSTGRESQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: app-db-password
+              - name: POSTGRESQL_DATABASE
+                value: pip-${SVC_NAME}
+              - name: DB_CONNECTION_STRING
+                value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
+            ports:
+              - containerPort: 5050
+                protocol: TCP
+            resources:
+              limits:
+                cpu: 50m
+                memory: 1Gi
+              requests:
+                cpu: 15m
+                memory: 500Mi
+            startupProbe:
+              httpGet:
+                path: /api/health
+                port: 5050
+              timeoutSeconds: 30
+              failureThreshold: 30
+              periodSeconds: 10
+            readinessProbe:
+              httpGet:
+                path: /api/health
+                port: 5050
+              initialDelaySeconds: 5
+              periodSeconds: 5
+            livenessProbe:
+              httpGet:
+                path: /api/health
+                port: 5050
+              failureThreshold: 1
+              periodSeconds: 5
+            imagePullPolicy: IfNotPresent
+            terminationMessagePolicy: File
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${SVC_NAME}-pip
+            - run-migrations
+          from:
+            kind: ImageStreamTag
+            namespace: "${OC_LICENSE_PLATE}-tools"
+            name: 'prime-pip-backend:${IMAGE_TAG}'
+
+#   Backend Web API Service
+- apiVersion: v1
+  kind: Service
+  namespace: ${OC_LICENSE_PLATE}-dev
+  metadata:
+    name: ${SVC_NAME}-pip
+    namespace: ${OC_LICENSE_PLATE}-dev
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  spec:
+    ports:
+      - name: "http"
+        port: 80
+        targetPort: 5050
+    selector:
+      name: ${SVC_NAME}-pip
+
+###########################################
 ###      Document Manager (backend)     ###
 ###########################################
 #   Document Manager (backend) Deployment Config
