@@ -181,10 +181,10 @@ jobs:
         id: build-image
         uses: docker/build-push-action@v2
         with:
-          context: prime-pip-webapi
+          context: pip-dotnet-webapi
           push: true
-          file: prime-pip-webapi/Dockerfile
-          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-pip-backend:pr-${{steps.PR.outputs.number}}
+          file: pip-dotnet-webapi/Dockerfile
+          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/pip-dotnet-webapi:pr-${{steps.PR.outputs.number}}
           cache-from: type=local,src=/tmp/.pip-cache
           cache-to: type=local,dest=/tmp/.pip-cache-new,mode=max
 

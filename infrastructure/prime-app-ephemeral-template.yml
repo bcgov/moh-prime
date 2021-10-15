@@ -804,7 +804,7 @@ objects:
         containers:
           - name: ${SVC_NAME}-pip
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-pip-backend:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/pip-dotnet-webapi:${IMAGE_TAG}
             command:
               - bash
               - '-c'
