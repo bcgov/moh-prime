@@ -98,12 +98,8 @@ namespace Prime.Services
             return await _context.PlrProviders
                 .Where(
                     p => party.Licenses.Contains(p.CollegeId)
-                )
-                .If(party.PreferredFirstName != null,
-                    q => q.Where(plr => plr.FirstName == party.PreferredFirstName && plr.LastName == party.PreferredLastName)
-                )
-                .If(party.PreferredFirstName == null,
-                    q => q.Where(plr => plr.FirstName == party.FirstName && plr.LastName == party.LastName)
+                    && ((p.FirstName == party.PreferredFirstName && p.LastName == party.PreferredLastName)
+                    || (p.FirstName == party.FirstName && p.LastName == party.LastName))
                 )
                 .AnyAsync();
         }
