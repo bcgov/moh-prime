@@ -7,7 +7,7 @@ using Prime.ViewModels.Parties;
 
 namespace Prime.ViewModels.SpecialAuthorityTransformation
 {
-    public class SatEnrolleeChangeModel : IPartyChangeModel
+    public class SatEnrolleeDemographicChangeModel : IPartyChangeModel
     {
         /// <summary>
         /// Identifier from Keycloak instance
@@ -115,7 +115,7 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
         }
     }
 
-    public class SatEnrolleeDemographicValidator : AbstractValidator<SatEnrolleeChangeModel>
+    public class SatEnrolleeDemographicValidator : AbstractValidator<SatEnrolleeDemographicChangeModel>
     {
         public SatEnrolleeDemographicValidator()
         {

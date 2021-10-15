@@ -43,7 +43,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<SatViewModel>), StatusCodes.Status201Created)]
-        public async Task<ActionResult> CreateSatEnrollee(SatEnrolleeChangeModel payload)
+        public async Task<ActionResult> CreateSatEnrollee(SatEnrolleeDemographicChangeModel payload)
         {
             if (!payload.Validate(User))
             {
@@ -122,7 +122,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateSatEnrollee(int satId, SatEnrolleeChangeModel payload)
+        public async Task<ActionResult> UpdateSatEnrollee(int satId, SatEnrolleeDemographicChangeModel payload)
         {
             var satEnrollee = await _partyService.GetPartyAsync(satId, PartyType.SatEnrollee);
             if (satEnrollee == null)
