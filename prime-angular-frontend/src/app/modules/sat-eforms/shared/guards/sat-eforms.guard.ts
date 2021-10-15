@@ -44,7 +44,7 @@ export class SatEformsGuard extends BaseGuard {
         map((enrollee: SatEnrollee) => {
           const enrolleeId = enrollee?.id ?? 0;
 
-          if(enrollee.submittedDate) {
+          if(enrollee?.submittedDate) {
             return this.navigate(routePath, enrolleeId, SatEformsRoutes.SUBMISSION_CONFIRMATION);
           }
 
