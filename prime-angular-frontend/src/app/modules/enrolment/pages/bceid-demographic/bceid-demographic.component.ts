@@ -148,7 +148,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private getUser$(): Observable<Enrollee> {
+  protected getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
         map(({ firstName, lastName, email = null }: BceidUser) => {

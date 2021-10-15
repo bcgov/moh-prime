@@ -1,0 +1,90 @@
+# Based on send-renewal-emails.cron.yml
+#
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: Template for job that activates api to re-run rules on applicable enrollees
+    tags: cronjob
+  name: rerun-enrollee-application-rules-cronjob-template
+objects:
+  - apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: '${CRON_NAME}'
+    spec:
+      concurrencyPolicy: Forbid
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+                - command:
+                  - bash
+                  - '-c'
+                  - >-
+                    echo -e "-------- STARTING CRON --------\n"
+
+                    echo -e "-------- Getting access_token --------\n"
+
+                    TOKEN=$(curl -X POST
+                    "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token"
+                    \
+                      -H "Content-Type: application/x-www-form-urlencoded" \
+                      -d "grant_type=client_credentials" \
+                      -d "client_id=${KEYCLOAK_CLIENT_ID}" \
+                      -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token')
+
+                    echo -e ${TOKEN}
+
+                    echo -e "-------- Calling PRIME API --------\n"
+
+                    curl -v -X POST
+                    http://${ENV_NAME}-webapi:8080/api/enrollees/rerun-rules
+                    \
+                      -H "Authorization: Bearer ${TOKEN}" \
+                      -H "Content-Length: 0"
+
+                    echo -e "-------- CRON COMPLETE --------\n"
+                  env:
+                    - name: KEYCLOAK_CLIENT_SECRET
+                      valueFrom:
+                        secretKeyRef:
+                          key: prime_service_account_client_secret
+                          name: prime-service-account
+                    - name: KEYCLOAK_CLIENT_ID
+                      valueFrom:
+                        secretKeyRef:
+                          key: prime_service_account_client_id
+                          name: prime-service-account
+                    - name: KEYCLOAK_URL
+                      valueFrom:
+                        configMapKeyRef:
+                          name: keycloak
+                          key: KEYCLOAK_URL
+                    - name: KEYCLOAK_REALM
+                      valueFrom:
+                        configMapKeyRef:
+                          name: keycloak
+                          key: KEYCLOAK_REALM
+                  image: >-
+                    public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
+                  limits:
+                    cpu: 500m
+                    memory: 2Gi
+                  name: '${CRON_NAME}'
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+                  resources: null
+              restartPolicy: Never
+      schedule: '${CRON_SCHEDULE}'
+parameters:
+  - description: 'Cron-like schedule expression. Default: Once a day at 11 PM'
+    name: CRON_SCHEDULE
+    value: '0 23 * * *'
+  - name: CRON_NAME
+    value: rerun-enrollee-application-rules-cronjob
+  - description: 'Environment name'
+    name: ENV_NAME
+    required: true
