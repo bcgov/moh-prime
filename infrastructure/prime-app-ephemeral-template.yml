@@ -746,8 +746,6 @@ objects:
           failurePolicy: Ignore
           execNewPod:
             command:
-              - /bin/bash
-              - -c
               - createdb -O $(APPUSER) pip-${SVC_NAME}
             env:
               - name: PGHOST
