@@ -26,6 +26,7 @@ using Newtonsoft.Json;
 using Wkhtmltopdf.NetCore;
 using IdentityModel.Client;
 using FluentValidation.AspNetCore;
+using Sentry.AspNetCore;
 
 using Prime.Configuration.Auth;
 using Prime.Extensions;
@@ -35,7 +36,6 @@ using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
-using Sentry.AspNetCore;
 
 namespace Prime
 {
