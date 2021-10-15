@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from '@angular/common';
 
-import { Moment } from 'moment';
-
 import { of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 

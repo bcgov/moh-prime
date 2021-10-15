@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 import { asyncValidator } from '@lib/validators/form-async.validators';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { SiteResource } from '@core/resources/site-resource.service';
 
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
