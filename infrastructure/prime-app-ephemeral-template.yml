@@ -781,7 +781,7 @@ objects:
         initContainers:
         - name: run-migrations
           image: >-
-            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-pip-backend:${IMAGE_TAG}
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-pip-webapi:${IMAGE_TAG}
           env:
           - name: PGHOST
             valueFrom:
@@ -875,7 +875,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-pip-backend:${IMAGE_TAG}'
+            name: 'prime-pip-webapi:${IMAGE_TAG}'
 
 #   Backend Web API Service
 - apiVersion: v1
