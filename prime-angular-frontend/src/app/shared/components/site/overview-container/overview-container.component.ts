@@ -1,13 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
-import { Moment } from 'moment';
-
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
-import { AbstractComponent } from '@shared/classes/abstract-component';
 
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
