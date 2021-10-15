@@ -1,0 +1,63 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\228884\\Desktop\\Projects\\Repos\\moh-prime\\pip-dotnet-webapi\\pip-dotnet-webapi.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\228884\\Desktop\\Projects\\Repos\\moh-prime\\pip-dotnet-webapi\\pip-dotnet-webapi.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\228884\\Desktop\\Projects\\Repos\\moh-prime\\pip-dotnet-webapi\\pip-dotnet-webapi.csproj",
+        "projectName": "pip-dotnet-webapi",
+        "projectPath": "C:\\Users\\228884\\Desktop\\Projects\\Repos\\moh-prime\\pip-dotnet-webapi\\pip-dotnet-webapi.csproj",
+        "packagesPath": "C:\\Users\\228884\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\228884\\Desktop\\Projects\\Repos\\moh-prime\\pip-dotnet-webapi\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\228884\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100-rc.2.21505.57\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

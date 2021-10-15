@@ -1,0 +1,184 @@
+[11:16:14 INF] Starting web host
+[11:16:15 INF] ###App Version:1.0.0.0###
+[11:16:15 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[11:16:16 INF] Now listening on: https://localhost:5051
+[11:16:16 INF] Now listening on: http://localhost:5050
+[11:16:16 INF] Application started. Press Ctrl+C to shut down.
+[11:16:16 INF] Hosting environment: Development
+[11:16:16 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[11:17:45 INF] Starting web host
+[11:17:45 INF] ###App Version:1.0.0.0###
+[11:17:45 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[11:17:46 INF] Now listening on: https://localhost:5051
+[11:17:46 INF] Now listening on: http://localhost:5050
+[11:17:46 INF] Application started. Press Ctrl+C to shut down.
+[11:17:46 INF] Hosting environment: Development
+[11:17:46 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[11:21:27 INF] Starting web host
+[11:21:27 INF] ###App Version:1.0.0.0###
+[11:21:28 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[11:21:28 INF] Now listening on: https://localhost:5051
+[11:21:28 INF] Now listening on: http://localhost:5050
+[11:21:28 INF] Application started. Press Ctrl+C to shut down.
+[11:21:28 INF] Hosting environment: Development
+[11:21:28 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[11:23:11 INF] Starting web host
+[11:23:12 INF] ###App Version:1.0.0.0###
+[11:23:12 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[11:23:13 INF] Now listening on: https://localhost:5051
+[11:23:13 INF] Now listening on: http://localhost:5050
+[11:23:13 INF] Application started. Press Ctrl+C to shut down.
+[11:23:13 INF] Hosting environment: Development
+[11:23:13 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[11:32:34 INF] Starting web host
+[11:32:34 INF] ###App Version:1.0.0.0###
+[11:32:34 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[11:32:35 INF] Now listening on: https://localhost:5051
+[11:32:35 INF] Now listening on: http://localhost:5050
+[11:32:35 INF] Application started. Press Ctrl+C to shut down.
+[11:32:35 INF] Hosting environment: Development
+[11:32:35 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[11:35:22 INF] Starting web host
+[11:35:23 INF] ###App Version:1.0.0.0###
+[11:35:23 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[11:35:24 INF] Now listening on: https://localhost:5051
+[11:35:24 INF] Now listening on: http://localhost:5050
+[11:35:24 INF] Application started. Press Ctrl+C to shut down.
+[11:35:24 INF] Hosting environment: Development
+[11:35:24 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[11:36:22 INF] Starting web host
+[11:36:23 INF] ###App Version:1.0.0.0###
+[11:36:23 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[11:36:24 INF] Now listening on: https://localhost:5051
+[11:36:24 INF] Now listening on: http://localhost:5050
+[11:36:24 INF] Application started. Press Ctrl+C to shut down.
+[11:36:24 INF] Hosting environment: Development
+[11:36:24 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[11:39:50 INF] Starting web host
+[11:39:51 INF] ###App Version:1.0.0.0###
+[11:39:51 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[11:39:52 INF] Now listening on: https://localhost:5051
+[11:39:52 INF] Now listening on: http://localhost:5050
+[11:39:52 INF] Application started. Press Ctrl+C to shut down.
+[11:39:52 INF] Hosting environment: Development
+[11:39:52 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[11:44:36 INF] Starting web host
+[11:44:37 INF] ###App Version:1.0.0.0###
+[11:44:37 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[11:44:38 INF] Now listening on: https://localhost:5051
+[11:44:38 INF] Now listening on: http://localhost:5050
+[11:44:38 INF] Application started. Press Ctrl+C to shut down.
+[11:44:38 INF] Hosting environment: Development
+[11:44:38 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:14:01 INF] Starting web host
+[12:14:02 INF] ###App Version:1.0.0.0###
+[12:14:02 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:14:03 INF] Now listening on: https://localhost:5051
+[12:14:03 INF] Now listening on: http://localhost:5050
+[12:14:03 INF] Application started. Press Ctrl+C to shut down.
+[12:14:03 INF] Hosting environment: Development
+[12:14:03 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:15:57 INF] Starting web host
+[12:15:58 INF] ###App Version:1.0.0.0###
+[12:15:58 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:15:59 INF] Now listening on: https://localhost:5051
+[12:15:59 INF] Now listening on: http://localhost:5050
+[12:15:59 INF] Application started. Press Ctrl+C to shut down.
+[12:15:59 INF] Hosting environment: Development
+[12:15:59 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:17:22 INF] Starting web host
+[12:17:23 INF] ###App Version:1.0.0.0###
+[12:17:23 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:17:23 INF] Now listening on: https://localhost:5051
+[12:17:23 INF] Now listening on: http://localhost:5050
+[12:17:23 INF] Application started. Press Ctrl+C to shut down.
+[12:17:23 INF] Hosting environment: Development
+[12:17:23 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:18:01 INF] Starting web host
+[12:18:01 INF] ###App Version:1.0.0.0###
+[12:18:02 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:18:02 INF] Now listening on: https://localhost:5051
+[12:18:02 INF] Now listening on: http://localhost:5050
+[12:18:02 INF] Application started. Press Ctrl+C to shut down.
+[12:18:02 INF] Hosting environment: Development
+[12:18:02 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:44:24 INF] Starting web host
+[12:44:24 INF] ###App Version:1.0.0.0###
+[12:44:25 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:44:25 INF] Now listening on: https://localhost:5051
+[12:44:25 INF] Now listening on: http://localhost:5050
+[12:44:25 INF] Application started. Press Ctrl+C to shut down.
+[12:44:25 INF] Hosting environment: Development
+[12:44:25 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:45:31 INF] Starting web host
+[12:45:32 INF] ###App Version:1.0.0.0###
+[12:45:32 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:45:32 INF] Now listening on: https://localhost:5051
+[12:45:32 INF] Now listening on: http://localhost:5050
+[12:45:32 INF] Application started. Press Ctrl+C to shut down.
+[12:45:32 INF] Hosting environment: Development
+[12:45:32 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:46:05 INF] Starting web host
+[12:46:05 INF] ###App Version:1.0.0.0###
+[12:46:05 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:46:06 INF] Now listening on: https://localhost:5051
+[12:46:06 INF] Now listening on: http://localhost:5050
+[12:46:06 INF] Application started. Press Ctrl+C to shut down.
+[12:46:06 INF] Hosting environment: Development
+[12:46:06 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:46:51 INF] Starting web host
+[12:46:51 INF] ###App Version:1.0.0.0###
+[12:46:51 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:46:52 INF] Now listening on: https://localhost:5051
+[12:46:52 INF] Now listening on: http://localhost:5050
+[12:46:52 INF] Application started. Press Ctrl+C to shut down.
+[12:46:52 INF] Hosting environment: Development
+[12:46:52 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:48:54 INF] Starting web host
+[12:48:55 INF] ###App Version:1.0.0.0###
+[12:48:55 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:48:56 INF] Now listening on: https://localhost:5051
+[12:48:56 INF] Now listening on: http://localhost:5050
+[12:48:56 INF] Application started. Press Ctrl+C to shut down.
+[12:48:56 INF] Hosting environment: Development
+[12:48:56 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:50:37 INF] Starting web host
+[12:50:38 INF] ###App Version:1.0.0.0###
+[12:50:38 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:50:39 INF] Now listening on: https://localhost:5051
+[12:50:39 INF] Now listening on: http://localhost:5050
+[12:50:39 INF] Application started. Press Ctrl+C to shut down.
+[12:50:39 INF] Hosting environment: Development
+[12:50:39 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:56:53 INF] Starting web host
+[12:56:54 INF] ###App Version:1.0.0.0###
+[12:56:54 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:56:55 INF] Now listening on: https://localhost:5051
+[12:56:55 INF] Now listening on: http://localhost:5050
+[12:56:55 INF] Application started. Press Ctrl+C to shut down.
+[12:56:55 INF] Hosting environment: Development
+[12:56:55 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:58:39 INF] Starting web host
+[12:58:39 INF] ###App Version:1.0.0.0###
+[12:58:40 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:58:40 INF] Now listening on: https://localhost:5051
+[12:58:40 INF] Now listening on: http://localhost:5050
+[12:58:40 INF] Application started. Press Ctrl+C to shut down.
+[12:58:40 INF] Hosting environment: Development
+[12:58:40 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[12:59:15 INF] Starting web host
+[12:59:16 INF] ###App Version:1.0.0.0###
+[12:59:16 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[12:59:16 INF] Now listening on: https://localhost:5051
+[12:59:16 INF] Now listening on: http://localhost:5050
+[12:59:16 INF] Application started. Press Ctrl+C to shut down.
+[12:59:16 INF] Hosting environment: Development
+[12:59:16 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[13:00:01 INF] Starting web host
+[13:00:02 INF] ###App Version:1.0.0.0###
+[13:00:02 INF] ###Prime Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[13:00:03 INF] Now listening on: https://localhost:5051
+[13:00:03 INF] Now listening on: http://localhost:5050
+[13:00:03 INF] Application started. Press Ctrl+C to shut down.
+[13:00:03 INF] Hosting environment: Development
+[13:00:03 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi

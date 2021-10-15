@@ -1,0 +1,100 @@
+[13:17:10 INF] Starting web host
+[13:17:11 INF] ###App Version:1.0.0.0###
+[13:17:11 INF] ###Pip Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[13:17:12 INF] Now listening on: https://localhost:5051
+[13:17:12 INF] Now listening on: http://localhost:5050
+[13:17:12 INF] Application started. Press Ctrl+C to shut down.
+[13:17:12 INF] Hosting environment: Development
+[13:17:12 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[13:18:37 INF] Starting web host
+[13:18:39 INF] ###App Version:1.0.0.0###
+[13:18:39 INF] ###Pip Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[13:18:41 INF] Now listening on: https://localhost:5051
+[13:18:41 INF] Now listening on: http://localhost:5050
+[13:18:41 INF] Application started. Press Ctrl+C to shut down.
+[13:18:41 INF] Hosting environment: Development
+[13:18:41 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[14:14:49 INF] Starting web host
+[14:14:50 INF] ###App Version:1.0.0.0###
+[14:14:50 INF] ###Pip Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[14:14:51 INF] Now listening on: https://localhost:5051
+[14:14:51 INF] Now listening on: http://localhost:5050
+[14:14:51 INF] Application started. Press Ctrl+C to shut down.
+[14:14:51 INF] Hosting environment: Development
+[14:14:51 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[14:23:53 INF] Starting web host
+[14:23:53 INF] ###App Version:1.0.0.0###
+[14:23:53 INF] ###Pip Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[14:23:54 INF] Now listening on: https://localhost:5051
+[14:23:54 INF] Now listening on: http://localhost:5050
+[14:23:54 INF] Application started. Press Ctrl+C to shut down.
+[14:23:54 INF] Hosting environment: Development
+[14:23:54 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[14:27:56 ERR] An unhandled exception has occurred while executing the request.
+System.Xml.XmlException: Root element is missing.
+   at System.Xml.XmlTextReaderImpl.Throw(Exception e)
+   at System.Xml.XmlTextReaderImpl.ParseDocumentContent()
+   at System.Xml.XmlTextReaderImpl.Read()
+   at System.Xml.XPath.XPathDocument.LoadFromReader(XmlReader reader, XmlSpace space)
+   at System.Xml.XPath.XPathDocument..ctor(String uri, XmlSpace space)
+   at System.Xml.XPath.XPathDocument..ctor(String uri)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenOptionsExtensions.<>c__DisplayClass30_0.<IncludeXmlComments>b__0()
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenOptionsExtensions.IncludeXmlComments(SwaggerGenOptions swaggerGenOptions, Func`1 xmlDocFactory, Boolean includeControllerXmlComments)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenOptionsExtensions.IncludeXmlComments(SwaggerGenOptions swaggerGenOptions, String filePath, Boolean includeControllerXmlComments)
+   at Pip.Startup.<>c.<ConfigureServices>b__8_2(SwaggerGenOptions c) in C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi\Startup.cs:line 61
+   at Microsoft.Extensions.Options.ConfigureNamedOptions`1.Configure(String name, TOptions options)
+   at Microsoft.Extensions.Options.OptionsFactory`1.Create(String name)
+   at Microsoft.Extensions.Options.UnnamedOptionsManager`1.get_Value()
+   at Swashbuckle.AspNetCore.SwaggerGen.ConfigureSwaggerGeneratorOptions..ctor(IOptions`1 swaggerGenOptionsAccessor, IServiceProvider serviceProvider, IWebHostEnvironment hostingEnv)
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeConstructorInfo.Invoke(BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitIEnumerable(IEnumerableCallSite enumerableCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateServiceAccessor(Type serviceType)
+   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at Microsoft.Extensions.DependencyInjection.SwaggerGenServiceCollectionExtensions.<>c.<AddSwaggerGen>b__0_1(IServiceProvider s)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.GetService(IServiceProvider sp, Type type, Type middleware)
+   at lambda_method6(Closure , Object , HttpContext , IServiceProvider )
+   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass5_1.<UseMiddleware>b__2(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[14:28:19 INF] Starting web host
+[14:28:20 INF] ###App Version:1.0.0.0###
+[14:28:20 INF] ###Pip Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[14:28:21 INF] Now listening on: https://localhost:5051
+[14:28:21 INF] Now listening on: http://localhost:5050
+[14:28:21 INF] Application started. Press Ctrl+C to shut down.
+[14:28:21 INF] Hosting environment: Development
+[14:28:21 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
+[14:29:22 INF] Starting web host
+[14:29:23 INF] ###App Version:1.0.0.0###
+[14:29:23 INF] ###Pip Configuration:{"ConnectionStrings":{"PipDatabase":"Host=localhost;Port=5433;Database=postgres;Username=postgres;Password=postgres"}}###
+[14:29:24 INF] Now listening on: https://localhost:5051
+[14:29:24 INF] Now listening on: http://localhost:5050
+[14:29:24 INF] Application started. Press Ctrl+C to shut down.
+[14:29:24 INF] Hosting environment: Development
+[14:29:24 INF] Content root path: C:\Users\228884\Desktop\Projects\Repos\moh-prime\pip-dotnet-webapi
