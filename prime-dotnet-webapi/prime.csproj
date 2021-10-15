@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Prime</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <UserSecretsId>2144bc8e-373b-4888-a0ca-b0ff7798bd81</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="3.0.0" />
@@ -16,6 +17,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.4" />
@@ -64,6 +68,9 @@
     <EmbeddedResource Include="Configuration\Resources\device-provider-org-v1.html" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\wkhtmltopdf\Linux\wkhtmltopdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
