@@ -389,15 +389,17 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     return Object.keys(selfDeclarationsTypes)
       .reduce((sds: SelfDeclaration[], sd: string) => {
-        sds.push(
-          new SelfDeclaration(
-            selfDeclarationsTypes[sd],
-            selfDeclarations[`${sd}Details`],
-            selfDeclarations[`${sd}DocumentGuids`],
-            this.enrolleeId,
-            selfDeclarations[sd]
-          )
-        );
+        if (selfDeclarations[sd]) {
+          sds.push(
+            new SelfDeclaration(
+              selfDeclarationsTypes[sd],
+              selfDeclarations[`${sd}Details`],
+              selfDeclarations[`${sd}DocumentGuids`],
+              this.enrolleeId,
+              selfDeclarations[sd]
+            )
+          );
+        }
         return sds;
       }, []);
   }

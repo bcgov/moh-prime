@@ -70,7 +70,7 @@ export class EnrolmentResource {
           })
             .pipe(
               map(({ enrolleeCareSettings, ...remainder }) => {
-                return { ...enrollee, ...enrolleeCareSettings, remainder }
+                return { ...enrollee, ...enrolleeCareSettings, ...remainder }
               }),
             ),
         ),
@@ -115,7 +115,7 @@ export class EnrolmentResource {
   }
 
   public createOrUpdateLinkedGpid(enrolleeId: number, paperEnrolleeGpid: string): Observable<NoContent> {
-    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/linked-gpid`, { data: paperEnrolleeGpid})
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/linked-gpid`, { data: paperEnrolleeGpid })
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         catchError((error: any) => {
