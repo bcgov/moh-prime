@@ -806,8 +806,6 @@ objects:
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/pip-dotnet-webapi:${IMAGE_TAG}
             command:
-              - /bin/ash
-              - '-c'
               - dotnet ./pip.dll -v 2>&1> /dev/stdout
             env:
               - name: DB_HOST
