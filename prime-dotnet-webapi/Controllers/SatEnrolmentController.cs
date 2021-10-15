@@ -166,12 +166,12 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // POST: api/parties/sat/5/submission
+        // POST: api/parties/sat/5/submissions
         /// <summary>
         /// SAT Enrolment submission
         /// </summary>
         /// <param name="satId"></param>
-        [HttpPost("{satId}/submission", Name = nameof(SubmitSatEnrollee))]
+        [HttpPost("{satId}/submissions", Name = nameof(SubmitSatEnrollee))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

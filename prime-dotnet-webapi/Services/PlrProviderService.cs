@@ -85,19 +85,25 @@ namespace Prime.Services
         {
             var party = await _context.Parties
                 .Where(p => p.Id == partyId)
+                .Select(p => new
+                {
+                    p.FirstName,
+                    p.LastName,
+                    p.PreferredFirstName,
+                    p.PreferredLastName,
+                    Licenses = p.PartyCertifications.Select(cert => cert.LicenseNumber)
+                })
                 .SingleOrDefaultAsync();
-
-            // PLR college Ids map to License Number
-            var collegeIds = await _context.PartyCertifications
-                .Where(pc => pc.PartyId == partyId)
-                .Select(cert => cert.LicenseNumber)
-                .ToListAsync();
 
             return await _context.PlrProviders
                 .Where(
-                    p => collegeIds.Contains(p.CollegeId)
-                    && (p.FirstName == party.FirstName || p.FirstName == party.PreferredFirstName)
-                    && (p.LastName == party.LastName || p.LastName == party.PreferredLastName)
+                    p => party.Licenses.Contains(p.CollegeId)
+                )
+                .If(party.PreferredFirstName != null,
+                    q => q.Where(plr => plr.FirstName == party.PreferredFirstName && plr.LastName == party.PreferredLastName)
+                )
+                .If(party.PreferredFirstName == null,
+                    q => q.Where(plr => plr.FirstName == party.FirstName && plr.LastName == party.LastName)
                 )
                 .AnyAsync();
         }
