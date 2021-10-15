@@ -19,4 +19,3 @@ FROM mcr.microsoft.com/dotnet/runtime:6.0.0-rc.2-alpine3.14
 WORKDIR /app
 RUN apk add postgresql-client
 COPY --from=build /app/out .
-ENTRYPOINT ["dotnet", "pip.dll"]

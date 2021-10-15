@@ -808,7 +808,7 @@ objects:
             command:
               - /bin/ash
               - '-c'
-              - dotnet ./prime.dll -v 2>&1> /dev/stdout
+              - dotnet ./pip.dll -v 2>&1> /dev/stdout
             env:
               - name: DB_HOST
                 valueFrom:
