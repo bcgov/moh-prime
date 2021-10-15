@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DelegateDecompiler.EntityFrameworkCore;
 
 using Prime.Engines;
 using Prime.Models;
@@ -150,6 +151,41 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task BulkRerunRulesAsync()
+        {
+            var pharmanetStatusReasons = new[]
+            {
+                (int) StatusReasonType.PharmanetError,
+                (int) StatusReasonType.NotInPharmanet,
+                (int) StatusReasonType.BirthdateDiscrepancy,
+                (int) StatusReasonType.NameDiscrepancy,
+                (int) StatusReasonType.Practicing
+            };
+
+            var enrollees = GetBaseQueryForEnrolleeApplicationRules()
+                .Where(e => e.Adjudicator == null)
+                .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview)
+                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => pharmanetStatusReasons.Contains(esr.StatusReasonCode)))
+                // Need `DecompileAsync` due to computed property `CurrentStatus`
+                .DecompileAsync()
+                .ToList();
+
+            foreach (var enrollee in enrollees)
+            {
+                // Group results of the rules under a new enrollment status
+                enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Cron Job running the enrollee application rules");
+
+                _logger.LogDebug($"RerunRulesAsync on {enrollee.FullName} (Id {enrollee.Id})");
+                if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
+                {
+                    await AdjudicatedAutomatically(enrollee, "Cron Job Automatically Approved");
+                }
+                // We don't perform a `_enrolleeService.RemoveNotificationsAsync`
+            }
+            await _context.SaveChangesAsync();
+        }
+
         private async Task<bool> HandleEnrolleeStatusActionAsync(EnrolleeStatusAction action, Enrollee enrollee, object additionalParameters)
         {
             switch (action)
@@ -188,6 +224,7 @@ namespace Prime.Services
                 default:
                     throw new InvalidOperationException($"Action {action} is not recognized in {nameof(HandleEnrolleeStatusActionAsync)}");
             }
+            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
 
             return true;
         }
@@ -203,13 +240,13 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
-            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
             // Manually Approved submissions are automatically confirmed
             await ConfirmLatestSubmissionAsync(enrollee.Id);
         }
 
         private async Task<bool> AcceptToaAsync(Enrollee enrollee, object additionalParameters)
         {
+            // Currently (as of 2021-09-27), only BCSC identity accepted so the following code will not execute
             if (enrollee.IdentityAssuranceLevel < 3)
             {
                 // Enrollees with lower assurance levels cannot electronically sign, and so must upload a signed Agreement
@@ -233,7 +270,6 @@ namespace Prime.Services
             await _enrolleeAgreementService.AcceptCurrentEnrolleeAgreementAsync(enrollee.Id);
             await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
-            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
 
             if (enrollee.AdjudicatorId != null)
             {
@@ -250,7 +286,6 @@ namespace Prime.Services
         {
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined TOA");
-            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
             await _context.SaveChangesAsync();
         }
 
@@ -261,7 +296,6 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
-            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 
         private async Task LockProfileAsync(Enrollee enrollee)
@@ -271,7 +305,6 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
-            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 
         private async Task DeclineProfileAsync(Enrollee enrollee)
@@ -280,7 +313,6 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
             await _enrolleeAgreementService.ExpireCurrentEnrolleeAgreementAsync(enrollee.Id);
-            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
 
             if (_httpContext.HttpContext.User.HasVCIssuance())
             {
@@ -301,7 +333,6 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator manually ran the enrollee application rules");
             await ProcessEnrolleeApplicationRules(enrollee.Id);
             await _context.SaveChangesAsync();
-            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 
         private async Task CancelToaAssignmentAsync(Enrollee enrollee)
@@ -312,7 +343,6 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator cancelled TOA assignment");
-            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 
         private async Task SetGpid(Enrollee enrollee)
@@ -330,7 +360,27 @@ namespace Prime.Services
         private async Task ProcessEnrolleeApplicationRules(int enrolleeId)
         {
             // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
-            var enrollee = await _context.Enrollees
+            var enrollee = await GetBaseQueryForEnrolleeApplicationRules()
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
+            {
+                await AdjudicatedAutomatically(enrollee, "Automatically Approved");
+            }
+        }
+
+        private async Task AdjudicatedAutomatically(Enrollee enrollee, string businessEventDesc)
+        {
+            var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
+            newStatus.AddStatusReason(StatusReasonType.Automatic);
+
+            await _enrolleeAgreementService.CreateEnrolleeAgreementAsync(enrollee.Id);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, businessEventDesc);
+        }
+
+        private IQueryable<Enrollee> GetBaseQueryForEnrolleeApplicationRules()
+        {
+            return _context.Enrollees
                 .Include(e => e.Submissions)
                 .Include(e => e.Addresses)
                     .ThenInclude(ea => ea.Address)
@@ -338,17 +388,7 @@ namespace Prime.Services
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.EnrolmentStatusReasons)
                 .Include(e => e.Certifications)
-                    .ThenInclude(c => c.License)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
-            {
-                var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
-                newStatus.AddStatusReason(StatusReasonType.Automatic);
-
-                await _enrolleeAgreementService.CreateEnrolleeAgreementAsync(enrolleeId);
-                await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Automatically Approved");
-            }
+                    .ThenInclude(c => c.License);
         }
     }
 }
