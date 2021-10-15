@@ -875,7 +875,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-pip-webapi:${IMAGE_TAG}'
+            name: 'pip-dotnet-webapi:${IMAGE_TAG}'
 
 #   Backend Web API Service
 - apiVersion: v1
