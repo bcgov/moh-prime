@@ -746,6 +746,8 @@ objects:
           failurePolicy: Ignore
           execNewPod:
             command:
+              - /bin/zsh
+              - -c
               - createdb -O $(APPUSER) pip-${SVC_NAME}
             env:
               - name: PGHOST
@@ -797,14 +799,14 @@ objects:
                 name: dev-patroni-secret
                 key: app-db-password
           - name: PGDATABASE
-            value: prime-${SVC_NAME}
+            value: pip-${SVC_NAME}
           command: ['psql', '-a', '-f', './databaseMigrations.sql']
         containers:
           - name: ${SVC_NAME}-pip
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/pip-dotnet-webapi:${IMAGE_TAG}
             command:
-              - bash
+              - /bin/zsh
               - '-c'
               - dotnet ./prime.dll -v 2>&1> /dev/stdout
             env:
