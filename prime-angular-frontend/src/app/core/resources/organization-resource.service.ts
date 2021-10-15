@@ -294,24 +294,6 @@ export class OrganizationResource {
   }
 
   /**
-     * @description
-     * Clear pending transfer flag on an organization
-     *
-     */
-  public finalizeTransfer(organizationId: number): NoContent {
-    return this.apiResource.put(`organizations/${organizationId}/finalize-transfer`)
-      .pipe(
-        NoContentResponse,
-        tap(() => this.toastService.openSuccessToast('Organization transfer has been finalized.')),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Care Setting Codes For Orgnazition could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getCareSettingThatRequireAgreements error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  /**
    * @description
    * Get a list of organization agreements.
    */
