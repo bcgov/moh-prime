@@ -1,5 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { SharedModule } from '@shared/shared.module';
 import { SatEformsProgressIndicatorComponent } from './sat-eforms-progress-indicator.component';
 
 describe('SatEformsProgressIndicatorComponent', () => {
@@ -8,9 +13,21 @@ describe('SatEformsProgressIndicatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SatEformsProgressIndicatorComponent ]
+      imports: [
+        SharedModule,
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      declarations: [SatEformsProgressIndicatorComponent],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

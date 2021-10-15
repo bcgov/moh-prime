@@ -1,4 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { CollectionNoticePageComponent } from './collection-notice-page.component';
 
@@ -8,9 +15,19 @@ describe('CollectionNoticePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CollectionNoticePageComponent ]
-    })
-    .compileComponents();
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+      ],
+      declarations: [CollectionNoticePageComponent],
+      providers: [
+        {
+          provide: AuthService,
+          useClass: MockAuthService
+        }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   });
 
   beforeEach(() => {
