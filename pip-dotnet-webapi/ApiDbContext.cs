@@ -39,8 +39,8 @@ namespace Pip
     {
         public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options) { }
 
-        public DbSet<FirstModel?>? FirstModel { get; set; }
-        public DbSet<NewModel?>? NewModel { get; set; }
+        public DbSet<FirstModel> FirstModel { get; set; }
+        public DbSet<NewModel> NewModel { get; set; }
 
         public override int SaveChanges()
         {
