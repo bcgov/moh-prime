@@ -28,7 +28,7 @@ namespace Prime.Models
         /// <summary>
         /// Whether there was an attempt to notify Remote User by email
         /// </summary>
-        public bool Notified { get; set; } = false;
+        public bool Notified { get; set; }
 
         public ICollection<RemoteUserCertification> RemoteUserCertifications { get; set; }
     }
