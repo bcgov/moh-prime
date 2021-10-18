@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-import { noop, Observable, of } from 'rxjs';
+import { noop, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
