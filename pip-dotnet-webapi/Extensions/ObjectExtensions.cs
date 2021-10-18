@@ -1,5 +1,3 @@
-using System;
-
 namespace Pip
 {
     public static class ObjectExtensions

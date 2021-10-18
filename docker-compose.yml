@@ -200,25 +200,25 @@ services:
     build:
       context: pip-dotnet-webapi/
       args:
-        # DB_HOST: localhost
+        DB_HOST: pipdb
         # PGPASSWORD: postgres
         # POSTGRESQL_ADMIN_PASSWORD: postgres
         # POSTGRESQL_USERNAME: postgres
         # POSTGRESQL_DATABASE: postgres
-        DB_CONNECTION_STRING: "host=pipdb;port=5433;database=postgres;username=postgres;password=postgres"
-        ASPNETCORE_HTTPS_PORT: "5051"
+        DB_CONNECTION_STRING: "host=pipdb;port=5432;database=postgres;username=postgres;password=postgres"
+        ASPNETCORE_HTTPS_PORT: "5001"
         ASPNETCORE_ENVIRONMENT: "Development"
         ASPNETCORE_URLS: "http://+:8080"
         DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
     environment:
-      # DB_HOST: "localhost"
+      DB_HOST: pipdb
       # PGPASSWORD: postgres
       # POSTGRESQL_ADMIN_PASSWORD: postgres
       # POSTGRESQL_USERNAME: postgres
       # POSTGRESQL_DATABASE: postgres
-      DB_CONNECTION_STRING: "host=pipdb;port=5433;database=postgres;username=postgres;password=postgres"
-      ASPNETCORE_HTTPS_PORT: "5051"
-      ASPNETCORE_ENVIRONMENT: "Development"
+      DB_CONNECTION_STRING: "host=pipdb;port=5432;database=postgres;username=postgres;password=postgres"
+      ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_ENVIRONMENT: "Developent"
       ASPNETCORE_URLS: "http://+:8080"
       DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
     volumes:

@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,6 +8,7 @@ namespace Pip.Models
     {
         [Key]
         public int Code { get; set; }
-        public string Name { get; set; } = "default name";
+        [Required]
+        public string Name { get; set; }
     }
 }

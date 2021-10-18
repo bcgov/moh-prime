@@ -1,17 +1,17 @@
-version: "3"
+# version: "3"
 
-services:
-  ######################################################### Sign-in #
-  dotnet-webapi:
-    container_name: pip-dotnet-webapi
-    restart: always
-    build:
-      context: .
-    environment:
-      DB_CONNECTION_STRING: "host=postgres;port=5433;database=postgres;username=postgres;password=postgres"
-      ASPNETCORE_HTTPS_PORT: "5051"
-      ASPNETCORE_ENVIRONMENT: "Development"
-      ASPNETCORE_URLS: "http://+:8080"
-    ports:
-      - "5050:8080"
-      - "5051:5001"
+# services:
+#   ######################################################### Sign-in #
+#   pip-dotnet-webapi:
+#     container_name: pip-dotnet-webapi
+#     restart: always
+#     build:
+#       context: .
+#     environment:
+#       DB_CONNECTION_STRING: "host=postgres;port=5433;database=postgres;username=postgres;password=postgres"
+#       ASPNETCORE_HTTPS_PORT: "5001"
+#       ASPNETCORE_ENVIRONMENT: "Development"
+#       ASPNETCORE_URLS: "http://+:8080"
+#     ports:
+#       - "5050:8080"
+#       - "5051:5001"
