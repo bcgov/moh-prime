@@ -21,8 +21,6 @@ export class PhsaEformsProgressIndicatorComponent implements OnInit, IProgressIn
   public routes: string[];
   public prefix: string;
 
-  public PhsaEformsRoutes = PhsaEformsRoutes;
-
   constructor(
     private router: Router
   ) {

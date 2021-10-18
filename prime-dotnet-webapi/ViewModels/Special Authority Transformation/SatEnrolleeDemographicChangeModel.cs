@@ -38,7 +38,7 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
         /// </summary>
         public VerifiedAddress VerifiedAddress { get; set; }
 
-        public MailingAddress PreferredAddress { get; set; }
+        public PhysicalAddress PhysicalAddress { get; set; }
 
         public string Email { get; set; }
 
@@ -80,21 +80,21 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
                 }
             }
 
-            if (PreferredAddress != null)
+            if (PhysicalAddress != null)
             {
-                // Add/Update MailingAddress
-                if (party.MailingAddress == null)
+                // Add/Update PhysicalAddress
+                if (party.PhysicalAddress == null)
                 {
                     party.Addresses.Add(new PartyAddress
                     {
                         Party = party,
-                        Address = PreferredAddress,
+                        Address = PhysicalAddress,
                     });
                 }
                 else
                 {
-                    PreferredAddress.Id = party.MailingAddress.Id;
-                    party.MailingAddress.SetValues(PreferredAddress);
+                    PhysicalAddress.Id = party.PhysicalAddress.Id;
+                    party.PhysicalAddress.SetValues(PhysicalAddress);
                 }
             }
 
@@ -103,7 +103,6 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
             return party;
         }
 
-        // TODO: Don't duplicate code from `AuthorizedUserChangeModel`
         public bool Validate(ClaimsPrincipal user)
         {
             return UserId == user.GetPrimeUserId()
@@ -111,7 +110,8 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
                && FirstName == user.FindFirstValue(Claims.GivenName)
                && LastName == user.FindFirstValue(Claims.FamilyName)
                && GivenNames == user.FindFirstValue(Claims.GivenNames)
-               && DateOfBirth == user.GetDateOfBirth();
+               && DateOfBirth == user.GetDateOfBirth()
+               && Equals(VerifiedAddress, user.GetVerifiedAddress());
         }
     }
 
