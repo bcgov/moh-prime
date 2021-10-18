@@ -176,7 +176,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       this.nurseCategory.valueChanges
         .pipe(startWith(initialNursingCategory))
         .subscribe((collegeLicenseGroupingCode: number) => {
-          this.resetNursingCategory();
+          this.clearNursingCategoryValidators();
           this.setNursingCategoryValidators();
           this.loadLicensesByNursingCategory(collegeLicenseGroupingCode);
         });
@@ -200,6 +200,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     // In case previous selection was BCCNM, clear old validators
     this.formUtilsService.setValidators(this.nurseCategory, []);
+    this.clearNursingCategoryValidators();
 
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
@@ -242,6 +243,21 @@ export class CollegeCertificationFormComponent implements OnInit {
       this.practiceCode.reset(null);
       this.resetPractitionerIdStateAndValidators();
     }
+  }
+
+  private setNursingCategoryValidators(): void {
+    this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
+    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
+
+    if (!this.condensed) {
+      this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
+    }
+  }
+
+  private clearNursingCategoryValidators(): void {
+    this.formUtilsService.setValidators(this.licenseCode, []);
+    this.formUtilsService.setValidators(this.licenseNumber, []);
+    this.formUtilsService.setValidators(this.renewalDate, []);
   }
 
   private setPractitionerInformation(licenseCode: number) {
