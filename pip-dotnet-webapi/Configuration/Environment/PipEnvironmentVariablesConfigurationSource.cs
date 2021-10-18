@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Configuration;
-
 namespace Pip.Configuration.Environment
 {
     public class PipEnvironmentVariablesConfigurationSource : IConfigurationSource

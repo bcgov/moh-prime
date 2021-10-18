@@ -27,7 +27,7 @@ namespace Pip.Controllers
 
         // GET: api/First
         /// <summary>
-        /// Gets a non usable result. Used to test connection to database
+        /// Gets a non-usable result. Used to test connection to database
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -42,7 +42,7 @@ namespace Pip.Controllers
 
         // GET: api/First/lookups
         /// <summary>
-        /// Gets a non usable result. Used to test connection to database
+        /// Gets entries in the FirstLookup Table
         /// </summary>
         [HttpGet("lookups")]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
