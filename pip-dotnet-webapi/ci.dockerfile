@@ -5,9 +5,10 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0.100-rc.2-alpine3.14 as build
 # WORKDIR /vsdbg
 
 RUN apk add postgresql-client
+ENV DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME"
 
 RUN dotnet tool install --global dotnet-ef --version 6.0.0-rc.2.21480.5
-ENV PATH="${PATH}:/root/.dotnet/tools"
+ENV PATH="$PATH:/tmp/DOTNET_CLI_HOME/.dotnet/tools"
 
 ENV API_PORT 8080
 
