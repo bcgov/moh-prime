@@ -24,7 +24,6 @@ namespace Prime.Services
         Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
         Task DeleteEnrolleeAsync(int enrolleeId);
-
         Task<AccessAgreementNoteViewModel> GetAccessAgreementNoteAsync(int enrolleeId);
         Task<CareSettingViewModel> GetCareSettingsAsync(int enrolleeId);
         Task<IEnumerable<CertificationViewModel>> GetCertificationsAsync(int enrolleeId);
@@ -34,22 +33,6 @@ namespace Prime.Services
         Task<IEnumerable<RemoteAccessSiteViewModel>> GetRemoteAccessSitesAsync(int enrolleeId);
         Task<IEnumerable<SelfDeclarationViewModel>> GetSelfDeclarationsAsync(int enrolleeId);
         Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType);
         Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId);
         Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck);
