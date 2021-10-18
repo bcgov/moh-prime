@@ -102,4 +102,10 @@ namespace Prime.Configuration.Internal
     {
         public string Url { get; set; }
     }
+
+    public class SentryConfiguration
+    {
+        public string Dsn { get; set; }
+        public double TracesSampleRate { get; set; }
+    }
 }

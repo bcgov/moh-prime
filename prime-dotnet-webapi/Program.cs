@@ -59,28 +59,13 @@ namespace Prime
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseSentry(o => InitSentry(o));
+                    webBuilder.UseSentry(o =>
+                    {
+                        o.Dsn = PrimeConfiguration.Current.Sentry.Dsn;
+                        o.TracesSampleRate = PrimeConfiguration.Current.Sentry.TracesSampleRate;
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
-
-        private static void InitSentry(SentryAspNetCoreOptions sentryOptions)
-        {
-            if (PrimeEnvironment.IsLocal)
-            {
-                sentryOptions.Dsn = PrimeEnvironment.PrimeSentryKeys.DevEnvDsn;
-                sentryOptions.TracesSampleRate = PrimeEnvironment.PrimeSentryKeys.DevEnvTraceSampleRate;
-            }
-            else if (PrimeEnvironment.IsProduction)
-            {
-                sentryOptions.Dsn = PrimeEnvironment.PrimeSentryKeys.ProdEnvDsn;
-                sentryOptions.TracesSampleRate = PrimeEnvironment.PrimeSentryKeys.ProdEnvTraceSampleRate;
-            }
-            else
-            {
-                sentryOptions.Dsn = PrimeEnvironment.PrimeSentryKeys.TestEnvDsn;
-                sentryOptions.TracesSampleRate = PrimeEnvironment.PrimeSentryKeys.TestEnvTraceSampleRate;
-            }
-        }
 
         private static void InitSentrySerilog(SentrySerilogOptions sentrySerilogOptions)
         {

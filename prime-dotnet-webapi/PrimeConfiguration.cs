@@ -46,5 +46,7 @@ namespace Prime
         public PlrIntegrationConfiguration PlrIntegration { get; set; }
 
         public LdapApiConfiguration LdapApi { get; set; }
+
+        public SentryConfiguration Sentry { get; set; }
     }
 }
