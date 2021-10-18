@@ -56,19 +56,9 @@ export class ElectronicOrganizationAgreementPageComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? of(noop)
+            ? this.organizationResource
+              .acceptOrganizationAgreement(organizationId, this.agreementId)
             : EMPTY
-        ),
-        exhaustMap(() =>
-          this.organizationResource
-            .acceptOrganizationAgreement(organizationId, this.agreementId)
-        ),
-        exhaustMap(() =>
-          this.organizationResource
-            .getCareSettingCodesForPendingTransfer(organizationId)
-        ),
-        exhaustMap((codes: CareSettingEnum[]) =>
-          (codes.length) ? of(noop) : this.organizationResource.finalizeTransfer(organizationId)
         ),
       )
       .subscribe(() => {
