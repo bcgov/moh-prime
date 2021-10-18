@@ -12,7 +12,7 @@ ENV PATH="$PATH:/tmp/DOTNET_CLI_HOME/.dotnet/tools"
 
 ENV API_PORT 8080
 
-COPY *.csproj /app
+COPY *.csproj /opt/app
 RUN dotnet restore
 COPY . /opt/app
 
