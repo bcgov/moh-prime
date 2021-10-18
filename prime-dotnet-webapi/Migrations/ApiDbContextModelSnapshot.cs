@@ -14152,6 +14152,44 @@ namespace Prime.Migrations
                     b.ToTable("PartyEnrolment");
                 });
 
+            modelBuilder.Entity("Prime.Models.PartySubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool>("Approved")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubmissionType")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("PartySubmissions");
+                });
+
             modelBuilder.Entity("Prime.Models.PharmanetTransactionLog", b =>
                 {
                     b.Property<long>("Id")
@@ -18992,7 +19030,7 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.HasOne("Prime.Models.Party", "Party")
-                        .WithMany()
+                        .WithMany("PartyCertifications")
                         .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -19006,6 +19044,15 @@ namespace Prime.Migrations
                 {
                     b.HasOne("Prime.Models.Party", "Party")
                         .WithMany("PartyEnrolments")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.PartySubmission", b =>
+                {
+                    b.HasOne("Prime.Models.Party", "Party")
+                        .WithMany("PartySubmissions")
                         .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
