@@ -103,8 +103,6 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected performSubmission(): Observable<HttpEnrollee> {
-    this.formState.form.markAsPristine();
-
     const payload = this.formState.json;
     const enrolleeId = +this.route.snapshot.params.eid;
     let request$ = this.paperEnrolmentResource.updateDemographic(enrolleeId, payload)

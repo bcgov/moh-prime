@@ -9,6 +9,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
+import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { GisAuthorizationRedirectGuard } from '@gis/shared/guards/gis-authorization-redirect.guard';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
@@ -48,6 +49,11 @@ const routes: Routes = [
         canLoad: [AuthorizationRedirectGuard],
         loadChildren: () => import('@phsa/shared/modules/phsa-eforms-login-page/phsa-eforms-login-page.module')
           .then(m => m.PhsaEformsLoginPageModule)
+      },
+      {
+        path: SatEformsRoutes.LOGIN_PAGE,
+        loadChildren: () => import('@sat/shared/modules/sat-eforms-login-page/sat-eforms-login-page.module')
+          .then(m => m.SatEformsLoginPageModule)
       },
       {
         path: GisEnrolmentRoutes.LOGIN_PAGE,
