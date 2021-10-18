@@ -1,0 +1,22 @@
+<app-page>
+  <app-page-header>{{ title }}</app-page-header>
+  <app-sat-eforms-progress-indicator></app-sat-eforms-progress-indicator>
+
+  <section class="mb-3">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        You are ready to access your SAT eForms
+      </ng-container>
+
+      <ng-container #alertContent
+                    class="alert-content">
+        You can log into your application using your BC Services Card.
+        <a href="https://www.eforms.phsaehealth.ca"
+           target="_blank"
+           rel="noopener noreferrer">www.eforms.phsaehealth.ca</a>
+      </ng-container>
+    </app-alert>
+  </section>
+</app-page>
