@@ -824,7 +824,11 @@ objects:
           - name: DB_CONNECTION_STRING
             value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
           command: 
-            - dotnet ef database update
+            - dotnet 
+          args:
+            - ef
+            - database
+            - update
         containers:
           - name: ${SVC_NAME}-pip
             image: >-
