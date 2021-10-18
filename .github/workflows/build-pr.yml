@@ -183,7 +183,7 @@ jobs:
         with:
           context: pip-dotnet-webapi
           push: true
-          file: pip-dotnet-webapi/Dockerfile
+          file: pip-dotnet-webapi/ci.dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/pip-dotnet-webapi:pr-${{steps.PR.outputs.number}}
           cache-from: type=local,src=/tmp/.pip-cache
           cache-to: type=local,dest=/tmp/.pip-cache-new,mode=max
