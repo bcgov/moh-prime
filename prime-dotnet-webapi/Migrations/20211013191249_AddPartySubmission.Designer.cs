@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211013191249_AddPartySubmission")]
+    partial class AddPartySubmission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -11972,46 +11974,6 @@ namespace Prime.Migrations
                     b.ToTable("EnrolleeHealthAuthority");
                 });
 
-            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("EnrolmentLinkDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int?>("PaperEnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("UserProvidedGpid")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.HasIndex("PaperEnrolleeId");
-
-                    b.ToTable("EnrolleeLinkedEnrolment");
-                });
-
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
                 {
                     b.Property<int>("Id")
@@ -17984,21 +17946,6 @@ namespace Prime.Migrations
                         {
                             Code = 18,
                             Name = "Manually entered paper enrolment"
-                        },
-                        new
-                        {
-                            Code = 19,
-                            Name = "PRIME enrolment does not match paper enrollee record"
-                        },
-                        new
-                        {
-                            Code = 20,
-                            Name = "Possible match with paper enrolment"
-                        },
-                        new
-                        {
-                            Code = 21,
-                            Name = "Unable to link enrollee to paper enrolment"
                         });
                 });
 
@@ -18731,19 +18678,6 @@ namespace Prime.Migrations
                         .HasForeignKey("HealthAuthorityCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolment", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany()
-                        .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Enrollee", "PaperEnrollee")
-                        .WithMany()
-                        .HasForeignKey("PaperEnrolleeId");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>

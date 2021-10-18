@@ -23,10 +23,15 @@ namespace Prime.Controllers
     public class SatEnrolmentController : PrimeControllerBase
     {
         private readonly IPartyService _partyService;
+        private readonly IPlrProviderService _plrProviderService;
 
-        public SatEnrolmentController(IPartyService partyService)
+        public SatEnrolmentController(
+            IPartyService partyService,
+            IPlrProviderService plrProviderService
+        )
         {
             _partyService = partyService;
+            _plrProviderService = plrProviderService;
         }
 
         // POST: api/parties/sat
@@ -159,6 +164,34 @@ namespace Prime.Controllers
 
             await _partyService.UpdateCertificationsAsync(satId, payload);
             return Ok();
+        }
+
+        // POST: api/parties/sat/5/submissions
+        /// <summary>
+        /// SAT Enrolment submission
+        /// </summary>
+        /// <param name="satId"></param>
+        [HttpPost("{satId}/submissions", Name = nameof(SubmitSatEnrollee))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<PartySubmissionViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> SubmitSatEnrollee(int satId)
+        {
+            var satEnrollee = await _partyService.GetPartyAsync(satId, PartyType.SatEnrollee);
+            if (satEnrollee == null)
+            {
+                return NotFound($"SAT Enrollee not found with id {satId}");
+            }
+            if (!satEnrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var existsInPlr = await _plrProviderService.PartyExistsInPlrWithCollegeIdAndNameAsync(satId);
+            var submission = await _partyService.CreateSubmissionAsync(satId, SubmissionType.SatEnrollee, existsInPlr);
+
+            return Ok(submission);
         }
     }
 }
