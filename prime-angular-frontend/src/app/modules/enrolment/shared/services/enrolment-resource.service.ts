@@ -82,7 +82,7 @@ export class EnrolmentResource {
   }
 
   public createOrUpdateLinkedGpid(enrolleeId: number, paperEnrolleeGpid: string): Observable<NoContent> {
-    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/linked-gpid`, { data: paperEnrolleeGpid})
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/linked-gpid`, { data: paperEnrolleeGpid })
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         catchError((error: any) => {
@@ -561,8 +561,9 @@ export class EnrolmentResource {
       }
     });
 
-    enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
-    enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
+    // TODO manage this pre-submission and on pages only otherwise after submission should be immutable
+    // enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
+    // enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
 
     return this.enrolleeAdapter(enrolment);
   }

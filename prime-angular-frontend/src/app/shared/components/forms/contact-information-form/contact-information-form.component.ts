@@ -11,7 +11,23 @@ import { NotificationInfoSummaryDirective } from './notification-info-summary.di
   styleUrls: ['./contact-information-form.component.scss']
 })
 export class ContactInformationFormComponent implements OnInit {
+  /**
+   * @description
+   * Contact information form instance.
+   */
   @Input() public form: FormGroup;
+  /**
+   * @description
+   * Mode for displaying the form fields where full includes
+   * all fields, and partial only includes phone and email.
+   */
+  @Input() public mode: 'full' | 'partial';
+  /**
+   * @description
+   * Whether to show the SMS phone field.
+   *
+   * NOTE: Only applies in "full" mode.
+   */
   @Input() public showSmsPhone: boolean;
   @Input() public contactDescription: string;
 
@@ -19,6 +35,7 @@ export class ContactInformationFormComponent implements OnInit {
   public notificationInfoSummaryChildren: QueryList<NotificationInfoSummaryDirective>;
 
   constructor() {
+
     this.showSmsPhone = true;
     this.contactDescription = 'Provide a phone number that may be used to contact you.';
   }
