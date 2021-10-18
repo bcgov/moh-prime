@@ -80,6 +80,7 @@ namespace Prime.Models
         public ICollection<Agreement> Agreements { get; set; }
 
         public ICollection<PartyEnrolment> PartyEnrolments { get; set; }
+        public ICollection<PartySubmission> PartySubmissions { get; set; }
 
         public ICollection<PartyCertification> PartyCertifications { get; set; }
 

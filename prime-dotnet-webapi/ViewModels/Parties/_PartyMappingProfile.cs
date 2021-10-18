@@ -14,6 +14,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<Party, GisViewModel>();
             CreateMap<Party, SatViewModel>();
             CreateMap<PartyCertificationViewModel, PartyCertification>();
+            CreateMap<PartySubmission, PartySubmissionViewModel>();
         }
     }
 }
