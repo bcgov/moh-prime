@@ -595,34 +595,6 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public async Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType)
         {
             var submission = await _context.Submissions
