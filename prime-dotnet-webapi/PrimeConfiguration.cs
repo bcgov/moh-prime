@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Hosting;
+using Serilog.Events;
 using System;
 
 using Prime.Configuration.Internal;
@@ -10,6 +11,7 @@ namespace Prime
         public static PrimeConfiguration Current { get; set; }
 
         public static readonly string LogFilePath = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
+        public static readonly LogEventLevel LogLevel = ParseLogLevel(); // Default is Information but can be optionally overridden by the environment variable "LogLevel"
         public static bool IsDevelopment() => EnvironmentName == Environments.Development;
         public static bool IsProduction() => EnvironmentName == Environments.Production;
         private static readonly string EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
@@ -48,5 +50,15 @@ namespace Prime
         public LdapApiConfiguration LdapApi { get; set; }
 
         public SentryConfiguration Sentry { get; set; }
+
+        private static LogEventLevel ParseLogLevel()
+        {
+            if (int.TryParse(Environment.GetEnvironmentVariable("LogLevel"), out var logLevel))
+            {
+                return (LogEventLevel)logLevel;
+            }
+
+            return LogEventLevel.Information;
+        }
     }
 }

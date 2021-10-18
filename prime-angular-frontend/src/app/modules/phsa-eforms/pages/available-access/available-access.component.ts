@@ -9,7 +9,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { PartyTypeEnum } from '@phsa/shared/enums/party-type.enum';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
-import { PhsaEformsResource } from '@phsa/shared/services/phsa-eforms-resource.service';
+import { PhsaEformsResource } from '@phsa/shared/resources/phsa-eforms-resource.service';
 import { PhsaEformsFormStateService } from '@phsa/shared/services/phsa-eforms-form-state.service';
 
 @Component({

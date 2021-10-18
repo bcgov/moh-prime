@@ -17,7 +17,7 @@
       </ng-container>
     </app-expiry-alert>
 
-    <app-alert *ngIf="absence"
+    <app-alert *ngIf="enrolleeAbsence"
                type="danger"
                icon="warning">
       <ng-container #alertTitle
@@ -27,7 +27,7 @@
       <ng-container #alertContent
                     class="alert-content">
         You are currently reported absent from
-        <strong>{{absence.startTimestamp | formatDate}} - {{absence.endTimestamp | formatDate}}</strong>,
+        <strong>{{enrolleeAbsence.startTimestamp | formatDate}} - {{enrolleeAbsence.endTimestamp | formatDate}}</strong>,
         click the link below if you would like to end your absence.
         <br/>
         <a [routerLink]="" (click)="routeTo(EnrolmentRoutes.ABSENCE_MANAGEMENT)">Absence Management</a>
@@ -83,15 +83,16 @@
           </button>
         </ng-container>
       </app-page-subheader>
-
     </ng-container>
 
     <app-page-subheader divider="false">
       <ng-container appPageSubheaderTitle>
         {{
-        isInitialEnrolment ? 'Enrolment Review'
-        : (withinDaysOfRenewal) ? 'Renew Enrolment'
-        : 'Enrolment Information'
+        (isInitialEnrolment)
+          ? 'Enrolment Review'
+          : (withinDaysOfRenewal)
+            ? 'Renew Enrolment'
+            : 'Enrolment Information'
         }}
       </ng-container>
 
@@ -136,6 +137,25 @@
       Your enrolment contains an error that will need to be updated before submission.
     </ng-container>
   </app-alert>
+
+  <app-page-section *ngIf="isMatchingPaperEnrollee">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Paper Enrolment Declaration</ng-container>
+
+      <button mat-icon-button
+              matTooltip="Edit Paper Enrolment Declaration"
+              (click)="routeTo(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </app-page-subheader>
+
+    <ng-container>
+      <app-enrollee-property
+        [title]=" (paperEnrolleeGpid) ? 'Paper enrolment GPID' : 'No manual enrolment GPID provided.'">
+        {{ paperEnrolleeGpid }}
+      </app-enrollee-property>
+    </ng-container>
+  </app-page-section>
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>

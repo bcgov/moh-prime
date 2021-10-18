@@ -29,6 +29,7 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 import { BcscDemographicFormState } from '@enrolment/pages/bcsc-demographic/bcsc-demographic-form-state.class';
 import { BceidDemographicFormState } from '@enrolment/pages/bceid-demographic/bceid-demographic-form-state.class';
 import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
+import { PaperEnrolleeReturneeFormState } from '@enrolment/pages/paper-enrollee-returnees-page/paper-enrollee-returnee-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,7 @@ import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form
 export class EnrolmentFormStateService extends AbstractFormStateService<Enrolment> {
   public accessForm: FormGroup;
   public identityDocumentForm: FormGroup;
+  public paperEnrolleeReturneeFormState: PaperEnrolleeReturneeFormState
   public bceidDemographicFormState: BceidDemographicFormState;
   public bcscDemographicFormState: BcscDemographicFormState;
   public regulatoryFormState: RegulatoryFormState;
@@ -97,6 +99,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public get json(): Enrolment {
     const id = this.enrolleeId;
     const userId = this.userId;
+    const paperProfile = this.paperEnrolleeReturneeFormState.json;
     const profile = (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicFormState.json
       : this.bcscDemographicFormState.json;
@@ -114,7 +117,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       id,
       enrollee: {
         userId,
-        ...profile
+        ...profile,
+        ...paperProfile
       },
       certifications,
       ...deviceProvider,
@@ -134,6 +138,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    */
   public get forms(): AbstractControl[] {
     return [
+      this.paperEnrolleeReturneeFormState.form,
       ...ArrayUtils.insertIf(
         this.identityProvider === IdentityProviderEnum.BCEID,
         // Purposefully omitted accessForm and identityDocumentForm
@@ -208,6 +213,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.accessForm = this.buildAccessForm();
     this.identityDocumentForm = this.buildIdentityDocumentForm();
 
+    this.paperEnrolleeReturneeFormState = new PaperEnrolleeReturneeFormState(this.fb);
     this.bceidDemographicFormState = new BceidDemographicFormState(this.fb, this.formUtilsService);
     this.bcscDemographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
     this.regulatoryFormState = new RegulatoryFormState(this.fb, this.configService);

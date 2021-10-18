@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 
 using Serilog;
+using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -22,6 +23,7 @@ namespace Prime
         public static int Main(string[] args)
         {
             CreateLogger();
+            Log.Information($"LOG_LEVEL={(int)PrimeConfiguration.LogLevel}");
 
             try
             {
@@ -87,7 +89,7 @@ namespace Prime
             var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
+                .MinimumLevel.ControlledBy(new LoggingLevelSwitch() { MinimumLevel = PrimeConfiguration.LogLevel })
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)

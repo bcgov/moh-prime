@@ -30,5 +30,8 @@ namespace Prime.Services
         Task FinalizeTransferAsync(int organizationId);
         AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode);
         Task SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId);
+        Task RemoveUnsignedOrganizationAgreementsAsync(int organizationId);
+        Task<bool> IsOrganizationTransferCompleteAsync(int organizationId);
+        Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(int organizationId);
     }
 }
