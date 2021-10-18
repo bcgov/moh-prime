@@ -801,28 +801,28 @@ objects:
           - name: PGDATABASE
             value: pip-${SVC_NAME}
           - name: DB_HOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-host
-              - name: BACKEND_URL
-                value: https://${SVC_NAME}${URL_STUB}/api/v1/
-              - name: FRONTEND_URL
-                value: https://${SVC_NAME}${URL_STUB}
-              - name: POSTGRESQL_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: app-db-username
-              - name: POSTGRESQL_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: app-db-password
-              - name: POSTGRESQL_DATABASE
-                value: pip-${SVC_NAME}
-              - name: DB_CONNECTION_STRING
-                value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
+            valueFrom:
+              configMapKeyRef:
+                name: database-cm
+                key: database-host
+          - name: BACKEND_URL
+            value: https://${SVC_NAME}${URL_STUB}/api/v1/
+          - name: FRONTEND_URL
+            value: https://${SVC_NAME}${URL_STUB}
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: dev-patroni-secret
+                key: app-db-username
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: dev-patroni-secret
+                key: app-db-password
+          - name: POSTGRESQL_DATABASE
+            value: pip-${SVC_NAME}
+          - name: DB_CONNECTION_STRING
+            value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
           command: 
             - dotnet ef database update
         containers:
