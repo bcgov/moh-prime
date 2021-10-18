@@ -1,0 +1,106 @@
+<app-page [busy]="busy">
+  <app-page-header>{{ title }}</app-page-header>
+  <app-sat-eforms-progress-indicator></app-sat-eforms-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="formState.form"
+        novalidate>
+
+    <app-page-section>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Enrollee Information</ng-container>
+        <ng-container appPageSubheader2Summary>
+          This information comes from your BC Services Card. If you use a different name professionally, please
+          select "I have a preferred name."
+          <small class="font-italic d-block">
+            Entering a preferred name in PRIME won't change your BC Services Card.
+          </small>
+        </ng-container>
+      </app-page-subheader2>
+
+      <app-bcsc-profile [user]="bcscUser"
+                        [showAddress]="false"></app-bcsc-profile>
+
+      <app-toggle-content label="I have a preferred name"
+                          [checked]="hasPreferredName"
+                          (toggle)="onPreferredNameChange($event)">
+
+        <section>
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Title>Preferred Name</ng-container>
+            <ng-container appPageSubheader2Summary>
+              If you have a name that is different than your legal name that people know you by, enter your full
+              preferred name.
+            </ng-container>
+          </app-page-subheader2>
+
+          <app-preferred-name-form [form]="formState.form"></app-preferred-name-form>
+        </section>
+
+      </app-toggle-content>
+    </app-page-section>
+
+    <app-page-section>
+      <ng-container *ngIf="hasVerifiedAddress; else noAddress">
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>Address</ng-container>
+          <ng-container appPageSubheader2Summary>
+            This information below comes from your BC Services Card. If you would prefer to receive mail at a
+            professional or other address, select "I have a preferred address."
+            <small class="font-italic d-block">
+              Entering a preferred address will not change your BC Services Card address.
+            </small>
+          </ng-container>
+        </app-page-subheader2>
+
+        <app-bcsc-profile [user]="bcscUser"
+                          [showPersonal]="false"
+                          [showAddressTitle]="false"></app-bcsc-profile>
+
+        <app-toggle-content label="I have a preferred address"
+                            [checked]="hasPhysicalAddress"
+                            (toggle)="onPhysicalAddressChange($event)">
+
+          <section>
+            <app-page-subheader2>
+              <ng-container appPageSubheader2Title>Physical Address</ng-container>
+            </app-page-subheader2>
+
+            <app-address-form [form]="formState.physicalAddress"
+                              [inBc]="true"
+                              [showManualButton]="true"
+                              [showAddressFields]="hasPhysicalAddress"></app-address-form>
+          </section>
+
+        </app-toggle-content>
+
+      </ng-container>
+
+      <ng-template #noAddress>
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>Address</ng-container>
+          <ng-container appPageSubheader2Summary>
+            Provide your physical address.
+          </ng-container>
+        </app-page-subheader2>
+
+        <app-address-form [form]="formState.physicalAddress"
+                          [inBc]="true"
+                          [showManualButton]="true"
+                          [showAddressFields]="hasPhysicalAddress"></app-address-form>
+      </ng-template>
+    </app-page-section>
+
+    <app-contact-information-form [form]="formState.form"
+                                  mode="partial"
+                                  contactDescription="Provide your contact information to be used to correspond with you">
+      <ng-container appNotificationInfoSummary>
+        Provide your contact information to be used to correspond with you
+      </ng-container>
+    </app-contact-information-form>
+
+  </form>
+
+  <app-page-footer [hasSecondaryAction]="false"
+                   (save)="onSubmit()"></app-page-footer>
+</app-page>

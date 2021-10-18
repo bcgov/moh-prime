@@ -12,6 +12,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<GisEnrolment, GisViewModel>()
                 .IncludeMembers(g => g.Party);
             CreateMap<Party, GisViewModel>();
+            CreateMap<Party, SatViewModel>();
             CreateMap<PartyCertificationViewModel, PartyCertification>();
             CreateMap<PartySubmission, PartySubmissionViewModel>();
         }

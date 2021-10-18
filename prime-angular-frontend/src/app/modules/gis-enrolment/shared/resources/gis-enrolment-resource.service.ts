@@ -9,6 +9,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ToastService } from '@core/services/toast.service';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { LdapCredential } from '../models/ldap-credential.model';
 import { GisEnrolment } from '../models/gis-enrolment.model';
@@ -53,6 +54,7 @@ export class GisEnrolmentResource {
     return this.apiResource.get<GisEnrolment>(`parties/gis/${userId}`)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
+        tap((enrolment: GisEnrolment) => this.logger.info('ENROLMENT', enrolment)),
         catchError((error: any) => {
           // Allow for creation of a new enrolment
           if (error.status === 404) {
@@ -70,6 +72,7 @@ export class GisEnrolmentResource {
     return this.apiResource.get<GisEnrolment>(`parties/gis/${enrolmentId}`)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
+        tap((enrolment: GisEnrolment) => this.logger.info('ENROLMENT', enrolment)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be retrieved');
           this.logger.error('[GisModule] GisResource::getEnrolmentById error has occurred: ', error);
