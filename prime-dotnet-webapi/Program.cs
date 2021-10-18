@@ -67,14 +67,6 @@ namespace Prime
                     webBuilder.UseStartup<Startup>();
                 });
 
-        private static void InitSentrySerilog(SentrySerilogOptions sentrySerilogOptions)
-        {
-            // Debug and higher are stored as breadcrumbs (default is Information)
-            sentrySerilogOptions.MinimumBreadcrumbLevel = LogEventLevel.Debug;
-            // Warning and higher is sent as event (default is Error)
-            sentrySerilogOptions.MinimumEventLevel = LogEventLevel.Warning;
-        }
-
         private static void CreateLogger()
         {
             var path = PrimeConfiguration.LogFilePath;
@@ -115,7 +107,13 @@ namespace Prime
                     new JsonFormatter(),
                     $@"{path}/prime.json",
                     rollingInterval: RollingInterval.Day))
-                .WriteTo.Sentry(serilogOptions => InitSentrySerilog(serilogOptions))
+                .WriteTo.Sentry(serilogOptions =>
+                {
+                    // Debug and higher are stored as breadcrumbs (default is Information)
+                    serilogOptions.MinimumBreadcrumbLevel = LogEventLevel.Debug;
+                    // Warning and higher is sent as event (default is Error)
+                    serilogOptions.MinimumEventLevel = LogEventLevel.Warning;
+                })
                 .CreateLogger();
         }
     }
