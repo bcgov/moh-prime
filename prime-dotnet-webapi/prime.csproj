@@ -42,7 +42,7 @@
     <PackageReference Include="SimpleBase" Version="3.0.2" />
     <PackageReference Include="SoapCore" Version="1.1.0.15" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.1.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Wkhtmltopdf.NetCore" Version="5.0.2-preview" />
   </ItemGroup>
   <ItemGroup>
