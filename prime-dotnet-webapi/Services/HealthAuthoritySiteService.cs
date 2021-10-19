@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
+using Prime.ViewModels.Sites;
 
 namespace Prime.Services
 {
@@ -68,48 +69,54 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task<BusinessHoursViewModel> GetBusinessHours(int siteId)
+        public async Task<IEnumerable<BusinessDayViewModel>> GetBusinessHours(int siteId)
         {
-            return await GetBaseSitesNoTrackingQuery()
-                .Include(ha => ha.BusinessHours)
-                .SingleOrDefaultAsync(has => has.Id == siteId);
+            // TODO implement
+            throw new NotImplementedException();
+            // return await GetBaseSitesNoTrackingQuery()
+            //     .Include(ha => ha.BusinessHours)
+            //     .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task<RemoteUsersViewModel> GetRemoteUsers(int siteId)
+        public async Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsers(int siteId)
         {
-            return await GetBaseSitesNoTrackingQuery()
-                .Include(ha => ha.RemoteUsers)
-                .SingleOrDefaultAsync(has => has.Id == siteId);
+            // TODO implement
+            throw new NotImplementedException();
+            // return await GetBaseSitesNoTrackingQuery()
+            //     .Include(ha => ha.RemoteUsers)
+            //     .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task UpdateSiteAsync(int healthAuthorityId, int siteId, HealthAuthorityUpdateViewModel updateModel)
+        public async Task UpdateSiteAsync(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
+            // TODO implement
+            throw new NotImplementedException();
+            // var site = await _context.HealthAuthoritySites
+            //     .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO split out into methods where appropriate to reduce method
-            //      size where checks are required, otherwise update in place
+            // // TODO split out into methods where appropriate to reduce method
+            // //      size where checks are required, otherwise update in place
 
-            // TODO check vendor exists on the HealthAuthority list of vendor(s)
-            site.VendorCode = updateModel.vendorCode;
-            site.SiteName = updateModel.SiteName;
-            site.SiteId = updateModel.SiteId;
-            site.SecurityGroupCode = updateModel.SecurityGroupCode;
-            // TODO check careType exists on the HealthAuthority list of careType(s)
-            site.CareType = updateModel.CareType;
-            site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
-            // TODO dependency of Site navigational property in BusinessDay
-            // TODO update using appropriate mapping
-            // site.BusinessHours = updateModel.BusinessHours;
-            // TODO dependency of Site navigational property in RemoteUser
-            // TODO update using appropriate mapping
-            // site.RemoteUsers = updateModel.RemoteUsers;
-            // TODO check administrator exists on the HealthAuthority list of administrator(s)
-            site.HealthAuthorityPharmanetAdministratorId = updateModel.HealthAuthorityContactId;
-            // TODO check technical support exists on the HealthAuthority list of technical support(s)
-            site.HealthAuthorityTechnicalSupportId = updateModel.HealthAuthorityContactId;
+            // // TODO check vendor exists on the HealthAuthority list of vendor(s)
+            // site.VendorCode = updateModel.vendorCode;
+            // site.SiteName = updateModel.SiteName;
+            // site.SiteId = updateModel.SiteId;
+            // site.SecurityGroupCode = updateModel.SecurityGroupCode;
+            // // TODO check careType exists on the HealthAuthority list of careType(s)
+            // site.CareType = updateModel.CareType;
+            // site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
+            // // TODO dependency of Site navigational property in BusinessDay
+            // // TODO update using appropriate mapping
+            // // site.BusinessHours = updateModel.BusinessHours;
+            // // TODO dependency of Site navigational property in RemoteUser
+            // // TODO update using appropriate mapping
+            // // site.RemoteUsers = updateModel.RemoteUsers;
+            // // TODO check administrator exists on the HealthAuthority list of administrator(s)
+            // site.HealthAuthorityPharmanetAdministratorId = updateModel.HealthAuthorityContactId;
+            // // TODO check technical support exists on the HealthAuthority list of technical support(s)
+            // site.HealthAuthorityTechnicalSupportId = updateModel.HealthAuthorityContactId;
 
-            await _context.SaveChangesAsync();
+            // await _context.SaveChangesAsync();
         }
 
         public async Task SetSiteCompletedAsync(int siteId)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
+using Prime.ViewModels.Sites;
 
 namespace Prime.Services
 {
@@ -14,9 +15,9 @@ namespace Prime.Services
         Task<IEnumerable<HealthAuthoritySiteViewModel>> GetAllSitesAsync();
         Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId);
         Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
-        Task<BusinessHoursViewModel> GetBusinessHours(int siteId);
-        Task<RemoteUsersViewModel> GetRemoteUsers(int siteId);
-        Task UpdateSiteAsync(int healthAuthorityId, int siteId, HealthAuthorityUpdateViewModel updateModel);
+        Task<IEnumerable<BusinessDayViewModel>> GetBusinessHours(int siteId);
+        Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsers(int siteId);
+        Task UpdateSiteAsync(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel);
         Task SetSiteCompletedAsync(int siteId);
         Task SiteSubmissionAsync(int siteId);
     }
