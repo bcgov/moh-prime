@@ -154,15 +154,7 @@ namespace Prime.Controllers
             //     return NotFound($"No editable health authority site found with site id {siteId}");
             // }
 
-            // TODO do this in service
-            // await _healthAuthoritySiteService.UpdateVendorAsync(siteId, payload.VendorCode);
-            // await _healthAuthoritySiteService.UpdateSiteInfoAsync(siteId, payload.SiteInfo);
-            // await _healthAuthoritySiteService.UpdateCareTypeAsync(siteId, payload.CareType);
-            // await _healthAuthoritySiteService.UpdatePhysicalAddressAsync(siteId, payload.Address);
-            // await _healthAuthoritySiteService.UpdateHoursOperationAsync(siteId, payload.BusinessHours);
-            // await _healthAuthoritySiteService.UpdateRemoteUsersAsync(siteId, payload.RemoteUsers);
-            // await _healthAuthoritySiteService.UpdatePharmanetAdministratorAsync(siteId, payload.HealthAuthorityPharmanetAdministratorId);
-            // await _healthAuthoritySiteService.UpdateTechnicalSupportAsync(siteId, payload.HealthAuthorityTechnicalSupportId);
+            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
 
             return NoContent();
         }
