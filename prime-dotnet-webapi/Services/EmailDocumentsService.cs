@@ -8,7 +8,7 @@ using Prime.HttpClients;
 using Prime.Models;
 using Prime.Models.Documents;
 using Prime.Services.Razor;
-using Prime.ViewModels.SiteRegistration;
+using Prime.ViewModels.SiteRegistration.ReviewDocument;
 
 namespace Prime.Services.EmailInternal
 {

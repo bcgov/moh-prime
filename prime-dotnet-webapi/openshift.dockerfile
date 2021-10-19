@@ -1,10 +1,9 @@
 ###################################
 ### Stage 1 - Build environment ###
 ###################################
-# FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-FROM registry.redhat.io/rhel8/dotnet-31 AS build
+FROM registry.redhat.io/rhel8/dotnet-50 AS build
 WORKDIR /opt/app-root/app
-ARG API_PORT 
+ARG API_PORT
 ARG ASPNETCORE_ENVIRONMENT
 ARG POSTGRESQL_PASSWORD
 ARG POSTGRESQL_DATABASE
@@ -13,7 +12,7 @@ ARG POSTGRESQL_USER
 ARG SVC_NAME
 ARG DB_HOST
 
-ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/opt/app-root/app/.dotnet/tools:/root/.dotnet/tools:/opt/app-root/.dotnet/tools"
+ENV PATH="$PATH:/opt/rh/rh-dotnet50/root/usr/bin/:/opt/app-root/app/.dotnet/tools:/root/.dotnet/tools:/opt/app-root/.dotnet/tools"
 
 ENV API_PORT 8080
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
@@ -36,15 +35,15 @@ RUN dotnet build "prime.csproj" -c Release -o /opt/app-root/app/out
 RUN dotnet publish "prime.csproj" -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 
 # Begin database migration setup
-RUN dotnet tool install --global dotnet-ef --version 3.1.1
+RUN dotnet tool install --global dotnet-ef --version 5.0.6
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
 
 ########################################
 ###   Stage 2 - Runtime environment  ###
 ########################################
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 USER 0
-ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
+ENV PATH="$PATH:/opt/rh/rh-dotnet50/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
 ENV POSTGRESQL_PASSWORD "${POSTGRESQL_PASSWORD}"
 ENV POSTGRESQL_DATABASE "${POSTGRESQL_DATABASE}"
