@@ -839,7 +839,7 @@ objects:
               - name: DB_CONNECTION_STRING
                 value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
             ports:
-              - containerPort: 5050
+              - containerPort: 5000
                 protocol: TCP
             resources:
               limits:
@@ -851,20 +851,20 @@ objects:
             startupProbe:
               httpGet:
                 path: /api/health
-                port: 5050
+                port: 5000
               timeoutSeconds: 30
               failureThreshold: 30
               periodSeconds: 10
             readinessProbe:
               httpGet:
                 path: /api/health
-                port: 5050
+                port: 5000
               initialDelaySeconds: 5
               periodSeconds: 5
             livenessProbe:
               httpGet:
                 path: /api/health
-                port: 5050
+                port: 5000
               failureThreshold: 1
               periodSeconds: 5
             imagePullPolicy: IfNotPresent
@@ -895,7 +895,7 @@ objects:
     ports:
       - name: "http"
         port: 80
-        targetPort: 5050
+        targetPort: 5000
     selector:
       name: ${SVC_NAME}-pip
 
