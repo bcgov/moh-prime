@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { startWith } from 'rxjs/operators';
+import { exhaustMap, startWith, tap } from 'rxjs/operators';
 
 import moment from 'moment';
 
@@ -15,6 +15,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { EMPTY, of } from 'rxjs';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -174,9 +175,16 @@ export class CollegeCertificationFormComponent implements OnInit {
 
       const initialNursingCategory: number | null = +this.nurseCategory.value ?? null;
       this.nurseCategory.valueChanges
-        .pipe(startWith(initialNursingCategory))
+        .pipe(
+          startWith(initialNursingCategory),
+          tap(_ => this.clearNursingCategoryValidators()),
+          exhaustMap((collegeLicenseGroupingCode: number | null) =>
+            (collegeLicenseGroupingCode)
+              ? of(collegeLicenseGroupingCode)
+              : EMPTY
+          )
+        )
         .subscribe((collegeLicenseGroupingCode: number) => {
-          this.clearNursingCategoryValidators();
           this.setNursingCategoryValidators();
           this.loadLicensesByNursingCategory(collegeLicenseGroupingCode);
         });
