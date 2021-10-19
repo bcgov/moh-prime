@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { startWith } from 'rxjs/operators';
+import { exhaustMap, startWith, tap } from 'rxjs/operators';
 
 import moment from 'moment';
 
@@ -15,6 +15,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { EMPTY, of } from 'rxjs';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -174,10 +175,19 @@ export class CollegeCertificationFormComponent implements OnInit {
 
       const initialNursingCategory: number | null = +this.nurseCategory.value ?? null;
       this.nurseCategory.valueChanges
-        .pipe(startWith(initialNursingCategory))
-        .subscribe((collegeLicenseGroupingCode: number) =>
-          this.loadLicensesByNursingCategory(collegeLicenseGroupingCode)
-        );
+        .pipe(
+          startWith(initialNursingCategory),
+          tap(_ => this.clearNursingCategoryValidators()),
+          exhaustMap((collegeLicenseGroupingCode: number | null) =>
+            (collegeLicenseGroupingCode)
+              ? of(collegeLicenseGroupingCode)
+              : EMPTY
+          )
+        )
+        .subscribe((collegeLicenseGroupingCode: number) => {
+          this.setNursingCategoryValidators();
+          this.loadLicensesByNursingCategory(collegeLicenseGroupingCode);
+        });
     } else {
       const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
       const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
@@ -195,6 +205,10 @@ export class CollegeCertificationFormComponent implements OnInit {
       this.formUtilsService.setValidators(this.nurseCategory, [Validators.required]);
       return;
     }
+
+    // In case previous selection was BCCNM, clear old validators
+    this.formUtilsService.setValidators(this.nurseCategory, []);
+    this.clearNursingCategoryValidators();
 
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
@@ -232,10 +246,26 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.licenseNumber.reset(null);
 
     if (!this.condensed) {
+      this.nurseCategory.reset(null);
       this.renewalDate.reset(null);
       this.practiceCode.reset(null);
       this.resetPractitionerIdStateAndValidators();
     }
+  }
+
+  private setNursingCategoryValidators(): void {
+    this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
+    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
+
+    if (!this.condensed) {
+      this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
+    }
+  }
+
+  private clearNursingCategoryValidators(): void {
+    this.formUtilsService.setValidators(this.licenseCode, []);
+    this.formUtilsService.setValidators(this.licenseNumber, []);
+    this.formUtilsService.setValidators(this.renewalDate, []);
   }
 
   private setPractitionerInformation(licenseCode: number) {
@@ -302,9 +332,9 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.formUtilsService.setValidators(this.licenseNumber, []);
 
     if (!this.condensed) {
+      this.formUtilsService.setValidators(this.nurseCategory, []);
       this.formUtilsService.setValidators(this.renewalDate, []);
       this.formUtilsService.setValidators(this.practitionerId, []);
-      this.formUtilsService.setValidators(this.nurseCategory, []);
     }
   }
 
