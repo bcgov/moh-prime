@@ -218,7 +218,7 @@ namespace Prime.Models
         }
 
         /// <summary>
-        /// The ID of the Enrollee's most recently accepted Agreement.
+        /// The Id of the Version of the Enrollee's most recently accepted Agreement.
         /// </summary>
         [NotMapped]
         [Computed]
