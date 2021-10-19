@@ -35,10 +35,12 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySite>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteViewModel>), StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateHealthAuthoritySite(int healthAuthorityId, HealthAuthoritySiteCreateModel payload)
         {
-            var createdSite = await _healthAuthoritySiteService.CreateSiteAsync(healthAuthorityId, payload.VendorCode);
+            // var createdSite = await _healthAuthoritySiteService.CreateSiteAsync(healthAuthorityId, payload.VendorCode);
+
+            var createdSite = new HealthAuthoritySiteViewModel { Id = 1 };
 
             return CreatedAtAction(
                 nameof(GetHealthAuthoritySiteById),
@@ -55,10 +57,26 @@ namespace Prime.Controllers
         [HttpGet(Name = nameof(GetHealthAuthoritySites))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<V2HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthoritySites(int healthAuthorityId)
         {
-            return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId));
+            var sites = new[]
+            {
+                new V2HealthAuthoritySiteViewModel
+                {
+                    Id = 1,
+                    PhysicalAddress = new AddressViewModel {}
+                },
+                new V2HealthAuthoritySiteViewModel
+                {
+                    Id = 2,
+                    PhysicalAddress = new AddressViewModel {}
+                }
+            };
+
+
+            return Ok(sites);
+            // return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId));
         }
 
         // GET: api/health-authorities/5/sites/5
