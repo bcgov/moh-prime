@@ -608,6 +608,7 @@ export class EnrolmentResource {
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
     enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
+    enrolment.selfDeclarations = this.removeUnansweredSelfDeclarationQuestions(enrolment.selfDeclarations);
 
     return this.enrolleeAdapter(enrolment);
   }
@@ -634,6 +635,10 @@ export class EnrolmentResource {
     return certifications.filter((certification: CollegeCertification) =>
       this.collegeCertificationIsIncomplete(certification)
     );
+  }
+
+  private removeUnansweredSelfDeclarationQuestions(selfDeclarations: SelfDeclaration[]) {
+    return selfDeclarations.filter((selfDeclaration: SelfDeclaration) => selfDeclaration.answered);
   }
 
   private collegeCertificationIsIncomplete(certification: CollegeCertification): boolean {
