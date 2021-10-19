@@ -42,8 +42,6 @@ export class PaperEnrolmentResource {
     return forkJoin({
       enrollee: this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
         .pipe(map((response: ApiHttpResponse<HttpEnrollee>) => response.result)),
-      accessAgreementNote: this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`)
-        .pipe(map((response: ApiHttpResponse<EnrolleeNote>) => response.result)),
       enrolleeCareSettings: this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`)
         .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
       certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
