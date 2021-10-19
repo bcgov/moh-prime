@@ -21,6 +21,7 @@ RUN dotnet publish "pip.csproj" -c Release -o /app/out /p:MicrosoftNETPlatformLi
 
 RUN dotnet ef migrations script --idempotent --output /app/out/databaseMigrations.sql
 
+EXPOSE 5000
 
 # FROM mcr.microsoft.com/dotnet/runtime:6.0
 # WORKDIR /app
