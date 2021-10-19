@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { debounceTime } from 'rxjs/operators';
 
@@ -8,6 +8,8 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { LocalStorageService } from '@core/services/local-storage.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-search-form',
@@ -17,8 +19,6 @@ import { LocalStorageService } from '@core/services/local-storage.service';
 export class SearchFormComponent implements OnInit {
   @Input() public hideStatus: boolean;
   @Input() public localStoragePrefix: string;
-  @Output() public search: EventEmitter<string>;
-  @Output() public filter: EventEmitter<EnrolmentStatusEnum>;
   @Output() public refresh: EventEmitter<void>;
 
   public form: FormGroup;
@@ -27,12 +27,16 @@ export class SearchFormComponent implements OnInit {
   private textSearchKey: string;
   private statusCodeKey: string;
 
+  protected routeUtils: RouteUtils;
+
   constructor(
     private route: ActivatedRoute,
+    protected router: Router,
     private fb: FormBuilder,
     private configService: ConfigService,
     private localStorage: LocalStorageService
   ) {
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
     this.statuses = this.configService.statuses;
 
     // MacGyver paper enrollee filter into the status filter. Arbitrarily chose 42.
@@ -40,8 +44,6 @@ export class SearchFormComponent implements OnInit {
     const manualEnrolleeStatus = new Config<number>(42, 'Manual (Paper) Enrollees');
     this.statuses.push(manualEnrolleeStatus);
 
-    this.search = new EventEmitter<string>();
-    this.filter = new EventEmitter<EnrolmentStatusEnum>();
     this.refresh = new EventEmitter<void>();
   }
 
@@ -75,8 +77,17 @@ export class SearchFormComponent implements OnInit {
   private initForm() {
     const queryParams = this.route.snapshot.queryParams;
 
-    if (queryParams.textSearch || queryParams.statusCode) {
-      this.form.patchValue(queryParams);
+    if (queryParams.textSearch || queryParams.status) {
+      this.form.patchValue({
+        textSearch: queryParams.textSearch,
+        statusCode: +queryParams.status
+      });
+    } else {
+      const textSearch = this.localStorage.get(this.textSearchKey) || null;
+      const statusCode = this.localStorage.getInteger(this.statusCodeKey) || null;
+      this.form.patchValue({ textSearch, statusCode });
+      this.routeUtils.updateQueryParams({ textSearch });
+      this.routeUtils.updateQueryParams({ status: statusCode });
     }
 
     this.textSearch.valueChanges
@@ -84,22 +95,14 @@ export class SearchFormComponent implements OnInit {
       // Passing `null` removes the query parameter from the URL
       .subscribe((search: string) => {
         this.localStorage.set(this.textSearchKey, search || '');
-        this.search.emit(search || null);
+        this.routeUtils.updateQueryParams({ textSearch: search || null });
       });
 
     this.statusCode.valueChanges
-      .pipe(debounceTime(500))
       // Passing `null` removes the query parameter from the URL
       .subscribe((enrolmentStatus: EnrolmentStatusEnum) => {
         this.localStorage.set(this.statusCodeKey, enrolmentStatus?.toString());
-        this.filter.emit(enrolmentStatus || null);
+        this.routeUtils.updateQueryParams({ status: enrolmentStatus || null });
       });
-
-    if (!queryParams.textSearch && !queryParams.statusCode) {
-      this.form.patchValue({
-        textSearch: this.localStorage.get(this.textSearchKey),
-        statusCode: this.localStorage.getInteger(this.statusCodeKey) || null
-      });
-    }
   }
 }

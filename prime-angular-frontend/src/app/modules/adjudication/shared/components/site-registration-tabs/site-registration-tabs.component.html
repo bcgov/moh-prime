@@ -48,8 +48,6 @@
       <app-search-form *ngIf="showSearchFilter"
                        [hideStatus]="true"
                        [localStoragePrefix]="localStoragePrefix"
-                       (search)="onSearch($event)"
-                       (filter)="onFilter($event)"
                        (refresh)="onRefresh()"></app-search-form>
     </div>
 
