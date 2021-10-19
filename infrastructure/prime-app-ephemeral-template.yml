@@ -850,20 +850,20 @@ objects:
                 memory: 500Mi
             startupProbe:
               httpGet:
-                path: /api/health
+                path: /health
                 port: 5000
               timeoutSeconds: 30
               failureThreshold: 30
               periodSeconds: 10
             readinessProbe:
               httpGet:
-                path: /api/health
+                path: /health
                 port: 5000
               initialDelaySeconds: 5
               periodSeconds: 5
             livenessProbe:
               httpGet:
-                path: /api/health
+                path: /health
                 port: 5000
               failureThreshold: 1
               periodSeconds: 5
