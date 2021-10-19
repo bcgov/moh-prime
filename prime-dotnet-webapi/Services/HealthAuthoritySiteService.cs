@@ -91,13 +91,13 @@ namespace Prime.Services
             //      size where checks are required, otherwise update in place
 
             // TODO check vendor exists on the HealthAuthority list of vendor(s)
-            site.VendorCode = updateModel.vendorCode;
-            site.SiteName = updateModel.SiteName;
-            site.SiteId = updateModel.SiteId;
-            site.SecurityGroupCode = updateModel.SecurityGroupCode;
+            // site.VendorCode = updateModel.vendorCode;
+            // site.SiteName = updateModel.SiteName;
+            // site.SiteId = updateModel.SiteId;
+            // site.SecurityGroupCode = updateModel.SecurityGroupCode;
             // TODO check careType exists on the HealthAuthority list of careType(s)
-            site.CareType = updateModel.CareType;
-            site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
+            // site.CareType = updateModel.CareType;
+            // site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
             // TODO dependency of Site navigational property in BusinessDay
             // TODO update using appropriate mapping
             // site.BusinessHours = updateModel.BusinessHours;
@@ -105,9 +105,9 @@ namespace Prime.Services
             // TODO update using appropriate mapping
             // site.RemoteUsers = updateModel.RemoteUsers;
             // TODO check administrator exists on the HealthAuthority list of administrator(s)
-            site.HealthAuthorityPharmanetAdministratorId = updateModel.HealthAuthorityContactId;
+            // site.HealthAuthorityPharmanetAdministratorId = updateModel.HealthAuthorityContactId;
             // TODO check technical support exists on the HealthAuthority list of technical support(s)
-            site.HealthAuthorityTechnicalSupportId = updateModel.HealthAuthorityContactId;
+            // site.HealthAuthorityTechnicalSupportId = updateModel.HealthAuthorityContactId;
 
             await _context.SaveChangesAsync();
         }
