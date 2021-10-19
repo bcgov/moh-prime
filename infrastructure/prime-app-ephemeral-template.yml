@@ -810,10 +810,9 @@ objects:
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/pip-dotnet-webapi:${IMAGE_TAG}
             command:
-              - psql
-              - '-a'
-              - '-f'
-              - ./out/databaseMigrations.sql
+              - dotnet
+              - ./out/pip.dll
+              - '-v 2>&1> /dev/stdout'
             env:
               - name: DB_HOST
                 valueFrom:
