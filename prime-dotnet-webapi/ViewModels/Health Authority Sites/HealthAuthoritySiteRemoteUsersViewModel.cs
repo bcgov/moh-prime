@@ -7,6 +7,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
 {
     public class HealthAuthoritySiteRemoteUsersViewModel
     {
-        public ICollection<RemoteUser> RemoteUsers { get; set; }
+        // TODO generic remote user view model
+        public ICollection<RemoteUserViewModel> RemoteUsers { get; set; }
     }
 }

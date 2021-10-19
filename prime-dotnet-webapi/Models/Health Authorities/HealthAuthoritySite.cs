@@ -19,12 +19,14 @@ namespace Prime.Models.HealthAuthorities
         [JsonIgnore]
         public HealthAuthorityOrganization Organization { get; set; }
 
-        public int VendorCode { get; set; }
-
+        // TODO at organization level prevent changes if sites are still using, and list the site id and name
         // public int? HealthAuthorityVendorId { get; set; }
         //
         // [JsonIgnore]
         // public HealthAuthorityVendor HealthAuthorityVendor { get; set; }
+
+        // TODO stored as string due to issue around deletions
+        public int VendorCode { get; set; }
 
         public string SiteName { get; set; }
 
@@ -32,13 +34,14 @@ namespace Prime.Models.HealthAuthorities
 
         public int SecurityGroupCode { get; set; }
 
-        public string CareType { get; set; }
-
-        // TODO list of care types?
+        // TODO at organization level prevent changes if sites are still using, and list the sites id and name
         // public int? HealthAuthorityCareTypeId { get; set; }
 
         // [JsonIgnore]
         // public HealthAuthorityCareType HealthAuthorityCareType { get; set; }
+
+        // TODO stored as string due to issue around deletions
+        public string CareType { get; set; }
 
         public PhysicalAddress PhysicalAddress { get; set; }
 
