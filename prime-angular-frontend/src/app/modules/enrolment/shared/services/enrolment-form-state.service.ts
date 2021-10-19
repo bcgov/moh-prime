@@ -379,7 +379,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    */
 
   private convertSelfDeclarationsToJson(): SelfDeclaration[] {
-    const selfDeclarations = this.selfDeclarationForm.getRawValue();
+    const selfDeclarations = this.selfDeclarationForm.getRawValue() as SelfDeclaration;
     const selfDeclarationsTypes = {
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
       hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
@@ -396,7 +396,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
               selfDeclarations[`${sd}Details`],
               selfDeclarations[`${sd}DocumentGuids`],
               this.enrolleeId,
-              selfDeclarations[sd]
+              true
             )
           );
         }

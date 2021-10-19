@@ -91,7 +91,7 @@ export class AdjudicationResource {
     })
       .pipe(
         map(({ enrollee, enrolleeCareSettings, ...remainder }) => {
-          return { ...enrollee, ...enrolleeCareSettings, ...remainder }
+          return { ...enrollee, ...enrolleeCareSettings, remainder }
         }),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
