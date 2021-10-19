@@ -14,20 +14,9 @@ namespace Prime.Services
         Task<IEnumerable<HealthAuthoritySiteViewModel>> GetAllSitesAsync();
         Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId);
         Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
-
-        Task UpdateSiteAsync(int siteId, HealthAuthorityUpdateViewModel updateModel);
-        // TODO should we use a relationship but issues around deletion
-        // Task UpdateVendorAsync(int siteId, int healthAuthorityVendorId);
-        Task UpdateVendorAsync(int siteId, int vendorCode);
-        Task UpdateSiteInfoAsync(int siteId, HealthAuthoritySiteInfoViewModel viewModel);
-        // TODO should we use a relationship but issues around deletion
-        // Task UpdateCareTypeAsync(int siteId, int healthAuthorityCareTypeId);
-        Task UpdateCareTypeAsync(int siteId, string careType);
-        Task UpdatePhysicalAddressAsync(int siteId, AddressViewModel physicalAddress);
-        Task UpdateHoursOperationAsync(int siteId, ICollection<BusinessDay> businessHours);
-        Task UpdateRemoteUsersAsync(int siteId, ICollection<RemoteUser> remoteUsers);
-        Task UpdatePharmanetAdministratorAsync(int siteId, int healthAuthoritySiteAdministratorId);
-        Task UpdateTechnicalSupportAsync(int siteId, int technicalSupportId);
+        Task<BusinessHoursViewModel> GetBusinessHours(int siteId);
+        Task<RemoteUsersViewModel> GetRemoteUsers(int siteId);
+        Task UpdateSiteAsync(int healthAuthorityId, int siteId, HealthAuthorityUpdateViewModel updateModel);
         Task SetSiteCompletedAsync(int siteId);
         Task SiteSubmissionAsync(int siteId);
     }

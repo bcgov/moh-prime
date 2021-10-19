@@ -94,7 +94,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteHoursOperationViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<BusinessHoursViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHoursOfOperation(int healthAuthorityId, int siteId)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
@@ -102,7 +102,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            var siteHoursOfOperation = await _healthAuthoritySiteService.GetHoursOfOperationAsync(healthAuthorityId, siteId);
+            var siteHoursOfOperation = await _healthAuthoritySiteService.GetBusinessHoursAsync(siteId);
 
             return Ok(siteHoursOfOperation);
         }
@@ -117,7 +117,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteRemoteUsersViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<RemoteUsersViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetRemoteUsers(int healthAuthorityId, int siteId)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
@@ -125,12 +125,12 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            var siteRemoteUsers = await _healthAuthoritySiteService.GetRemoteUsersAsync(healthAuthorityId, siteId);
+            var siteRemoteUsers = await _healthAuthoritySiteService.GetRemoteUsersAsync(siteId);
 
             return Ok(siteRemoteUsers);
         }
 
-        // PUT: api/health-authorities/5/sites/5/vendor
+        // PUT: api/health-authorities/5/sites/5
         /// <summary>
         /// Updates a health authority site.
         /// </summary>
@@ -154,7 +154,7 @@ namespace Prime.Controllers
             //     return NotFound($"No editable health authority site found with site id {siteId}");
             // }
 
-            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
+            await _healthAuthoritySiteService.UpdateSiteAsync(healthAuthorityId, siteId, updateModel);
 
             return NoContent();
         }

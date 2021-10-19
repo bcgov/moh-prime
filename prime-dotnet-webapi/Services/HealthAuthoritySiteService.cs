@@ -6,10 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
-using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
@@ -70,100 +68,46 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task UpdateSiteAsync(int siteId, HealthAuthorityUpdateViewModel updateModel)
+        public async Task<BusinessHoursViewModel> GetBusinessHours(int siteId)
         {
-            // await UpdateVendorAsync(siteId, updateModel.VendorCode);
-            // await UpdateSiteInfoAsync(siteId, updateModel.SiteInfo);
-            // await UpdateCareTypeAsync(siteId, updateModel.CareType);
-            // await UpdatePhysicalAddressAsync(siteId, updateModel.Address);
-            // await UpdateHoursOperationAsync(siteId, updateModel.BusinessHours);
-            // await UpdateRemoteUsersAsync(siteId, updateModel.RemoteUsers);
-            // await UpdatePharmanetAdministratorAsync(siteId, updateModel.HealthAuthorityPharmanetAdministratorId);
-            // await UpdateTechnicalSupportAsync(siteId, updateModel.HealthAuthorityTechnicalSupportId);
+            return await GetBaseSitesNoTrackingQuery()
+                .Include(ha => ha.BusinessHours)
+                .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task UpdateVendorAsync(int siteId, int vendorCode)
+        public async Task<RemoteUsersViewModel> GetRemoteUsers(int siteId)
+        {
+            return await GetBaseSitesNoTrackingQuery()
+                .Include(ha => ha.RemoteUsers)
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+        }
+
+        public async Task UpdateSiteAsync(int healthAuthorityId, int siteId, HealthAuthorityUpdateViewModel updateModel)
         {
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // TODO split out into methods where appropriate to reduce method
+            //      size where checks are required, otherwise update in place
 
             // TODO check vendor exists on the HealthAuthority list of vendor(s)
-            site.VendorCode = vendorCode;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateSiteInfoAsync(int siteId, HealthAuthoritySiteInfoViewModel viewModel)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            _mapper.Map(viewModel, site);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateCareTypeAsync(int siteId, string careType)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
+            site.VendorCode = updateModel.vendorCode;
+            site.SiteName = updateModel.SiteName;
+            site.SiteId = updateModel.SiteId;
+            site.SecurityGroupCode = updateModel.SecurityGroupCode;
             // TODO check careType exists on the HealthAuthority list of careType(s)
-            site.CareType = careType;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdatePhysicalAddressAsync(int siteId, AddressViewModel physicalAddress)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            site.PhysicalAddress = _mapper.Map<PhysicalAddress>(physicalAddress);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateHoursOperationAsync(int siteId, ICollection<BusinessDay> businessHours)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
+            site.CareType = updateModel.CareType;
+            site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
             // TODO dependency of Site navigational property in BusinessDay
-            // site.BusinessHours = businessHours;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateRemoteUsersAsync(int siteId, ICollection<RemoteUser> remoteUsers)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
+            // TODO update using appropriate mapping
+            // site.BusinessHours = updateModel.BusinessHours;
             // TODO dependency of Site navigational property in RemoteUser
-            // site.RemoteUsers = remoteUsers;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdatePharmanetAdministratorAsync(int siteId, int healthAuthorityContactId)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
+            // TODO update using appropriate mapping
+            // site.RemoteUsers = updateModel.RemoteUsers;
             // TODO check administrator exists on the HealthAuthority list of administrator(s)
-            site.HealthAuthorityPharmanetAdministratorId = healthAuthorityContactId;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateTechnicalSupportAsync(int siteId, int healthAuthorityContactId)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
+            site.HealthAuthorityPharmanetAdministratorId = updateModel.HealthAuthorityContactId;
             // TODO check technical support exists on the HealthAuthority list of technical support(s)
-            site.HealthAuthorityTechnicalSupportId = healthAuthorityContactId;
+            site.HealthAuthorityTechnicalSupportId = updateModel.HealthAuthorityContactId;
 
             await _context.SaveChangesAsync();
         }
@@ -183,8 +127,8 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO add status change to site (next sprint)
-            // TODO add business events (next sprint)
+            // TODO add status change to site
+            // TODO add business events
             site.SubmittedDate = DateTimeOffset.Now;
 
             await _context.SaveChangesAsync();
