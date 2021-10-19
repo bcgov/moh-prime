@@ -70,6 +70,18 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
+        public async Task UpdateSiteAsync(int siteId, HealthAuthorityUpdateViewModel updateModel)
+        {
+            // await UpdateVendorAsync(siteId, updateModel.VendorCode);
+            // await UpdateSiteInfoAsync(siteId, updateModel.SiteInfo);
+            // await UpdateCareTypeAsync(siteId, updateModel.CareType);
+            // await UpdatePhysicalAddressAsync(siteId, updateModel.Address);
+            // await UpdateHoursOperationAsync(siteId, updateModel.BusinessHours);
+            // await UpdateRemoteUsersAsync(siteId, updateModel.RemoteUsers);
+            // await UpdatePharmanetAdministratorAsync(siteId, updateModel.HealthAuthorityPharmanetAdministratorId);
+            // await UpdateTechnicalSupportAsync(siteId, updateModel.HealthAuthorityTechnicalSupportId);
+        }
+
         public async Task UpdateVendorAsync(int siteId, int vendorCode)
         {
             var site = await _context.HealthAuthoritySites

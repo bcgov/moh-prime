@@ -7,7 +7,8 @@ namespace Prime.ViewModels.HealthAuthoritySites
 {
     public class HealthAuthoritySiteHoursOperationViewModel
     {
-        public ICollection<BusinessDay> BusinessHours { get; set; }
+        // TODO generic view model for sites
+        public ICollection<BusinessHourViewModel> BusinessHours { get; set; }
     }
 
     public class HealthAuthoritySiteHoursOperationValidator : AbstractValidator<HealthAuthoritySiteHoursOperationViewModel>
