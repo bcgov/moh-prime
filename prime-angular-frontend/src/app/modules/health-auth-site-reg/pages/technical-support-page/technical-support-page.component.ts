@@ -16,6 +16,7 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-page/technical-support-form-state.class';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { NoContent } from '@core/resources/abstract-resource';
+import { HealthAuthFormStateService } from '@health-auth/shared/services/health-auth-form-state.service';
 
 @Component({
   selector: 'app-technical-support-page',
@@ -34,6 +35,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private healthAuthorityResource: HealthAuthorityResource,
+    private formStateService: HealthAuthFormStateService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -60,14 +62,14 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected createFormInstance(): void {
-    this.formState = new TechnicalSupportFormState(this.fb);
+    this.formState = this.formStateService.technicalSupportFormState;
   }
 
   protected patchForm(): void {
     const healthAuthId = +this.route.snapshot.params.haid;
     const healthAuthSiteId = +this.route.snapshot.params.sid;
     if (!healthAuthId || !healthAuthSiteId) {
-      return;
+      throw new Error('No health authority site ID was provided');
     }
 
     this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
@@ -93,7 +95,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
     const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthorityResource.updateHealthAuthoritySiteTechnicalSupport(haid, sid, payload)
+    return this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, this.formStateService.json)
       .pipe(exhaustMap(() => this.healthAuthorityResource.setHealthAuthoritySiteCompleted(haid, sid)));
   }
 

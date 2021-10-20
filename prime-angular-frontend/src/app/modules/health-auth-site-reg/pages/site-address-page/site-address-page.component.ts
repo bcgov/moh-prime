@@ -1,20 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { FormBuilder } from '@angular/forms';
 
-import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Address, AddressLine } from '@lib/models/address.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { SiteAddressFormState } from './site-address-form-state.class';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { FormBuilder } from '@angular/forms';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthFormStateService } from '@health-auth/shared/services/health-auth-form-state.service';
+import { SiteAddressFormState } from './site-address-form-state.class';
 
 @Component({
   selector: 'app-site-address-page',
@@ -35,6 +36,7 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private healthAuthorityResource: HealthAuthorityResource,
+    private formStateService: HealthAuthFormStateService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -65,14 +67,14 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected createFormInstance(): void {
-    this.formState = new SiteAddressFormState(this.fb, this.formUtilsService);
+    this.formState = this.formStateService.siteAddressFormState;
   }
 
   protected patchForm(): void {
     const healthAuthId = +this.route.snapshot.params.haid;
     const healthAuthSiteId = +this.route.snapshot.params.sid;
     if (!healthAuthId || !healthAuthSiteId) {
-      return;
+      throw new Error('No health authority site ID was provided');
     }
 
     this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
@@ -90,10 +92,9 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthorityResource.updateHealthAuthoritySitePhysicalAddress(haid, sid, payload);
+    return this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, this.formStateService.json);
   }
 
   protected afterSubmitIsSuccessful(): void {

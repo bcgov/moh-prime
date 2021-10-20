@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
+import { Observable } from 'rxjs';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -17,6 +19,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthFormStateService } from '@health-auth/shared/services/health-auth-form-state.service';
 import { HoursOperationFormState } from './hours-operation-form-state.class';
 
 export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
@@ -66,6 +69,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private healthAuthorityResource: HealthAuthorityResource,
+    private formStateService: HealthAuthFormStateService,
     private route: ActivatedRoute,
     router: Router,
   ) {
@@ -124,7 +128,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected createFormInstance(): void {
-    this.formState = new HoursOperationFormState(this.fb);
+    this.formState = this.formStateService.hoursOperationFormState;
     this.lessThanErrorStateMatcher = new LessThanErrorStateMatcher();
   }
 
@@ -132,7 +136,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     const healthAuthId = +this.route.snapshot.params.haid;
     const healthAuthSiteId = +this.route.snapshot.params.sid;
     if (!healthAuthId || !healthAuthSiteId) {
-      return;
+      throw new Error('No health authority site ID was provided');
     }
 
     this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
@@ -168,10 +172,9 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthorityResource.updateHealthAuthoritySiteHoursOperation(haid, sid, payload);
+    return this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, this.formStateService.json);
   }
 
   protected afterSubmitIsSuccessful(): void {

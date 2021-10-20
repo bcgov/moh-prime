@@ -319,7 +319,7 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySite(healthAuthId: HealthAuthorityEnum, siteId: number, updateModel: HealthAuthoritySiteUpdate): Observable<NoContent> {
+  public updateHealthAuthoritySite(healthAuthId: HealthAuthorityEnum, siteId: number, updateModel: HealthAuthoritySiteUpdate): NoContent {
     return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}`, updateModel)
       .pipe(
         NoContentResponse,

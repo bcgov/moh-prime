@@ -7,6 +7,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
+import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { VendorFormState } from '@health-auth/pages/vendor-page/vendor-form-state.class';
 import { SiteInformationFormState } from '@health-auth/pages/site-information-page/site-information-form-state.class';
@@ -16,8 +17,6 @@ import { HoursOperationFormState } from '@health-auth/pages/hours-operation-page
 import { RemoteUsersFormState } from '@health-auth/pages/remote-users-page/remote-users-form-state.class';
 import { AdministratorFormState } from '@health-auth/pages/administrator-page/administrator-form-state.class';
 import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-page/technical-support-form-state.class';
-import { SiteRoutes } from '@registration/site-registration.routes';
-import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
 @Injectable({
   providedIn: 'root'

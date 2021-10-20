@@ -16,6 +16,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+import { HealthAuthFormStateService } from '@health-auth/shared/services/health-auth-form-state.service';
 import { AdministratorFormState } from './administrator-form-state.class';
 
 @Component({
@@ -35,6 +36,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private healthAuthorityResource: HealthAuthorityResource,
+    private formStateService: HealthAuthFormStateService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -61,14 +63,14 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   protected createFormInstance(): void {
-    this.formState = new AdministratorFormState(this.fb);
+    this.formState = this.formStateService.administratorFormState;
   }
 
   protected patchForm(): void {
     const healthAuthId = +this.route.snapshot.params.haid;
     const healthAuthSiteId = +this.route.snapshot.params.sid;
     if (!healthAuthId || !healthAuthSiteId) {
-      return;
+      throw new Error('No health authority site ID was provided');
     }
 
     this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
@@ -91,11 +93,9 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthorityResource.updateHealthAuthoritySitePharmanetAdministrator(haid, sid, payload)
-      .pipe(exhaustMap(() => this.healthAuthorityResource.setHealthAuthoritySiteCompleted(haid, sid)));
+    return this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, this.formStateService.json);
   }
 
   protected afterSubmitIsSuccessful(): void {

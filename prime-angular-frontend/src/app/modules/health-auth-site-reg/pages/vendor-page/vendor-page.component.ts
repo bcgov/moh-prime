@@ -16,6 +16,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthFormStateService } from '@health-auth/shared/services/health-auth-form-state.service';
 import { VendorFormState } from './vendor-form-state.class';
 
 @Component({
@@ -38,6 +39,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
     private location: Location,
     private configService: ConfigService,
     private healthAuthorityResource: HealthAuthorityResource,
+    private formStateService: HealthAuthFormStateService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -60,12 +62,13 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   protected createFormInstance(): void {
-    this.formState = new VendorFormState(this.fb);
+    this.formState = this.formStateService.vendorFormState;
   }
 
   protected patchForm(): void {
     const healthAuthId = +this.route.snapshot.params.haid;
     if (!healthAuthId) {
+      // Don't throw an error as new registrations are created in this view
       return;
     }
 
@@ -97,13 +100,12 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   protected performSubmission(): Observable<number> {
-    const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
     return (+sid)
-      ? this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, payload)
+      ? this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, this.formStateService.json)
         .pipe(map(() => sid))
-      : this.healthAuthorityResource.createHealthAuthoritySite(haid, payload)
+      : this.healthAuthorityResource.createHealthAuthoritySite(haid, this.formState.json)
         .pipe(
           map((site: HealthAuthoritySite) => {
             // Replace the URL with redirection, and prevent initial

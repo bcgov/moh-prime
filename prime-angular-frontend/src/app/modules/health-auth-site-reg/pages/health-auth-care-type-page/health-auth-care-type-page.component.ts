@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
-import { EMPTY } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { exhaustMap, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -16,6 +16,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthFormStateService } from '@health-auth/shared/services/health-auth-form-state.service';
 import { HealthAuthCareTypeFormState } from './health-auth-care-type-form-state.class';
 
 @Component({
@@ -36,6 +37,7 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
     private fb: FormBuilder,
     private configService: ConfigService,
     private healthAuthorityResource: HealthAuthorityResource,
+    private formStateService: HealthAuthFormStateService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -59,14 +61,14 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
   }
 
   protected createFormInstance() {
-    this.formState = new HealthAuthCareTypeFormState(this.fb);
+    this.formState = this.formStateService.healthAuthCareTypeFormState;
   }
 
   protected patchForm(): void {
     const healthAuthId = +this.route.snapshot.params.haid;
     const healthAuthSiteId = +this.route.snapshot.params.sid;
     if (!healthAuthId || !healthAuthSiteId) {
-      return;
+      throw new Error('No health authority site ID was provided');
     }
 
     this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
@@ -78,17 +80,16 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
             : EMPTY
         )
       )
-      .subscribe(({ careType, completed }: HealthAuthoritySite) => {
+      .subscribe(({ healthAuthorityCareTypeCode, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
-        this.formState.patchValue({ careType });
+        this.formState.patchValue({ healthAuthorityCareTypeCode });
       });
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthorityResource.updateHealthAuthoritySiteCareType(haid, sid, payload);
+    return this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, this.formStateService.json);
   }
 
   protected afterSubmitIsSuccessful(): void {

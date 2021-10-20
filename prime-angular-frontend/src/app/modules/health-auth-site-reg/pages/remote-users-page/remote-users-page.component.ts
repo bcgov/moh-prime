@@ -4,6 +4,8 @@ import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { KeyValue } from '@angular/common';
 
+import { Observable } from 'rxjs';
+
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -16,6 +18,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthFormStateService } from '@health-auth/shared/services/health-auth-form-state.service';
 import { RemoteUsersFormState } from './remote-users-form-state.class';
 
 // TODO refactor into list/form composite component used in health authority organization information
@@ -45,6 +48,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private healthAuthorityResource: HealthAuthorityResource,
+    private formStateService: HealthAuthFormStateService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -93,7 +97,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected createFormInstance(): void {
-    this.formState = new RemoteUsersFormState(this.fb);
+    this.formState = this.formStateService.remoteUserFormState;
   }
 
   protected initForm(): void {
@@ -123,7 +127,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     const healthAuthId = +this.route.snapshot.params.haid;
     const healthAuthSiteId = +this.route.snapshot.params.sid;
     if (!healthAuthId || !healthAuthSiteId) {
-      return;
+      throw new Error('No health authority site ID was provided');
     }
 
     this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
@@ -151,37 +155,9 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthorityResource.updateHealthAuthoritySiteRemoteUsers(haid, sid, payload);
-
-    // TODO do we need to send emails to remote users?
-    // const newRemoteUsers = this.formStateService.remoteUsersPageFormState.json
-    //   .reduce((newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
-    //     if (!site.remoteUsers.find((current: RemoteUser) =>
-    //       current.firstName === updated.firstName &&
-    //       current.lastName === updated.lastName &&
-    //       current.email === updated.email
-    //     )) {
-    //       newRemoteUsersAcc.push(updated);
-    //     }
-    //     return newRemoteUsersAcc;
-    //   }, []);
-
-    // return this.siteResource.updateSite(payload)
-    //   .pipe(
-    //     exhaustMap(() =>
-    //       (site.submittedDate)
-    //         ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
-    //         : of(noop())
-    //     ),
-    //     exhaustMap(() =>
-    //       (site.submittedDate && newRemoteUsers)
-    //         ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
-    //         : of(noop())
-    //     )
-    //   );
+    return this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, this.formStateService.json);
   }
 
   protected afterSubmitIsSuccessful(): void {
