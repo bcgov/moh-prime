@@ -22,7 +22,6 @@ namespace Prime.Services
         Task<Site> EnableEditingSite(int siteId);
         Task<Site> SubmitRegistrationAsync(int siteId);
         Task<Site> GetSiteNoTrackingAsync(int siteId);
-        Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId);
         Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, BusinessLicence businessLicence, Guid documentGuid);
         Task<BusinessLicence> UpdateBusinessLicenceAsync(int businessLicenceId, BusinessLicence updateBusinessLicence);
         Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId);

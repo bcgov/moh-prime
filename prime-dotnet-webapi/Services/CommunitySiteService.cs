@@ -277,6 +277,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        // TODO common
         public async Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null)
         {
             var site = await GetBaseSiteQuery()
@@ -293,14 +294,13 @@ namespace Prime.Services
             return site;
         }
 
+        // TODO *make* common
         public async Task<Site> UpdatePecCode(int siteId, string pecCode)
         {
             var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             site.PEC = pecCode;
-
-            _context.Update(site);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
@@ -313,6 +313,7 @@ namespace Prime.Services
             return site;
         }
 
+        // TODO make common?
         public async Task DeleteSiteAsync(int siteId)
         {
             var site = await GetBaseSiteQuery()
@@ -333,7 +334,7 @@ namespace Prime.Services
 
                 _context.Sites.Remove(site);
 
-                await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
+                await _businessEventService.CreateSiteEventAsync(siteId, provisionerId.Value, "Site Deleted");
 
                 await _context.SaveChangesAsync();
             }
@@ -422,20 +423,6 @@ namespace Prime.Services
             return await GetBaseSiteQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
-        }
-
-        public async Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId)
-        {
-            return await _context.BusinessEvents
-                .Where(e => e.SiteId == siteId)
-                .OrderByDescending(e => e.EventDate)
-                .ToListAsync();
-        }
-
-        public async Task<Vendor> GetVendorAsync(int vendorCode)
-        {
-            return await _context.Vendors
-                .SingleOrDefaultAsync(v => v.Code == vendorCode);
         }
 
         public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, BusinessLicence businessLicence, Guid documentGuid)
