@@ -9,7 +9,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/prime-dotnet-webapi/bin/Debug/netcoreapp3.1/prime.dll",
+      "program": "${workspaceFolder}/prime-dotnet-webapi/bin/Debug/net5.0/prime.dll",
       "args": [],
       "cwd": "${workspaceFolder}/prime-dotnet-webapi",
       "stopAtEntry": false,
