@@ -13,6 +13,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+import { HealthAuthFormStateService } from '@health-auth/shared/services/health-auth-form-state.service';
 import { SiteInformationFormState } from './site-information-form-state.class';
 
 @Component({
@@ -33,6 +34,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
     private fb: FormBuilder,
     private configService: ConfigService,
     private healthAuthorityResource: HealthAuthorityResource,
+    private formStateService: HealthAuthFormStateService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -76,10 +78,9 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthorityResource.updateHealthAuthoritySiteInfo(haid, sid, payload);
+    return this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, this.formStateService.json);
   }
 
   protected afterSubmitIsSuccessful(): void {
