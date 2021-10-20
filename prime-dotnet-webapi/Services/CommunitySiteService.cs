@@ -340,6 +340,7 @@ namespace Prime.Services
             }
         }
 
+        // TODO all of the status changing methods are common, and may deserve to be on their own service
         public async Task<Site> ApproveSite(int siteId)
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
