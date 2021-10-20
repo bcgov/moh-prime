@@ -13,7 +13,7 @@ namespace Prime.Services
         Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId);
         Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode);
         Task<IEnumerable<HealthAuthoritySiteViewModel>> GetAllSitesAsync();
-        Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId);
+        Task<IEnumerable<V2HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId);
         Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
         Task<IEnumerable<BusinessDayViewModel>> GetBusinessHours(int siteId);
         Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsers(int siteId);

@@ -62,22 +62,22 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<V2HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthoritySites(int healthAuthorityId)
         {
-            var sites = new[]
-            {
-                new V2HealthAuthoritySiteViewModel
-                {
-                    Id = 1,
-                    PhysicalAddress = new AddressViewModel {}
-                },
-                new V2HealthAuthoritySiteViewModel
-                {
-                    Id = 2,
-                    PhysicalAddress = new AddressViewModel {}
-                }
-            };
+            // var sites = new[]
+            // {
+            //     new V2HealthAuthoritySiteViewModel
+            //     {
+            //         Id = 1,
+            //         PhysicalAddress = new AddressViewModel {}
+            //     },
+            //     new V2HealthAuthoritySiteViewModel
+            //     {
+            //         Id = 2,
+            //         PhysicalAddress = new AddressViewModel {}
+            //     }
+            // };
 
-            return Ok(sites);
-            // return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId));
+            // return Ok(sites);
+            return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId));
         }
 
         // GET: api/health-authorities/5/sites/5

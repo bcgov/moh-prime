@@ -65,9 +65,9 @@ namespace Prime.Services
             return await GetBaseSitesNoTrackingQuery().ToListAsync();
         }
 
-        public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId)
+        public async Task<IEnumerable<V2HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId)
         {
-            return await GetBaseSitesNoTrackingQuery()
+            return await GetBaseV2SitesNoTrackingQuery()
                 .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId)
                 .ToListAsync();
         }
@@ -158,6 +158,13 @@ namespace Prime.Services
             return _context.HealthAuthoritySites
                 .AsNoTracking()
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider);
+        }
+
+        private IQueryable<V2HealthAuthoritySiteViewModel> GetBaseV2SitesNoTrackingQuery()
+        {
+            return _context.V2HealthAuthoritySites
+                .AsNoTracking()
+                .ProjectTo<V2HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider);
         }
     }
 }
