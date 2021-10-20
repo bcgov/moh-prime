@@ -28,9 +28,18 @@ namespace Prime.Services
 
         public async Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId)
         {
-            return await _context.HealthAuthoritySites
+            return await _context.V2HealthAuthoritySites
                 .AsNoTracking()
                 .AnyAsync(s => s.Id == siteId && s.HealthAuthorityOrganizationId == healthAuthorityId);
+        }
+
+        public async Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId)
+        {
+            return await _context.V2HealthAuthoritySites
+                .AsNoTracking()
+                .AnyAsync(s => s.Id == siteId
+                    && s.HealthAuthorityOrganizationId == healthAuthorityId
+                    && s.Status == SiteStatusType.Editable);
         }
 
         public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode)

@@ -90,6 +90,7 @@ namespace Prime
         public DbSet<OrganizationClaim> OrganizationClaims { get; set; }
 
         // Health Authorities
+        public DbSet<V2HealthAuthoritySite> V2HealthAuthoritySites { get; set; }
         public DbSet<HealthAuthorityOrganization> HealthAuthorities { get; set; }
         public DbSet<HealthAuthorityCareType> HealthAuthorityCareTypes { get; set; }
         public DbSet<HealthAuthorityContact> HealthAuthorityContacts { get; set; }
