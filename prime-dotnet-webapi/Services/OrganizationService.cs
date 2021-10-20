@@ -203,7 +203,7 @@ namespace Prime.Services
         /// </summary>
         public async Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int careSettingCode, int signingAuthorityId)
         {
-            var siteExists = await _context.Sites
+            var siteExists = await _context.CommunitySites
                 .AsNoTracking()
                 .Where(s => s.CareSettingCode == careSettingCode && s.OrganizationId == organizationId)
                 .AnyAsync();
@@ -250,7 +250,7 @@ namespace Prime.Services
         public async Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId)
         {
             // Get a list of the care settings used on sites that exist for an organization
-            var oganizationCareSettings = await _context.Sites
+            var oganizationCareSettings = await _context.CommunitySites
                 .AsNoTracking()
                 .Where(s => s.OrganizationId == organizationId)
                 .Select(s => s.CareSettingCode)

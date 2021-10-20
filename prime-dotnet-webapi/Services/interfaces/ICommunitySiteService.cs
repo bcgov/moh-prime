@@ -6,9 +6,9 @@ using Prime.ViewModels;
 using System.Security.Claims;
 namespace Prime.Services
 {
-    public interface ISiteService
+    public interface ICommunitySiteService
     {
-        Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null);
+        Task<IEnumerable<CommunitySite>> GetSitesAsync(int? organizationId = null);
         Task<Site> GetSiteAsync(int siteId);
         Task<int> CreateSiteAsync(int organizationId);
         Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite);

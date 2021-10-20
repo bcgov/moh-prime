@@ -16,16 +16,16 @@ using Prime.ViewModels;
 
 namespace Prime.Services
 {
-    public class SiteService : BaseService, ISiteService
+    public class CommunitySiteService : BaseService, ICommunitySiteService
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
 
-        public SiteService(
+        public CommunitySiteService(
             ApiDbContext context,
-            ILogger<SiteService> logger,
+            ILogger<CommunitySiteService> logger,
             IBusinessEventService businessEventService,
             IDocumentManagerClient documentClient,
             IMapper mapper,
@@ -38,9 +38,9 @@ namespace Prime.Services
             _organizationService = organizationService;
         }
 
-        public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
+        public async Task<IEnumerable<CommunitySite>> GetSitesAsync(int? organizationId = null)
         {
-            IQueryable<Site> query = GetBaseSiteQuery();
+            IQueryable<CommunitySite> query = GetBaseSiteQuery();
 
             if (organizationId != null)
             {
@@ -58,30 +58,32 @@ namespace Prime.Services
 
         public async Task<int> CreateSiteAsync(int organizationId)
         {
-            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            var signingAuthorityId = await _context.Organizations
+                .Where(o => o.Id == organizationId)
+                .Select(o => o.SigningAuthorityId)
+                .SingleOrDefaultAsync();
 
-            if (organization == null)
+            if (signingAuthorityId == default)
             {
                 throw new ArgumentException("Could not create a site, the passed in Organization doesnt exist.", nameof(organizationId));
             }
 
-            // Site provisionerId should be equal to organization signingAuthorityId
-            var site = new Site
+            var site = new CommunitySite
             {
-                ProvisionerId = organization.SigningAuthorityId,
-                OrganizationId = organization.Id,
+                ProvisionerId = signingAuthorityId,
+                OrganizationId = organizationId,
             };
             site.AddStatus(SiteStatusType.Editable);
 
-            _context.Sites.Add(site);
+            _context.CommunitySites.Add(site);
 
-            var created = await _context.SaveChangesAsync();
-            if (created < 1)
+            if (await _context.SaveChangesAsync() < 1)
             {
-                throw new InvalidOperationException("Could not create Site.");
+                _logger.LogError($"Could not create Community Site under Organization {organizationId}.");
+                return InvalidId;
             }
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, organization.SigningAuthorityId, "Site Created");
+            await _businessEventService.CreateSiteEventAsync(site.Id, signingAuthorityId, "Site Created");
 
             return site.Id;
         }
@@ -756,9 +758,9 @@ namespace Prime.Services
                 .AllAsync(s => s.PEC != pec);
         }
 
-        private IQueryable<Site> GetBaseSiteQuery()
+        private IQueryable<CommunitySite> GetBaseSiteQuery()
         {
-            return _context.Sites
+            return _context.CommunitySites
                 .Include(s => s.Provisioner)
                 .Include(s => s.SiteVendors)
                     .ThenInclude(v => v.Vendor)
