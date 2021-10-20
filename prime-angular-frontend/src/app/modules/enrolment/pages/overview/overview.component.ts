@@ -145,13 +145,13 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // Form being patched indicates that there is possibly changes that reside
           // in the form for submission, and they should be reflected in the view
           if (this.enrolmentFormStateService.isPatched) {
-            // Keep track of the Self Declaration Documents and place it back into the
-            // enrolment since it is not part of any of the forms
-            const selfDeclarationDocuments = enrolment.selfDeclarationDocuments;
-
-            // Replace enrolment with the version from the form
-            enrolment = this.enrolmentFormStateService.json;
-            enrolment.selfDeclarationDocuments = selfDeclarationDocuments;
+            // Replace enrolment with the version from the form for the user
+            // to review, but maintain a subset of immutable properties
+            const { selfDeclarationDocuments } = enrolment;
+            enrolment = {
+              ...this.enrolmentFormStateService.json,
+              selfDeclarationDocuments
+            };
           }
 
           // Allow for BCSC information to be updated on each submission of the enrolment
