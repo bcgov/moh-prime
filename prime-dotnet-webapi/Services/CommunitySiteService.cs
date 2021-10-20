@@ -50,7 +50,7 @@ namespace Prime.Services
             return await query.ToListAsync();
         }
 
-        public async Task<Site> GetSiteAsync(int siteId)
+        public async Task<CommunitySite> GetSiteAsync(int siteId)
         {
             return await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
@@ -88,7 +88,7 @@ namespace Prime.Services
             return site.Id;
         }
 
-        public async Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite)
+        public async Task UpdateSiteAsync(int siteId, CommunitySiteUpdateModel updatedSite)
         {
             var currentSite = await GetSiteAsync(siteId);
 
@@ -108,11 +108,11 @@ namespace Prime.Services
 
             try
             {
-                return await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                return 0;
+                _logger.LogError($"DbUpdateConcurrencyException when attempting to update Site {siteId}. Message: {ex.Message}");
             }
         }
 
@@ -125,7 +125,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        private void UpdateAddress(Site current, SiteUpdateModel updated)
+        private void UpdateAddress(Site current, CommunitySiteUpdateModel updated)
         {
             if (updated?.PhysicalAddress != null)
             {
@@ -140,7 +140,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateContacts(Site current, SiteUpdateModel updated)
+        private void UpdateContacts(Site current, CommunitySiteUpdateModel updated)
         {
             var contactTypes = new[]
             {
@@ -153,7 +153,7 @@ namespace Prime.Services
             {
                 var currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
 
-                if (!(typeof(SiteUpdateModel).GetProperty(contactType)?.GetValue(updated) is Contact updatedContact))
+                if (!(typeof(CommunitySiteUpdateModel).GetProperty(contactType)?.GetValue(updated) is Contact updatedContact))
                 {
                     continue;
                 }
@@ -178,7 +178,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateBusinessHours(Site current, SiteUpdateModel updated)
+        private void UpdateBusinessHours(Site current, CommunitySiteUpdateModel updated)
         {
             if (updated?.BusinessHours != null)
             {
@@ -198,7 +198,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateRemoteUsers(Site current, SiteUpdateModel updated)
+        private void UpdateRemoteUsers(Site current, CommunitySiteUpdateModel updated)
         {
             // Wholesale replace the remote users
             foreach (var remoteUser in current.RemoteUsers)
@@ -236,7 +236,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateVendors(Site current, SiteUpdateModel updated)
+        private void UpdateVendors(Site current, CommunitySiteUpdateModel updated)
         {
             if (updated?.SiteVendors != null)
             {
