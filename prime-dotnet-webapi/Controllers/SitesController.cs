@@ -1058,7 +1058,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var siteRegistrationNotes = await _communitySiteService.GetSiteRegistrationNotesAsync(site);
+            var siteRegistrationNotes = await _communitySiteService.GetSiteRegistrationNotesAsync(siteId);
 
             return Ok(siteRegistrationNotes);
         }

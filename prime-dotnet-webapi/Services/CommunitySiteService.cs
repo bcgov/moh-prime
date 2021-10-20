@@ -584,16 +584,18 @@ namespace Prime.Services
             return SiteRegistrationNote;
         }
 
-        public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(Site site)
+        // TODO make common
+        public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId)
         {
             return await _context.SiteRegistrationNotes
-                .Where(srn => srn.SiteId == site.Id)
+                .Where(srn => srn.SiteId == siteId)
                 .Include(srn => srn.Adjudicator)
                 .OrderByDescending(srn => srn.NoteDate)
                 .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
+        // TODO make common
         public async Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId)
         {
             return await _context.SiteRegistrationNotes
@@ -609,7 +611,9 @@ namespace Prime.Services
         {
             return await _context.BusinessEvents
                 .Include(e => e.Admin)
-                .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode) && (e.SiteId == siteId || e.Organization.Sites.Any(s => s.Id == siteId)))
+                .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
+                .Where(e => e.SiteId == siteId
+                        || e.Organization.Sites.Any(s => s.Id == siteId))
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
         }
