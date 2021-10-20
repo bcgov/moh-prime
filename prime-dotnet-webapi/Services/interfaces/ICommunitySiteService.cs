@@ -12,7 +12,7 @@ namespace Prime.Services
         Task<CommunitySite> GetSiteAsync(int siteId);
         Task<int> CreateSiteAsync(int organizationId);
         Task UpdateSiteAsync(int siteId, CommunitySiteUpdateModel updatedSite);
-        Task<int> UpdateCompletedAsync(int siteId, bool completed);
+        Task UpdateCompletedAsync(int siteId, bool completed);
         Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null);
         Task<Site> UpdatePecCode(int siteId, string pecCode);
         Task DeleteSiteAsync(int siteId);

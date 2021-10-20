@@ -118,7 +118,7 @@ namespace Prime.Services
 
         public async Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId)
         {
-            return await _context.Sites
+            return await _context.CommunitySites
                 .AsNoTracking()
                 .Where(s => s.Id == siteId)
                 .Select(s => new PermissionsRecord { UserId = s.Organization.SigningAuthority.UserId })
@@ -140,7 +140,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateContacts(Site current, CommunitySiteUpdateModel updated)
+        private void UpdateContacts(CommunitySite current, CommunitySiteUpdateModel updated)
         {
             var contactTypes = new[]
             {
@@ -236,7 +236,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateVendors(Site current, CommunitySiteUpdateModel updated)
+        private void UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated)
         {
             if (updated?.SiteVendors != null)
             {
@@ -261,27 +261,32 @@ namespace Prime.Services
             }
         }
 
-        public async Task<int> UpdateCompletedAsync(int siteId, bool completed)
+        // TODO common
+        public async Task UpdateCompletedAsync(int siteId, bool completed)
         {
-            var site = await GetBaseSiteQuery()
+            var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            if (site == null)
+            {
+                throw new ArgumentException($"Could not set Completed on Site {siteId}, it doesn't exist.");
+            }
 
             site.Completed = completed;
 
-            _context.Update(site);
-
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the site.");
-            }
-
-            return updated;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null)
         {
-            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
+            var site = await _context.Sites
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            if (site == null)
+            {
+                throw new ArgumentException($"Could not Update Adjudicator on Site {siteId}, it doesn't exist.");
+            }
+
             site.AdjudicatorId = adminId;
             await _context.SaveChangesAsync();
 
