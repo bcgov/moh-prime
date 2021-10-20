@@ -37,6 +37,4 @@ namespace Prime.Models
         [Required]
         public PhysicalAddress PhysicalAddress { get; set; }
     }
-
 }
-
