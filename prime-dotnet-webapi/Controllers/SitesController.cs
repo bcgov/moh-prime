@@ -138,7 +138,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateSite(int siteId, SiteUpdateModel updatedSite)
+        public async Task<ActionResult> UpdateSite(int siteId, CommunitySiteUpdateModel updatedSite)
         {
             var record = await _communitySiteService.GetPermissionsRecordAsync(siteId);
             if (record == null)
@@ -352,7 +352,7 @@ namespace Prime.Controllers
                 return BadRequest("Business Licence could not be created; network error or upload is already submitted");
             }
 
-            await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<SiteUpdateModel>(updatedSite));
+            await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
             site = await _communitySiteService.SubmitRegistrationAsync(siteId);
 
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);

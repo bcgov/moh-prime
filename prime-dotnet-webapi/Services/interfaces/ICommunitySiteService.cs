@@ -9,9 +9,9 @@ namespace Prime.Services
     public interface ICommunitySiteService
     {
         Task<IEnumerable<CommunitySite>> GetSitesAsync(int? organizationId = null);
-        Task<Site> GetSiteAsync(int siteId);
+        Task<CommunitySite> GetSiteAsync(int siteId);
         Task<int> CreateSiteAsync(int organizationId);
-        Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite);
+        Task UpdateSiteAsync(int siteId, CommunitySiteUpdateModel updatedSite);
         Task<int> UpdateCompletedAsync(int siteId, bool completed);
         Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null);
         Task<Site> UpdatePecCode(int siteId, string pecCode);
