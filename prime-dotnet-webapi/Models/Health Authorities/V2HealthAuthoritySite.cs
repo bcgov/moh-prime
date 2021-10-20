@@ -36,8 +36,8 @@ namespace Prime.Models
 
         public HealthAuthorityTechnicalSupport HealthAuthorityTechnicalSupport { get; set; }
 
-        public int? ProvisionerId { get; set; }
+        public int? AuthorizedUserId { get; set; }
 
-        public Party Provisioner { get; set; }
+        public Party AuthorizedUser { get; set; }
     }
 }
