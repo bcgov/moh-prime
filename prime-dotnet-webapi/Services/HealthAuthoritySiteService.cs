@@ -130,24 +130,27 @@ namespace Prime.Services
 
         public async Task SetSiteCompletedAsync(int siteId)
         {
-            var site = await _context.HealthAuthoritySites
+            var site = await _context.V2HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             site.Completed = true;
 
             await _context.SaveChangesAsync();
+
+            // await _businessEventService.CreateSiteEventAsync(site.Id, "Site Completed");
         }
 
         public async Task SiteSubmissionAsync(int siteId)
         {
-            var site = await _context.HealthAuthoritySites
+            var site = await _context.V2HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO add status change to site
-            // TODO add business events
             site.SubmittedDate = DateTimeOffset.Now;
+            site.AddStatus(SiteStatusType.InReview);
 
             await _context.SaveChangesAsync();
+
+            // await _businessEventService.CreateSiteEventAsync(site.Id, "Site Submitted");
         }
 
         private IQueryable<HealthAuthoritySiteViewModel> GetBaseSitesNoTrackingQuery()

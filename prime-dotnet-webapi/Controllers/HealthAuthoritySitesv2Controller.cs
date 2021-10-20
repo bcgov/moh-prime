@@ -191,22 +191,21 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SetHealthAuthoritySiteCompleted(int healthAuthorityId, int siteId)
         {
-            // if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            // {
-            //     return NotFound($"Health authority site not found with id {siteId}");
-            // }
-            // // TODO SiteIsEditable doesn't exist
-            // // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
-            // // {
-            // //     return NotFound($"No editable health authority site found with site id {siteId}");
-            // // }
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
+            if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"No editable health authority site found with site id {siteId}");
+            }
 
-            // await _healthAuthoritySiteService.SetSiteCompletedAsync(siteId);
+            await _healthAuthoritySiteService.SetSiteCompletedAsync(siteId);
 
-            return Ok();
+            return NoContent();
         }
 
         // POST: api/health-authorities/5/sites/5/submissions
@@ -219,22 +218,21 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId)
         {
-            // if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            // {
-            //     return NotFound($"Health authority site not found with id {siteId}");
-            // }
-            // // TODO SiteIsEditable doesn't exist
-            // // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
-            // // {
-            // //     return NotFound($"No editable health authority site found with site id {siteId}");
-            // // }
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
+            if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"No editable health authority site found with site id {siteId}");
+            }
 
-            // await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+            await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
 
-            return Ok();
+            return NoContent();
         }
     }
 }
