@@ -147,7 +147,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           if (this.enrolmentFormStateService.isPatched) {
             // Keep track of the Self Declaration Documents and place it back into the
             // enrolment since it is not part of any of the forms
-            const selfDeclarationDocuments = enrolment?.selfDeclarationDocuments;
+            const selfDeclarationDocuments = enrolment.selfDeclarationDocuments;
 
             // Replace enrolment with the version from the form
             enrolment = this.enrolmentFormStateService.json;
