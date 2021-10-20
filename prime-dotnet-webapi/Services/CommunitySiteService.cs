@@ -279,7 +279,7 @@ namespace Prime.Services
 
         public async Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null)
         {
-            var site = await _context.Sites
+            var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             if (site == null)
