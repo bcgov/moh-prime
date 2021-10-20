@@ -14187,7 +14187,7 @@ namespace Prime.Migrations
 
                     b.HasIndex("PartyId");
 
-                    b.ToTable("PartySubmissions");
+                    b.ToTable("PartySubmission");
                 });
 
             modelBuilder.Entity("Prime.Models.PharmanetTransactionLog", b =>
