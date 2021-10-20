@@ -157,7 +157,7 @@ export abstract class AbstractFormStateService<T> {
    */
   protected initialize(resetRoutes: string[] = []) {
     // Initial state of the form is unpatched and ready for
-    // enrolment information to be populated
+    // information to be populated
     this.patched = false;
 
     this.buildForms();
