@@ -146,7 +146,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // in the form for submission, and they should be reflected in the view
           if (this.enrolmentFormStateService.isPatched) {
             // Replace enrolment with the version from the form
+            // Keep track of the Self Declaration Documents and place it back into the
+            // enrolment since it is not part of any of the forms
+            const selfDeclarationDocuments = enrolment?.selfDeclarationDocuments;
             enrolment = this.enrolmentFormStateService.json;
+            enrolment.selfDeclarationDocuments = selfDeclarationDocuments;
           }
 
           // Allow for BCSC information to be updated on each submission of the enrolment
