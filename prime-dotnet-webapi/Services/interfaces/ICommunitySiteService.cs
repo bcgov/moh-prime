@@ -44,7 +44,6 @@ namespace Prime.Services
         Task<SiteNotification> CreateSiteNotificationAsync(int siteRegistrationNoteId, int adminId, int assineeId);
         Task RemoveSiteNotificationAsync(int siteNotificationId);
         Task<IEnumerable<SiteRegistrationNoteViewModel>> GetNotificationsAsync(int siteId, int adminId);
-        Task<SiteNotification> GetSiteNotificationAsync(int siteNotificationId);
         Task RemoveNotificationsAsync(int siteId);
         Task UpdateSiteFlag(int siteId, bool flagged);
         Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId);

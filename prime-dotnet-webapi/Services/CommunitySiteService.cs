@@ -692,10 +692,6 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<SiteNotification> GetSiteNotificationAsync(int siteNotificationId)
-        {
-            return await _context.SiteNotifications.SingleOrDefaultAsync(sn => sn.Id == siteNotificationId);
-        }
         public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetNotificationsAsync(int siteId, int adminId)
         {
             return await _context.SiteRegistrationNotes
