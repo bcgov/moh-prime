@@ -5,10 +5,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { Address, AddressLine } from '@lib/models/address.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { Address, AddressLine } from '@shared/models/address.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { SiteAddressFormState } from './site-address-form-state.class';

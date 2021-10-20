@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AddressLine } from '@lib/models/address.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { AddressLine } from '@shared/models/address.model';
 
 import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';

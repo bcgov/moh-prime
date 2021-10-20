@@ -7,13 +7,13 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { optionalAddressLineItems } from '@lib/models/address.model';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
-import { optionalAddressLineItems } from '@shared/models/address.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AddressPipe } from '@shared/pipes/address.pipe';

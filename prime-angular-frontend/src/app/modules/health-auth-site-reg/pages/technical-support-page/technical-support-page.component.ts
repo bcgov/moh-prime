@@ -94,7 +94,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
     const { haid, sid } = this.route.snapshot.params;
 
     return this.healthAuthorityResource.updateHealthAuthoritySiteTechnicalSupport(haid, sid, payload)
-      .pipe(exhaustMap(() => this.healthAuthorityResource.healthAuthoritySiteCompleted(haid, sid)));
+      .pipe(exhaustMap(() => this.healthAuthorityResource.setHealthAuthoritySiteCompleted(haid, sid)));
   }
 
   protected afterSubmitIsSuccessful(): void {

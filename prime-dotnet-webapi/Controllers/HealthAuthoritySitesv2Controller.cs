@@ -76,7 +76,6 @@ namespace Prime.Controllers
                 }
             };
 
-
             return Ok(sites);
             // return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId));
         }

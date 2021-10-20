@@ -2,7 +2,7 @@ import * as faker from 'faker';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { IAuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';

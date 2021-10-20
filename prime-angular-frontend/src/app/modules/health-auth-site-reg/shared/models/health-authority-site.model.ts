@@ -1,5 +1,5 @@
 import { Contact } from '@lib/models/contact.model';
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 // TODO move these into /lib
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { BusinessDay } from '@registration/shared/models/business-day.model';
@@ -9,15 +9,11 @@ import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 export interface HealthAuthoritySite {
   id?: number;
   healthAuthorityOrganizationId: HealthAuthorityEnum;
-  // healthAuthorityVendorId: number;
-  // healthAuthorityVendor: Vendor;
-  vendorCode: number;
+  healthAuthorityVendorCode: string;
+  healthAuthorityCareTypeCode: string;
   siteName: string;
   siteId: string;
   securityGroupCode: number;
-  // healthAuthorityCareTypeId: number;
-  // healthAuthorityCareType: string;
-  careType: string;
   physicalAddress: Address;
   businessHours: BusinessDay[];
   remoteUsers: RemoteUser[];
@@ -26,7 +22,7 @@ export interface HealthAuthoritySite {
   healthAuthorityTechnicalSupportId: number;
   healthAuthorityTechnicalSupport: Contact;
   // Indicates that a user has progressed through the entire registration, and
-  // reached the overview page switching them from wizard to spoking navigation
+  // reached the overview page switching them from wizard to spoke navigation
   completed: boolean;
   submittedDate: string;
   approvedDate: string;

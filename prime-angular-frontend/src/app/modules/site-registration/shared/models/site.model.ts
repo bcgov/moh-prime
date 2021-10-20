@@ -2,7 +2,7 @@ import moment, { Moment } from 'moment';
 
 import { Party } from '@lib/models/party.model';
 import { Contact } from '@lib/models/contact.model';
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { Vendor } from './vendor.model';

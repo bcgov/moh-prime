@@ -6,6 +6,7 @@ import { Observable, pipe, from, of, UnaryFunction } from 'rxjs';
 import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { Address } from '@lib/models/address.model';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -13,7 +14,6 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Address } from '@shared/models/address.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';

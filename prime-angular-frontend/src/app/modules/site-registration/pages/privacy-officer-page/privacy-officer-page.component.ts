@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Address } from '@lib/models/address.model';
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Address } from '@shared/models/address.model';
 
 import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';

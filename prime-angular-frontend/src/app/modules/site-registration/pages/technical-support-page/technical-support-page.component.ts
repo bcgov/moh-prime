@@ -5,13 +5,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import { Address } from '@lib/models/address.model';
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { OrganizationAgreement } from '@shared/models/agreement.model';
-import { Address } from '@shared/models/address.model';
 
 import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';

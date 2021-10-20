@@ -1,5 +1,5 @@
 import { Person } from '@lib/models/person.model';
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 
 export class Contact implements Person {
   public id?: number;

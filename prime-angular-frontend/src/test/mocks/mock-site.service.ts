@@ -2,7 +2,7 @@ import * as faker from 'faker';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 

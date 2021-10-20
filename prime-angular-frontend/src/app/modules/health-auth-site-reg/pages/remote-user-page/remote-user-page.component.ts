@@ -8,10 +8,10 @@ import { noop, of } from 'rxjs';
 import { CollegeConfig, LicenseConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AddressLine } from '@lib/models/address.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { AddressLine } from '@shared/models/address.model';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';

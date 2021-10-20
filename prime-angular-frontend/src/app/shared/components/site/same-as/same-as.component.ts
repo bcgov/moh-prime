@@ -3,7 +3,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Party } from '@lib/models/party.model';
 import { Person } from '@lib/models/person.model';
 import { Contact } from '@lib/models/contact.model';
-import { Address, AddressType } from '@shared/models/address.model';
+import { Address, AddressType } from '@lib/models/address.model';
 import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
@@ -78,7 +78,7 @@ export class SameAsComponent implements OnInit {
     ['physicalAddress', 'mailingAddress']
       .forEach((addressType: AddressType) => {
         if (person[addressType]) {
-          person[`${ addressType }Id`] = 0;
+          person[`${addressType}Id`] = 0;
           person[addressType].id = 0;
         }
       });
