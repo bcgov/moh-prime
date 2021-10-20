@@ -18,5 +18,8 @@ namespace Prime.Services
         Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<ContactViewModel> contacts) where T : HealthAuthorityContact, new();
         Task UpdatePrivacyOfficeAsync(int healthAuthorityId, PrivacyOfficeViewModel privacyOffice);
         Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes);
+
+        // New Line
+        Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId);
     }
 }
