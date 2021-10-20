@@ -12,13 +12,79 @@
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
         crossorigin="anonymous">
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+          integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+          crossorigin="anonymous"></script>
+
   <script>
     /**
-     * TEMPORARY FIX
-     * Currently Angular is not bootstrapping in Internet Explorer, and this is
-     * a work around to patch and provide time until it can be resolved allowing
-     * the guards to redirect users.
+     * UNSUPPORTED BROWSERS
+     * Angular no longer supports legacy browsers like Internet Explorer,
+     * Edge (pre-Chromium), etc; and this page provides a work around to
+     * provide feedback to users that their browser is out of date.
      */
+
+    function getBrowserByUserAgent() {
+      var name;
+      var userAgent = navigator.userAgent;
+
+      if (userAgent.indexOf('Firefox') > -1) {
+        name = 'Mozilla Firefox';
+      } else if (userAgent.indexOf('SamsungBrowser') > -1) {
+        name = 'Samsung Internet';
+      } else if (userAgent.indexOf('Opera') > -1 || userAgent.indexOf('OPR') > -1) {
+        name = 'Opera';
+      } else if (userAgent.indexOf('Trident') > -1) {
+        name = 'Microsoft Internet Explorer';
+      } else if (userAgent.indexOf('Edge') > -1) {
+        name = 'Microsoft Edge (Legacy)';
+      } else if (userAgent.indexOf('Edg') > -1) {
+        name = 'Microsoft Edge (Chromium)';
+      } else if (userAgent.indexOf('Chrome') > -1) {
+        name = 'Google Chrome or Chromium';
+      } else if (userAgent.indexOf('Safari') > -1) {
+        name = 'Apple Safari';
+      } else {
+        name = 'Unknown';
+      }
+
+      return {
+        name: name,
+        userAgent: userAgent
+      };
+    }
+
+    /**
+     * @description
+     * Log unsupported browser information to the server.
+     */
+    $.get('/assets/config-map.json')
+      .then(
+        function (configMap) {
+          return configMap.apiEndpoint;
+        },
+        function () {
+          return 'http://localhost:5000/api';
+        }
+      )
+      .always(function (apiEndpoint) {
+        var browser = getBrowserByUserAgent();
+        var log = {
+          message: 'Unsupported Browser: ' + browser.name,
+          data: JSON.stringify(browser.userAgent),
+          logType: 1
+        };
+        $.ajax({
+          type: 'POST',
+          url: apiEndpoint + '/client-logs',
+          data: JSON.stringify(log),
+          success: function () {
+            console.log('Unsupported browser has been logged');
+          },
+          contentType: 'application/json; charset=utf-8',
+          dataType: 'json'
+        });
+      });
   </script>
 
   <style>
@@ -125,8 +191,12 @@
       <div class="col-sm-12 col-md-10 col-lg-8 text-center">
         <h1 class="mb-5">
           PRIME
-          <span class="d-block d-lg-inline">does not support Internet Explorer.</span>
-          <span class="d-block">Use Chrome, Firefox, Safari, or the latest version of Edge.</span>
+          <span class="d-block d-lg-inline pt-3">does not support your browser.</span>
+          <span class="d-block">
+            Use <a href="https://www.google.ca/chrome" target="_blank">Chrome</a>,
+            <a href="https://www.mozilla.org/en-US/firefox/new" target="_blank">Firefox</a>, Safari, or
+            the latest version of <a href="https://www.microsoft.com/en-us/edge" target="_blank">Edge</a>.
+          </span>
         </h1>
       </div>
     </div>

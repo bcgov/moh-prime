@@ -73,10 +73,11 @@ namespace Prime.Services
                 Guid guid = Guid.NewGuid();
                 return Engine.Razor.RunCompile(template, guid.ToString(), typeof(TModel), model);
             }
-            catch (TemplateCompilationException ex)
+            // Implicitly rethrow the exception to preserve stack trace:
+            // https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2200
+            catch (TemplateCompilationException)
             {
-                // TODO: This is the error thrown then @Model.X and X doesn't exist in the model
-                throw ex;
+                throw;
             }
 
         }
