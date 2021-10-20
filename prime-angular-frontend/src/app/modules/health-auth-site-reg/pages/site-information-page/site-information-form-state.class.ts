@@ -24,7 +24,7 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     return this.formInstance.get('securityGroupCode') as FormControl;
   }
 
-  public get json(): any {
+  public get json(): SiteInformationForm {
     if (!this.formInstance) {
       return;
     }

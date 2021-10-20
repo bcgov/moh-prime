@@ -6,15 +6,14 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
-// TODO move to /lib
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-site-management-page',

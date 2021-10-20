@@ -7,16 +7,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, Observable } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { VendorFormState } from './vendor-form-state.class';
-import { HealthAuthority } from '@shared/models/health-authority.model';
 
 @Component({
   selector: 'app-vendor-page',
@@ -80,9 +80,9 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
             : EMPTY
         )
       )
-      .subscribe(({ vendorCode, completed }: HealthAuthoritySite) => {
+      .subscribe(({ healthAuthorityVendorCode, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
-        this.formState.patchValue({ vendorCode });
+        this.formState.patchValue({ healthAuthorityVendorCode });
       });
   }
 
@@ -91,7 +91,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   protected onSubmitFormIsInvalid(): void {
-    if (!this.formState.vendorCode.value) {
+    if (!this.formState.healthAuthorityVendorCode.value) {
       this.hasNoVendorError = true;
     }
   }
@@ -101,7 +101,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
     const { haid, sid } = this.route.snapshot.params;
 
     return (+sid)
-      ? this.healthAuthorityResource.updateHealthAuthoritySiteVendor(haid, sid, payload)
+      ? this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, payload)
         .pipe(map(() => sid))
       : this.healthAuthorityResource.createHealthAuthoritySite(haid, payload)
         .pipe(

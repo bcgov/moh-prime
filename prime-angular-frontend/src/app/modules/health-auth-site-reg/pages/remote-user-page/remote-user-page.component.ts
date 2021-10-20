@@ -10,18 +10,17 @@ import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AddressLine } from '@lib/models/address.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { RemoteUser } from '@lib/models/remote-user.model';
+import { RemoteUserCertification } from '@lib/models/remote-user-certification.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-form-state.class';
+import { RemoteUsersFormState } from '../remote-users-page/remote-users-form-state.class';
 
 // TODO refactor into list/form composite component used in health authority organization information
 // TODO copy of the remote users and remote user have been pulled from site registration
@@ -41,7 +40,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * FormState of the parent form, which has reuse in child form
    * with regards to helper methods.
    */
-  public formState: RemoteUsersPageFormState;
+  public formState: RemoteUsersFormState;
   /**
    * @description
    * Local form for adding and updating a single model that is
@@ -174,7 +173,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected createFormInstance(): void {
     // Be aware that this is the parent form state and should only
     // be used for it's API and on submission
-    this.formState = new RemoteUsersPageFormState(this.fb);
+    this.formState = new RemoteUsersFormState(this.fb);
   }
 
   protected patchForm(): void {

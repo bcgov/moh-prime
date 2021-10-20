@@ -3,9 +3,9 @@ import * as faker from 'faker';
 import { BehaviorSubject } from 'rxjs';
 
 import { Address } from '@lib/models/address.model';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { IAuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 
 export class MockAuthorizedUserService implements IAuthorizedUserService {

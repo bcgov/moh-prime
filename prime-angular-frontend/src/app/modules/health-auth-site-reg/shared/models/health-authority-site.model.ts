@@ -1,10 +1,9 @@
 import { Contact } from '@lib/models/contact.model';
 import { Address } from '@lib/models/address.model';
-// TODO move these into /lib
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { BusinessDay } from '@registration/shared/models/business-day.model';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
+import { RemoteUser } from '@lib/models/remote-user.model';
+import { BusinessDay } from '@lib/models/business-day.model';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 
 export interface HealthAuthoritySite {
   id?: number;

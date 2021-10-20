@@ -9,9 +9,8 @@ import { noop, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RemoteUser } from '@lib/models/remote-user.model';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
-// TODO move to @lib/models
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';

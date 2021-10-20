@@ -16,7 +16,7 @@ export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCar
     return this.formInstance.get('careType') as FormControl;
   }
 
-  public get json(): any {
+  public get json(): HealthAuthCareTypeForm {
     if (!this.formInstance) {
       return;
     }

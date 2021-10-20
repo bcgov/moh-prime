@@ -7,18 +7,16 @@ import { KeyValue } from '@angular/common';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RemoteUser } from '@lib/models/remote-user.model';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-// TODO move to @lib/models
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { RemoteUsersPageFormState } from './remote-users-form-state.class';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { RemoteUsersFormState } from './remote-users-form-state.class';
 
 // TODO refactor into list/form composite component used in health authority organization information
 // TODO copy of the remote users and remote user have been pulled from site registration
@@ -33,7 +31,7 @@ import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority
   styleUrls: ['./remote-users-page.component.scss']
 })
 export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: RemoteUsersPageFormState;
+  public formState: RemoteUsersFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
@@ -95,7 +93,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected createFormInstance(): void {
-    this.formState = new RemoteUsersPageFormState(this.fb);
+    this.formState = new RemoteUsersFormState(this.fb);
   }
 
   protected initForm(): void {

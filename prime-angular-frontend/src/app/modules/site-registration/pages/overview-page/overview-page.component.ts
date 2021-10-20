@@ -9,6 +9,7 @@ import { exhaustMap, map } from 'rxjs/operators';
 import { Moment } from 'moment';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -20,7 +21,6 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
 @Component({

@@ -7,7 +7,9 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { DateUtils } from '@lib/utils/date-utils.class';
 import { optionalAddressLineItems } from '@lib/models/address.model';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
@@ -22,10 +24,8 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
-import { DateUtils } from '@lib/utils/date-utils.class';
 
 @Component({
   selector: 'app-site-management-page',

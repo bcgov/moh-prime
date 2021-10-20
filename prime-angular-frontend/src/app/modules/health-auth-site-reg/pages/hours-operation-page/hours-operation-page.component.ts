@@ -10,11 +10,10 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { BusinessDayHours } from '@lib/models/business-day-hours.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-// TODO move to /lib
-import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';

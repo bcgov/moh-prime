@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
+import { RemoteUser } from '@lib/models/remote-user.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
 
 @Component({
   selector: 'app-remote-user-review',

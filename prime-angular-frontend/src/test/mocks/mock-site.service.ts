@@ -3,8 +3,8 @@ import * as faker from 'faker';
 import { BehaviorSubject } from 'rxjs';
 
 import { Address } from '@lib/models/address.model';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { Site } from '@registration/shared/models/site.model';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 export class MockSiteService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match

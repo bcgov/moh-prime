@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { Contact } from '@lib/models/contact.model';
 import { PrivacyOffice } from '@lib/models/privacy-office.model';
 import { ApiResource } from '@core/resources/api-resource.service';
@@ -17,7 +18,6 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-authority-site-create.model';

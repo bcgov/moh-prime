@@ -13,8 +13,8 @@ export class VendorFormState extends AbstractFormState<VendorForm> {
     this.buildForm();
   }
 
-  public get vendorCode(): FormControl {
-    return this.formInstance.get('vendorCode') as FormControl;
+  public get healthAuthorityVendorCode(): FormControl {
+    return this.formInstance.get('healthAuthorityVendorCode') as FormControl;
   }
 
   public get json(): VendorForm {
@@ -35,7 +35,7 @@ export class VendorFormState extends AbstractFormState<VendorForm> {
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      vendorCode: [
+      healthAuthorityVendorCode: [
         0,
         [FormControlValidators.requiredIndex]
       ]
