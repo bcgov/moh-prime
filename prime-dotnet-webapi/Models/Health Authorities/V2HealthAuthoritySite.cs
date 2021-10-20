@@ -38,6 +38,6 @@ namespace Prime.Models
 
         public int? AuthorizedUserId { get; set; }
 
-        public Party AuthorizedUser { get; set; }
+        public AuthorizedUser AuthorizedUser { get; set; }
     }
 }
