@@ -193,7 +193,7 @@ jobs:
           rm -rf /tmp/.pip-cache
           mv /tmp/.pip-cache-new /tmp/.pip-cache
 
-  build-frontend:
+  build-pip-frontend:
     runs-on: ubuntu-latest
     environment: Development
     defaults:
@@ -333,7 +333,7 @@ jobs:
   apply-oc-template:
     runs-on: ubuntu-20.04
     environment: Development
-    needs: [build-document-manager-backend,build-frontend,build-backend,build-pip]
+    needs: [build-document-manager-backend,build-frontend,build-backend,build-pip-frontend,build-pip]
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
