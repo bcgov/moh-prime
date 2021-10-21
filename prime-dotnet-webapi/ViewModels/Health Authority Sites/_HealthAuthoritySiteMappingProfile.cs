@@ -1,12 +1,14 @@
 using AutoMapper;
 using Prime.Models.HealthAuthorities;
-using Prime.ViewModels.HealthAuthoritySites;
 
-public class HealthAuthoritySiteMappingProfile : Profile
+namespace Prime.ViewModels.HealthAuthoritySites
 {
-    public HealthAuthoritySiteMappingProfile()
+    public class HealthAuthoritySiteMappingProfile : Profile
     {
-        CreateMap<HealthAuthoritySite, HealthAuthoritySiteViewModel>();
-        CreateMap<HealthAuthorityPharmanetAdministrator, HealthAuthoritySite>();
+        public HealthAuthoritySiteMappingProfile()
+        {
+            CreateMap<HealthAuthoritySite, HealthAuthoritySiteViewModel>();
+            CreateMap<HealthAuthorityPharmanetAdministrator, HealthAuthoritySite>();
+        }
     }
 }

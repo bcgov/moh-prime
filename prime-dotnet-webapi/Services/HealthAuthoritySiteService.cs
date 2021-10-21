@@ -73,8 +73,8 @@ namespace Prime.Services
         {
             return await _context.V2HealthAuthoritySites
                 .AsNoTracking()
-                .ProjectTo<V2HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId)
+                .ProjectTo<V2HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
@@ -96,14 +96,13 @@ namespace Prime.Services
 
         public async Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsersAsync(int siteId)
         {
-            return await _context.V2HealthAuthoritySites
-                .Where(ha => ha.Id == siteId)
-                .SelectMany(ha => ha.RemoteUsers)
+            return await _context.RemoteUsers
+                .Where(user => user.SiteId == siteId)
                 .ProjectTo<RemoteUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
-        public async Task UpdateSiteAsync(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel)
+        public async Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
             var site = await _context.V2HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);

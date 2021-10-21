@@ -192,7 +192,7 @@ namespace Prime.Controllers
                 return BadRequest();
             }
 
-            await _healthAuthoritySiteService.UpdateSiteAsync(healthAuthorityId, siteId, updateModel);
+            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
 
             return NoContent();
         }
