@@ -258,7 +258,7 @@ jobs:
         with:
           context: pip-angular-frontend
           push: true
-          file: pip-angular-frontend/ci.dockerfile
+          file: pip-angular-frontend/Dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/pip-frontend:pr-${{steps.PR.outputs.number}}
           cache-from: type=local,src=/tmp/.pip-frontend-cache
           cache-to: type=local,dest=/tmp/.pip-frontend-cache-new,mode=max
