@@ -77,7 +77,7 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
 
   public onBack(route: string) {
     this.removeIncompleteLocations();
-    super.onBack(route)
+    super.onBack(route);
   }
 
   /**
@@ -100,12 +100,6 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
     this.patchForm();
   }
 
-  private addRemoteAccessLocation(): void {
-    const remoteAccessLocation = this.enrolmentFormStateService
-      .remoteAccessLocationFormGroup();
-    this.remoteAccessLocations.push(remoteAccessLocation);
-  }
-
   protected createFormInstance(): void {
     this.form = this.enrolmentFormStateService.remoteAccessLocationsForm;
   }
@@ -118,11 +112,27 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
     }
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    const { remoteAccessLocations } = this.enrolmentService.enrolment;
+    this.enrolmentFormStateService.patchRemoteAccessLocationsForm(remoteAccessLocations);
+  }
+
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = this.EnrolmentRoutes.SELF_DECLARATION;
     }
     super.nextRouteAfterSubmit(nextRoutePath);
+  }
+
+  private addRemoteAccessLocation(): void {
+    const remoteAccessLocation = this.enrolmentFormStateService
+      .remoteAccessLocationFormGroup();
+    this.remoteAccessLocations.push(remoteAccessLocation);
   }
 }

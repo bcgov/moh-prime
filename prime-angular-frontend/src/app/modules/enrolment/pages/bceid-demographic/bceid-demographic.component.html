@@ -4,7 +4,7 @@
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
+        [formGroup]="formState.form"
         novalidate>
 
     <section class="mb-3">
@@ -15,7 +15,7 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-preferred-name-form [form]="form"
+      <app-preferred-name-form [form]="formState.form"
                                mode="columns"></app-preferred-name-form>
 
       <div class="row">
@@ -56,7 +56,7 @@
 
     </section>
 
-    <app-contact-information-form [form]="form"></app-contact-information-form>
+    <app-contact-information-form [form]="formState.form"></app-contact-information-form>
 
   </form>
 

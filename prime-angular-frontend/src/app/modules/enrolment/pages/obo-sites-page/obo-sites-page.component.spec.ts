@@ -71,7 +71,7 @@ describe('OboSitesPageComponent', () => {
     fixture = TestBed.createComponent(OboSitesPageComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
-    component.form = enrolmentFormStateService.buildJobsForm();
+    component.form = enrolmentFormStateService.buildOboSitesForm();
     fixture.detectChanges();
   }));
 
