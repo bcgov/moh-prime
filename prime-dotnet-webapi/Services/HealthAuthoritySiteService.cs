@@ -107,15 +107,9 @@ namespace Prime.Services
             var site = await _context.V2HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // _context.Entry(site).CurrentValues.SetValues(updateModel);
+            _context.Entry(site).CurrentValues.SetValues(updateModel);
 
-            site.SiteName = updateModel.SiteName;
-            site.SiteId = updateModel.SiteId;
-            site.SecurityGroupCode = updateModel.SecurityGroupCode;
-            site.HealthAuthorityCareTypeId = updateModel.HealthAuthorityCareTypeId;
-            site.HealthAuthorityPharmanetAdministratorId = updateModel.HealthAuthorityPharmanetAdministratorId;
-            site.HealthAuthorityTechnicalSupportId = updateModel.HealthAuthorityTechnicalSupportId;
-
+            // TODO not like this
             site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
             site.BusinessHours = _mapper.Map<ICollection<BusinessDay>>(updateModel.BusinessHours);
             site.RemoteUsers = _mapper.Map<ICollection<RemoteUser>>(updateModel.RemoteUsers);
