@@ -11,6 +11,7 @@ using Prime.Models.HealthAuthorities;
 using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.Parties;
+using System;
 
 namespace Prime.Services
 {
@@ -64,6 +65,14 @@ namespace Prime.Services
                 .Where(u => u.HealthAuthorityCode == (HealthAuthorityCode)healthAuthorityId)
                 .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<bool> AuthorizedUserExistsOnOrganizationAsync(int healthAuthorityId, int authorizedUserId)
+        {
+            return await _context.AuthorizedUsers
+                .Where(u => u.HealthAuthorityCode == (HealthAuthorityCode)healthAuthorityId
+                    && u.Id == authorizedUserId)
+                .AnyAsync();
         }
 
         public async Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes)
@@ -153,6 +162,11 @@ namespace Prime.Services
             _context.HealthAuthorityVendors.AddRange(newVendors);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> HealthAuthorityVendorExistsAsync(int healthAuthorityVendorId)
+        {
+            return await _context.HealthAuthorityVendors.AnyAsync(v => v.Id == healthAuthorityVendorId);
         }
     }
 }

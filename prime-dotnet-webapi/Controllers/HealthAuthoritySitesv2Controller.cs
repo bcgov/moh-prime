@@ -21,10 +21,15 @@ namespace Prime.Controllers
     public class HealthAuthoritySitesV2Controller : PrimeControllerBase
     {
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
+        private readonly IHealthAuthorityService _healthAuthorityService;
 
-        public HealthAuthoritySitesV2Controller(IHealthAuthoritySiteService healthAuthoritySiteService)
+        public HealthAuthoritySitesV2Controller(
+            IHealthAuthoritySiteService healthAuthoritySiteService,
+            IHealthAuthorityService healthAuthorityService
+        )
         {
             _healthAuthoritySiteService = healthAuthoritySiteService;
+            _healthAuthorityService = healthAuthorityService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -40,9 +45,20 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteViewModel>), StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateHealthAuthoritySite(int healthAuthorityId, HealthAuthoritySiteCreateModel payload)
         {
-            // var createdSite = await _healthAuthoritySiteService.CreateSiteAsync(healthAuthorityId, payload.VendorCode);
+            if (await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+            }
+            if (await _healthAuthorityService.AuthorizedUserExistsOnOrganizationAsync(healthAuthorityId, payload.AuthorizedUserId))
+            {
+                return Forbid();
+            }
+            if (await _healthAuthorityService.HealthAuthorityVendorExistsAsync(payload.HealthAuthorityVendorId))
+            {
+                return NotFound($"Health Authority Vendor not found with id {payload.HealthAuthorityVendorId}");
+            }
 
-            var createdSite = new HealthAuthoritySiteViewModel { Id = 1 };
+            var createdSite = await _healthAuthoritySiteService.CreateSiteAsync(healthAuthorityId, payload);
 
             return CreatedAtAction(
                 nameof(GetHealthAuthoritySite),

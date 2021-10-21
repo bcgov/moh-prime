@@ -42,22 +42,23 @@ namespace Prime.Services
                     && s.Status == SiteStatusType.Editable);
         }
 
-        public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode)
+        public async Task<V2HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel)
         {
-            // TODO dependency of Site navigational property in Vendor
-            var site = new HealthAuthoritySite
+            var site = new V2HealthAuthoritySite
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
-                VendorCode = vendorCode
-                // TODO set initial status change (next sprint)
+                HealthAuthorityVendorId = createModel.HealthAuthorityVendorId,
+                AuthorizedUserId = createModel.AuthorizedUserId
             };
+            site.AddStatus(SiteStatusType.Editable);
 
-            // TODO add business events (next sprint)
 
-            _context.HealthAuthoritySites.Add(site);
+            _context.V2HealthAuthoritySites.Add(site);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<HealthAuthoritySiteViewModel>(site);
+            // await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Created");
+
+            return _mapper.Map<V2HealthAuthoritySiteViewModel>(site);
         }
 
         public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetAllSitesAsync()
@@ -137,7 +138,7 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
 
-            // await _businessEventService.CreateSiteEventAsync(site.Id, "Site Completed");
+            // await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Completed");
         }
 
         public async Task SiteSubmissionAsync(int siteId)
@@ -150,7 +151,7 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
 
-            // await _businessEventService.CreateSiteEventAsync(site.Id, "Site Submitted");
+            // await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Submitted");
         }
 
         private IQueryable<HealthAuthoritySiteViewModel> GetBaseSitesNoTrackingQuery()
