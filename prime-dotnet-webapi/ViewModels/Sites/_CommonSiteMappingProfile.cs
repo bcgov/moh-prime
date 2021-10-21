@@ -11,6 +11,7 @@ namespace Prime.ViewModels.Profiles
         public CommonSiteMappingProfile()
         {
             CreateMap<BusinessDay, BusinessDayViewModel>();
+            CreateMap<RemoteUser, RemoteUserViewModel>();
         }
     }
 }
