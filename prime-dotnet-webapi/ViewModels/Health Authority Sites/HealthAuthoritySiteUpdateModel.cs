@@ -12,11 +12,14 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public string SiteId { get; set; }
         public int SecurityGroupCode { get; set; }
         public AddressViewModel PhysicalAddress { get; set; }
-        public int HealthAuthorityCareTypeCode { get; set; }
+        public int HealthAuthorityCareTypeId { get; set; }
         public int HealthAuthorityPharmanetAdministratorId { get; set; }
         public int HealthAuthorityTechnicalSupportId { get; set; }
 
         public ICollection<BusinessDayViewModel> BusinessHours { get; set; }
         public ICollection<RemoteUserViewModel> RemoteUsers { get; set; }
+
+        // new attribute
+        public int? HealthAuthorityVendorId { get; set; }
     }
 }
