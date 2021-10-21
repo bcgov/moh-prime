@@ -120,9 +120,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       return;
     }
 
-    // Replace previous values on deactivation when
-    // so updates are discarded
-    this.formState.patchValue(this.enrolment.certifications);
+    // Replace previous values on deactivation so updates are discarded
+    this.formState.patchValue(this.enrolmentService.enrolment.certifications);
   }
 
   protected onSubmitFormIsValid() {

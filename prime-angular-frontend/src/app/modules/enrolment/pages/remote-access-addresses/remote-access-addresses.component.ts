@@ -117,9 +117,8 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
       return;
     }
 
-    // Replace previous values on deactivation when
-    // so updates are discarded
-    const { remoteAccessLocations } = this.enrolment;
+    // Replace previous values on deactivation so updates are discarded
+    const { remoteAccessLocations } = this.enrolmentService.enrolment;
     this.enrolmentFormStateService.patchRemoteAccessLocationsForm(remoteAccessLocations);
   }
 

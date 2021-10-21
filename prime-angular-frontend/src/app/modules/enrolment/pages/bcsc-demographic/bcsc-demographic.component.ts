@@ -135,9 +135,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       return;
     }
 
-    // Replace previous values on deactivation when
-    // so updates are discarded
-    this.formState.patchValue(this.enrolment.enrollee);
+    // Replace previous values on deactivation so updates are discarded
+    this.formState.patchValue(this.enrolmentService.enrolment.enrollee);
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {

@@ -104,8 +104,7 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
       return;
     }
 
-    // Replace previous values on deactivation when
-    // so updates are discarded
+    // Replace previous values on deactivation so updates are discarded
     this.formState.patchValue({ paperEnrolleeGpid: this.paperEnrolleeGpid });
   }
 

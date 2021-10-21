@@ -94,7 +94,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       this.setHealthAuthorityValidator();
     }
 
-    // If an individual health authority was deselected, its Obo Sites should be removed as well
+    // If an individual health authority was deselected, its Obo Sites
+    // should be removed as well
     this.enrolmentFormStateService.removeUnselectedHAOboSites();
 
     super.onSubmit();
@@ -191,13 +192,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       return;
     }
 
-    // Replace previous values on deactivation when
-    // so updates are discarded
-    const { careSettings, enrolleeHealthAuthorities } = this.enrolment;
-    this.enrolmentFormStateService.patchCareSettingsForm({
-      careSettings,
-      enrolleeHealthAuthorities
-    });
+    // Replace previous values on deactivation so updates are discarded
+    const { careSettings, enrolleeHealthAuthorities } = this.enrolmentService.enrolment;
+    this.enrolmentFormStateService.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
   }
 
   protected onSubmitFormIsValid(): void {

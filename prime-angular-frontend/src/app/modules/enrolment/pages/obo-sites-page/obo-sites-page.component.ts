@@ -205,9 +205,8 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       return;
     }
 
-    // Replace previous values on deactivation when
-    // so updates are discarded
-    this.enrolmentFormStateService.patchOboSitesForm(this.enrolment.oboSites);
+    // Replace previous values on deactivation so updates are discarded
+    this.enrolmentFormStateService.patchOboSitesForm(this.enrolmentService.enrolment.oboSites);
   }
 
   protected onSubmitFormIsValid() {

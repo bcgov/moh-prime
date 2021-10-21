@@ -178,9 +178,8 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       return;
     }
 
-    // Replace previous values on deactivation when
-    // so updates are discarded
-    const { enrolleeRemoteUsers, remoteAccessSites} = this.enrolment;
+    // Replace previous values on deactivation so updates are discarded
+    const { enrolleeRemoteUsers, remoteAccessSites} = this.enrolmentService.enrolment;
     this.enrolmentFormStateService.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
   }
 

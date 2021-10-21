@@ -241,13 +241,22 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       : this.bcscDemographicFormState.patchValue(enrolment.enrollee);
     this.regulatoryFormState.patchValue(enrolment.certifications);
 
-    const { careSettings, enrolleeHealthAuthorities, enrolleeRemoteUsers, remoteAccessSites, remoteAccessLocations } = enrolment;
+    const {
+      careSettings,
+      enrolleeHealthAuthorities,
+      oboSites,
+      enrolleeRemoteUsers,
+      remoteAccessSites,
+      remoteAccessLocations,
+      selfDeclarations,
+      profileCompleted
+    } = enrolment;
     this.patchDeviceProviderForm(enrolment);
     this.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
-    this.patchOboSitesForm(enrolment.oboSites);
+    this.patchOboSitesForm(oboSites);
     this.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
     this.patchRemoteAccessLocationsForm(remoteAccessLocations);
-    this.patchSelfDeclarations(enrolment.profileCompleted, enrolment.selfDeclarations);
+    this.patchSelfDeclarations({ profileCompleted, selfDeclarations });
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly
@@ -532,10 +541,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public patchCareSettingsForm({
-                                 careSettings,
-                                 enrolleeHealthAuthorities
-                               }: { careSettings: CareSetting[], enrolleeHealthAuthorities: EnrolleeHealthAuthority[] }) {
+  public patchCareSettingsForm(
+    { careSettings, enrolleeHealthAuthorities }: { careSettings: CareSetting[], enrolleeHealthAuthorities: EnrolleeHealthAuthority[] }
+  ) {
     if (!Array.isArray(careSettings)) {
       careSettings = [];
     }
@@ -591,7 +599,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public patchSelfDeclarations(profileCompleted: boolean, selfDeclarations: SelfDeclaration[]): void {
+  public patchSelfDeclarations(
+    { selfDeclarations, profileCompleted }: { selfDeclarations: SelfDeclaration[], profileCompleted: boolean }
+  ): void {
     const defaultValue = (profileCompleted) ? false : null;
     const selfDeclarationsTypes = {
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
