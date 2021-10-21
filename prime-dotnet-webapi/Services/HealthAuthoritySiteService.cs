@@ -112,7 +112,7 @@ namespace Prime.Services
             //      size where checks are required, otherwise update in place
 
             // *******************************************************************************
-            // c hecks are in the HealthAuthority Service
+            // checks are in the HealthAuthority Service
             // *******************************************************************************
 
             // Update
