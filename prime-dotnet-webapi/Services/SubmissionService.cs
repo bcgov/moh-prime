@@ -74,7 +74,7 @@ namespace Prime.Services
                 .Include(e => e.Submissions)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            bool minorUpdate = await _submissionRulesService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
+            var minorUpdate = await _submissionRulesService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
             await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, updatedProfile);
 
             if (minorUpdate)

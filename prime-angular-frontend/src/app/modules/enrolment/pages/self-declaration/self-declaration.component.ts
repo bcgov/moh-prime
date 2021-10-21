@@ -168,6 +168,16 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
       });
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    const { selfDeclarations, profileCompleted } = this.enrolmentService.enrolment;
+    this.enrolmentFormStateService.patchSelfDeclarations({ selfDeclarations, profileCompleted });
+  }
+
   protected onSubmitFormIsInvalid() {
     this.showUnansweredQuestionsError = this.showUnansweredQuestions();
   }
