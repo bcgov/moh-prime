@@ -85,10 +85,8 @@ namespace Prime.Services
 
         public async Task<IEnumerable<BusinessDayViewModel>> GetBusinessHoursAsync(int siteId)
         {
-            // TODO implement
-            // throw new NotImplementedException();
-            return await _context.V2HealthAuthoritySites
-                .Where(ha => ha.Id == siteId)
+            return await _context.Set<BusinessDay>()
+                .Where(day => day.SiteId == siteId)
                 .ProjectTo<BusinessDayViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
