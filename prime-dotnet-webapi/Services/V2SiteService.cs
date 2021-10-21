@@ -31,6 +31,11 @@ namespace Prime.Services
 
         public async Task<bool> PecAssignableAsync(int siteId, string pec)
         {
+            if (string.IsNullOrWhiteSpace(pec))
+            {
+                return false;
+            }
+
             var siteDto = await _context.Sites
                 .AsNoTracking()
                 .Where(site => site.Id == siteId)
@@ -41,7 +46,7 @@ namespace Prime.Services
                 })
                 .SingleOrDefaultAsync();
 
-            if (siteDto?.CareSettingCode == null || string.IsNullOrWhiteSpace(pec))
+            if (siteDto?.CareSettingCode == null)
             {
                 return false;
             }
