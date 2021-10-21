@@ -10,8 +10,9 @@ namespace Prime.ViewModels.Profiles
     {
         public CommonSiteMappingProfile()
         {
-            CreateMap<BusinessDay, BusinessDayViewModel>();
-            CreateMap<RemoteUser, RemoteUserViewModel>();
+            CreateMap<BusinessDay, BusinessDayViewModel>().ReverseMap();
+            CreateMap<RemoteUser, RemoteUserViewModel>().ReverseMap();
+            CreateMap<RemoteUserCertification, RemoteUserCertificationViewModel>().ReverseMap();
         }
     }
 }

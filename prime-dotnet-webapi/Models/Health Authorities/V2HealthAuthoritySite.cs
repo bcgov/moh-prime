@@ -18,7 +18,6 @@ namespace Prime.Models
 
         public int HealthAuthorityOrganizationId { get; set; }
 
-        // TODO: Note Change name from organization to HealthAuthorityOrganization
         [JsonIgnore]
         public HealthAuthorityOrganization HealthAuthorityOrganization { get; set; }
 

@@ -16,14 +16,17 @@ namespace Prime.Services
     public class HealthAuthoritySiteService : BaseService, IHealthAuthoritySiteService
     {
         private readonly IMapper _mapper;
+        private readonly IBusinessEventService _businessEventService;
 
         public HealthAuthoritySiteService(
             ApiDbContext context,
             ILogger<HealthAuthoritySiteService> logger,
-            IMapper mapper)
+            IMapper mapper,
+            IBusinessEventService businessEventService)
             : base(context, logger)
         {
             _mapper = mapper;
+            _businessEventService = businessEventService;
         }
 
         public async Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId)
@@ -56,7 +59,7 @@ namespace Prime.Services
             _context.V2HealthAuthoritySites.Add(site);
             await _context.SaveChangesAsync();
 
-            // await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Created");
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Created");
 
             return _mapper.Map<V2HealthAuthoritySiteViewModel>(site);
         }
@@ -93,8 +96,6 @@ namespace Prime.Services
 
         public async Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsersAsync(int siteId)
         {
-            // TODO implement
-            // throw new NotImplementedException();
             return await _context.V2HealthAuthoritySites
                 .Where(ha => ha.Id == siteId)
                 .SelectMany(ha => ha.RemoteUsers)
@@ -107,40 +108,18 @@ namespace Prime.Services
             var site = await _context.V2HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-
-
-            // TODO split out into methods where appropriate to reduce method
-            //      size where checks are required, otherwise update in place
-
-            // *******************************************************************************
-            // checks are in the HealthAuthority Service
-            // *******************************************************************************
-
-            // Update
-            // ************************************************* do ones that require a check,
-
             // _context.Entry(site).CurrentValues.SetValues(updateModel);
 
             site.SiteName = updateModel.SiteName;
             site.SiteId = updateModel.SiteId;
             site.SecurityGroupCode = updateModel.SecurityGroupCode;
-
             site.HealthAuthorityCareTypeId = updateModel.HealthAuthorityCareTypeId;
             site.HealthAuthorityPharmanetAdministratorId = updateModel.HealthAuthorityPharmanetAdministratorId;
             site.HealthAuthorityTechnicalSupportId = updateModel.HealthAuthorityTechnicalSupportId;
 
-            // ************************************************* do the ones that don't require a check
-
-
-
             site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
-            // // TODO dependency of Site navigational property in BusinessDay
-            // // TODO update using appropriate mapping
             site.BusinessHours = _mapper.Map<ICollection<BusinessDay>>(updateModel.BusinessHours);
-            // // TODO dependency of Site navigational property in RemoteUser
-            // // TODO update using appropriate mapping
             site.RemoteUsers = _mapper.Map<ICollection<RemoteUser>>(updateModel.RemoteUsers);
-
 
             await _context.SaveChangesAsync();
         }
@@ -154,7 +133,7 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
 
-            // await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Completed");
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Completed");
         }
 
         public async Task SiteSubmissionAsync(int siteId)
@@ -167,7 +146,7 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
 
-            // await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Submitted");
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Submitted");
         }
 
         private IQueryable<HealthAuthoritySiteViewModel> GetBaseSitesNoTrackingQuery()
