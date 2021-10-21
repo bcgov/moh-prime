@@ -136,12 +136,5 @@ namespace Prime.Services
 
             await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Submitted");
         }
-
-        private IQueryable<HealthAuthoritySiteViewModel> GetBaseSitesNoTrackingQuery()
-        {
-            return _context.HealthAuthoritySites
-                .AsNoTracking()
-                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider);
-        }
     }
 }
