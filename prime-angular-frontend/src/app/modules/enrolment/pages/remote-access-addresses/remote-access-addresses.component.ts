@@ -77,7 +77,7 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
 
   public onBack(route: string) {
     this.removeIncompleteLocations();
-    super.onBack(route)
+    super.onBack(route);
   }
 
   /**
@@ -119,8 +119,8 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
 
     // Replace previous values on deactivation when
     // so updates are discarded
-    // TODO clear out changes and replace from source of truth
-    this.form.patchValue();
+    const { remoteAccessLocations } = this.enrolment;
+    this.enrolmentFormStateService.patchRemoteAccessLocationsForm(remoteAccessLocations);
   }
 
   protected nextRouteAfterSubmit() {

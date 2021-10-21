@@ -241,69 +241,17 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       : this.bcscDemographicFormState.patchValue(enrolment.enrollee);
     this.regulatoryFormState.patchValue(enrolment.certifications);
 
-    const { careSettings, enrolleeHealthAuthorities, enrolleeRemoteUsers, remoteAccessSites } = enrolment;
+    const { careSettings, enrolleeHealthAuthorities, enrolleeRemoteUsers, remoteAccessSites, remoteAccessLocations } = enrolment;
     this.patchDeviceProviderForm(enrolment);
     this.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
     this.patchOboSitesForm(enrolment.oboSites);
     this.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
-    this.patchRemoteAccessLocationsForm();
+    this.patchRemoteAccessLocationsForm(remoteAccessLocations);
     this.patchSelfDeclarations(enrolment.profileCompleted, enrolment.selfDeclarations);
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly
     this.markAsPristine();
-  }
-
-  protected patchDeviceProviderForm(enrolment) {
-    this.deviceProviderForm.patchValue(enrolment);
-  }
-
-  protected patchRemoteAccessForm({
-                                    enrolleeRemoteUsers,
-                                    remoteAccessSites
-                                  }: Pick<Enrolment, 'enrolleeRemoteUsers' | 'remoteAccessSites'>) {
-    if (enrolment.enrolleeRemoteUsers.length) {
-      const enrolleeRemoteUsers = this.remoteAccessForm.get('enrolleeRemoteUsers') as FormArray;
-      enrolleeRemoteUsers.clear();
-      enrolment.enrolleeRemoteUsers.forEach((eru: EnrolleeRemoteUser) => {
-        const enrolleeRemoteUser = this.enrolleeRemoteUserFormGroup();
-        enrolleeRemoteUser.patchValue(eru);
-        enrolleeRemoteUsers.push(enrolleeRemoteUser);
-      });
-    }
-
-    if (enrolment.remoteAccessSites.length) {
-      const remoteAccessSites = this.remoteAccessForm.get('remoteAccessSites') as FormArray;
-      remoteAccessSites.clear();
-      enrolment.remoteAccessSites.forEach((ras: RemoteAccessSite) => {
-        const remoteAccessSite = this.remoteAccessSiteFormGroup();
-        // Add the vendors, and then patch the remaining fields
-        const siteVendors = remoteAccessSite.get('siteVendors') as FormArray;
-        ras.site.siteVendors
-          .forEach(v => siteVendors.push(this.fb.group({ vendorCode: v.vendorCode })));
-
-        remoteAccessSite.patchValue({
-          enrolleeId: ras.enrolleeId,
-          siteId: ras.siteId,
-          doingBusinessAs: ras.site.doingBusinessAs
-        });
-        remoteAccessSites.push(remoteAccessSite);
-      });
-    }
-  }
-
-  protected patchRemoteAccessLocationsForm(remoteAccessLocations: RemoteAccessLocation[]) {
-    if (!Array.isArray(remoteAccessLocations)) {
-      remoteAccessLocations = [];
-    }
-
-    const remoteAccessLocationsFormArray = this.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
-    remoteAccessLocationsFormArray.clear();
-    remoteAccessLocations.forEach((ral: RemoteAccessLocation) => {
-      const remoteAccessLocation = this.remoteAccessLocationFormGroup();
-      remoteAccessLocation.patchValue(ral);
-      remoteAccessLocationsFormArray.push(remoteAccessLocation);
-    });
   }
 
   /**
@@ -470,10 +418,49 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
+  public patchDeviceProviderForm(enrolment) {
+    this.deviceProviderForm.patchValue(enrolment);
+  }
+
   public buildRemoteAccessForm(): FormGroup {
     return this.fb.group({
       remoteAccessSites: this.fb.array([]),
       enrolleeRemoteUsers: this.fb.array([])
+    });
+  }
+
+  public patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites }: { enrolleeRemoteUsers, remoteAccessSites }) {
+    if (!Array.isArray(enrolleeRemoteUsers)) {
+      enrolleeRemoteUsers = [];
+    }
+
+    const enrolleeRemoteUsersFormArray = this.remoteAccessForm.get('enrolleeRemoteUsers') as FormArray;
+    enrolleeRemoteUsersFormArray.clear();
+    enrolleeRemoteUsers.forEach((eru: EnrolleeRemoteUser) => {
+      const enrolleeRemoteUser = this.enrolleeRemoteUserFormGroup();
+      enrolleeRemoteUser.patchValue(eru);
+      enrolleeRemoteUsersFormArray.push(enrolleeRemoteUser);
+    });
+
+    if (!Array.isArray(remoteAccessSites)) {
+      remoteAccessSites = [];
+    }
+
+    const remoteAccessSitesFormArray = this.remoteAccessForm.get('remoteAccessSites') as FormArray;
+    remoteAccessSitesFormArray.clear();
+    remoteAccessSites.forEach((ras: RemoteAccessSite) => {
+      const remoteAccessSite = this.remoteAccessSiteFormGroup();
+      // Add the vendors, and then patch the remaining fields
+      const siteVendors = remoteAccessSite.get('siteVendors') as FormArray;
+      ras.site.siteVendors
+        .forEach(v => siteVendors.push(this.fb.group({ vendorCode: v.vendorCode })));
+
+      remoteAccessSite.patchValue({
+        enrolleeId: ras.enrolleeId,
+        siteId: ras.siteId,
+        doingBusinessAs: ras.site.doingBusinessAs
+      });
+      remoteAccessSitesFormArray.push(remoteAccessSite);
     });
   }
 
@@ -500,6 +487,20 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public buildRemoteAccessLocationsForm(): FormGroup {
     return this.fb.group({
       remoteAccessLocations: this.fb.array([])
+    });
+  }
+
+  public patchRemoteAccessLocationsForm(remoteAccessLocations: RemoteAccessLocation[]) {
+    if (!Array.isArray(remoteAccessLocations)) {
+      remoteAccessLocations = [];
+    }
+
+    const remoteAccessLocationsFormArray = this.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
+    remoteAccessLocationsFormArray.clear();
+    remoteAccessLocations.forEach((ral: RemoteAccessLocation) => {
+      const remoteAccessLocation = this.remoteAccessLocationFormGroup();
+      remoteAccessLocation.patchValue(ral);
+      remoteAccessLocationsFormArray.push(remoteAccessLocation);
     });
   }
 
