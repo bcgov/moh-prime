@@ -183,13 +183,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateHealthAuthoritySite(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            {
-                return NotFound($"Health authority site not found with id {siteId}");
-            }
             if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
             {
-                return Conflict($"Site is not editable");
+                return NotFound($"No Editable Health Authority Site found with id {siteId}");
             }
             if (!await _healthAuthorityService.PerformSiteValidationBeforeUpdate(healthAuthorityId, updateModel))
             {
