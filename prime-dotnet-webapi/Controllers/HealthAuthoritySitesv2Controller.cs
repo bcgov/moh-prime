@@ -22,9 +22,14 @@ namespace Prime.Controllers
     {
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
 
-        public HealthAuthoritySitesV2Controller(IHealthAuthoritySiteService healthAuthoritySiteService)
+        private readonly IHealthAuthorityService _healthAuthorityService;
+
+        public HealthAuthoritySitesV2Controller(
+            IHealthAuthoritySiteService healthAuthoritySiteService,
+        IHealthAuthorityService healthAuthorityService)
         {
             _healthAuthoritySiteService = healthAuthoritySiteService;
+            _healthAuthorityService = healthAuthorityService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -160,23 +165,28 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="updateModel"></param>
         [HttpPut("{siteId}", Name = nameof(UpdateHealthAuthoritySite))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateHealthAuthoritySite(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
-            // if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            // {
-            //     return NotFound($"Health authority site not found with id {siteId}");
-            // }
-            // // TODO SiteIsEditable doesn't exist
-            // // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
-            // // {
-            // //     return NotFound($"No editable health authority site found with site id {siteId}");
-            // // }
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
+            // TODO SiteIsEditable doesn't exist
+            if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"No editable health authority site found with site id {siteId}");
+            }
+            if (!await _healthAuthorityService.PerformSiteValidation(healthAuthorityId, updateModel))
+            {
+                return BadRequest();
+            }
 
-            // await _healthAuthoritySiteService.UpdateSiteAsync(healthAuthorityId, siteId, updateModel);
+            await _healthAuthoritySiteService.UpdateSiteAsync(healthAuthorityId, siteId, updateModel);
 
             return NoContent();
         }
@@ -194,17 +204,16 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> SetHealthAuthoritySiteCompleted(int healthAuthorityId, int siteId)
         {
-            // if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            // {
-            //     return NotFound($"Health authority site not found with id {siteId}");
-            // }
-            // // TODO SiteIsEditable doesn't exist
-            // // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
-            // // {
-            // //     return NotFound($"No editable health authority site found with site id {siteId}");
-            // // }
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
+            if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"No editable health authority site found with site id {siteId}");
+            }
 
-            // await _healthAuthoritySiteService.SetSiteCompletedAsync(siteId);
+            await _healthAuthoritySiteService.SetSiteCompletedAsync(siteId);
 
             return Ok();
         }
@@ -222,17 +231,17 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId)
         {
-            // if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            // {
-            //     return NotFound($"Health authority site not found with id {siteId}");
-            // }
-            // // TODO SiteIsEditable doesn't exist
-            // // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
-            // // {
-            // //     return NotFound($"No editable health authority site found with site id {siteId}");
-            // // }
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
+            // TODO SiteIsEditable doesn't exist
+            if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"No editable health authority site found with site id {siteId}");
+            }
 
-            // await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+            await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
 
             return Ok();
         }

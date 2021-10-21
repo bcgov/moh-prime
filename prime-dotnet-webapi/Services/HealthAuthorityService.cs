@@ -11,7 +11,7 @@ using Prime.Models.HealthAuthorities;
 using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.Parties;
-
+using Prime.ViewModels.HealthAuthoritySites;
 namespace Prime.Services
 {
     public class HealthAuthorityService : BaseService, IHealthAuthorityService
@@ -153,6 +153,19 @@ namespace Prime.Services
             _context.HealthAuthorityVendors.AddRange(newVendors);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> PerformSiteValidation(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
+        {
+            return await _context.HealthAuthorities
+                .AsNoTracking()
+                .Where(ha => ha.Id == healthAuthorityId
+                    && ha.Vendors.Any(v => v.Id == updateModel.HealthAuthorityVendorId)
+                    && ha.CareTypes.Any(ct => ct.Id == updateModel.HealthAuthorityCareTypeId)
+                    && ha.PharmanetAdministrators.Any(pa => pa.Id == updateModel.HealthAuthorityPharmanetAdministratorId)
+                    && ha.TechnicalSupports.Any(ts => ts.Id == updateModel.HealthAuthorityTechnicalSupportId)
+                )
+                .AnyAsync();
         }
     }
 }

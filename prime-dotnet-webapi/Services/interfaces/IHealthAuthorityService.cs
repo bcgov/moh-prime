@@ -5,6 +5,7 @@ using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.Models.HealthAuthorities;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
 {
@@ -19,7 +20,6 @@ namespace Prime.Services
         Task UpdatePrivacyOfficeAsync(int healthAuthorityId, PrivacyOfficeViewModel privacyOffice);
         Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes);
 
-        // New Line
-        Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId);
+        Task<bool> PerformSiteValidation(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel);
     }
 }
