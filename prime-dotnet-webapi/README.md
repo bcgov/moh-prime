@@ -23,7 +23,7 @@ If you have already built the binaries, you will need to re-build to include `wk
 
 [ASP.NET Core User Secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-5.0&tabs=windows)
 
-After aquiring the secrets.json file from the appropriate source, open a terminal in the the prime-dotnet-webapi folder and run
+After acquiring the secrets.json file from the appropriate source, open a terminal in the the prime-dotnet-webapi folder and run
 `type .\secrets.json | dotnet user-secrets set` on Windows or
 `cat ./secrets.json | dotnet user-secrets set` on macOS / Linux
 to set the secrets for local development.
