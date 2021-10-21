@@ -79,7 +79,8 @@ namespace TestPrimeE2E
 
         protected void ClickHamburgerMenuInTable(string uniqueTextOfRow)
         {
-            _driver.FindPatiently($"//tr[td[contains(text(), '{uniqueTextOfRow}')]]/td/button/span/mat-icon[contains(text(), 'more_vert')]").Click();
+            // See https://stackoverflow.com/questions/4608097/xpath-to-select-a-table-row-that-has-a-cell-containing-specified-text
+            _driver.FindPatiently($"//tr[td//text()[contains(., '{uniqueTextOfRow}')]]/td/button/span/mat-icon[contains(text(), 'more_vert')]").Click();
         }
 
 
@@ -267,7 +268,6 @@ namespace TestPrimeE2E
         /// </summary>
         protected void EnterAddress(Address address)
         {
-            ClickButton("Add address manually");
             SelectDropdownItem("countryCode", "Canada");
             SelectDropdownItem("provinceCode", "British Columbia");
             FillFormField("street", address.StreetAddress());
