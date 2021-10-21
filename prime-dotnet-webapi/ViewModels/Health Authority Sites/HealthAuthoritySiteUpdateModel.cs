@@ -18,5 +18,6 @@ namespace Prime.ViewModels.HealthAuthoritySites
 
         public ICollection<BusinessDayViewModel> BusinessHours { get; set; }
         public ICollection<RemoteUserViewModel> RemoteUsers { get; set; }
+        public int HealthAuthorityVendorId { get; set; }
     }
 }

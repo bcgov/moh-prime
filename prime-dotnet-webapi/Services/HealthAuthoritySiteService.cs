@@ -113,7 +113,11 @@ namespace Prime.Services
             // TODO split out into methods where appropriate to reduce method
             //      size where checks are required, otherwise update in place
 
+            // *******************************************************************************
+            // c hecks are in the HealthAuthority Service
+            // *******************************************************************************
 
+            // Update
             // ************************************************* do ones that require a check,
             // // TODO check vendor exists on the HealthAuthority list of vendor(s)
             v2Site.HealthAuthorityVendorId = updateModel.HealthAuthorityVendorId;
