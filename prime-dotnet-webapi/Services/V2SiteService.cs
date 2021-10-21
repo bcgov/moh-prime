@@ -20,10 +20,13 @@ namespace Prime.Services
 
         public V2SiteService(
             ApiDbContext context,
-            ILogger<V2SiteService> logger)
+            ILogger<V2SiteService> logger,
+            IBusinessEventService businessEventService,
+            IMapper mapper)
             : base(context, logger)
         {
-
+            _businessEventService = businessEventService;
+            _mapper = mapper;
         }
 
         public async Task<bool> PecAssignableAsync(int siteId, string pec)
