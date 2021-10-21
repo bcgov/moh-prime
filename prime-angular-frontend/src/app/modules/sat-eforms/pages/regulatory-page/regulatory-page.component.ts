@@ -88,7 +88,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.formState.removeIncompleteCertifications(true);
     return this.enrolmentResource.updateSatEnrolleeCertifications(enrolleeId, this.formState.json.partyCertifications)
       .pipe(
-        // exhaustMap(() => this.enrolmentResource.submitSatEnrollee(enrolleeId))
+        exhaustMap(() => this.enrolmentResource.submitSatEnrollee(enrolleeId))
       );
   }
 
