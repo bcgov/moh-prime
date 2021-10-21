@@ -130,6 +130,15 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     this.toggleAddressLineValidators(this.hasMailingAddress, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.formState.patchValue(this.enrolmentService.enrolment.enrollee);
+  }
+
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     return (!enrolment.id && this.isInitialEnrolment)
       ? this.createEnrolment(enrolment)

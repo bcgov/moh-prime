@@ -108,16 +108,25 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     const initialRemoteAccess = this.canRequestRemoteAccess();
 
-    this.form.valueChanges
+    this.formState.form.valueChanges
       .pipe(map((_) => initialRemoteAccess && !this.isInitialEnrolment))
       .subscribe((couldRequestRemoteAccess: boolean) =>
         this.cannotRequestRemoteAccess = couldRequestRemoteAccess && !this.canRequestRemoteAccess()
       );
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.formState.patchValue(this.enrolmentService.enrolment.certifications);
+  }
+
   protected onSubmitFormIsValid() {
     // Enrollees can not have certifications and jobs
-    this.removeJobs();
+    this.removeOboSites();
     // Remove remote access data when enrollee is no longer eligible, e.g. licence type changes
     if (this.cannotRequestRemoteAccess) {
       this.removeRemoteAccessData();
@@ -167,10 +176,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   /**
    * @description
-   * Remove obo sites/jobs from the enrolment as enrollees can not have
-   * certificate(s), as well as, job(s).
+   * Remove obo sites from the enrolment as enrollees can not have
+   * certificate(s), as well as, OBO site(s).
    */
-  private removeJobs() {
+  private removeOboSites() {
     this.removeIncompleteCertifications(true);
 
     if (this.certifications.length) {
