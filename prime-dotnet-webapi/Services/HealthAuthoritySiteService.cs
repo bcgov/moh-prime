@@ -67,24 +67,29 @@ namespace Prime.Services
 
         public async Task<IEnumerable<V2HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId)
         {
-            return await GetBaseV2SitesNoTrackingQuery()
+            return await _context.V2HealthAuthoritySites
+                .AsNoTracking()
+                .ProjectTo<V2HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId)
                 .ToListAsync();
         }
 
         public async Task<V2HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
         {
-            return await GetBaseV2SitesNoTrackingQuery()
+            return await _context.V2HealthAuthoritySites
+                .AsNoTracking()
+                .ProjectTo<V2HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task<IEnumerable<BusinessDayViewModel>> GetBusinessHours(int siteId)
+        public async Task<IEnumerable<BusinessDayViewModel>> GetBusinessHoursAsync(int siteId)
         {
             // TODO implement
-            throw new NotImplementedException();
-            // return await GetBaseSitesNoTrackingQuery()
-            //     .Include(ha => ha.BusinessHours)
-            //     .SingleOrDefaultAsync(has => has.Id == siteId);
+            // throw new NotImplementedException();
+            return await _context.V2HealthAuthoritySites
+                .Where(ha => ha.Id == siteId)
+                .ProjectTo<BusinessDayViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsers(int siteId)
@@ -158,13 +163,6 @@ namespace Prime.Services
             return _context.HealthAuthoritySites
                 .AsNoTracking()
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider);
-        }
-
-        private IQueryable<V2HealthAuthoritySiteViewModel> GetBaseV2SitesNoTrackingQuery()
-        {
-            return _context.V2HealthAuthoritySites
-                .AsNoTracking()
-                .ProjectTo<V2HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider);
         }
     }
 }

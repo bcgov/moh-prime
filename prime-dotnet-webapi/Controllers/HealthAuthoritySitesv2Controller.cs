@@ -117,15 +117,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessDayViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHoursOfOperation(int healthAuthorityId, int siteId)
         {
-            // if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            // {
-            //     return NotFound($"Health authority site not found with id {siteId}");
-            // }
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
 
-            // var siteHoursOfOperation = await _healthAuthoritySiteService.GetBusinessHoursAsync(siteId);
+            var siteHoursOfOperation = await _healthAuthoritySiteService.GetBusinessHoursAsync(siteId);
 
-            // return Ok(siteHoursOfOperation);
-            return Ok(new[] { new BusinessDayViewModel { Day = DayOfWeek.Monday, StartTime = TimeSpan.FromHours(9), EndTime = TimeSpan.FromHours(17) } });
+            return Ok(siteHoursOfOperation);
+            // return Ok(new[] { new BusinessDayViewModel { Day = DayOfWeek.Monday, StartTime = TimeSpan.FromHours(9), EndTime = TimeSpan.FromHours(17) } });
         }
 
         // GET: api/health-authorities/5/sites/5/remote-users
