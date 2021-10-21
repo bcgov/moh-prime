@@ -92,13 +92,14 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsers(int siteId)
+        public async Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsersAsync(int siteId)
         {
             // TODO implement
-            throw new NotImplementedException();
-            // return await GetBaseSitesNoTrackingQuery()
-            //     .Include(ha => ha.RemoteUsers)
-            //     .SingleOrDefaultAsync(has => has.Id == siteId);
+            // throw new NotImplementedException();
+            return await _context.V2HealthAuthoritySites
+                .Where(ha => ha.Id == siteId)
+                .ProjectTo<RemoteUserViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task UpdateSiteAsync(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel)

@@ -141,15 +141,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<RemoteUserViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetRemoteUsers(int healthAuthorityId, int siteId)
         {
-            // if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            // {
-            //     return NotFound($"Health authority site not found with id {siteId}");
-            // }
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
 
-            // var siteRemoteUsers = await _healthAuthoritySiteService.GetRemoteUsersAsync(siteId);
+            var siteRemoteUsers = await _healthAuthoritySiteService.GetRemoteUsersAsync(siteId);
 
-            // return Ok(siteRemoteUsers);
-            return Ok(new[] { new RemoteUserViewModel { FirstName = "John", LastName = "Doe", Email = "example@example.com", RemoteUserCertifications = new[] { new RemoteUserCertificationViewModel { CollegeCode = 1, LicenseCode = 1, LicenseNumber = "12345" } } } });
+            return Ok(siteRemoteUsers);
+            // return Ok(new[] { new RemoteUserViewModel { FirstName = "John", LastName = "Doe", Email = "example@example.com", RemoteUserCertifications = new[] { new RemoteUserCertificationViewModel { CollegeCode = 1, LicenseCode = 1, LicenseNumber = "12345" } } } });
         }
 
         // PUT: api/health-authorities/5/sites/5
