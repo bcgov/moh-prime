@@ -8,6 +8,7 @@ namespace Prime.Services
 {
     public interface IV2SiteService
     {
+        Task<bool> PecAssignableAsync(int siteId, string pec);
         Task UpdateCompletedAsync(int siteId, bool completed);
         Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null);
         Task<Site> UpdatePecCode(int siteId, string pecCode);

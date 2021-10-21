@@ -532,6 +532,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
+        // TODO make common
         public async Task<IEnumerable<RemoteAccessSearchViewModel>> GetRemoteUserInfoAsync(IEnumerable<CertSearchViewModel> certs)
         {
             if (certs == null || !certs.Any())
@@ -550,14 +551,8 @@ namespace Prime.Services
                 .AsExpandable()
                 .Where(ruc => ruc.RemoteUser.Site.ApprovedDate != null)
                 .Where(predicate)
-                .Select(ruc => new RemoteAccessSearchViewModel
-                {
-                    RemoteUserId = ruc.RemoteUser.Id,
-                    SiteId = ruc.RemoteUser.SiteId,
-                    SiteDoingBusinessAs = ruc.RemoteUser.Site.DoingBusinessAs,
-                    SiteAddress = ruc.RemoteUser.Site.PhysicalAddress,
-                    VendorCodes = ruc.RemoteUser.Site.SiteVendors.Select(sv => sv.VendorCode)
-                })
+                .Select(ruc => ruc.RemoteUser)
+                .ProjectTo<RemoteAccessSearchViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return remoteUsers
@@ -565,6 +560,7 @@ namespace Prime.Services
                 .Select(group => group.First());
         }
 
+        // TODO make all notes stuff common
         public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
         {
             var SiteRegistrationNote = new SiteRegistrationNote
@@ -586,28 +582,26 @@ namespace Prime.Services
             return SiteRegistrationNote;
         }
 
-        // // TODO make common
-        // public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId)
-        // {
-        //     return await _context.SiteRegistrationNotes
-        //         .Where(srn => srn.SiteId == siteId)
-        //         .Include(srn => srn.Adjudicator)
-        //         .OrderByDescending(srn => srn.NoteDate)
-        //         .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
-        //         .ToListAsync();
-        // }
+        public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId)
+        {
+            return await _context.SiteRegistrationNotes
+                .Where(srn => srn.SiteId == siteId)
+                .Include(srn => srn.Adjudicator)
+                .OrderByDescending(srn => srn.NoteDate)
+                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
 
-        // TODO make common
-        // public async Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId)
-        // {
-        //     return await _context.SiteRegistrationNotes
-        //         .Where(srn => srn.SiteId == siteId)
-        //         .Include(srn => srn.Adjudicator)
-        //         .Include(srn => srn.SiteNotification)
-        //             .ThenInclude(sre => sre.Admin)
-        //         .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
-        //         .SingleOrDefaultAsync(srn => srn.Id == siteRegistrationNoteId);
-        // }
+        public async Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId)
+        {
+            return await _context.SiteRegistrationNotes
+                .Where(srn => srn.SiteId == siteId)
+                .Include(srn => srn.Adjudicator)
+                .Include(srn => srn.SiteNotification)
+                    .ThenInclude(sre => sre.Admin)
+                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(srn => srn.Id == siteRegistrationNoteId);
+        }
 
         public async Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes)
         {
@@ -646,16 +640,16 @@ namespace Prime.Services
         public async Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId)
         {
             return await _context.SiteAdjudicationDocuments
-               .Where(bl => bl.SiteId == siteId)
-               .Include(bl => bl.Adjudicator)
+                .Where(bl => bl.SiteId == siteId)
+                .Include(bl => bl.Adjudicator)
                 .OrderByDescending(bl => bl.UploadedDate)
-               .ToListAsync();
+                .ToListAsync();
         }
 
         public async Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId)
         {
             return await _context.SiteAdjudicationDocuments
-               .SingleOrDefaultAsync(d => d.Id == documentId);
+                .SingleOrDefaultAsync(d => d.Id == documentId);
         }
 
         public async Task DeleteSiteAdjudicationDocumentAsync(int documentId)
@@ -742,14 +736,6 @@ namespace Prime.Services
             return await _context.Sites
                 .AsNoTracking()
                 .AnyAsync(s => s.Id == siteId);
-        }
-
-        public async Task<bool> PecAssignableAsync(string pec)
-        {
-            // TODO: Validate re: care settings and HA
-            return await _context.Sites
-                .AsNoTracking()
-                .AllAsync(s => s.PEC != pec);
         }
 
         private IQueryable<CommunitySite> GetBaseSiteQuery()

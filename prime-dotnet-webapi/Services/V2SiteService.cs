@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.ViewModels.Sites;
+
+using Prime.Models;
 
 namespace Prime.Services
 {
@@ -17,6 +20,34 @@ namespace Prime.Services
             : base(context, logger)
         {
 
+        }
+
+        public async Task<bool> PecAssignableAsync(int siteId, string pec)
+        {
+            var siteDto = await _context.Sites
+                .AsNoTracking()
+                .Where(site => site.Id == siteId)
+                .Select(site => new
+                {
+                    site.CareSettingCode,
+                    site.PEC
+                })
+                .SingleOrDefaultAsync();
+
+            if (siteDto?.CareSettingCode == null || string.IsNullOrWhiteSpace(pec))
+            {
+                return false;
+            }
+
+            if (siteDto.CareSettingCode == (int)CareSettingType.HealthAuthority
+                || siteDto.PEC == pec)
+            {
+                return true;
+            }
+
+            return !await _context.Sites
+                .AsNoTracking()
+                .AnyAsync(site => site.PEC == pec);
         }
 
         public async Task UpdateCompletedAsync(int siteId, bool completed)

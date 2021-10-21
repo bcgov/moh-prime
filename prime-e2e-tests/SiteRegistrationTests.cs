@@ -84,7 +84,7 @@ namespace TestPrimeE2E.SiteRegistration
             _driver.FindPatiently("//input[@type='file']").SendKeys(TestParameters.BusinessLicencePath);
             _driver.FindPatiently("//*[contains(text(), 'Upload complete')]");
             // Input business licence expiry date
-            PickDate("//input[@formcontrolname='businessLicenceExpiry']", "2023", "JUL", "22");
+            PickDate("//input[@formcontrolname='expiryDate']", "2023", "JUL", "22");
             TypeIntoField("Site Name (Doing Business As)", _company.CompanyName());
             var siteId = _driver.FindPatiently("//input[@formcontrolname='pec']");
             siteId.Clear();
