@@ -49,11 +49,11 @@ namespace Prime.Controllers
             {
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
-            if (await _healthAuthorityService.AuthorizedUserExistsOnOrganizationAsync(healthAuthorityId, payload.AuthorizedUserId))
+            if (await _healthAuthorityService.AuthorizedUserExistsOnHealthAuthorityAsync(healthAuthorityId, payload.AuthorizedUserId))
             {
                 return Forbid();
             }
-            if (await _healthAuthorityService.HealthAuthorityVendorExistsAsync(payload.HealthAuthorityVendorId))
+            if (await _healthAuthorityService.HealthAuthorityVendorExistsOnHealthAuthorityAsync(healthAuthorityId, payload.HealthAuthorityVendorId))
             {
                 return NotFound($"Health Authority Vendor not found with id {payload.HealthAuthorityVendorId}");
             }

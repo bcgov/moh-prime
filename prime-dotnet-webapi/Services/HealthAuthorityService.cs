@@ -67,7 +67,7 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> AuthorizedUserExistsOnOrganizationAsync(int healthAuthorityId, int authorizedUserId)
+        public async Task<bool> AuthorizedUserExistsOnHealthAuthorityAsync(int healthAuthorityId, int authorizedUserId)
         {
             return await _context.AuthorizedUsers
                 .Where(u => u.HealthAuthorityCode == (HealthAuthorityCode)healthAuthorityId
@@ -164,9 +164,9 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> HealthAuthorityVendorExistsAsync(int healthAuthorityVendorId)
+        public async Task<bool> HealthAuthorityVendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId)
         {
-            return await _context.HealthAuthorityVendors.AnyAsync(v => v.Id == healthAuthorityVendorId);
+            return await _context.HealthAuthorityVendors.AnyAsync(v => v.Id == healthAuthorityVendorId && v.HealthAuthorityOrganizationId == healthAuthorityId);
         }
     }
 }
