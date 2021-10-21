@@ -550,14 +550,8 @@ namespace Prime.Services
                 .AsExpandable()
                 .Where(ruc => ruc.RemoteUser.Site.ApprovedDate != null)
                 .Where(predicate)
-                .Select(ruc => new RemoteAccessSearchViewModel
-                {
-                    RemoteUserId = ruc.RemoteUser.Id,
-                    SiteId = ruc.RemoteUser.SiteId,
-                    SiteDoingBusinessAs = ruc.RemoteUser.Site.DoingBusinessAs,
-                    SiteAddress = ruc.RemoteUser.Site.PhysicalAddress,
-                    VendorCodes = ruc.RemoteUser.Site.SiteVendors.Select(sv => sv.VendorCode)
-                })
+                .Select(ruc => ruc.RemoteUser)
+                .ProjectTo<RemoteAccessSearchViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return remoteUsers
