@@ -78,22 +78,10 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
+        public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId)
         {
             IQueryable<Enrollee> query = GetBaseEnrolleeQuery()
                 .Include(e => e.Submissions);
-
-            if (isAdmin)
-            {
-                // TODO create an enrollee admin view model
-                query = query.Include(e => e.Adjudicator)
-                    .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.EnrolmentStatusReference)
-                            .ThenInclude(esr => esr.AdjudicatorNote)
-                    .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.EnrolmentStatusReference)
-                            .ThenInclude(esr => esr.Adjudicator);
-            }
 
             var enrollee = await query
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
@@ -609,6 +597,10 @@ namespace Prime.Services
         {
             return await _context.EnrolmentStatuses
                 .Include(es => es.Status)
+                .Include(es => es.EnrolmentStatusReference)
+                    .ThenInclude(esr => esr.AdjudicatorNote)
+                .Include(e => e.EnrolmentStatusReference)
+                    .ThenInclude(esr => esr.Adjudicator)
                 .Where(es => es.EnrolleeId == enrolleeId)
                 .OrderByDescending(es => es.StatusDate)
                     .ThenByDescending(s => s.Id)
@@ -1104,6 +1096,14 @@ namespace Prime.Services
                 _context.EnrolleeAbsences.Remove(absence);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<string> GetAdjudicatorIdirForEnrolleeAsync(int enrolleeId)
+        {
+            return await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => e.Adjudicator.IDIR)
+                .SingleOrDefaultAsync();
         }
     }
 }

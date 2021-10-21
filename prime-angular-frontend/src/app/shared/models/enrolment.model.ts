@@ -52,6 +52,7 @@ export interface HttpEnrollee extends Enrollee {
   alwaysManual: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
+  adjudicatorIdir: string;
   base64QRCode: string;
   gpid: string;
   requiresConfirmation: boolean;
@@ -106,6 +107,7 @@ export interface Enrolment {
   alwaysManual: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
+  adjudicatorIdir: string;
   base64QRCode: string;
   requiresConfirmation: boolean;
   confirmed: boolean;

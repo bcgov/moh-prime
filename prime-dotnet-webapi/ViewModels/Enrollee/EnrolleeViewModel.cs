@@ -51,13 +51,6 @@ namespace Prime.ViewModels
 
         public bool? IsInsulinPumpProvider { get; set; }
 
-        public int? AdjudicatorId { get; set; }
-
-        // TODO currently derived on web client, but currently used on backend
-        public string AdjudicatorIdir { get; set; }
-
-        public Admin Adjudicator { get; set; }
-
         public bool ProfileCompleted { get; set; }
 
         public bool AlwaysManual { get; set; }

@@ -27,7 +27,6 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<Enrollee, EnrolleeViewModel>()
                 .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
-                .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
                 .ForMember(dest => dest.RequiresConfirmation, opt => opt.MapFrom(src =>
                     !src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed
                     && src.PreviousStatus.StatusCode == (int)StatusType.RequiresToa

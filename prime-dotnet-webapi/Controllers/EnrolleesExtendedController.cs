@@ -250,6 +250,30 @@ namespace Prime.Controllers
             return Ok(idir);
         }
 
+        // GET: api/Enrollees/5/adjudicator-idir
+        /// <summary>
+        /// Gets the adjudicator for an enrollee
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/adjudicator-idir", Name = nameof(GetAdjudicatorIdir))]
+        [Authorize(Roles = Roles.ViewEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAdjudicatorIdir(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+
+            var adjudicatorIdir = await _enrolleeService.GetAdjudicatorIdirForEnrolleeAsync(enrolleeId);
+
+            return Ok(adjudicatorIdir);
+        }
+
         // DELETE: api/Enrollees/5/adjudicator
         /// <summary>
         /// Remove an enrollee's assigned adjudicator.

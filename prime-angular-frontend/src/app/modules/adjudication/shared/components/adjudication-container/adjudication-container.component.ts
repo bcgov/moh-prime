@@ -526,7 +526,8 @@ export class AdjudicationContainerComponent implements OnInit {
       enrolleeCareSettings,
       requiresConfirmation,
       confirmed,
-      gpid
+      gpid,
+      adjudicatorIdir
     } = enrollee;
 
     return {
@@ -543,7 +544,7 @@ export class AdjudicationContainerComponent implements OnInit {
       currentTOAStatus,
       assignedTOAType,
       hasNewestAgreement,
-      adjudicatorIdir: adjudicator?.idir,
+      adjudicatorIdir,
       alwaysManual,
       remoteAccess: !!(enrolleeRemoteUsers?.length),
       careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode),

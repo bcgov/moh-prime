@@ -40,6 +40,7 @@ import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
 
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 
 @Injectable({
   providedIn: 'root'
@@ -87,7 +88,11 @@ export class AdjudicationResource {
       selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`)
         .pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
       selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`)
-        .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result))
+        .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result)),
+      enrolmentStatuses: this.apiResource.get<EnrolmentStatus[]>(`enrollees/${enrolleeId}/statuses`)
+        .pipe(map((response: ApiHttpResponse<EnrolmentStatus[]>) => response.result)),
+      adjudicatorIdir: this.apiResource.get<string>(`enrollees/${enrolleeId}/adjudicator-idir`)
+        .pipe(map((response: ApiHttpResponse<string>) => response.result))
     })
       .pipe(
         map(({ enrollee, enrolleeCareSettings, ...remainder }) => {
