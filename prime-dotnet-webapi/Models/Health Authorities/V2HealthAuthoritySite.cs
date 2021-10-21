@@ -42,8 +42,5 @@ namespace Prime.Models
         public int AuthorizedUserId { get; set; }
 
         public AuthorizedUser AuthorizedUser { get; set; }
-        public new ICollection<BusinessDayViewModel> BusinessHours { get; set; }
-        public new ICollection<RemoteUserViewModel> RemoteUsers { get; set; }
-
     }
 }

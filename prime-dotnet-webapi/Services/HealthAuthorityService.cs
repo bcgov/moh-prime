@@ -170,7 +170,6 @@ namespace Prime.Services
             return await _context.HealthAuthorities
                 .AsNoTracking()
                 .Where(ha => ha.Id == healthAuthorityId
-                    && ha.Vendors.Any(v => v.Id == updateModel.HealthAuthorityVendorId)
                     && ha.CareTypes.Any(ct => ct.Id == updateModel.HealthAuthorityCareTypeId)
                     && ha.PharmanetAdministrators.Any(pa => pa.Id == updateModel.HealthAuthorityPharmanetAdministratorId)
                     && ha.TechnicalSupports.Any(ts => ts.Id == updateModel.HealthAuthorityTechnicalSupportId)
