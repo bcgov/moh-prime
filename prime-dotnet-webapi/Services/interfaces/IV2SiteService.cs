@@ -18,9 +18,10 @@ namespace Prime.Services
         Task<Site> UnrejectSite(int siteId);
         Task<Site> EnableEditingSite(int siteId);
         Task<Site> SubmitRegistrationAsync(int siteId);
-        Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId);
-        Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId);
         Task<IEnumerable<BusinessDayViewModel>> GetBusinessHoursAsync(int siteId);
         Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsersAsync(int siteId);
+        Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId);
+        Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId);
+        Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId);
     }
 }
