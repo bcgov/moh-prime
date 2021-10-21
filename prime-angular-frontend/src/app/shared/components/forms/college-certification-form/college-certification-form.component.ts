@@ -29,6 +29,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public collegeFilterPredicate: (collegeConfig: CollegeConfig) => boolean;
   @Input() public licenceFilterPredicate: (licenceConfig: LicenseConfig) => boolean;
   @Input() public condensed: boolean;
+  @Input() public defaultOption: boolean;
   @Output() public remove: EventEmitter<number>;
   public isPrescribing: boolean;
   public colleges: CollegeConfig[];
@@ -67,6 +68,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.nurseGroups = this.configService.collegeLicenseGroupings;
     this.minRenewalDate = moment();
     this.condensed = false;
+    this.defaultOption = true;
   }
 
   public get isMobile() {
