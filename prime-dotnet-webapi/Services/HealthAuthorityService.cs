@@ -12,6 +12,8 @@ using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthoritySites;
+using System;
+
 namespace Prime.Services
 {
     public class HealthAuthorityService : BaseService, IHealthAuthorityService
@@ -64,6 +66,14 @@ namespace Prime.Services
                 .Where(u => u.HealthAuthorityCode == (HealthAuthorityCode)healthAuthorityId)
                 .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<bool> AuthorizedUserExistsOnOrganizationAsync(int healthAuthorityId, int authorizedUserId)
+        {
+            return await _context.AuthorizedUsers
+                .Where(u => u.HealthAuthorityCode == (HealthAuthorityCode)healthAuthorityId
+                    && u.Id == authorizedUserId)
+                .AnyAsync();
         }
 
         public async Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes)
@@ -155,7 +165,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> PerformSiteValidation(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
+        public async Task<bool> PerformSiteValidationBeforeUpdate(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
         {
             return await _context.HealthAuthorities
                 .AsNoTracking()
@@ -166,6 +176,10 @@ namespace Prime.Services
                     && ha.TechnicalSupports.Any(ts => ts.Id == updateModel.HealthAuthorityTechnicalSupportId)
                 )
                 .AnyAsync();
+        }
+        public async Task<bool> HealthAuthorityVendorExistsAsync(int healthAuthorityVendorId)
+        {
+            return await _context.HealthAuthorityVendors.AnyAsync(v => v.Id == healthAuthorityVendorId);
         }
     }
 }

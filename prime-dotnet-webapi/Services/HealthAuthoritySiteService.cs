@@ -42,22 +42,23 @@ namespace Prime.Services
                     && s.Status == SiteStatusType.Editable);
         }
 
-        public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode)
+        public async Task<V2HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel)
         {
-            // TODO dependency of Site navigational property in Vendor
-            var site = new HealthAuthoritySite
+            var site = new V2HealthAuthoritySite
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
-                VendorCode = vendorCode
-                // TODO set initial status change (next sprint)
+                HealthAuthorityVendorId = createModel.HealthAuthorityVendorId,
+                AuthorizedUserId = createModel.AuthorizedUserId
             };
+            site.AddStatus(SiteStatusType.Editable);
 
-            // TODO add business events (next sprint)
 
-            _context.HealthAuthoritySites.Add(site);
+            _context.V2HealthAuthoritySites.Add(site);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<HealthAuthoritySiteViewModel>(site);
+            // await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Created");
+
+            return _mapper.Map<V2HealthAuthoritySiteViewModel>(site);
         }
 
         public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetAllSitesAsync()
@@ -65,16 +66,16 @@ namespace Prime.Services
             return await GetBaseSitesNoTrackingQuery().ToListAsync();
         }
 
-        public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId)
+        public async Task<IEnumerable<V2HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId)
         {
-            return await GetBaseSitesNoTrackingQuery()
+            return await GetBaseV2SitesNoTrackingQuery()
                 .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId)
                 .ToListAsync();
         }
 
-        public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
+        public async Task<V2HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
         {
-            return await GetBaseSitesNoTrackingQuery()
+            return await GetBaseV2SitesNoTrackingQuery()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
@@ -140,24 +141,27 @@ namespace Prime.Services
 
         public async Task SetSiteCompletedAsync(int siteId)
         {
-            var site = await _context.HealthAuthoritySites
+            var site = await _context.V2HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             site.Completed = true;
 
             await _context.SaveChangesAsync();
+
+            // await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Completed");
         }
 
         public async Task SiteSubmissionAsync(int siteId)
         {
-            var site = await _context.HealthAuthoritySites
+            var site = await _context.V2HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO add status change to site
-            // TODO add business events
             site.SubmittedDate = DateTimeOffset.Now;
+            site.AddStatus(SiteStatusType.InReview);
 
             await _context.SaveChangesAsync();
+
+            // await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Submitted");
         }
 
         private IQueryable<HealthAuthoritySiteViewModel> GetBaseSitesNoTrackingQuery()
@@ -165,6 +169,13 @@ namespace Prime.Services
             return _context.HealthAuthoritySites
                 .AsNoTracking()
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider);
+        }
+
+        private IQueryable<V2HealthAuthoritySiteViewModel> GetBaseV2SitesNoTrackingQuery()
+        {
+            return _context.V2HealthAuthoritySites
+                .AsNoTracking()
+                .ProjectTo<V2HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider);
         }
     }
 }

@@ -308,7 +308,7 @@ namespace Prime.Services
                 throw new InvalidOperationException($"Could not update the site.");
             }
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site ID (PEC Code) associated with site");
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
 
             return site;
         }
@@ -334,12 +334,13 @@ namespace Prime.Services
 
                 _context.Sites.Remove(site);
 
-                await _businessEventService.CreateSiteEventAsync(siteId, provisionerId.Value, "Site Deleted");
+                await _businessEventService.CreateSiteEventAsync(siteId, "Site Deleted");
 
                 await _context.SaveChangesAsync();
             }
         }
 
+        // TODO all of the status changing methods are common, and may deserve to be on their own service
         public async Task<Site> ApproveSite(int siteId)
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
@@ -348,7 +349,7 @@ namespace Prime.Services
             site.ApprovedDate = DateTimeOffset.Now;
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Approved");
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Approved");
 
             return site;
         }
@@ -360,7 +361,7 @@ namespace Prime.Services
             site.ApprovedDate = null;
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Declined");
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Declined");
 
             return site;
         }
@@ -371,7 +372,7 @@ namespace Prime.Services
             site.AddStatus(SiteStatusType.InReview);
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Unrejected");
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Unrejected");
 
             return site;
         }
@@ -383,7 +384,7 @@ namespace Prime.Services
             site.AddStatus(SiteStatusType.Editable);
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Enabled Editing");
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Enabled Editing");
 
             return site;
         }
@@ -400,6 +401,7 @@ namespace Prime.Services
             }
         }
 
+        // TODO common
         public async Task<Site> SubmitRegistrationAsync(int siteId)
         {
             var site = await GetSiteAsync(siteId);
@@ -413,7 +415,7 @@ namespace Prime.Services
                 throw new InvalidOperationException($"Could not submit the site.");
             }
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Submitted");
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Submitted");
 
             return site;
         }
