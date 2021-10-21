@@ -118,12 +118,9 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     const careSettings = this.enrolmentFormStateService.careSettingsForm
       .get('careSettings').value as CareSetting[];
 
-    let backRoutePath: string;
+    let backRoutePath = EnrolmentRoutes.OVERVIEW;
     if (!this.isProfileComplete) {
-      backRoutePath = (
-        this.enrolmentService
-          .canRequestRemoteAccess(certifications, careSettings)
-      )
+      backRoutePath = (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
         ? EnrolmentRoutes.REMOTE_ACCESS
         : (certifications.length)
           ? EnrolmentRoutes.REGULATORY
