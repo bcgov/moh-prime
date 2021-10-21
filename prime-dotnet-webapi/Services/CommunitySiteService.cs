@@ -640,16 +640,16 @@ namespace Prime.Services
         public async Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId)
         {
             return await _context.SiteAdjudicationDocuments
-               .Where(bl => bl.SiteId == siteId)
-               .Include(bl => bl.Adjudicator)
+                .Where(bl => bl.SiteId == siteId)
+                .Include(bl => bl.Adjudicator)
                 .OrderByDescending(bl => bl.UploadedDate)
-               .ToListAsync();
+                .ToListAsync();
         }
 
         public async Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId)
         {
             return await _context.SiteAdjudicationDocuments
-               .SingleOrDefaultAsync(d => d.Id == documentId);
+                .SingleOrDefaultAsync(d => d.Id == documentId);
         }
 
         public async Task DeleteSiteAdjudicationDocumentAsync(int documentId)
