@@ -14,7 +14,7 @@ namespace Prime.Services
         Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode);
         Task<IEnumerable<HealthAuthoritySiteViewModel>> GetAllSitesAsync();
         Task<IEnumerable<V2HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId);
-        Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
+        Task<V2HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
         Task<IEnumerable<BusinessDayViewModel>> GetBusinessHours(int siteId);
         Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsers(int siteId);
         Task UpdateSiteAsync(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel);

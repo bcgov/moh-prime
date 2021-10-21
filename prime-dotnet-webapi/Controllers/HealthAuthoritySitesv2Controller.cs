@@ -90,18 +90,18 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<V2HealthAuthoritySiteViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthoritySite(int healthAuthorityId, int siteId)
         {
-            // if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            // {
-            //     return NotFound($"Health authority site not found with id {siteId}");
-            // }
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
 
-            // var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
+            var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
 
-            // return Ok(site);
-            return Ok(new HealthAuthoritySiteViewModel { Id = siteId });
+            return Ok(site);
+            // return Ok(new HealthAuthoritySiteViewModel { Id = siteId });
         }
 
         // GET: api/health-authorities/5/sites/5/hours-operation

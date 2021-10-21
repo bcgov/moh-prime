@@ -72,9 +72,9 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
+        public async Task<V2HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
         {
-            return await GetBaseSitesNoTrackingQuery()
+            return await GetBaseV2SitesNoTrackingQuery()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
