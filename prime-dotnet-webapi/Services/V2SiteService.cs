@@ -114,25 +114,26 @@ namespace Prime.Services
         public async Task DeleteSiteAsync(int siteId)
         {
             var site = await _context.Sites
+                .Include(site => site.PhysicalAddress)
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             if (site != null)
             {
-                var provisionerId = site.ProvisionerId;
+                await _businessEventService.CreateSiteEventAsync(siteId, "Site Deleted");
 
                 if (site.PhysicalAddress != null)
                 {
                     _context.Addresses.Remove(site.PhysicalAddress);
                 }
 
-                DeleteContactFromSite(site.AdministratorPharmaNet);
-                DeleteContactFromSite(site.TechnicalSupport);
-                DeleteContactFromSite(site.PrivacyOfficer);
+                if (site is CommunitySite communitySite)
+                {
+                    await DeleteContactFromSite(communitySite.AdministratorPharmaNetId);
+                    await DeleteContactFromSite(communitySite.TechnicalSupportId);
+                    await DeleteContactFromSite(communitySite.PrivacyOfficerId);
+                }
 
                 _context.Sites.Remove(site);
-
-                await _businessEventService.CreateSiteEventAsync(siteId, "Site Deleted");
-
                 await _context.SaveChangesAsync();
             }
         }
@@ -240,17 +241,22 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        private void DeleteContactFromSite(Contact contact)
+        private async Task DeleteContactFromSite(int? contactId)
         {
-            if (contact != null)
+            if (contactId == null)
             {
-                if (contact.PhysicalAddress != null)
-                {
-                    _context.Addresses.Remove(contact.PhysicalAddress);
-                }
-                _context.Contacts.Remove(contact);
+                return;
             }
-        }
 
+            var contact = await _context.Contacts
+                .Include(contact => contact.PhysicalAddress)
+                .SingleAsync(contact => contact.Id == contactId);
+
+            if (contact.PhysicalAddress != null)
+            {
+                _context.Addresses.Remove(contact.PhysicalAddress);
+            }
+            _context.Contacts.Remove(contact);
+        }
     }
 }
