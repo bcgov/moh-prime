@@ -8,12 +8,16 @@ using Prime.Models;
 using Prime.ViewModels;
 using Prime.ViewModels.Sites;
 
-using Prime.Models;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
 
 namespace Prime.Services
 {
     public class V2SiteService : BaseService, IV2SiteService
     {
+        private readonly IBusinessEventService _businessEventService;
+        private readonly IMapper _mapper;
+
         public V2SiteService(
             ApiDbContext context,
             ILogger<V2SiteService> logger)
@@ -67,7 +71,7 @@ namespace Prime.Services
 
         public async Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null)
         {
-            var site = await GetBaseSiteQuery()
+            var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             if (site == null)
@@ -83,7 +87,7 @@ namespace Prime.Services
 
         public async Task<Site> UpdatePecCode(int siteId, string pecCode)
         {
-            var site = await GetBaseSiteQuery()
+            var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             site.PEC = pecCode;
@@ -101,7 +105,7 @@ namespace Prime.Services
 
         public async Task DeleteSiteAsync(int siteId)
         {
-            var site = await GetBaseSiteQuery()
+            var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             if (site != null)
@@ -175,7 +179,7 @@ namespace Prime.Services
 
         public async Task<Site> SubmitRegistrationAsync(int siteId)
         {
-            var site = await GetSiteAsync(siteId);
+            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
             site.SubmittedDate = DateTimeOffset.Now;
             site.AddStatus(SiteStatusType.InReview);
             _context.Update(site);
@@ -226,6 +230,18 @@ namespace Prime.Services
                 .Where(user => user.SiteId == siteId)
                 .ProjectTo<RemoteUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        private void DeleteContactFromSite(Contact contact)
+        {
+            if (contact != null)
+            {
+                if (contact.PhysicalAddress != null)
+                {
+                    _context.Addresses.Remove(contact.PhysicalAddress);
+                }
+                _context.Contacts.Remove(contact);
+            }
         }
 
     }
