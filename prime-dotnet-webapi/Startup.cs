@@ -60,6 +60,7 @@ namespace Prime
             services.AddScoped<IBannerService, BannerService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<IClientLogService, ClientLogService>();
+            services.AddScoped<ICommunitySiteService, CommunitySiteService>();
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IEmailDocumentsService, EmailDocumentsService>();
@@ -85,7 +86,7 @@ namespace Prime
             services.AddScoped<IPlrProviderService, PlrProviderService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
-            services.AddScoped<ICommunitySiteService, CommunitySiteService>();
+            services.AddScoped<IV2SiteService, V2SiteService>();
             services.AddScoped<ISoapService, SoapService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
