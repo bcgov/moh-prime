@@ -24,7 +24,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
 
         // public int? HealthAuthorityPharmanetAdministratorId { get; set; }
         // public int? HealthAuthorityTechnicalSupportId { get; set; }
-        // public ICollection<BusinessDay> BusinessHours { get; set; }
+        public ICollection<BusinessDay> BusinessHours { get; set; }
         // public ICollection<RemoteUser> RemoteUsers { get; set; }
     }
 }
