@@ -523,7 +523,7 @@ namespace Prime.Services
 
         public async Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId)
         {
-            return await _context.Sites
+            return await _context.CommunitySites
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Where(s => s.Id == siteId)
