@@ -4,10 +4,14 @@ import { BehaviorSubject } from 'rxjs';
 
 import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
 
+export interface ISatEnrolleeService {
+  enrollee: SatEnrollee;
+}
+
 @Injectable({
   providedIn: 'root'
 })
-export class SatEnrolleeService {
+export class SatEnrolleeService implements ISatEnrolleeService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _enrollee: BehaviorSubject<SatEnrollee>;
 
@@ -15,9 +19,9 @@ export class SatEnrolleeService {
     this._enrollee = new BehaviorSubject<SatEnrollee>(null);
   }
 
-  public set enrollee(site: SatEnrollee) {
+  public set enrollee(enrollee: SatEnrollee) {
     // Store a copy to prevent updates by reference
-    this._enrollee.next({ ...site });
+    this._enrollee.next({ ...enrollee });
   }
 
   public get enrollee(): SatEnrollee {
