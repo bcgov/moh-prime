@@ -261,133 +261,133 @@ namespace Prime.Services
             }
         }
 
+        // // TODO common
+        // public async Task UpdateCompletedAsync(int siteId, bool completed)
+        // {
+        //     var site = await _context.Sites
+        //         .SingleOrDefaultAsync(s => s.Id == siteId);
+
+        //     if (site == null)
+        //     {
+        //         throw new ArgumentException($"Could not set Completed on Site {siteId}, it doesn't exist.");
+        //     }
+
+        //     site.Completed = completed;
+
+        //     await _context.SaveChangesAsync();
+        // }
+
         // TODO common
-        public async Task UpdateCompletedAsync(int siteId, bool completed)
-        {
-            var site = await _context.Sites
-                .SingleOrDefaultAsync(s => s.Id == siteId);
+        // public async Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null)
+        // {
+        //     var site = await GetBaseSiteQuery()
+        //         .SingleOrDefaultAsync(s => s.Id == siteId);
 
-            if (site == null)
-            {
-                throw new ArgumentException($"Could not set Completed on Site {siteId}, it doesn't exist.");
-            }
+        //     if (site == null)
+        //     {
+        //         throw new ArgumentException($"Could not Update Adjudicator on Site {siteId}, it doesn't exist.");
+        //     }
 
-            site.Completed = completed;
+        //     site.AdjudicatorId = adminId;
+        //     await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
-        }
-
-        // TODO common
-        public async Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null)
-        {
-            var site = await GetBaseSiteQuery()
-                .SingleOrDefaultAsync(s => s.Id == siteId);
-
-            if (site == null)
-            {
-                throw new ArgumentException($"Could not Update Adjudicator on Site {siteId}, it doesn't exist.");
-            }
-
-            site.AdjudicatorId = adminId;
-            await _context.SaveChangesAsync();
-
-            return site;
-        }
+        //     return site;
+        // }
 
         // TODO *make* common
-        public async Task<Site> UpdatePecCode(int siteId, string pecCode)
-        {
-            var site = await GetBaseSiteQuery()
-                .SingleOrDefaultAsync(s => s.Id == siteId);
+        // public async Task<Site> UpdatePecCode(int siteId, string pecCode)
+        // {
+        //     var site = await GetBaseSiteQuery()
+        //         .SingleOrDefaultAsync(s => s.Id == siteId);
 
-            site.PEC = pecCode;
+        //     site.PEC = pecCode;
 
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the site.");
-            }
+        //     var updated = await _context.SaveChangesAsync();
+        //     if (updated < 1)
+        //     {
+        //         throw new InvalidOperationException($"Could not update the site.");
+        //     }
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
+        //     await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
 
-            return site;
-        }
+        //     return site;
+        // }
 
-        // TODO make common?
-        public async Task DeleteSiteAsync(int siteId)
-        {
-            var site = await GetBaseSiteQuery()
-                .SingleOrDefaultAsync(s => s.Id == siteId);
+        // // TODO make common?
+        // public async Task DeleteSiteAsync(int siteId)
+        // {
+        //     var site = await GetBaseSiteQuery()
+        //         .SingleOrDefaultAsync(s => s.Id == siteId);
 
-            if (site != null)
-            {
-                var provisionerId = site.ProvisionerId;
+        //     if (site != null)
+        //     {
+        //         var provisionerId = site.ProvisionerId;
 
-                if (site.PhysicalAddress != null)
-                {
-                    _context.Addresses.Remove(site.PhysicalAddress);
-                }
+        //         if (site.PhysicalAddress != null)
+        //         {
+        //             _context.Addresses.Remove(site.PhysicalAddress);
+        //         }
 
-                DeleteContactFromSite(site.AdministratorPharmaNet);
-                DeleteContactFromSite(site.TechnicalSupport);
-                DeleteContactFromSite(site.PrivacyOfficer);
+        //         DeleteContactFromSite(site.AdministratorPharmaNet);
+        //         DeleteContactFromSite(site.TechnicalSupport);
+        //         DeleteContactFromSite(site.PrivacyOfficer);
 
-                _context.Sites.Remove(site);
+        //         _context.Sites.Remove(site);
 
-                await _businessEventService.CreateSiteEventAsync(siteId, "Site Deleted");
+        //         await _businessEventService.CreateSiteEventAsync(siteId, "Site Deleted");
 
-                await _context.SaveChangesAsync();
-            }
-        }
+        //         await _context.SaveChangesAsync();
+        //     }
+        // }
 
-        // TODO all of the status changing methods are common, and may deserve to be on their own service
-        public async Task<Site> ApproveSite(int siteId)
-        {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+        // // TODO all of the status changing methods are common, and may deserve to be on their own service
+        // public async Task<Site> ApproveSite(int siteId)
+        // {
+        //     var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
 
-            site.AddStatus(SiteStatusType.Editable);
-            site.ApprovedDate = DateTimeOffset.Now;
-            await _context.SaveChangesAsync();
+        //     site.AddStatus(SiteStatusType.Editable);
+        //     site.ApprovedDate = DateTimeOffset.Now;
+        //     await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Approved");
+        //     await _businessEventService.CreateSiteEventAsync(site.Id, "Site Approved");
 
-            return site;
-        }
+        //     return site;
+        // }
 
-        public async Task<Site> DeclineSite(int siteId)
-        {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
-            site.AddStatus(SiteStatusType.Locked);
-            site.ApprovedDate = null;
-            await _context.SaveChangesAsync();
+        // public async Task<Site> DeclineSite(int siteId)
+        // {
+        //     var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+        //     site.AddStatus(SiteStatusType.Locked);
+        //     site.ApprovedDate = null;
+        //     await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Declined");
+        //     await _businessEventService.CreateSiteEventAsync(site.Id, "Site Declined");
 
-            return site;
-        }
+        //     return site;
+        // }
 
-        public async Task<Site> UnrejectSite(int siteId)
-        {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
-            site.AddStatus(SiteStatusType.InReview);
-            await _context.SaveChangesAsync();
+        // public async Task<Site> UnrejectSite(int siteId)
+        // {
+        //     var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+        //     site.AddStatus(SiteStatusType.InReview);
+        //     await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Unrejected");
+        //     await _businessEventService.CreateSiteEventAsync(site.Id, "Site Unrejected");
 
-            return site;
-        }
+        //     return site;
+        // }
 
-        public async Task<Site> EnableEditingSite(int siteId)
-        {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
-            site.ApprovedDate = null;
-            site.AddStatus(SiteStatusType.Editable);
-            await _context.SaveChangesAsync();
+        // public async Task<Site> EnableEditingSite(int siteId)
+        // {
+        //     var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+        //     site.ApprovedDate = null;
+        //     site.AddStatus(SiteStatusType.Editable);
+        //     await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Enabled Editing");
+        //     await _businessEventService.CreateSiteEventAsync(site.Id, "Site Enabled Editing");
 
-            return site;
-        }
+        //     return site;
+        // }
 
         private void DeleteContactFromSite(Contact contact)
         {
@@ -402,23 +402,23 @@ namespace Prime.Services
         }
 
         // TODO common
-        public async Task<Site> SubmitRegistrationAsync(int siteId)
-        {
-            var site = await GetSiteAsync(siteId);
-            site.SubmittedDate = DateTimeOffset.Now;
-            site.AddStatus(SiteStatusType.InReview);
-            _context.Update(site);
+        // public async Task<Site> SubmitRegistrationAsync(int siteId)
+        // {
+        //     var site = await GetSiteAsync(siteId);
+        //     site.SubmittedDate = DateTimeOffset.Now;
+        //     site.AddStatus(SiteStatusType.InReview);
+        //     _context.Update(site);
 
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not submit the site.");
-            }
+        //     var updated = await _context.SaveChangesAsync();
+        //     if (updated < 1)
+        //     {
+        //         throw new InvalidOperationException($"Could not submit the site.");
+        //     }
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Submitted");
+        //     await _businessEventService.CreateSiteEventAsync(site.Id, "Site Submitted");
 
-            return site;
-        }
+        //     return site;
+        // }
 
         public async Task<Site> GetSiteNoTrackingAsync(int siteId)
         {
@@ -586,28 +586,28 @@ namespace Prime.Services
             return SiteRegistrationNote;
         }
 
-        // TODO make common
-        public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId)
-        {
-            return await _context.SiteRegistrationNotes
-                .Where(srn => srn.SiteId == siteId)
-                .Include(srn => srn.Adjudicator)
-                .OrderByDescending(srn => srn.NoteDate)
-                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
+        // // TODO make common
+        // public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId)
+        // {
+        //     return await _context.SiteRegistrationNotes
+        //         .Where(srn => srn.SiteId == siteId)
+        //         .Include(srn => srn.Adjudicator)
+        //         .OrderByDescending(srn => srn.NoteDate)
+        //         .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
+        //         .ToListAsync();
+        // }
 
         // TODO make common
-        public async Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId)
-        {
-            return await _context.SiteRegistrationNotes
-                .Where(srn => srn.SiteId == siteId)
-                .Include(srn => srn.Adjudicator)
-                .Include(srn => srn.SiteNotification)
-                    .ThenInclude(sre => sre.Admin)
-                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync(srn => srn.Id == siteRegistrationNoteId);
-        }
+        // public async Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId)
+        // {
+        //     return await _context.SiteRegistrationNotes
+        //         .Where(srn => srn.SiteId == siteId)
+        //         .Include(srn => srn.Adjudicator)
+        //         .Include(srn => srn.SiteNotification)
+        //             .ThenInclude(sre => sre.Admin)
+        //         .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
+        //         .SingleOrDefaultAsync(srn => srn.Id == siteRegistrationNoteId);
+        // }
 
         public async Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes)
         {

@@ -81,22 +81,6 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task<IEnumerable<BusinessDayViewModel>> GetBusinessHoursAsync(int siteId)
-        {
-            return await _context.Set<BusinessDay>()
-                .Where(day => day.SiteId == siteId)
-                .ProjectTo<BusinessDayViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsersAsync(int siteId)
-        {
-            return await _context.RemoteUsers
-                .Where(user => user.SiteId == siteId)
-                .ProjectTo<RemoteUserViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
-
         public async Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
             var site = await _context.V2HealthAuthoritySites
