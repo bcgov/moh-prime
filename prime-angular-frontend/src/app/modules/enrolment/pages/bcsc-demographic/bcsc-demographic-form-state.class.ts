@@ -44,8 +44,6 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
       return;
     }
 
-    // TODO adapt the data after getting values, ie. address(es)
-
     return this.formInstance.getRawValue();
   }
 
@@ -53,8 +51,6 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
     if (!this.formInstance) {
       return;
     }
-
-    // TODO adapt the data before patching values, ie. address(es)
 
     this.formInstance.patchValue(enrollee);
   }

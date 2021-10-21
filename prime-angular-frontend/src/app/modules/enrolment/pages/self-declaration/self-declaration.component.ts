@@ -118,12 +118,9 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     const careSettings = this.enrolmentFormStateService.careSettingsForm
       .get('careSettings').value as CareSetting[];
 
-    let backRoutePath: string;
+    let backRoutePath = EnrolmentRoutes.OVERVIEW;
     if (!this.isProfileComplete) {
-      backRoutePath = (
-        this.enrolmentService
-          .canRequestRemoteAccess(certifications, careSettings)
-      )
+      backRoutePath = (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
         ? EnrolmentRoutes.REMOTE_ACCESS
         : (certifications.length)
           ? EnrolmentRoutes.REGULATORY
@@ -166,6 +163,16 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
         this.toggleSelfDeclarationValidators(value, this.hasPharmaNetSuspendedDetails);
         this.showUnansweredQuestionsError = this.showUnansweredQuestions();
       });
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    const { selfDeclarations, profileCompleted } = this.enrolmentService.enrolment;
+    this.enrolmentFormStateService.patchSelfDeclarations({ selfDeclarations, profileCompleted });
   }
 
   protected onSubmitFormIsInvalid() {
