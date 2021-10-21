@@ -48,15 +48,14 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
   }
 
   public patchValue(certifications: CollegeCertification[]): void {
-    if (!this.formInstance || !Array.isArray(certifications) || !certifications.length) {
+    if (!this.formInstance || !Array.isArray(certifications)) {
       return;
     }
 
+    this.removeCollegeCertifications();
+
     if (certifications.length) {
-      this.removeCollegeCertifications();
-      certifications.forEach((c: CollegeCertification) =>
-        this.addCollegeCertification(c)
-      );
+      certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
     }
 
     this.certifications.patchValue(certifications);
