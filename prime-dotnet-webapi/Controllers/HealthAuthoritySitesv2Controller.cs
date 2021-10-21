@@ -53,7 +53,7 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            if (await _healthAuthorityService.HealthAuthorityVendorExistsOnHealthAuthorityAsync(healthAuthorityId, payload.HealthAuthorityVendorId))
+            if (await _healthAuthorityService.VendorExistsOnHealthAuthorityAsync(healthAuthorityId, payload.HealthAuthorityVendorId))
             {
                 return NotFound($"Health Authority Vendor not found with id {payload.HealthAuthorityVendorId}");
             }
