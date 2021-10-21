@@ -353,7 +353,7 @@ namespace Prime.Controllers
             }
 
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
-            site = await _communitySiteService.SubmitRegistrationAsync(siteId);
+            await _communitySiteService.SubmitRegistrationAsync(siteId);
 
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
@@ -361,7 +361,7 @@ namespace Prime.Controllers
             return Ok(site);
         }
 
-        private async Task<bool> HandleBusinessLicenseUpdateAsync(Site site, SiteBusinessLicenceViewModel newLicence)
+        private async Task<bool> HandleBusinessLicenseUpdateAsync(CommunitySite site, SiteBusinessLicenceViewModel newLicence)
         {
             if (site.SubmittedDate == null
                 || (site.ApprovedDate.HasValue && !site.IsWithinRenewalPeriod()))
