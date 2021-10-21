@@ -11,6 +11,8 @@ using Prime.Models.HealthAuthorities;
 using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.Parties;
+using Prime.ViewModels.HealthAuthoritySites;
+using System;
 
 namespace Prime.Services
 {
@@ -64,6 +66,14 @@ namespace Prime.Services
                 .Where(u => u.HealthAuthorityCode == (HealthAuthorityCode)healthAuthorityId)
                 .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<bool> AuthorizedUserExistsOnHealthAuthorityAsync(int healthAuthorityId, int authorizedUserId)
+        {
+            return await _context.AuthorizedUsers
+                .Where(u => u.HealthAuthorityCode == (HealthAuthorityCode)healthAuthorityId
+                    && u.Id == authorizedUserId)
+                .AnyAsync();
         }
 
         public async Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes)
@@ -153,6 +163,24 @@ namespace Prime.Services
             _context.HealthAuthorityVendors.AddRange(newVendors);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> PerformSiteValidationBeforeUpdate(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
+        {
+            return await _context.HealthAuthorities
+                .AsNoTracking()
+                .Where(ha => ha.Id == healthAuthorityId
+                    && ha.Vendors.Any(v => v.Id == updateModel.HealthAuthorityVendorId)
+                    && ha.CareTypes.Any(ct => ct.Id == updateModel.HealthAuthorityCareTypeId)
+                    && ha.PharmanetAdministrators.Any(pa => pa.Id == updateModel.HealthAuthorityPharmanetAdministratorId)
+                    && ha.TechnicalSupports.Any(ts => ts.Id == updateModel.HealthAuthorityTechnicalSupportId)
+                )
+                .AnyAsync();
+        }
+
+        public async Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId)
+        {
+            return await _context.HealthAuthorityVendors.AnyAsync(v => v.Id == healthAuthorityVendorId && v.HealthAuthorityOrganizationId == healthAuthorityId);
         }
     }
 }
