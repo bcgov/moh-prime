@@ -532,6 +532,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
+        // TODO make common
         public async Task<IEnumerable<RemoteAccessSearchViewModel>> GetRemoteUserInfoAsync(IEnumerable<CertSearchViewModel> certs)
         {
             if (certs == null || !certs.Any())
@@ -559,6 +560,7 @@ namespace Prime.Services
                 .Select(group => group.First());
         }
 
+        // TODO make all notes stuff common
         public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
         {
             var SiteRegistrationNote = new SiteRegistrationNote
@@ -580,7 +582,6 @@ namespace Prime.Services
             return SiteRegistrationNote;
         }
 
-        // TODO make common
         public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId)
         {
             return await _context.SiteRegistrationNotes
@@ -591,7 +592,6 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        // TODO make common
         public async Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId)
         {
             return await _context.SiteRegistrationNotes
