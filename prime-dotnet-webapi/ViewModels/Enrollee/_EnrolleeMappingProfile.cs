@@ -23,7 +23,7 @@ namespace Prime.ViewModels.Profiles
                     !src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed
                     && src.PreviousStatus.StatusCode == (int)StatusType.RequiresToa
                 ))
-                .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed));
+                .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true));
 
             CreateMap<Enrollee, EnrolleeViewModel>()
                 .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
@@ -32,7 +32,7 @@ namespace Prime.ViewModels.Profiles
                     !src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed
                     && src.PreviousStatus.StatusCode == (int)StatusType.RequiresToa
                 ))
-                .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed))
+                .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true))
                 .AfterMap((src, dest) => dest.IsRegulatedUser = src.IsRegulatedUser());
             // TODO: .AfterMap() DOES NOT RUN WHEN CALLING .ProjectTo()
 
