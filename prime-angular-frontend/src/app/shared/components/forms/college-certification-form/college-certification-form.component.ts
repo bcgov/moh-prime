@@ -265,7 +265,10 @@ export class CollegeCertificationFormComponent implements OnInit {
   private clearNursingCategoryValidators(): void {
     this.formUtilsService.setValidators(this.licenseCode, []);
     this.formUtilsService.setValidators(this.licenseNumber, []);
-    this.formUtilsService.setValidators(this.renewalDate, []);
+
+    if(!this.condensed) {
+      this.formUtilsService.setValidators(this.renewalDate, []);
+    }
   }
 
   private setPractitionerInformation(licenseCode: number) {
