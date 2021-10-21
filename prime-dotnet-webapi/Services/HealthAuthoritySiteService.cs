@@ -97,6 +97,7 @@ namespace Prime.Services
             // throw new NotImplementedException();
             return await _context.V2HealthAuthoritySites
                 .Where(ha => ha.Id == siteId)
+                .SelectMany(ha => ha.RemoteUsers)
                 .ProjectTo<RemoteUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
