@@ -204,6 +204,88 @@ namespace Prime.Services
             return site;
         }
 
+        public async Task<IEnumerable<BusinessDayViewModel>> GetBusinessHoursAsync(int siteId)
+        {
+            return await _context.Set<BusinessDay>()
+                .Where(day => day.SiteId == siteId)
+                .ProjectTo<BusinessDayViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsersAsync(int siteId)
+        {
+            return await _context.RemoteUsers
+                .Where(user => user.SiteId == siteId)
+                .ProjectTo<RemoteUserViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<RemoteAccessSearchViewModel>> GetRemoteUserInfoAsync(IEnumerable<CertSearchViewModel> certs)
+        {
+            if (certs == null || !certs.Any())
+            {
+                return Enumerable.Empty<RemoteAccessSearchViewModel>();
+            }
+
+            var predicate = PredicateBuilder.New<RemoteUserCertification>();
+            foreach (var cert in certs)
+            {
+                predicate.Or(ruc => ruc.CollegeCode == cert.CollegeCode && ruc.LicenseNumber == cert.LicenceNumber);
+            }
+
+            var remoteUsers = await _context.RemoteUserCertifications
+                .AsNoTracking()
+                .AsExpandable()
+                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate != null)
+                .Where(predicate)
+                .Select(ruc => ruc.RemoteUser)
+                .ProjectTo<RemoteAccessSearchViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return remoteUsers
+                .GroupBy(user => user.RemoteUserId)
+                .Select(group => group.First());
+        }
+
+        private async Task DeleteContactFromSite(int? contactId)
+        {
+            if (contactId == null)
+            {
+                return;
+            }
+
+            var contact = await _context.Contacts
+                .Include(contact => contact.PhysicalAddress)
+                .SingleAsync(contact => contact.Id == contactId);
+
+            if (contact.PhysicalAddress != null)
+            {
+                _context.Addresses.Remove(contact.PhysicalAddress);
+            }
+            _context.Contacts.Remove(contact);
+        }
+
+        public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
+        {
+            var SiteRegistrationNote = new SiteRegistrationNote
+            {
+                SiteId = siteId,
+                AdjudicatorId = adminId,
+                Note = note,
+                NoteDate = DateTimeOffset.Now
+            };
+
+            _context.SiteRegistrationNotes.Add(SiteRegistrationNote);
+
+            var created = await _context.SaveChangesAsync();
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create site registration note.");
+            }
+
+            return SiteRegistrationNote;
+        }
+
         public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId)
         {
             return await _context.SiteRegistrationNotes
@@ -223,40 +305,6 @@ namespace Prime.Services
                     .ThenInclude(sre => sre.Admin)
                 .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(srn => srn.Id == siteRegistrationNoteId);
-        }
-
-        public async Task<IEnumerable<BusinessDayViewModel>> GetBusinessHoursAsync(int siteId)
-        {
-            return await _context.Set<BusinessDay>()
-                .Where(day => day.SiteId == siteId)
-                .ProjectTo<BusinessDayViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsersAsync(int siteId)
-        {
-            return await _context.RemoteUsers
-                .Where(user => user.SiteId == siteId)
-                .ProjectTo<RemoteUserViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
-
-        private async Task DeleteContactFromSite(int? contactId)
-        {
-            if (contactId == null)
-            {
-                return;
-            }
-
-            var contact = await _context.Contacts
-                .Include(contact => contact.PhysicalAddress)
-                .SingleAsync(contact => contact.Id == contactId);
-
-            if (contact.PhysicalAddress != null)
-            {
-                _context.Addresses.Remove(contact.PhysicalAddress);
-            }
-            _context.Contacts.Remove(contact);
         }
     }
 }
