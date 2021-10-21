@@ -10,6 +10,7 @@ using Prime.ViewModels.Sites;
 
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using LinqKit;
 
 namespace Prime.Services
 {
