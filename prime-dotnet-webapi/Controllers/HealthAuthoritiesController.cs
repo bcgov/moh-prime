@@ -94,10 +94,10 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<V2HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAllHealthAuthoritySites()
         {
-            return Ok(await _healthAuthoritySiteService.GetAllSitesAsync());
+            return Ok(await _healthAuthoritySiteService.GetSitesAsync());
         }
 
         // PUT: api/health-authorities/5/care-types
