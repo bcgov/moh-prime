@@ -187,10 +187,9 @@ namespace Prime.Controllers
             {
                 return NotFound($"Health authority site not found with id {siteId}");
             }
-            // TODO SiteIsEditable doesn't exist
             if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
             {
-                return NotFound($"No editable health authority site found with site id {siteId}");
+                return Conflict($"Site is not editable");
             }
             if (!await _healthAuthorityService.PerformSiteValidationBeforeUpdate(healthAuthorityId, updateModel))
             {

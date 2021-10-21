@@ -1,9 +1,8 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
-using Prime.Models.HealthAuthorities;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
-using Prime.ViewModels.Sites;
+using Prime.Models.HealthAuthorities;
+
 namespace Prime.Models
 {
     [Table("V2HealthAuthoritySite")]
@@ -39,10 +38,6 @@ namespace Prime.Models
         public HealthAuthorityTechnicalSupport HealthAuthorityTechnicalSupport { get; set; }
 
         public int AuthorizedUserId { get; set; }
-
-        public new ICollection<BusinessDayViewModel> BusinessHours { get; set; }
-
-        public new ICollection<RemoteUserViewModel> RemoteUsers { get; set; }
 
         public AuthorizedUser AuthorizedUser { get; set; }
     }
