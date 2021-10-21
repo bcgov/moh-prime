@@ -2,7 +2,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, pipe, from, of, UnaryFunction } from 'rxjs';
+import { Observable, pipe, from, of, UnaryFunction, OperatorFunction } from 'rxjs';
 import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
@@ -107,7 +107,14 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty && !this.allowRoutingWhenDirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      ? this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          map((result: boolean) => {
+            this.handleDeactivation(result);
+            return result;
+          })
+        )
       : true;
   }
 
@@ -120,6 +127,15 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
   protected abstract createFormInstance(): void;
 
   protected abstract initForm(): void;
+
+  /**
+   * @description
+   * Deactivation guard hook to allow for specific actions
+   * to be performed based on user interaction.
+   */
+  protected handleDeactivation(result: boolean): void {
+    // Optional can deactivate hook, otherwise NOOP
+  }
 
   /**
    * @description

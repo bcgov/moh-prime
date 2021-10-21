@@ -2,7 +2,7 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -61,8 +61,8 @@ export interface IEnrolmentPage {
  *   }
  * }
  */
-// TODO remove default from T generic added to allow for slow refactoring
-// eslint-disable-next-line max-len
+  // TODO remove default from T generic added to allow for slow refactoring
+  // eslint-disable-next-line max-len
 export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown> = AbstractFormState<unknown>, S = unknown> implements IEnrolmentPage {
   /**
    * @description
@@ -139,7 +139,14 @@ export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.formState.form.dirty && !this.checkDeactivationIsAllowed())
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      ? this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          map((confirmation: boolean) => {
+            this.handleDeactivation(confirmation);
+            return confirmation;
+          })
+        )
       : true;
   }
 
@@ -174,6 +181,15 @@ export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>
   protected initForm(): void {
     // Optional method for setting up form listeners, but
     // when no listeners are required is NOOP
+  }
+
+  /**
+   * @description
+   * Deactivation guard hook to allow for specific actions
+   * to be performed based on user interaction.
+   */
+  protected handleDeactivation(result: boolean): void {
+    // Optional can deactivate hook, otherwise NOOP
   }
 
   /**
