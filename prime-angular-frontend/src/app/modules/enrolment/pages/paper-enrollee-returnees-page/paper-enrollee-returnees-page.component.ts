@@ -99,6 +99,16 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
     this.togglePaperEnrolleeReturneeValidator(!!this.paperEnrolleeGpid, this.formState.paperEnrolleeGpid);
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation when
+    // so updates are discarded
+    this.formState.patchValue({ paperEnrolleeGpid: this.paperEnrolleeGpid });
+  }
+
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     const paperEnrolleeGpid = this.formState.paperEnrolleeGpid.value;
     const request$ = (!enrolment.id && this.isInitialEnrolment)

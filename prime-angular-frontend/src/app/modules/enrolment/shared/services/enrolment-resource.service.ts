@@ -18,12 +18,9 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
+import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
 @Injectable({
   providedIn: 'root'
@@ -561,10 +558,6 @@ export class EnrolmentResource {
       }
     });
 
-    // TODO manage this pre-submission and on pages only otherwise after submission should be immutable
-    // enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
-    // enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
-
     return this.enrolleeAdapter(enrolment);
   }
 
@@ -580,28 +573,5 @@ export class EnrolmentResource {
       enrolleeRemoteUsers: enrolment.enrolleeRemoteUsers,
       ...remainder
     };
-  }
-
-  // ---
-  // Sanitization Helpers
-  // ---
-
-  private removeIncompleteCollegeCertifications(certifications: CollegeCertification[]) {
-    return certifications.filter((certification: CollegeCertification) =>
-      this.collegeCertificationIsIncomplete(certification)
-    );
-  }
-
-  private collegeCertificationIsIncomplete(certification: CollegeCertification): boolean {
-    const allowlist = ['practiceCode', 'practitionerId'];
-
-    return Object.keys(certification)
-      .every((key: string) =>
-        (!allowlist.includes(key) && !certification[key]) ? certification[key] : true
-      );
-  }
-
-  private removeIncompleteCareSettings(careSettings: CareSetting[]) {
-    return careSettings.filter((careSetting: CareSetting) => careSetting.careSettingCode);
   }
 }

@@ -12,6 +12,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
+import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
@@ -37,7 +38,7 @@ import { PaperEnrolleeReturneeFormState } from '@enrolment/pages/paper-enrollee-
 export class EnrolmentFormStateService extends AbstractFormStateService<Enrolment> {
   public accessForm: FormGroup;
   public identityDocumentForm: FormGroup;
-  public paperEnrolleeReturneeFormState: PaperEnrolleeReturneeFormState
+  public paperEnrolleeReturneeFormState: PaperEnrolleeReturneeFormState;
   public bceidDemographicFormState: BceidDemographicFormState;
   public bcscDemographicFormState: BcscDemographicFormState;
   public regulatoryFormState: RegulatoryFormState;
@@ -218,7 +219,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.bcscDemographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
     this.regulatoryFormState = new RegulatoryFormState(this.fb, this.configService);
     this.deviceProviderForm = this.buildDeviceProviderForm();
-    this.oboSitesForm = this.buildJobsForm();
+    this.oboSitesForm = this.buildOboSitesForm();
     this.remoteAccessForm = this.buildRemoteAccessForm();
     this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
@@ -238,63 +239,29 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicFormState.patchValue(enrolment.enrollee)
       : this.bcscDemographicFormState.patchValue(enrolment.enrollee);
+    this.regulatoryFormState.patchValue(enrolment.certifications);
+
+    const { careSettings, enrolleeHealthAuthorities, enrolleeRemoteUsers, remoteAccessSites } = enrolment;
+    this.patchDeviceProviderForm(enrolment);
+    this.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
+    this.patchOboSitesForm(enrolment.oboSites);
+    this.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
+    this.patchRemoteAccessLocationsForm();
+    this.patchSelfDeclarations(enrolment.profileCompleted, enrolment.selfDeclarations);
+
+    // After patching the form is dirty, and needs to be pristine
+    // to allow for deactivation modals to work properly
+    this.markAsPristine();
+  }
+
+  protected patchDeviceProviderForm(enrolment) {
     this.deviceProviderForm.patchValue(enrolment);
+  }
 
-    if (enrolment.careSettings.length) {
-      const careSettings = this.careSettingsForm.get('careSettings') as FormArray;
-      careSettings.clear();
-      enrolment.careSettings.forEach((s: CareSetting) => {
-        const careSetting = this.buildCareSettingForm();
-        careSetting.patchValue(s);
-        careSettings.push(careSetting);
-      });
-    }
-
-    // Initialize Health Authority form even if it might not be used by end user:
-    // Create checkboxes for each known Health Authority, according to order of Health Authority list.
-    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
-    enrolleeHealthAuthorities.clear();
-    // Set value of checkboxes according to previous selections, if any
-    this.configService.healthAuthorities.forEach(ha => {
-      const checked = enrolment.enrolleeHealthAuthorities.some(eha => ha.code === eha.healthAuthorityCode);
-      enrolleeHealthAuthorities.push(this.buildEnrolleeHealthAuthorityFormControl(checked));
-    });
-
-    this.careSettingsForm.get('careSettings').patchValue(enrolment.careSettings);
-
-    if (enrolment.oboSites.length) {
-      const oboSites = this.oboSitesForm.get('oboSites') as FormArray;
-      const communityHealthSites = this.oboSitesForm.get('communityHealthSites') as FormArray;
-      const communityPharmacySites = this.oboSitesForm.get('communityPharmacySites') as FormArray;
-      const healthAuthoritySites = this.oboSitesForm.get('healthAuthoritySites') as FormGroup;
-
-      oboSites.clear();
-      communityHealthSites.clear();
-      communityPharmacySites.clear();
-      Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
-
-      enrolment.oboSites.forEach((s: OboSite) => {
-        const site = this.buildOboSiteForm();
-        site.patchValue(s);
-        oboSites.push(site);
-
-        switch (s.careSettingCode) {
-          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            this.addNonHealthAuthorityOboSite(site, communityHealthSites);
-            break;
-          }
-          case CareSettingEnum.COMMUNITY_PHARMACIST: {
-            this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
-            break;
-          }
-          case CareSettingEnum.HEALTH_AUTHORITY: {
-            this.addHealthAuthorityOboSite(site, healthAuthoritySites, s.healthAuthorityCode);
-            break;
-          }
-        }
-      });
-    }
-
+  protected patchRemoteAccessForm({
+                                    enrolleeRemoteUsers,
+                                    remoteAccessSites
+                                  }: Pick<Enrolment, 'enrolleeRemoteUsers' | 'remoteAccessSites'>) {
     if (enrolment.enrolleeRemoteUsers.length) {
       const enrolleeRemoteUsers = this.remoteAccessForm.get('enrolleeRemoteUsers') as FormArray;
       enrolleeRemoteUsers.clear();
@@ -323,46 +290,20 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         remoteAccessSites.push(remoteAccessSite);
       });
     }
+  }
 
-    if (enrolment.remoteAccessLocations.length) {
-      const remoteAccessLocations = this.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
-      remoteAccessLocations.clear();
-      enrolment.remoteAccessLocations.forEach((ral: RemoteAccessLocation) => {
-        const remoteAccessLocation = this.remoteAccessLocationFormGroup();
-        remoteAccessLocation.patchValue(ral);
-        remoteAccessLocations.push(remoteAccessLocation);
-      });
+  protected patchRemoteAccessLocationsForm(remoteAccessLocations: RemoteAccessLocation[]) {
+    if (!Array.isArray(remoteAccessLocations)) {
+      remoteAccessLocations = [];
     }
-    this.regulatoryFormState.patchValue(enrolment.certifications);
-    this.oboSitesForm.patchValue(enrolment);
-    this.remoteAccessForm.patchValue(enrolment);
-    this.remoteAccessLocationsForm.patchValue(enrolment);
 
-    const defaultValue = (enrolment.profileCompleted) ? false : null;
-    const selfDeclarationsTypes = {
-      hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
-      hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,
-      hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
-      hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED
-    };
-    const selfDeclarations = Object.keys(selfDeclarationsTypes)
-      .reduce((sds, sd) => {
-        const type = selfDeclarationsTypes[sd];
-        const selfDeclarationDetails = enrolment.selfDeclarations
-          .find(esd => esd.selfDeclarationTypeCode === type)
-          ?.selfDeclarationDetails;
-        const adapted = {
-          [sd]: (selfDeclarationDetails) ? true : defaultValue,
-          [`${sd}Details`]: (selfDeclarationDetails) ? selfDeclarationDetails : null
-        };
-        return { ...sds, ...adapted };
-      }, {});
-
-    this.selfDeclarationForm.patchValue(selfDeclarations);
-
-    // After patching the form is dirty, and needs to be pristine
-    // to allow for deactivation modals to work properly
-    this.markAsPristine();
+    const remoteAccessLocationsFormArray = this.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
+    remoteAccessLocationsFormArray.clear();
+    remoteAccessLocations.forEach((ral: RemoteAccessLocation) => {
+      const remoteAccessLocation = this.remoteAccessLocationFormGroup();
+      remoteAccessLocation.patchValue(ral);
+      remoteAccessLocationsFormArray.push(remoteAccessLocation);
+    });
   }
 
   /**
@@ -456,7 +397,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public buildJobsForm(): FormGroup {
+  public buildOboSitesForm(): FormGroup {
     return this.fb.group({
       oboSites: this.fb.array([]),
       communityHealthSites: this.fb.array([]),
@@ -479,6 +420,43 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         areDisabled: ['provinceCode', 'countryCode']
       }),
       pec: [null, []]
+    });
+  }
+
+  public patchOboSitesForm(oboSites) {
+    if (!Array.isArray(oboSites)) {
+      oboSites = [];
+    }
+
+    const oboSitesFormArray = this.oboSitesForm.get('oboSites') as FormArray;
+    const communityHealthSites = this.oboSitesForm.get('communityHealthSites') as FormArray;
+    const communityPharmacySites = this.oboSitesForm.get('communityPharmacySites') as FormArray;
+    const healthAuthoritySites = this.oboSitesForm.get('healthAuthoritySites') as FormGroup;
+
+    oboSitesFormArray.clear();
+    communityHealthSites.clear();
+    communityPharmacySites.clear();
+    Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
+
+    oboSites.forEach((s: OboSite) => {
+      const site = this.buildOboSiteForm();
+      site.patchValue(s);
+      oboSitesFormArray.push(site);
+
+      switch (s.careSettingCode) {
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+          this.addNonHealthAuthorityOboSite(site, communityHealthSites);
+          break;
+        }
+        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
+          break;
+        }
+        case CareSettingEnum.HEALTH_AUTHORITY: {
+          this.addHealthAuthorityOboSite(site, healthAuthoritySites, s.healthAuthorityCode);
+          break;
+        }
+      }
     });
   }
 
@@ -553,6 +531,37 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
+  public patchCareSettingsForm({
+                                 careSettings,
+                                 enrolleeHealthAuthorities
+                               }: { careSettings: CareSetting[], enrolleeHealthAuthorities: EnrolleeHealthAuthority[] }) {
+    if (!Array.isArray(careSettings)) {
+      careSettings = [];
+    }
+
+    const careSettingsFormArray = this.careSettingsForm.get('careSettings') as FormArray;
+    careSettingsFormArray.clear();
+    careSettings.forEach((s: CareSetting) => {
+      const careSetting = this.buildCareSettingForm();
+      careSetting.patchValue(s);
+      careSettingsFormArray.push(careSetting);
+    });
+
+    if (!Array.isArray(enrolleeHealthAuthorities)) {
+      enrolleeHealthAuthorities = [];
+    }
+
+    // Initialize Health Authority form even if it might not be used by end user:
+    // Create checkboxes for each known Health Authority, according to order of Health Authority list.
+    const enrolleeHealthAuthoritiesFormArray = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    enrolleeHealthAuthoritiesFormArray.clear();
+    // Set value of checkboxes according to previous selections, if any
+    this.configService.healthAuthorities.forEach(ha => {
+      const checked = enrolleeHealthAuthorities.some(eha => ha.code === eha.healthAuthorityCode);
+      enrolleeHealthAuthoritiesFormArray.push(this.buildEnrolleeHealthAuthorityFormControl(checked));
+    });
+  }
+
   public buildEnrolleeHealthAuthorityFormControl(checkState: boolean): FormControl {
     return this.fb.control(checkState);
   }
@@ -579,6 +588,30 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       hasPharmaNetSuspendedDetails: [null, []],
       hasPharmaNetSuspendedDocumentGuids: this.fb.array([])
     });
+  }
+
+  public patchSelfDeclarations(profileCompleted: boolean, selfDeclarations: SelfDeclaration[]): void {
+    const defaultValue = (profileCompleted) ? false : null;
+    const selfDeclarationsTypes = {
+      hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
+      hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,
+      hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
+      hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED
+    };
+    const selfDeclarationForm = Object.keys(selfDeclarationsTypes)
+      .reduce((sds, sd) => {
+        const type = selfDeclarationsTypes[sd];
+        const selfDeclarationDetails = selfDeclarations
+          .find(esd => esd.selfDeclarationTypeCode === type)
+          ?.selfDeclarationDetails;
+        const adapted = {
+          [sd]: (selfDeclarationDetails) ? true : defaultValue,
+          [`${sd}Details`]: (selfDeclarationDetails) ? selfDeclarationDetails : null
+        };
+        return { ...sds, ...adapted };
+      }, {});
+
+    this.selfDeclarationForm.patchValue(selfDeclarationForm);
   }
 
   private buildAccessAgreementForm(): FormGroup {

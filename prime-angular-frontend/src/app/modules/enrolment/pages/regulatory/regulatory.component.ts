@@ -115,6 +115,16 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       );
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation when
+    // so updates are discarded
+    this.formState.patchValue(this.enrolment.certifications);
+  }
+
   protected onSubmitFormIsValid() {
     // Enrollees can not have certifications and jobs
     this.removeOboSites();
