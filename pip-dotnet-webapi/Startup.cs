@@ -1,14 +1,11 @@
-using System.Reflection;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
 using Serilog;
-using AutoMapper;
-using Newtonsoft.Json;
-using FluentValidation.AspNetCore;
+using System.Reflection;
+using System.Text.Json;
 
 using Pip.Services;
-using Pip.Infrastructure;
 
 namespace Pip
 {
@@ -17,6 +14,7 @@ namespace Pip
         public const string CorsPolicy = "CorsPolicy";
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
+
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,18 +28,13 @@ namespace Pip
             services.AddScoped<IFirstService, FirstService>();
 
             services.AddControllers()
-                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
-                });
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pip Web API", Version = "v1" });
             });
-            services.AddSwaggerGenNewtonsoftSupport();
 
             ConfigureDatabase(services);
         }
@@ -55,8 +48,9 @@ namespace Pip
             services.AddSingleton(config);
 
             Log.Logger.Information("###App Version:{0}###", Assembly.GetExecutingAssembly().GetName().Version);
-            Log.Logger.Information("###Pip Configuration:{0}###", JsonConvert.SerializeObject(PipConfiguration.Current));
+            Log.Logger.Information("###Pip Configuration:{0}###", JsonSerializer.Serialize(PipConfiguration.Current));
         }
+
         protected virtual void ConfigureDatabase(IServiceCollection services)
         {
             var connectionString = PipConfiguration.Current!.ConnectionStrings.PipDatabase;
