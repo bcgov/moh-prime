@@ -4,8 +4,6 @@ using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
 using System.Reflection;
 
-using Pip.Configuration.Environment;
-
 namespace Pip
 {
     public class Program
@@ -17,7 +15,9 @@ namespace Pip
             try
             {
                 Log.Information("Starting web host");
-                CreateHostBuilder(args)
+                Host.CreateDefaultBuilder(args)
+                    .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+                    .UseSerilog()
                     .Build()
                     .Run();
                 return 0;
@@ -33,25 +33,6 @@ namespace Pip
                 Log.CloseAndFlush();
             }
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            // By default, .CreateDefaultBuilder() adds Configuration from the following, in order:
-            // 1. appsettings.json
-            // 2. appsettings.{EnvironmentName}.json,
-            // 3. user secrets (only in local development)
-            // 4. environment variables
-            // 5. command line arguments
-            // See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-5.0
-            Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    config.Add(new PipEnvironmentVariablesConfigurationSource());
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseSerilog();
 
         private static void CreateLogger()
         {
