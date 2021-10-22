@@ -22,14 +22,16 @@ namespace Prime.Controllers
     {
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly IHealthAuthorityService _healthAuthorityService;
+        private readonly IV2SiteService _siteService;
 
         public HealthAuthoritySitesV2Controller(
             IHealthAuthoritySiteService healthAuthoritySiteService,
-            IHealthAuthorityService healthAuthorityService
-        )
+            IHealthAuthorityService healthAuthorityService,
+            IV2SiteService siteService)
         {
             _healthAuthoritySiteService = healthAuthoritySiteService;
             _healthAuthorityService = healthAuthorityService;
+            _siteService = siteService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -123,10 +125,9 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            var siteHoursOfOperation = await _healthAuthoritySiteService.GetBusinessHoursAsync(siteId);
+            var siteHoursOfOperation = await _siteService.GetBusinessHoursAsync(siteId);
 
             return Ok(siteHoursOfOperation);
-            // return Ok(new[] { new BusinessDayViewModel { Day = DayOfWeek.Monday, StartTime = TimeSpan.FromHours(9), EndTime = TimeSpan.FromHours(17) } });
         }
 
         // GET: api/health-authorities/5/sites/5/remote-users
@@ -147,10 +148,9 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            var siteRemoteUsers = await _healthAuthoritySiteService.GetRemoteUsersAsync(siteId);
+            var siteRemoteUsers = await _siteService.GetRemoteUsersAsync(siteId);
 
             return Ok(siteRemoteUsers);
-            // return Ok(new[] { new RemoteUserViewModel { FirstName = "John", LastName = "Doe", Email = "example@example.com", RemoteUserCertifications = new[] { new RemoteUserCertificationViewModel { CollegeCode = 1, LicenseCode = 1, LicenseNumber = "12345" } } } });
         }
 
         // PUT: api/health-authorities/5/sites/5
