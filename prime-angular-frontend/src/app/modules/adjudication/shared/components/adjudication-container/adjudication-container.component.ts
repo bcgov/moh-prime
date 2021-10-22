@@ -182,7 +182,7 @@ export class AdjudicationContainerComponent implements OnInit {
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.APPROVE)
       )
       .subscribe((approvedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(approvedEnrollee);
+        this.updateEnrollee(approvedEnrollee.id);
         this.action.emit();
       });
   }
@@ -202,7 +202,7 @@ export class AdjudicationContainerComponent implements OnInit {
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.DECLINE_PROFILE)
       )
       .subscribe((declinedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(declinedEnrollee);
+        this.updateEnrollee(declinedEnrollee.id);
         this.action.emit();
       });
   }
@@ -222,7 +222,7 @@ export class AdjudicationContainerComponent implements OnInit {
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.LOCK_PROFILE)
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(lockedEnrollee);
+        this.updateEnrollee(lockedEnrollee.id);
         this.action.emit();
       });
   }
@@ -242,7 +242,7 @@ export class AdjudicationContainerComponent implements OnInit {
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(lockedEnrollee);
+        this.updateEnrollee(lockedEnrollee.id);
         this.action.emit();
       });
   }
@@ -262,7 +262,7 @@ export class AdjudicationContainerComponent implements OnInit {
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee);
+        this.updateEnrollee(enableEnrollee.id);
         this.action.emit();
       });
   }
@@ -282,7 +282,7 @@ export class AdjudicationContainerComponent implements OnInit {
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee);
+        this.updateEnrollee(enableEnrollee.id);
         this.action.emit();
       });
   }
@@ -302,7 +302,7 @@ export class AdjudicationContainerComponent implements OnInit {
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.CANCEL_TOA)
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee);
+        this.updateEnrollee(enableEnrollee.id);
         this.action.emit();
       });
   }
@@ -322,7 +322,7 @@ export class AdjudicationContainerComponent implements OnInit {
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.RERUN_RULES)
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee);
+        this.updateEnrollee(enableEnrollee.id);
         this.action.emit();
       });
   }
@@ -373,7 +373,7 @@ export class AdjudicationContainerComponent implements OnInit {
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
       .subscribe((flaggedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(flaggedEnrollee);
+        this.updateEnrollee(flaggedEnrollee.id);
         this.action.emit();
       });
   }
@@ -384,7 +384,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onAssignToa({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
     this.busy = this.adjudicationResource.assignToaAgreementType(enrolleeId, agreementType)
-      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
+      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee.id));
   }
 
   public onSendBulkEmail() {
@@ -448,8 +448,8 @@ export class AdjudicationContainerComponent implements OnInit {
         // Set enrolleeNavigation to null to disable navigation arrows for certain routes
         // TODO: add support for enrollee event page and notes page
         this.enrolleeNavigation = [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT,
-            AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT,
-            AdjudicationRoutes.EVENT_LOG
+        AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT,
+        AdjudicationRoutes.EVENT_LOG
         ].includes(RouteUtils.currentRoutePath(this.router.url)) ? null : enrolleeNavigation;
       });
   }
@@ -461,10 +461,13 @@ export class AdjudicationContainerComponent implements OnInit {
       );
   }
 
-  private updateEnrollee(enrollee: HttpEnrollee) {
-    const index = this.enrollees.findIndex(e => e.id === enrollee.id);
-    this.enrollees.splice(index, 1, this.toEnrolleeListViewModel(enrollee));
-    this.enrollees = [...this.enrollees];
+  private updateEnrollee(enrolleeId: number) {
+    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
+      .subscribe((enrollee: HttpEnrollee) => {
+        const index = this.enrollees.findIndex(e => e.id === enrollee.id);
+        this.enrollees.splice(index, 1, this.toEnrolleeListViewModel(enrollee));
+        this.enrollees = [...this.enrollees];
+      })
   }
 
   private adjudicationActionPipe(enrolleeId: number, action: EnrolleeStatusAction) {
