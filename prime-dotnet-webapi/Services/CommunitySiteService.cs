@@ -20,21 +20,18 @@ namespace Prime.Services
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
-        private readonly IOrganizationService _organizationService;
 
         public CommunitySiteService(
             ApiDbContext context,
             ILogger<CommunitySiteService> logger,
             IBusinessEventService businessEventService,
             IDocumentManagerClient documentClient,
-            IMapper mapper,
-            IOrganizationService organizationService)
+            IMapper mapper)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
             _documentClient = documentClient;
             _mapper = mapper;
-            _organizationService = organizationService;
         }
 
         public async Task<IEnumerable<CommunitySite>> GetSitesAsync(int? organizationId = null)
