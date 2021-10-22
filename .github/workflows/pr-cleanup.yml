@@ -36,3 +36,9 @@ jobs:
       - name: "Delete PR database"
         run: |
           oc exec db-task-runner -- dropdb prime-pr-${{ github.event.number }}
+
+      - name: "Cleanup Container Images"
+        run: |
+           oc tag -d ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{ github.event.number }} && \
+           oc tag -d ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{ github.event.number }} && \
+           oc tag -d ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{ github.event.number }}
