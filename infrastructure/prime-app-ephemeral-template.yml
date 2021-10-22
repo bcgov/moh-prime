@@ -457,6 +457,7 @@ objects:
       - hosts:
         - '${SVC_NAME}.pharmanetenrolment.gov.bc.ca'
         - '${SVC_NAME}-hpr.pharmanetenrolment.gov.bc.ca'
+        - '${SVC_NAME}-pip.pharmanetenrolment.gov.bc.ca'
         secretName: pharmanetenrolment-tls
     rules:
       - host: '${SVC_NAME}.pharmanetenrolment.gov.bc.ca'
@@ -467,6 +468,16 @@ objects:
               backend:
                 service:
                   name: ${SVC_NAME}-frontend
+                  port:
+                    number: 8080
+      - host: '${SVC_NAME}-pip.pharmanetenrolment.gov.bc.ca'
+        http:
+          paths:
+            - path: /
+              pathType: Prefix
+              backend:
+                service:
+                  name: ${SVC_NAME}-pip-frontend
                   port:
                     number: 8080
       - host: '${SVC_NAME}-hpr.pharmanetenrolment.gov.bc.ca'
@@ -744,6 +755,367 @@ objects:
         targetPort: 8080
     selector:
       name: ${SVC_NAME}-webapi
+
+###########################################
+###           PIP Frontend              ###
+###########################################
+#   PIP Frontend Deployment Config
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  namespace: ${OC_LICENSE_PLATE}-dev
+  metadata:
+    name: ${SVC_NAME}-pip-frontend
+    namespace: ${OC_LICENSE_PLATE}-dev
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.openshift.io/runtime: nginx
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      name: ${SVC_NAME}-pip-frontend
+    strategy:
+      type: Recreate
+      maxSurge: 50%
+      maxUnavailable: 0
+    template:
+      metadata:
+        labels:
+          dev-app: ${SVC_NAME}
+          name: ${SVC_NAME}-pip-frontend
+      spec:
+        containers:
+          - name: ${SVC_NAME}-pip-frontend
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/pip-frontend:${IMAGE_TAG}
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+            resources:
+              limits:
+                cpu: 50m
+                memory: 50Mi
+              requests:
+                cpu: 15m
+                memory: 10Mi
+            readinessProbe:
+              httpGet:
+                path: /
+                port: 8080
+              initialDelaySeconds: 5
+              periodSeconds: 5
+            livenessProbe:
+              httpGet:
+                path: /
+                port: 8080
+              initialDelaySeconds: 5
+              failureThreshold: 1
+              periodSeconds: 5
+            volumeMounts:
+            - name: pip-nginx-config
+              readOnly: true
+              mountPath: /opt/bitnami/nginx/conf/nginx.conf
+              subPath: nginx.conf
+        volumes:
+        - name: pip-nginx-config
+          configMap:
+            name: ${SVC_NAME}-pip-nginx-config
+            defaultMode: 420
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${SVC_NAME}-pip-frontend
+          from:
+            kind: ImageStreamTag
+            namespace: "${OC_LICENSE_PLATE}-tools"
+            name: 'pip-frontend:${IMAGE_TAG}'
+
+#  PIP NGINX Configuration
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: ${SVC_NAME}-pip-nginx-config
+    namespace: ${OC_LICENSE_PLATE}-dev
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  data:
+    nginx.conf: |-
+      # Based on https://www.nginx.com/resources/wiki/start/topics/examples/full/#nginx-conf
+      #user              www www;  ## Default: nobody
+
+      worker_processes  auto;
+      error_log         "/opt/bitnami/nginx/logs/error.log";
+      pid               "/opt/bitnami/nginx/tmp/nginx.pid";
+
+      events {
+          worker_connections  1024;
+      }
+
+      http {
+          include       mime.types;
+          default_type  application/octet-stream;
+          log_format    main '$remote_addr - $remote_user [$time_local] '
+                            '"$request" $status  $body_bytes_sent "$http_referer" '
+                            '"$http_user_agent" "$http_x_forwarded_for"';
+          access_log    "/opt/bitnami/nginx/logs/access.log" main;
+          # add_header    X-Frame-Options SAMEORIGIN;
+
+          client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
+          proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
+          fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
+          scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
+          uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
+
+          sendfile           on;
+          # tcp_nopush         on;
+          tcp_nodelay        off;
+          gzip               on;
+          gzip_http_version  1.0;
+          gzip_comp_level    2;
+          gzip_proxied       any;
+          gzip_types         text/plain text/css application/javascript text/xml application/xml+rss;
+          keepalive_timeout  65;
+          ssl_protocols      TLSv1.1 TLSv1.2 TLSv1.3;
+          ssl_ciphers        HIGH:!aNULL:!MD5;
+          client_max_body_size 80M;
+          server_tokens off;
+
+        server {
+          listen 8080;
+          server_name localhost *.gov.bc.ca;
+          server_tokens off;
+
+          root /opt/app-root/src;
+          index index.html;
+
+          include mime.types;
+          add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
+          add_header X-XSS-Protection "1; mode=block" always;
+          add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
+          add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload" always;
+          add_header X-Content-Type-Options "nosniff" always;
+          add_header Referrer-Policy "no-referrer-when-downgrade";
+
+          gzip on;
+          gzip_min_length 1000;
+          gzip_proxied expired no-cache no-store private auth;
+          gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+          location / {
+            try_files $uri $uri/ /index.html$args;
+          }
+
+          location /nginx_status {
+            # Enable Nginx stats
+            stub_status on;
+            # Only allow access from localhost
+            allow 127.0.0.1;
+            # Other request should be denied
+            deny all;
+            # No need to log this request, its just noise
+            access_log on;
+          }
+        }
+      }
+
+#   Frontend Service
+- apiVersion: v1
+  kind: Service
+  namespace: ${OC_LICENSE_PLATE}-dev
+  metadata:
+    name: ${SVC_NAME}-pip-frontend
+    namespace: ${OC_LICENSE_PLATE}-dev
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  spec:
+    ports:
+      - name: "http"
+        port: 8080
+        targetPort: 8080
+    selector:
+      name: ${SVC_NAME}-pip-frontend
+
+###########################################
+###           PIP API           ###
+###########################################
+#   PIP API Deployment Config
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  namespace: ${OC_LICENSE_PLATE}-dev
+  metadata:
+    name: ${SVC_NAME}-pip
+    namespace: ${OC_LICENSE_PLATE}-dev
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.openshift.io/runtime: dotnet
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      name: ${SVC_NAME}-pip
+    strategy:
+      type: Recreate
+      maxSurge: 50%
+      maxUnavailable: 0
+      recreateParams:
+        pre:
+          failurePolicy: Ignore
+          execNewPod:
+            command:
+              - /bin/ash
+              - -c
+              - createdb -O $(APPUSER) pip-${SVC_NAME}
+            env:
+              - name: PGHOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+              - name: PGDATABASE
+                value: postgres
+              - name: APPUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: app-db-username
+              - name: PGUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: superuser-username
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: superuser-password
+    template:
+      metadata:
+        labels:
+          dev-app: ${SVC_NAME}
+          name: ${SVC_NAME}-pip
+      spec:
+        initContainers:
+        - name: run-migrations
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/pip-dotnet-webapi:${IMAGE_TAG}
+          env:
+          - name: PGHOST
+            valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: dev-patroni-secret
+                key: app-db-username
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: dev-patroni-secret
+                key: app-db-password
+          - name: PGDATABASE
+            value: pip-${SVC_NAME}
+          command: 
+            - psql
+            - -a
+            - -f
+            - ./out/databaseMigrations.sql
+        containers:
+          - name: ${SVC_NAME}-pip
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/pip-dotnet-webapi:${IMAGE_TAG}
+            command:
+              - dotnet
+              - ./out/pip.dll
+              - '-v 2>&1> /dev/stdout'
+            env:
+              - name: DB_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+              - name: BACKEND_URL
+                value: https://${SVC_NAME}${URL_STUB}/api/v1/
+              - name: FRONTEND_URL
+                value: https://${SVC_NAME}${URL_STUB}
+              - name: POSTGRESQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: app-db-username
+              - name: POSTGRESQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: app-db-password
+              - name: POSTGRESQL_DATABASE
+                value: pip-${SVC_NAME}
+              - name: DB_CONNECTION_STRING
+                value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
+            ports:
+              - containerPort: 5000
+                protocol: TCP
+            resources:
+              limits:
+                cpu: 50m
+                memory: 1Gi
+              requests:
+                cpu: 15m
+                memory: 500Mi
+            startupProbe:
+              httpGet:
+                path: /health
+                port: 5000
+              timeoutSeconds: 30
+              failureThreshold: 30
+              periodSeconds: 10
+            readinessProbe:
+              httpGet:
+                path: /health
+                port: 5000
+              initialDelaySeconds: 5
+              periodSeconds: 5
+            livenessProbe:
+              httpGet:
+                path: /health
+                port: 5000
+              failureThreshold: 1
+              periodSeconds: 5
+            imagePullPolicy: IfNotPresent
+            terminationMessagePolicy: File
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${SVC_NAME}-pip
+            - run-migrations
+          from:
+            kind: ImageStreamTag
+            namespace: "${OC_LICENSE_PLATE}-tools"
+            name: 'pip-dotnet-webapi:${IMAGE_TAG}'
+
+#   Backend Web API Service
+- apiVersion: v1
+  kind: Service
+  namespace: ${OC_LICENSE_PLATE}-dev
+  metadata:
+    name: ${SVC_NAME}-pip
+    namespace: ${OC_LICENSE_PLATE}-dev
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  spec:
+    ports:
+      - name: "http"
+        port: 80
+        targetPort: 5000
+    selector:
+      name: ${SVC_NAME}-pip
 
 ###########################################
 ###      Document Manager (backend)     ###
