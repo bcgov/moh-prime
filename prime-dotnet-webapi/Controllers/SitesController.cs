@@ -27,6 +27,7 @@ namespace Prime.Controllers
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
+        private readonly IV2SiteService _siteService;
 
         public SitesController(
             IAdminService adminService,
@@ -34,7 +35,8 @@ namespace Prime.Controllers
             IDocumentService documentService,
             IEmailService emailService,
             IMapper mapper,
-            IOrganizationService organizationService)
+            IOrganizationService organizationService,
+            IV2SiteService siteService)
         {
             _adminService = adminService;
             _communitySiteService = communitySiteService;
@@ -42,6 +44,7 @@ namespace Prime.Controllers
             _emailService = emailService;
             _mapper = mapper;
             _organizationService = organizationService;
+            _siteService = siteService;
         }
 
         // GET: api/Sites
@@ -150,13 +153,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var site = await _communitySiteService.GetSiteNoTrackingAsync(siteId);
-
-            if (site.CareSettingCode != null
-                && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && !string.IsNullOrWhiteSpace(updatedSite.PEC)
-                && site.PEC != updatedSite.PEC
-                && !await _communitySiteService.PecAssignableAsync(updatedSite.PEC))
+            if (!await _siteService.PecAssignableAsync(siteId, updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -188,7 +185,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _communitySiteService.UpdateCompletedAsync(siteId, true);
+            await _siteService.UpdateCompletedAsync(siteId, true);
 
             return NoContent();
         }
@@ -215,7 +212,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _communitySiteService.UpdateCompletedAsync(siteId, false);
+            await _siteService.UpdateCompletedAsync(siteId, false);
 
             return NoContent();
         }
@@ -249,7 +246,7 @@ namespace Prime.Controllers
                 return NotFound($"Admin not found with id {adjudicatorId.Value}.");
             }
 
-            var updatedSite = await _communitySiteService.UpdateSiteAdjudicator(siteId, admin.Id);
+            var updatedSite = await _siteService.UpdateSiteAdjudicator(siteId, admin.Id);
             // TODO implement business events for sites
             // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin claimed site");
 
@@ -275,7 +272,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var updatedSite = await _communitySiteService.UpdateSiteAdjudicator(siteId);
+            var updatedSite = await _siteService.UpdateSiteAdjudicator(siteId);
             // TODO implement business events for sites
             // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin disclaimed site");
 
@@ -304,7 +301,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _communitySiteService.DeleteSiteAsync(siteId);
+            await _siteService.DeleteSiteAsync(siteId);
 
             return NoContent();
         }
@@ -338,11 +335,7 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            if (site.CareSettingCode != null
-                && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && !string.IsNullOrWhiteSpace(updatedSite.PEC)
-                && site.PEC != updatedSite.PEC
-                && !await _communitySiteService.PecAssignableAsync(updatedSite.PEC))
+            if (!await _siteService.PecAssignableAsync(siteId, updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -353,7 +346,7 @@ namespace Prime.Controllers
             }
 
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
-            await _communitySiteService.SubmitRegistrationAsync(siteId);
+            await _siteService.SubmitRegistrationAsync(siteId);
 
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
@@ -702,7 +695,7 @@ namespace Prime.Controllers
                 return Ok(true);
             }
 
-            return Ok(await _communitySiteService.PecAssignableAsync(pec));
+            return Ok(await _siteService.PecAssignableAsync(siteId, pec));
         }
 
         // PUT: api/Sites/5/pec
@@ -734,17 +727,12 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var site = await _communitySiteService.GetSiteNoTrackingAsync(siteId);
-
-            if (site.CareSettingCode != null
-                && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && site.PEC != pecCode
-                && !await _communitySiteService.PecAssignableAsync(pecCode))
+            if (!await _siteService.PecAssignableAsync(siteId, pecCode))
             {
                 return BadRequest("PEC already exists");
             }
 
-            var updatedSite = await _communitySiteService.UpdatePecCode(siteId, pecCode);
+            var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
 
             return Ok(updatedSite);
         }
@@ -911,7 +899,7 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            var updatedSite = await _communitySiteService.ApproveSite(siteId);
+            var updatedSite = await _siteService.ApproveSite(siteId);
             if (site.ActiveBeforeRegistration)
             {
                 await _emailService.SendSiteActiveBeforeRegistrationAsync(site.Id, site.Organization.SigningAuthority.Email);
@@ -949,7 +937,7 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            var updatedSite = await _communitySiteService.DeclineSite(siteId);
+            var updatedSite = await _siteService.DeclineSite(siteId);
             return Ok(updatedSite);
         }
 
@@ -976,7 +964,7 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            var updatedSite = await _communitySiteService.EnableEditingSite(siteId);
+            var updatedSite = await _siteService.EnableEditingSite(siteId);
             return Ok(updatedSite);
         }
 
@@ -1003,7 +991,7 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            var updatedSite = await _communitySiteService.UnrejectSite(siteId);
+            var updatedSite = await _siteService.UnrejectSite(siteId);
             return Ok(updatedSite);
         }
 
@@ -1034,7 +1022,7 @@ namespace Prime.Controllers
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
-            var createdSiteRegistrationNote = await _communitySiteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
+            var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
 
             return Ok(createdSiteRegistrationNote);
         }
@@ -1058,7 +1046,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var siteRegistrationNotes = await _communitySiteService.GetSiteRegistrationNotesAsync(siteId);
+            var siteRegistrationNotes = await _siteService.GetSiteRegistrationNotesAsync(siteId);
 
             return Ok(siteRegistrationNotes);
         }
@@ -1074,7 +1062,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<RemoteAccessSearchViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSitesByRemoteUserInfo(IEnumerable<CertSearchViewModel> certifications)
         {
-            var info = await _communitySiteService.GetRemoteUserInfoAsync(certifications);
+            var info = await _siteService.GetRemoteUserInfoAsync(certifications);
             return Ok(info);
         }
 
@@ -1146,7 +1134,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var note = await _communitySiteService.GetSiteRegistrationNoteAsync(siteId, siteRegistrationNoteId);
+            var note = await _siteService.GetSiteRegistrationNoteAsync(siteId, siteRegistrationNoteId);
             if (note == null)
             {
                 return NotFound($"Site Registration Note not found with id {siteRegistrationNoteId}");
@@ -1177,7 +1165,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var note = await _communitySiteService.GetSiteRegistrationNoteAsync(siteId, siteRegistrationNoteId);
+            var note = await _siteService.GetSiteRegistrationNoteAsync(siteId, siteRegistrationNoteId);
             if (note == null || note.SiteNotification == null)
             {
                 return NotFound($"Site Registration Note with notification not found with id {siteRegistrationNoteId}");
