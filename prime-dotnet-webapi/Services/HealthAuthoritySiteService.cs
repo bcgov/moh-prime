@@ -7,9 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Prime.Models;
-using Prime.Models.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
-using Prime.ViewModels.Sites;
 
 namespace Prime.Services
 {

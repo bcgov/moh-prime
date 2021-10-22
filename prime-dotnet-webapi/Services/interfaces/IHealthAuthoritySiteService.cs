@@ -1,10 +1,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using Prime.Models;
-using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
-using Prime.ViewModels.Sites;
 
 namespace Prime.Services
 {

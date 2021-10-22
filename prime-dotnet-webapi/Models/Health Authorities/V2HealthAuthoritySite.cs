@@ -1,10 +1,8 @@
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
-
 
 using Prime.Models.HealthAuthorities;
-using Prime.ViewModels.Sites;
+
 namespace Prime.Models
 {
     [Table("V2HealthAuthoritySite")]

@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 
 using Prime.Configuration.Auth;
 using Prime.Services;
-using Prime.Models.HealthAuthorities;
-using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Sites;
 
