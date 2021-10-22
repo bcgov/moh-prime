@@ -1,16 +1,13 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
 using Xunit;
 using FakeItEasy;
 
-using Prime;
 using Prime.Models;
 using Prime.Services;
 using Prime.Services.EmailInternal;
 using PrimeTests.Utils;
-using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.ViewModels.Emails;
 using PrimeTests.ModelFactories;
