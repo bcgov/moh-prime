@@ -74,6 +74,18 @@ objects:
           dev-app: ${SVC_NAME}
           name: ${SVC_NAME}-frontend
       spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  topologyKey: kubernetes.io/hostname
+                  labelSelector:
+                    matchExpressions:
+                      - key: deploymentconfig
+                        operator: In
+                        values:
+                          - ${SVC_NAME}-frontend
         containers:
           - name: ${SVC_NAME}-frontend
             image: >-
@@ -558,6 +570,18 @@ objects:
           dev-app: ${SVC_NAME}
           name: ${SVC_NAME}-webapi
       spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  topologyKey: kubernetes.io/hostname
+                  labelSelector:
+                    matchExpressions:
+                      - key: deploymentconfig
+                        operator: In
+                        values:
+                          - ${SVC_NAME}-webapi
         initContainers:
         - name: run-migrations
           image: >-
@@ -597,6 +621,8 @@ objects:
                     key: DOCUMENT_MANAGER_CLIENT_ID
               - name: DOCUMENT_MANAGER_URL
                 value: http://${SVC_NAME}-document-manager:6001
+              - name: OC_APP
+                value: ${OC_APP}
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
@@ -642,7 +668,7 @@ objects:
                 port: 8080
               timeoutSeconds: 30
               failureThreshold: 30
-              periodSeconds: 10
+              periodSeconds: 35
             readinessProbe:
               httpGet:
                 path: /api/healthcheck
@@ -1164,62 +1190,35 @@ objects:
                   key: database-password
             - name: CACHE_REDIS_PORT
               value: "6379"
-            - name: DB_HOST
+            - name: PGHOST
               valueFrom:
                   configMapKeyRef:
                     name: database-cm
                     key: database-host
-            - name: DB_NAME
-              value: prime-${SVC_NAME}
-            - name: DB_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: dev-patroni-secret
-                  key: app-db-password
-            - name: DB_PORT
-              value: "5432"
-            - name: DB_USER
+            - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   name: dev-patroni-secret
                   key: app-db-username
-            - name: DOCUMENT_MANAGER_URL
-              value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
-            - name: FLASK_ENV
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_ENV
-            - name: FLASK_RUN_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_RUN_HOST
-            - name: FLASK_DEBUG
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_DEBUG
-            - name: FLASK_APP
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_APP
-            - name: FLASK_RUN_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_RUN_PORT
-            - name: JWT_OIDC_WELL_KNOWN_CONFIG
-              valueFrom:
-                configMapKeyRef:
-                  name: keycloak
-                  key: JWT_WELL_KNOWN_CONFIG
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   name: dev-patroni-secret
                   key: app-db-password
+            - name: PGDATABASE
+              value: prime-${SVC_NAME}
+            - name: DOCUMENT_MANAGER_URL
+              value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
+            - name: JWT_OIDC_WELL_KNOWN_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: keycloak
+                  key: JWT_WELL_KNOWN_CONFIG
+            - name: SQLALCHEMY_DATABASE_URI
+              value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
+          envFrom:
+            - configMapRef:
+                name: document-manager
           command:
             # Script force waits migration pod execution until PostgreSQL is verified to
             # be open to query connections.
@@ -1240,62 +1239,33 @@ objects:
                     key: database-password
               - name: CACHE_REDIS_PORT
                 value: "6379"
-              - name: DB_HOST
+              - name: PGHOST
                 valueFrom:
                   configMapKeyRef:
                     name: database-cm
                     key: database-host
-              - name: DB_NAME
-                value: prime-${SVC_NAME}
-              - name: DB_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: app-db-password
-              - name: DB_PORT
-                value: "5432"
-              - name: DB_USER
+              - name: PGUSER
                 valueFrom:
                   secretKeyRef:
                     name: dev-patroni-secret
                     key: app-db-username
-              - name: DOCUMENT_MANAGER_URL
-                value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
-              - name: FLASK_ENV
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_ENV
-              - name: FLASK_RUN_HOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_RUN_HOST
-              - name: FLASK_DEBUG
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_DEBUG
-              - name: FLASK_APP
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_APP
-              - name: FLASK_RUN_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_RUN_PORT
-              - name: JWT_OIDC_WELL_KNOWN_CONFIG
-                valueFrom:
-                  configMapKeyRef:
-                    name: keycloak
-                    key: JWT_WELL_KNOWN_CONFIG
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: dev-patroni-secret
                     key: app-db-password
+              - name: PGDATABASE
+                value: prime-${SVC_NAME}
+              - name: DOCUMENT_MANAGER_URL
+                value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
+              - name: JWT_OIDC_WELL_KNOWN_CONFIG
+                valueFrom:
+                  configMapKeyRef:
+                    name: keycloak
+                    key: JWT_WELL_KNOWN_CONFIG
+            envFrom:
+              - configMapRef:
+                  name: document-manager
             resources:
               limits:
                 cpu: 25m
@@ -1317,7 +1287,7 @@ objects:
                 path: /healthcheck
                 port: 6001
               failureThreshold: 30
-              periodSeconds: 10
+              periodSeconds: 35
             readinessProbe:
               httpGet:
                 path: /healthcheck
