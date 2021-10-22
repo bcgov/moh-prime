@@ -1,0 +1,27 @@
+{
+  "editor.tabSize": 4,
+  "editor.minimap.enabled": true,
+  "editor.formatOnType": true,
+  "editor.formatOnSave": true,
+  "editor.renderWhitespace": "boundary",
+  "files.autoSave": "onFocusChange",
+  "files.trimTrailingWhitespace": true,
+  "css.lint.important": "warning",
+  "scss.lint.important": "warning",
+  "scss.lint.zeroUnits": "warning",
+  "html.format.indentInnerHtml": true,
+  "html.format.wrapAttributes": "force-aligned",
+  "html.format.unformatted": "wbr,small,span,a,strong,em,br",
+  "git.ignoreLimitWarning": true,
+  "editor.formatOnPaste": true,
+  "search.exclude": {
+    "./bin": true,
+    "./logs": true,
+    "./obj": true,
+  },
+  "emmet.includeLanguages": {
+    "aspnetcorerazor": "html"
+  },
+  "omnisharp.enableEditorConfigSupport": true,
+  "omnisharp.enableRoslynAnalyzers": true,
+}
