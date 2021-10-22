@@ -26,6 +26,7 @@
                                             [index]="i"
                                             [total]="formState.certifications.controls.length"
                                             [selectedColleges]="formState.selectedCollegeCodes"
+                                            [defaultOption]="false"
                                             (remove)="formState.removeCertification($event)">
             </app-college-certification-form>
 
@@ -46,6 +47,7 @@
   </form>
 
   <app-page-footer [isInitialEnrolment]="true"
+                   primaryActionLabel="Submit"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>
 

@@ -24,11 +24,6 @@ parameters:
   displayName: Openshift Environment
   description: dev/test/prod
   required: true
-- name: FRONTEND_POD
-  displayName: Frontend Pod Name
-  description: For naming the web/reverse proxy pod
-  required: true
-  value: frontend
 - name: FRONTEND_REPLICAS
   displayName: Number of frontend pods
   description: For scaling frontend pods
@@ -44,30 +39,16 @@ parameters:
   description: Minus the HTTP/HTTPS, this is your vanity URL or the prefix of your default URL
   required: true
   value: vanity
-- name: API_POD
-  displayName: API Pod Name
-  description: For the .NET API
-  required: true
-  value: webapi
 - name: ASP_ENV
   displayName: ASP.NET Environment
   description: Development or Production
   required: true
   value: Development
-- name: DOCMAN_POD
-  displayName: Document Manager Pod Name
-  description: For other pods to reference it
-  required: true
-  value: document-manager
 - name: DOCMAN_VOLUME_CAPACITY
   displayName: Document Manager Persistent Volume Capacity
   description: Volume space available for Document Manager Backend data e.g. 512Mi, 2Gi.
   required: true
   value: 5Gi
-- name: REDIS_POD
-  displayName: Redis Pod
-  description: Redis in-memory database
-  value: redis
 - name: WEB_PORT
   displayName: Web Port for NGINX
   description: Termination port on NGINX (8080 or 8443)
@@ -83,11 +64,11 @@ parameters:
 - name: MAUTH_URL
   displayName: MUTUAL_AUTHENTICATION URL
   value: ""
-- description: 'Reneal email sending cron schedule. Cron-like schedule expression. Default: Once a day at 11 PM'
-  name: CRON_SCHEDULE_RENEWALS
+- name: CRON_SCHEDULE_RENEWALS
+  description: 'Renewal email sending cron schedule. Cron-like schedule expression. Default: Once a day at 11 PM'
   value: '0 23 * * *'
-- description: 'Email status update cron job. Cron-like schedule expression. Default: At minute 0 past every 6th hour.'
-  name: CRON_SCHEDULE_STATUSES
+- name: CRON_SCHEDULE_STATUSES
+  description: 'Email status update cron job. Cron-like schedule expression. Default: At minute 0 past every 6th hour.'
   value: '0 */6 * * *'
 objects:
 ###########################################
@@ -98,8 +79,8 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-frontend
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: nginx
@@ -107,7 +88,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: ${{FRONTEND_REPLICAS}}
     selector:
-      name: ${SVC_NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-frontend
     strategy:
       type: Rolling
       rollingParams:
@@ -120,8 +101,20 @@ objects:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${FRONTEND_POD}
+          name: ${SVC_NAME}-frontend
       spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  topologyKey: kubernetes.io/hostname
+                  labelSelector:
+                    matchExpressions:
+                      - key: deploymentconfig
+                        operator: In
+                        values:
+                          - ${SVC_NAME}-frontend
         volumes:
           - name: vanity-tls-certs
             secret:
@@ -140,7 +133,7 @@ objects:
               name: ${SVC_NAME}-env-config
               defaultMode: 420
         containers:
-          - name: ${SVC_NAME}-${FRONTEND_POD}
+          - name: ${SVC_NAME}-frontend
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-frontend:${IMAGE_TAG}
             ports:
@@ -195,7 +188,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${SVC_NAME}-${FRONTEND_POD}
+            - ${SVC_NAME}-frontend
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
@@ -422,8 +415,8 @@ objects:
   kind: Service
   namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-frontend
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -441,20 +434,20 @@ objects:
         port: 8890
         targetPort: 8890
     selector:
-      name: ${SVC_NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-frontend
 #   Frontend Route (Web)
 - kind: Route
   apiVersion: route.openshift.io/v1
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-frontend
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     host: ${SVC_NAME}${URL_STUB}
     to:
       kind: Service
-      name: ${SVC_NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-frontend
       weight: 100
     port:
       targetPort: http
@@ -468,15 +461,15 @@ objects:
   kind: Route
   namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}-hpr
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-frontend-hpr
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     host: ${HPR_URL}
     to:
       kind: Service
-      name: ${SVC_NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-frontend
       weight: 100
     port:
       targetPort: 8888
@@ -489,15 +482,15 @@ objects:
   kind: Route
   namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}-mutualauth
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-frontend-mutualauth
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     host: ${MAUTH_URL}
     to:
       kind: Service
-      name: ${SVC_NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-frontend
       weight: 100
     port:
       targetPort: 8890
@@ -514,8 +507,8 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    name: ${SVC_NAME}-${API_POD}
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-webapi
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: dotnet
@@ -523,7 +516,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: ${{BACKEND_REPLICAS}}
     selector:
-      name: ${SVC_NAME}-${API_POD}
+      name: ${SVC_NAME}-webapi
     strategy:
       type: Rolling
       rollingParams:
@@ -536,8 +529,20 @@ objects:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${API_POD}
+          name: ${SVC_NAME}-webapi
       spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  topologyKey: kubernetes.io/hostname
+                  labelSelector:
+                    matchExpressions:
+                      - key: deploymentconfig
+                        operator: In
+                        values:
+                          - ${SVC_NAME}-webapi
         initContainers:
         - name: run-migrations
           image: >-
@@ -565,7 +570,7 @@ objects:
                 key: app-db-name
           command: ['psql', '-a', '-f', './databaseMigrations.sql']
         containers:
-          - name: ${SVC_NAME}-${API_POD}
+          - name: ${SVC_NAME}-webapi
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
             command:
@@ -579,7 +584,7 @@ objects:
                     name: document-manager
                     key: DOCUMENT_MANAGER_CLIENT_ID
               - name: DOCUMENT_MANAGER_URL
-                value: http://${SVC_NAME}-${DOCMAN_POD}:6001
+                value: http://${SVC_NAME}-document-manager:6001
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
@@ -621,7 +626,7 @@ objects:
                 port: 8080
               timeoutSeconds: 30
               failureThreshold: 30
-              periodSeconds: 10
+              periodSeconds: 35
             readinessProbe:
               httpGet:
                 path: /api/healthcheck
@@ -685,8 +690,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${SVC_NAME}-${API_POD}
-            - run-migrations
+            - ${SVC_NAME}-webapi
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
@@ -697,17 +701,17 @@ objects:
   kind: Service
   namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    name: ${SVC_NAME}-${API_POD}
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-webapi
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${SVC_NAME}-${API_POD}
+      - name: ${SVC_NAME}-webapi
         port: 8080
         targetPort: 8080
     selector:
-      name: ${SVC_NAME}-${API_POD}
+      name: ${SVC_NAME}-webapi
 
 ###########################################
 ###      Document Manager (backend)     ###
@@ -717,8 +721,8 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-document-manager
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
@@ -726,7 +730,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${DOCMAN_POD}
+      name: ${SVC_NAME}-document-manager
     strategy:
       type: Recreate
       rollingParams:
@@ -739,7 +743,7 @@ objects:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${DOCMAN_POD}
+          name: ${SVC_NAME}-document-manager
       spec:
         initContainers:
         - name: run-migrations
@@ -824,12 +828,12 @@ objects:
           args:
             - migrate
         containers:
-          - name: ${SVC_NAME}-${DOCMAN_POD}
+          - name: ${SVC_NAME}-document-manager
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
             env:
               - name: CACHE_REDIS_HOST
-                value: ${SVC_NAME}-${REDIS_POD}
+                value: ${SVC_NAME}-redis
               - name: CACHE_REDIS_PASS
                 valueFrom:
                   secretKeyRef:
@@ -902,7 +906,7 @@ objects:
             volumeMounts:
             # Mount Document Manager to PVC
               - mountPath: /app/
-                name: ${SVC_NAME}-${DOCMAN_POD}-pvc
+                name: ${SVC_NAME}-document-manager-pvc
             ports:
               - containerPort: 6001
                 protocol: TCP
@@ -913,7 +917,7 @@ objects:
                 path: /healthcheck
                 port: 6001
               failureThreshold: 30
-              periodSeconds: 10
+              periodSeconds: 35
             readinessProbe:
               httpGet:
                 path: /healthcheck
@@ -921,17 +925,16 @@ objects:
               initialDelaySeconds: 5
               periodSeconds: 5
         volumes:
-          - name: ${SVC_NAME}-${DOCMAN_POD}-pvc
+          - name: ${SVC_NAME}-document-manager-pvc
             persistentVolumeClaim:
-              claimName: '${SVC_NAME}-${DOCMAN_POD}-pvc'
+              claimName: '${SVC_NAME}-document-manager-pvc'
     triggers:
       - type: ConfigChange
       - type: ImageChange
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${SVC_NAME}-${DOCMAN_POD}
-            - run-migrations
+            - ${SVC_NAME}-document-manager
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
@@ -942,23 +945,23 @@ objects:
   kind: Service
   namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-document-manager
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${SVC_NAME}-${DOCMAN_POD}
+      - name: ${SVC_NAME}-document-manager
         port: 6001
         targetPort: 6001
     selector:
-      name: ${SVC_NAME}-${DOCMAN_POD}
+      name: ${SVC_NAME}-document-manager
 #   Document Manager (backend) Persistent Volume Claim
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-pvc
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-document-manager-pvc
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -976,8 +979,8 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
-    name: ${SVC_NAME}-${REDIS_POD}
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-redis
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: redis
@@ -985,7 +988,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${REDIS_POD}
+      name: ${SVC_NAME}-redis
     strategy:
       type: Rolling
       rollingParams:
@@ -999,10 +1002,10 @@ objects:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${REDIS_POD}
+          name: ${SVC_NAME}-redis
       spec:
         volumes:
-          - name: ${SVC_NAME}-${REDIS_POD}-data
+          - name: ${SVC_NAME}-redis-data
             emptyDir: {}
         containers:
           - resources:
@@ -1060,8 +1063,8 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: ${SVC_NAME}-${REDIS_POD}
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    name: ${SVC_NAME}-redis
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -1071,7 +1074,7 @@ objects:
         port: 6379
         targetPort: 6379
     selector:
-      name: ${SVC_NAME}-${REDIS_POD}
+      name: ${SVC_NAME}-redis
 
 ###########################################
 ###              Cron Jobs              ###
