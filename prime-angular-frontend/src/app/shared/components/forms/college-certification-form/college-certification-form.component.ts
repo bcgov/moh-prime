@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
+import { EMPTY, of } from 'rxjs';
 import { exhaustMap, startWith, tap } from 'rxjs/operators';
 
 import moment from 'moment';
@@ -12,10 +13,8 @@ import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
-import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { EMPTY, of } from 'rxjs';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -173,7 +172,7 @@ export class CollegeCertificationFormComponent implements OnInit {
           }
         });
 
-      const initialNursingCategory: number | null = +this.nurseCategory.value ?? null;
+      const initialNursingCategory = +this.nurseCategory.value ?? null;
       this.nurseCategory.valueChanges
         .pipe(
           startWith(initialNursingCategory),
@@ -206,9 +205,11 @@ export class CollegeCertificationFormComponent implements OnInit {
       return;
     }
 
-    // In case previous selection was BCCNM, clear old validators
-    this.formUtilsService.setValidators(this.nurseCategory, []);
-    this.clearNursingCategoryValidators();
+    // In case previous selection was BCCNM, clear validators
+    if(!this.condensed) {
+      this.formUtilsService.setValidators(this.nurseCategory, []);
+      this.clearNursingCategoryValidators();
+    }
 
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
@@ -265,7 +266,10 @@ export class CollegeCertificationFormComponent implements OnInit {
   private clearNursingCategoryValidators(): void {
     this.formUtilsService.setValidators(this.licenseCode, []);
     this.formUtilsService.setValidators(this.licenseNumber, []);
-    this.formUtilsService.setValidators(this.renewalDate, []);
+
+    if(!this.condensed) {
+      this.formUtilsService.setValidators(this.renewalDate, []);
+    }
   }
 
   private setPractitionerInformation(licenseCode: number) {
