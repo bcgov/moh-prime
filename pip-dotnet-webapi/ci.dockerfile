@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0.100-rc.2-alpine3.14 as build
 
-# ENV DB_CONNECTION_STRING "host=localhost;port=5433;database=postgres;username=postgres;password=postgres"
+# ENV ConnectionStrings__PipDatabase "host=localhost;port=5433;database=postgres;username=postgres;password=postgres"
 
 WORKDIR /app
 
