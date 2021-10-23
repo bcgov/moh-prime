@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-using Pip.Configuration.Environment;
 using Pip.Models;
 
 namespace Pip
@@ -15,7 +14,6 @@ namespace Pip
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables()
-                .Add(new PipEnvironmentVariablesConfigurationSource())
                 .Build();
 
             var connectionString = config.GetConnectionString("PipDatabase");
