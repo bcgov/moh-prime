@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -7,7 +6,6 @@
     <RootNamespace>Pip</RootNamespace>
     <UserSecretsId>5c2dc965-00b4-4531-9ff0-9b37193ead9b</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="5.0.2" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
@@ -19,12 +17,13 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="NodaTime" Version="3.0.9" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0-rc.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="6.0.0-rc.2" />
     <PackageReference Include="Serilog" Version="2.11.0-dev-01371" />
     <PackageReference Include="Serilog.AspNetCore" Version="4.1.1-dev-00229" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.1-dev-00787" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
-
 </Project>
