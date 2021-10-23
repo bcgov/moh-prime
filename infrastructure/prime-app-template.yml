@@ -77,10 +77,9 @@ objects:
 #   Frontend Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-frontend
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: nginx
@@ -413,10 +412,9 @@ objects:
 #   Frontend Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-frontend
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -440,7 +438,7 @@ objects:
   apiVersion: route.openshift.io/v1
   metadata:
     name: ${SVC_NAME}-frontend
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -459,10 +457,9 @@ objects:
 #   Frontend Route (Health Practitioner Registration)
 - apiVersion: route.openshift.io/v1
   kind: Route
-  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-frontend-hpr
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -480,10 +477,9 @@ objects:
 #   Frontend Route (Mutual Authentication)
 - apiVersion: route.openshift.io/v1
   kind: Route
-  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-frontend-mutualauth
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -505,10 +501,9 @@ objects:
 #   Backend Web API Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-webapi
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: dotnet
@@ -699,10 +694,9 @@ objects:
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-webapi
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -719,10 +713,9 @@ objects:
 #   Document Manager (backend) Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-document-manager
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
@@ -943,10 +936,9 @@ objects:
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-document-manager
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -961,7 +953,7 @@ objects:
   kind: PersistentVolumeClaim
   metadata:
     name: ${SVC_NAME}-document-manager-pvc
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -977,10 +969,9 @@ objects:
 #   Redis Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   metadata:
     name: ${SVC_NAME}-redis
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: redis
@@ -1064,7 +1055,7 @@ objects:
   apiVersion: v1
   metadata:
     name: ${SVC_NAME}-redis
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
