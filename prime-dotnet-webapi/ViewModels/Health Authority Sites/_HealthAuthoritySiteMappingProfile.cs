@@ -1,4 +1,5 @@
 using AutoMapper;
+using Prime.Models;
 using Prime.Models.HealthAuthorities;
 
 namespace Prime.ViewModels.HealthAuthoritySites
@@ -9,6 +10,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         {
             CreateMap<HealthAuthoritySite, HealthAuthoritySiteViewModel>();
             CreateMap<HealthAuthorityPharmanetAdministrator, HealthAuthoritySite>();
+            CreateMap<V2HealthAuthoritySite, V2HealthAuthoritySiteViewModel>();
         }
     }
 }
