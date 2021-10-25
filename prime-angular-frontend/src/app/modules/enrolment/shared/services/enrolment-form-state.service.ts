@@ -359,6 +359,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       oboSites: this.fb.array([]),
       communityHealthSites: this.fb.array([]),
       communityPharmacySites: this.fb.array([]),
+      deviceProviderSites: this.fb.array([]),
       healthAuthoritySites: this.fb.group({})
     });
   }
@@ -388,11 +389,13 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const oboSitesFormArray = this.oboSitesForm.get('oboSites') as FormArray;
     const communityHealthSites = this.oboSitesForm.get('communityHealthSites') as FormArray;
     const communityPharmacySites = this.oboSitesForm.get('communityPharmacySites') as FormArray;
+    const deviceProviderSites = this.oboSitesForm.get('deviceProviderSites') as FormArray;
     const healthAuthoritySites = this.oboSitesForm.get('healthAuthoritySites') as FormGroup;
 
     oboSitesFormArray.clear();
     communityHealthSites.clear();
     communityPharmacySites.clear();
+    deviceProviderSites.clear();
     Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
 
     oboSites.forEach((s: OboSite) => {
@@ -407,6 +410,10 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
           this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
+          break;
+        }
+        case CareSettingEnum.DEVICE_PROVIDER: {
+          this.addNonHealthAuthorityOboSite(site, deviceProviderSites);
           break;
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {

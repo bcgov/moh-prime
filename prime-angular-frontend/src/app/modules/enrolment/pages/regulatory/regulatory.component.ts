@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -10,6 +10,7 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -17,6 +18,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { RegulatoryFormState } from './regulatory-form-state';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -29,6 +31,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public formState: RegulatoryFormState;
   public cannotRequestRemoteAccess: boolean;
+  public isDeviceProvider: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -73,6 +76,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.formState.addCollegeCertification();
   }
 
+  public get deviceProviderId(): FormControl {
+    return this.formState.deviceProviderId;
+  }
   /**
    * @description
    * Removes a certification from the list in response to an
@@ -86,6 +92,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public ngOnInit() {
+    this.isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
+      careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());
   }
@@ -100,6 +108,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected initForm() {
+    if (this.isDeviceProvider) {
+      this.enableDeviceProviderValidator();
+    }
     // Always have at least one certification ready for
     // the enrollee to fill out
     if (!this.certifications.length) {
@@ -203,5 +214,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     const enrolleeRemoteUsers = remoteAccessForm.get('enrolleeRemoteUsers') as FormArray;
     const remoteLocations = this.enrolmentFormStateService.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
     [remoteAccessSites, enrolleeRemoteUsers, remoteLocations].forEach(f => f.clear());
+  }
+
+  private enableDeviceProviderValidator(): void {
+    this.formUtilsService.setValidators(this.formState.deviceProviderId, [
+      FormControlValidators.requiredLength(5)
+    ]);
   }
 }

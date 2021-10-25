@@ -10,7 +10,9 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { CareSetting } from '../models/care-setting.model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
@@ -183,12 +185,21 @@ export class EnrolmentGuard extends BaseGuard {
 
     let certifications = enrolment.certifications;
     let careSettings = enrolment.careSettings;
+    let deviceProviderId = null;
 
     // When renewing an enrollee may have updates that allow or
     // prevent routing to specific views, which should be
     if (this.enrolmentFormStateService.isPatched && this.enrolmentFormStateService.isDirty) {
       certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
+    }
+
+    if (this.enrolmentService.enrolment.careSettings.some((careSetting) =>
+      careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
+      deviceProviderId = this.enrolmentFormStateService.regulatoryFormState.deviceProviderId.value;
+      if (route === EnrolmentRoutes.SELF_DECLARATION && deviceProviderId === '') {
+        return this.navigate(routePath, EnrolmentRoutes.OBO_SITES);
+      }
     }
 
     if (!this.enrolmentService.canRequestRemoteAccess(certifications, careSettings)) {

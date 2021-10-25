@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
@@ -7,6 +7,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 
 export interface RegulatoryFormModel {
   certifications: CollegeCertification[];
+  deviceProviderId: FormControl;
 }
 
 // TODO use RegulatoryFormModel instead of CollegeCertification[], which
@@ -23,6 +24,10 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
 
   public get certifications(): FormArray {
     return this.formInstance.get('certifications') as FormArray;
+  }
+
+  public get deviceProviderId(): FormControl {
+    return this.formInstance.get('deviceProviderId') as FormControl;
   }
 
   /**
@@ -64,6 +69,7 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
   public buildForm(): void {
     this.formInstance = this.fb.group({
       certifications: this.fb.array([]),
+      deviceProviderId: ['', []]
     });
   }
 
@@ -78,7 +84,7 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
       licenseNumber: [null, []],
       renewalDate: [null, []],
       practiceCode: [null, []],
-      practitionerId: [null, []]
+      practitionerId: [null, []],
     });
   }
 

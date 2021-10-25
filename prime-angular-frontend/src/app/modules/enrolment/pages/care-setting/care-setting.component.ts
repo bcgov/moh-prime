@@ -111,7 +111,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return ![
       CareSettingEnum.COMMUNITY_PHARMACIST,
       CareSettingEnum.HEALTH_AUTHORITY,
-      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
+      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
+      CareSettingEnum.DEVICE_PROVIDER
     ].includes(careSettingCode);
   }
 

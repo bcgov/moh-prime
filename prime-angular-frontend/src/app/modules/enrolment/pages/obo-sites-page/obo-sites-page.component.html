@@ -57,6 +57,34 @@
                 </button>
               </ng-container>
 
+              <ng-container *ngSwitchCase="CareSettingEnum.DEVICE_PROVIDER"
+                            formArrayName="deviceProviderSites">
+
+                <ng-container *ngFor="let site of deviceProviderSites.controls; let i = index; let last = last"
+                              [formGroupName]="i">
+
+                  <app-obo-site-form [form]="site"
+                                     [index]="i"
+                                     [careSettingCode]="careSetting.careSettingCode"
+                                     [site]="site"
+                                     [total]="deviceProviderSites.controls.length"
+                                     [last]="last"
+                                     [jobNames]="jobNames"
+                                     [allowDefaultOption]="allowDefaultOption"
+                                     [defaultOptionLabel]="defaultOptionLabel"
+                                     (remove)="removeOboSite($event, careSetting.careSettingCode)"></app-obo-site-form>
+
+                </ng-container>
+                <button mat-button
+                        class="mb-4"
+                        type="button"
+                        color="primary"
+                        (click)="addOboSite(careSetting.careSettingCode)">
+                  <mat-icon>add</mat-icon>
+                  Add Additional Site
+                </button>
+              </ng-container>
+
               <ng-container *ngSwitchCase="CareSettingEnum.COMMUNITY_PHARMACIST"
                             formArrayName="communityPharmacySites">
 

@@ -9,6 +9,35 @@
         [formGroup]="formState.form"
         novalidate>
 
+    <section class="mb-3"
+             *ngIf="isDeviceProvider">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Provide your Device Provider ID if you have one.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   maxlength="5"
+                   placeholder="Device Provider ID"
+                   formControlName="deviceProviderId">
+            <!-- <mat-error *ngIf="deviceProviderId.hasError('length') || deviceProviderId.hasError('numeric')">
+                Must be a 5 digit number
+              </mat-error> -->
+            <mat-error *ngIf="formState.deviceProviderId.hasError('numeric')">
+              Must be 5 digits in length
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </section>
+
     <section class="mb-3">
 
       <app-page-subheader>
@@ -27,7 +56,7 @@
         <ng-container #alertContent
                       class="alert-content">
           Only physicians and nurse practitioners are permitted to access PharmaNet remotely,
-          and your remote use information will be deleted from your enrolment if you choose a different license type.
+          and your remote user information will be deleted from your enrolment if you choose a different license type.
         </ng-container>
       </app-alert>
 
