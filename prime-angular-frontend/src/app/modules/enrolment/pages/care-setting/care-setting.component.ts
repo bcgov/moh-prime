@@ -107,15 +107,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     this.setHealthAuthorityValidator();
   }
 
-  public disableCareSetting(careSettingCode: number): boolean {
-    return ![
-      CareSettingEnum.COMMUNITY_PHARMACIST,
-      CareSettingEnum.HEALTH_AUTHORITY,
-      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
-      CareSettingEnum.DEVICE_PROVIDER
-    ].includes(careSettingCode);
-  }
-
   public removeCareSetting(index: number, careSettingCode: number) {
     this.careSettings.removeAt(index);
     this.setHealthAuthorityValidator();

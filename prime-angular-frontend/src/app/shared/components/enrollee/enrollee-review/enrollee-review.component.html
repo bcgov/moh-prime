@@ -298,31 +298,6 @@
 
 </app-page-section>
 
-
-
-<app-page-section *ngIf="enrolment?.deviceProviderNumber">
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Device Provider</ng-container>
-
-    <button *ngIf="showEditRedirect"
-            mat-icon-button
-            matTooltip="Edit Device Provider"
-            (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader>
-
-  <app-enrollee-property title="Device Provider Number">
-    {{ enrolment?.deviceProviderNumber | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Are you an insulin pump provider?">
-    {{ enrolment.isInsulinPumpProvider | yesNo: true }}
-  </app-enrollee-property>
-
-</app-page-section>
-
 <app-page-section *ngIf="isRequestingRemoteAccess">
 
   <app-page-subheader>

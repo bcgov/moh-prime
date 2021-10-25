@@ -197,7 +197,7 @@ export class EnrolmentGuard extends BaseGuard {
     if (this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
       deviceProviderId = this.enrolmentFormStateService.regulatoryFormState.deviceProviderId.value;
-      if (route === EnrolmentRoutes.SELF_DECLARATION && deviceProviderId === '') {
+      if (route === EnrolmentRoutes.SELF_DECLARATION && !deviceProviderId) {
         return this.navigate(routePath, EnrolmentRoutes.OBO_SITES);
       }
     }
