@@ -40,7 +40,7 @@ namespace Prime.Models.HealthAuthorities
         // [JsonIgnore]
         // public HealthAuthorityCareType HealthAuthorityCareType { get; set; }
 
-        // TODO stored as string due to issue around deletions
+        // TODO stored as string due to issue around deletions and custom types
         public string CareType { get; set; }
 
         public PhysicalAddress PhysicalAddress { get; set; }

@@ -44,7 +44,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteViewModel>), StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateHealthAuthoritySite(int healthAuthorityId, HealthAuthoritySiteCreateModel payload)
         {
-            if (await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
