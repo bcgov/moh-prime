@@ -9,6 +9,7 @@ namespace Prime.Migrations
             migrationBuilder.AddColumn<bool>(
                 name: "Notified",
                 table: "RemoteUser",
+                type: "boolean",
                 nullable: false,
                 defaultValue: false);
         }
