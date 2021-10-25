@@ -14,7 +14,7 @@ namespace PrimeTests.ModelFactories
         {
 //            this.SetBaseRules();
 
-            RuleFor(x => x.Id, f => IdCounter.Id++);
+//            RuleFor(x => x.Id, f => IdCounter.Id++);
             RuleFor(x => x.Province, f => null);
             RuleFor(x => x.ProvinceCode, f => ProvinceLookup.BC.Code);
             RuleFor(x => x.CountryCode, f => CountryLookup.Canada.Code);

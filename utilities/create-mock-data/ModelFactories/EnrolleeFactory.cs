@@ -10,7 +10,7 @@ namespace PrimeTests.ModelFactories
 {
     public class EnrolleeFactory : Faker<Enrollee>
     {
-        private static int IdCounter = 1;
+        private static int IdCounter = 1000;
 
         public EnrolleeFactory()
         {
@@ -46,10 +46,10 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.EnrolleeCareSettings, (f, x) => new EnrolleeCareSettingFactory(x).Generate(1));
             RuleFor(x => x.EnrolleeHealthAuthorities, (f, x) => new EnrolleeHealthAuthorityFactory(x).Generate(1));
             RuleFor(x => x.AccessAgreementNote, f => null);
-            RuleFor(x => x.AdjudicatorNotes, (f, x) => new EnrolleeNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
+//            RuleFor(x => x.AdjudicatorNotes, (f, x) => new EnrolleeNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.OboSites, f => new List<OboSite>());
-            RuleFor(x => x.EnrolleeAbsences, (f, x) => new EnrolleeAbsenceFactory(x).GenerateBetween(0, 1));
+//            RuleFor(x => x.EnrolleeAbsences, (f, x) => new EnrolleeAbsenceFactory(x).GenerateBetween(0, 1));
             // TODO: create rule sets for these ignores?
             Ignore(x => x.Agreements);
             Ignore(x => x.Adjudicator);

@@ -20,7 +20,7 @@ namespace PrimeTests.ModelFactories
 
 //            this.SetBaseRules();
 
-            RuleFor(x => x.Id, f => IdCounter++);
+//            RuleFor(x => x.Id, f => IdCounter++);
             RuleFor(x => x.Enrollee, f => owner);
             RuleFor(x => x.EnrolleeId, f => owner.Id);
             RuleFor(x => x.StatusCode, f => (GetNextStatus() ?? f.PickRandom(StatusLookup.All)).Code);
