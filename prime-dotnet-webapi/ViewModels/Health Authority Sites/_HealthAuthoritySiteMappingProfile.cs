@@ -10,7 +10,6 @@ namespace Prime.ViewModels.HealthAuthoritySites
         {
             CreateMap<HealthAuthoritySite, HealthAuthoritySiteViewModel>();
             CreateMap<HealthAuthorityPharmanetAdministrator, HealthAuthoritySite>();
-            CreateMap<V2HealthAuthoritySite, HealthAuthoritySiteViewModel>();
         }
     }
 }
