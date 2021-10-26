@@ -73,7 +73,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> 
   public buildForm(): void {
     this.formInstance = this.fb.group({
       certifications: this.fb.array([]),
-      deviceProviderIdentifier: ['', []]
+      deviceProviderIdentifier: [null, []]
     });
   }
 
