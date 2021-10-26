@@ -4,7 +4,7 @@ using Prime.Models;
 
 namespace Prime.ViewModels.HealthAuthoritySites
 {
-    public class V2HealthAuthoritySiteViewModel
+    public class HealthAuthoritySiteViewModel
     {
         public int Id { get; set; }
         public int HealthAuthorityOrganizationId { get; set; }
@@ -14,7 +14,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public DateTimeOffset? SubmittedDate { get; set; }
         public DateTimeOffset? ApprovedDate { get; set; }
         public AddressViewModel PhysicalAddress { get; set; }
-        
+
         public HealthAuthorityVendorViewModel HealthAuthorityVendor { get; set; }
         public HealthAuthorityCareTypeViewModel CareType { get; set; }
 
