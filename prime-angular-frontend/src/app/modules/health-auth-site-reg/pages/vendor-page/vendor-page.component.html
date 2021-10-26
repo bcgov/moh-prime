@@ -16,11 +16,11 @@
       </app-page-subheader2>
 
       <mat-radio-group class="radio-group"
-                       formControlName="healthAuthorityVendorCode">
-        <mat-radio-button *ngFor="let vendorCode of vendorCodes"
+                       formControlName="healthAuthorityVendorId">
+        <mat-radio-button *ngFor="let vendor of vendors"
                           class="radio-button"
-                          [value]="vendorCode">
-          {{ vendorCode | configCode: 'vendors' }}
+                          [value]="vendor.id">
+          {{ vendor.vendorCode | configCode: 'vendors' }}
         </mat-radio-button>
       </mat-radio-group>
 

@@ -16,7 +16,9 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 import { HealthAuthFormStateService } from '@health-auth/shared/services/health-auth-form-state.service';
+import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { VendorFormState } from './vendor-form-state.class';
 
 @Component({
@@ -28,7 +30,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   public formState: VendorFormState;
   public title: string;
   public routeUtils: RouteUtils;
-  public vendorCodes: number[];
+  public vendors: HealthAuthorityVendor[];
   public isCompleted: boolean;
   public hasNoVendorError: boolean;
 
@@ -38,6 +40,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
     private fb: FormBuilder,
     private location: Location,
     private configService: ConfigService,
+    private authorizedUserService: AuthorizedUserService,
     private healthAuthorityResource: HealthAuthorityResource,
     private formStateService: HealthAuthFormStateService,
     private route: ActivatedRoute,
@@ -76,16 +79,16 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
 
     this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
       .pipe(
-        tap(({ vendorCodes }: HealthAuthority) => this.vendorCodes = vendorCodes),
+        tap(({ vendors }: HealthAuthority) => this.vendors = vendors),
         exhaustMap((_: HealthAuthority) =>
           (healthAuthSiteId)
             ? this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
             : EMPTY
         )
       )
-      .subscribe(({ healthAuthorityVendorCode, completed }: HealthAuthoritySite) => {
+      .subscribe(({ healthAuthorityVendorId, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
-        this.formState.patchValue({ healthAuthorityVendorCode });
+        this.formState.patchValue({ healthAuthorityVendorId });
       });
   }
 
@@ -94,7 +97,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   protected onSubmitFormIsInvalid(): void {
-    if (!this.formState.healthAuthorityVendorCode.value) {
+    if (!this.formState.healthAuthorityVendorId.value) {
       this.hasNoVendorError = true;
     }
   }
@@ -105,7 +108,10 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
     return (+sid)
       ? this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, this.formStateService.json)
         .pipe(map(() => sid))
-      : this.healthAuthorityResource.createHealthAuthoritySite(haid, this.formState.json)
+      : this.healthAuthorityResource.createHealthAuthoritySite(haid, {
+        healthAuthorityVendorId: this.formState.json.healthAuthorityVendorId,
+        authorizedUserId: this.authorizedUserService.authorizedUser.id
+      })
         .pipe(
           map((site: HealthAuthoritySite) => {
             // Replace the URL with redirection, and prevent initial
