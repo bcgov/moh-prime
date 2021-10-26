@@ -1,4 +1,3 @@
-using System;
 using FluentValidation;
 
 namespace Prime.ViewModels.HealthAuthoritySites
@@ -6,6 +5,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
     public class HealthAuthorityVendorViewModel
     {
         public int Id { get; set; }
+        public int HealthAuthorityOrganizationId { get; set; }
         public int VendorCode { get; set; }
     }
 
