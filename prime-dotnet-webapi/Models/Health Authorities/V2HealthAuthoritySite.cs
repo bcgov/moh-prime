@@ -10,8 +10,6 @@ namespace Prime.Models
     {
         public string SiteName { get; set; }
 
-        public string SiteId { get; set; }
-
         public int SecurityGroupCode { get; set; }
 
         public int HealthAuthorityOrganizationId { get; set; }
