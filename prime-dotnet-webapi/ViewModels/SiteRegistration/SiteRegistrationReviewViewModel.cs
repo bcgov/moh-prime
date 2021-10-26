@@ -9,6 +9,7 @@ namespace Prime.ViewModels.SiteRegistration
         public string OrganizationName { get; set; }
         public string OrganizationRegistrationId { get; set; }
         public string OrganizationDoingBusinessAs { get; set; }
+        public string OrganizationReferenceId { get; set; }
         public string SiteName { get; set; }
         public string PEC { get; set; }
         public PhysicalAddress SiteAddress { get; set; }

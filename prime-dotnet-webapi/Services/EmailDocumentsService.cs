@@ -81,6 +81,7 @@ namespace Prime.Services.EmailInternal
                     OrganizationName = s.Organization.Name,
                     OrganizationRegistrationId = s.Organization.RegistrationId,
                     OrganizationDoingBusinessAs = s.Organization.DoingBusinessAs,
+                    OrganizationReferenceId = s.Organization.DisplayId.ToString(),
                     SiteName = s.DoingBusinessAs,
                     SiteAddress = s.PhysicalAddress,
                     PEC = s.PEC,
