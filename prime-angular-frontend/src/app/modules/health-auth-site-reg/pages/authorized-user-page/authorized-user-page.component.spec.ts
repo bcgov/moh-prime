@@ -23,9 +23,6 @@ import { AuthorizedUserPageComponent } from './authorized-user-page.component';
 fdescribe('AuthorizedUserPageComponent', () => {
   let component: AuthorizedUserPageComponent;
   let fixture: ComponentFixture<AuthorizedUserPageComponent>;
-  let spyOnTogglePrefferedNameValidators;
-  let spyOnFormGetPreferredMiddleName;
-  let spyOnToggleAddressLineValidators;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
