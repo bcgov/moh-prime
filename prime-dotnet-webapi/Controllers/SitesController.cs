@@ -73,7 +73,7 @@ namespace Prime.Controllers
                 return Ok(sites);
             }
 
-            return Ok(_mapper.Map<IEnumerable<SiteListViewModel>>(sites));
+            return Ok(_mapper.Map<IEnumerable<CommunitySiteListViewModel>>(sites));
         }
 
         // GET: api/Sites/5
