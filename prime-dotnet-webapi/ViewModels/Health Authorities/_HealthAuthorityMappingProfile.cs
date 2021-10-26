@@ -5,6 +5,7 @@ using Prime.Models;
 using Prime.Models.HealthAuthorities;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.ViewModels.Profiles
 {
@@ -16,8 +17,9 @@ namespace Prime.ViewModels.Profiles
             CreateMap<HealthAuthorityOrganization, HealthAuthorityListViewModel>()
                 .ForMember(dest => dest.HasUnderReviewUsers, opt => opt.MapFrom(src => underReviewIds.Contains(src.Id)));
             CreateMap<HealthAuthorityOrganization, HealthAuthorityViewModel>()
-                .ForMember(dest => dest.CareTypes, opt => opt.MapFrom(src => src.CareTypes.Select(x => x.CareType)))
-                .ForMember(dest => dest.VendorCodes, opt => opt.MapFrom(src => src.Vendors.Select(x => x.VendorCode)));
+                .ForMember(dest => dest.CareTypes, opt => opt.MapFrom(src => src.CareTypes.Select(x => x.CareType)));
+
+            CreateMap<HealthAuthorityVendor, HealthAuthorityVendorViewModel>();
 
             CreateMap<PrivacyOffice, PrivacyOfficeViewModel>()
                 .ForMember(dest => dest.PrivacyOfficer, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.PrivacyOfficers.Select(x => x.Contact).SingleOrDefault()))

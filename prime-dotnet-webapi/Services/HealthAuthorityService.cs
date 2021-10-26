@@ -178,7 +178,8 @@ namespace Prime.Services
 
         public async Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId)
         {
-            return await _context.HealthAuthorityVendors.AnyAsync(v => v.Id == healthAuthorityVendorId && v.HealthAuthorityOrganizationId == healthAuthorityId);
+            return await _context.HealthAuthorityVendors
+                .AnyAsync(v => v.Id == healthAuthorityVendorId && v.HealthAuthorityOrganizationId == healthAuthorityId);
         }
     }
 }
