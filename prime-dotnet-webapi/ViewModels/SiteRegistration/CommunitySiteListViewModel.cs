@@ -4,7 +4,7 @@ using Prime.Models;
 
 namespace Prime.ViewModels
 {
-    public class SiteListViewModel
+    public class CommunitySiteListViewModel
     {
         public int Id { get; set; }
 
