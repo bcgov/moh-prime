@@ -74,7 +74,7 @@ namespace Prime.Controllers
         [HttpGet(Name = nameof(GetHealthAuthoritySites))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<V2HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthoritySites(int healthAuthorityId)
         {
             return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId));
@@ -90,7 +90,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<V2HealthAuthoritySiteViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthoritySite(int healthAuthorityId, int siteId)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))

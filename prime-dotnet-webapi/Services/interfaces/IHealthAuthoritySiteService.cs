@@ -8,9 +8,9 @@ namespace Prime.Services
     public interface IHealthAuthoritySiteService
     {
         Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId);
-        Task<V2HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel);
-        Task<IEnumerable<V2HealthAuthoritySiteViewModel>> GetSitesAsync(int? healthAuthorityId = null);
-        Task<V2HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
+        Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel);
+        Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int? healthAuthorityId = null);
+        Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
         Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel);
         Task SetSiteCompletedAsync(int siteId);
         Task SiteSubmissionAsync(int siteId);

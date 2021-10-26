@@ -43,7 +43,7 @@ namespace Prime.Services
                     && s.Status == SiteStatusType.Editable);
         }
 
-        public async Task<V2HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel)
+        public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel)
         {
             var site = new V2HealthAuthoritySite
             {
@@ -59,23 +59,23 @@ namespace Prime.Services
 
             await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Created");
 
-            return _mapper.Map<V2HealthAuthoritySiteViewModel>(site);
+            return _mapper.Map<HealthAuthoritySiteViewModel>(site);
         }
 
-        public async Task<IEnumerable<V2HealthAuthoritySiteViewModel>> GetSitesAsync(int? healthAuthorityId = null)
+        public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int? healthAuthorityId = null)
         {
             return await _context.V2HealthAuthoritySites
                 .AsNoTracking()
                 .If(healthAuthorityId.HasValue, q => q.Where(site => site.HealthAuthorityOrganizationId == healthAuthorityId))
-                .ProjectTo<V2HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
-        public async Task<V2HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
+        public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
         {
             return await _context.V2HealthAuthoritySites
                 .AsNoTracking()
-                .ProjectTo<V2HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
