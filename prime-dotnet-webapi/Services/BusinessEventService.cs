@@ -135,7 +135,7 @@ namespace Prime.Services
                     .Where(site => site.Id == siteId)
                     .Select(site => site.Organization.SigningAuthorityId)
                     .SingleAsync(),
-                V2HealthAuthoritySite h => await _context.V2HealthAuthoritySites
+                HealthAuthoritySite h => await _context.HealthAuthoritySites
                     .AsNoTracking()
                     .Where(site => site.Id == siteId)
                     .Select(site => site.AuthorizedUser.PartyId)
