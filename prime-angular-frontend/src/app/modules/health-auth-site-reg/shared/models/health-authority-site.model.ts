@@ -8,8 +8,8 @@ import { SiteStatusType } from '@lib/enums/site-status.enum';
 export interface HealthAuthoritySite {
   id?: number;
   healthAuthorityOrganizationId: HealthAuthorityEnum;
-  healthAuthorityVendorCode: string;
-  healthAuthorityCareTypeCode: string;
+  healthAuthorityVendorId: string;
+  healthAuthorityCareTypeId: string;
   siteName: string;
   siteId: string;
   securityGroupCode: number;
