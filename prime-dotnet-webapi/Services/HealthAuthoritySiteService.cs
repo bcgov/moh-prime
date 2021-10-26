@@ -29,14 +29,14 @@ namespace Prime.Services
 
         public async Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId)
         {
-            return await _context.V2HealthAuthoritySites
+            return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .AnyAsync(s => s.Id == siteId && s.HealthAuthorityOrganizationId == healthAuthorityId);
         }
 
         public async Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId)
         {
-            return await _context.V2HealthAuthoritySites
+            return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .AnyAsync(s => s.Id == siteId
                     && s.HealthAuthorityOrganizationId == healthAuthorityId
@@ -45,7 +45,7 @@ namespace Prime.Services
 
         public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel)
         {
-            var site = new V2HealthAuthoritySite
+            var site = new HealthAuthoritySite
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
                 HealthAuthorityVendorId = createModel.HealthAuthorityVendorId,
@@ -54,7 +54,7 @@ namespace Prime.Services
             site.AddStatus(SiteStatusType.Editable);
 
 
-            _context.V2HealthAuthoritySites.Add(site);
+            _context.HealthAuthoritySites.Add(site);
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Created");
@@ -64,7 +64,7 @@ namespace Prime.Services
 
         public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int? healthAuthorityId = null)
         {
-            return await _context.V2HealthAuthoritySites
+            return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .If(healthAuthorityId.HasValue, q => q.Where(site => site.HealthAuthorityOrganizationId == healthAuthorityId))
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
@@ -73,7 +73,7 @@ namespace Prime.Services
 
         public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
         {
-            return await _context.V2HealthAuthoritySites
+            return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
@@ -81,7 +81,7 @@ namespace Prime.Services
 
         public async Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
-            var site = await _context.V2HealthAuthoritySites
+            var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             _context.Entry(site).CurrentValues.SetValues(updateModel);
@@ -96,7 +96,7 @@ namespace Prime.Services
 
         public async Task SetSiteCompletedAsync(int siteId)
         {
-            var site = await _context.V2HealthAuthoritySites
+            var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             site.Completed = true;
@@ -108,7 +108,7 @@ namespace Prime.Services
 
         public async Task SiteSubmissionAsync(int siteId)
         {
-            var site = await _context.V2HealthAuthoritySites
+            var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             site.SubmittedDate = DateTimeOffset.Now;

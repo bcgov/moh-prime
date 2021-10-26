@@ -22,7 +22,7 @@ namespace Prime.ViewModels.Profiles
             //     .IncludeMembers(user => user.Site);
             // CreateMap<CommunitySite, RemoteAccessSearchViewModel>()
             //     .ForMember(dest => dest.VendorCodes, opt => opt.MapFrom(src => src.SiteVendors.Select(x => x.VendorCode)));
-            // CreateMap<V2HealthAuthoritySite, RemoteAccessSearchViewModel>()
+            // CreateMap<HealthAuthoritySite, RemoteAccessSearchViewModel>()
             //     .ForMember(dest => dest.VendorCodes, opt => opt.MapFrom(src => new[] { src.HealthAuthorityVendor.VendorCode }));
         }
     }
