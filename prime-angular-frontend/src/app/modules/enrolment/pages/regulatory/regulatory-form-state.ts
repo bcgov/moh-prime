@@ -7,7 +7,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 
 export interface RegulatoryFormModel {
   certifications: CollegeCertification[];
-  deviceProviderNumber?: number;
+  deviceProviderIdentifier?: number;
 }
 
 export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> {
@@ -23,8 +23,8 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> 
     return this.formInstance.get('certifications') as FormArray;
   }
 
-  public get deviceProviderNumber(): FormControl {
-    return this.formInstance.get('deviceProviderNumber') as FormControl;
+  public get deviceProviderIdentifier(): FormControl {
+    return this.formInstance.get('deviceProviderIdentifier') as FormControl;
   }
 
   /**
@@ -49,9 +49,9 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> 
       return collegeCertification;
     });
 
-    const deviceProviderNumber = this.deviceProviderNumber.value;
+    const deviceProviderIdentifier = this.deviceProviderIdentifier.value;
 
-    return { certifications, deviceProviderNumber }
+    return { certifications, deviceProviderIdentifier }
   }
 
   public patchValue(regulatoryFormModel: RegulatoryFormModel): void {
@@ -73,7 +73,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> 
   public buildForm(): void {
     this.formInstance = this.fb.group({
       certifications: this.fb.array([]),
-      deviceProviderNumber: ['', []]
+      deviceProviderIdentifier: ['', []]
     });
   }
 

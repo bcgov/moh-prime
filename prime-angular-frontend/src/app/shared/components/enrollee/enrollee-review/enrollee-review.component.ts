@@ -78,8 +78,8 @@ export class EnrolleeReviewComponent {
       : [];
   }
 
-  public get hasDeviceProviderNumber(): boolean {
-    return (this.enrolment && !!this.enrolment.deviceProviderNumber);
+  public get hasdeviceProviderIdentifier(): boolean {
+    return (this.enrolment && !!this.enrolment.deviceProviderIdentifier);
   }
 
   public get hasCareSetting(): boolean {

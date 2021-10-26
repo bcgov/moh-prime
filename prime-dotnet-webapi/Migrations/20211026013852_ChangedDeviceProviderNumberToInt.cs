@@ -14,8 +14,7 @@ namespace Prime.Migrations
                 name: "DeviceProviderIdentifier",
                 table: "Enrollee",
                 type: "integer",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

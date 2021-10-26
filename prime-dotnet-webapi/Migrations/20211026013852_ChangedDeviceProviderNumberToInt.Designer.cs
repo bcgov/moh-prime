@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20211026011929_ChangedDeviceProviderNumberToInt")]
+    [Migration("20211026013852_ChangedDeviceProviderNumberToInt")]
     partial class ChangedDeviceProviderNumberToInt
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -3665,7 +3665,7 @@ namespace Prime.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("DeviceProviderIdentifier")
+                    b.Property<int?>("DeviceProviderIdentifier")
                         .HasColumnType("integer");
 
                     b.Property<string>("Email")

@@ -104,7 +104,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const profile = (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicFormState.json
       : this.bcscDemographicFormState.json;
-    const { certifications, deviceProviderNumber } = this.regulatoryFormState.json;
+    const { certifications, deviceProviderIdentifier } = this.regulatoryFormState.json;
     // const deviceProvider = this.deviceProviderForm.getRawValue();
     const { oboSites } = this.oboSitesForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
@@ -122,8 +122,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         ...paperProfile
       },
       certifications,
-      // ...deviceProvider,
-      deviceProviderNumber,
+      deviceProviderIdentifier,
       oboSites,
       ...careSettings,
       enrolleeRemoteUsers,
@@ -427,7 +426,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   public buildDeviceProviderForm(): FormGroup {
     return this.fb.group({
-      deviceProviderNumber: [null, [
+      deviceProviderIdentifier: [null, [
         FormControlValidators.numeric,
         FormControlValidators.requiredLength(5)
       ]],

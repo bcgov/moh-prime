@@ -47,7 +47,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       enrolleeRemoteUsers: [],
       remoteAccessSites: [],
       remoteAccessLocations: [],
-      deviceProviderNumber: null,
+      deviceProviderIdentifier: null,
       isInsulinPumpProvider: null,
       oboSites: [],
       enrolleeHealthAuthorities: [],

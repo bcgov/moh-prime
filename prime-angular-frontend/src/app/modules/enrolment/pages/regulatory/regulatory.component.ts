@@ -76,8 +76,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.formState.addCollegeCertification();
   }
 
-  public get deviceProviderNumber(): FormControl {
-    return this.formState.deviceProviderNumber;
+  public get deviceProviderIdentifier(): FormControl {
+    return this.formState.deviceProviderIdentifier;
   }
   /**
    * @description
@@ -151,11 +151,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   protected nextRouteAfterSubmit() {
     const certifications = this.formState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value as CareSetting[];
-    const formDeviceProviderNumber = this.formState.deviceProviderNumber.value;
+    const formdeviceProviderIdentifier = this.formState.deviceProviderIdentifier.value;
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = (!this.certifications.length || (this.isDeviceProvider && !formDeviceProviderNumber))
+      nextRoutePath = (!certifications.length || (this.isDeviceProvider && !formdeviceProviderIdentifier))
         ? EnrolmentRoutes.OBO_SITES
         : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
           ? EnrolmentRoutes.REMOTE_ACCESS
@@ -218,7 +218,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   private enableDeviceProviderValidator(): void {
-    this.formUtilsService.setValidators(this.formState.deviceProviderNumber, [
+    this.formUtilsService.setValidators(this.formState.deviceProviderIdentifier, [
       FormControlValidators.requiredLength(5)
     ]);
   }

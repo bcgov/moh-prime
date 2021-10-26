@@ -26,8 +26,8 @@
             <input matInput
                    maxlength="5"
                    placeholder="Device Provider ID"
-                   formControlName="deviceProviderNumber">
-            <mat-error *ngIf="formState.deviceProviderNumber.hasError('numeric')">
+                   formControlName="deviceProviderIdentifier">
+            <mat-error *ngIf="formState.deviceProviderIdentifier.hasError('numeric')">
               Must be 5 digits in length
             </mat-error>
           </mat-form-field>

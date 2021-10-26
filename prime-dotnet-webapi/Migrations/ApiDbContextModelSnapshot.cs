@@ -3663,7 +3663,7 @@ namespace Prime.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("DeviceProviderIdentifier")
+                    b.Property<int?>("DeviceProviderIdentifier")
                         .HasColumnType("integer");
 
                     b.Property<string>("Email")
