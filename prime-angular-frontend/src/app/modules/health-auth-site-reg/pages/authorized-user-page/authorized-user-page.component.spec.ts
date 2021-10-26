@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
@@ -25,6 +25,7 @@ fdescribe('AuthorizedUserPageComponent', () => {
   let fixture: ComponentFixture<AuthorizedUserPageComponent>;
   let spyOnTogglePrefferedNameValidators;
   let spyOnFormGetPreferredMiddleName;
+  let spyOnToggleAddressLineValidators;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -75,32 +76,5 @@ fdescribe('AuthorizedUserPageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  describe("testing onPreferredNameChange()", () => {
-    beforeEach(() => {
-      spyOnTogglePrefferedNameValidators = spyOn<any>(component, 'togglePreferredNameValidators');
-      spyOnFormGetPreferredMiddleName = spyOn<any>(component.formState.form.get('preferredMiddleName'), 'reset');
-    });
-
-    it('should not call getPreferredMiddleName and call togglePreferredNameValidators with true as first param', () => {
-      component.hasPreferredName = true;
-      const checked = true;
-
-      component.onPreferredNameChange({ checked });
-      expect(spyOnFormGetPreferredMiddleName).toHaveBeenCalledTimes(0);
-      expect(spyOnTogglePrefferedNameValidators).toHaveBeenCalled();
-      expect(spyOnTogglePrefferedNameValidators).toHaveBeenCalledWith(checked, jasmine.any(FormControl), jasmine.any(FormControl));
-    });
-
-    it('should call getPreferredMiddleName once and call togglePreferredNameValidators with false as first param', () => {
-      component.hasPreferredName = false;
-      const checked = false;
-
-      component.onPreferredNameChange({ checked });
-      expect(spyOnFormGetPreferredMiddleName).toHaveBeenCalledTimes(1);
-      expect(spyOnTogglePrefferedNameValidators).toHaveBeenCalled();
-      expect(spyOnTogglePrefferedNameValidators).toHaveBeenCalledWith(checked, jasmine.any(FormControl), jasmine.any(FormControl));
-    });
   });
 });

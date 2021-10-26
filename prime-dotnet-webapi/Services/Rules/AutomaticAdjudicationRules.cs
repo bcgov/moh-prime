@@ -146,16 +146,7 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            // *************************************************************
-            // TODO: To be uncommented in the future?
-            // *************************************************************
-            // if (!string.IsNullOrWhiteSpace(enrollee.DeviceProviderNumber)
-            //     || enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
-            // {
-            //     enrollee.AddReasonToCurrentStatus(StatusReasonType.PumpProvider);
-            //     return Task.FromResult(false);
-            // }
-            if (enrollee.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == ((int)CareSettingType.DeviceProvider)))
+            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider))
             {
                 return Task.FromResult(false);
             }
