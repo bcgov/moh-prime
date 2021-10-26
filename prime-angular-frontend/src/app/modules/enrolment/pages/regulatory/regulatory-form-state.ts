@@ -7,7 +7,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 
 export interface RegulatoryFormModel {
   certifications: CollegeCertification[];
-  deviceProviderIdentifier?: number;
+  deviceProviderIdentifier?: string;
 }
 
 export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> {
@@ -55,7 +55,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> 
   }
 
   public patchValue(regulatoryFormModel: RegulatoryFormModel): void {
-    const { certifications } = regulatoryFormModel;
+    const { certifications, deviceProviderIdentifier } = regulatoryFormModel;
 
     if (!this.formInstance || !Array.isArray(certifications)) {
       return;
@@ -68,6 +68,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> 
     }
 
     this.certifications.patchValue(certifications);
+    this.deviceProviderIdentifier.patchValue(deviceProviderIdentifier);
   }
 
   public buildForm(): void {

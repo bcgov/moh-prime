@@ -24,7 +24,7 @@ export interface HttpEnrollee extends Enrollee {
   approvedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
-  deviceProviderIdentifier: number;
+  deviceProviderIdentifier: string;
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
@@ -78,7 +78,7 @@ export interface Enrolment {
   approvedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
-  deviceProviderIdentifier: number;
+  deviceProviderIdentifier: string;
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
