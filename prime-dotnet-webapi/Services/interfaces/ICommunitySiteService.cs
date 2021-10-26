@@ -12,7 +12,6 @@ namespace Prime.Services
         Task<CommunitySite> GetSiteAsync(int siteId);
         Task<int> CreateSiteAsync(int organizationId);
         Task UpdateSiteAsync(int siteId, CommunitySiteUpdateModel updatedSite);
-        Task<Site> GetSiteNoTrackingAsync(int siteId);
         Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, BusinessLicence businessLicence, Guid documentGuid);
         Task<BusinessLicence> UpdateBusinessLicenceAsync(int businessLicenceId, BusinessLicence updateBusinessLicence);
         Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId);

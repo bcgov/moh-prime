@@ -257,13 +257,6 @@ namespace Prime.Services
             }
         }
 
-        public async Task<Site> GetSiteNoTrackingAsync(int siteId)
-        {
-            return await GetBaseSiteQuery()
-                .AsNoTracking()
-                .SingleOrDefaultAsync(s => s.Id == siteId);
-        }
-
         public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, BusinessLicence businessLicence, Guid documentGuid)
         {
             businessLicence.SiteId = siteId;
