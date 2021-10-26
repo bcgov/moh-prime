@@ -119,7 +119,6 @@
                            [makeBold]="true">
       {{ careSetting.careSettingCode | configCode: 'careSettings' }}
     </app-enrollee-property>
-
   </ng-container>
 
   <app-enrollee-property *ngIf="!hasCareSetting"
@@ -129,6 +128,8 @@
   </app-enrollee-property>
 
 </app-page-section>
+
+
 
 <app-page-section *ngIf="healthAuthorities?.length">
 
@@ -152,6 +153,29 @@
 
 </app-page-section>
 
+<app-page-section *ngIf="enrolment.deviceProviderIdentifier">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit College Licenses"
+            (click)="onRoute(EnrolmentRoutes.REGULATORY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+
+  <app-enrollee-property title="Device Provider ID"
+                         [makeBold]="true">
+    {{ enrolment?.deviceProviderIdentifier }}
+  </app-enrollee-property>
+
+
+</app-page-section>
+
+
 <app-page-section>
 
   <app-page-subheader>
@@ -164,15 +188,6 @@
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
-
-  <!-- <ng-container *ngFor="let careSetting in careSettings">
-    <ng-container *ngIf="careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER">
-      <app-enrollee-property title="Device Provider ID"
-                             [makeBold]="true">
-        {{ certification.collegeCode | configCode: 'colleges' | default }}
-      </app-enrollee-property>
-    </ng-container>
-  </ng-container> -->
 
   <ng-container *ngFor="let certification of certifications; let i = index;">
 
