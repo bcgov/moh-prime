@@ -14,14 +14,14 @@ using LinqKit;
 
 namespace Prime.Services
 {
-    public class V2SiteService : BaseService, IV2SiteService
+    public class SiteService : BaseService, ISiteService
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly IMapper _mapper;
 
-        public V2SiteService(
+        public SiteService(
             ApiDbContext context,
-            ILogger<V2SiteService> logger,
+            ILogger<SiteService> logger,
             IBusinessEventService businessEventService,
             IMapper mapper)
             : base(context, logger)

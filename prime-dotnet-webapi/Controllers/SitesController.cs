@@ -27,7 +27,7 @@ namespace Prime.Controllers
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
-        private readonly IV2SiteService _siteService;
+        private readonly ISiteService _siteService;
 
         public SitesController(
             IAdminService adminService,
@@ -36,7 +36,7 @@ namespace Prime.Controllers
             IEmailService emailService,
             IMapper mapper,
             IOrganizationService organizationService,
-            IV2SiteService siteService)
+            ISiteService siteService)
         {
             _adminService = adminService;
             _communitySiteService = communitySiteService;

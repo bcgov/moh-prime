@@ -6,7 +6,7 @@ using Prime.ViewModels.Sites;
 
 namespace Prime.Services
 {
-    public interface IV2SiteService
+    public interface ISiteService
     {
         Task<bool> PecAssignableAsync(int siteId, string pec);
         Task UpdateCompletedAsync(int siteId, bool completed);
