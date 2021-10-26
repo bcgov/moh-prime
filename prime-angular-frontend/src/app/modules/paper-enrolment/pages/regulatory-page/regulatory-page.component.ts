@@ -81,7 +81,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
         if (enrollee) {
           this.enrollee = enrollee;
           // Attempt to patch the form if not already patched
-          this.formState.patchValue(enrollee.certifications);
+          this.formState.patchValue({certifications: enrollee.certifications});
         }
       });
   }
@@ -90,7 +90,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.formState.removeIncompleteCertifications(true);
     this.formState.form.markAsPristine();
 
-    const payload = this.formState.json;
+    const payload = this.formState.json.certifications;
     const oboSites = this.removeOboSites(this.enrollee.oboSites);
 
     return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, payload)

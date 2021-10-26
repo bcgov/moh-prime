@@ -22,7 +22,7 @@ export class CollegeCertification {
     public renewalDate: string,
     public practiceCode?: number,
     public id?: number,
-    public deviceProviderId?: string
+    public deviceProviderNumber?: string
   ) { }
 
   public static hasPractice(collegeCode: number, licenseCode: number): boolean {

@@ -7,13 +7,10 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 
 export interface RegulatoryFormModel {
   certifications: CollegeCertification[];
-  deviceProviderId: FormControl;
+  deviceProviderNumber?: number;
 }
 
-// TODO use RegulatoryFormModel instead of CollegeCertification[], which
-// makes the passing in and out of form state more like using specific
-// keys from the original model
-export class RegulatoryFormState extends AbstractFormState<CollegeCertification[]> {
+export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> {
   public constructor(
     private fb: FormBuilder,
     private configService: ConfigService
@@ -26,8 +23,8 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
     return this.formInstance.get('certifications') as FormArray;
   }
 
-  public get deviceProviderId(): FormControl {
-    return this.formInstance.get('deviceProviderId') as FormControl;
+  public get deviceProviderNumber(): FormControl {
+    return this.formInstance.get('deviceProviderNumber') as FormControl;
   }
 
   /**
@@ -38,21 +35,28 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
    * @alias json
    */
   public get collegeCertifications(): CollegeCertification[] {
-    return this.json;
+    const { certifications } = this.json;
+    return certifications;
   }
 
-  public get json(): CollegeCertification[] {
+  public get json(): RegulatoryFormModel {
     if (!this.formInstance) {
       return;
     }
 
-    return this.certifications.getRawValue().map(c => {
+    const certifications = this.certifications.getRawValue().map(c => {
       const { nurseCategory, ...collegeCertification } = c;
       return collegeCertification;
     });
+
+    const deviceProviderNumber = this.deviceProviderNumber.value;
+
+    return { certifications, deviceProviderNumber }
   }
 
-  public patchValue(certifications: CollegeCertification[]): void {
+  public patchValue(regulatoryFormModel: RegulatoryFormModel): void {
+    const { certifications } = regulatoryFormModel;
+
     if (!this.formInstance || !Array.isArray(certifications)) {
       return;
     }
@@ -69,7 +73,7 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
   public buildForm(): void {
     this.formInstance = this.fb.group({
       certifications: this.fb.array([]),
-      deviceProviderId: ['', []]
+      deviceProviderNumber: ['', []]
     });
   }
 

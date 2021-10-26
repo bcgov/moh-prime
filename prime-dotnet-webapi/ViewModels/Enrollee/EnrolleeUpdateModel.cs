@@ -51,7 +51,7 @@ namespace Prime.ViewModels
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
-        public string DeviceProviderNumber { get; set; }
+        public int DeviceProviderIdentifier { get; set; }
 
         public bool? IsInsulinPumpProvider { get; set; }
 

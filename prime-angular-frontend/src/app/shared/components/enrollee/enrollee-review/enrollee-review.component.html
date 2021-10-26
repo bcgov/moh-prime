@@ -165,6 +165,15 @@
     </button>
   </app-page-subheader>
 
+  <!-- <ng-container *ngFor="let careSetting in careSettings">
+    <ng-container *ngIf="careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER">
+      <app-enrollee-property title="Device Provider ID"
+                             [makeBold]="true">
+        {{ certification.collegeCode | configCode: 'colleges' | default }}
+      </app-enrollee-property>
+    </ng-container>
+  </ng-container> -->
+
   <ng-container *ngFor="let certification of certifications; let i = index;">
 
     <app-enrollee-property title="College Licence"

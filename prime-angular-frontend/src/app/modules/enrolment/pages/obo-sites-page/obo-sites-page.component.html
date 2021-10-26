@@ -59,7 +59,6 @@
 
               <ng-container *ngSwitchCase="CareSettingEnum.DEVICE_PROVIDER"
                             formArrayName="deviceProviderSites">
-
                 <ng-container *ngFor="let site of deviceProviderSites.controls; let i = index; let last = last"
                               [formGroupName]="i">
 
@@ -72,7 +71,8 @@
                                      [jobNames]="jobNames"
                                      [allowDefaultOption]="allowDefaultOption"
                                      [defaultOptionLabel]="defaultOptionLabel"
-                                     (remove)="removeOboSite($event, careSetting.careSettingCode)"></app-obo-site-form>
+                                     (remove)="removeOboSite($event, careSetting.careSettingCode)">
+                  </app-obo-site-form>
 
                 </ng-container>
                 <button mat-button
