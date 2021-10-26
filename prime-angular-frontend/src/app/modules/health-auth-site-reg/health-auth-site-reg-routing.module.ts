@@ -93,7 +93,8 @@ const routes: Routes = [
       // of health authority information
       {
         path: `${HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES}/:haid/${HealthAuthSiteRegRoutes.SITES}/:sid`,
-        canActivateChild: [AuthorizedUserGuard],
+        canActivate: [AuthorizedUserGuard],
+        canActivateChild: [HealthAuthSiteRegGuard],
         children: [
           {
             path: HealthAuthSiteRegRoutes.VENDOR,
