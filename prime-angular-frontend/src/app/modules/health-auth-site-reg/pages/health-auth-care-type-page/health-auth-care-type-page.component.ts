@@ -24,7 +24,7 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
   public formState: HealthAuthCareTypeFormState;
   public title: string;
   public routeUtils: RouteUtils;
-  public careTypes: HealthAuthorityCareType[];
+  public healthAuthorityCareTypes: HealthAuthorityCareType[];
   public isCompleted: boolean;
 
   constructor(
@@ -64,12 +64,12 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
   protected patchForm(): void {
     const healthAuthId = +this.route.snapshot.params.haid;
     const healthAuthSiteId = +this.route.snapshot.params.sid;
-    if (!healthAuthId || !healthAuthSiteId) {
-      throw new Error('No health authority site ID was provided');
-    }
+    // if (!healthAuthId || !healthAuthSiteId) {
+    //   throw new Error('No health authority site ID was provided');
+    // }
 
     const site = this.siteService.site;
-    this.careTypes = this.route.snapshot.data.healthAuthority?.careTypes ?? [];
+    this.healthAuthorityCareTypes = this.route.snapshot.data.healthAuthority?.careTypes ?? [];
     this.isCompleted = site?.completed;
     this.formStateService.setForm(site, !this.hasBeenSubmitted);
   }
