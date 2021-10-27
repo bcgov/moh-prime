@@ -111,6 +111,10 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public getSiteProperties(site: SiteListViewModel): KeyValue<string, string>[] {
+    // TODO update API to only provide a single vendor
+    const siteVendorCode = (Array.isArray(site.siteVendors) && site.siteVendors.length)
+      ? site.siteVendors[0].vendorCode
+      : null;
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
@@ -118,7 +122,7 @@ export class SiteManagementPageComponent implements OnInit {
         key: 'Site Address',
         value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode'])
       },
-      { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
+      { key: 'Vendor', value: this.configCodePipe.transform(siteVendorCode, 'vendors') }
     ];
   }
 
