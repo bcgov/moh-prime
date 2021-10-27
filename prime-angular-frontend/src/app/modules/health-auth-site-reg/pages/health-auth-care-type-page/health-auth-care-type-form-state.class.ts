@@ -12,8 +12,8 @@ export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCar
     this.buildForm();
   }
 
-  public get careType(): FormControl {
-    return this.formInstance.get('careType') as FormControl;
+  public get healthAuthorityCareTypeId(): FormControl {
+    return this.formInstance.get('healthAuthorityCareTypeId') as FormControl;
   }
 
   public get json(): HealthAuthCareTypeForm {
@@ -34,7 +34,7 @@ export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCar
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      careType: [
+      healthAuthorityCareTypeId: [
         null,
         [Validators.required]
       ]
