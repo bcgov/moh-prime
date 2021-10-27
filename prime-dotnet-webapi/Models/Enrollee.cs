@@ -121,6 +121,7 @@ namespace Prime.Models
         public ICollection<EnrolleeAbsence> EnrolleeAbsences { get; set; }
 
         [NotMapped]
+        [Computed]
         public PhysicalAddress PhysicalAddress
         {
             get => Addresses?
@@ -130,6 +131,7 @@ namespace Prime.Models
         }
 
         [NotMapped]
+        [Computed]
         public MailingAddress MailingAddress
         {
             get => Addresses?
@@ -139,6 +141,7 @@ namespace Prime.Models
         }
 
         [NotMapped]
+        [Computed]
         public VerifiedAddress VerifiedAddress
         {
             get => Addresses?
