@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using FluentValidation;
 
 using Prime.ViewModels.Sites;
 
@@ -9,7 +8,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
     {
         public string SiteName { get; set; }
         public string PEC { get; set; }
-        public int SecurityGroupCode { get; set; }
+        public int? SecurityGroupCode { get; set; }
         public AddressViewModel PhysicalAddress { get; set; }
         public int HealthAuthorityVendorId { get; set; }
         public int? HealthAuthorityCareTypeId { get; set; }
@@ -18,15 +17,5 @@ namespace Prime.ViewModels.HealthAuthoritySites
 
         public ICollection<BusinessDayViewModel> BusinessHours { get; set; }
         public ICollection<RemoteUserViewModel> RemoteUsers { get; set; }
-    }
-
-    public class HealthAuthoritySiteValidator : AbstractValidator<HealthAuthoritySiteUpdateModel>
-    {
-        public HealthAuthoritySiteValidator()
-        {
-            RuleFor(x => x.SiteName).NotEmpty();
-            RuleFor(x => x.SecurityGroupCode).NotEmpty();
-            RuleFor(x => x.HealthAuthorityVendorId).NotEmpty();
-        }
     }
 }
