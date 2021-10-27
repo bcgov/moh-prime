@@ -16,8 +16,8 @@ import { SiteInformationForm } from './site-information-form.model';
       <app-enrollee-property title="Site Name">
         {{ siteInformation?.siteName | default }}
       </app-enrollee-property>
-      <app-enrollee-property title="Site ID/PEC Code">
-        {{ siteInformation?.siteId | default }}
+      <app-enrollee-property title="Site ID">
+        {{ siteInformation?.pec | default }}
       </app-enrollee-property>
       <app-enrollee-property title="Security Group">
         {{ siteInformation?.securityGroupCode | configCode: 'securityGroups' | default }}
