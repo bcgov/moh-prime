@@ -80,23 +80,20 @@ namespace Prime.Services
 
         public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId)
         {
-            IQueryable<Enrollee> query = GetBaseEnrolleeQuery()
-                .Include(e => e.Submissions);
-
-            var enrollee = await query
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-            var newestAgreementIds = await _context.AgreementVersions
+            var newestAgreementIds = _context.AgreementVersions
                 .Select(a => a.AgreementType)
                 .Distinct()
                 .Select(type => _context.AgreementVersions
                     .OrderByDescending(a => a.EffectiveDate)
                     .First(a => a.AgreementType == type)
                     .Id
-                )
-                .ToListAsync();
+                );
 
-            return _mapper.Map<Enrollee, EnrolleeViewModel>(enrollee,
-                opt => opt.AfterMap((src, dest) => dest.HasNewestAgreement = newestAgreementIds.Any(n => n == src.CurrentAgreementId)));
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .ProjectTo<EnrolleeViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
