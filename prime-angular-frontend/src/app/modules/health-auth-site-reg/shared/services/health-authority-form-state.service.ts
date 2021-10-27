@@ -6,6 +6,7 @@ import { AbstractFormStateService } from '@lib/classes/abstract-form-state-servi
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
@@ -21,7 +22,7 @@ import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-
 @Injectable({
   providedIn: 'root'
 })
-export class HealthAuthFormStateService extends AbstractFormStateService<HealthAuthoritySite> {
+export class HealthAuthorityFormStateService extends AbstractFormStateService<HealthAuthoritySite> {
   public vendorFormState: VendorFormState;
   public siteInformationFormState: SiteInformationFormState;
   public healthAuthCareTypeFormState: HealthAuthCareTypeFormState;
@@ -39,8 +40,8 @@ export class HealthAuthFormStateService extends AbstractFormStateService<HealthA
   private healthAuthoritySiteReference: Pick<HealthAuthoritySite,
     'id' |
     'healthAuthorityOrganizationId' |
-    'healthAuthorityPharmanetAdministrator' |
-    'healthAuthorityTechnicalSupport' |
+    'healthAuthorityPharmanetAdministratorId' |
+    'healthAuthorityTechnicalSupportId' |
     'completed' |
     'submittedDate' |
     'approvedDate' |
@@ -86,7 +87,7 @@ export class HealthAuthFormStateService extends AbstractFormStateService<HealthA
     const administratorFormState = this.administratorFormState.json;
     const technicalSupportFormState = this.technicalSupportFormState.json;
 
-    return {
+    return HealthAuthoritySite.toHealthAuthoritySite({
       ...this.healthAuthoritySiteReference,
       ...vendorFormState,
       ...siteInformationFormState,
@@ -96,7 +97,7 @@ export class HealthAuthFormStateService extends AbstractFormStateService<HealthA
       ...remoteUserFormState,
       ...administratorFormState,
       ...technicalSupportFormState
-    };
+    });
   }
 
   /**
@@ -142,13 +143,13 @@ export class HealthAuthFormStateService extends AbstractFormStateService<HealthA
     }
 
     this.vendorFormState.patchValue(healthAuthoritySite);
-    this.siteInformationFormState.patchValue(healthAuthoritySite);
-    this.healthAuthCareTypeFormState.patchValue(healthAuthoritySite);
-    this.siteAddressFormState.patchValue(healthAuthoritySite);
-    this.hoursOperationFormState.patchValue(healthAuthoritySite);
-    this.remoteUserFormState.patchValue(healthAuthoritySite);
-    this.administratorFormState.patchValue(healthAuthoritySite);
-    this.technicalSupportFormState.patchValue(healthAuthoritySite);
+    // this.siteInformationFormState.patchValue(healthAuthoritySite);
+    // this.healthAuthCareTypeFormState.patchValue(healthAuthoritySite);
+    // this.siteAddressFormState.patchValue(healthAuthoritySite);
+    // this.hoursOperationFormState.patchValue(healthAuthoritySite);
+    // this.remoteUserFormState.patchValue(healthAuthoritySite);
+    // this.administratorFormState.patchValue(healthAuthoritySite);
+    // this.technicalSupportFormState.patchValue(healthAuthoritySite);
   }
 
   /**
@@ -160,8 +161,8 @@ export class HealthAuthFormStateService extends AbstractFormStateService<HealthA
     const {
       id,
       healthAuthorityOrganizationId,
-      healthAuthorityPharmanetAdministrator,
-      healthAuthorityTechnicalSupport,
+      healthAuthorityPharmanetAdministratorId,
+      healthAuthorityTechnicalSupportId,
       completed,
       submittedDate,
       approvedDate,
@@ -170,8 +171,8 @@ export class HealthAuthFormStateService extends AbstractFormStateService<HealthA
     this.healthAuthoritySiteReference = {
       id,
       healthAuthorityOrganizationId,
-      healthAuthorityPharmanetAdministrator,
-      healthAuthorityTechnicalSupport,
+      healthAuthorityPharmanetAdministratorId,
+      healthAuthorityTechnicalSupportId,
       completed,
       submittedDate,
       approvedDate,

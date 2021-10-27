@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
-import { Organization } from '@registration/shared/models/organization.model';
 
 /**
  * @description
