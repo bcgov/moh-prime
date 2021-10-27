@@ -1,6 +1,6 @@
 # How to run
 
-`dotnet run <number of Enrollees to generate>`
+`dotnet run <number of Enrollees to generate> <number of Sites to generate>`
 
 The target database to generate the Enrollees into is stored in the `appsettings.json` file.  Change as desired.  
 

@@ -16,23 +16,52 @@ namespace create_mock_data
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .CreateLogger();
-            int numEnrollees = int.Parse(args[0]);
 
-            try
+            if (args.Length == 0) 
             {
-                ApiDbContext dbContext = new ApiDbContextFactory().CreateDbContext(args);
-                Log.Information($"Beginning to generate {numEnrollees} enrollees at {DateTime.Now}");
-                for (int i = 0; i < numEnrollees; i++)
-                {
-                    Enrollee enrollee = new EnrolleeFactory().Generate();
-                    dbContext.Enrollees.Add(enrollee);
-                }
-                dbContext.SaveChanges();
-                Log.Information($"Completed generating enrollees at {DateTime.Now}");
+                Log.Warning("Usage:  `dotnet run <number of Enrollees to generate> <number of Sites to generate>`");
+                return;
             }
-            catch (Exception e)
+
+            ApiDbContext dbContext = new ApiDbContextFactory().CreateDbContext(args);
+            int numEnrollees = int.Parse(args[0]);
+            if (numEnrollees > 0)
             {
-                Log.Error(e, "Unexpected error encountered.");
+                try
+                {
+                    Log.Information($"Beginning to generate {numEnrollees} enrollees at {DateTime.Now}");
+                    for (int i = 0; i < numEnrollees; i++)
+                    {
+                        Enrollee enrollee = new EnrolleeFactory().Generate();
+                        dbContext.Enrollees.Add(enrollee);
+                    }
+                    dbContext.SaveChanges();
+                    Log.Information($"Completed generating enrollees at {DateTime.Now}");
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e, "Unexpected error encountered generating enrollees.");
+                }
+            }
+
+            int numSites = int.Parse(args[1]);
+            if (numSites > 0)
+            {
+                try
+                {
+                    Log.Information($"Beginning to generate {numSites} sites at {DateTime.Now}");
+                    for (int i = 0; i < numSites; i++)
+                    {
+                        Site site = new SiteFactory().Generate();
+                        dbContext.Sites.Add(site);
+                    }
+                    dbContext.SaveChanges();
+                    Log.Information($"Completed generating sites at {DateTime.Now}");
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e, "Unexpected error encountered generating sites.");
+                }
             }
         }
     }
