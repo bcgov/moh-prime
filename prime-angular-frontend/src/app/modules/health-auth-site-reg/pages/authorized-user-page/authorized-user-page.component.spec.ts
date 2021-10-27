@@ -20,7 +20,7 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AuthorizedUserPageComponent } from './authorized-user-page.component';
 
-fdescribe('AuthorizedUserPageComponent', () => {
+describe('AuthorizedUserPageComponent', () => {
   let component: AuthorizedUserPageComponent;
   let fixture: ComponentFixture<AuthorizedUserPageComponent>;
   let spyOnTogglePreferredNameValidators;
