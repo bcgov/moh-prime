@@ -8,7 +8,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { DocumentUploadComponent, BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { Site } from '@registration/shared/models/site.model';
@@ -22,7 +22,7 @@ import { BusinessLicenceRenewalPageFormState } from './business-licence-renewal-
   templateUrl: './business-licence-renewal-page.component.html',
   styleUrls: ['./business-licence-renewal-page.component.scss']
 })
-export class BusinessLicenceRenewalPageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: BusinessLicenceRenewalPageFormState;
   public title: string;
   public routeUtils: RouteUtils;

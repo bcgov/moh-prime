@@ -8,7 +8,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -20,7 +20,7 @@ import { PrivacyOfficerPageFormState } from './privacy-officer-page-form-state.c
   templateUrl: './privacy-officer-page.component.html',
   styleUrls: ['./privacy-officer-page.component.scss']
 })
-export class PrivacyOfficerPageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class PrivacyOfficerPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: PrivacyOfficerPageFormState;
   public title: string;
   public routeUtils: RouteUtils;

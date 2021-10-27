@@ -15,7 +15,7 @@ import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -27,7 +27,7 @@ import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
   templateUrl: './remote-users-page.component.html',
   styleUrls: ['./remote-users-page.component.scss']
 })
-export class RemoteUsersPageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: RemoteUsersPageFormState;
   public title: string;
   public routeUtils: RouteUtils;

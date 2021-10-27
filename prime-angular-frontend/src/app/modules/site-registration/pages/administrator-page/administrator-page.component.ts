@@ -11,7 +11,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -23,7 +23,7 @@ import { AdministratorPageFormState } from './administrator-page-form-state.clas
   templateUrl: './administrator-page.component.html',
   styleUrls: ['./administrator-page.component.scss']
 })
-export class AdministratorPageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class AdministratorPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: AdministratorPageFormState;
   public title: string;
   public routeUtils: RouteUtils;

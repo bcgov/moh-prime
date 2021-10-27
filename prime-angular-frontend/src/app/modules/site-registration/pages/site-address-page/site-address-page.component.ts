@@ -7,7 +7,7 @@ import { AddressLine } from '@lib/models/address.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -18,7 +18,7 @@ import { SiteAddressPageFormState } from './site-address-page-form-state.class';
   templateUrl: './site-address-page.component.html',
   styleUrls: ['./site-address-page.component.scss']
 })
-export class SiteAddressPageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class SiteAddressPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: SiteAddressPageFormState;
   public title: string;
   public routeUtils: RouteUtils;

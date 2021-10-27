@@ -13,7 +13,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { OrganizationAgreement } from '@shared/models/agreement.model';
 
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -25,7 +25,7 @@ import { TechnicalSupportPageFormState } from './technical-support-page-form-sta
   templateUrl: './technical-support-page.component.html',
   styleUrls: ['./technical-support-page.component.scss']
 })
-export class TechnicalSupportPageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class TechnicalSupportPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: TechnicalSupportPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
