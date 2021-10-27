@@ -23,7 +23,7 @@ import { AuthorizedUserPageComponent } from './authorized-user-page.component';
 fdescribe('AuthorizedUserPageComponent', () => {
   let component: AuthorizedUserPageComponent;
   let fixture: ComponentFixture<AuthorizedUserPageComponent>;
-  let spyOnTogglePrefferedNameValidators;
+  let spyOnTogglePreferredNameValidators;
   let spyOnFormGetPreferredMiddleName;
   let spyOnToggleAddressLineValidators;
 
@@ -78,9 +78,9 @@ fdescribe('AuthorizedUserPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe("testing onPreferredNameChange()", () => {
+  describe('testing onPreferredNameChange()', () => {
     beforeEach(() => {
-      spyOnTogglePrefferedNameValidators = spyOn<any>(component, 'togglePreferredNameValidators');
+      spyOnTogglePreferredNameValidators = spyOn<any>(component, 'togglePreferredNameValidators');
       spyOnFormGetPreferredMiddleName = spyOn<any>(component.formState.form.get('preferredMiddleName'), 'reset');
     });
 
@@ -90,8 +90,8 @@ fdescribe('AuthorizedUserPageComponent', () => {
 
       component.onPreferredNameChange({ checked });
       expect(spyOnFormGetPreferredMiddleName).toHaveBeenCalledTimes(0);
-      expect(spyOnTogglePrefferedNameValidators).toHaveBeenCalled();
-      expect(spyOnTogglePrefferedNameValidators).toHaveBeenCalledWith(checked, jasmine.any(FormControl), jasmine.any(FormControl));
+      expect(spyOnTogglePreferredNameValidators).toHaveBeenCalled();
+      expect(spyOnTogglePreferredNameValidators).toHaveBeenCalledWith(checked, jasmine.any(FormControl), jasmine.any(FormControl));
     });
 
     it('should call getPreferredMiddleName once and call togglePreferredNameValidators with false as first param', () => {
@@ -100,15 +100,16 @@ fdescribe('AuthorizedUserPageComponent', () => {
 
       component.onPreferredNameChange({ checked });
       expect(spyOnFormGetPreferredMiddleName).toHaveBeenCalledTimes(1);
-      expect(spyOnTogglePrefferedNameValidators).toHaveBeenCalled();
-      expect(spyOnTogglePrefferedNameValidators).toHaveBeenCalledWith(checked, jasmine.any(FormControl), jasmine.any(FormControl));
+      expect(spyOnTogglePreferredNameValidators).toHaveBeenCalled();
+      expect(spyOnTogglePreferredNameValidators).toHaveBeenCalledWith(checked, jasmine.any(FormControl), jasmine.any(FormControl));
     });
   });
 
   describe('testing onPhysicalAddressChange()', () => {
     beforeEach(() => {
       spyOnToggleAddressLineValidators = spyOn<any>(component, 'toggleAddressLineValidators');
-    })
+    });
+
     it('should call onPhysicalAddressChange with true as the first argument', () => {
       const checked = true;
 
