@@ -23,6 +23,11 @@ import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority
 import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-authority-site-create.model';
 import { HealthAuthoritySiteUpdate } from '@health-auth/shared/models/health-authority-site-update.model';
 
+// TODO split this into multiple resources to reduce responsibility and have the
+//      resource name accurately describe the service, possibly:
+//      - HealthAuthorityResource,
+//      - HealthAuthoritySiteResource, and maybe
+//      - AuthorizedUserResource
 @Injectable({
   providedIn: 'root'
 })
@@ -302,14 +307,15 @@ export class HealthAuthorityResource {
     return this.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
       .pipe(
         map((healthAuthSite: HealthAuthoritySite) => [
-          ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityPharmanetAdministrator, {
-            label: 'PharmaNet Administrator',
-            email: healthAuthSite?.healthAuthorityPharmanetAdministrator?.email
-          }),
-          ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityTechnicalSupport.email, {
-            label: 'Technical Support Contact',
-            email: healthAuthSite?.healthAuthorityTechnicalSupport.email
-          })
+          // TODO what needs to happen and what is available
+          // ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityPharmanetAdministrator, {
+          //   label: 'PharmaNet Administrator',
+          //   email: healthAuthSite?.healthAuthorityPharmanetAdministrator?.email
+          // }),
+          // ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityTechnicalSupport.email, {
+          //   label: 'Technical Support Contact',
+          //   email: healthAuthSite?.healthAuthorityTechnicalSupport.email
+          // })
         ]),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site contacts could not be retrieved');
