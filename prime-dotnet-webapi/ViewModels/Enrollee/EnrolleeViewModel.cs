@@ -33,11 +33,11 @@ namespace Prime.ViewModels
 
         public DateTime DateOfBirth { get; set; }
 
-        public PhysicalAddress PhysicalAddress { get; set; }
+        public AddressViewModel PhysicalAddress { get; set; }
 
-        public MailingAddress MailingAddress { get; set; }
+        public AddressViewModel MailingAddress { get; set; }
 
-        public VerifiedAddress VerifiedAddress { get; set; }
+        public AddressViewModel VerifiedAddress { get; set; }
 
         public string Email { get; set; }
 
@@ -69,9 +69,6 @@ namespace Prime.ViewModels
 
         public int DisplayId { get; set; }
 
-        // TODO currently derived on web client, but needed on backend for now
-        public int CurrentStatusCode { get; set; }
-
         public bool HasNewestAgreement { get; set; }
 
         public AgreementType? AssignedTOAType { get; set; }
@@ -80,31 +77,25 @@ namespace Prime.ViewModels
 
         public bool Confirmed { get; set; }
 
-        public string CurrentTOAStatus
+        public string CurrentTOAStatus => (StatusType)CurrentStatus.StatusCode switch
         {
-            get
+            StatusType.UnderReview => "",
+            StatusType.Locked => "N/A",
+            StatusType.Declined => "N/A",
+            StatusType.RequiresToa => "Pending",
+            StatusType.Editable => EditableToaStatusText(),
+            _ => null
+        };
+
+        private string EditableToaStatusText()
+        {
+            if (ExpiryDate == null || ExpiryDate < DateTimeOffset.Now)
             {
-                switch ((StatusType)CurrentStatusCode)
-                {
-                    case StatusType.UnderReview:
-                        return "";
-                    case StatusType.Locked:
-                    case StatusType.Declined:
-                        return "N/A";
-                    case StatusType.RequiresToa:
-                        return "Pending";
-                    case StatusType.Editable:
-                        if (ExpiryDate == null || ExpiryDate < DateTimeOffset.Now)
-                        {
-                            return "";
-                        }
-                        else
-                        {
-                            return HasNewestAgreement ? "Yes" : "No";
-                        }
-                    default:
-                        return null;
-                }
+                return "";
+            }
+            else
+            {
+                return HasNewestAgreement ? "Yes" : "No";
             }
         }
     }
