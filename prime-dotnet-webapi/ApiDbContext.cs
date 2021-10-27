@@ -96,7 +96,6 @@ namespace Prime
         public DbSet<HealthAuthorityContact> HealthAuthorityContacts { get; set; }
         public DbSet<HealthAuthorityVendor> HealthAuthorityVendors { get; set; }
         public DbSet<PrivacyOffice> PrivacyOffices { get; set; }
-        public DbSet<HealthAuthoritySite> HealthAuthoritySites { get; set; }
 
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
