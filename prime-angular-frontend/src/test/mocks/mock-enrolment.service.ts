@@ -118,7 +118,6 @@ export class MockEnrolmentService implements IEnrolmentService {
       },
       currentTOAStatus: null,
       assignedTOAType: null,
-      hasNewestAgreement: false,
       enrolleeClassification: EnrolleeClassification.OBO,
       enrolmentCertificateNote: null,
       accessAgreementNote: null,
@@ -130,7 +129,8 @@ export class MockEnrolmentService implements IEnrolmentService {
       base64QRCode: null,
       confirmed: false,
       requiresConfirmation: false,
-      jobs: [{ title: faker.name.jobTitle() }]
+      jobs: [{ title: faker.name.jobTitle() }],
+      adjudicatorIdir: null
     });
   }
 
