@@ -78,6 +78,21 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Gets the GPID for an Enrollee.
+        /// Returns null if no Enrollee exists with the given UserId or if the Enrollee is in the 'Declined' status
+        /// </summary>
+        /// <param name="userId"></param>
+        public async Task<string> GetActiveGpidAsync(Guid userId)
+        {
+            return await _context.Enrollees
+                .Where(enrollee => enrollee.UserId == userId
+                    && enrollee.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Select(enrollee => enrollee.GPID)
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId)
         {
             var newestAgreementIds = _context.AgreementVersions
@@ -93,6 +108,7 @@ namespace Prime.Services
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
                 .ProjectTo<EnrolleeViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .DecompileAsync()
                 .SingleOrDefaultAsync();
         }
 
@@ -150,21 +166,6 @@ namespace Prime.Services
                 .FirstOrDefaultAsync();
 
             return new EnrolleeNavigation { NextId = nextId, PreviousId = previousId };
-        }
-
-        public async Task<Enrollee> GetEnrolleeAsync(Guid userId, bool excludeDecline = false)
-        {
-            Enrollee enrollee = await GetBaseEnrolleeQuery()
-                .AsNoTracking()
-                .SingleOrDefaultAsync(e => e.UserId == userId);
-
-            if (enrollee == null
-                || (excludeDecline && enrollee.CurrentStatus.IsType(StatusType.Declined)))
-            {
-                return null;
-            }
-
-            return enrollee;
         }
 
         public async Task<int> CreateEnrolleeAsync(EnrolleeCreateModel createModel)
