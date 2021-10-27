@@ -5,8 +5,8 @@ using Prime.Models.HealthAuthorities;
 
 namespace Prime.Models
 {
-    [Table("V2HealthAuthoritySite")]
-    public class V2HealthAuthoritySite : Site
+    [Table("HealthAuthoritySite")]
+    public class HealthAuthoritySite : Site
     {
         public string SiteName { get; set; }
 
