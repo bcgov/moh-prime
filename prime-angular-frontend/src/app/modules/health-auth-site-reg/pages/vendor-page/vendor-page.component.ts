@@ -50,7 +50,7 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
     super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthorityFormStateService, healthAuthorityResource);
 
     this.title = this.route.snapshot.data.title;
-    this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+    this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH, location);
     this.hasNoVendorError = false;
   }
 

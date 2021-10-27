@@ -4,16 +4,8 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 import { VendorForm } from './vendor-form.model';
-import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
-import { HealthAuthority } from '@shared/models/health-authority.model';
 
 export class VendorFormState extends AbstractFormState<VendorForm> {
-  /**
-   * @description
-   * List of vendors provided by the HealthAuthority.
-   */
-  private healthAuthorityVendors: HealthAuthorityVendor[];
-
   public constructor(
     private fb: FormBuilder,
     private healthAuthorityService

@@ -19,7 +19,7 @@ import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthoritySite, HealthAuthoritySiteDto } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-authority-site-create.model';
 import { HealthAuthoritySiteUpdate } from '@health-auth/shared/models/health-authority-site-update.model';
 
@@ -264,12 +264,16 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthoritySiteById(healthAuthId: HealthAuthorityEnum, healthAuthSiteId: number): Observable<HealthAuthoritySite> {
-    return this.apiResource.get<HealthAuthoritySite>(`health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`)
+  public getHealthAuthoritySiteById(healthAuthId: HealthAuthorityEnum, healthAuthSiteId: number): Observable<HealthAuthoritySite | null> {
+    return this.apiResource.get<HealthAuthoritySiteDto>(`health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`)
       .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result),
+        map((response: ApiHttpResponse<HealthAuthoritySiteDto>) => HealthAuthoritySite.toHealthAuthoritySite(response.result)),
         tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
         catchError((error: any) => {
+          if(error.status === 404) {
+            return of(null);
+          }
+
           this.toastService.openErrorToast('Health authority site could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteById error has occurred: ', error);
           throw error;

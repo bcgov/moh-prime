@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
-import { HealthAuthoritySiteDto, HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
 /**
  * @description
@@ -21,9 +21,7 @@ export class HealthAuthoritySiteService {
     this._site = new BehaviorSubject<HealthAuthoritySite | null>(null);
   }
 
-  public set site(healthAuthoritySiteDto: HealthAuthoritySiteDto) {
-    // TODO move conversion to resource
-    const healthAuthoritySite = HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto);
+  public set site(healthAuthoritySite: HealthAuthoritySite) {
     this._site.next(ObjectUtils.deepFreeze(healthAuthoritySite));
   }
 

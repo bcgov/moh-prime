@@ -58,7 +58,11 @@ export class HealthAuthoritySite {
    * Convert structurally typed HealthAuthoritySite to an
    * instance of HealthAuthoritySite.
    */
-  public static toHealthAuthoritySite(healthAuthoritySite: HealthAuthoritySiteDto): HealthAuthoritySite {
+  public static toHealthAuthoritySite(healthAuthoritySite: HealthAuthoritySiteDto): HealthAuthoritySite | null {
+    if (!healthAuthoritySite) {
+      return null;
+    }
+
     return new HealthAuthoritySite(
       healthAuthoritySite.healthAuthorityOrganizationId,
       healthAuthoritySite.healthAuthorityVendor,
@@ -110,7 +114,7 @@ export class HealthAuthoritySite {
     if (!authorizedUserId) {
       throw Error('Authorized user identifier was not provided');
     }
-    if(!healthAuthorityVendorId) {
+    if (!healthAuthorityVendorId) {
       throw Error('Health authority vendor identifier was not provided');
     }
 
@@ -132,10 +136,10 @@ export class HealthAuthoritySite {
       physicalAddress: this.physicalAddress,
       businessHours: this.businessHours,
       remoteUsers: this.remoteUsers,
-      healthAuthorityPharmanetAdministratorId: this.healthAuthorityPharmanetAdministratorId,
-      healthAuthorityTechnicalSupportId: this.healthAuthorityTechnicalSupportId,
-      healthAuthorityVendorId: this.healthAuthorityVendor.id,
-      healthAuthorityCareTypeId: this.healthAuthorityCareType.id
+      healthAuthorityPharmanetAdministratorId: this.healthAuthorityPharmanetAdministratorId ?? 0,
+      healthAuthorityTechnicalSupportId: this.healthAuthorityTechnicalSupportId ?? 0,
+      healthAuthorityVendorId: this.healthAuthorityVendor?.id ?? 0,
+      healthAuthorityCareTypeId: this.healthAuthorityCareType?.id ?? 0
     });
   }
 }
