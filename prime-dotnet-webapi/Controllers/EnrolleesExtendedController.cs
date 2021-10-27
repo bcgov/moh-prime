@@ -45,7 +45,7 @@ namespace Prime.Controllers
             _plrProviderService = plrProviderService;
         }
 
-        // GET: api/Enrollees/1/adjacent
+        // GET: api/enrollees/1/adjacent
         /// <summary>
         /// Gets adjacent next and previous enrollee IDs for a given enrolleeId
         /// </summary>
@@ -60,7 +60,7 @@ namespace Prime.Controllers
             return Ok(result);
         }
 
-        // GET: api/Enrollees/5/statuses
+        // GET: api/enrollees/5/statuses
         /// <summary>
         /// Gets all of the status changes for a specific Enrollee.
         /// </summary>
@@ -87,7 +87,7 @@ namespace Prime.Controllers
             return Ok(enrollees);
         }
 
-        // GET: api/Enrollees/5/adjudicator-notes
+        // GET: api/enrollees/5/adjudicator-notes
         /// <summary>
         /// Gets all of the adjudicator notes for a specific Enrollee.
         /// </summary>
@@ -110,7 +110,7 @@ namespace Prime.Controllers
             return Ok(adjudicationNotes);
         }
 
-        // POST: api/Enrollees/5/adjudicator-notes
+        // POST: api/enrollees/5/adjudicator-notes
         /// <summary>
         /// Creates a new adjudicator note on an enrollee.
         /// </summary>
@@ -151,7 +151,7 @@ namespace Prime.Controllers
             );
         }
 
-        // POST: api/Enrollees/5/status-reference
+        // POST: api/enrollees/5/status-reference
         /// <summary>
         /// Creates a new Enrolment Status Reference on the enrollee's current status.
         /// </summary>
@@ -180,7 +180,7 @@ namespace Prime.Controllers
             );
         }
 
-        // PUT: api/Enrollees/5/access-agreement-notes
+        // PUT: api/enrollees/5/access-agreement-notes
         /// <summary>
         /// Updates an access agreement note.
         /// </summary>
@@ -216,7 +216,7 @@ namespace Prime.Controllers
             return Ok(updatedNote);
         }
 
-        // PUT: api/Enrollees/5/adjudicator?adjudicatorId=1
+        // PUT: api/enrollees/5/adjudicator?adjudicatorId=1
         /// <summary>
         /// Set an enrollee's assigned adjudicator.
         /// </summary>
@@ -247,7 +247,7 @@ namespace Prime.Controllers
             return Ok(idir);
         }
 
-        // GET: api/Enrollees/5/adjudicator-idir
+        // GET: api/enrollees/5/adjudicator-idir
         /// <summary>
         /// Gets the adjudicator for an enrollee
         /// </summary>
@@ -270,7 +270,7 @@ namespace Prime.Controllers
             return Ok(adjudicatorIdir);
         }
 
-        // DELETE: api/Enrollees/5/adjudicator
+        // DELETE: api/enrollees/5/adjudicator
         /// <summary>
         /// Remove an enrollee's assigned adjudicator.
         /// </summary>
@@ -294,7 +294,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // GET: api/Enrollees/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
+        // GET: api/enrollees/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
         /// <summary>
         /// Gets a list of enrollee events.
         /// </summary>
@@ -319,7 +319,7 @@ namespace Prime.Controllers
             return Ok(events);
         }
 
-        // POST: api/Enrollees/5/reminder
+        // POST: api/enrollees/5/reminder
         /// <summary>
         /// Send an enrollee a reminder email.
         /// </summary>
@@ -346,7 +346,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/Enrollees/5/events/email-initiated
+        // POST: api/enrollees/5/events/email-initiated
         /// <summary>
         /// Logs a business event for email initiated
         /// </summary>
@@ -372,7 +372,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/Enrollees/5/self-declaration-document
+        // POST: api/enrollees/5/self-declaration-document
         /// <summary>
         /// Create Self Declaration Document Link
         /// </summary>
@@ -402,7 +402,7 @@ namespace Prime.Controllers
             return Ok(sdd);
         }
 
-        // GET: api/Enrollees/{enrolleeId}/self-declaration-document/{selfDeclarationDocumentId}
+        // GET: api/enrollees/{enrolleeId}/self-declaration-document/{selfDeclarationDocumentId}
         /// <summary>
         /// Get the self Declaration document download token.
         /// </summary>
@@ -431,7 +431,7 @@ namespace Prime.Controllers
             return Ok(token);
         }
 
-        // GET: api/Enrollees/{enrolleeId}/identification-document/{identificationDocumentId}
+        // GET: api/enrollees/{enrolleeId}/identification-document/{identificationDocumentId}
         /// <summary>
         /// Get the Identification Document download token.
         /// </summary>
@@ -513,7 +513,7 @@ namespace Prime.Controllers
             return Ok(documents);
         }
 
-        // GET: api/Enrollees/{enrolleeId}/adjudication-documents/{documentId}
+        // GET: api/enrollees/{enrolleeId}/adjudication-documents/{documentId}
         /// <summary>
         /// Get the enrollee adjudication documents download token.
         /// </summary>
@@ -538,7 +538,7 @@ namespace Prime.Controllers
             return Ok(token);
         }
 
-        // DELETE: api/Enrollees/{enrolleeId}/adjudication-documents/{documentId}
+        // DELETE: api/enrollees/{enrolleeId}/adjudication-documents/{documentId}
         /// <summary>
         /// Delete the enrollee's adjudication document
         /// </summary>
@@ -562,7 +562,7 @@ namespace Prime.Controllers
             return Ok(document);
         }
 
-        // GET: api/Enrollees/{enrolleeId}/current-status
+        // GET: api/enrollees/{enrolleeId}/current-status
         /// <summary>
         /// Get the enrollees current status
         /// </summary>
@@ -586,7 +586,7 @@ namespace Prime.Controllers
             return Ok(status);
         }
 
-        // POST: api/Enrollees/5/adjudicator-notes/6/notification
+        // POST: api/enrollees/5/adjudicator-notes/6/notification
         /// <summary>
         /// Creates a new enrollee notification on an enrollee note.
         /// </summary>
@@ -617,7 +617,7 @@ namespace Prime.Controllers
             return Ok(notification);
         }
 
-        // DELETE: api/Enrollees/5/adjudicator-notes/6/notification
+        // DELETE: api/enrollees/5/adjudicator-notes/6/notification
         /// <summary>
         /// deletes the notification on an enrollees note.
         /// </summary>
@@ -646,7 +646,7 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // Get: api/Enrollees/5/notifications
+        // Get: api/enrollees/5/notifications
         /// <summary>
         /// Get the enrollee note on an enrollee that has a notification for current admin user.
         /// </summary>
@@ -671,7 +671,7 @@ namespace Prime.Controllers
             return Ok(notes);
         }
 
-        // Delete: api/Enrollees/5/notifications
+        // Delete: api/enrollees/5/notifications
         /// <summary>
         /// Delete all notifications on an enrollee
         /// </summary>
@@ -694,7 +694,7 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // GET: api/Enrollees/emails
+        // GET: api/enrollees/emails
         /// <summary>
         /// Gets all of the enrollee emails that match the type
         /// </summary>
@@ -710,7 +710,7 @@ namespace Prime.Controllers
             return Ok(emails);
         }
 
-        // GET: api/Enrollees/1/qrcode
+        // GET: api/enrollees/1/qrcode
         /// <summary>
         /// Gets and Enrollee's Verifiable Credential qrcode invitation
         /// </summary>
@@ -724,7 +724,7 @@ namespace Prime.Controllers
             return Ok(result?.Base64QRCode);
         }
 
-        // GET: api/Enrollees/5/plrs
+        // GET: api/enrollees/5/plrs
         /// <summary>
         /// Gets all PLR data matching the Enrollee's License Number(s)
         /// </summary>

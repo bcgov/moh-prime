@@ -1158,7 +1158,7 @@ namespace Prime.Controllers
             return Ok(notification);
         }
 
-        // DELETE: api/Enrollees/5/site-registration-notes/6/notification
+        // DELETE: api/sites/5/site-registration-notes/6/notification
         /// <summary>
         /// deletes the notification on an site registration note.
         /// </summary>
