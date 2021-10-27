@@ -4,21 +4,21 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { EMPTY, Observable } from 'rxjs';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
-import { HealthAuthFormStateService } from '@health-auth/shared/services/health-auth-form-state.service';
+import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
+import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
+import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { VendorFormState } from './vendor-form-state.class';
 
 @Component({
@@ -26,7 +26,7 @@ import { VendorFormState } from './vendor-form-state.class';
   templateUrl: './vendor-page.component.html',
   styleUrls: ['./vendor-page.component.scss']
 })
-export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistrationPage implements OnInit {
   public formState: VendorFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -37,16 +37,17 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    protected route: ActivatedRoute,
+    protected siteService: HealthAuthoritySiteService,
+    protected formStateService: HealthAuthorityFormStateService,
+    protected healthAuthorityResource: HealthAuthorityResource,
     private fb: FormBuilder,
     private location: Location,
     private configService: ConfigService,
     private authorizedUserService: AuthorizedUserService,
-    private healthAuthorityResource: HealthAuthorityResource,
-    private formStateService: HealthAuthFormStateService,
-    private route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, route, siteService, formStateService, healthAuthorityResource);
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -75,21 +76,10 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
       return;
     }
 
-    const healthAuthSiteId = +this.route.snapshot.params.sid;
-
-    this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
-      .pipe(
-        tap(({ vendors }: HealthAuthority) => this.vendors = vendors),
-        exhaustMap((_: HealthAuthority) =>
-          (healthAuthSiteId)
-            ? this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
-            : EMPTY
-        )
-      )
-      .subscribe(({ healthAuthorityVendorId, completed }: HealthAuthoritySite) => {
-        this.isCompleted = completed;
-        this.formState.patchValue({ healthAuthorityVendorId });
-      });
+    const site = this.siteService.site;
+    this.vendors = this.route.snapshot.data.healthAuthority?.vendors ?? [];
+    this.isCompleted = site?.completed;
+    this.formStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
   protected onSubmitFormIsValid(): void {
@@ -102,28 +92,26 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
     }
   }
 
-  protected performSubmission(): Observable<number> {
+  protected submissionRequest(): Observable<unknown> {
     const { haid, sid } = this.route.snapshot.params;
+    const healthAuthoritySite = this.formStateService.json;
 
     return (+sid)
-      ? this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, this.formStateService.json)
-        .pipe(map(() => sid))
-      : this.healthAuthorityResource.createHealthAuthoritySite(haid, {
-        healthAuthorityVendorId: this.formState.json.healthAuthorityVendorId,
-        authorizedUserId: this.authorizedUserService.authorizedUser.id
-      })
+      ? this.healthAuthorityResource
+        .updateHealthAuthoritySite(+haid, +sid, healthAuthoritySite.forUpdate())
+        .pipe(map(() => +sid))
+      : this.healthAuthorityResource
+        .createHealthAuthoritySite(+haid, healthAuthoritySite.forCreate(this.authorizedUserService.authorizedUser.id))
         .pipe(
           map((site: HealthAuthoritySite) => {
-            // Replace the URL with redirection, and prevent initial
-            // ID of zero being pushed onto browser history
-            this.location.replaceState([
+            this.routeUtils.replaceState([
               HealthAuthSiteRegRoutes.MODULE_PATH,
               HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
               +haid,
               HealthAuthSiteRegRoutes.SITES,
               site.id,
               HealthAuthSiteRegRoutes.VENDOR
-            ].join('/'));
+            ]);
             return site.id;
           })
         );

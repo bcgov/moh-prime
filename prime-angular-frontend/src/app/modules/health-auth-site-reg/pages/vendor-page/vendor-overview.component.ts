@@ -14,7 +14,7 @@ import { VendorForm } from './vendor-form.model';
                           [editRoute]="HealthAuthSiteRegRoutes.VENDOR"
                           (route)="onRoute($event)">
       <app-enrollee-property title="Vendor">
-        {{ vendor?.healthAuthorityVendorId | configCode: 'vendors' | default }}
+        {{ vendor?.healthAuthorityVendor.vendorCode | configCode: 'vendors' | default }}
       </app-enrollee-property>
     </app-overview-section>
   `,
