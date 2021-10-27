@@ -67,4 +67,28 @@ export class ObjectUtils {
       ? this.mergeInto(key, refObject, mergeObject)
       : mergeObject;
   }
+
+  /**
+   * @description
+   * Recursively make an object immutable.
+   *
+   * NOTE: Only for use with simple objects to avoid the possibility of
+   * an infinite loop being triggered, or freezing object that should
+   * not be made immutable.
+   */
+  public static deepFreeze(object: any) {
+    // Retrieve the property names defined on object
+    const propNames = Object.getOwnPropertyNames(object);
+
+    // Freeze properties before freezing self
+    for (const name of propNames) {
+      const value = object[name];
+
+      if (value && typeof value === 'object') {
+        this.deepFreeze(value);
+      }
+    }
+
+    return Object.freeze(object);
+  }
 }
