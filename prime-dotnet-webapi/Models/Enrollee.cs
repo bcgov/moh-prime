@@ -316,19 +316,6 @@ namespace Prime.Models
             return AgreementVersion.NewestAgreementVersionIds().Contains(currentAgreement.AgreementVersionId);
         }
 
-        /// <summary>
-        /// Returns true if the Enrollee has at least one Certification with a regulated Licence
-        /// </summary>
-        public bool IsRegulatedUser()
-        {
-            if (Certifications == null)
-            {
-                throw new InvalidOperationException($"{nameof(Certifications)} cannot be null");
-            }
-
-            return Certifications.Any(cert => cert.License?.NamedInImReg == true);
-        }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Guid.Empty.Equals(UserId))

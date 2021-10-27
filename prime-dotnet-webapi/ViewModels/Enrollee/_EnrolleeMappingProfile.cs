@@ -16,7 +16,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<Enrollee, EnrolleeListViewModel>()
                 .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
-                .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(n => n == src.CurrentAgreementId)))
+                .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(id => id == src.CurrentAgreementId)))
                 .ForMember(dest => dest.RemoteAccess, opt => opt.MapFrom(src => src.EnrolleeRemoteUsers.Any()))
                 .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)))
                 .ForMember(dest => dest.RequiresConfirmation, opt => opt.MapFrom(src =>
@@ -32,8 +32,7 @@ namespace Prime.ViewModels.Profiles
                     && src.PreviousStatus.StatusCode == (int)StatusType.RequiresToa
                 ))
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true))
-                .AfterMap((src, dest) => dest.IsRegulatedUser = src.IsRegulatedUser());
-            // TODO: .AfterMap() DOES NOT RUN WHEN CALLING .ProjectTo()
+                .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(id => id == src.CurrentAgreementId)));
 
             CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
             CreateMap<EnrolleeAbsence, EnrolleeAbsenceViewModel>();

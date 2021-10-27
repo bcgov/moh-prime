@@ -74,9 +74,6 @@ namespace Prime.ViewModels
 
         public bool HasNewestAgreement { get; set; }
 
-        // TODO not currently used in web client, but needed on backend for now
-        public bool IsRegulatedUser { get; set; }
-
         public AgreementType? AssignedTOAType { get; set; }
 
         public bool RequiresConfirmation { get; set; }
@@ -97,7 +94,7 @@ namespace Prime.ViewModels
                     case StatusType.RequiresToa:
                         return "Pending";
                     case StatusType.Editable:
-                        if (ExpiryDate == null || DateTimeOffset.Now >= ExpiryDate)
+                        if (ExpiryDate == null || ExpiryDate < DateTimeOffset.Now)
                         {
                             return "";
                         }
