@@ -16,10 +16,10 @@ namespace Prime.ViewModels.Profiles
             IQueryable<int> underReviewIds = null;
             CreateMap<HealthAuthorityOrganization, HealthAuthorityListViewModel>()
                 .ForMember(dest => dest.HasUnderReviewUsers, opt => opt.MapFrom(src => underReviewIds.Contains(src.Id)));
-            CreateMap<HealthAuthorityOrganization, HealthAuthorityViewModel>()
-                .ForMember(dest => dest.CareTypes, opt => opt.MapFrom(src => src.CareTypes.Select(x => x.CareType)));
+            CreateMap<HealthAuthorityOrganization, HealthAuthorityViewModel>();
 
             CreateMap<HealthAuthorityVendor, HealthAuthorityVendorViewModel>();
+            CreateMap<HealthAuthorityCareType, HealthAuthorityCareTypeViewModel>();
 
             CreateMap<PrivacyOffice, PrivacyOfficeViewModel>()
                 .ForMember(dest => dest.PrivacyOfficer, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.PrivacyOfficers.Select(x => x.Contact).SingleOrDefault()))
