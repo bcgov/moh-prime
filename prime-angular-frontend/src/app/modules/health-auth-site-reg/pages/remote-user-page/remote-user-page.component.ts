@@ -19,7 +19,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
+import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 import { RemoteUsersFormState } from '../remote-users-page/remote-users-form-state.class';
 
 // TODO refactor into list/form composite component used in health authority organization information
@@ -66,7 +66,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private configService: ConfigService,
-    private healthAuthoritySiteService: HealthAuthSiteRegService,
+    private healthAuthoritySiteService: HealthAuthoritySiteService,
     // TODO do we need this in health authority?
     // TODO even if we don't move the single method out to @lib/utils and don't use dependencies from other feature modules
     private enrolmentService: EnrolmentService,
