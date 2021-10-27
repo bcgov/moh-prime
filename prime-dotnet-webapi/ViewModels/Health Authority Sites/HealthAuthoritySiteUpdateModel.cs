@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using FluentValidation;
+
 using Prime.ViewModels.Sites;
 
 namespace Prime.ViewModels.HealthAuthoritySites
@@ -10,11 +12,21 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public int SecurityGroupCode { get; set; }
         public AddressViewModel PhysicalAddress { get; set; }
         public int HealthAuthorityVendorId { get; set; }
-        public int HealthAuthorityCareTypeId { get; set; }
-        public int HealthAuthorityPharmanetAdministratorId { get; set; }
-        public int HealthAuthorityTechnicalSupportId { get; set; }
+        public int? HealthAuthorityCareTypeId { get; set; }
+        public int? HealthAuthorityPharmanetAdministratorId { get; set; }
+        public int? HealthAuthorityTechnicalSupportId { get; set; }
 
         public ICollection<BusinessDayViewModel> BusinessHours { get; set; }
         public ICollection<RemoteUserViewModel> RemoteUsers { get; set; }
+    }
+
+    public class HealthAuthoritySiteValidator : AbstractValidator<HealthAuthoritySiteUpdateModel>
+    {
+        public HealthAuthoritySiteValidator()
+        {
+            RuleFor(x => x.SiteName).NotEmpty();
+            RuleFor(x => x.SecurityGroupCode).NotEmpty();
+            RuleFor(x => x.HealthAuthorityVendorId).NotEmpty();
+        }
     }
 }
