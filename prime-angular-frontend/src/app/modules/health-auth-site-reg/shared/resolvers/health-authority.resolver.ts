@@ -4,15 +4,16 @@ import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/r
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
+import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HealthAuthorityResolver implements Resolve<HealthAuthority> {
   constructor(
+    private healthAuthorityService: HealthAuthorityService,
     private healthAuthorityResource: HealthAuthorityResource
   ) {}
 
@@ -25,7 +26,7 @@ export class HealthAuthorityResolver implements Resolve<HealthAuthority> {
     const { haid } = route.params;
     return this.healthAuthorityResource.getHealthAuthorityById(haid)
       .pipe(
-        map((healthAuthority: HealthAuthority) => ObjectUtils.deepFreeze(healthAuthority))
+        map((healthAuthority: HealthAuthority) => this.healthAuthorityService.healthAuthority = healthAuthority)
       );
   }
 }

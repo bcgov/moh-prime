@@ -37,7 +37,7 @@ export class AuthorizedUserService implements IAuthorizedUserService {
   }
 
   public get authorizedUser$(): Observable<AuthorizedUser | null> {
-    // Allow subscriptions, but make immutable
+    // Allow subscriptions, but make the subject immutable
     return this._authorizedUser.asObservable();
   }
 }

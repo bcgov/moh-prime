@@ -5,7 +5,6 @@ import { AbstractFormStateService } from '@lib/classes/abstract-form-state-servi
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
@@ -17,6 +16,7 @@ import { HoursOperationFormState } from '@health-auth/pages/hours-operation-page
 import { RemoteUsersFormState } from '@health-auth/pages/remote-users-page/remote-users-form-state.class';
 import { AdministratorFormState } from '@health-auth/pages/administrator-page/administrator-form-state.class';
 import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-page/technical-support-form-state.class';
+import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +50,9 @@ export class HealthAuthorityFormStateService extends AbstractFormStateService<He
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
+    // Must apply HealthAuthorityResolver to routable views that
+    // consume the FormStateService, otherwise this will be null
+    private healthAuthorityService: HealthAuthorityService,
     private formUtilsService: FormUtilsService
   ) {
     super(fb, routeStateService, logger);
@@ -122,9 +125,9 @@ export class HealthAuthorityFormStateService extends AbstractFormStateService<He
    * clear previous form data from the service.
    */
   protected buildForms(): void {
-    this.vendorFormState = new VendorFormState(this.fb);
+    this.vendorFormState = new VendorFormState(this.fb, this.healthAuthorityService);
     this.siteInformationFormState = new SiteInformationFormState(this.fb);
-    this.healthAuthCareTypeFormState = new HealthAuthCareTypeFormState(this.fb);
+    this.healthAuthCareTypeFormState = new HealthAuthCareTypeFormState(this.fb, this.healthAuthorityService);
     this.siteAddressFormState = new SiteAddressFormState(this.fb, this.formUtilsService);
     this.hoursOperationFormState = new HoursOperationFormState(this.fb);
     this.remoteUserFormState = new RemoteUsersFormState(this.fb);
@@ -142,13 +145,13 @@ export class HealthAuthorityFormStateService extends AbstractFormStateService<He
     }
 
     this.vendorFormState.patchValue(healthAuthoritySite);
-    // this.siteInformationFormState.patchValue(healthAuthoritySite);
-    // this.healthAuthCareTypeFormState.patchValue(healthAuthoritySite);
-    // this.siteAddressFormState.patchValue(healthAuthoritySite);
-    // this.hoursOperationFormState.patchValue(healthAuthoritySite);
-    // this.remoteUserFormState.patchValue(healthAuthoritySite);
-    // this.administratorFormState.patchValue(healthAuthoritySite);
-    // this.technicalSupportFormState.patchValue(healthAuthoritySite);
+    this.siteInformationFormState.patchValue(healthAuthoritySite);
+    this.healthAuthCareTypeFormState.patchValue(healthAuthoritySite);
+    this.siteAddressFormState.patchValue(healthAuthoritySite);
+    this.hoursOperationFormState.patchValue(healthAuthoritySite);
+    this.remoteUserFormState.patchValue(healthAuthoritySite);
+    this.administratorFormState.patchValue(healthAuthoritySite);
+    this.technicalSupportFormState.patchValue(healthAuthoritySite);
   }
 
   /**

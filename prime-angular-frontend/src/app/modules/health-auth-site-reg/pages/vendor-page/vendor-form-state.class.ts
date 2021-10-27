@@ -15,7 +15,8 @@ export class VendorFormState extends AbstractFormState<VendorForm> {
   private healthAuthorityVendors: HealthAuthorityVendor[];
 
   public constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private healthAuthorityService
   ) {
     super();
 
@@ -31,7 +32,8 @@ export class VendorFormState extends AbstractFormState<VendorForm> {
       return;
     }
     const { healthAuthorityVendorId } = this.formInstance.getRawValue();
-    const healthAuthorityVendor = null; // this.healthAuthority.vendors.find(hav => hav.id === healthAuthorityVendorId);
+    const healthAuthorityVendor = this.healthAuthorityService.healthAuthority.vendors
+      .find(hav => hav.id === healthAuthorityVendorId);
 
     return { healthAuthorityVendor };
   }

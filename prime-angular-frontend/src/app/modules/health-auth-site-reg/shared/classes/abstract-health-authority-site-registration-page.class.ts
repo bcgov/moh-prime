@@ -13,14 +13,14 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 
 // TODO matches AbstractCommunitySiteRegistrationPage until HealthAuthoritySiteRegistration is completed
-//      then should be refactored for reuse
+//      then should be refactored for reuse using interfaces and abstractions
 export abstract class AbstractHealthAuthoritySiteRegistrationPage<T extends AbstractFormState<unknown> = AbstractFormState<unknown>, S = unknown> extends AbstractEnrolmentPage {
   protected constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     protected route: ActivatedRoute,
-    protected siteService: HealthAuthoritySiteService,
-    protected formStateService: HealthAuthorityFormStateService,
+    protected healthAuthoritySiteService: HealthAuthoritySiteService,
+    protected healthAuthorityFormStateService: HealthAuthorityFormStateService,
     protected healthAuthorityResource: HealthAuthorityResource
   ) {
     super(dialog, formUtilsService);
@@ -32,7 +32,7 @@ export abstract class AbstractHealthAuthoritySiteRegistrationPage<T extends Abst
    * the initial creation of a site or an existing site.
    */
   public get hasBeenSubmitted(): boolean {
-    return !!this.siteService.site?.submittedDate;
+    return !!this.healthAuthoritySiteService.site?.submittedDate;
   }
 
   /**
@@ -59,7 +59,7 @@ export abstract class AbstractHealthAuthoritySiteRegistrationPage<T extends Abst
    */
   protected submissionRequest(): Observable<unknown | void> {
     const { haid, sid } = this.route.snapshot.params;
-    const payload = this.formStateService.json.forUpdate();
+    const payload = this.healthAuthorityFormStateService.json.forUpdate();
 
     return this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, payload);
   }

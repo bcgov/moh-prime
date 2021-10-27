@@ -38,8 +38,8 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     protected route: ActivatedRoute,
-    protected siteService: HealthAuthoritySiteService,
-    protected formStateService: HealthAuthorityFormStateService,
+    protected healthAuthoritySiteService: HealthAuthoritySiteService,
+    protected healthAuthorityFormStateService: HealthAuthorityFormStateService,
     protected healthAuthorityResource: HealthAuthorityResource,
     private fb: FormBuilder,
     private location: Location,
@@ -47,7 +47,7 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
     private authorizedUserService: AuthorizedUserService,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, siteService, formStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthorityFormStateService, healthAuthorityResource);
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -66,7 +66,7 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
   }
 
   protected createFormInstance(): void {
-    this.formState = this.formStateService.vendorFormState;
+    this.formState = this.healthAuthorityFormStateService.vendorFormState;
   }
 
   protected patchForm(): void {
@@ -76,10 +76,10 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
       return;
     }
 
-    const site = this.siteService.site;
+    const site = this.healthAuthoritySiteService.site;
     this.vendors = this.route.snapshot.data.healthAuthority?.vendors ?? [];
     this.isCompleted = site?.completed;
-    this.formStateService.setForm(site, !this.hasBeenSubmitted);
+    this.healthAuthorityFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
   protected onSubmitFormIsValid(): void {
@@ -94,7 +94,7 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
 
   protected submissionRequest(): Observable<unknown> {
     const { haid, sid } = this.route.snapshot.params;
-    const healthAuthoritySite = this.formStateService.json;
+    const healthAuthoritySite = this.healthAuthorityFormStateService.json;
 
     return (+sid)
       ? this.healthAuthorityResource

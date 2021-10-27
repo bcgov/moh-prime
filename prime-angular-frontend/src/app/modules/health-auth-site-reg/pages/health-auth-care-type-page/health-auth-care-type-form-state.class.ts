@@ -2,10 +2,12 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
+import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 
 export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCareTypeForm> {
   public constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private healthAuthorityService: HealthAuthorityService
   ) {
     super();
 

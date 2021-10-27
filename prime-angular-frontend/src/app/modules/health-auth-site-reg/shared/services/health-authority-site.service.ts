@@ -22,7 +22,7 @@ export class HealthAuthoritySiteService {
   }
 
   public set site(healthAuthoritySiteDto: HealthAuthoritySiteDto) {
-    // TODO move conversion to resource, and maybe immutability to resource
+    // TODO move conversion to resource
     const healthAuthoritySite = HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto);
     this._site.next(ObjectUtils.deepFreeze(healthAuthoritySite));
   }
@@ -32,7 +32,7 @@ export class HealthAuthoritySiteService {
   }
 
   public get site$(): Observable<HealthAuthoritySite | null> {
-    // Allow subscriptions, but make immutable
+    // Allow subscriptions, but make the subject immutable
     return this._site.asObservable();
   }
 }
