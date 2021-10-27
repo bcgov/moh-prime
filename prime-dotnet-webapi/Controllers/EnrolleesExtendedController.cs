@@ -100,13 +100,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeNoteViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAdjudicatorNotes(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
-            var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee.Id);
+            var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrolleeId);
 
             return Ok(adjudicationNotes);
         }
@@ -141,8 +140,8 @@ namespace Prime.Controllers
             if (link)
             {
                 // Link Adjudicator note to most recent status change on an enrollee if request
-                var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-                await _enrolleeService.AddAdjudicatorNoteToReferenceIdAsync(enrollee.CurrentStatus.Id, createdAdjudicatorNote.Id);
+                var status = await _enrolleeService.GetEnrolleeCurrentStatusAsync(enrolleeId);
+                await _enrolleeService.AddAdjudicatorNoteToReferenceIdAsync(status.Id, createdAdjudicatorNote.Id);
             }
 
             return CreatedAtAction(
@@ -169,10 +168,10 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            var status = await _enrolleeService.GetEnrolleeCurrentStatusAsync(enrolleeId);
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
-            var createdEnrolmentStatusReference = await _enrolleeService.CreateEnrolmentStatusReferenceAsync(enrollee.CurrentStatus.Id, admin.Id);
+            var createdEnrolmentStatusReference = await _enrolleeService.CreateEnrolmentStatusReferenceAsync(status.Id, admin.Id);
 
             return CreatedAtAction(
                 nameof(CreateEnrolmentReference),
@@ -196,9 +195,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<AccessAgreementNote>), StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateAccessAgreementNote(int enrolleeId, AccessAgreementNote accessAgreementNote)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}.");
             }
@@ -263,8 +260,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAdjudicatorIdir(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
@@ -313,9 +309,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessEvent>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrolleeBusinessEvents(int enrolleeId, [FromQuery] IEnumerable<int> businessEventTypeCodes)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
@@ -339,17 +333,15 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendEnrolleeReminderEmail(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var username = admin.IDIR.Replace("@idir", "");
-            await _emailService.SendReminderEmailAsync(enrollee.Id);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Email reminder sent to Enrollee by {username}");
+            await _emailService.SendReminderEmailAsync(enrolleeId);
+            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Email reminder sent to Enrollee by {username}");
 
             return NoContent();
         }

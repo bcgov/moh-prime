@@ -296,7 +296,6 @@ namespace Prime.Services
             }
         }
 
-
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
         {
             // Remove existing items
@@ -947,15 +946,13 @@ namespace Prime.Services
         public async Task<EnrolmentStatus> GetEnrolleeCurrentStatusAsync(int enrolleeId)
         {
             var enrollee = await _context.Enrollees
+                .AsNoTracking()
                 .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.EnrolmentStatusReasons)
-                            .ThenInclude(esr => esr.StatusReason)
+                    .ThenInclude(es => es.EnrolmentStatusReasons)
+                        .ThenInclude(esr => esr.StatusReason)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-            if (enrollee != null)
-            {
-                return enrollee.CurrentStatus;
-            }
-            return null;
+
+            return enrollee?.CurrentStatus;
         }
 
         public async Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user)
