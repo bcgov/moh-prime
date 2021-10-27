@@ -131,15 +131,16 @@ export class HealthAuthoritySite {
    */
   public forUpdate(): HealthAuthoritySiteUpdate {
     return ObjectUtils.deepFreeze({
+      siteName: this.siteName,
       pec: this.pec,
       securityGroupCode: this.securityGroupCode,
       physicalAddress: this.physicalAddress,
       businessHours: this.businessHours,
       remoteUsers: this.remoteUsers,
-      healthAuthorityPharmanetAdministratorId: this.healthAuthorityPharmanetAdministratorId ?? 0,
-      healthAuthorityTechnicalSupportId: this.healthAuthorityTechnicalSupportId ?? 0,
-      healthAuthorityVendorId: this.healthAuthorityVendor?.id ?? 0,
-      healthAuthorityCareTypeId: this.healthAuthorityCareType?.id ?? 0
+      healthAuthorityPharmanetAdministratorId: this.healthAuthorityPharmanetAdministratorId ?? null,
+      healthAuthorityTechnicalSupportId: this.healthAuthorityTechnicalSupportId ?? null,
+      healthAuthorityVendorId: this.healthAuthorityVendor?.id ?? null,
+      healthAuthorityCareTypeId: this.healthAuthorityCareType?.id ?? null
     });
   }
 }

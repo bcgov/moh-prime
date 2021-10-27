@@ -1,6 +1,7 @@
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
 export interface HealthAuthoritySiteUpdate extends Pick<HealthAuthoritySite,
+  'siteName' |
   'pec' |
   'securityGroupCode' |
   'physicalAddress' |
@@ -11,5 +12,3 @@ export interface HealthAuthoritySiteUpdate extends Pick<HealthAuthoritySite,
   healthAuthorityVendorId: number;
   healthAuthorityCareTypeId: number;
 }
-
-
