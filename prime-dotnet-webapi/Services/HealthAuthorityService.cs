@@ -179,7 +179,9 @@ namespace Prime.Services
         public async Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId)
         {
             return await _context.HealthAuthorityVendors
-                .AnyAsync(v => v.Id == healthAuthorityVendorId && v.HealthAuthorityOrganizationId == healthAuthorityId);
+                .AsNoTracking()
+                .AnyAsync(vendor => vendor.Id == healthAuthorityVendorId
+                    && vendor.HealthAuthorityOrganizationId == healthAuthorityId);
         }
     }
 }
