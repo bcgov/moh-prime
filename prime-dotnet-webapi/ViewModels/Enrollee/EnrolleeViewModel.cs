@@ -63,8 +63,6 @@ namespace Prime.ViewModels
 
         public DateTimeOffset? ApprovedDate { get; set; }
 
-        public int? CurrentAgreementId { get; set; }
-
         public DateTimeOffset? ExpiryDate { get; set; }
 
         public int DisplayId { get; set; }
