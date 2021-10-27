@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DelegateDecompiler;
+using DelegateDecompiler.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
 
@@ -38,9 +40,10 @@ namespace Prime.Services
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
+                .DecompileAsync()
                 .AnyAsync(s => s.Id == siteId
-                    && s.HealthAuthorityOrganizationId == healthAuthorityId
-                    && s.Status == SiteStatusType.Editable);
+                   && s.HealthAuthorityOrganizationId == healthAuthorityId
+                   && s.Status == SiteStatusType.Editable);
         }
 
         public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel)
@@ -52,7 +55,6 @@ namespace Prime.Services
                 AuthorizedUserId = createModel.AuthorizedUserId
             };
             site.AddStatus(SiteStatusType.Editable);
-
 
             _context.HealthAuthoritySites.Add(site);
             await _context.SaveChangesAsync();
