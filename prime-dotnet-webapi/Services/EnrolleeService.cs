@@ -620,38 +620,6 @@ namespace Prime.Services
             return statusCodesToCheck.Contains(enrollee.CurrentStatus.GetStatusType());
         }
 
-        private IQueryable<Enrollee> GetBaseEnrolleeQuery()
-        {
-            return _context.Enrollees
-                .Include(e => e.Addresses)
-                    .ThenInclude(ea => ea.Address)
-                .Include(e => e.Certifications)
-                    .ThenInclude(c => c.License)
-                .Include(e => e.OboSites)
-                    .ThenInclude(s => s.PhysicalAddress)
-                .Include(e => e.EnrolleeCareSettings)
-                .Include(e => e.EnrolleeHealthAuthorities)
-                .Include(e => e.EnrolleeRemoteUsers)
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(ras => ras.PhysicalAddress)
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(ras => ras.SiteVendors)
-                .Include(r => r.RemoteAccessLocations)
-                    .ThenInclude(rul => rul.PhysicalAddress)
-                .Include(e => e.EnrolmentStatuses)
-                    .ThenInclude(es => es.Status)
-                .Include(e => e.EnrolmentStatuses)
-                    .ThenInclude(es => es.EnrolmentStatusReasons)
-                        .ThenInclude(esr => esr.StatusReason)
-                .Include(e => e.AccessAgreementNote)
-                .Include(e => e.SelfDeclarations)
-                .Include(e => e.SelfDeclarationDocuments)
-                .Include(e => e.IdentificationDocuments)
-                .Include(e => e.Agreements);
-        }
-
         public async Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId)
         {
             return await _context.EnrolleeNotes
