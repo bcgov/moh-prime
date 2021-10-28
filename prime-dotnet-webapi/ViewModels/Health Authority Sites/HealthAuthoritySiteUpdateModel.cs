@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-
 using Prime.ViewModels.Sites;
 
 namespace Prime.ViewModels.HealthAuthoritySites

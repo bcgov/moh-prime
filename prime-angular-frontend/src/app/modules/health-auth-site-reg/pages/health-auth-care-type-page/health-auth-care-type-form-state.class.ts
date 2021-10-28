@@ -27,17 +27,18 @@ export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCar
   }
 
   public patchValue(model: HealthAuthCareTypeForm): void {
-    if (!this.formInstance) {
+    const healthAuthorityCareTypeId = model.healthAuthorityCareType?.id;
+    if (!this.formInstance || !healthAuthorityCareTypeId) {
       return;
     }
 
-    this.formInstance.patchValue(model);
+    this.formInstance.patchValue({ healthAuthorityCareTypeId });
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
       healthAuthorityCareTypeId: [
-        null,
+        0,
         [Validators.required]
       ]
     });
