@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20211026021021_ChangedToDeviceProviderIdentifier")]
-    partial class ChangedToDeviceProviderIdentifier
+    [Migration("20211028202736_UpdatedDeviceProviderFields")]
+    partial class UpdatedDeviceProviderFields
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -3692,9 +3692,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("IdentityProvider")
                         .HasColumnType("text");
-
-                    b.Property<bool?>("IsInsulinPumpProvider")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -9891,7 +9888,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 8,
-                            Name = "Insulin Pump Provider"
+                            Name = "Device Provider"
                         },
                         new
                         {
@@ -9957,6 +9954,11 @@ namespace Prime.Migrations
                         {
                             Code = 21,
                             Name = "Unable to link enrollee to paper enrolment"
+                        },
+                        new
+                        {
+                            Code = 22,
+                            Name = "Device Provider ID number not found in PharmaNet."
                         });
                 });
 

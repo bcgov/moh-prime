@@ -16,7 +16,7 @@ namespace Prime.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.6")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
@@ -3690,9 +3690,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("IdentityProvider")
                         .HasColumnType("text");
-
-                    b.Property<bool?>("IsInsulinPumpProvider")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -9889,7 +9886,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 8,
-                            Name = "Insulin Pump Provider"
+                            Name = "Device Provider"
                         },
                         new
                         {
@@ -9955,6 +9952,11 @@ namespace Prime.Migrations
                         {
                             Code = 21,
                             Name = "Unable to link enrollee to paper enrolment"
+                        },
+                        new
+                        {
+                            Code = 22,
+                            Name = "Device Provider ID number not found in PharmaNet."
                         });
                 });
 
