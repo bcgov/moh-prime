@@ -142,7 +142,7 @@ namespace Prime.Services.Rules
             if (enrollee.HasCareSetting(CareSettingType.DeviceProvider))
             {
                 var deviceProviderIdentifier = enrollee.DeviceProviderIdentifier;
-                var deviceProviderPrefix = "D6";
+                var deviceProviderPrefix = "Prefix place holder"; // will update after we get the value
                 PharmanetCollegeRecord record = null;
 
                 try
