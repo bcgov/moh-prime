@@ -201,7 +201,7 @@ namespace Prime.Services
                     || orgValues.Contains(siteValue.Value);
             }
 
-            return org.VendorIds.Contains(site.HealthAuthorityVendorId)
+            return ValidateIfSpecified(org.VendorIds, site.HealthAuthorityVendorId)
                 && ValidateIfSpecified(org.CareTypeIds, site.HealthAuthorityCareTypeId)
                 && ValidateIfSpecified(org.PharmanetAdministratorIds, site.HealthAuthorityPharmanetAdministratorId)
                 && ValidateIfSpecified(org.TechnicalSupportIds, site.HealthAuthorityTechnicalSupportId);
