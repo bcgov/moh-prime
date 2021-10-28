@@ -16,7 +16,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public AddressViewModel PhysicalAddress { get; set; }
 
         public HealthAuthorityVendorViewModel HealthAuthorityVendor { get; set; }
-        public HealthAuthorityCareTypeViewModel CareType { get; set; }
+        public HealthAuthorityCareTypeViewModel HealthAuthorityCareType { get; set; }
 
         public bool Completed { get; set; }
 
