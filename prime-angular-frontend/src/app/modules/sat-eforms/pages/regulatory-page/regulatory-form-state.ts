@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ConfigService } from '@config/config.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
@@ -69,7 +69,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryForm> {
   public buildCollegeCertificationForm(): FormGroup {
     return this.fb.group({
       // Force selection of "None" on new certifications
-      collegeCode: ['', []],
+      collegeCode: ['', [Validators.required]],
       nurseCategory: [null, []],
       licenseCode: [null, []],
       // Validators are applied at the component-level when

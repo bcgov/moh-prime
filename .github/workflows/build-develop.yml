@@ -181,17 +181,13 @@ jobs:
         id: oc
         run: |
           oc process -f infrastructure/prime-app-template.yml \
-            -p API_POD=webapi \
             -p ASP_ENV=Development \
-            -p DOCMAN_POD=document-manager \
-            -p FRONTEND_POD=frontend \
             -p IMAGE_TAG=dev \
             -p SVC_NAME=dev \
             -p VANITY_URL=dev.pharmanetenrolment.gov.bc.ca \
             -p OC_LICENSE_PLATE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_ENV=${{secrets.OPENSHIFT_ENVIRONMENT}} \
             -p URL_STUB=.pharmanetenrolment.gov.bc.ca \
-            -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
             -p HPR_URL=dev-hpr-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
             -p MAUTH_URL=dev-mauth-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \

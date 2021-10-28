@@ -13,6 +13,8 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { SatEnrolleeService } from '@sat/shared/services/sat-enrollee.service';
+import { MockSatEnrolleeService } from '@sat/test/mock-sat-enrollee.service';
 import { RegulatoryPageComponent } from './regulatory-page.component';
 
 describe('RegulatoryPageComponent', () => {
@@ -50,11 +52,14 @@ describe('RegulatoryPageComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute
+        },
+        {
+          provide: SatEnrolleeService,
+          useClass: MockSatEnrolleeService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
