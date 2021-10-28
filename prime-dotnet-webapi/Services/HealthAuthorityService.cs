@@ -164,15 +164,15 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> PerformSiteValidationBeforeUpdate(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
+        public async Task<bool> ValidateSiteUpdateSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
         {
             return await _context.HealthAuthorities
                 .AsNoTracking()
-                .Where(ha => ha.Id == healthAuthorityId
-                    && ha.CareTypes.Any(ct => ct.Id == updateModel.HealthAuthorityCareTypeId)
-                    && ha.PharmanetAdministrators.Any(pa => pa.Id == updateModel.HealthAuthorityPharmanetAdministratorId)
-                    && ha.TechnicalSupports.Any(ts => ts.Id == updateModel.HealthAuthorityTechnicalSupportId)
-                )
+                .Where(ha => ha.Id == healthAuthorityId)
+                .Where(ha => ha.Vendors.Any(x => x.Id == updateModel.HealthAuthorityVendorId))
+                .Where(ha => updateModel.HealthAuthorityCareTypeId == null || ha.CareTypes.Any(x => x.Id == updateModel.HealthAuthorityCareTypeId))
+                .Where(ha => updateModel.HealthAuthorityPharmanetAdministratorId == null || ha.PharmanetAdministrators.Any(x => x.Id == updateModel.HealthAuthorityPharmanetAdministratorId))
+                .Where(ha => updateModel.HealthAuthorityTechnicalSupportId == null || ha.TechnicalSupports.Any(x => x.Id == updateModel.HealthAuthorityTechnicalSupportId))
                 .AnyAsync();
         }
 

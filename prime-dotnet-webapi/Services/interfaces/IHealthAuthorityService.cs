@@ -21,7 +21,7 @@ namespace Prime.Services
         Task UpdatePrivacyOfficeAsync(int healthAuthorityId, PrivacyOfficeViewModel privacyOffice);
         Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes);
 
-        Task<bool> PerformSiteValidationBeforeUpdate(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel);
+        Task<bool> ValidateSiteUpdateSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel);
         Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId);
     }
 }
