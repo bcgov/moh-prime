@@ -93,7 +93,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
       ? group.patchValue(this.business24Hours)
       : group.patchValue(this.businessRegularHours);
 
-    this.allowEditingHours(group, !change.checked);
+    this.formState.allowEditingHours(group, !change.checked);
   }
 
   public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
@@ -137,19 +137,6 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
       throw new Error('No health authority site ID was provided');
     }
 
-    // this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
-    //   .subscribe(({ businessHours, completed }: HealthAuthoritySite) => {
-    //     this.isCompleted = completed;
-    //     this.formState.patchValue({ businessHours });
-    //
-    //     // TODO needs to be refactored and move into FormState
-    //     this.formState.businessDays.controls.forEach((group: FormGroup) => {
-    //       if (this.is24Hours(group)) {
-    //         this.allowEditingHours(group, false);
-    //       }
-    //     });
-    //   });
-
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.formStateService.setForm(site, !this.hasBeenSubmitted);
@@ -179,18 +166,5 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
 
     this.routeUtils.routeRelativeTo(nextRoutePath);
-  }
-
-  private allowEditingHours(group: FormGroup, isEditable: boolean = true): void {
-    const startTime = group.get('startTime') as FormControl;
-    const endTime = group.get('endTime') as FormControl;
-
-    if (isEditable) {
-      startTime.enable();
-      endTime.enable();
-    } else {
-      startTime.disable();
-      endTime.disable();
-    }
   }
 }

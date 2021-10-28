@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
@@ -48,24 +48,32 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
       return;
     }
 
-    businessHours = businessHours.map((businessDay: BusinessDay) => {
-      businessDay.startTime = BusinessDayHours.fromTimeSpan(businessDay.startTime);
-      businessDay.endTime = BusinessDayHours.fromTimeSpan(businessDay.endTime);
-      return businessDay;
-    });
+    console.log('BUSINESS_HOURS', businessHours);
 
-    const businessDays = [...Array(7).keys()]
-      .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
-        const day = businessHours.find(bh => bh.day === dayOfWeek);
-        if (day) {
-          day.startTime = day.startTime.replace(':', '');
-          day.endTime = day.endTime.replace(':', '');
-        }
-        days.push(day ?? {});
-        return days;
-      }, []);
+    // businessHours = businessHours.map((businessDay: BusinessDay) => {
+    //   businessDay.startTime = BusinessDayHours.fromTimeSpan(businessDay.startTime);
+    //   businessDay.endTime = BusinessDayHours.fromTimeSpan(businessDay.endTime);
+    //   return businessDay;
+    // });
+    //
+    // const businessDays = [...Array(7).keys()]
+    //   .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
+    //     const day = businessHours.find(bh => bh.day === dayOfWeek);
+    //     if (day) {
+    //       day.startTime = day.startTime.replace(':', '');
+    //       day.endTime = day.endTime.replace(':', '');
+    //     }
+    //     days.push(day ?? {});
+    //     return days;
+    //   }, []);
 
-    this.formInstance.patchValue({ businessDays });
+    // this.formInstance.patchValue({ businessDays });
+
+    // this.formState.businessDays.controls.forEach((group: FormGroup) => {
+    //   if (this.is24Hours(group)) {
+    //     this.allowEditingHours(group, false);
+    //   }
+    // });
   }
 
   public buildForm(): void {
@@ -81,5 +89,18 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
       // TODO at least one business hours is required
       // [FormArrayValidators.atLeast(1)]
     });
+  }
+
+  public allowEditingHours(group: FormGroup, isEditable: boolean = true): void {
+    const startTime = group.get('startTime') as FormControl;
+    const endTime = group.get('endTime') as FormControl;
+
+    if (isEditable) {
+      startTime.enable();
+      endTime.enable();
+    } else {
+      startTime.disable();
+      endTime.disable();
+    }
   }
 }
