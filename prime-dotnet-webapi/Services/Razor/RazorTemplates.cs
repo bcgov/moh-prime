@@ -4,6 +4,7 @@ using Prime.Models.Documents;
 using Prime.ViewModels.Emails;
 using Prime.ViewModels.Agreements;
 using Prime.ViewModels.SiteRegistration;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services.Razor
 {
@@ -20,6 +21,8 @@ namespace Prime.Services.Razor
     public static class RazorTemplates
     {
         public static readonly RazorTemplate<SiteRegistrationReviewViewModel> SiteRegistrationReview = new RazorTemplate<SiteRegistrationReviewViewModel>("/Views/SiteRegistrationReview.cshtml");
+        public static readonly RazorTemplate<HealthAuthoritySiteSubmissionViewModel> HealthAuthoritySiteRegistrationReview = new RazorTemplate<HealthAuthoritySiteSubmissionViewModel>("/Views/HealthAuthoritySiteRegistrationReview.cshtml");
+
         public static readonly RazorTemplate<File> Document = new RazorTemplate<File>("/Views/Helpers/Document.cshtml");
         public static readonly RazorTemplate<File> ApologyDocument = new RazorTemplate<File>("/Views/Helpers/ApologyDocument.cshtml");
 

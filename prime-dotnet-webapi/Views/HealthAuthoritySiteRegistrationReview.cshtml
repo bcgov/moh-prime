@@ -1,0 +1,15 @@
+@using Prime.ViewModels.SiteRegistration
+@model SiteRegistrationReviewViewModel
+
+@{
+  Layout = "~/Views/Partials/_BaseLayout.cshtml";
+}
+
+@section Title { Site Registration Review }
+
+@section Theme {
+@await Html.PartialAsync("~/Views/Partials/_BootstrapTheme.cshtml")
+@await Html.PartialAsync("~/Views/Partials/_FontTheme.cshtml")
+}
+
+<h1 class="mb-4">HEALTH AUTHORITY SITE REGISTRATION REVIEW</h1>

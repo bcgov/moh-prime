@@ -89,6 +89,13 @@ namespace Prime.Services
             await _emailDocumentService.SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
         }
 
+        public async Task SendHealthAuthoritySiteRegistrationSubmissionDetailsToHIBCAsync(int healthAuthoritySiteId)
+        {
+
+            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(null), CareSettingType.HealthAuthority);
+
+        }
+
         public async Task SendSiteReviewedNotificationAsync(int siteId, string note)
         {
 

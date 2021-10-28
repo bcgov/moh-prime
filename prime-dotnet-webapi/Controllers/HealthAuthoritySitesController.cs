@@ -19,10 +19,16 @@ namespace Prime.Controllers
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
+        private readonly ISiteService _siteService;
 
-        public HealthAuthoritySitesController(IHealthAuthoritySiteService healthAuthoritySiteService)
+        private readonly IEmailService _emailService;
+        public HealthAuthoritySitesController(
+            IHealthAuthoritySiteService healthAuthoritySiteService,
+            IEmailService emailService
+            )
         {
             _healthAuthoritySiteService = healthAuthoritySiteService;
+            _emailService = emailService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -313,12 +319,17 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId)
         {
-            // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
+            // if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            // {
+            //     return NotFound($"Health authority site not found with id {siteId}");
+            // }
+            // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
             // {
             //     return NotFound($"No editable health authority site found with site id {siteId}");
             // }
 
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+            await _emailService.SendHealthAuthoritySiteRegistrationSubmissionDetailsToHIBCAsync(siteId);
 
             return Ok();
         }

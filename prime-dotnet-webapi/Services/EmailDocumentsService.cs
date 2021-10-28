@@ -9,6 +9,7 @@ using Prime.Models;
 using Prime.Models.Documents;
 using Prime.Services.Razor;
 using Prime.ViewModels.SiteRegistration;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services.EmailInternal
 {
@@ -69,6 +70,28 @@ namespace Prime.Services.EmailInternal
 
             _context.SiteRegistrationReviewDocuments.Add(new SiteRegistrationReviewDocument(siteId, documentGuid, pdf.Filename));
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Pdf> GenerateHealthAuthoritySiteRegistrationSubmissionAttachmentsAsync(int healthAuthoritSiteId)
+        {
+            var model = await _context.HealthAuthoritySites
+                .Where(has => has.Id == healthAuthoritSiteId)
+                .Select(has => new HealthAuthoritySiteSubmissionViewModel
+                {
+                    SiteName = has.SiteName,
+                    SiteAddress = has.PhysicalAddress,
+                    // AuthorizedUser
+                    // HealthAuthority
+                    PEC = has.PEC,
+                    CareType = has.CareType,
+                    IsNew = string.IsNullOrWhiteSpace(has.SiteId),
+                    Vendor = has.VendorCode,
+                    // PharmaNetAdministrator
+                })
+                .SingleAsync();
+
+            var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.HealthAuthoritySiteRegistrationReview, model);
+            return new Pdf("HealthAuthoritySiteRegistrationReview.pdf", _pdfService.Generate(html));
         }
 
         private async Task<Pdf> GenerateRegistrationReviewAttachmentAsync(int siteId)
