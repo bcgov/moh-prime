@@ -15,16 +15,16 @@ namespace PrimeTests.ModelFactories
         {
 //            this.SetBaseRules();
 
-            RuleFor(x => x.Id, () => IdCounter++);
+//            RuleFor(x => x.Id, () => IdCounter++);
             RuleFor(x => x.PhysicalAddress, f => new PhysicalAddressFactory().Generate());
-            RuleFor(x => x.Organization, f => org != null ? org : new OrganizationFactory().Generate());
+            RuleFor(x => x.Organization, f => org != null ? org : new OrganizationFactory(new PartyFactory().Generate()).Generate());
             // TODO: necessary?
             RuleFor(x => x.OrganizationId, (f, x) => x.Organization.Id);
 
             RuleFor(x => x.AdministratorPharmaNet, f => new ContactFactory().Generate());
             RuleFor(x => x.PrivacyOfficer, f => new ContactFactory().Generate());
             RuleFor(x => x.TechnicalSupport, f => new ContactFactory().Generate());
-            RuleFor(x => x.CareSetting, f => f.PickRandom(CareSettingLookup.SiteCareSettings));
+//            RuleFor(x => x.CareSetting, f => f.PickRandom(CareSettingLookup.SiteCareSettings));
             // TODO: Signing Authority now must provide?
             RuleFor(x => x.PEC, f => f.Lorem.Letter(3).OrNull(f));
             RuleFor(x => x.DoingBusinessAs, f => f.Company.CompanyName());
@@ -35,7 +35,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Flagged, f => f.Random.Bool(0.1f));
             // TODO: What dates are generated?
             RuleFor(x => x.SubmittedDate, f => f.Date.Past(1).OrNull(f, 0.2f));
-            RuleFor(x => x.SiteVendors, (f, x) => new SiteVendorFactory(x).GenerateBetween(1, 3));
+//            RuleFor(x => x.SiteVendors, (f, x) => new SiteVendorFactory(x).GenerateBetween(1, 3));
             // TODO: is BusinessLicenceFactory complete?
             RuleFor(x => x.BusinessLicences, (f, x) => new BusinessLicenceFactory(x).GenerateBetween(1, 3));
 

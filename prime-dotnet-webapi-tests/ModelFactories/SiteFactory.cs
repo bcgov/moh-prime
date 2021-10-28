@@ -17,7 +17,7 @@ namespace PrimeTests.ModelFactories
 
             RuleFor(x => x.Id, () => IdCounter++);
             RuleFor(x => x.PhysicalAddress, f => new PhysicalAddressFactory().Generate());
-            RuleFor(x => x.Organization, f => org != null ? org : new OrganizationFactory().Generate());
+            RuleFor(x => x.Organization, f => org != null ? org : new OrganizationFactory(new PartyFactory().Generate()).Generate());
             // TODO: necessary?
             RuleFor(x => x.OrganizationId, (f, x) => x.Organization.Id);
 

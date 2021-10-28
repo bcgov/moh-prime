@@ -1,8 +1,13 @@
 # How to run
 
-`dotnet run <number of Enrollees to generate> <number of Sites to generate>`
+1. `dotnet run <number of Enrollees to generate> <number of Sites to generate>`.  Zero is an acceptable parameter.  The target database to generate the Enrollees into is stored in the `appsettings.json` file.  Change as desired.  
 
-The target database to generate the Enrollees into is stored in the `appsettings.json` file.  Change as desired.  
+2. Currently for Site generation, there is a deficiency such that `Site.CareSettingCode` is not set by the program.  Manually execute SQL like the following to set:
+```
+update "Site" 
+set "CareSettingCode" = 3
+where "CareSettingCode" is null
+```
 
 
 # ModelFactories and Lookups
