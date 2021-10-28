@@ -15,14 +15,14 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public DateTimeOffset? ApprovedDate { get; set; }
         public AddressViewModel PhysicalAddress { get; set; }
 
-        public HealthAuthorityVendorViewModel HealthAuthorityVendor { get; set; }
-        public HealthAuthorityCareTypeViewModel HealthAuthorityCareType { get; set; }
-
-        public bool Completed { get; set; }
-
         public ICollection<BusinessDay> BusinessHours { get; set; }
         // public ICollection<RemoteUser> RemoteUsers { get; set; }
-        // public int? HealthAuthorityPharmanetAdministratorId { get; set; }
-        // public int? HealthAuthorityTechnicalSupportId { get; set; }
+
+        public HealthAuthorityVendorViewModel HealthAuthorityVendor { get; set; }
+        public HealthAuthorityCareTypeViewModel HealthAuthorityCareType { get; set; }
+        public int? HealthAuthorityPharmanetAdministratorId { get; set; }
+        public int? HealthAuthorityTechnicalSupportId { get; set; }
+
+        public bool Completed { get; set; }
     }
 }

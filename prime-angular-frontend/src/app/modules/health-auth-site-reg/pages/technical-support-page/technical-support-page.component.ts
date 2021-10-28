@@ -74,9 +74,9 @@ export class TechnicalSupportPageComponent extends AbstractHealthAuthoritySiteRe
       throw new Error('No health authority site ID was provided');
     }
 
-    // const technicalSupportContacts = this.healthAuthorityService.healthAuthority.technicalSupports
-    //   .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
-    // this.technicalSupports.next(technicalSupportContacts);
+    const technicalSupportContacts = this.healthAuthorityService.healthAuthority.technicalSupports
+      .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
+    this.technicalSupports.next(technicalSupportContacts);
 
     const site = this.siteService.site;
     this.isCompleted = site?.completed;

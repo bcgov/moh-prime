@@ -72,9 +72,9 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
       throw new Error('No health authority site ID was provided');
     }
 
-    // const administrators = this.healthAuthorityService.healthAuthority.pharmanetAdministrators
-    //   .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
-    // this.pharmanetAdministrators.next(administrators);
+    const administrators = this.healthAuthorityService.healthAuthority.pharmanetAdministrators
+      .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
+    this.pharmanetAdministrators.next(administrators);
 
     const site = this.healthAuthoritySiteService.site;
     this.isCompleted = site?.completed;
