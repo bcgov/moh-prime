@@ -219,13 +219,13 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId)
         {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            {
-                return NotFound($"Health authority site not found with id {siteId}");
-            }
             if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
             {
-                return NotFound($"No editable health authority site found with site id {siteId}");
+                return NotFound($"No editable Health Authority Site found with Id {siteId}");
+            }
+            if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, siteId))
+            {
+                return Conflict("Cannot submit Site, one or more selections dependant on the Health Authority are invalid.");
             }
 
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);

@@ -12,6 +12,7 @@ using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthoritySites;
+using Prime.ViewModels.HealthAuthoritySites.Internal;
 
 namespace Prime.Services
 {
@@ -164,16 +165,46 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> ValidateSiteUpdateSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
+        public async Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
         {
-            return await _context.HealthAuthorities
+            var orgDto = await _context.HealthAuthorities
                 .AsNoTracking()
                 .Where(ha => ha.Id == healthAuthorityId)
-                .Where(ha => ha.Vendors.Any(x => x.Id == updateModel.HealthAuthorityVendorId))
-                .Where(ha => updateModel.HealthAuthorityCareTypeId == null || ha.CareTypes.Any(x => x.Id == updateModel.HealthAuthorityCareTypeId))
-                .Where(ha => updateModel.HealthAuthorityPharmanetAdministratorId == null || ha.PharmanetAdministrators.Any(x => x.Id == updateModel.HealthAuthorityPharmanetAdministratorId))
-                .Where(ha => updateModel.HealthAuthorityTechnicalSupportId == null || ha.TechnicalSupports.Any(x => x.Id == updateModel.HealthAuthorityTechnicalSupportId))
-                .AnyAsync();
+                .ProjectTo<HealthAuthoritySelectionDto>(_mapper.ConfigurationProvider)
+                .SingleAsync();
+
+            return ValidateSiteSelectionsInternal(orgDto, _mapper.Map<SiteSelectionDto>(updateModel));
+        }
+
+        public async Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, int healthAuthoritySiteId)
+        {
+            var orgDto = await _context.HealthAuthorities
+                .AsNoTracking()
+                .Where(ha => ha.Id == healthAuthorityId)
+                .ProjectTo<HealthAuthoritySelectionDto>(_mapper.ConfigurationProvider)
+                .SingleAsync();
+
+            var siteDto = await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Where(site => site.Id == healthAuthoritySiteId)
+                .ProjectTo<SiteSelectionDto>(_mapper.ConfigurationProvider)
+                .SingleAsync();
+
+            return ValidateSiteSelectionsInternal(orgDto, siteDto);
+        }
+
+        private static bool ValidateSiteSelectionsInternal(HealthAuthoritySelectionDto org, SiteSelectionDto site)
+        {
+            static bool ValidateIfSpecified(IEnumerable<int> orgValues, int? siteValue)
+            {
+                return siteValue == null
+                    || orgValues.Contains(siteValue.Value);
+            }
+
+            return org.VendorIds.Contains(site.VendorId)
+                && ValidateIfSpecified(org.CareTypeIds, site.CareTypeId)
+                && ValidateIfSpecified(org.PharmanetAdministratorIds, site.PharmanetAdministratorId)
+                && ValidateIfSpecified(org.TechnicalSupportIds, site.TechnicalSupportId);
         }
 
         public async Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId)
