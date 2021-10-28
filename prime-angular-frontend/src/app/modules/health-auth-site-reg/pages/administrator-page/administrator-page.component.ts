@@ -3,18 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 
-import { BehaviorSubject, EMPTY } from 'rxjs';
-import { exhaustMap, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
@@ -36,17 +33,17 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     protected route: ActivatedRoute,
-    protected siteService: HealthAuthoritySiteService,
-    protected formStateService: HealthAuthorityFormStateService,
+    protected healthAuthoritySiteService: HealthAuthoritySiteService,
+    protected healthAuthorityFormStateService: HealthAuthorityFormStateService,
     protected healthAuthorityResource: HealthAuthorityResource,
     private fb: FormBuilder,
+    private healthAuthorityService: HealthAuthorityService,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, siteService, formStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthorityFormStateService, healthAuthorityResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    // TODO revisit passed subject value type
     this.pharmanetAdministrators = new BehaviorSubject<{ id: number, fullName: string }[]>([]);
   }
 
@@ -65,7 +62,7 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
   }
 
   protected createFormInstance(): void {
-    this.formState = this.formStateService.administratorFormState;
+    this.formState = this.healthAuthorityFormStateService.administratorFormState;
   }
 
   protected patchForm(): void {
@@ -75,27 +72,13 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
       throw new Error('No health authority site ID was provided');
     }
 
-    // this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
-    //   .pipe(
-    //     tap(({ pharmanetAdministrators }: HealthAuthority) => {
-    //       const administrators = pharmanetAdministrators
-    //         .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
-    //       this.pharmanetAdministrators.next(administrators);
-    //     }),
-    //     exhaustMap((_: HealthAuthority) =>
-    //       (healthAuthSiteId)
-    //         ? this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
-    //         : EMPTY
-    //     )
-    //   )
-    //   .subscribe(({ healthAuthorityPharmanetAdministratorId, completed }: HealthAuthoritySite) => {
-    //     this.isCompleted = completed;
-    //     this.formState.patchValue({ healthAuthorityPharmanetAdministratorId });
-    //   });
+    // const administrators = this.healthAuthorityService.healthAuthority.pharmanetAdministrators
+    //   .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
+    // this.pharmanetAdministrators.next(administrators);
 
-    const site = this.siteService.site;
+    const site = this.healthAuthoritySiteService.site;
     this.isCompleted = site?.completed;
-    this.formStateService.setForm(site, !this.hasBeenSubmitted);
+    this.healthAuthorityFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
   protected afterSubmitIsSuccessful(): void {

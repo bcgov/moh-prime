@@ -11,11 +11,9 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { BusinessDayHours } from '@lib/models/business-day-hours.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';

@@ -22,9 +22,9 @@
                               [editRoute]="AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES"
                               (route)="onRouteRelative($event)">
           <ng-container *ngIf="healthAuthority?.careTypes.length; else noCareTypes">
-            <app-enrollee-property *ngFor="let careType of healthAuthority.careTypes"
+            <app-enrollee-property *ngFor="let healthAuthorityCareType of healthAuthority.careTypes"
                                    title="Care Type">
-              {{ careType }}
+              {{ healthAuthorityCareType.careType }}
             </app-enrollee-property>
           </ng-container>
 

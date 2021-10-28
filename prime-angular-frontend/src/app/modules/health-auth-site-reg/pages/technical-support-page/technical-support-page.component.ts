@@ -3,18 +3,17 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
-import { exhaustMap, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
@@ -40,13 +39,13 @@ export class TechnicalSupportPageComponent extends AbstractHealthAuthoritySiteRe
     protected formStateService: HealthAuthorityFormStateService,
     protected healthAuthorityResource: HealthAuthorityResource,
     private fb: FormBuilder,
+    private healthAuthorityService: HealthAuthorityService,
     router: Router
   ) {
     super(dialog, formUtilsService, route, siteService, formStateService, healthAuthorityResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    // TODO revisit passed subject value type
     this.technicalSupports = new BehaviorSubject<{ id: number, fullName: string }[]>([]);
   }
 
@@ -75,23 +74,9 @@ export class TechnicalSupportPageComponent extends AbstractHealthAuthoritySiteRe
       throw new Error('No health authority site ID was provided');
     }
 
-    // this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
-    //   .pipe(
-    //     tap(({ technicalSupports }: HealthAuthority) => {
-    //       const technicalSupportContacts = technicalSupports
-    //         .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
-    //       this.technicalSupports.next(technicalSupportContacts);
-    //     }),
-    //     exhaustMap((_: HealthAuthority) =>
-    //       (healthAuthSiteId)
-    //         ? this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
-    //         : EMPTY
-    //     )
-    //   )
-    //   .subscribe(({ healthAuthorityTechnicalSupportId, completed }: HealthAuthoritySite) => {
-    //     this.isCompleted = completed;
-    //     this.formState.patchValue({ healthAuthorityTechnicalSupportId });
-    //   });
+    // const technicalSupportContacts = this.healthAuthorityService.healthAuthority.technicalSupports
+    //   .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
+    // this.technicalSupports.next(technicalSupportContacts);
 
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
