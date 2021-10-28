@@ -53,8 +53,6 @@ namespace Prime.ViewModels
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string DeviceProviderIdentifier { get; set; }
 
-        public bool? IsInsulinPumpProvider { get; set; }
-
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 
         // These properties are set by the backend from the JWT token; we cannot trust these properties from the frontend

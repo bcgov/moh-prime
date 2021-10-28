@@ -67,8 +67,6 @@ namespace Prime.Models
 
         public string DeviceProviderIdentifier { get; set; }
 
-        public bool? IsInsulinPumpProvider { get; set; }
-
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 
         public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }

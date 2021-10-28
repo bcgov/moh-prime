@@ -17,7 +17,7 @@ namespace Prime.Configuration.Database
                     new StatusReason { Code = (int)StatusReasonType.BirthdateDiscrepancy,         Name = "Birthdate discrepancy in PharmaNet practitioner table"        },
                     new StatusReason { Code = (int)StatusReasonType.NameDiscrepancy,              Name = "Name discrepancy in PharmaNet practitioner table"             },
                     new StatusReason { Code = (int)StatusReasonType.Practicing,                   Name = "Listed as Non-Practicing in PharmaNet practitioner table"     },
-                    new StatusReason { Code = (int)StatusReasonType.PumpProvider,                 Name = "Insulin Pump Provider"                                        },
+                    new StatusReason { Code = (int)StatusReasonType.DeviceProvider,               Name = "Device Provider"                                              },
                     new StatusReason { Code = (int)StatusReasonType.LicenceClass,                 Name = "Licence Class requires manual adjudication"                   },
                     new StatusReason { Code = (int)StatusReasonType.SelfDeclaration,              Name = "Answered one or more Self Declaration questions \"Yes\""      },
                     new StatusReason { Code = (int)StatusReasonType.Address,                      Name = "Contact Address or Identity Address not in British Columbia"  },
@@ -31,6 +31,8 @@ namespace Prime.Configuration.Database
                     new StatusReason { Code = (int)StatusReasonType.PaperEnrolmentMismatch,       Name = "PRIME enrolment does not match paper enrollee record"         },
                     new StatusReason { Code = (int)StatusReasonType.PossiblePaperEnrolmentMatch,  Name = "Possible match with paper enrolment"                          },
                     new StatusReason { Code = (int)StatusReasonType.UnableToLinkToPaperEnrolment, Name = "Unable to link enrollee to paper enrolment"                   },
+                    new StatusReason { Code = (int)StatusReasonType.DeviceProviderNotFound,       Name = "Device Provider ID number not found in PharmaNet."            },
+
                 };
             }
         }

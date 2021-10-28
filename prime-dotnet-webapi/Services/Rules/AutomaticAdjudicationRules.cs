@@ -138,6 +138,28 @@ namespace Prime.Services.Rules
                 }
             }
 
+            // If enrollee choses device provider, check device provider ID against PharmaNet
+            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider))
+            {
+                var deviceProviderIdentifier = enrollee.DeviceProviderIdentifier;
+                var deviceProviderPrefix = "D6";
+                PharmanetCollegeRecord record = null;
+
+                try
+                {
+                    record = await _collegeLicenceClient.GetCollegeRecordAsync(deviceProviderPrefix, deviceProviderIdentifier);
+                }
+                catch (PharmanetCollegeApiException)
+                {
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, deviceProviderPrefix, deviceProviderIdentifier, "An error occurred calling the Pharmanet API.");
+                }
+                if (record == null)
+                {
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProviderNotFound, deviceProviderIdentifier);
+                }
+
+            }
+
             return passed;
         }
     }
@@ -148,6 +170,7 @@ namespace Prime.Services.Rules
         {
             if (enrollee.HasCareSetting(CareSettingType.DeviceProvider))
             {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProvider);
                 return Task.FromResult(false);
             }
 

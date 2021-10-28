@@ -57,9 +57,7 @@ namespace Prime.ViewModels
 
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
-        public string DeviceProviderNumber { get; set; }
-
-        public bool? IsInsulinPumpProvider { get; set; }
+        public string DeviceProviderIdentifier { get; set; }
 
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 

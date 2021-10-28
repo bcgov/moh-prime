@@ -9,7 +9,7 @@ namespace Prime.Models
         NameDiscrepancy = 5,
         BirthdateDiscrepancy = 6,
         Practicing = 7,
-        PumpProvider = 8,
+        DeviceProvider = 8,
         LicenceClass = 9,
         SelfDeclaration = 10,
         Address = 11,
@@ -22,6 +22,7 @@ namespace Prime.Models
         PaperEnrollee = 18,
         PaperEnrolmentMismatch = 19,
         PossiblePaperEnrolmentMatch = 20,
-        UnableToLinkToPaperEnrolment = 21
+        UnableToLinkToPaperEnrolment = 21,
+        DeviceProviderNotFound = 22
     }
 }
