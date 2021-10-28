@@ -201,10 +201,10 @@ namespace Prime.Services
                     || orgValues.Contains(siteValue.Value);
             }
 
-            return org.VendorIds.Contains(site.VendorId)
-                && ValidateIfSpecified(org.CareTypeIds, site.CareTypeId)
-                && ValidateIfSpecified(org.PharmanetAdministratorIds, site.PharmanetAdministratorId)
-                && ValidateIfSpecified(org.TechnicalSupportIds, site.TechnicalSupportId);
+            return org.VendorIds.Contains(site.HealthAuthorityVendorId)
+                && ValidateIfSpecified(org.CareTypeIds, site.HealthAuthorityCareTypeId)
+                && ValidateIfSpecified(org.PharmanetAdministratorIds, site.HealthAuthorityPharmanetAdministratorId)
+                && ValidateIfSpecified(org.TechnicalSupportIds, site.HealthAuthorityTechnicalSupportId);
         }
 
         public async Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId)

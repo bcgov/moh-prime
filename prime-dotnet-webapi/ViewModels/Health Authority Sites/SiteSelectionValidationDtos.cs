@@ -13,9 +13,9 @@ namespace Prime.ViewModels.HealthAuthoritySites.Internal
 
     public class SiteSelectionDto
     {
-        public int VendorId { get; set; }
-        public int? CareTypeId { get; set; }
-        public int? PharmanetAdministratorId { get; set; }
-        public int? TechnicalSupportId { get; set; }
+        public int HealthAuthorityVendorId { get; set; }
+        public int? HealthAuthorityCareTypeId { get; set; }
+        public int? HealthAuthorityPharmanetAdministratorId { get; set; }
+        public int? HealthAuthorityTechnicalSupportId { get; set; }
     }
 }
