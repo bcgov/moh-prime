@@ -43,7 +43,7 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
   public buildForm(): void {
     this.formInstance = this.fb.group({
       siteName: ['', [Validators.required]],
-      pec: [null, [Validators.required]],
+      pec: [null, []],
       securityGroupCode: [null, [Validators.required]]
     });
   }
