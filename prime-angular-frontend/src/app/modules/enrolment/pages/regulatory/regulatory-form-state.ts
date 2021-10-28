@@ -89,7 +89,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> 
       licenseNumber: [null, []],
       renewalDate: [null, []],
       practiceCode: [null, []],
-      practitionerId: [null, []],
+      practitionerId: [null, []]
     });
   }
 

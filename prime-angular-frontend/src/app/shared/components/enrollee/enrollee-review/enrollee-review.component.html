@@ -119,6 +119,7 @@
                            [makeBold]="true">
       {{ careSetting.careSettingCode | configCode: 'careSettings' }}
     </app-enrollee-property>
+
   </ng-container>
 
   <app-enrollee-property *ngIf="!hasCareSetting"
@@ -128,8 +129,6 @@
   </app-enrollee-property>
 
 </app-page-section>
-
-
 
 <app-page-section *ngIf="healthAuthorities?.length">
 
@@ -166,15 +165,12 @@
     </button>
   </app-page-subheader>
 
-
   <app-enrollee-property title="Device Provider ID"
                          [makeBold]="true">
     {{ enrolment?.deviceProviderIdentifier }}
   </app-enrollee-property>
 
-
 </app-page-section>
-
 
 <app-page-section>
 
@@ -227,8 +223,6 @@
   </app-enrollee-property>
 
 </app-page-section>
-
-
 
 <app-page-section>
   <ng-container *ngIf="enrolment.oboSites?.length || enrolment.jobs?.length || enrolmentErrors?.certificateOrOboSite;">
