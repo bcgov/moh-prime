@@ -22,7 +22,7 @@
             <mat-label>Health authority care type</mat-label>
             <mat-select [formControl]="formState.healthAuthorityCareTypeId">
               <mat-option *ngFor="let healthAuthorityCareType of healthAuthorityCareTypes"
-                          [value]="healthAuthorityCareType">
+                          [value]="healthAuthorityCareType.id">
                 {{ healthAuthorityCareType.careType }}
               </mat-option>
             </mat-select>

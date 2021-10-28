@@ -64,9 +64,9 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
   protected patchForm(): void {
     const healthAuthId = +this.route.snapshot.params.haid;
     const healthAuthSiteId = +this.route.snapshot.params.sid;
-    // if (!healthAuthId || !healthAuthSiteId) {
-    //   throw new Error('No health authority site ID was provided');
-    // }
+    if (!healthAuthId || !healthAuthSiteId) {
+      throw new Error('No health authority site ID was provided');
+    }
 
     const site = this.siteService.site;
     this.healthAuthorityCareTypes = this.route.snapshot.data.healthAuthority?.careTypes ?? [];

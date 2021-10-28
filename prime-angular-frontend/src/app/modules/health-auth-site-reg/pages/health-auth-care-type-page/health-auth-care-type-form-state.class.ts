@@ -1,8 +1,8 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
+import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
 
 export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCareTypeForm> {
   public constructor(
@@ -23,7 +23,11 @@ export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCar
       return;
     }
 
-    return this.formInstance.getRawValue();
+    const { healthAuthorityCareTypeId } = this.formInstance.getRawValue();
+    const healthAuthorityCareType = this.healthAuthorityService.healthAuthority.careTypes
+      .find(hact => hact.id === healthAuthorityCareTypeId);
+
+    return { healthAuthorityCareType };
   }
 
   public patchValue(model: HealthAuthCareTypeForm): void {

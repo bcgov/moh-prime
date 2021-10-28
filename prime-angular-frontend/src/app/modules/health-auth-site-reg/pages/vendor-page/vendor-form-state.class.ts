@@ -2,13 +2,13 @@ import { FormBuilder, FormControl } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-
+import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { VendorForm } from './vendor-form.model';
 
 export class VendorFormState extends AbstractFormState<VendorForm> {
   public constructor(
     private fb: FormBuilder,
-    private healthAuthorityService
+    private healthAuthorityService: HealthAuthorityService
   ) {
     super();
 
@@ -23,6 +23,7 @@ export class VendorFormState extends AbstractFormState<VendorForm> {
     if (!this.formInstance) {
       return;
     }
+
     const { healthAuthorityVendorId } = this.formInstance.getRawValue();
     const healthAuthorityVendor = this.healthAuthorityService.healthAuthority.vendors
       .find(hav => hav.id === healthAuthorityVendorId);
