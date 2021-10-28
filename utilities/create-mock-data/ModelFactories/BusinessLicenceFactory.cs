@@ -11,7 +11,7 @@ namespace PrimeTests.ModelFactories
         {
 //            this.SetBaseRules();
 
-            RuleFor(x => x.Id, f => IdCounter++);
+//            RuleFor(x => x.Id, f => IdCounter++);
             RuleFor(x => x.Site, f => owner);
             // TODO: What dates are generated?  Have logic related to Site SubmittedDate?
             RuleFor(x => x.UploadedDate, f => f.Date.Past(1));
