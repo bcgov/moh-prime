@@ -24,7 +24,7 @@ namespace PrimeTests.ModelFactories
 
             RuleFor(x => x.Id, f => IdCounter.Id++);
             RuleFor(x => x.DocumentGuid, f => f.Random.Guid());
-            RuleFor(x => x.Filename, f => f.Random.Word());
+            RuleFor(x => x.Filename, f => f.System.FileName());
             // TODO: add additional logic?
             RuleFor(x => x.UploadedDate, f => f.Date.Past(1));
         }
