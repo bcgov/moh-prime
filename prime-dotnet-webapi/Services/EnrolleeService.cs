@@ -104,12 +104,14 @@ namespace Prime.Services
                     .Id
                 );
 
-            return await _context.Enrollees
+            var dto = await _context.Enrollees
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
-                .ProjectTo<EnrolleeViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .ProjectTo<EnrolleeDTO>(_mapper.ConfigurationProvider, new { newestAgreementIds })
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
+
+            return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)

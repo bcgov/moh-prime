@@ -25,13 +25,15 @@ namespace Prime.ViewModels.Profiles
                 ))
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true));
 
-            CreateMap<Enrollee, EnrolleeViewModel>()
+            CreateMap<Enrollee, EnrolleeDTO>()
                 .ForMember(dest => dest.RequiresConfirmation, opt => opt.MapFrom(src =>
                     !src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed
                     && src.PreviousStatus.StatusCode == (int)StatusType.RequiresToa
                 ))
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true))
                 .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(id => id == src.CurrentAgreementId)));
+
+            CreateMap<EnrolleeDTO, EnrolleeViewModel>();
 
             CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
             CreateMap<EnrolleeAbsence, EnrolleeAbsenceViewModel>();
