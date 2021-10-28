@@ -169,7 +169,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"No Editable Health Authority Site found with id {siteId}");
             }
-            if (!await _healthAuthorityService.PerformSiteValidationBeforeUpdate(healthAuthorityId, updateModel))
+            if (!await _healthAuthorityService.ValidateSiteUpdateSelectionsAsync(healthAuthorityId, updateModel))
             {
                 return BadRequest();
             }

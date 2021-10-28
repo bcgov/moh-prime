@@ -164,7 +164,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> PerformSiteValidationBeforeUpdate(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
+        public async Task<bool> ValidateSiteUpdateSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
         {
             return await _context.HealthAuthorities
                 .AsNoTracking()
