@@ -18,6 +18,15 @@ import { AdministratorFormState } from '@health-auth/pages/administrator-page/ad
 import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-page/technical-support-form-state.class';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 
+/**
+ * @description
+ * Manages the state of registering a site across the
+ * entire workflow.
+ *
+ * NOTE: Must apply HealthAuthorityResolver to routable
+ * views that consume the FormStateService, otherwise
+ * HealthAuthorityService will be null.
+ */
 @Injectable({
   providedIn: 'root'
 })

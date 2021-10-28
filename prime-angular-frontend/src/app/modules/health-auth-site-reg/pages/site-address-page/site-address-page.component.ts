@@ -79,7 +79,7 @@ export class SiteAddressPageComponent extends AbstractHealthAuthoritySiteRegistr
 
     const site = this.siteService.site;
 
-    if (Address.isNotEmpty(site.physicalAddress)) {
+    if (Address.isNotEmpty(site.physicalAddress, ['countryCode', 'provinceCode'])) {
       this.showAddressFields = true;
     }
 
