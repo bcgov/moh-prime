@@ -8,8 +8,8 @@
 @section Title { Site Registration Review }
 
 @section Theme {
-  @await Html.PartialAsync("~/Views/Partials/_BootstrapTheme.cshtml")
-  @await Html.PartialAsync("~/Views/Partials/_FontTheme.cshtml")
+@await Html.PartialAsync("~/Views/Partials/_BootstrapTheme.cshtml")
+@await Html.PartialAsync("~/Views/Partials/_FontTheme.cshtml")
 }
 
 <h1 class="mb-4">SITE REGISTRATION REVIEW</h1>
@@ -29,6 +29,11 @@
 <div class="ml-2 mb-2">
   <h5>Doing Business As</h5>
   <span class="ml-2">@(Model.OrganizationDoingBusinessAs ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Organization Reference ID</h5>
+  <span class="ml-2">@(Model.OrganizationReferenceId)</span>
 </div>
 
 <h2 class="mb-3">Site Information</h2>
@@ -77,7 +82,8 @@
 
 <h2 class="mb-3">Hours of Operation</h2>
 
-@foreach (var businessHour in Model.BusinessHours) {
+@foreach (var businessHour in Model.BusinessHours)
+{
   <div class="ml-2 mb-2">
     <h5>@businessHour.Day</h5>
     <span class="ml-2">@businessHour.StartTime - @businessHour.EndTime</span>
@@ -86,7 +92,8 @@
 
 <h2 class="mb-3">Vendors</h2>
 
-@foreach (var vendor in Model.Vendors) {
+@foreach (var vendor in Model.Vendors)
+{
 
   <div class="ml-2 mb-2">
     <h5>Vendor Name</h5>
@@ -101,14 +108,14 @@
 
 <h2 class="mb-3">Remote Users</h2>
 
-@foreach(var user in @Model.RemoteUsers )
+@foreach (var user in @Model.RemoteUsers)
 {
   <div class="ml-2 mb-2">
     <h5>Name</h5>
     <span class="ml-2">@user.FullName</span>
   </div>
 
-  @foreach(var certificate in @user.Certifications)
+  @foreach (var certificate in @user.Certifications)
   {
     <div class="ml-2 mb-2">
       <strong>Certification</strong>
