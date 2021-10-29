@@ -90,10 +90,31 @@ namespace Prime.Services
 
             // TODO not like this
             site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
-            site.BusinessHours = _mapper.Map<ICollection<BusinessDay>>(updateModel.BusinessHours);
+            UpdateBusinessHours(site, updateModel);
             site.RemoteUsers = _mapper.Map<ICollection<RemoteUser>>(updateModel.RemoteUsers);
 
             await _context.SaveChangesAsync();
+        }
+
+        private void UpdateBusinessHours(Site current, HealthAuthoritySiteUpdateModel updated)
+        {
+            if (updated?.BusinessHours != null)
+            {
+                if (current.BusinessHours != null)
+                {
+                    foreach (var businessHour in current.BusinessHours)
+                    {
+                        _context.Remove(businessHour);
+                    }
+                }
+
+                foreach (var businessHour in updated.BusinessHours)
+                {
+                    updated.PEC = current.PEC;
+                    _context.Entry(businessHour).State = EntityState.Added;
+                }
+
+            }
         }
 
         public async Task SetSiteCompletedAsync(int siteId)
