@@ -84,6 +84,9 @@ namespace Prime.Services
         public async Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
             var site = await _context.HealthAuthoritySites
+                .Include(site => site.PhysicalAddress)
+                .Include(site => site.BusinessHours)
+                .Include(site => site.RemoteUsers)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             _context.Entry(site).CurrentValues.SetValues(updateModel);
