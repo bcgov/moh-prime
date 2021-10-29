@@ -5,7 +5,6 @@ namespace Prime.ViewModels.HealthAuthoritySites
 {
     public class HealthAuthoritySiteUpdateModel
     {
-        public int SiteId { get; set; }
         public string SiteName { get; set; }
         public string PEC { get; set; }
         public int? SecurityGroupCode { get; set; }
@@ -14,7 +13,6 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public int? HealthAuthorityCareTypeId { get; set; }
         public int? HealthAuthorityPharmanetAdministratorId { get; set; }
         public int? HealthAuthorityTechnicalSupportId { get; set; }
-
         public ICollection<BusinessDayViewModel> BusinessHours { get; set; }
         public ICollection<RemoteUserViewModel> RemoteUsers { get; set; }
     }

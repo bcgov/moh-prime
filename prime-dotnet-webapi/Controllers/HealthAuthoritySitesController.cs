@@ -101,7 +101,6 @@ namespace Prime.Controllers
             var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
 
             return Ok(site);
-            // return Ok(new HealthAuthoritySiteViewModel { Id = siteId });
         }
 
         // GET: api/health-authorities/5/sites/5/hours-operation

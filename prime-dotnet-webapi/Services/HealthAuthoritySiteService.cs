@@ -98,7 +98,7 @@ namespace Prime.Services
 
         private void UpdateBusinessHours(Site current, HealthAuthoritySiteUpdateModel updated)
         {
-            if (updated?.BusinessHours == null)
+            if (updated.BusinessHours == null)
             {
                 return;
             }
@@ -113,7 +113,7 @@ namespace Prime.Services
 
             foreach (var businessHour in updated.BusinessHours)
             {
-                updated.SiteId = current.Id;
+                businessHour.SiteId = current.Id;
                 _context.Entry(businessHour).State = EntityState.Added;
             }
         }
