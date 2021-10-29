@@ -113,7 +113,7 @@ namespace Prime.Services
 
             foreach (var businessHour in updated.BusinessHours)
             {
-                updated.PEC = current.PEC;
+                updated.SiteId = current.Id;
                 _context.Entry(businessHour).State = EntityState.Added;
             }
         }
