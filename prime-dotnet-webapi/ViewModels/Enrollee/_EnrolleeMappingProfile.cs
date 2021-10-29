@@ -53,6 +53,11 @@ namespace Prime.ViewModels.Profiles
             CreateMap<SelfDeclaration, SelfDeclarationViewModel>()
                 .ForMember(dest => dest.Answered, opt => opt.MapFrom(src => true));
             CreateMap<SelfDeclarationDocument, SelfDeclarationDocumentViewModel>();
+
+            CreateMap<EnrolmentStatus, EnrolmentStatusViewModel>();
+            CreateMap<Admin, AdminViewModel>();
+            CreateMap<EnrolmentStatusReference, EnrolmentStatusReferenceViewModel>();
+            CreateMap<EnrolmentStatusReason, EnrolmentStatusReasonViewModel>();
         }
     }
 }

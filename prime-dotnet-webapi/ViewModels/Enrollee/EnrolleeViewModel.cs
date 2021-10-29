@@ -55,9 +55,9 @@ namespace Prime.ViewModels
 
         public bool AlwaysManual { get; set; }
 
-        public EnrolmentStatus CurrentStatus { get; set; }
+        public EnrolmentStatusViewModel CurrentStatus { get; set; }
 
-        public EnrolmentStatus PreviousStatus { get; set; }
+        public EnrolmentStatusViewModel PreviousStatus { get; set; }
 
         public DateTimeOffset? AppliedDate { get; set; }
 
