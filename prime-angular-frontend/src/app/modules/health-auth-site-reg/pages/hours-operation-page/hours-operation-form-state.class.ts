@@ -1,5 +1,6 @@
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
+import { DateUtils } from '@lib/utils/date-utils.class';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { StringUtils } from '@lib/utils/string-utils.class';
@@ -25,19 +26,16 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
       return;
     }
 
-    const businessHours = this.formInstance.getRawValue().businessDays
-      .map((hours: BusinessDayHours, dayOfWeek: number) => {
-        if (hours.startTime && hours.endTime) {
-          hours.startTime = StringUtils.splice(hours.startTime, 2, ':');
-          hours.endTime = StringUtils.splice(hours.endTime, 2, ':');
-        }
-        return new BusinessDay(dayOfWeek, hours.startTime, hours.endTime);
-      })
+    const { businessDays } = this.formInstance.getRawValue();
+
+    const businessHours = businessDays
       .filter((day: BusinessDay) => day.startTime)
-      .map((businessDay: BusinessDay) => {
-        businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
-        businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
-        return businessDay;
+      .map(({ startTime, endTime }: BusinessDayHours, day: number) => {
+        if (startTime && endTime) {
+          startTime = StringUtils.splice(startTime, 2, ':');
+          endTime = StringUtils.splice(endTime, 2, ':');
+        }
+        return BusinessDay.asTimespan({ day, startTime, endTime });
       });
 
     return { businessHours };
@@ -48,32 +46,21 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
       return;
     }
 
-    console.log('BUSINESS_HOURS', businessHours);
+    // Create a business day for each day of the week, and
+    // hydrate with the hours of operation where applicable
+    const businessDays = [...Array(7).keys()]
+      .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
+        let day = businessHours.find(bh => bh.day === dayOfWeek);
+        if (day) {
+          day = BusinessDay.asHoursAndMins(day);
+          day.startTime = day.startTime.replace(':', '');
+          day.endTime = day.endTime.replace(':', '');
+        }
+        days.push(day ?? {});
+        return days;
+      }, []);
 
-    // businessHours = businessHours.map((businessDay: BusinessDay) => {
-    //   businessDay.startTime = BusinessDayHours.fromTimeSpan(businessDay.startTime);
-    //   businessDay.endTime = BusinessDayHours.fromTimeSpan(businessDay.endTime);
-    //   return businessDay;
-    // });
-    //
-    // const businessDays = [...Array(7).keys()]
-    //   .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
-    //     const day = businessHours.find(bh => bh.day === dayOfWeek);
-    //     if (day) {
-    //       day.startTime = day.startTime.replace(':', '');
-    //       day.endTime = day.endTime.replace(':', '');
-    //     }
-    //     days.push(day ?? {});
-    //     return days;
-    //   }, []);
-
-    // this.formInstance.patchValue({ businessDays });
-
-    // this.formState.businessDays.controls.forEach((group: FormGroup) => {
-    //   if (this.is24Hours(group)) {
-    //     this.allowEditingHours(group, false);
-    //   }
-    // });
+    this.formInstance.patchValue({ businessDays });
   }
 
   public buildForm(): void {
@@ -89,18 +76,5 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
       // TODO at least one business hours is required
       // [FormArrayValidators.atLeast(1)]
     });
-  }
-
-  public allowEditingHours(group: FormGroup, isEditable: boolean = true): void {
-    const startTime = group.get('startTime') as FormControl;
-    const endTime = group.get('endTime') as FormControl;
-
-    if (isEditable) {
-      startTime.enable();
-      endTime.enable();
-    } else {
-      startTime.disable();
-      endTime.disable();
-    }
   }
 }

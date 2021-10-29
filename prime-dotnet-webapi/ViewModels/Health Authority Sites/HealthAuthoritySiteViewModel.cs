@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Prime.Models;
+using Prime.ViewModels.Sites;
 
 namespace Prime.ViewModels.HealthAuthoritySites
 {
@@ -14,9 +15,6 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public DateTimeOffset? SubmittedDate { get; set; }
         public DateTimeOffset? ApprovedDate { get; set; }
         public AddressViewModel PhysicalAddress { get; set; }
-        public ICollection<BusinessDay> BusinessHours { get; set; }
-        // public ICollection<RemoteUser> RemoteUsers { get; set; }
-
         public HealthAuthorityVendorViewModel HealthAuthorityVendor { get; set; }
         public HealthAuthorityCareTypeViewModel HealthAuthorityCareType { get; set; }
         public int? HealthAuthorityPharmanetAdministratorId { get; set; }

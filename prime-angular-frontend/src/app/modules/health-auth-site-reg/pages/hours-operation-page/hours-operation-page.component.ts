@@ -93,7 +93,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
       ? group.patchValue(this.business24Hours)
       : group.patchValue(this.businessRegularHours);
 
-    this.formState.allowEditingHours(group, !change.checked);
+    this.allowEditingHours(group, !change.checked);
   }
 
   public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
@@ -140,6 +140,13 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.formStateService.setForm(site, !this.hasBeenSubmitted);
+
+    // TODO move this into form state, and perform individual, but expose for controller
+    this.formState.businessDays.controls.forEach((group: FormGroup) => {
+      if (this.is24Hours(group)) {
+        this.allowEditingHours(group, false);
+      }
+    });
   }
 
   protected checkValidity(form: FormGroup | FormArray): boolean {
@@ -166,5 +173,18 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
 
     this.routeUtils.routeRelativeTo(nextRoutePath);
+  }
+
+  private allowEditingHours(group: FormGroup, isEditable: boolean = true): void {
+    const startTime = group.get('startTime') as FormControl;
+    const endTime = group.get('endTime') as FormControl;
+
+    if (isEditable) {
+      startTime.enable();
+      endTime.enable();
+    } else {
+      startTime.disable();
+      endTime.disable();
+    }
   }
 }

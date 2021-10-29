@@ -264,13 +264,14 @@ export class HealthAuthorityResource {
       );
   }
 
+  // TODO combine get for hours of operations and remote users into this request
   public getHealthAuthoritySiteById(healthAuthId: HealthAuthorityEnum, healthAuthSiteId: number): Observable<HealthAuthoritySite | null> {
     return this.apiResource.get<HealthAuthoritySiteDto>(`health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`)
       .pipe(
         map((response: ApiHttpResponse<HealthAuthoritySiteDto>) => HealthAuthoritySite.toHealthAuthoritySite(response.result)),
         tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
         catchError((error: any) => {
-          if(error.status === 404) {
+          if (error.status === 404) {
             return of(null);
           }
 

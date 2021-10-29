@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { DateUtils } from '@lib/utils/date-utils.class';
 import { RemoteUser } from '@lib/models/remote-user.model';
 import { BusinessDay } from '@lib/models/business-day.model';
 import { BusinessDayHours } from '@lib/models/business-day-hours.model';
@@ -60,8 +61,8 @@ export class SiteResource {
         map((site: Site) => {
           site.businessHours = site.businessHours
             .map((businessDay: BusinessDay) => {
-              businessDay.startTime = BusinessDayHours.fromTimeSpan(businessDay.startTime);
-              businessDay.endTime = BusinessDayHours.fromTimeSpan(businessDay.endTime);
+              businessDay.startTime = DateUtils.fromTimespan(businessDay.startTime);
+              businessDay.endTime = DateUtils.fromTimespan(businessDay.endTime);
               return businessDay;
             });
           return site;
@@ -116,8 +117,8 @@ export class SiteResource {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
-          businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
+          businessDay.startTime = DateUtils.toTimespan(businessDay.startTime);
+          businessDay.endTime = DateUtils.toTimespan(businessDay.endTime);
           return businessDay;
         });
     } else {
@@ -260,8 +261,8 @@ export class SiteResource {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
-          businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
+          businessDay.startTime = DateUtils.toTimespan(businessDay.startTime);
+          businessDay.endTime = DateUtils.toTimespan(businessDay.endTime);
           return businessDay;
         });
     } else {
