@@ -5,6 +5,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
 {
     public class HealthAuthoritySiteUpdateModel
     {
+        public int SiteId { get; set; }
         public string SiteName { get; set; }
         public string PEC { get; set; }
         public int? SecurityGroupCode { get; set; }
