@@ -18,6 +18,7 @@ namespace Prime.Models
             EnrolmentStatuses = new List<EnrolmentStatus>();
             Agreements = new List<Agreement>();
             Submissions = new List<Submission>();
+            Addresses = new List<EnrolleeAddress>();
         }
 
         public const int DISPLAY_OFFSET = 1000;
@@ -124,7 +125,7 @@ namespace Prime.Models
         [Computed]
         public PhysicalAddress PhysicalAddress
         {
-            get => Addresses?
+            get => Addresses
                 .Select(a => a.Address)
                 .OfType<PhysicalAddress>()
                 .SingleOrDefault();
@@ -134,7 +135,7 @@ namespace Prime.Models
         [Computed]
         public MailingAddress MailingAddress
         {
-            get => Addresses?
+            get => Addresses
                 .Select(a => a.Address)
                 .OfType<MailingAddress>()
                 .SingleOrDefault();
@@ -144,7 +145,7 @@ namespace Prime.Models
         [Computed]
         public VerifiedAddress VerifiedAddress
         {
-            get => Addresses?
+            get => Addresses
                 .Select(a => a.Address)
                 .OfType<VerifiedAddress>()
                 .SingleOrDefault();
