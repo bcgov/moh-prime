@@ -98,28 +98,23 @@ namespace Prime.Services
 
         private void UpdateBusinessHours(Site current, HealthAuthoritySiteUpdateModel updated)
         {
-            if (updated?.BusinessHours != null)
+            if (updated?.BusinessHours == null)
             {
-                // Noop
                 return;
             }
-            else
-            {
-                // Remove
-                if (current.BusinessHours != null)
-                {
-                    foreach (var businessHour in current.BusinessHours)
-                    {
-                        _context.Remove(businessHour);
-                    }
-                }
 
-                // Update
-                foreach (var businessHour in updated.BusinessHours)
+            if (current.BusinessHours != null)
+            {
+                foreach (var businessHour in current.BusinessHours)
                 {
-                    updated.PEC = current.PEC;
-                    _context.Entry(businessHour).State = EntityState.Added;
+                    _context.Remove(businessHour);
                 }
+            }
+
+            foreach (var businessHour in updated.BusinessHours)
+            {
+                updated.PEC = current.PEC;
+                _context.Entry(businessHour).State = EntityState.Added;
             }
         }
 
