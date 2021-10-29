@@ -100,6 +100,12 @@ namespace Prime.Services
         {
             if (updated?.BusinessHours != null)
             {
+                // Noop
+                return;
+            }
+            else
+            {
+                // Remove
                 if (current.BusinessHours != null)
                 {
                     foreach (var businessHour in current.BusinessHours)
@@ -108,12 +114,12 @@ namespace Prime.Services
                     }
                 }
 
+                // Update
                 foreach (var businessHour in updated.BusinessHours)
                 {
                     updated.PEC = current.PEC;
                     _context.Entry(businessHour).State = EntityState.Added;
                 }
-
             }
         }
 
