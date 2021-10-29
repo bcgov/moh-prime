@@ -756,6 +756,15 @@ namespace Prime.Services
                 .AllAsync(s => s.PEC != pec);
         }
 
+        public async Task MarkUsersAsNotifiedAsync(IEnumerable<RemoteUser> notifiedUsers)
+        {
+            foreach (var wasNotified in notifiedUsers)
+            {
+                wasNotified.Notified = true;
+            }
+            await _context.SaveChangesAsync();
+        }
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
