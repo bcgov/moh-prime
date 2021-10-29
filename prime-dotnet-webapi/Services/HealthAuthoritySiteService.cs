@@ -88,34 +88,19 @@ namespace Prime.Services
 
             _context.Entry(site).CurrentValues.SetValues(updateModel);
 
-            // TODO not like this
+            _context.Addresses.Remove(site.PhysicalAddress);
             site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
-            UpdateBusinessHours(site, updateModel);
+
+            if (updateModel.BusinessHours != null)
+            {
+                _context.RemoveRange(site.BusinessHours);
+                site.BusinessHours = _mapper.Map<ICollection<BusinessDay>>(updateModel.BusinessHours);
+            }
+
+            // TODO not like this, we need to update in place
             site.RemoteUsers = _mapper.Map<ICollection<RemoteUser>>(updateModel.RemoteUsers);
 
             await _context.SaveChangesAsync();
-        }
-
-        private void UpdateBusinessHours(Site current, HealthAuthoritySiteUpdateModel updated)
-        {
-            if (updated.BusinessHours == null)
-            {
-                return;
-            }
-
-            if (current.BusinessHours != null)
-            {
-                foreach (var businessHour in current.BusinessHours)
-                {
-                    _context.Remove(businessHour);
-                }
-            }
-
-            foreach (var businessHour in updated.BusinessHours)
-            {
-                businessHour.SiteId = current.Id;
-                _context.Entry(businessHour).State = EntityState.Added;
-            }
         }
 
         public async Task SetSiteCompletedAsync(int siteId)
