@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
-import { Observable, of } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { ArrayUtils } from '@lib/utils/array-utils.class';
-import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { Contact } from '@lib/models/contact.model';
+import { RemoteUser } from '@lib/models/remote-user.model';
+import { BusinessDay } from '@lib/models/business-day.model';
 import { PrivacyOffice } from '@lib/models/privacy-office.model';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
@@ -264,11 +265,25 @@ export class HealthAuthorityResource {
       );
   }
 
-  // TODO combine get for hours of operations and remote users into this request
   public getHealthAuthoritySiteById(healthAuthId: HealthAuthorityEnum, healthAuthSiteId: number): Observable<HealthAuthoritySite | null> {
-    return this.apiResource.get<HealthAuthoritySiteDto>(`health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`)
+    const path = `health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`;
+    return forkJoin({
+      healthAuthoritySite: this.apiResource.get<Omit<HealthAuthoritySiteDto, 'businessHours' | 'remoteUsers'>>(`${path}`)
+        .pipe(map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result)),
+      businessHours: this.apiResource.get<BusinessDay[]>(`${path}/hours-operation`)
+        .pipe(map((response: ApiHttpResponse<BusinessDay[]>) => response.result)),
+      remoteUsers: this.apiResource.get<RemoteUser[]>(`${path}/remote-users`)
+        .pipe(map((response: ApiHttpResponse<RemoteUser[]>) => response.result))
+    })
       .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySiteDto>) => HealthAuthoritySite.toHealthAuthoritySite(response.result)),
+        map(({
+               healthAuthoritySite,
+               businessHours,
+               remoteUsers
+             }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[], remoteUsers: RemoteUser[] }) => {
+          return { ...healthAuthoritySite, businessHours, remoteUsers };
+        }),
+        map((healthAuthoritySiteDto: HealthAuthoritySiteDto) => HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto)),
         tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
         catchError((error: any) => {
           if (error.status === 404) {
@@ -282,37 +297,12 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthoritySiteHoursOfOperation(healthAuthId: HealthAuthorityEnum, healthAuthSiteId: number): Observable<HealthAuthoritySite> {
-    return this.apiResource.get<HealthAuthoritySite>(`health-authorities/${healthAuthId}/sites/${healthAuthSiteId}/hours-operation`)
-      .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result),
-        tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE_HOURS_OPERATION', healthAuthoritySite)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteHoursOfOperation error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getHealthAuthoritySiteRemoteUsers(healthAuthId: HealthAuthorityEnum, healthAuthSiteId: number): Observable<HealthAuthoritySite> {
-    return this.apiResource.get<HealthAuthoritySite>(`health-authorities/${healthAuthId}/sites/${healthAuthSiteId}/remote-users`)
-      .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result),
-        tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteRemoteUsers error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
+  // TODO [BREAKING CHANGE] in site-registration-tabs.component.ts L203 onNotify
   public getHealthAuthoritySiteContacts(healthAuthId: HealthAuthorityEnum, healthAuthSiteId: number): Observable<{ label: string, email: string }[]> {
     return this.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
       .pipe(
         map((healthAuthSite: HealthAuthoritySite) => [
-          // TODO what needs to happen and what is available
+          // TODO what needs to happen and what is available or different endpoint
           // ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityPharmanetAdministrator, {
           //   label: 'PharmaNet Administrator',
           //   email: healthAuthSite?.healthAuthorityPharmanetAdministrator?.email

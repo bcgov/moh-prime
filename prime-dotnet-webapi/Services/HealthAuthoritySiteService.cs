@@ -100,8 +100,12 @@ namespace Prime.Services
                 site.BusinessHours = _mapper.Map<ICollection<BusinessDay>>(updateModel.BusinessHours);
             }
 
-            // TODO not like this, we need to update in place
-            site.RemoteUsers = _mapper.Map<ICollection<RemoteUser>>(updateModel.RemoteUsers);
+            // TODO refactor to allow for update and so all remote users are not dropped every time
+            if (updateModel.RemoteUsers != null)
+            {
+                _context.RemoveRange(site.RemoteUsers);
+                site.RemoteUsers = _mapper.Map<ICollection<RemoteUser>>(updateModel.RemoteUsers);
+            }
 
             await _context.SaveChangesAsync();
         }

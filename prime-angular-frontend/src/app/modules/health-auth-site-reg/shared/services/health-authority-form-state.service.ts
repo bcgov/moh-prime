@@ -158,8 +158,7 @@ export class HealthAuthorityFormStateService extends AbstractFormStateService<He
     this.healthAuthCareTypeFormState.patchValue(healthAuthoritySite);
     this.siteAddressFormState.patchValue(healthAuthoritySite);
     this.hoursOperationFormState.patchValue(healthAuthoritySite);
-    // TODO omitted to avoid issues
-    // this.remoteUserFormState.patchValue(healthAuthoritySite);
+    this.remoteUserFormState.patchValue(healthAuthoritySite);
     this.administratorFormState.patchValue(healthAuthoritySite);
     this.technicalSupportFormState.patchValue(healthAuthoritySite);
   }

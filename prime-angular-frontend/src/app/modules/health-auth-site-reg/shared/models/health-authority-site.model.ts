@@ -83,27 +83,6 @@ export class HealthAuthoritySite {
     );
   }
 
-  public asDto(): HealthAuthoritySiteDto {
-    return {
-      healthAuthorityOrganizationId: this.healthAuthorityOrganizationId,
-      healthAuthorityVendor: this.healthAuthorityVendor,
-      healthAuthorityCareType: this.healthAuthorityCareType,
-      siteName: this.siteName,
-      pec: this.pec,
-      securityGroupCode: this.securityGroupCode,
-      physicalAddress: this.physicalAddress,
-      businessHours: this.businessHours,
-      remoteUsers: this.remoteUsers,
-      healthAuthorityPharmanetAdministratorId: this.healthAuthorityPharmanetAdministratorId,
-      healthAuthorityTechnicalSupportId: this.healthAuthorityTechnicalSupportId,
-      completed: this.completed,
-      submittedDate: this.submittedDate,
-      approvedDate: this.approvedDate,
-      status: this.status,
-      id: this.id
-    };
-  }
-
   /**
    * @description
    * Get a reduced version of a HealthAuthoritySite for
@@ -118,10 +97,10 @@ export class HealthAuthoritySite {
       throw Error('Health authority vendor identifier was not provided');
     }
 
-    return Object.freeze({
+    return {
       authorizedUserId,
       healthAuthorityVendorId
-    });
+    };
   }
 
   /**
@@ -130,17 +109,17 @@ export class HealthAuthoritySite {
    * updating an existing site.
    */
   public forUpdate(): HealthAuthoritySiteUpdate {
-    return ObjectUtils.deepFreeze({
+    return {
       siteName: this.siteName,
       pec: this.pec,
       securityGroupCode: this.securityGroupCode,
-      physicalAddress: this.physicalAddress,
-      businessHours: this.businessHours,
-      remoteUsers: this.remoteUsers,
+      physicalAddress: { ...this.physicalAddress },
+      businessHours: [...this.businessHours],
+      remoteUsers: [...this.remoteUsers],
       healthAuthorityPharmanetAdministratorId: this.healthAuthorityPharmanetAdministratorId ?? null,
       healthAuthorityTechnicalSupportId: this.healthAuthorityTechnicalSupportId ?? null,
       healthAuthorityVendorId: this.healthAuthorityVendor?.id ?? null,
       healthAuthorityCareTypeId: this.healthAuthorityCareType?.id ?? null
-    });
+    };
   }
 }
