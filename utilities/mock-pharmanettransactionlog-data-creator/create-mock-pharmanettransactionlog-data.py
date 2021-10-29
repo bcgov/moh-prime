@@ -8,13 +8,14 @@ from faker import Faker
 
 num_logs = int(sys.argv[1])
 output_filename = sys.argv[2]
+starting_tx_id = int(sys.argv[3])
 
 faker = Faker()
 with open(output_filename, mode='w') as data_file:
     data_writer = csv.writer(data_file, delimiter=',', quotechar='"')
     print(f"Started generation of {num_logs} records at {datetime.datetime.now()}")
 
-    tx_id = 1
+    tx_id = starting_tx_id
     for _ in range(num_logs):
         pract_id_format = '#' * random.randint(3, 5)
 
