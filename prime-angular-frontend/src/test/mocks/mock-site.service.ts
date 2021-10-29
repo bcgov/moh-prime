@@ -61,7 +61,8 @@ export class MockSiteService {
               licenseNumber: faker.random.words(1),
               licenseCode: faker.random.number(),
             }
-          ]
+          ],
+          notified: faker.random.boolean()
         }
       ],
       administratorPharmaNetId: faker.random.number(),

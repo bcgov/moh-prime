@@ -90,8 +90,8 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     const group = this.remoteUserFormGroup();
 
     if (remoteUser) {
-      const { id, firstName, lastName, email, remoteUserCertifications } = remoteUser;
-      group.patchValue({ id, firstName, lastName, email });
+      const { id, firstName, lastName, email, remoteUserCertifications, notified } = remoteUser;
+      group.patchValue({ id, firstName, lastName, email, notified });
 
       const certs = group.get('remoteUserCertifications') as FormArray;
       remoteUserCertifications.map((cert: RemoteUserCertification) => {
@@ -138,7 +138,11 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
       remoteUserCertifications: this.fb.array(
         [],
         { validators: FormArrayValidators.atLeast(1) }
-      )
+      ),
+      notified: [
+        false,
+        []
+      ]
     });
   }
 }
