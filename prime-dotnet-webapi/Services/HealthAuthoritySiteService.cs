@@ -91,8 +91,11 @@ namespace Prime.Services
 
             _context.Entry(site).CurrentValues.SetValues(updateModel);
 
-            _context.Addresses.Remove(site.PhysicalAddress);
-            site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
+            if (updateModel.PhysicalAddress != null)
+            {
+                _context.Addresses.Remove(site.PhysicalAddress);
+                site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
+            }
 
             if (updateModel.BusinessHours != null)
             {

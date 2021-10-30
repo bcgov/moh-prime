@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of, pipe, UnaryFunction } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
@@ -268,12 +268,9 @@ export class HealthAuthorityResource {
   public getHealthAuthoritySiteById(healthAuthId: HealthAuthorityEnum, healthAuthSiteId: number): Observable<HealthAuthoritySite | null> {
     const path = `health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`;
     return forkJoin({
-      healthAuthoritySite: this.apiResource.get<Omit<HealthAuthoritySiteDto, 'businessHours' | 'remoteUsers'>>(`${path}`)
-        .pipe(map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result)),
-      businessHours: this.apiResource.get<BusinessDay[]>(`${path}/hours-operation`)
-        .pipe(map((response: ApiHttpResponse<BusinessDay[]>) => response.result)),
-      remoteUsers: this.apiResource.get<RemoteUser[]>(`${path}/remote-users`)
-        .pipe(map((response: ApiHttpResponse<RemoteUser[]>) => response.result))
+      healthAuthoritySite: this.apiResource.get<Omit<HealthAuthoritySiteDto, 'businessHours' | 'remoteUsers'>>(`${path}`, null, null, true),
+      businessHours: this.apiResource.get<BusinessDay[]>(`${path}/hours-operation`, null, null, true),
+      remoteUsers: this.apiResource.get<RemoteUser[]>(`${path}/remote-users`, null, null, true)
     })
       .pipe(
         map(({
@@ -380,4 +377,17 @@ export class HealthAuthorityResource {
         })
       );
   }
+
+  private resultPipe<T>(result404: any): UnaryFunction<Observable<ApiHttpResponse<T>>, Observable<any[] | T>> {
+    return pipe(
+      map((response: ApiHttpResponse<T>) => response.result),
+      catchError((error: any) => {
+        if (error.status === 404) {
+          return of(result404);
+        }
+
+        throw error;
+      })
+    );
+  };
 }

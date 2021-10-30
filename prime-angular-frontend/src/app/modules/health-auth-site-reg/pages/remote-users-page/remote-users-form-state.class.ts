@@ -79,8 +79,6 @@ export class RemoteUsersFormState extends AbstractFormState<RemoteUsersForm> {
         [],
         []
       )
-      // TODO at least one remote users is required
-      // [FormArrayValidators.atLeast(1)]
     });
   }
 

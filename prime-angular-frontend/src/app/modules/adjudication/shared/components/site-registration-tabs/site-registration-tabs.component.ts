@@ -9,7 +9,7 @@ import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { EmailUtils } from '@lib/utils/email-utils.class';
-import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
@@ -221,7 +221,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
       .subscribe((email: string) => EmailUtils.openEmailClient(email));
   }
 
-  public onRoute(routePath: string | (string | number)[]) {
+  public onRoute(routePath: RoutePath) {
     this.routeUtils.routeWithin(routePath);
   }
 

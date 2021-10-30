@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
 /**
@@ -22,7 +21,7 @@ export class HealthAuthoritySiteService {
   }
 
   public set site(healthAuthoritySite: HealthAuthoritySite) {
-    this._site.next(ObjectUtils.deepFreeze(healthAuthoritySite));
+    this._site.next(healthAuthoritySite);
   }
 
   public get site(): HealthAuthoritySite | null {

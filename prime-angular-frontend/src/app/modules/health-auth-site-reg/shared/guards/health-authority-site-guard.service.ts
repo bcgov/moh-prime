@@ -58,20 +58,18 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
     //   }
     // }
 
-    // Otherwise, no authorized user exists
-    // return this.manageNoHealthAuthoritySite(routePath, params);
-
-    // TODO may not be needed
     if (healthAuthoritySite) {
-      // return (healthAuthoritySite.submittedDate)
-      //   ? this.manageSubmittedSiteRouting(routePath, healthAuthoritySite)
-      //   : true;
       return true;
     }
 
-    // Otherwise, prevent the route from resolving
-    return false;
+    // Otherwise, no authorized user exists
+    return this.manageNoHealthAuthoritySite(routePath, params);
   }
+
+  // TODO may not be needed
+  // private manageSubmittedSiteRouting(routePath: string, healthAuthoritySite: HealthAuthoritySite) {
+  //   return this.manageInReviewHealthAuthoritySite(routePath, params);
+  // }
 
   // TODO may not be needed
   // private manageInReviewHealthAuthoritySite(routePath: string, params: Params): boolean {
@@ -96,20 +94,15 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
   //   return true;
   // }
 
-  // TODO may not be needed
-  // private manageNoHealthAuthoritySite(routePath: string, params: Params): boolean {
-  //   return this.navigate(routePath, [
-  //     HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
-  //     params.haid,
-  //     HealthAuthSiteRegRoutes.SITES,
-  //     0
-  //   ]);
-  // }
-
-  // TODO may not be needed
-  // private manageSubmittedSiteRouting(routePath: string, healthAuthoritySite: HealthAuthoritySite) {
-  //   return;
-  // }
+  private manageNoHealthAuthoritySite(routePath: string, params: Params): boolean {
+    return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
+      params.haid,
+      HealthAuthSiteRegRoutes.SITES,
+      0,
+      HealthAuthSiteRegRoutes.VENDOR
+    ]);
+  }
 
   /**
    * @description

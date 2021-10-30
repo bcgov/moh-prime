@@ -24,6 +24,6 @@ export class BusinessDay extends BusinessDayHours {
   // TODO move conversion to the resource so hours and minutes is client model, or
   //      even better move this up to the API and make automapper do the conversion
   public static asTimespan({ day, startTime, endTime }: BusinessDay): BusinessDay {
-    return new BusinessDay(day, DateUtils.toTimespan(startTime), DateUtils.fromTimespan(endTime));
+    return new BusinessDay(day, DateUtils.toTimespan(startTime), DateUtils.toTimespan(endTime));
   };
 }

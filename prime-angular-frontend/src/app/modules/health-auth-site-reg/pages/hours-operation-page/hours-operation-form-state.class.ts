@@ -29,14 +29,16 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
     const { businessDays } = this.formInstance.getRawValue();
 
     const businessHours = businessDays
-      .filter((day: BusinessDay) => day.startTime)
       .map(({ startTime, endTime }: BusinessDayHours, day: number) => {
-        if (startTime && endTime) {
-          startTime = StringUtils.splice(startTime, 2, ':');
-          endTime = StringUtils.splice(endTime, 2, ':');
+        if (!startTime || !endTime) {
+          return null;
         }
+
+        startTime = StringUtils.splice(startTime, 2, ':');
+        endTime = StringUtils.splice(endTime, 2, ':');
         return BusinessDay.asTimespan({ day, startTime, endTime });
-      });
+      })
+      .filter((day: BusinessDay) => day instanceof BusinessDay);
 
     return { businessHours };
   }
