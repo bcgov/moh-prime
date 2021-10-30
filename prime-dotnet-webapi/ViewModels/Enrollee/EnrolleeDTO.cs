@@ -65,8 +65,6 @@ namespace Prime.ViewModels
 
         public AgreementType? AssignedTOAType { get; set; }
 
-        public bool RequiresConfirmation { get; set; }
-
         public bool Confirmed { get; set; }
     }
 }

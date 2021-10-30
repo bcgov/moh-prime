@@ -71,9 +71,9 @@ namespace Prime.ViewModels
 
         public AgreementType? AssignedTOAType { get; set; }
 
-        public bool RequiresConfirmation { get; set; }
-
         public bool Confirmed { get; set; }
+
+        public bool RequiresConfirmation { get => !Confirmed && PreviousStatus?.IsType(StatusType.UnderReview) == true; }
 
         public string CurrentTOAStatus => (StatusType)CurrentStatus.StatusCode switch
         {
