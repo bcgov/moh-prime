@@ -132,6 +132,9 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * @description
    * Deactivation guard hook to allow for specific actions
    * to be performed based on user interaction.
+   *
+   * NOTE: Usage example would be replacing previous form
+   * values on deactivation so updates are discarded.
    */
   protected handleDeactivation(result: boolean): void {
     // Optional can deactivate hook, otherwise NOOP

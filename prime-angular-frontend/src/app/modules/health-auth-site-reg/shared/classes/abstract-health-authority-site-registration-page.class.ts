@@ -37,6 +37,23 @@ export abstract class AbstractHealthAuthoritySiteRegistrationPage<T extends Abst
 
   /**
    * @description
+   * Deactivation guard hook to allow for specific actions
+   * to be performed based on user interaction.
+   *
+   * NOTE: Usage example would be replacing previous form
+   * values on deactivation so updates are discarded.
+   */
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.formState.patchValue(this.healthAuthoritySiteService.site);
+  }
+
+  /**
+   * @description
    * Submission hook for execution.
    */
   protected performSubmission(): Observable<unknown | void> {
