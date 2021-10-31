@@ -9,6 +9,7 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { ToastService } from '@core/services/toast.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
@@ -25,7 +26,8 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private healthAuthoritySiteService: HealthAuthoritySiteService,
-    private healthAuthorityResource: HealthAuthorityResource
+    private healthAuthorityResource: HealthAuthorityResource,
+    private toastService: ToastService
   ) {
     super(authService, logger);
   }
@@ -45,62 +47,79 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
   }
 
   private routeDestination(routePath: string, params: Params, healthAuthoritySite: HealthAuthoritySite): boolean {
-    // TODO may not be needed
-    // switch (healthAuthoritySite?.status) {
-    //   case SiteStatusType.IN_REVIEW: {
-    //     return this.manageInReviewHealthAuthoritySite(routePath, params);
-    //   }
-    //   case SiteStatusType.LOCKED: {
-    //     return this.manageLockedHealthAuthoritySite(routePath, params);
-    //   }
-    //   case SiteStatusType.EDITABLE: {
-    //     return this.manageEditableHealthAuthoritySite(routePath, params);
-    //   }
-    // }
-
-    if (healthAuthoritySite) {
-      return true;
+    switch (healthAuthoritySite?.status) {
+      case SiteStatusType.EDITABLE: {
+        return this.manageEditableHealthAuthoritySite(routePath, params);
+      }
+      case SiteStatusType.IN_REVIEW: {
+        return this.manageInReviewHealthAuthoritySite(routePath, params);
+      }
+      case SiteStatusType.LOCKED: {
+        return this.manageLockedHealthAuthoritySite(routePath, params);
+      }
     }
 
-    // Otherwise, no authorized user exists
+    // Otherwise, no health authority site exists
     return this.manageNoHealthAuthoritySite(routePath, params);
   }
 
-  // TODO may not be needed
-  // private manageSubmittedSiteRouting(routePath: string, healthAuthoritySite: HealthAuthoritySite) {
-  //   return this.manageInReviewHealthAuthoritySite(routePath, params);
-  // }
+  /**
+   * @description
+   * Restrict access to routes permitted when "Editable".
+   */
+  // TODO what is editable in health authority site registration?
+  // TODO editable and !approved vs editable and approved
+  private manageEditableHealthAuthoritySite(routePath: string, params: Params): boolean {
+    return true;
+  }
 
-  // TODO may not be needed
-  // private manageInReviewHealthAuthoritySite(routePath: string, params: Params): boolean {
-  //   return this.navigate(routePath, [
-  //     HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
-  //     params.haid,
-  //     HealthAuthSiteRegRoutes.SITES,
-  //     params.sid,
-  //     HealthAuthSiteRegRoutes.SITE_OVERVIEW
-  //   ]);
-  // }
-
-  // TODO may not be needed
-  // private manageLockedHealthAuthoritySite(routePath: string, params: Params): boolean {
-  //   return this.navigate(routePath, [
-  //     HealthAuthSiteRegRoutes.SITE_MANAGEMENT
-  //   ]);
-  // }
-
-  // TODO may not be needed
-  // private manageEditableHealthAuthoritySite(routePath: string, params: Params): boolean {
-  //   return true;
-  // }
-
-  private manageNoHealthAuthoritySite(routePath: string, params: Params): boolean {
+  /**
+   * @description
+   * Restrict access to routes permitted when "In Review".
+   */
+  private manageInReviewHealthAuthoritySite(routePath: string, params: Params): boolean {
     return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
+      params.haid,
+      HealthAuthSiteRegRoutes.SITES,
+      params.sid,
+      HealthAuthSiteRegRoutes.SITE_OVERVIEW
+    ]);
+  }
+
+  /**
+   * @description
+   * Restrict access to routes permitted when "Locked".
+   */
+  // TODO what does locking a site mean in health authority site registration?
+  private manageLockedHealthAuthoritySite(routePath: string, params: Params): boolean {
+    return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.SITE_MANAGEMENT
+    ]);
+  }
+
+  /**
+   * @description
+   * Restrict access to routes permitted when the site
+   * does not exist.
+   */
+  private manageNoHealthAuthoritySite(routePath: string, params: Params): boolean {
+    const newSiteRoutePath = [
       HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
       params.haid,
       HealthAuthSiteRegRoutes.SITES,
       0,
       HealthAuthSiteRegRoutes.VENDOR
+    ].join('/');
+
+    if (routePath.includes(newSiteRoutePath)) {
+      return true;
+    }
+
+    this.toastService.openErrorToast('Site being accessed does not exist');
+
+    return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.SITE_MANAGEMENT
     ]);
   }
 
