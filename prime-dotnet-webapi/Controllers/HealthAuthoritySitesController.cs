@@ -224,7 +224,7 @@ namespace Prime.Controllers
             }
             if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, siteId))
             {
-                return Conflict("Cannot submit Site, one or more selections dependant on the Health Authority are invalid.");
+                return Conflict("Cannot submit Site, one or more selections dependent on the Health Authority are invalid.");
             }
 
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
