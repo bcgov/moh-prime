@@ -269,7 +269,10 @@ export class HealthAuthorityResource {
     const path = `health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`;
     return forkJoin({
       healthAuthoritySite: this.apiResource.get<Omit<HealthAuthoritySiteDto, 'businessHours' | 'remoteUsers'>>(`${path}`, null, null, true),
-      businessHours: this.apiResource.get<BusinessDay[]>(`${path}/hours-operation`, null, null, true),
+      businessHours: this.apiResource.get<BusinessDay[]>(`${path}/hours-operation`, null, null, true)
+        .pipe(map((businessHours: BusinessDay[]) =>
+          businessHours.map((businessDay: BusinessDay) => BusinessDay.asHoursAndMins(businessDay))
+        )),
       remoteUsers: this.apiResource.get<RemoteUser[]>(`${path}/remote-users`, null, null, true)
     })
       .pipe(
@@ -318,6 +321,8 @@ export class HealthAuthorityResource {
   }
 
   public updateHealthAuthoritySite(healthAuthId: HealthAuthorityEnum, siteId: number, updateModel: HealthAuthoritySiteUpdate): NoContent {
+    updateModel.businessHours = updateModel.businessHours
+      .map((businessDay: BusinessDay) => BusinessDay.asTimespan(businessDay));
     return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}`, updateModel)
       .pipe(
         NoContentResponse,

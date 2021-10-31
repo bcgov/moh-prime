@@ -20,15 +20,9 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
+import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
 import { RemoteUsersFormState } from '../remote-users-page/remote-users-form-state.class';
 
-// TODO refactor into list/form composite component used in health authority organization information
-// TODO copy of the remote users and remote user have been pulled from site registration
-//      and do not fit the current workflow for health authorities. Remote users should
-//      be set up similar to adjudication/pages/health-authorities/vendor-page where
-//      the list and form exist in one page and allow for a single form state to be
-//      shared since form state service is not used
-// TODO test bed has been skipped until the above update occurs
 @Component({
   selector: 'app-remote-user-page',
   templateUrl: './remote-user-page.component.html',
@@ -66,8 +60,8 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private configService: ConfigService,
+    private healthAuthorityFormStateService: HealthAuthorityFormStateService,
     private healthAuthoritySiteService: HealthAuthoritySiteService,
-    // TODO do we need this in health authority?
     // TODO even if we don't move the single method out to @lib/utils and don't use dependencies from other feature modules
     private enrolmentService: EnrolmentService,
     route: ActivatedRoute,
@@ -78,47 +72,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.licenses = this.configService.licenses;
     this.remoteUserIndex = route.snapshot.params.index;
-  }
-
-  // TODO remove this method add to allow routing between pages
-  public onSubmit(): void {
-    this.hasAttemptedSubmission = true;
-
-    if (this.checkValidity()) {
-      this.onSubmitFormIsValid();
-
-      // Set the parent form for updating on submission, but otherwise use the
-      // local form group for all changes prior to submission
-      const parent = this.formState.form;
-      const remoteUsersFormArray = parent.get('remoteUsers') as FormArray;
-
-      if (this.remoteUserIndex !== 'new') {
-        const remoteUserFormGroup = remoteUsersFormArray.at(+this.remoteUserIndex);
-        const certificationFormArray = remoteUserFormGroup.get('remoteUserCertifications') as FormArray;
-
-        // Changes in the amount of certificates requires adjusting the number of
-        // certificates in the parent, which is not handled automatically
-        if (this.remoteUserCertifications.length !== certificationFormArray.length) {
-          certificationFormArray.clear();
-
-          Object.keys(this.remoteUserCertifications.controls)
-            .map((_) => this.formState.remoteUserCertificationFormGroup())
-            .forEach((certification: FormGroup) => certificationFormArray.push(certification));
-        }
-
-        // Replace the updated remote user in the parent form for submission
-        remoteUserFormGroup.reset(this.form.getRawValue());
-      } else {
-        // Store the new remote user in the parent form for submission
-        remoteUsersFormArray.push(this.form);
-      }
-
-      parent.markAsPristine();
-
-      this.afterSubmitIsSuccessful();
-    } else {
-      this.onSubmitFormIsInvalid();
-    }
   }
 
   /**
@@ -173,7 +126,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected createFormInstance(): void {
     // Be aware that this is the parent form state and should only
     // be used for it's API and on submission
-    this.formState = new RemoteUsersFormState(this.fb);
+    this.formState = this.healthAuthorityFormStateService.remoteUserFormState;
   }
 
   protected patchForm(): void {
@@ -182,7 +135,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
     // Attempt to patch if needed on a refresh, otherwise do not forcibly
     // update the form state as it will drop unsaved updates
-    // this.formStateService.setForm(site);
+    this.healthAuthorityFormStateService.setForm(site);
 
     // Extract an existing remoteUser from the parent form for updates, otherwise new
     const remoteUser = this.formState.getRemoteUsers()[+this.remoteUserIndex] ?? null;

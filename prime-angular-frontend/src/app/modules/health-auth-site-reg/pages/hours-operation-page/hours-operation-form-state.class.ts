@@ -1,6 +1,5 @@
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder } from '@angular/forms';
 
-import { DateUtils } from '@lib/utils/date-utils.class';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { StringUtils } from '@lib/utils/string-utils.class';
@@ -36,7 +35,7 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
 
         startTime = StringUtils.splice(startTime, 2, ':');
         endTime = StringUtils.splice(endTime, 2, ':');
-        return BusinessDay.asTimespan({ day, startTime, endTime });
+        return new BusinessDay(day, startTime, endTime);
       })
       .filter((day: BusinessDay) => day instanceof BusinessDay);
 
@@ -54,7 +53,6 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
       .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
         let day = businessHours.find(bh => bh.day === dayOfWeek);
         if (day) {
-          day = BusinessDay.asHoursAndMins(day);
           day.startTime = day.startTime.replace(':', '');
           day.endTime = day.endTime.replace(':', '');
         }

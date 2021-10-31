@@ -77,7 +77,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * Remote user certifications specific to the local form.
    */
   public get remoteUserCertifications(): FormArray {
-    // TODO use formState
     return this.form.get('remoteUserCertifications') as FormArray;
   }
 

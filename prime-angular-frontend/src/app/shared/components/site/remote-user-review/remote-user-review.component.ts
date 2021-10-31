@@ -9,10 +9,27 @@ import { SiteRoutes } from '@registration/site-registration.routes';
   styleUrls: ['./remote-user-review.component.scss']
 })
 export class RemoteUserReviewComponent implements OnInit {
+  /**
+   * @description
+   * List of remote users to be displayed.
+   */
   @Input() public remoteUsers: RemoteUser[];
+  /**
+   * @description
+   * Show the edit remote user(s) redirect icon.
+   */
   @Input() public showEditRedirect: boolean;
+  /**
+   * @description
+   * Route path for editing the remote user(s).
+   */
   @Input() public editRoute: string;
+  /**
+   * @description
+   * Route action emitter.
+   */
   @Output() public route: EventEmitter<string>;
+
   public SiteRoutes = SiteRoutes;
 
   constructor() {

@@ -52,19 +52,19 @@ export class RemoteUsersFormState extends AbstractFormState<RemoteUsersForm> {
       return;
     }
 
-    // const remoteUsersFormArray = this.formInstance.get('remoteUsers') as FormArray;
-    // remoteUsersFormArray.clear(); // Clear out existing indices
-    //
-    // if (remoteUsers?.length) {
-    //   // Omitted from payload, but provided in the form to allow for
-    //   // validation to occur when "Have Remote Users" is toggled
-    //   this.formInstance.get('hasRemoteUsers').patchValue(!!remoteUsers.length);
-    //
-    //   remoteUsers.forEach((remoteUser: RemoteUser) => {
-    //     const group = this.createEmptyRemoteUserFormAndPatch(remoteUser);
-    //     remoteUsersFormArray.push(group);
-    //   });
-    // }
+    const remoteUsersFormArray = this.formInstance.get('remoteUsers') as FormArray;
+    remoteUsersFormArray.clear(); // Clear out existing indices
+
+    if (remoteUsers?.length) {
+      // Omitted from payload, but provided in the form to allow for
+      // validation to occur when "Have Remote Users" is toggled
+      this.formInstance.get('hasRemoteUsers').patchValue(!!remoteUsers.length);
+
+      remoteUsers.forEach((remoteUser: RemoteUser) => {
+        const group = this.createEmptyRemoteUserFormAndPatch(remoteUser);
+        remoteUsersFormArray.push(group);
+      });
+    }
   }
 
   public buildForm(): void {

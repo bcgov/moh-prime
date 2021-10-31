@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { KeyValue } from '@angular/common';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -15,10 +16,10 @@ import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 
-import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
 
 @UntilDestroy()
@@ -34,7 +35,6 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public isCompleted: boolean;
   public hasNoRemoteUserError: boolean;
   public hasNoEmailError: boolean;
-  public submitButtonText: string;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -52,10 +52,9 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.submitButtonText = 'Save and Continue';
   }
 
-  public getRemoteUserProperties(remoteUser: FormGroup) {
+  public getRemoteUserProperties(remoteUser: FormGroup): KeyValue<string, string>[] {
     const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
 
     const collegeLicence = (remoteUserCertifications.length > 1)
@@ -91,10 +90,6 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
-
-    if (this.hasBeenSubmitted) {
-      this.submitButtonText = 'Save and Submit';
-    }
   }
 
   protected createFormInstance() {
@@ -104,12 +99,15 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
+
     // Inform the parent not to patch the form as there are outstanding changes
     // to the remote users that need to be persisted
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
+
     // Remove query param from URL without refreshing
     this.routeUtils.removeQueryParams({ fromRemoteUser: null });
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
+    // TODO is this needed?
     this.formState.form.markAsPristine();
   }
 
