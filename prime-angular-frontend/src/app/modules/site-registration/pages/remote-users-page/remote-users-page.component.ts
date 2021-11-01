@@ -145,28 +145,12 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   protected submissionRequest(): NoContent {
     const payload = this.siteFormStateService.json;
     const site = this.siteService.site;
-    const newRemoteUsers = this.siteFormStateService.remoteUsersPageFormState.json
-      .reduce((newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
-        if (!site.remoteUsers.find((current: RemoteUser) =>
-          current.firstName === updated.firstName &&
-          current.lastName === updated.lastName &&
-          current.email === updated.email
-        )) {
-          newRemoteUsersAcc.push(updated);
-        }
-        return newRemoteUsersAcc;
-      }, []);
 
     return this.siteResource.updateSite(payload)
       .pipe(
         exhaustMap(() =>
           (site.submittedDate)
             ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
-            : of(noop())
-        ),
-        exhaustMap(() =>
-          (site.submittedDate && newRemoteUsers)
-            ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
             : of(noop())
         )
       );

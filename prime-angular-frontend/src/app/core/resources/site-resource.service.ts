@@ -170,18 +170,6 @@ export class SiteResource {
       );
   }
 
-  public sendRemoteUsersEmailUser(siteId: number, newRemoteUsers: RemoteUser[]): NoContent {
-    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-user`, newRemoteUsers)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Remote users email could not be sent');
-          this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmailUser error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
   public sendSiteReviewedEmailUser(siteId: number, note: string): NoContent {
     const payload = { data: note };
     return this.apiResource.post<NoContent>(`sites/${siteId}/site-reviewed-email`, payload)
