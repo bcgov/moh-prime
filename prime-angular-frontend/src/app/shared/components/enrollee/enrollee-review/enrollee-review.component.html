@@ -152,7 +152,7 @@
 
 </app-page-section>
 
-<app-page-section *ngIf="enrolment.deviceProviderIdentifier">
+<app-page-section>
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
@@ -167,7 +167,7 @@
 
   <app-enrollee-property title="Device Provider ID"
                          [makeBold]="true">
-    {{ enrolment?.deviceProviderIdentifier }}
+    {{ enrolment.deviceProviderIdentifier | default }}
   </app-enrollee-property>
 
 </app-page-section>

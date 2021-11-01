@@ -218,7 +218,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.bceidDemographicFormState = new BceidDemographicFormState(this.fb, this.formUtilsService);
     this.bcscDemographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
     this.regulatoryFormState = new RegulatoryFormState(this.fb, this.configService);
-    this.deviceProviderForm = this.buildDeviceProviderForm();
     this.oboSitesForm = this.buildOboSitesForm();
     this.remoteAccessForm = this.buildRemoteAccessForm();
     this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
@@ -252,7 +251,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       selfDeclarations,
       profileCompleted
     } = enrolment;
-    this.patchDeviceProviderForm(enrolment);
     this.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
     this.patchOboSitesForm(oboSites);
     this.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
@@ -423,20 +421,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         }
       }
     });
-  }
-
-  public buildDeviceProviderForm(): FormGroup {
-    return this.fb.group({
-      deviceProviderIdentifier: [null, [
-        FormControlValidators.numeric,
-        FormControlValidators.requiredLength(5)
-      ]],
-      isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
-    });
-  }
-
-  public patchDeviceProviderForm(enrolment) {
-    this.deviceProviderForm.patchValue(enrolment);
   }
 
   public buildRemoteAccessForm(): FormGroup {

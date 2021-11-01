@@ -31,8 +31,6 @@ namespace Prime.Configuration.Database
                     new StatusReason { Code = (int)StatusReasonType.PaperEnrolmentMismatch,       Name = "PRIME enrolment does not match paper enrollee record"         },
                     new StatusReason { Code = (int)StatusReasonType.PossiblePaperEnrolmentMatch,  Name = "Possible match with paper enrolment"                          },
                     new StatusReason { Code = (int)StatusReasonType.UnableToLinkToPaperEnrolment, Name = "Unable to link enrollee to paper enrolment"                   },
-                    new StatusReason { Code = (int)StatusReasonType.DeviceProviderNotFound,       Name = "Device Provider ID number not found in PharmaNet."            },
-
                 };
             }
         }

@@ -9,8 +9,8 @@
         [formGroup]="formState.form"
         novalidate>
 
-    <section class="mb-3"
-             *ngIf="isDeviceProvider">
+    <section *ngIf="isDeviceProvider"
+             class="mb-3">
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
@@ -27,7 +27,8 @@
                    maxlength="5"
                    placeholder="Device Provider ID"
                    formControlName="deviceProviderIdentifier">
-            <mat-error *ngIf="formState.deviceProviderIdentifier.hasError('numeric')">
+            <mat-error
+                       *ngIf="formState.deviceProviderIdentifier.hasError('numeric') || formState.deviceProviderIdentifier.hasError('length')">
               Must be 5 digits in length
             </mat-error>
           </mat-form-field>
@@ -61,12 +62,12 @@
         <div class="col col-sm-10 py-3"
              formArrayName="certifications">
 
-          <ng-container *ngFor="let certificate of certifications.controls; let i = index;"
+          <ng-container *ngFor="let certificate of this.formState.certifications.controls; let i = index;"
                         [formGroupName]="i">
 
             <app-college-certification-form [form]="certificate"
                                             [index]="i"
-                                            [total]="certifications.controls.length"
+                                            [total]="formState.certifications.controls.length"
                                             [selectedColleges]="selectedCollegeCodes"
                                             (remove)="removeCertification($event)">
             </app-college-certification-form>

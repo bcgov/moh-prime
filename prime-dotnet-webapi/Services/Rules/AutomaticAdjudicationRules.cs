@@ -79,15 +79,27 @@ namespace Prime.Services.Rules
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.Certifications == null || !enrollee.Certifications.Any())
+            var certifications = enrollee.Certifications.Where(c => c.License.Validate);
+
+            // If enrollee choses device provider, add device provider as a licence and check it against PharmaNet
+            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider) || enrollee.DeviceProviderIdentifier != null)
             {
-                // No certs to verify
+                certifications = certifications.Append(new Certification
+                {
+                    License = new License { Prefix = "Prefix place holder" },
+                    LicenseNumber = enrollee.DeviceProviderIdentifier
+                });
+            }
+
+            if (!certifications.Any())
+            {
+                // No certificationss to verify
                 return true;
             }
 
             bool passed = true;
 
-            foreach (var cert in enrollee.Certifications.Where(c => c.License.Validate))
+            foreach (var cert in certifications)
             {
                 if (cert.License.PrescriberIdType == PrescriberIdType.Optional && cert.PractitionerId == null)
                 {
@@ -138,28 +150,6 @@ namespace Prime.Services.Rules
                 }
             }
 
-            // If enrollee choses device provider, check device provider ID against PharmaNet
-            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider))
-            {
-                var deviceProviderIdentifier = enrollee.DeviceProviderIdentifier;
-                var deviceProviderPrefix = "Prefix place holder"; // will update after we get the value
-                PharmanetCollegeRecord record = null;
-
-                try
-                {
-                    record = await _collegeLicenceClient.GetCollegeRecordAsync(deviceProviderPrefix, deviceProviderIdentifier);
-                }
-                catch (PharmanetCollegeApiException)
-                {
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, deviceProviderPrefix, deviceProviderIdentifier, "An error occurred calling the Pharmanet API.");
-                }
-                if (record == null)
-                {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProviderNotFound, deviceProviderIdentifier);
-                }
-
-            }
-
             return passed;
         }
     }
@@ -168,7 +158,7 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider))
+            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider) || enrollee.DeviceProviderIdentifier != null)
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProvider);
                 return Task.FromResult(false);
@@ -309,7 +299,6 @@ namespace Prime.Services.Rules
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch);
                 return false;
             }
-
         }
     }
 }

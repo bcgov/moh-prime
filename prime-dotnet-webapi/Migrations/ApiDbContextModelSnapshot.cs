@@ -9952,11 +9952,6 @@ namespace Prime.Migrations
                         {
                             Code = 21,
                             Name = "Unable to link enrollee to paper enrolment"
-                        },
-                        new
-                        {
-                            Code = 22,
-                            Name = "Device Provider ID number not found in PharmaNet."
                         });
                 });
 

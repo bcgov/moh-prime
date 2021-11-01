@@ -4,13 +4,16 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ConfigService } from '@config/config.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
+import { Enrolment } from '@shared/models/enrolment.model';
 
-export interface RegulatoryFormModel {
-  certifications: CollegeCertification[];
-  deviceProviderIdentifier?: string;
-}
+// export interface RegulatoryFormModel {
+//   certifications: CollegeCertification[];
+//   deviceProviderIdentifier?: string;
+// }
 
-export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> {
+export interface EnrolmentRegulatoryForm extends Pick<Enrolment, 'certifications' | 'deviceProviderIdentifier'> { }
+
+export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryForm> {
   public constructor(
     private fb: FormBuilder,
     private configService: ConfigService
@@ -39,7 +42,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> 
     return certifications;
   }
 
-  public get json(): RegulatoryFormModel {
+  public get json(): EnrolmentRegulatoryForm {
     if (!this.formInstance) {
       return;
     }
@@ -54,7 +57,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryFormModel> 
     return { certifications, deviceProviderIdentifier }
   }
 
-  public patchValue(regulatoryFormModel: RegulatoryFormModel): void {
+  public patchValue(regulatoryFormModel: EnrolmentRegulatoryForm): void {
     const { certifications, deviceProviderIdentifier } = regulatoryFormModel;
 
     if (!this.formInstance || !Array.isArray(certifications)) {

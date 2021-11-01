@@ -21,20 +21,10 @@ namespace Prime.Migrations
                 keyValue: 8,
                 column: "Name",
                 value: "Device Provider");
-
-            migrationBuilder.InsertData(
-                table: "StatusReasonLookup",
-                columns: new[] { "Code", "Name" },
-                values: new object[] { 22, "Device Provider ID number not found in PharmaNet." });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "StatusReasonLookup",
-                keyColumn: "Code",
-                keyValue: 22);
-
             migrationBuilder.RenameColumn(
                 name: "DeviceProviderIdentifier",
                 table: "Enrollee",

@@ -63,12 +63,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.cannotRequestRemoteAccess = false;
   }
 
-  public get certifications(): FormArray {
-    return this.formState.certifications as FormArray;
-  }
-
   public get selectedCollegeCodes(): number[] {
-    return this.certifications.value
+    return this.formState.certifications.value
       .map((certification: CollegeCertification) => +certification.collegeCode);
   }
 
@@ -76,9 +72,6 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.formState.addCollegeCertification();
   }
 
-  public get deviceProviderIdentifier(): FormControl {
-    return this.formState.deviceProviderIdentifier;
-  }
   /**
    * @description
    * Removes a certification from the list in response to an
@@ -88,7 +81,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
    * @param index to be removed
    */
   public removeCertification(index: number) {
-    this.certifications.removeAt(index);
+    this.formState.certifications.removeAt(index);
   }
 
   public ngOnInit() {
@@ -113,7 +106,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
     // Always have at least one certification ready for
     // the enrollee to fill out
-    if (!this.certifications.length) {
+    if (!this.formState.certifications.length) {
       this.addEmptyCollegeCertification();
     }
 
@@ -131,8 +124,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       return;
     }
 
+    const enrolment = this.enrolmentService.enrolment;
+
     // Replace previous values on deactivation so updates are discarded
-    this.formState.patchValue({ certifications: this.enrolmentService.enrolment.certifications });
+    this.formState.patchValue({ certifications: enrolment.certifications, deviceProviderIdentifier: enrolment.deviceProviderIdentifier });
   }
 
   protected onSubmitFormIsValid() {
@@ -151,11 +146,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   protected nextRouteAfterSubmit() {
     const certifications = this.formState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value as CareSetting[];
-    const formdeviceProviderIdentifier = this.formState.deviceProviderIdentifier.value;
+    const formDeviceProviderIdentifier = this.formState.deviceProviderIdentifier.value;
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = (!certifications.length || (this.isDeviceProvider && !formdeviceProviderIdentifier))
+      nextRoutePath = (!certifications.length || (this.isDeviceProvider && !formDeviceProviderIdentifier))
         ? EnrolmentRoutes.OBO_SITES
         : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
           ? EnrolmentRoutes.REMOTE_ACCESS
@@ -171,7 +166,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
    * for submission, and allows for an empty list of certifications.
    */
   private removeIncompleteCertifications(noEmptyCert: boolean = false) {
-    this.certifications.controls
+    this.formState.certifications.controls
       .forEach((control: FormGroup, index: number) => {
         // Remove if college code is "None" or the group is invalid
         if (!control.get('collegeCode').value || control.invalid) {
@@ -181,7 +176,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     // Always have a single certification available, and it prevents
     // the page from jumping too much when routing
-    if (!noEmptyCert && !this.certifications.controls.length) {
+    if (!noEmptyCert && !this.formState.certifications.controls.length) {
       this.addEmptyCollegeCertification();
     }
   }
@@ -194,7 +189,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   private removeOboSites() {
     this.removeIncompleteCertifications(true);
 
-    if (this.certifications.length) {
+    if (this.formState.certifications.length) {
       const form = this.enrolmentFormStateService.oboSitesForm;
       const oboSites = form.get('oboSites') as FormArray;
       oboSites.clear();
@@ -219,7 +214,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   private enableDeviceProviderValidator(): void {
     this.formUtilsService.setValidators(this.formState.deviceProviderIdentifier, [
-      FormControlValidators.requiredLength(5)
+      FormControlValidators.requiredLength(5),
+      FormControlValidators.numeric
     ]);
   }
 }

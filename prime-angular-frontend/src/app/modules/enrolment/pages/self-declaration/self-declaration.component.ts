@@ -119,14 +119,14 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
       .get('careSettings').value as CareSetting[];
     const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-    const formdeviceProviderIdentifier = this.enrolmentFormStateService.deviceProviderForm.value;
+    const deviceProviderIdentifier = this.enrolmentFormStateService.deviceProviderForm
 
 
     let backRoutePath = EnrolmentRoutes.OVERVIEW;
     if (!this.isProfileComplete) {
       backRoutePath = (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
         ? EnrolmentRoutes.REMOTE_ACCESS
-        : (!certifications.length || (isDeviceProvider && !formdeviceProviderIdentifier))
+        : (!certifications.length || (isDeviceProvider && !deviceProviderIdentifier))
           ? EnrolmentRoutes.OBO_SITES
           : EnrolmentRoutes.REGULATORY;
     }

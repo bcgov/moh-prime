@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20211028202736_UpdatedDeviceProviderFields")]
+    [Migration("20211101224452_UpdatedDeviceProviderFields")]
     partial class UpdatedDeviceProviderFields
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -9954,11 +9954,6 @@ namespace Prime.Migrations
                         {
                             Code = 21,
                             Name = "Unable to link enrollee to paper enrolment"
-                        },
-                        new
-                        {
-                            Code = 22,
-                            Name = "Device Provider ID number not found in PharmaNet."
                         });
                 });
 
