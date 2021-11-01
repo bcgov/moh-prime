@@ -297,5 +297,14 @@ namespace Prime.Services
                 .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(srn => srn.Id == siteRegistrationNoteId);
         }
+
+        public async Task MarkUsersAsNotifiedAsync(IEnumerable<RemoteUser> notifiedUsers)
+        {
+            foreach (var wasNotified in notifiedUsers)
+                wasNotified.Notified = true;
+            {
+            }
+            await _context.SaveChangesAsync();
+        }
     }
 }

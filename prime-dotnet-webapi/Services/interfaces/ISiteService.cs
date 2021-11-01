@@ -24,5 +24,10 @@ namespace Prime.Services
         Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId);
         Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId);
         Task<IEnumerable<RemoteAccessSearchViewModel>> GetRemoteUserInfoAsync(IEnumerable<CertSearchViewModel> certs);
+
+        /// <summary>
+        /// Save the fact that the given <c>notifiedUsers</c> were notified by email.
+        /// </summary>
+        Task MarkUsersAsNotifiedAsync(IEnumerable<RemoteUser> notifiedUsers);
     }
 }

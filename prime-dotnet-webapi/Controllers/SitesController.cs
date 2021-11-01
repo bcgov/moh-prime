@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -349,7 +350,6 @@ namespace Prime.Controllers
             await _siteService.SubmitRegistrationAsync(siteId);
 
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
-            await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
 
             return Ok(site);
         }
@@ -910,6 +910,9 @@ namespace Prime.Controllers
                 await _emailService.SendSiteApprovedSigningAuthorityAsync(site);
             }
             await _emailService.SendSiteApprovedHIBCAsync(site);
+            var remoteUsersToNotify = site.RemoteUsers.Where(ru => !ru.Notified);
+            await _emailService.SendRemoteUserNotificationsAsync(site, remoteUsersToNotify);
+            await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
 
             return Ok(updatedSite);
         }
