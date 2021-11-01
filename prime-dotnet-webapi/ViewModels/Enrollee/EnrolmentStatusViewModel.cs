@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using Prime.Models;
 
 namespace Prime.ViewModels
@@ -10,6 +11,7 @@ namespace Prime.ViewModels
         public DateTimeOffset StatusDate { get; set; }
         public ICollection<EnrolmentStatusReasonViewModel> EnrolmentStatusReasons { get; set; }
         public EnrolmentStatusReferenceViewModel EnrolmentStatusReference { get; set; }
+
         public bool IsType(StatusType statusType)
         {
             return StatusCode == (int)statusType;
