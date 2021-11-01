@@ -18,6 +18,13 @@ namespace Prime.Migrations
             migrationBuilder.UpdateData(
                 table: "StatusReasonLookup",
                 keyColumn: "Code",
+                keyValue: 4,
+                column: "Name",
+                value: "College License, Practitioner ID, or Device Provider ID not in PharmaNet table");
+
+            migrationBuilder.UpdateData(
+                table: "StatusReasonLookup",
+                keyColumn: "Code",
                 keyValue: 8,
                 column: "Name",
                 value: "Device Provider");
@@ -35,6 +42,13 @@ namespace Prime.Migrations
                 table: "Enrollee",
                 type: "boolean",
                 nullable: true);
+
+            migrationBuilder.UpdateData(
+                table: "StatusReasonLookup",
+                keyColumn: "Code",
+                keyValue: 4,
+                column: "Name",
+                value: "College License or Practitioner ID not in PharmaNet table");
 
             migrationBuilder.UpdateData(
                 table: "StatusReasonLookup",

@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20211101224452_UpdatedDeviceProviderFields")]
+    [Migration("20211101233443_UpdatedDeviceProviderFields")]
     partial class UpdatedDeviceProviderFields
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -9868,7 +9868,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 4,
-                            Name = "College License or Practitioner ID not in PharmaNet table"
+                            Name = "College License, Practitioner ID, or Device Provider ID not in PharmaNet table"
                         },
                         new
                         {

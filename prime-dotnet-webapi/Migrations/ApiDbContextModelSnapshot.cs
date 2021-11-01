@@ -9866,7 +9866,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 4,
-                            Name = "College License or Practitioner ID not in PharmaNet table"
+                            Name = "College License, Practitioner ID, or Device Provider ID not in PharmaNet table"
                         },
                         new
                         {
