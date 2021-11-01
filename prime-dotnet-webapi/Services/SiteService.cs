@@ -550,22 +550,24 @@ namespace Prime.Services
                 predicate.Or(ruc => ruc.CollegeCode == cert.CollegeCode && ruc.LicenseNumber == cert.LicenceNumber);
             }
 
-            return await _context.RemoteUserCertifications
+            var remoteUsers = await _context.RemoteUserCertifications
                 .AsNoTracking()
                 .AsExpandable()
                 .Where(ruc => ruc.RemoteUser.Site.ApprovedDate != null)
                 .Where(predicate)
-                .Select(ruc => ruc.RemoteUser)
-                .Distinct()
-                .Select(ru => new RemoteAccessSearchViewModel
+                .Select(ruc => new RemoteAccessSearchViewModel
                 {
-                    RemoteUserId = ru.Id,
-                    SiteId = ru.SiteId,
-                    SiteDoingBusinessAs = ru.Site.DoingBusinessAs,
-                    SiteAddress = ru.Site.PhysicalAddress,
-                    VendorCodes = ru.Site.SiteVendors.Select(sv => sv.VendorCode)
+                    RemoteUserId = ruc.RemoteUser.Id,
+                    SiteId = ruc.RemoteUser.SiteId,
+                    SiteDoingBusinessAs = ruc.RemoteUser.Site.DoingBusinessAs,
+                    SiteAddress = ruc.RemoteUser.Site.PhysicalAddress,
+                    VendorCodes = ruc.RemoteUser.Site.SiteVendors.Select(sv => sv.VendorCode)
                 })
                 .ToListAsync();
+
+            return remoteUsers
+                .GroupBy(user => user.RemoteUserId)
+                .Select(group => group.First());
         }
 
         public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
@@ -753,6 +755,15 @@ namespace Prime.Services
             return await _context.Sites
                 .AsNoTracking()
                 .AllAsync(s => s.PEC != pec);
+        }
+
+        public async Task MarkUsersAsNotifiedAsync(IEnumerable<RemoteUser> notifiedUsers)
+        {
+            foreach (var wasNotified in notifiedUsers)
+            {
+                wasNotified.Notified = true;
+            }
+            await _context.SaveChangesAsync();
         }
 
         private IQueryable<Site> GetBaseSiteQuery()

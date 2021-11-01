@@ -6,6 +6,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
+using AutoMapper;
+
 using Prime.Models;
 using Prime.ViewModels.Parties;
 
@@ -13,11 +15,16 @@ namespace Prime.Services
 {
     public class PartyService : BaseService, IPartyService
     {
+        private readonly IMapper _mapper;
+
         public PartyService(
             ApiDbContext context,
-            ILogger<PartyService> logger)
+            ILogger<PartyService> logger,
+            IMapper mapper)
             : base(context, logger)
-        { }
+        {
+            _mapper = mapper;
+        }
 
         public async Task<bool> PartyExistsAsync(int partyId, PartyType? withType = null)
         {
@@ -153,12 +160,46 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task UpdateCertificationsAsync(int satId, IEnumerable<PartyCertificationViewModel> viewModels)
+        {
+            var newCerts = _mapper.Map<IEnumerable<PartyCertification>>(viewModels);
+
+            var oldItems = await _context.PartyCertifications
+                .Where(x => x.PartyId == satId)
+                .ToListAsync();
+
+            var itemList = newCerts.ToList();
+            itemList.ForEach(x => x.PartyId = satId);
+
+            _context.PartyCertifications.RemoveRange(oldItems);
+            _context.PartyCertifications.AddRange(itemList);
+
+            await _context.SaveChangesAsync();
+        }
+
+
+        public async Task<PartySubmissionViewModel> CreateSubmissionAsync(int partyId, SubmissionType type, bool approved)
+        {
+            var submission = new PartySubmission
+            {
+                PartyId = partyId,
+                SubmissionType = type,
+                Approved = approved,
+                CreatedDate = DateTimeOffset.Now
+            };
+
+            _context.PartySubmissions.Add(submission);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<PartySubmissionViewModel>(submission);
+        }
+
         private IQueryable<Party> GetBasePartyQuery()
         {
             return _context.Parties
                 .Include(e => e.Addresses)
                     .ThenInclude(pa => pa.Address)
-                .Include(p => p.PartyEnrolments);
+                .Include(p => p.PartyEnrolments)
+                .Include(p => p.PartyCertifications);
         }
     }
 }

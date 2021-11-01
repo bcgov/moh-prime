@@ -85,10 +85,6 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.certifications.removeAt(index);
   }
 
-  public routeBackTo() {
-    this.routeTo(EnrolmentRoutes.CARE_SETTING);
-  }
-
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());
@@ -117,6 +113,15 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       .subscribe((couldRequestRemoteAccess: boolean) =>
         this.cannotRequestRemoteAccess = couldRequestRemoteAccess && !this.canRequestRemoteAccess()
       );
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.formState.patchValue(this.enrolmentService.enrolment.certifications);
   }
 
   protected onSubmitFormIsValid() {

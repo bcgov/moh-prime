@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -356,7 +357,6 @@ namespace Prime.Controllers
             site = await _siteService.SubmitRegistrationAsync(siteId);
 
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
-            await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
 
             return Ok(site);
         }
@@ -912,9 +912,19 @@ namespace Prime.Controllers
             }
 
             var updatedSite = await _siteService.ApproveSite(siteId);
-            await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(site);
-            await _emailService.SendSiteApprovedSigningAuthorityAsync(site);
+            if (site.ActiveBeforeRegistration)
+            {
+                await _emailService.SendSiteActiveBeforeRegistrationAsync(site.Id, site.Organization.SigningAuthority.Email);
+            }
+            else
+            {
+                await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(site);
+                await _emailService.SendSiteApprovedSigningAuthorityAsync(site);
+            }
             await _emailService.SendSiteApprovedHIBCAsync(site);
+            var remoteUsersToNotify = site.RemoteUsers.Where(ru => !ru.Notified);
+            await _emailService.SendRemoteUserNotificationsAsync(site, remoteUsersToNotify);
+            await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
 
             return Ok(updatedSite);
         }

@@ -1,66 +1,73 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Prime</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <UserSecretsId>2144bc8e-373b-4888-a0ca-b0ff7798bd81</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="3.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="5.0.2" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="CompareNETObjects" Version="4.73.0" />
+    <PackageReference Include="DelegateDecompiler.EntityFrameworkCore5" Version="0.29.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.3" />
+    <PackageReference Include="Flurl" Version="3.0.2" />
+    <PackageReference Include="IdentityModel" Version="5.2.0" />
+    <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="5.0.24" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.6" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.11.0-1.final" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="3.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
-    <PackageReference Include="QRCoder" Version="1.3.9" />
-    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.6" />
+    <PackageReference Include="QRCoder" Version="1.4.1" />
+    <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
-    <PackageReference Include="SimpleBase" Version="3.0.0" />
-    <PackageReference Include="SoapCore" Version="1.1.0.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.0.0" />
-    <PackageReference Include="CompareNETObjects" Version="4.73.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.4" />
-    <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.0" />
-    <PackageReference Include="IdentityModel" Version="4.3.0" />
-    <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="3.0.0" />
-    <PackageReference Include="DelegateDecompiler.EntityFrameworkCore" Version="0.28.0" />
-    <PackageReference Include="Flurl" Version="3.0.1" />
-    <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.6.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.3" />
+    <PackageReference Include="SimpleBase" Version="3.0.2" />
+    <PackageReference Include="SoapCore" Version="1.1.0.9" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Wkhtmltopdf.NetCore" Version="5.0.2-preview" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v4.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v5.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v4.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v5.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-practice-org-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\com-pharmacy-org-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\pharmacy-obo-toa-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\device-provider-org-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharm-terms-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharm-terms-v2.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharm-terms-v3.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v2.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v3.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v4.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\ru-access-terms-v5.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v2.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v3.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v4.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\obo-access-terms-v5.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-practice-org-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharmacy-org-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\pharmacy-obo-toa-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\device-provider-org-v1.html" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\wkhtmltopdf\Linux\wkhtmltopdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

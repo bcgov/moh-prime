@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -218,6 +218,9 @@ namespace Prime.Controllers
             var notificationRequired = existingSigningAuthorityId != orgClaim.NewSigningAuthorityId;
 
             await _organizationService.SwitchSigningAuthorityAsync(organizationId, orgClaim.NewSigningAuthorityId);
+            await _organizationService.RemoveUnsignedOrganizationAgreementsAsync(organizationId);
+            await _organizationService.FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(organizationId);
+
             await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
 
             if (notificationRequired)
@@ -328,7 +331,7 @@ namespace Prime.Controllers
             return Ok(agreements);
         }
 
-        // POST: api/Organizations/5/agreements/update
+        // POST: api/Organizations/5/agreements/4
         /// <summary>
         /// Creates a new un-accepted Organization Agreement based on the Care Setting supplied, if a newer version exits
         /// or if the signing authority has changed.
@@ -400,34 +403,6 @@ namespace Prime.Controllers
             var careSettingCodes = await _organizationService.GetCareSettingCodesForPendingTransferAsync(organizationId, organization.SigningAuthorityId);
 
             return Ok(careSettingCodes);
-        }
-
-        // PUT: api/Organizations/5/finalize-transfer
-        /// <summary>
-        /// Clear Pending Transfer Flag on an organization.
-        /// </summary>
-        /// <param name="organizationId"></param>
-        [HttpPut("{organizationId}/finalize-transfer", Name = nameof(FinalizeTransfer))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> FinalizeTransfer(int organizationId)
-        {
-            var organization = await _organizationService.GetOrganizationAsync(organizationId);
-            if (organization == null)
-            {
-                return NotFound($"Organization not found with id {organizationId}");
-            }
-            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
-            {
-                return Forbid();
-            }
-
-            await _organizationService.FinalizeTransferAsync(organizationId);
-
-            return NoContent();
         }
 
         // GET: api/Organizations/5/agreements/7
@@ -525,6 +500,11 @@ namespace Prime.Controllers
             }
 
             await _organizationService.AcceptOrgAgreementAsync(organizationId, agreementId);
+
+            if (organization.PendingTransfer && await _organizationService.IsOrganizationTransferCompleteAsync(organizationId))
+            {
+                await _organizationService.FinalizeTransferAsync(organizationId);
+            }
 
             return NoContent();
         }

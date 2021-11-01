@@ -117,6 +117,9 @@ namespace Prime.Models
 
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
+        [JsonIgnore]
+        public ICollection<EnrolleeAbsence> EnrolleeAbsences { get; set; }
+
         [NotMapped]
         public PhysicalAddress PhysicalAddress
         {
@@ -215,7 +218,7 @@ namespace Prime.Models
         }
 
         /// <summary>
-        /// The ID of the Enrollee's most recently accepted Agreement.
+        /// The Id of the Version of the Enrollee's most recently accepted Agreement.
         /// </summary>
         [NotMapped]
         [Computed]

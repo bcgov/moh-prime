@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.HttpClients;
@@ -38,14 +38,14 @@ namespace Prime.Controllers
             return Ok(lookupEntity);
         }
 
-        // POST /api/lookups/validate-licence
+        // Get /api/lookups/validate-licence
         /// <summary>
         /// For testing college licence validation
         /// </summary>
-        [HttpPost("validate-licence", Name = nameof(LicenceCodeTest))]
+        [HttpGet("validate-licence", Name = nameof(LicenceCodeTest))]
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(typeof(ApiResultResponse<PharmanetCollegeRecord>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> LicenceCodeTest(string collegePrefix, string licenceNumber)
+        public async Task<ActionResult> LicenceCodeTest([FromQuery] string collegePrefix, [FromQuery] string licenceNumber)
         {
             var record = await _collegeLicenceClient.GetCollegeRecordAsync(collegePrefix, licenceNumber);
 

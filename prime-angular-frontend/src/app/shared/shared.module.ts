@@ -111,6 +111,7 @@ import { InfographicComponent } from './components/infographic/infographic.compo
 import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-logger/error-logger.component';
 import { DocumentAttachmentsComponent } from '@shared/components/document-attachments/document-attachments.component';
 import { DocumentAttachmentComponent } from '@shared/components/document-attachment/document-attachment.component';
+import { PartyTypePipe } from '@phsa/shared/pipes/party-type.pipe';
 
 @NgModule({
   declarations: [
@@ -131,6 +132,7 @@ import { DocumentAttachmentComponent } from '@shared/components/document-attachm
     ContainsPipe,
     CareSettingPipe,
     JoinPipe,
+    PartyTypePipe,
     AddressFormComponent,
     ConfirmDialogComponent,
     PageComponent,
@@ -240,6 +242,7 @@ import { DocumentAttachmentComponent } from '@shared/components/document-attachm
     RolePipe,
     InRolePipe,
     ContainsPipe,
+    PartyTypePipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,

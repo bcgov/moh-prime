@@ -112,6 +112,15 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     }
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.formState.patchValue(this.enrolmentService.enrolment.enrollee);
+  }
+
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     const enrollee = this.form.getRawValue();
     // BCeID has to match BCSC for submission, which requires givenNames
@@ -148,7 +157,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private getUser$(): Observable<Enrollee> {
+  protected getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
         map(({ firstName, lastName, email = null }: BceidUser) => {

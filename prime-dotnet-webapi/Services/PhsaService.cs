@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.HttpClients;
 using Prime.Models;
 using Prime.ViewModels.Parties;

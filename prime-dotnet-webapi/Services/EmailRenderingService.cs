@@ -103,6 +103,8 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderRenewalRequiredEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
+
             return new Email
             (
                 from: PrimeEmail,
@@ -179,6 +181,17 @@ namespace Prime.Services.EmailInternal
                 to: newSigningAuthorityEmail,
                 subject: "Organization Claim was Approved",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.OrganizationClaimApprovalNotification, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderSiteActiveBeforeRegistrationEmailAsync(string signingAuthorityEmail, SiteActiveBeforeRegistrationEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: signingAuthorityEmail,
+                subject: "PRIME Site Registration Submission",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteActiveBeforeRegistrationSubmission, viewModel)
             );
         }
     }

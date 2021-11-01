@@ -200,6 +200,15 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     });
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.enrolmentFormStateService.patchOboSitesForm(this.enrolmentService.enrolment.oboSites);
+  }
+
   protected onSubmitFormIsValid() {
     // Enrollees can not have jobs and certifications
     this.removeCollegeCertifications();
@@ -210,8 +219,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
     Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
       const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
-      sitesOfHealthAuthority.controls.forEach((site) =>
-        this.oboSites.push(site));
+      sitesOfHealthAuthority.controls.forEach((site) => this.oboSites.push(site));
     });
     this.removeCareSettingSites();
   }

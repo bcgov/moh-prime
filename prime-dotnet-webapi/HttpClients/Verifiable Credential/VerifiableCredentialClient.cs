@@ -119,7 +119,7 @@ namespace Prime.HttpClients
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.GetAsync($"schemas/created?schema_version={PrimeEnvironment.VerifiableCredentialApi.SchemaVersion}&schema_issuer_did={did}&schema_name={PrimeEnvironment.VerifiableCredentialApi.SchemaName}");
+                response = await _client.GetAsync($"schemas/created?schema_version={PrimeConfiguration.Current.VerifiableCredentialApi.SchemaVersion}&schema_issuer_did={did}&schema_name={PrimeConfiguration.Current.VerifiableCredentialApi.SchemaName}");
             }
             catch (Exception ex)
             {
@@ -150,8 +150,8 @@ namespace Prime.HttpClients
         {
             var schemaRequest = new SchemaRequest
             {
-                SchemaName = PrimeEnvironment.VerifiableCredentialApi.SchemaName,
-                SchemaVersion = PrimeEnvironment.VerifiableCredentialApi.SchemaVersion
+                SchemaName = PrimeConfiguration.Current.VerifiableCredentialApi.SchemaName,
+                SchemaVersion = PrimeConfiguration.Current.VerifiableCredentialApi.SchemaVersion
             };
 
             var properties = JObject.FromObject(new CredentialPayload { });

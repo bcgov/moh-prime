@@ -29,6 +29,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public collegeFilterPredicate: (collegeConfig: CollegeConfig) => boolean;
   @Input() public licenceFilterPredicate: (licenceConfig: LicenseConfig) => boolean;
   @Input() public condensed: boolean;
+  @Input() public defaultOption: boolean;
   @Output() public remove: EventEmitter<number>;
   public isPrescribing: boolean;
   public colleges: CollegeConfig[];
@@ -67,6 +68,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.nurseGroups = this.configService.collegeLicenseGroupings;
     this.minRenewalDate = moment();
     this.condensed = false;
+    this.defaultOption = true;
   }
 
   public get isMobile() {
@@ -145,6 +147,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       : this.resetPractitionerIdStateAndValidators();
   }
 
+  // TODO decouple default and condensed modes in controller and template
   public ngOnInit() {
     if (this.condensed) {
       this.formUtilsService.setValidators(this.collegeCode, [Validators.required]);
@@ -161,7 +164,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       });
 
     if (!this.condensed) {
-      const initialLicenceCode: number | null = +this.licenseCode?.value ?? null;
+      const initialLicenceCode = +this.licenseCode?.value ?? null;
       this.licenseCode.valueChanges
         // Allow for initialization of the licence code when
         // the code already exists

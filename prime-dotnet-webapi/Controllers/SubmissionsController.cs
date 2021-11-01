@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Services;
 using Prime.Models.Api;
@@ -213,6 +213,20 @@ namespace Prime.Controllers
         public async Task<ActionResult> RerunRules(int enrolleeId)
         {
             return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.RerunRules);
+        }
+
+        // POST: api/enrollees/rerun-rules
+        /// <summary>
+        /// Re-runs the automatic adjudication rules for all applicable Enrollees.
+        /// </summary>
+        [HttpPost("rerun-rules", Name = nameof(RerunAutomaticAdjudicationRules))]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> RerunAutomaticAdjudicationRules()
+        {
+            await _submissionService.BulkRerunRulesAsync();
+            return Ok();
         }
 
         private async Task<ActionResult> EnrolleeStatusActionInternal(int enrolleeId, EnrolleeStatusAction action, object additionalParameters = null)

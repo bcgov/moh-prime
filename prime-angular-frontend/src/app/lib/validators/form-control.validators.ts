@@ -1,7 +1,4 @@
-import { AbstractControl, ValidatorFn, Validators, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
-
-import { EMPTY, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, first, map, switchMap } from 'rxjs/operators';
+import { AbstractControl, ValidatorFn, Validators, ValidationErrors } from '@angular/forms';
 
 export class FormControlValidators {
 
@@ -141,6 +138,18 @@ export class FormControlValidators {
     const atLeast = control.value?.length &&
       control.value.length >= minNumber;
     return (atLeast) ? null : { atLeast: true };
+  }
+
+  /**
+   * @description
+   * Checks the form control value starts with a specific string.
+   */
+  public static startsWith(value: string): ValidatorFn {
+    const regexp = new RegExp(`^(${value})`);
+    return (control: AbstractControl) => {
+      const startsWith = (control.valid && regexp.test(control.value));
+      return (startsWith) ? null : { startsWith: true };
+    };
   }
 
   /**

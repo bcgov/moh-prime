@@ -12,6 +12,7 @@ import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
+import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -60,7 +61,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     this.healthAuthorities = configService.healthAuthorities;
   }
 
-  public onPreferredNameChange({ checked }: { checked: boolean }): void {
+  public onPreferredNameChange({ checked }: ToggleContentChange): void {
     if (!this.hasPreferredName) {
       this.formState.form.get('preferredMiddleName').reset();
     }
@@ -68,7 +69,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     this.togglePreferredNameValidators(checked, this.formState.preferredFirstName, this.formState.preferredLastName);
   }
 
-  public onPhysicalAddressChange({ checked }: { checked: boolean }): void {
+  public onPhysicalAddressChange({ checked }: ToggleContentChange): void {
     this.toggleAddressLineValidators(checked, this.formState.physicalAddress);
   }
 
@@ -78,6 +79,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
 
   public ngOnInit(): void {
     this.createFormInstance();
+
     // Ensure that the identity provider user information is loaded
     // prior to initialization of the form override form values, and
     // control the validation management

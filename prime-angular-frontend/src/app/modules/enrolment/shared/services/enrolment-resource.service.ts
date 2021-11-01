@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
@@ -18,11 +18,9 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
+import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +58,43 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be created.');
           this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public checkForMatchingPaperSubmission(dateOfBirth: string): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ dateOfBirth });
+    return this.apiResource.head<boolean>('enrollees/paper-submissions', params)
+      .pipe(
+        map(() => true),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(false);
+          }
+          this.logger.error('[Enrolment] EnrolmentResource::checkForMatchingPaperSubmission error has occurred:  ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createOrUpdateLinkedGpid(enrolleeId: number, paperEnrolleeGpid: string): Observable<NoContent> {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/linked-gpid`, { data: paperEnrolleeGpid })
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::createOrUpdateLinkedGpid error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getLinkedGpid(enrolleeId: number): Observable<string | null> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/linked-gpid`)
+      .pipe(
+        map((response: ApiHttpResponse<string | null>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getLinkedGpid error has occurred: ', error);
           throw error;
         })
       );
@@ -302,6 +337,82 @@ export class EnrolmentResource {
   }
 
   // ---
+  // Enrollee Absesnces
+  // ---
+
+  public createEnrolleeAbsence(enrolleeId: number, startTimestamp: string, endTimestamp: string): Observable<NoContent> {
+    const payload = { startTimestamp, endTimestamp };
+    return this
+      .apiResource.post<NoContent>(`enrollees/${enrolleeId}/absences`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Enrollee Absence has been created.')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee Absence could not be created.');
+          this.logger.error('[Enrolment] EnrolmentResource::createEnrolleeAbsence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public endCurrentEnrolleeAbsence(enrolleeId: number): Observable<NoContent> {
+    return this
+      .apiResource.put<NoContent>(`enrollees/${enrolleeId}/absences/current/end`)
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Enrollee Absence has been ended.')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee Absence could not be ended.');
+          this.logger.error('[Enrolment] EnrolmentResource::endEnrolleeAbsence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteFutureEnrolleeAbsence(enrolleeId: number, absenceId: number): Observable<NoContent> {
+    return this
+      .apiResource.delete<NoContent>(`enrollees/${enrolleeId}/absences/${absenceId}`)
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Enrollee Absence has been removed.')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee Absence could not be removed.');
+          this.logger.error('[Enrolment] EnrolmentResource::deleteFutureEnrolleeAbsence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolleeAbsences(enrolleeId: number): Observable<EnrolleeAbsence[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ includesPast: false });
+    return this.apiResource
+      .get<EnrolleeAbsence[]>(`enrollees/${enrolleeId}/absences`, params)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAbsence[]>) => response.result),
+        tap((absences: EnrolleeAbsence[]) => this.logger.info('ENROLLEE_ABSENCES', absences)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee absences could not be retrieved.');
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAbsences error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getCurrentEnrolleeAbsence(enrolleeId: number): Observable<EnrolleeAbsence> {
+    return this.apiResource
+      .get<EnrolleeAbsence>(`enrollees/${enrolleeId}/absences/current`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAbsence>) => response.result),
+        tap((absence: EnrolleeAbsence) => this.logger.info('CURRENT_ENROLLEE_ABSENCE', absence)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Current enrollee absence could not be retrieved.');
+          this.logger.error('[Enrolment] EnrolmentResource::getCurrentEnrolleeAbsence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  // ---
   // Enrollee and Enrolment Adapters
   // ---
 
@@ -447,9 +558,6 @@ export class EnrolmentResource {
       }
     });
 
-    enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
-    enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
-
     return this.enrolleeAdapter(enrolment);
   }
 
@@ -465,28 +573,5 @@ export class EnrolmentResource {
       enrolleeRemoteUsers: enrolment.enrolleeRemoteUsers,
       ...remainder
     };
-  }
-
-  // ---
-  // Sanitization Helpers
-  // ---
-
-  private removeIncompleteCollegeCertifications(certifications: CollegeCertification[]) {
-    return certifications.filter((certification: CollegeCertification) =>
-      this.collegeCertificationIsIncomplete(certification)
-    );
-  }
-
-  private collegeCertificationIsIncomplete(certification: CollegeCertification): boolean {
-    const allowlist = ['practiceCode', 'practitionerId'];
-
-    return Object.keys(certification)
-      .every((key: string) =>
-        (!allowlist.includes(key) && !certification[key]) ? certification[key] : true
-      );
-  }
-
-  private removeIncompleteCareSettings(careSettings: CareSetting[]) {
-    return careSettings.filter((careSetting: CareSetting) => careSetting.careSettingCode);
   }
 }

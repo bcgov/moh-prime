@@ -12,7 +12,6 @@ namespace Prime.ViewModels.Emails
         {
             EnrolleeName = $"{firstName} {lastName}";
             RenewalDate = renewalDate;
-            PrimeUrl = PrimeEnvironment.FrontendUrl;
         }
     }
 }

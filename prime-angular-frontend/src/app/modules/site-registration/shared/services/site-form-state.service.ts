@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, AbstractControl, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, AbstractControl, Validators } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
@@ -84,7 +84,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { businessLicence, doingBusinessAs, pec } = this.businessLicenceFormState.json;
+    const { businessLicence, doingBusinessAs, pec, activeBeforeRegistration } = this.businessLicenceFormState.json;
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
@@ -117,7 +117,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       // completed (N/A)
       // approvedDate (N/A)
       // submittedDate (N/A)
-      pec
+      pec,
+      activeBeforeRegistration
     } as Site; // Enforced type due to N/A properties
   }
 
@@ -215,10 +216,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence } = site;
+    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence, activeBeforeRegistration } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence }, id);
+    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence, activeBeforeRegistration }, id);
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);

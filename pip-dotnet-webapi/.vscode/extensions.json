@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "coenraads.bracket-pair-colorizer",
+        "editorconfig.editorconfig",
+        "eamodio.gitlens",
+        "ms-vsliveshare.vsliveshare",
+        "ms-vsliveshare.vsliveshare-audio",
+        "ms-vsliveshare.vsliveshare-pack",
+        "ms-dotnettools.csharp",
+        "ms-azuretools.vscode-docker"
+    ]
+}

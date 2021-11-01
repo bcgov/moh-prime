@@ -20,6 +20,24 @@ services:
       - prime-net
 
 ###############################################################################
+###                     PostgreSQL Database Definition                      ###
+###############################################################################
+  pip-postgres:
+    restart: always
+    container_name: pipdb
+    image: postgres:10.6
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - local_pip_postgress_data:/var/lib/postgresql/data
+    networks:
+      - prime-net
+
+###############################################################################
 ###                           MongoDB Definition                            ###
 ###############################################################################
   mongo:
@@ -151,6 +169,9 @@ services:
       - ./prime-dotnet-webapi/:/app
       - prime-dotnet-webapi-bin:/app/bin
       - prime-dotnet-webapi-obj:/app/obj
+      - ${APPDATA}/Microsoft/UserSecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81:/root/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81
+      # Use the following instead if developing on Mac/Linux:
+      # - ${HOME}/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81:/root/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81
     ports:
       - "5000:8080"
       - "5001:5001"
@@ -158,6 +179,62 @@ services:
       - prime-net
     depends_on:
       - postgres
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "echo Waiting for Database...;
+      sleep 15;
+      echo \"Running Database Migrations...\";
+      dotnet ef database update;
+      echo \"Starting API...\";
+      dotnet watch run --urls=http://+:8080"
+    ]
+
+###############################################################################
+##                      PIP API Backend Definition                           ##
+###############################################################################
+  pip-dotnet-webapi:
+    container_name: pip-webapi-backend
+    restart: always
+    image: pip
+    build:
+      context: pip-dotnet-webapi/
+      args:
+        DB_HOST: pipdb
+        # PGPASSWORD: postgres
+        # POSTGRESQL_ADMIN_PASSWORD: postgres
+        # POSTGRESQL_USERNAME: postgres
+        # POSTGRESQL_DATABASE: postgres
+        DB_CONNECTION_STRING: "host=pipdb;port=5432;database=postgres;username=postgres;password=postgres"
+        ASPNETCORE_HTTPS_PORT: "5001"
+        ASPNETCORE_ENVIRONMENT: "Development"
+        ASPNETCORE_URLS: "http://+:8080"
+        DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+    environment:
+      DB_HOST: pipdb
+      # PGPASSWORD: postgres
+      # POSTGRESQL_ADMIN_PASSWORD: postgres
+      # POSTGRESQL_USERNAME: postgres
+      # POSTGRESQL_DATABASE: postgres
+      DB_CONNECTION_STRING: "host=pipdb;port=5432;database=postgres;username=postgres;password=postgres"
+      ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_ENVIRONMENT: "Developent"
+      ASPNETCORE_URLS: "http://+:8080"
+      DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+    volumes:
+      - ./pip-dotnet-webapi/:/app
+      - pip-dotnet-webapi-bin:/app/bin
+      - pip-dotnet-webapi-obj:/app/obj
+      - ${APPDATA}/Microsoft/UserSecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81:/root/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81
+      # Use the following instead if developing on Mac/Linux:
+      # - ${HOME}/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81:/root/.microsoft/usersecrets/2144bc8e-373b-4888-a0ca-b0ff7798bd81
+    ports:
+      - "5050:8080"
+      - "5051:5001"
+    networks:
+      - prime-net
+    depends_on:
+      - pip-postgres
     entrypoint: /bin/bash
     command: [
       "-c",
@@ -292,8 +369,11 @@ networks:
 ###############################################################################
 volumes:
   local_postgres_data:
+  local_pip_postgress_data:
   local_mongodb_data:
   db_backup_data:
   wallet:
   prime-dotnet-webapi-bin:
   prime-dotnet-webapi-obj:
+  pip-dotnet-webapi-bin:
+  pip-dotnet-webapi-obj:

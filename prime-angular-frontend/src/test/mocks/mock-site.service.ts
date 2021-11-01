@@ -61,7 +61,8 @@ export class MockSiteService {
               licenseNumber: faker.random.words(1),
               licenseCode: faker.random.number(),
             }
-          ]
+          ],
+          notified: faker.random.boolean()
         }
       ],
       administratorPharmaNetId: faker.random.number(),
@@ -77,7 +78,8 @@ export class MockSiteService {
       adjudicator: null,
       status: SiteStatusType.EDITABLE,
       pec: null,
-      flagged: false
+      flagged: false,
+      activeBeforeRegistration: false
     });
   }
 

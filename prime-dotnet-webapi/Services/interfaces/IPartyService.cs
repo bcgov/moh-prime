@@ -18,5 +18,7 @@ namespace Prime.Services
         Task RemovePartyEnrolmentAsync(int partyId, PartyType partyType);
         Task DeletePartyAsync(int partyId);
         Task<IEnumerable<PartyType>> GetPreApprovedRegistrationsAsync(string firstName, string lastName, string email);
+        Task UpdateCertificationsAsync(int satId, IEnumerable<PartyCertificationViewModel> viewModels);
+        Task<PartySubmissionViewModel> CreateSubmissionAsync(int partyId, SubmissionType type, bool approved);
     }
 }
