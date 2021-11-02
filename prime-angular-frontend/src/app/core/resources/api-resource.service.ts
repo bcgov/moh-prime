@@ -1,7 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, pipe, UnaryFunction } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
@@ -25,11 +26,15 @@ export class ApiResource extends AbstractResource {
   public get<T>(
     path: string,
     params: HttpParams = new HttpParams(),
-    options: { [key: string]: any } = {}
-  ): Observable<ApiHttpResponse<T> | ApiHttpErrorResponse> {
+    options: { [key: string]: any } = {},
+    unwrapResult: boolean = false
+  ): Observable<T | ApiHttpResponse<T> | ApiHttpErrorResponse> {
     return this.http
       .get(`${this.config.apiEndpoint}/${path}`, { params, observe: 'response', ...options })
-      .pipe(this.handleResponse<T>());
+      .pipe(
+        this.handleResponse<T>(),
+        this.unwrapResult<T>(unwrapResult)
+      );
   }
 
   public head<T>(
@@ -46,42 +51,72 @@ export class ApiResource extends AbstractResource {
     path: string,
     body: any = {},
     params: HttpParams = new HttpParams(),
-    options: { [key: string]: any } = {}
-  ): Observable<ApiHttpResponse<T> | ApiHttpErrorResponse> {
+    options: { [key: string]: any } = {},
+    unwrapResult: boolean = false
+  ): Observable<T | ApiHttpResponse<T> | ApiHttpErrorResponse> {
     return this.http
       .post(`${this.config.apiEndpoint}/${path}`, body, { params, observe: 'response', ...options })
-      .pipe(this.handleResponse<T>());
+      .pipe(
+        this.handleResponse<T>(),
+        this.unwrapResult<T>(unwrapResult)
+      );
   }
 
   public put<T>(
     path: string,
     body: any = {},
     params: HttpParams = new HttpParams(),
-    options: { [key: string]: any } = {}
-  ): Observable<ApiHttpResponse<T> | ApiHttpErrorResponse> {
+    options: { [key: string]: any } = {},
+    unwrapResult: boolean = false
+  ): Observable<T | ApiHttpResponse<T> | ApiHttpErrorResponse> {
     return this.http
       .put(`${this.config.apiEndpoint}/${path}`, body, { params, observe: 'response', ...options })
-      .pipe(this.handleResponse<T>());
+      .pipe(
+        this.handleResponse<T>(),
+        this.unwrapResult<T>(unwrapResult)
+      );
   }
 
   public patch<T>(
     path: string,
     body: any = {},
     params: HttpParams = new HttpParams(),
-    options: { [key: string]: any } = {}
-  ): Observable<ApiHttpResponse<T> | ApiHttpErrorResponse> {
+    options: { [key: string]: any } = {},
+    unwrapResult: boolean = false
+  ): Observable<T | ApiHttpResponse<T> | ApiHttpErrorResponse> {
     return this.http
       .patch(`${this.config.apiEndpoint}/${path}`, body, { params, observe: 'response', ...options })
-      .pipe(this.handleResponse<T>());
+      .pipe(
+        this.handleResponse<T>(),
+        this.unwrapResult<T>(unwrapResult)
+      );
   }
 
   public delete<T>(
     path: string,
     params: HttpParams = new HttpParams(),
-    options: { [key: string]: any } = {}
-  ): Observable<ApiHttpResponse<T> | ApiHttpErrorResponse> {
+    options: { [key: string]: any } = {},
+    unwrapResult: boolean = false
+  ): Observable<T | ApiHttpResponse<T> | ApiHttpErrorResponse> {
     return this.http
       .delete(`${this.config.apiEndpoint}/${path}`, { params, observe: 'response', ...options })
-      .pipe(this.handleResponse<T>());
+      .pipe(
+        this.handleResponse<T>(),
+        this.unwrapResult<T>(unwrapResult)
+      );
+  }
+
+  /**
+   * @description
+   * Handles getting the result from the response.
+   */
+  private unwrapResult<T>(unwrapResults: boolean): UnaryFunction<Observable<ApiHttpResponse<T>>, Observable<T | ApiHttpResponse<T>>> {
+    return pipe(
+      map((response: ApiHttpResponse<T>) =>
+        (unwrapResults)
+          ? response.result
+          : response
+      )
+    );
   }
 }

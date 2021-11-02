@@ -2,14 +2,13 @@ import moment, { Moment } from 'moment';
 
 import { Party } from '@lib/models/party.model';
 import { Contact } from '@lib/models/contact.model';
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
+import { RemoteUser } from '@lib/models/remote-user.model';
+import { BusinessDay } from '@lib/models/business-day.model';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { Admin } from '@auth/shared/models/admin.model';
-
 import { Vendor } from './vendor.model';
-import { RemoteUser } from './remote-user.model';
-import { BusinessDay } from './business-day.model';
 import { BusinessLicence } from './business-licence.model';
-import { SiteStatusType } from '../enum/site-status.enum';
 
 export class Site {
   id?: number;

@@ -100,10 +100,10 @@ export class VendorsPageComponent implements OnInit {
       });
 
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
-      .subscribe(({ vendorCodes }: HealthAuthority) =>
-        (vendorCodes?.length)
+      .subscribe(({ vendors }: HealthAuthority) =>
+        (vendors?.length)
           ? this.configService.vendors
-            .filter(v => vendorCodes.includes(v.code))
+            .filter(v => vendors.some(({ vendorCode }) => v.code === vendorCode))
             .map(v => this.addVendor(v))
           : this.addVendor()
       );

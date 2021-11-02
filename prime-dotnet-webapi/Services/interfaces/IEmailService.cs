@@ -1,21 +1,19 @@
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
-using Prime.HttpClients.Mail;
 
 namespace Prime.Services
 {
     public interface IEmailService
     {
-        Task SendBusinessLicenceUploadedAsync(Site site);
+        Task SendBusinessLicenceUploadedAsync(CommunitySite site);
         Task SendProvisionerLinkAsync(IEnumerable<string> recipientEmails, EnrolmentCertificateAccessToken token, int careSettingCode);
         Task SendReminderEmailAsync(int enrolleeId);
-        Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers);
-        Task SendRemoteUsersUpdatedAsync(Site site);
-        Task SendSiteApprovedHIBCAsync(Site site);
-        Task SendSiteApprovedPharmaNetAdministratorAsync(Site site);
-        Task SendSiteApprovedSigningAuthorityAsync(Site site);
+        Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers);
+        Task SendRemoteUsersUpdatedAsync(CommunitySite site);
+        Task SendSiteApprovedHIBCAsync(CommunitySite site);
+        Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site);
+        Task SendSiteApprovedSigningAuthorityAsync(CommunitySite site);
         Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode);
         Task SendHealthAuthoritySiteRegistrationSubmissionDetailsToHIBCAsync(int siteId);
         Task SendSiteReviewedNotificationAsync(int siteId, string note);

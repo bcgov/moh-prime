@@ -35,7 +35,7 @@ export class SiteService {
   }
 
   public get site$(): Observable<Site> {
-    // Allow subscriptions, but make immutable
+    // Allow subscriptions, but make the subject immutable
     return this._site.asObservable();
   }
 }

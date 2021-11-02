@@ -10,6 +10,7 @@ using Prime.Models.Documents;
 using Prime.Services.Razor;
 using Prime.ViewModels.SiteRegistration;
 using Prime.ViewModels.HealthAuthoritySites;
+using Prime.ViewModels.SiteRegistration.ReviewDocument;
 
 namespace Prime.Services.EmailInternal
 {
@@ -97,13 +98,14 @@ namespace Prime.Services.EmailInternal
         private async Task<Pdf> GenerateRegistrationReviewAttachmentAsync(int siteId)
         {
             // TODO use Automapper
-            var model = await _context.Sites
+            var model = await _context.CommunitySites
                 .Where(s => s.Id == siteId)
                 .Select(s => new SiteRegistrationReviewViewModel
                 {
                     OrganizationName = s.Organization.Name,
                     OrganizationRegistrationId = s.Organization.RegistrationId,
                     OrganizationDoingBusinessAs = s.Organization.DoingBusinessAs,
+                    OrganizationReferenceId = s.Organization.DisplayId,
                     SiteName = s.DoingBusinessAs,
                     SiteAddress = s.PhysicalAddress,
                     PEC = s.PEC,
@@ -183,7 +185,7 @@ namespace Prime.Services.EmailInternal
             }
 
             var agreementType = _organizationService.OrgAgreementTypeForSiteSetting(careSetting.Value);
-            var agreementDto = await _context.Sites
+            var agreementDto = await _context.CommunitySites
                 .Where(s => s.Id == siteId)
                 .SelectMany(s => s.Organization.Agreements)
                 .Where(a => a.AgreementVersion.AgreementType == agreementType

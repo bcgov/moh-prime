@@ -6,4 +6,5 @@ export interface RemoteUser {
   lastName: string;
   email: string;
   remoteUserCertifications: RemoteUserCertification[];
+  notified: boolean;
 }

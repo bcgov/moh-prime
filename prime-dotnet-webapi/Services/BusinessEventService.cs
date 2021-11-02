@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Prime.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Prime.Services
 {
@@ -119,6 +121,29 @@ namespace Prime.Services
             }
 
             return businessEvent;
+        }
+
+        public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, string description)
+        {
+            var site = await _context.Sites
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            var partyId = site switch
+            {
+                CommunitySite c => await _context.CommunitySites
+                    .AsNoTracking()
+                    .Where(site => site.Id == siteId)
+                    .Select(site => site.Organization.SigningAuthorityId)
+                    .SingleAsync(),
+                HealthAuthoritySite h => await _context.HealthAuthoritySites
+                    .AsNoTracking()
+                    .Where(site => site.Id == siteId)
+                    .Select(site => site.AuthorizedUser.PartyId)
+                    .SingleAsync(),
+                _ => throw new NotImplementedException($"Unknown Site Type in {nameof(CreateSiteEventAsync)}: {site.GetType()}")
+            };
+
+            return await CreateSiteEventAsync(siteId, partyId, description);
         }
 
         public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int partyId, string description)
