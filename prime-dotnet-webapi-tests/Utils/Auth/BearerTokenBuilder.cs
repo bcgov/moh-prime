@@ -93,11 +93,6 @@ namespace PrimeTests.Utils.Auth
 
         public BearerTokenBuilder WithLifetime(TimeSpan life)
         {
-            if (life == null)
-            {
-                throw new ArgumentException("Lifetime cannot be null", nameof(life));
-            }
-
             _life = life;
 
             return this;
@@ -105,12 +100,7 @@ namespace PrimeTests.Utils.Auth
 
         public BearerTokenBuilder NotBefore(DateTime notBefore)
         {
-            if (notBefore == null)
-            {
-                throw new ArgumentException("Not before cannot be null", nameof(notBefore));
-            }
-
-            _notBefore = notBefore;
+            _notBefore = notBefore!;
 
             return this;
         }
