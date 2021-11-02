@@ -93,7 +93,10 @@ namespace Prime.Services
 
             if (updateModel.PhysicalAddress != null)
             {
-                _context.Addresses.Remove(site.PhysicalAddress);
+                if (site.PhysicalAddress != null)
+                {
+                    _context.Addresses.Remove(site.PhysicalAddress);
+                }
                 site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
             }
 
@@ -103,7 +106,8 @@ namespace Prime.Services
                 site.BusinessHours = _mapper.Map<ICollection<BusinessDay>>(updateModel.BusinessHours);
             }
 
-            // TODO refactor to allow for update and so all remote users are not dropped every time
+            // TODO refactor to allow for updates without orphaning records in EnrolleeRemoteUsers
+            //      for community site registration and health authority site registration
             if (updateModel.RemoteUsers != null)
             {
                 _context.RemoveRange(site.RemoteUsers);
