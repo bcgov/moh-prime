@@ -38,7 +38,7 @@
 
   </ng-container>
 
-  <ng-container *ngFor="let healthAuthoritySite of healthAuthoritySites">
+  <ng-container *ngFor="let healthAuthoritySite of healthAuthoritySites; trackBy: trackBySiteId">
 
     <app-summary-card icon="store"
                       title="Site Information"
@@ -50,7 +50,7 @@
                             { key: 'Vendor', value: healthAuthoritySite.healthAuthorityVendor.vendorCode | configCode : 'vendors' }
                       ]"
                       (action)="viewSiteRemoteUsers(healthAuthority.id, healthAuthoritySite.id)">
-      <ng-container *ngIf="!healthAuthoritySite.submittedDate"
+      <ng-container *ngIf="inComplete(healthAuthoritySite)"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
                       props: {
@@ -61,7 +61,7 @@
                       }
                     }">
       </ng-container>
-      <ng-container *ngIf="isUnderReview(healthAuthoritySite)"
+      <ng-container *ngIf="isInReview(healthAuthoritySite)"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
                       props: {
@@ -70,16 +70,25 @@
                       }
                     }">
       </ng-container>
-      <ng-container *ngIf="isDeclined(healthAuthoritySite)"
+      <ng-container *ngIf="isLocked(healthAuthoritySite)"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
-                      props: { icon: 'not_interested', text: 'Declined' }
+                      props: {
+                        icon: 'not_interested',
+                        text: 'Declined'
+                      }
                     }">
       </ng-container>
-      <ng-container *ngIf="isApproved(healthAuthoritySite)"
+      <ng-container *ngIf="isApproved(healthAuthoritySite) && !requiresRenewal(healthAuthoritySite)"
                     [ngTemplateOutlet]="success_notification"
                     [ngTemplateOutletContext]="{
-                      props: { icon: 'task_alt', text: 'Site Approved' }
+                      props: getApprovedSiteNotificationProperties(healthAuthoritySite)
+                    }">
+      </ng-container>
+      <ng-container *ngIf="isApproved(healthAuthoritySite) && requiresRenewal(healthAuthoritySite)"
+                    [ngTemplateOutlet]="notification"
+                    [ngTemplateOutletContext]="{
+                      props: getRenewalRequiredSiteNotificationProperties(healthAuthoritySite)
                     }">
       </ng-container>
     </app-summary-card>
@@ -141,7 +150,7 @@
         <span>View/Update Site Information</span>
       </button>
       <button mat-menu-item
-              [disabled]="!healthAuthoritySite.completed"
+              [disabled]="!healthAuthoritySite.completed || healthAuthoritySite.status === SiteStatusType.IN_REVIEW"
               (click)="viewSiteRemoteUsers(healthAuthorityId, healthAuthoritySite.id)">
         <span>View/Update Remote Practitioners</span>
       </button>

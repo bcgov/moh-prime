@@ -112,6 +112,7 @@ export class SiteManagementPageComponent implements OnInit {
 
   public getSiteProperties(site: SiteListViewModel): KeyValue<string, string>[] {
     // TODO update API to only provide a single vendor
+    //      initially only as VM change, then API update
     const siteVendorCode = (Array.isArray(site.siteVendors) && site.siteVendors.length)
       ? site.siteVendors[0].vendorCode
       : null;
@@ -165,7 +166,7 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public isLocked(site: SiteListViewModel): boolean {
-    return (site.status === SiteStatusType.LOCKED);
+    return site.status === SiteStatusType.LOCKED;
   }
 
   public getLockedSiteNotificationProperties() {
