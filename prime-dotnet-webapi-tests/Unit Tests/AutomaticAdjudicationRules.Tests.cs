@@ -39,7 +39,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        private void UpdateDeviceProvider(Enrollee enrollee, bool provider = false, bool pumpProvider = false)
+        private void UpdateDeviceProvider(Enrollee enrollee, bool provider = false)
         {
             enrollee.DeviceProviderIdentifier = provider ? TestUtils.RandomDeviceProviderIdentifier() : null;
         }
@@ -285,14 +285,14 @@ namespace PrimeTests.UnitTests
         }
 
         [Theory]
-        [InlineData(false, false, true)]
-        [InlineData(true, false, false)]
-        [InlineData(false, true, false)]
-        [InlineData(true, true, false)]
-        public async void TestDeviceProviderRule(bool isProvider, bool isPumpProvider, bool expected)
+        [InlineData(false, false)]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(true, true)]
+        public async void TestDeviceProviderRule(bool isProvider, bool expected)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
-            UpdateDeviceProvider(enrollee, isProvider, isPumpProvider);
+            UpdateDeviceProvider(enrollee, isProvider);
 
             var rule = new DeviceProviderRule();
 
