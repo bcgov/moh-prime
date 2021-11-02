@@ -119,7 +119,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
       .get('careSettings').value as CareSetting[];
     const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-    const deviceProviderIdentifier = this.enrolmentFormStateService.deviceProviderForm
+    const deviceProviderIdentifier = this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.value;
 
 
     let backRoutePath = EnrolmentRoutes.OVERVIEW;
