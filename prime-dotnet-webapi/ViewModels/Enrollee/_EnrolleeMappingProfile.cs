@@ -51,6 +51,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<SelfDeclarationDocument, SelfDeclarationDocumentViewModel>();
 
             CreateMap<EnrolmentStatus, EnrolmentStatusViewModel>();
+            CreateMap<EnrolmentStatus, EnrolmentStatusVerboseViewModel>();
             CreateMap<Admin, AdminViewModel>();
             CreateMap<EnrolmentStatusReference, EnrolmentStatusReferenceViewModel>();
             CreateMap<EnrolmentStatusReason, EnrolmentStatusReasonViewModel>();

@@ -592,7 +592,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<EnrolmentStatusViewModel>> GetEnrolmentStatusesAsync(int enrolleeId)
+        public async Task<IEnumerable<EnrolmentStatusVerboseViewModel>> GetEnrolmentStatusesAsync(int enrolleeId)
         {
             return await _context.EnrolmentStatuses
                 .Include(es => es.Status)
