@@ -70,6 +70,7 @@ namespace Prime.Services
                 .AsNoTracking()
                 .If(healthAuthorityId.HasValue, q => q.Where(site => site.HealthAuthorityOrganizationId == healthAuthorityId))
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
                 .ToListAsync();
         }
 
@@ -78,6 +79,7 @@ namespace Prime.Services
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 

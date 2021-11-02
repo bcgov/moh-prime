@@ -1,10 +1,11 @@
+import moment from 'moment';
+
 import { NonFunctionProperties } from '@lib/types';
 import { Address } from '@lib/models/address.model';
 import { RemoteUser } from '@lib/models/remote-user.model';
 import { BusinessDay } from '@lib/models/business-day.model';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
-import { ObjectUtils } from '@lib/utils/object-utils.class';
 
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 import { HealthAuthorityCareType } from '@health-auth/shared/models/health-authority-care-type.model';
@@ -121,5 +122,16 @@ export class HealthAuthoritySite {
       healthAuthorityVendorId: this.healthAuthorityVendor?.id ?? null,
       healthAuthorityCareTypeId: this.healthAuthorityCareType?.id ?? null
     };
+  }
+
+  // TODO do health authority sites need to renew?
+  public static getExpiryDate(healthAuthoritySite: HealthAuthoritySite): string | null {
+    if (!healthAuthoritySite) {
+      return null;
+    }
+
+    return (healthAuthoritySite.submittedDate)
+        ? moment(healthAuthoritySite.submittedDate).add(1, 'year').format()
+        : null;
   }
 }
