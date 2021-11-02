@@ -595,14 +595,10 @@ namespace Prime.Services
         public async Task<IEnumerable<EnrolmentStatusVerboseViewModel>> GetEnrolmentStatusesAsync(int enrolleeId)
         {
             return await _context.EnrolmentStatuses
-                .Include(es => es.Status)
-                .Include(es => es.EnrolmentStatusReference)
-                    .ThenInclude(esr => esr.AdjudicatorNote)
-                .Include(e => e.EnrolmentStatusReference)
-                    .ThenInclude(esr => esr.Adjudicator)
                 .Where(es => es.EnrolleeId == enrolleeId)
                 .OrderByDescending(es => es.StatusDate)
                     .ThenByDescending(s => s.Id)
+                .ProjectTo<EnrolmentStatusVerboseViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 

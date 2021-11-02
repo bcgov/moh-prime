@@ -1,4 +1,3 @@
-
 namespace Prime.ViewModels
 {
     public class EnrolmentStatusReferenceViewModel
