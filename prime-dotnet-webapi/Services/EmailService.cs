@@ -93,7 +93,11 @@ namespace Prime.Services
         {
 
             var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(null), CareSettingType.HealthAuthority);
+            email.Attachments = await _emailDocumentService.GenerateHealthAuthoritySiteRegistrationSubmissionAttachmentsAsync(healthAuthoritySiteId);
+            await Send(email);
 
+            var siteRegReviewPdf = email.Attachments.Single(a => a.Filename == "HealthAuthoritySiteRegistrationReview.pdf");
+            await _emailDocumentService.SaveSiteRegistrationReview(healthAuthoritySiteId, siteRegReviewPdf);
         }
 
         public async Task SendSiteReviewedNotificationAsync(int siteId, string note)

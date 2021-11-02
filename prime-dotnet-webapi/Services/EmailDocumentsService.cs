@@ -50,6 +50,14 @@ namespace Prime.Services.EmailInternal
             };
         }
 
+        public async Task<IEnumerable<Pdf>> GenerateHealthAuthoritySiteRegistrationSubmissionAttachmentsAsync(int healthAuthoritySiteId)
+        {
+            return new[]
+            {
+                await GenerateHealthAuthorityRegistrationReviewAttachmentAsync(healthAuthoritySiteId)
+            };
+        }
+
         public async Task<string> GetBusinessLicenceDownloadLink(int businessLicenceId)
         {
             var document = await _context.BusinessLicenceDocuments
@@ -72,10 +80,10 @@ namespace Prime.Services.EmailInternal
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Pdf> GenerateHealthAuthoritySiteRegistrationSubmissionAttachmentsAsync(int healthAuthoritSiteId)
+        private async Task<Pdf> GenerateHealthAuthorityRegistrationReviewAttachmentAsync(int healthAuthoritySiteId)
         {
             var model = await _context.HealthAuthoritySites
-                .Where(has => has.Id == healthAuthoritSiteId)
+                .Where(has => has.Id == healthAuthoritySiteId)
                 .Select(has => new HealthAuthoritySiteSubmissionViewModel
                 {
                     SiteName = has.SiteName,
@@ -84,12 +92,12 @@ namespace Prime.Services.EmailInternal
                     HealthAuthorityName = has.HealthAuthorityOrganization.Name,
                     PEC = has.PEC,
                     CareType = has.HealthAuthorityCareType.CareType,
-                    IsNew = !string.IsNullOrWhiteSpace(has.PEC),
+                    NewOrExisting = string.IsNullOrWhiteSpace(has.PEC) ? "New Site" : "Existing Site",
                     Vendor = has.HealthAuthorityVendor.Vendor.Name,
 
                     PharmaNetAdministrator = new HealthAuthoritySiteSubmissionViewModel.HealthAuthorityContactViewModel
                     {
-                        JobTitle = "has.HealthAuthorityPharmanetAdministrator.Contact.JobRoleTitle",
+                        JobTitle = has.HealthAuthorityPharmanetAdministrator.Contact.JobRoleTitle,
                         FullName = $"{has.HealthAuthorityPharmanetAdministrator.Contact.FirstName} {has.HealthAuthorityPharmanetAdministrator.Contact.LastName}",
                         Phone = has.HealthAuthorityPharmanetAdministrator.Contact.Phone,
                         Fax = has.HealthAuthorityPharmanetAdministrator.Contact.Fax,

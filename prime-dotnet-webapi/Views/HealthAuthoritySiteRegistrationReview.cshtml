@@ -21,6 +21,36 @@
   <span class="ml-2">@(Model.SiteName ?? "-")</span>
 </div>
 
+<div class="ml-2 mb-2">
+  <h5>Authorized User Name</h5>
+  <span class="ml-2">@(Model.AuthorizedUserName ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Health Authority Name</h5>
+  <span class="ml-2">@(Model.HealthAuthorityName ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>New or existing site?</h5>
+  <span class="ml-2">@(Model.NewOrExisting)</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>PEC/Site ID</h5>
+  <span class="ml-2">@(Model.PEC ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>CareType</h5>
+  <span class="ml-2">@(Model.CareType ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Vendor</h5>
+  <span class="ml-2">@(Model.Vendor ?? "-")</span>
+</div>
+
 <h2 class="mb-3">Site Address</h2>
 
 <div class="ml-2 mb-2">
@@ -51,38 +81,6 @@
 <div class="ml-2 mb-2">
   <h5>Country</h5>
   <span class="ml-2">@(Model.SiteAddress.CountryCode ?? "-")</span>
-</div>
-
-<h2 class="mb-3">Other Site Information</h2>
-
-<div class="ml-2 mb-2">
-  <h5>Authorized User Name</h5>
-  <span class="ml-2">@(Model.AuthorizedUserName ?? "-")</span>
-</div>
-
-<div class="ml-2 mb-2">
-  <h5>Health Authority Name</h5>
-  <span class="ml-2">@(Model.HealthAuthorityName ?? "-")</span>
-</div>
-
-<div class="ml-2 mb-2">
-  <h5>New/Existing Site</h5>
-  <span class="ml-2">@(Model.IsNew ? "New Site" : "Existing Site")</span>
-</div>
-
-<div class="ml-2 mb-2">
-  <h5>PEC/Site ID</h5>
-  <span class="ml-2">@(Model.PEC ?? "-")</span>
-</div>
-
-<div class="ml-2 mb-2">
-  <h5>CareType</h5>
-  <span class="ml-2">@(Model.CareType ?? "-")</span>
-</div>
-
-<div class="ml-2 mb-2">
-  <h5>Vendor</h5>
-  <span class="ml-2">@(Model.Vendor ?? "-")</span>
 </div>
 
 <h2 class="mb-3">Administrator of PharmaNet Onboarding</h2>
