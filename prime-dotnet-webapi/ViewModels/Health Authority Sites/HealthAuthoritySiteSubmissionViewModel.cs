@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using Prime.Models;
-using Prime.Models.HealthAuthorities;
 
 namespace Prime.ViewModels.HealthAuthoritySites
 {
@@ -9,26 +6,35 @@ namespace Prime.ViewModels.HealthAuthoritySites
     {
         public string SiteName { get; set; }
         public PhysicalAddress SiteAddress { get; set; }
+        public string AuthorizedUserName { get; set; }
         public AuthorizedUserViewModel AuthorizedUser { get; set; }
-        public HealthAuthorityViewModel HealthAuthority { get; set; }
+        public string HealthAuthorityName { get; set; }
         public string PEC { get; set; }
         public string CareType { get; set; }
         public bool IsNew { get; set; }
-        public int Vendor { get; set; }
+        public string Vendor { get; set; }
         public int? HealthAuthorityPharmanetAdministratorId { get; set; }
-        public HealthAuthorityPharmanetAdministratorViewModel PharmaNetAdministrator { get; set; }
+        public string PharmaNetAdministratorName { get; set; }
+        public HealthAuthorityContactViewModel PharmaNetAdministrator { get; set; }
 
         public class AuthorizedUserViewModel
         {
-            public string Name { get; set; }
+            public string FullName { get; set; }
+            // public string LastName { get; set; }
         }
         public class HealthAuthorityViewModel
         {
             public string Name { get; set; }
         }
-        public class HealthAuthorityPharmanetAdministratorViewModel
+
+        public class HealthAuthorityContactViewModel
         {
-            public string Name { get; set; }
+            public string JobTitle { get; set; }
+            public string FullName { get; set; }
+            public string Phone { get; set; }
+            public string Fax { get; set; }
+            public string SmsPhone { get; set; }
+            public string Email { get; set; }
         }
     }
 

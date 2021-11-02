@@ -8,7 +8,6 @@ using Prime.HttpClients;
 using Prime.Models;
 using Prime.Models.Documents;
 using Prime.Services.Razor;
-using Prime.ViewModels.SiteRegistration;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.SiteRegistration.ReviewDocument;
 
@@ -81,13 +80,23 @@ namespace Prime.Services.EmailInternal
                 {
                     SiteName = has.SiteName,
                     SiteAddress = has.PhysicalAddress,
-                    // AuthorizedUser
-                    // HealthAuthority
+                    AuthorizedUserName = has.AuthorizedUser.Party.FirstName + " " + has.AuthorizedUser.Party.LastName,
+                    HealthAuthorityName = has.HealthAuthorityOrganization.Name,
                     PEC = has.PEC,
-                    CareType = has.CareType,
-                    IsNew = string.IsNullOrWhiteSpace(has.SiteId),
-                    Vendor = has.VendorCode,
-                    // PharmaNetAdministrator
+                    CareType = has.HealthAuthorityCareType.CareType,
+                    IsNew = !string.IsNullOrWhiteSpace(has.PEC),
+                    Vendor = has.HealthAuthorityVendor.Vendor.Name,
+
+                    PharmaNetAdministrator = new HealthAuthoritySiteSubmissionViewModel.HealthAuthorityContactViewModel
+                    {
+                        JobTitle = "has.HealthAuthorityPharmanetAdministrator.Contact.JobRoleTitle",
+                        FullName = $"{has.HealthAuthorityPharmanetAdministrator.Contact.FirstName} {has.HealthAuthorityPharmanetAdministrator.Contact.LastName}",
+                        Phone = has.HealthAuthorityPharmanetAdministrator.Contact.Phone,
+                        Fax = has.HealthAuthorityPharmanetAdministrator.Contact.Fax,
+                        SmsPhone = has.HealthAuthorityPharmanetAdministrator.Contact.SMSPhone,
+                        Email = has.HealthAuthorityPharmanetAdministrator.Contact.Email
+                    },
+                    PharmaNetAdministratorName = has.HealthAuthorityPharmanetAdministrator.Contact.FirstName + " " + has.HealthAuthorityPharmanetAdministrator.Contact.LastName,
                 })
                 .SingleAsync();
 
