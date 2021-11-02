@@ -53,5 +53,10 @@ namespace Prime.Services
         Task<bool> SiteExists(int siteId);
         Task<bool> PecAssignableAsync(string pec);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId);
+
+        /// <summary>
+        /// Save the fact that the given <c>notifiedUsers</c> were notified by email.
+        /// </summary>
+        Task MarkUsersAsNotifiedAsync(IEnumerable<RemoteUser> notifiedUsers);
     }
 }
