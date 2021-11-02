@@ -29,8 +29,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Phone, f => f.Phone.PhoneNumber());
             RuleFor(x => x.PhoneExtension, f => f.Random.Replace("###").OrNull(f));
             RuleFor(x => x.SmsPhone, f => f.Phone.PhoneNumber().OrNull(f));
-            RuleFor(x => x.DeviceProviderNumber, f => null);
-            RuleFor(x => x.IsInsulinPumpProvider, f => null);
+            RuleFor(x => x.DeviceProviderIdentifier, f => null);
             RuleFor(x => x.GPID, f => null);
             RuleFor(x => x.HPDID, f => null);
             RuleFor(x => x.ProfileCompleted, f => false);
@@ -77,8 +76,7 @@ namespace PrimeTests.ModelFactories
 
             RuleSet("deviceProvider", (set) =>
             {
-                set.RuleFor(x => x.DeviceProviderNumber, f => f.Random.Replace("#####"));
-                set.RuleFor(x => x.IsInsulinPumpProvider, f => f.Random.Bool());
+                set.RuleFor(x => x.DeviceProviderIdentifier, f => f.Random.Replace("#####"));
             });
 
             RuleSet("obo", (set) =>

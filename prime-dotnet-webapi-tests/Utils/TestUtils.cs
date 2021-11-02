@@ -73,7 +73,7 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.GivenNames, f => f.Name.FirstName())
             .RuleFor(e => e.DateOfBirth, f => (f.Date.Past(20, DateTime.Now.AddYears(-18))).Date)
             .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
-            .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
+            .RuleFor(e => e.DeviceProviderIdentifier, TestUtils.RandomDeviceProviderIdentifier())
             .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
             .RuleFor(e => e.EnrolleeCareSettings, f => EnrolleeCareSettingFaker.Generate(2))
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
@@ -100,7 +100,7 @@ namespace PrimeTests.Utils
             return new Faker().PickRandom(provinces.Except(excludedProvinceCodes));
         }
 
-        public static string RandomDeviceProviderNumber()
+        public static string RandomDeviceProviderIdentifier()
         {
             return new Faker().Random.Int(100000, 999999).ToString().Substring(1);
         }

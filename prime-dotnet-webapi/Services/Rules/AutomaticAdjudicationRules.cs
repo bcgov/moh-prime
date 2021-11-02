@@ -82,19 +82,13 @@ namespace Prime.Services.Rules
             var certifications = enrollee.Certifications.Where(c => c.License.Validate);
 
             // If enrollee choses device provider, add device provider as a licence and check it against PharmaNet
-            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider) || enrollee.DeviceProviderIdentifier != null)
+            if (!string.IsNullOrWhiteSpace(enrollee.DeviceProviderIdentifier))
             {
                 certifications = certifications.Append(new Certification
                 {
                     License = new License { Prefix = "Prefix place holder" },
                     LicenseNumber = enrollee.DeviceProviderIdentifier
                 });
-            }
-
-            if (!certifications.Any())
-            {
-                // No certificationss to verify
-                return true;
             }
 
             bool passed = true;

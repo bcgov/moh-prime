@@ -41,8 +41,7 @@ namespace PrimeTests.UnitTests
 
         private void UpdateDeviceProvider(Enrollee enrollee, bool provider = false, bool pumpProvider = false)
         {
-            enrollee.DeviceProviderNumber = provider ? TestUtils.RandomDeviceProviderNumber() : null;
-            enrollee.IsInsulinPumpProvider = pumpProvider;
+            enrollee.DeviceProviderIdentifier = provider ? TestUtils.RandomDeviceProviderIdentifier() : null;
         }
 
         [Flags]
@@ -290,7 +289,7 @@ namespace PrimeTests.UnitTests
         [InlineData(true, false, false)]
         [InlineData(false, true, false)]
         [InlineData(true, true, false)]
-        public async void TestPumpProviderRule(bool isProvider, bool isPumpProvider, bool expected)
+        public async void TestDeviceProviderRule(bool isProvider, bool isPumpProvider, bool expected)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateDeviceProvider(enrollee, isProvider, isPumpProvider);
@@ -304,7 +303,7 @@ namespace PrimeTests.UnitTests
             }
             else
             {
-                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.PumpProvider);
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.DeviceProvider);
             }
         }
 
