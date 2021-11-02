@@ -74,7 +74,6 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.DateOfBirth, f => (f.Date.Past(20, DateTime.Now.AddYears(-18))).Date)
             .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
             .RuleFor(e => e.DeviceProviderIdentifier, TestUtils.RandomDeviceProviderIdentifier())
-            .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
             .RuleFor(e => e.EnrolleeCareSettings, f => EnrolleeCareSettingFaker.Generate(2))
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
             .RuleFor(e => e.IdentityAssuranceLevel, f => 3)
