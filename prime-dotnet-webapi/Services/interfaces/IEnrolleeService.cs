@@ -34,7 +34,7 @@ namespace Prime.Services
         Task<IEnumerable<SelfDeclarationViewModel>> GetSelfDeclarationsAsync(int enrolleeId);
         Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId);
         Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType);
-        Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId);
+        Task<IEnumerable<EnrolmentStatusViewModel>> GetEnrolmentStatusesAsync(int enrolleeId);
         Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck);
         Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId);
         Task<EnrolleeNoteViewModel> GetEnrolleeAdjudicatorNoteAsync(int enrolleeId, int noteId);

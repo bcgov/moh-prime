@@ -62,14 +62,15 @@ namespace Prime.Controllers
 
         // GET: api/enrollees/5/statuses
         /// <summary>
-        /// Gets all of the status changes for a specific Enrollee.
+        /// Gets all of the status changes for a specific Enrollee, including referenced Adjudicator Notes.
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/statuses", Name = nameof(GetEnrolmentStatuses))]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentStatus>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentStatusViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrolmentStatuses(int enrolleeId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
@@ -82,9 +83,9 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var enrollees = await _enrolleeService.GetEnrolmentStatusesAsync(enrolleeId);
+            var statuses = await _enrolleeService.GetEnrolmentStatusesAsync(enrolleeId);
 
-            return Ok(enrollees);
+            return Ok(statuses);
         }
 
         // GET: api/enrollees/5/adjudicator-notes
