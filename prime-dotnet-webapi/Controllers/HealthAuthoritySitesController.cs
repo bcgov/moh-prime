@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
 using Prime.Configuration.Auth;
+using Prime.Engines;
+using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Sites;
@@ -216,18 +218,36 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId)
+        public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
             if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"No editable Health Authority Site found with Id {siteId}");
+            }
+
+            var record = await _healthAuthoritySiteService.GetPermissionsRecordAsync(siteId);
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
             }
             if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, siteId))
             {
                 return Conflict("Cannot submit Site, one or more selections dependent on the Health Authority are invalid.");
             }
 
+            var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+            // TODO do we need to check that PEC is assignable for health authorities?
+            //      1) Duplicate PEC allowed in same Health Authority, or
+            //      2) Duplicate PEC allowed, but not in same Health Authority
+
+            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+
+            // TODO send site registration submission notification
 
             return NoContent();
         }
