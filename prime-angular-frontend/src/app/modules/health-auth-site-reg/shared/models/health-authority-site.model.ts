@@ -165,7 +165,6 @@ export class HealthAuthoritySite implements HealthAuthoritySiteDto {
     return DateUtils.withinRenewalPeriod(this.getExpiryDate());
   }
 
-  // TODO do health authority sites need to renew?
   public getExpiryDate(): string | null {
     return (this.submittedDate)
       ? moment(this.submittedDate).add(1, 'year').format()

@@ -183,9 +183,8 @@ export class ApiResource extends AbstractResource {
    * Handles an HTTP error response by providing the
    * user and console with appropriate information.
    */
-  // TODO don't use this instead combine into handleHttpErrorCodePipe
-  //      so the toast being displayed can be controlled when also
-  //      using handleHttpErrorCodePipe
+  // TODO don't use this instead combine into handleHttpErrorCodePipe so control
+  //      of the toast is isolated, otherwise you would always see it
   public handleHttpErrorMessagePipe(
     methodName: string,
     toastMessage?: string

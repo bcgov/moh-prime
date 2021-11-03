@@ -112,9 +112,6 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
    * @description
    * Restrict access to routes permitted when "Locked".
    */
-  // TODO what does locking a site mean in health authority site registration?
-  //      currently it means absolutely no access to the site routes, and only
-  //      provides the limited information from the site management card
   private manageLockedHealthAuthoritySite(routePath: string, params: Params): boolean {
     return this.navigate(routePath, [
       HealthAuthSiteRegRoutes.SITE_MANAGEMENT

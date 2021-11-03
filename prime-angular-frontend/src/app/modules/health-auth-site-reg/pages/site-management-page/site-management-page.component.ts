@@ -82,7 +82,6 @@ export class SiteManagementPageComponent implements OnInit {
     return healthAuthoritySite.status === SiteStatusType.EDITABLE && !!healthAuthoritySite.approvedDate;
   }
 
-  // TODO do health authority sites need to renew?
   public requiresRenewal(healthAuthoritySite: HealthAuthoritySite): boolean {
     return healthAuthoritySite.withinRenewalPeriod();
   }
@@ -94,7 +93,6 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
-  // TODO do health authority sites need to renew?
   public getWithinRenewalPeriodSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
     return {
       icon: 'notification_important',

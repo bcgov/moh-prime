@@ -62,8 +62,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     private configService: ConfigService,
     private healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     private healthAuthoritySiteService: HealthAuthoritySiteService,
-    // TODO even if we don't move the single method out to @lib/utils and don't use dependencies from other feature modules
-    private enrolmentService: EnrolmentService,
     route: ActivatedRoute,
     router: Router
   ) {
@@ -97,15 +95,9 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * Removes a certification from the list in response to an
    * emitted event from college certifications. Does not allow
    * the list of certifications to empty.
-   *
-   * @param index to be removed
    */
   public removeCertification(index: number): void {
     this.remoteUserCertifications.removeAt(index);
-  }
-
-  public onBack(): void {
-    this.routeUtils.routeRelativeTo(['./']);
   }
 
   public collegeFilterPredicate(): (collegeConfig: CollegeConfig) => boolean {
@@ -114,8 +106,11 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public licenceFilterPredicate(): (licenceConfig: LicenseConfig) => boolean {
-    return (licenceConfig: LicenseConfig) =>
-      this.enrolmentService.hasAllowedRemoteAccessLicences(licenceConfig);
+    return (licenceConfig: LicenseConfig) => this.hasAllowedRemoteAccessLicences(licenceConfig);
+  }
+
+  public onBack(): void {
+    this.routeUtils.routeRelativeTo(['./']);
   }
 
   public ngOnInit(): void {
@@ -223,5 +218,9 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     if (!noEmptyCert && !this.remoteUserCertifications.controls.length) {
       this.addCertification();
     }
+  }
+
+  private hasAllowedRemoteAccessLicences(licenceConfig: LicenseConfig): boolean {
+    return (licenceConfig.licensedToProvideCare && licenceConfig.namedInImReg);
   }
 }
