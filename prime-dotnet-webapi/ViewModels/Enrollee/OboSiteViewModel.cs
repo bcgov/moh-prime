@@ -12,6 +12,6 @@ namespace Prime.ViewModels
         public string PEC { get; set; }
         public string FacilityName { get; set; }
         public string JobTitle { get; set; }
-        public AddressViewModel Address { get; set; }
+        public AddressViewModel PhysicalAddress { get; set; }
     }
 }
