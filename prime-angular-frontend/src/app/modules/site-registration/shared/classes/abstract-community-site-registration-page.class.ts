@@ -11,7 +11,7 @@ import { NoContentResponse } from '@core/resources/abstract-resource';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 
-export abstract class AbstractSiteRegistrationPage<T extends AbstractFormState<unknown> = AbstractFormState<unknown>, S = unknown> extends AbstractEnrolmentPage {
+export abstract class AbstractCommunitySiteRegistrationPage<T extends AbstractFormState<unknown> = AbstractFormState<unknown>, S = unknown> extends AbstractEnrolmentPage {
   /**
    * @description
    * Form state
@@ -36,30 +36,6 @@ export abstract class AbstractSiteRegistrationPage<T extends AbstractFormState<u
   public get hasBeenSubmitted(): boolean {
     return !!this.siteService.site?.submittedDate;
   }
-
-  /**
-   * @description
-   * Instantiate the form instance.
-   */
-  protected abstract createFormInstance(): void;
-
-  /**
-   * @description
-   * Initialize the form instance with model data.
-   *
-   * Implementation Details:
-   * Typically invoked before form initialization using the initForm
-   * method, but also useful if invoked from within the initForm method
-   * when listeners need to be setup before and after patching the form.
-   *
-   * @param model optional parameter to reduce the rigidity of invoking
-   * the method in case a member variable is not available.
-   *
-   * @returns unknown to allow for flexibility when implemented, which
-   * is can be useful as an observable when the sequence during patching
-   * is asynchronous, but otherwise should be void
-   */
-  protected abstract patchForm(model?: unknown): unknown;
 
   /**
    * @description

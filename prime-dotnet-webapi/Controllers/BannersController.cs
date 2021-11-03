@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Configuration.Auth;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
 

@@ -6,10 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using DelegateDecompiler;
+using DelegateDecompiler.EntityFrameworkCore;
 using Prime.Models;
-using Prime.Models.HealthAuthorities;
-using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
@@ -17,14 +16,17 @@ namespace Prime.Services
     public class HealthAuthoritySiteService : BaseService, IHealthAuthoritySiteService
     {
         private readonly IMapper _mapper;
+        private readonly IBusinessEventService _businessEventService;
 
         public HealthAuthoritySiteService(
             ApiDbContext context,
             ILogger<HealthAuthoritySiteService> logger,
-            IMapper mapper)
+            IMapper mapper,
+            IBusinessEventService businessEventService)
             : base(context, logger)
         {
             _mapper = mapper;
+            _businessEventService = businessEventService;
         }
 
         public async Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId)
@@ -34,124 +36,85 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId && s.HealthAuthorityOrganizationId == healthAuthorityId);
         }
 
-        public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode)
+        public async Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId)
         {
-            // TODO dependency of Site navigational property in Vendor
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .DecompileAsync()
+                .AnyAsync(s => s.Id == siteId
+                   && s.HealthAuthorityOrganizationId == healthAuthorityId
+                   && s.Status == SiteStatusType.Editable);
+        }
+
+        public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel)
+        {
             var site = new HealthAuthoritySite
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
-                VendorCode = vendorCode
-                // TODO set initial status change (next sprint)
+                HealthAuthorityVendorId = createModel.HealthAuthorityVendorId,
+                AuthorizedUserId = createModel.AuthorizedUserId
             };
-
-            // TODO add business events (next sprint)
+            site.AddStatus(SiteStatusType.Editable);
 
             _context.HealthAuthoritySites.Add(site);
             await _context.SaveChangesAsync();
 
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Created");
+
             return _mapper.Map<HealthAuthoritySiteViewModel>(site);
         }
 
-        public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetAllSitesAsync()
+        public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int? healthAuthorityId = null)
         {
-            return await GetBaseSitesNoTrackingQuery().ToListAsync();
-        }
-
-        public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId)
-        {
-            return await GetBaseSitesNoTrackingQuery()
-                .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId)
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .If(healthAuthorityId.HasValue, q => q.Where(site => site.HealthAuthorityOrganizationId == healthAuthorityId))
+                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
                 .ToListAsync();
         }
 
         public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
         {
-            return await GetBaseSitesNoTrackingQuery()
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task UpdateVendorAsync(int siteId, int vendorCode)
+        public async Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
             var site = await _context.HealthAuthoritySites
+                .Include(site => site.PhysicalAddress)
+                .Include(site => site.BusinessHours)
+                .Include(site => site.RemoteUsers)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO check vendor exists on the HealthAuthority list of vendor(s)
-            site.VendorCode = vendorCode;
+            _context.Entry(site).CurrentValues.SetValues(updateModel);
 
-            await _context.SaveChangesAsync();
-        }
+            if (updateModel.PhysicalAddress != null)
+            {
+                if (site.PhysicalAddress != null)
+                {
+                    _context.Addresses.Remove(site.PhysicalAddress);
+                }
+                site.PhysicalAddress = _mapper.Map<PhysicalAddress>(updateModel.PhysicalAddress);
+            }
 
-        public async Task UpdateSiteInfoAsync(int siteId, HealthAuthoritySiteInfoViewModel viewModel)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
+            if (updateModel.BusinessHours != null)
+            {
+                _context.RemoveRange(site.BusinessHours);
+                site.BusinessHours = _mapper.Map<ICollection<BusinessDay>>(updateModel.BusinessHours);
+            }
 
-            _mapper.Map(viewModel, site);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateCareTypeAsync(int siteId, string careType)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            // TODO check careType exists on the HealthAuthority list of careType(s)
-            site.CareType = careType;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdatePhysicalAddressAsync(int siteId, AddressViewModel physicalAddress)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            site.PhysicalAddress = _mapper.Map<PhysicalAddress>(physicalAddress);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateHoursOperationAsync(int siteId, ICollection<BusinessDay> businessHours)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            // TODO dependency of Site navigational property in BusinessDay
-            // site.BusinessHours = businessHours;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateRemoteUsersAsync(int siteId, ICollection<RemoteUser> remoteUsers)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            // TODO dependency of Site navigational property in RemoteUser
-            // site.RemoteUsers = remoteUsers;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdatePharmanetAdministratorAsync(int siteId, int healthAuthorityContactId)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            // TODO check administrator exists on the HealthAuthority list of administrator(s)
-            site.HealthAuthorityPharmanetAdministratorId = healthAuthorityContactId;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateTechnicalSupportAsync(int siteId, int healthAuthorityContactId)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            // TODO check technical support exists on the HealthAuthority list of technical support(s)
-            site.HealthAuthorityTechnicalSupportId = healthAuthorityContactId;
+            // TODO refactor to allow for updates without orphaning records in EnrolleeRemoteUsers
+            //      for community site registration and health authority site registration
+            if (updateModel.RemoteUsers != null)
+            {
+                _context.RemoveRange(site.RemoteUsers);
+                site.RemoteUsers = _mapper.Map<ICollection<RemoteUser>>(updateModel.RemoteUsers);
+            }
 
             await _context.SaveChangesAsync();
         }
@@ -164,6 +127,8 @@ namespace Prime.Services
             site.Completed = true;
 
             await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Completed");
         }
 
         public async Task SiteSubmissionAsync(int siteId)
@@ -171,18 +136,12 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO add status change to site (next sprint)
-            // TODO add business events (next sprint)
             site.SubmittedDate = DateTimeOffset.Now;
+            site.AddStatus(SiteStatusType.InReview);
 
             await _context.SaveChangesAsync();
-        }
 
-        private IQueryable<HealthAuthoritySiteViewModel> GetBaseSitesNoTrackingQuery()
-        {
-            return _context.HealthAuthoritySites
-                .AsNoTracking()
-                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider);
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Submitted");
         }
     }
 }

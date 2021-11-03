@@ -6,8 +6,6 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 
 import { RemoteUsersForm } from './remote-users-form.model';
 
-// TODO drop specific routes out of remote-user-review and always pass in
-// TODO should be a message of no remote users added if none
 @Component({
   selector: 'app-remote-users-overview',
   template: `

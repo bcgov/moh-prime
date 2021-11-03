@@ -5,11 +5,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { HealthAuthSiteRegGuard } from './health-auth-site-reg.guard';
+import { HealthAuthoritySiteGuard } from './health-authority-site-guard.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
-describe('HealthAuthSiteRegGuard', () => {
-  let guard: HealthAuthSiteRegGuard;
+describe('HealthAuthoritySiteGuard', () => {
+  let guard: HealthAuthoritySiteGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -19,7 +19,7 @@ describe('HealthAuthSiteRegGuard', () => {
         MatSnackBarModule
       ],
       providers: [
-        HealthAuthSiteRegGuard,
+        HealthAuthoritySiteGuard,
         KeycloakService,
         {
           provide: APP_CONFIG,
@@ -27,7 +27,7 @@ describe('HealthAuthSiteRegGuard', () => {
         }
       ]
     });
-    guard = TestBed.inject(HealthAuthSiteRegGuard);
+    guard = TestBed.inject(HealthAuthoritySiteGuard);
   });
 
   it('should be created', () => {

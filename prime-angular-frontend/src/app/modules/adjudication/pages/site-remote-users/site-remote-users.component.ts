@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { RemoteUser } from '@lib/models/remote-user.model';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { Site } from '@registration/shared/models/site.model';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
 
 @Component({
   selector: 'app-site-remote-users',

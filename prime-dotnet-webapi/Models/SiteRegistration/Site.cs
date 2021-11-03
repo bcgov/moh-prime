@@ -9,41 +9,19 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("Site")]
-    public class Site : BaseAuditable
+    public abstract class Site : BaseAuditable
     {
         public Site()
         {
             // Initialize collections to prevent null exception on computed properties
             // like `Status`
             SiteStatuses = new List<SiteStatus>();
-            BusinessLicences = new List<BusinessLicence>();
         }
 
         [Key]
         public int Id { get; set; }
 
-        public int OrganizationId { get; set; }
-
-        [JsonIgnore]
-        public Organization Organization { get; set; }
-
         public PhysicalAddress PhysicalAddress { get; set; }
-
-        public int? AdministratorPharmaNetId { get; set; }
-
-        public Contact AdministratorPharmaNet { get; set; }
-
-        public int? PrivacyOfficerId { get; set; }
-
-        public Contact PrivacyOfficer { get; set; }
-
-        public int? TechnicalSupportId { get; set; }
-
-        public Contact TechnicalSupport { get; set; }
-
-        public int? ProvisionerId { get; set; }
-
-        public Party Provisioner { get; set; }
 
         public int? CareSettingCode { get; set; }
 
@@ -65,10 +43,6 @@ namespace Prime.Models
         public ICollection<SiteStatus> SiteStatuses { get; set; }
 
         public DateTimeOffset? ApprovedDate { get; set; }
-
-        public ICollection<SiteVendor> SiteVendors { get; set; }
-
-        public ICollection<BusinessLicence> BusinessLicences { get; set; }
 
         public ICollection<RemoteUser> RemoteUsers { get; set; }
 
@@ -113,32 +87,15 @@ namespace Prime.Models
         }
 
         /// <summary>
-        /// Gets the most recently uploaded business licence
+        /// Days in which the business has any business hours.
+        /// Only the time portion of the input parameter is considered.
         /// </summary>
-        [NotMapped]
-        [Computed]
-        public BusinessLicence BusinessLicence
+        public IEnumerable<DayOfWeek> DaysOpen(DateTimeOffset? atTime = null)
         {
-            get => BusinessLicences
-                .OrderByDescending(l => l.UploadedDate.HasValue)
-                .ThenByDescending(l => l.UploadedDate)
-                .FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Site submissions are considered renewals starting 90 days before the expiry of its current Business Licence.
-        /// For sites without expiry dates on thier BL, expiry is considered to be one year after the Site's submitted date.
-        /// </summary>
-        public bool IsWithinRenewalPeriod()
-        {
-            if (SubmittedDate == null)
-            {
-                return false;
-            }
-
-            var expiryDate = BusinessLicence?.ExpiryDate ?? SubmittedDate.Value.AddYears(1);
-
-            return DateTimeOffset.Now >= expiryDate.AddDays(-90);
+            return BusinessHours
+                .Where(h => atTime == null || h.IsOpen(atTime.Value))
+                .Select(b => b.Day)
+                .Distinct();
         }
     }
 }

@@ -1,9 +1,10 @@
 using System;
+
 using Prime.Models;
 using Prime.Models.Documents;
 using Prime.ViewModels.Emails;
 using Prime.ViewModels.Agreements;
-using Prime.ViewModels.SiteRegistration;
+using Prime.ViewModels.SiteRegistration.ReviewDocument;
 
 namespace Prime.Services.Razor
 {

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Address, AddressType, addressTypes } from '@shared/models/address.model';
+import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrolleeSubmission, EnrolmentSubmission } from '@shared/models/enrollee-submission.model';
@@ -46,8 +46,10 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       this.adjudicationResource.getEnrolleeById(enrolleeId)
     ]).pipe(
       map(([enrolleeSubmission, enrolment]: [HttpEnrolleeSubmission, HttpEnrollee]) =>
-        [this.enrolleeSubmissionAdapterResponse(enrolleeSubmission),
-        this.enrolleeAdapterResponse(enrolment)]
+        [
+            this.enrolleeSubmissionAdapterResponse(enrolleeSubmission),
+            this.enrolleeAdapterResponse(enrolment)
+        ]
       )
     ).subscribe(([enrolmentSubmission, enrolment]: [EnrolmentSubmission, Enrolment]) => {
       this.enrolmentSubmission = enrolmentSubmission;

@@ -72,17 +72,16 @@
           type="button"
           color="primary"
           class="mb-3"
-          [disabled]="true"
           [routerLink]="['new']">
     <mat-icon class="add-icon">add</mat-icon>
     Add Remote Practitioners
   </button>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [primaryActionLabel]="(hasBeenSubmitted) ? 'Continue' : 'Save and Continue'"
                    [hasSecondaryAction]="true"
-                   [primaryActionLabel]="submitButtonText"
                    (save)="onSubmit()"
-                   (back)="onBack()"
-                   (continue)="onBack()"></app-page-footer>
+                   (continue)="onBack()"
+                   (back)="onBack()"></app-page-footer>
 
 </app-page>
