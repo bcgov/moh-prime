@@ -39,9 +39,19 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        private void UpdateDeviceProvider(Enrollee enrollee, bool provider = false)
+        private void UpdateDeviceProvider(Enrollee enrollee, bool provider, bool isProviderInCareSetting)
         {
             enrollee.DeviceProviderIdentifier = provider ? TestUtils.RandomDeviceProviderIdentifier() : null;
+            if (provider || isProviderInCareSetting) {
+                enrollee.EnrolleeCareSettings.Add(new EnrolleeCareSetting{
+                    CareSettingCode = (int)CareSettingType.DeviceProvider
+                });
+            } else {
+                var deviceProviderEntry = enrollee.EnrolleeCareSettings.SingleOrDefault(ecs => ecs.IsType(CareSettingType.DeviceProvider));
+                if (deviceProviderEntry != null) {
+                    enrollee.EnrolleeCareSettings.Remove(deviceProviderEntry);
+                }
+            }
         }
 
         [Flags]
@@ -285,17 +295,17 @@ namespace PrimeTests.UnitTests
         }
 
         [Theory]
-        [InlineData(false, false)]
-        [InlineData(true, false)]
-        [InlineData(false, true)]
-        [InlineData(true, true)]
-        public async void TestDeviceProviderRule(bool isProvider, bool expected)
+        [InlineData(false, false, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
+        [InlineData(true, true, false)]
+        public async void TestDeviceProviderRule(bool isProvider, bool isProviderInCareSetting, bool expected)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
-            UpdateDeviceProvider(enrollee, isProvider);
+
+            UpdateDeviceProvider(enrollee, isProvider, isProviderInCareSetting);
 
             var rule = new DeviceProviderRule();
-
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             if (expected)
             {
