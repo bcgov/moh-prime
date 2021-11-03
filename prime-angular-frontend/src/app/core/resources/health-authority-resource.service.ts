@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpStatusCode } from '@angular/common/http';
 
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
@@ -290,7 +291,7 @@ export class HealthAuthorityResource {
         map((healthAuthoritySiteDto: HealthAuthoritySiteDto) => HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto)),
         tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
         catchError((error: any) => {
-          if (error.status === 404) {
+          if (error.status === HttpStatusCode.NotFound) {
             return of(null);
           }
 

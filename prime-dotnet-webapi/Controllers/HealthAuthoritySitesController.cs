@@ -240,9 +240,8 @@ namespace Prime.Controllers
             {
                 return BadRequest("Action could not be performed.");
             }
-            // TODO do we need to check that PEC is assignable for health authorities?
-            //      1) Duplicate PEC allowed in same Health Authority, or
-            //      2) Duplicate PEC allowed, but not in same Health Authority
+
+            // TODO duplicate PEC allowed but only in same Health Authority
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
