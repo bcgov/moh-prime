@@ -1,4 +1,4 @@
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 
 import { Party } from '@lib/models/party.model';
 import { Contact } from '@lib/models/contact.model';
@@ -10,6 +10,7 @@ import { Admin } from '@auth/shared/models/admin.model';
 import { Vendor } from './vendor.model';
 import { BusinessLicence } from './business-licence.model';
 
+// TODO rename to CommunitySite and split out common properties to Site interface
 export class Site {
   id?: number;
   organizationId: number;
