@@ -253,6 +253,7 @@ export class HealthAuthorityResource {
       );
   }
 
+  // TODO doesn't contain business hours or remote users and will need typing adjusted
   public getHealthAuthoritySites(healthAuthId: HealthAuthorityEnum): Observable<HealthAuthoritySite[]> {
     return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/${healthAuthId}/sites`)
       .pipe(
