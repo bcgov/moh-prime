@@ -256,6 +256,9 @@ export class HealthAuthorityResource {
     return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/${healthAuthId}/sites`)
       .pipe(
         map((response: ApiHttpResponse<HealthAuthoritySite[]>) => response.result),
+        map((healthAuthoritySiteDtos: HealthAuthoritySiteDto[]) =>
+          healthAuthoritySiteDtos.map(hasd => HealthAuthoritySite.toHealthAuthoritySite(hasd))
+        ),
         tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority sites could not be retrieved');
@@ -355,8 +358,8 @@ export class HealthAuthorityResource {
    * @description
    * Submit the health authority site registration.
    */
-  public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number): NoContent {
-    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submissions`)
+  public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number, healthAuthoritySite: HealthAuthoritySite): NoContent {
+    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submissions`, healthAuthoritySite)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
