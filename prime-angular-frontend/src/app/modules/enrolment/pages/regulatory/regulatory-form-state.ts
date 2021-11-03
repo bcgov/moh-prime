@@ -6,11 +6,6 @@ import { ConfigService } from '@config/config.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 
-// export interface RegulatoryFormModel {
-//   certifications: CollegeCertification[];
-//   deviceProviderIdentifier?: string;
-// }
-
 export interface EnrolmentRegulatoryForm extends Pick<Enrolment, 'certifications' | 'deviceProviderIdentifier'> { }
 
 export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryForm> {
@@ -38,8 +33,7 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
    * @alias json
    */
   public get collegeCertifications(): CollegeCertification[] {
-    const { certifications } = this.json;
-    return certifications;
+    return this.json.certifications;
   }
 
   public get json(): EnrolmentRegulatoryForm {
@@ -47,18 +41,16 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
       return;
     }
 
-    const certifications = this.certifications.getRawValue().map(c => {
+    const { certifications: rawCertifications, deviceProviderIdentifier } = this.formInstance.getRawValue();
+    const certifications = rawCertifications.map(c => {
       const { nurseCategory, ...collegeCertification } = c;
       return collegeCertification;
     });
 
-    const deviceProviderIdentifier = this.deviceProviderIdentifier.value;
-
     return { certifications, deviceProviderIdentifier }
   }
 
-  public patchValue(regulatoryFormModel: EnrolmentRegulatoryForm): void {
-    const { certifications, deviceProviderIdentifier } = regulatoryFormModel;
+  public patchValue({ certifications, deviceProviderIdentifier }: EnrolmentRegulatoryForm): void {
 
     if (!this.formInstance || !Array.isArray(certifications)) {
       return;
@@ -70,8 +62,7 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
       certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
     }
 
-    this.certifications.patchValue(certifications);
-    this.deviceProviderIdentifier.patchValue(deviceProviderIdentifier);
+    this.formInstance.patchValue({ certifications, deviceProviderIdentifier });
   }
 
   public buildForm(): void {

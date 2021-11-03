@@ -19,10 +19,6 @@ fdescribe('RegulatoryPageComponent', () => {
   const mockActivatedRoute = {
     snapshot: { params: { eid: 1 } }
   };
-  // let mockEnrollee: HttpEnrollee;
-  // let mockComponent;
-
-  // let spyOnRouteRelativeTo;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -56,33 +52,9 @@ fdescribe('RegulatoryPageComponent', () => {
     fixture = TestBed.createComponent(RegulatoryPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    // spyOnRouteRelativeTo = spyOn(component.routeUtils, 'routeRelativeTo');
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  // TODO: fix unit tests and uncomment
-  // describe('testing onBack()', () => {
-  //   describe('with profile completed', () => {
-  //     it('should call routeRelativeTo with route PaperEnrolmentRoutes.OVERVIEW ', () => {
-  //       component.ngOnInit();
-  //       component.enrollee = mockEnrollee;
-  //       component.enrollee['profileCompleted'] = true;
-  //       component.onBack();
-  //       expect(spyOnRouteRelativeTo).toHaveBeenCalledOnceWith(PaperEnrolmentRoutes.OVERVIEW);
-  //     });
-  //   });
-
-  //   describe('with profile not completed', () => {
-  //     it('should call routeRelativeTo with route PaperEnrolmentRoutes.CARE_SETTING ', () => {
-  //       component.ngOnInit();
-  //       component.enrollee = mockEnrollee;
-  //       component.enrollee['profileCompleted'] = false;
-  //       component.onBack();
-  //       expect(spyOnRouteRelativeTo).toHaveBeenCalledOnceWith(PaperEnrolmentRoutes.CARE_SETTING);
-  //     });
-  //   });
-  // });
 });

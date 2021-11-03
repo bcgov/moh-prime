@@ -104,8 +104,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const profile = (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicFormState.json
       : this.bcscDemographicFormState.json;
-    const { certifications, deviceProviderIdentifier } = this.regulatoryFormState.json;
-    // const deviceProvider = this.deviceProviderForm.getRawValue();
+    const regulatory = this.regulatoryFormState.json;
     const { oboSites } = this.oboSitesForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
@@ -121,8 +120,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         ...profile,
         ...paperProfile
       },
-      certifications,
-      deviceProviderIdentifier,
+      ...regulatory,
       oboSites,
       ...careSettings,
       enrolleeRemoteUsers,
@@ -238,8 +236,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicFormState.patchValue(enrolment.enrollee)
       : this.bcscDemographicFormState.patchValue(enrolment.enrollee);
-    const regulatoryFormModel = { certifications: enrolment.certifications, deviceProviderIdentifier: enrolment.deviceProviderIdentifier };
-    this.regulatoryFormState.patchValue(regulatoryFormModel);
+    const { certifications, deviceProviderIdentifier } = enrolment;
+    this.regulatoryFormState.patchValue({ certifications, deviceProviderIdentifier });
 
     const {
       careSettings,
