@@ -61,7 +61,8 @@ namespace Prime.Services
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
                 HealthAuthorityVendorId = createModel.HealthAuthorityVendorId,
-                AuthorizedUserId = createModel.AuthorizedUserId
+                AuthorizedUserId = createModel.AuthorizedUserId,
+                CareSettingCode = (int)CareSettingType.HealthAuthority
             };
             site.AddStatus(SiteStatusType.Editable);
 
