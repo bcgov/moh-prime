@@ -88,7 +88,7 @@ namespace Prime.Services.EmailInternal
                 {
                     SiteName = has.SiteName,
                     SiteAddress = has.PhysicalAddress,
-                    AuthorizedUserName = has.AuthorizedUser.Party.FirstName + " " + has.AuthorizedUser.Party.LastName,
+                    AuthorizedUserName = $"{has.AuthorizedUser.Party.FirstName} {has.AuthorizedUser.Party.LastName}",
                     HealthAuthorityName = has.HealthAuthorityOrganization.Name,
                     PEC = has.PEC,
                     CareType = has.HealthAuthorityCareType.CareType,
@@ -104,7 +104,6 @@ namespace Prime.Services.EmailInternal
                         SmsPhone = has.HealthAuthorityPharmanetAdministrator.Contact.SMSPhone,
                         Email = has.HealthAuthorityPharmanetAdministrator.Contact.Email
                     },
-                    PharmaNetAdministratorName = has.HealthAuthorityPharmanetAdministrator.Contact.FirstName + " " + has.HealthAuthorityPharmanetAdministrator.Contact.LastName,
                 })
                 .SingleAsync();
 

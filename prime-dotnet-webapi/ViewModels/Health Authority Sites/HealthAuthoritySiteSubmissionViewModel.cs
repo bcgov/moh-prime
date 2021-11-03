@@ -12,8 +12,6 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public string CareType { get; set; }
         public string NewOrExisting { get; set; }
         public string Vendor { get; set; }
-        public int? HealthAuthorityPharmanetAdministratorId { get; set; }
-        public string PharmaNetAdministratorName { get; set; }
         public HealthAuthorityContactViewModel PharmaNetAdministrator { get; set; }
         public class HealthAuthorityContactViewModel
         {
