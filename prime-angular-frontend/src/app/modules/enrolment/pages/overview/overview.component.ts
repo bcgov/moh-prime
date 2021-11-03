@@ -17,6 +17,7 @@ import { Address } from '@shared/models/address.model';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
@@ -196,8 +197,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
    * enrolment for checking validation instead of form state.
    */
   private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
+    const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
+      careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+    const isDeviceProviderIdentifier = this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.value;
+
     return {
-      certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length
+      certificateOrOboSite: ((isDeviceProvider && !isDeviceProviderIdentifier)
+        || !enrolment.certifications?.length)
+        && !enrolment.oboSites?.length
     };
   }
 }

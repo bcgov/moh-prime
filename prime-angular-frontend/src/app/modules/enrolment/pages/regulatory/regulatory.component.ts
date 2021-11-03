@@ -101,9 +101,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected initForm() {
-    if (this.isDeviceProvider) {
-      this.enableDeviceProviderValidator();
-    }
+    this.enableDeviceProviderValidator();
+
     // Always have at least one certification ready for
     // the enrollee to fill out
     if (!this.formState.certifications.length) {
@@ -124,10 +123,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       return;
     }
 
-    const enrolment = this.enrolmentService.enrolment;
-
     // Replace previous values on deactivation so updates are discarded
-    this.formState.patchValue({ certifications: enrolment.certifications, deviceProviderIdentifier: enrolment.deviceProviderIdentifier });
+    const { certifications, deviceProviderIdentifier } = this.enrolmentService.enrolment;
+    this.formState.patchValue({ certifications, deviceProviderIdentifier });
   }
 
   protected onSubmitFormIsValid() {
@@ -213,9 +211,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   private enableDeviceProviderValidator(): void {
-    this.formUtilsService.setValidators(this.formState.deviceProviderIdentifier, [
-      FormControlValidators.requiredLength(5),
-      FormControlValidators.numeric
-    ]);
+    this.isDeviceProvider
+    ? this.formUtilsService.setValidators(this.formState.deviceProviderIdentifier, [
+        FormControlValidators.requiredLength(5),
+        FormControlValidators.numeric
+      ])
+    :this.formUtilsService.resetAndClearValidators(this.formState.deviceProviderIdentifier);
   }
 }

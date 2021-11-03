@@ -81,7 +81,8 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
         if (enrollee) {
           this.enrollee = enrollee;
           // Attempt to patch the form if not already patched
-          this.formState.patchValue({ certifications: enrollee.certifications, deviceProviderIdentifier: enrollee.deviceProviderIdentifier });
+          const { certifications, deviceProviderIdentifier } = enrollee;
+          this.formState.patchValue({ certifications, deviceProviderIdentifier });
         }
       });
   }

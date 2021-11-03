@@ -8,12 +8,9 @@ import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { MockConfigService } from 'test/mocks/mock-config.service';
-import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { RegulatoryPageComponent } from './regulatory-page.component';
-import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
-fdescribe('RegulatoryPageComponent', () => {
+describe('RegulatoryPageComponent', () => {
   let component: RegulatoryPageComponent;
   let fixture: ComponentFixture<RegulatoryPageComponent>;
   const mockActivatedRoute = {
