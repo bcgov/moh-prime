@@ -125,15 +125,6 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
       this.technicalSupportFormState.form
     ];
   }
-  /**
-   * @description
-   * Check that all constituent forms are valid for submission..
-   */
-  public get isValidSubmission(): boolean {
-
-
-    return true;
-  }
 
   /**
    * @description

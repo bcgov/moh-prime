@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
-import { forkJoin, Observable, of, pipe, UnaryFunction } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
@@ -272,6 +272,7 @@ export class HealthAuthorityResource {
     const path = `health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`;
     return forkJoin({
       healthAuthoritySite: this.apiResource.get<Omit<HealthAuthoritySiteDto, 'businessHours' | 'remoteUsers'>>(`${path}`, null, null, true),
+      // TODO convert to hours and minutes in view model and drop this adapter
       businessHours: this.apiResource.get<BusinessDay[]>(`${path}/hours-operation`, null, null, true)
         .pipe(map((businessHours: BusinessDay[]) =>
           businessHours.map((businessDay: BusinessDay) => BusinessDay.asHoursAndMins(businessDay))
@@ -323,10 +324,10 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySite(healthAuthId: HealthAuthorityEnum, siteId: number, updateModel: HealthAuthoritySiteUpdate): NoContent {
-    updateModel.businessHours = updateModel.businessHours
+  public updateHealthAuthoritySite(healthAuthId: HealthAuthorityEnum, siteId: number, updatedModel: HealthAuthoritySiteUpdate): NoContent {
+    updatedModel.businessHours = updatedModel.businessHours
       .map((businessDay: BusinessDay) => BusinessDay.asTimespan(businessDay));
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}`, updateModel)
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}`, updatedModel)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -358,8 +359,10 @@ export class HealthAuthorityResource {
    * @description
    * Submit the health authority site registration.
    */
-  public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number, healthAuthoritySite: HealthAuthoritySite): NoContent {
-    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submissions`, healthAuthoritySite)
+  public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number, updatedModel: HealthAuthoritySiteUpdate): NoContent {
+    updatedModel.businessHours = updatedModel.businessHours
+      .map((businessDay: BusinessDay) => BusinessDay.asTimespan(businessDay));
+    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submissions`, updatedModel)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -385,17 +388,4 @@ export class HealthAuthorityResource {
         })
       );
   }
-
-  private resultPipe<T>(result404: any): UnaryFunction<Observable<ApiHttpResponse<T>>, Observable<any[] | T>> {
-    return pipe(
-      map((response: ApiHttpResponse<T>) => response.result),
-      catchError((error: any) => {
-        if (error.status === 404) {
-          return of(result404);
-        }
-
-        throw error;
-      })
-    );
-  };
 }
