@@ -592,13 +592,13 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<EnrolmentStatusVerboseViewModel>> GetEnrolmentStatusesAsync(int enrolleeId)
+        public async Task<IEnumerable<EnrolmentStatusAdminViewModel>> GetEnrolmentStatusesAsync(int enrolleeId)
         {
             return await _context.EnrolmentStatuses
                 .Where(es => es.EnrolleeId == enrolleeId)
                 .OrderByDescending(es => es.StatusDate)
                     .ThenByDescending(s => s.Id)
-                .ProjectTo<EnrolmentStatusVerboseViewModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<EnrolmentStatusAdminViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
@@ -941,16 +941,15 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<EnrolmentStatus> GetEnrolleeCurrentStatusAsync(int enrolleeId)
+        public async Task<EnrolmentStatusAdminViewModel> GetEnrolleeCurrentStatusAsync(int enrolleeId)
         {
-            var enrollee = await _context.Enrollees
+            return await _context.Enrollees
                 .AsNoTracking()
-                .Include(e => e.EnrolmentStatuses)
-                    .ThenInclude(es => es.EnrolmentStatusReasons)
-                        .ThenInclude(esr => esr.StatusReason)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            return enrollee?.CurrentStatus;
+                .Where(enrollee => enrollee.Id == enrolleeId)
+                .Select(enrollee => enrollee.CurrentStatus)
+                .ProjectTo<EnrolmentStatusAdminViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user)

@@ -70,7 +70,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentStatusVerboseViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentStatusAdminViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrolmentStatuses(int enrolleeId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
@@ -573,7 +573,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolmentStatus>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolmentStatusAdminViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrolleeCurrentStatus(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);

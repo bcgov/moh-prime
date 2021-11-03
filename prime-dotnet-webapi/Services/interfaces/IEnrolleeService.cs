@@ -34,7 +34,7 @@ namespace Prime.Services
         Task<IEnumerable<SelfDeclarationViewModel>> GetSelfDeclarationsAsync(int enrolleeId);
         Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId);
         Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType);
-        Task<IEnumerable<EnrolmentStatusVerboseViewModel>> GetEnrolmentStatusesAsync(int enrolleeId);
+        Task<IEnumerable<EnrolmentStatusAdminViewModel>> GetEnrolmentStatusesAsync(int enrolleeId);
         Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck);
         Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId);
         Task<EnrolleeNoteViewModel> GetEnrolleeAdjudicatorNoteAsync(int enrolleeId, int noteId);
@@ -53,7 +53,7 @@ namespace Prime.Services
         Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId);
         Task<EnrolleeAdjudicationDocument> GetEnrolleeAdjudicationDocumentAsync(int documentId);
         Task DeleteEnrolleeAdjudicationDocumentAsync(int documentId);
-        Task<EnrolmentStatus> GetEnrolleeCurrentStatusAsync(int enrolleeId);
+        Task<EnrolmentStatusAdminViewModel> GetEnrolleeCurrentStatusAsync(int enrolleeId);
         Task<EnrolleeNotification> CreateEnrolleeNotificationAsync(int EnrolleeNoteId, int adminId, int assigneeId);
         Task RemoveEnrolleeNotificationAsync(int enrolleeNotificationId);
         Task<EnrolleeNotification> GetEnrolleeNotificationAsync(int enrolleeNotificationId);
