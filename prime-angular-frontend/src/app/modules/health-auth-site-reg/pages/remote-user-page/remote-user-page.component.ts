@@ -20,7 +20,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
-import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { RemoteUsersFormState } from '../remote-users-page/remote-users-form-state.class';
 
 @Component({
@@ -60,7 +60,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private configService: ConfigService,
-    private healthAuthorityFormStateService: HealthAuthorityFormStateService,
+    private healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     private healthAuthoritySiteService: HealthAuthoritySiteService,
     // TODO even if we don't move the single method out to @lib/utils and don't use dependencies from other feature modules
     private enrolmentService: EnrolmentService,
@@ -126,7 +126,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected createFormInstance(): void {
     // Be aware that this is the parent form state and should only
     // be used for it's API and on submission
-    this.formState = this.healthAuthorityFormStateService.remoteUserFormState;
+    this.formState = this.healthAuthoritySiteFormStateService.remoteUserFormState;
   }
 
   protected patchForm(): void {
@@ -135,7 +135,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
     // Attempt to patch if needed on a refresh, otherwise do not forcibly
     // update the form state as it will drop unsaved updates
-    this.healthAuthorityFormStateService.setForm(site);
+    this.healthAuthoritySiteFormStateService.setForm(site);
 
     // Extract an existing remoteUser from the parent form for updates, otherwise new
     const remoteUser = this.formState.getRemoteUsers()[+this.remoteUserIndex] ?? null;

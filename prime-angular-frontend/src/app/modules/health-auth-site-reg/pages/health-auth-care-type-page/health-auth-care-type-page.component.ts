@@ -11,7 +11,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthorityCareType } from '@health-auth/shared/models/health-authority-care-type.model';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
-import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { HealthAuthCareTypeFormState } from './health-auth-care-type-form-state.class';
 
@@ -31,14 +31,14 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     protected route: ActivatedRoute,
-    protected siteService: HealthAuthoritySiteService,
-    protected formStateService: HealthAuthorityFormStateService,
+    protected healthAuthoritySiteService: HealthAuthoritySiteService,
+    protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthorityResource: HealthAuthorityResource,
     private fb: FormBuilder,
     private configService: ConfigService,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, siteService, formStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -58,7 +58,7 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
   }
 
   protected createFormInstance() {
-    this.formState = this.formStateService.healthAuthCareTypeFormState;
+    this.formState = this.healthAuthoritySiteFormStateService.healthAuthCareTypeFormState;
   }
 
   protected patchForm(): void {
@@ -68,10 +68,10 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
       throw new Error('No health authority site ID was provided');
     }
 
-    const site = this.siteService.site;
+    const site = this.healthAuthoritySiteService.site;
     this.healthAuthorityCareTypes = this.route.snapshot.data.healthAuthority?.careTypes ?? [];
     this.isCompleted = site?.completed;
-    this.formStateService.setForm(site, !this.hasBeenSubmitted);
+    this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
   protected afterSubmitIsSuccessful(): void {

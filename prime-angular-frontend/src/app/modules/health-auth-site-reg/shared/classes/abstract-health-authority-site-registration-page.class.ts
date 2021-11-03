@@ -7,7 +7,7 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { SiteService } from '@registration/shared/services/site.service';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
@@ -20,7 +20,7 @@ export abstract class AbstractHealthAuthoritySiteRegistrationPage<T extends Abst
     protected formUtilsService: FormUtilsService,
     protected route: ActivatedRoute,
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
-    protected healthAuthorityFormStateService: HealthAuthorityFormStateService,
+    protected healthAuthorityFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthorityResource: HealthAuthorityResource
   ) {
     super(dialog, formUtilsService);

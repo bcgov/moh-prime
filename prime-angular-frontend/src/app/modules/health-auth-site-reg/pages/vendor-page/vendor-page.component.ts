@@ -16,7 +16,7 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
-import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { VendorFormState } from './vendor-form-state.class';
@@ -39,7 +39,7 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
     protected formUtilsService: FormUtilsService,
     protected route: ActivatedRoute,
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
-    protected healthAuthorityFormStateService: HealthAuthorityFormStateService,
+    protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthorityResource: HealthAuthorityResource,
     private fb: FormBuilder,
     private location: Location,
@@ -47,7 +47,7 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
     private authorizedUserService: AuthorizedUserService,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthorityFormStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH, location);
@@ -66,7 +66,7 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
   }
 
   protected createFormInstance(): void {
-    this.formState = this.healthAuthorityFormStateService.vendorFormState;
+    this.formState = this.healthAuthoritySiteFormStateService.vendorFormState;
   }
 
   protected patchForm(): void {
@@ -79,7 +79,7 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
     const site = this.healthAuthoritySiteService.site;
     this.vendors = this.route.snapshot.data.healthAuthority?.vendors ?? [];
     this.isCompleted = site?.completed;
-    this.healthAuthorityFormStateService.setForm(site, !this.hasBeenSubmitted);
+    this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
   protected onSubmitFormIsValid(): void {
@@ -94,7 +94,7 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
 
   protected submissionRequest(): Observable<unknown> {
     const { haid, sid } = this.route.snapshot.params;
-    const healthAuthoritySite = this.healthAuthorityFormStateService.json;
+    const healthAuthoritySite = this.healthAuthoritySiteFormStateService.json;
 
     return (+sid)
       ? this.healthAuthorityResource

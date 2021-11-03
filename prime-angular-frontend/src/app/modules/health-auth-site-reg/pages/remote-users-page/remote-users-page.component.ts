@@ -18,7 +18,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
-import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { RemoteUsersFormState } from './remote-users-form-state.class';
 
@@ -42,11 +42,11 @@ export class RemoteUsersPageComponent extends AbstractHealthAuthoritySiteRegistr
     protected formUtilsService: FormUtilsService,
     protected route: ActivatedRoute,
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
-    protected healthAuthorityFormStateService: HealthAuthorityFormStateService,
+    protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthorityResource: HealthAuthorityResource,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthorityFormStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
 
     this.canDeactivateAllowlist = ['hasRemoteUsers'];
 
@@ -76,7 +76,7 @@ export class RemoteUsersPageComponent extends AbstractHealthAuthoritySiteRegistr
   }
 
   public onEdit(index: number): void {
-    this.routeUtils.routeRelativeTo([HealthAuthSiteRegRoutes.REMOTE_USERS, index]);
+    this.routeUtils.routeRelativeTo([index]);
   }
 
   public onBack(): void {
@@ -93,7 +93,7 @@ export class RemoteUsersPageComponent extends AbstractHealthAuthoritySiteRegistr
   }
 
   protected createFormInstance(): void {
-    this.formState = this.healthAuthorityFormStateService.remoteUserFormState;
+    this.formState = this.healthAuthoritySiteFormStateService.remoteUserFormState;
   }
 
   protected patchForm(): void {
@@ -112,9 +112,7 @@ export class RemoteUsersPageComponent extends AbstractHealthAuthoritySiteRegistr
 
     // Remove query param from URL without refreshing
     this.routeUtils.removeQueryParams({ fromRemoteUser: null });
-    this.healthAuthorityFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
-    // TODO is this needed?
-    // this.formState.form.markAsPristine();
+    this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
   }
 
   protected initForm(): void {
