@@ -12,7 +12,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { ConfigService } from '@config/config.service';
 import { RemoteUserPageComponent } from './remote-user-page.component';
 
-xdescribe('RemoteUserPageComponent', () => {
+describe('RemoteUserPageComponent', () => {
   let component: RemoteUserPageComponent;
   let fixture: ComponentFixture<RemoteUserPageComponent>;
 
@@ -52,7 +52,7 @@ xdescribe('RemoteUserPageComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

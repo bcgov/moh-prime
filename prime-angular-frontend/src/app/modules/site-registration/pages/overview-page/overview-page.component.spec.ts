@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { MockSiteService } from 'test/mocks/mock-site.service';
+import { MockCommunitySiteService } from 'test/mocks/mock-community-site.service';
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
 import { OverviewPageComponent } from './overview-page.component';
@@ -50,7 +50,7 @@ describe('OverviewPageComponent', () => {
         },
         {
           provide: SiteService,
-          useClass: MockSiteService
+          useClass: MockCommunitySiteService
         },
         {
           provide: OrganizationService,

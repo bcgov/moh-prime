@@ -6,7 +6,7 @@ import { Address } from '@lib/models/address.model';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { Site } from '@registration/shared/models/site.model';
 
-export class MockSiteService {
+export class MockCommunitySiteService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private readonly _site: BehaviorSubject<Site>;
 
