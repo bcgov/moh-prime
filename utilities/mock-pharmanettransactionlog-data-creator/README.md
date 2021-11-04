@@ -27,9 +27,33 @@ Assuming you don't have the `psql` client locally:
 2. Use `psql` in the pod to COPY into target database, e.g. importing into the `dev` Patroni cluster, `prime-pr-1722` database:
 ```
 psql -h dev-patroni -U prime_user -c "\COPY \"PharmanetTransactionLog\"(\"TransactionId\", \"TxDateTime\", \"UserId\", \"SourceIpAddress\", \"LocationIpAddress\", \"PharmacyId\", \"TransactionType\", \"TransactionSubType\", \"PractitionerId\", \"CollegePrefix\", \"TransactionOutcome\", \"ProviderSoftwareId\", \"ProviderSoftwareVersion\")
-    FROM '/tmp/pnet-logs.csv'
-    csv;" prime-pr-1722
+    FROM '/tmp/pnet-logs2.csv'
+    csv;" prime-pr-1721
 ```
 
 3. The password for `prime_user` can be found in the OpenShift secret `dev-patroni-secret`, `app-db-password` key
 
+
+# Other useful commands
+
+These require some tweaking for the given situation:
+
+1.  To generate multiple files, see `loop-generation.ps1`
+
+2.  To upload multiple files to a OpenShift pod, see `loop-upload.ps1`
+
+3.  To load data from multiple files, working in an OpenShift pod (be sure to be using `bash`):
+
+```
+for i in {4..8}; do PGPASSWORD=<PASSWORD GOES HERE> psql -h dev-patroni -U prime_user -c "\COPY \"PharmanetTransactionLog\"(\"TransactionId\", \"TxDateTime\", \"UserId\", \"SourceIpAddress\", \"LocationIpAddress\", \"PharmacyId\", \"TransactionType\", \"TransactionSubType\", \"PractitionerId\", \"CollegePrefix\", \"TransactionOutcome\", \"ProviderSoftwareId\", \"ProviderSoftwareVersion\")
+    FROM '/tmp/pnet-logs${i}.csv'
+    csv;" prime_dev ; done
+```
+
+4.  To load data from multiple files, working locally (e.g. in `~/Source/Repos/moh-prime/utilities/mock-pharmanettransactionlog-data-creator`) using `bash`:
+
+```
+echo $(date);   for i in {1..5}; do PGPASSWORD=<PASSWORD GOES HERE> psql -h localhost -p 15432 -U prime-user -c "\COPY \"PharmanetTransactionLog\"(\"TransactionId\", \"TxDateTime\", \"UserId\", \"SourceIpAddress\", \"LocationIpAddress\", \"PharmacyId\", \"TransactionType\", \"TransactionSubType\", \"PractitionerId\", \"CollegePrefix\", \"TransactionOutcome\", \"ProviderSoftwareId\", \"ProviderSoftwareVersion\")
+    FROM 'pnet-logs${i}.csv'
+    csv;" prime-test ; done;   echo $(date)
+```
