@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
 using Prime.Configuration.Auth;
+using Prime.Engines;
+using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Sites;
@@ -211,23 +213,41 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
+        /// <param name="updateModel"></param>
         [HttpPost("{siteId}/submissions", Name = nameof(HealthAuthoritySiteSubmission))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId)
+        public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
             if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"No editable Health Authority Site found with Id {siteId}");
+            }
+
+            var record = await _healthAuthoritySiteService.GetPermissionsRecordAsync(siteId);
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
             }
             if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, siteId))
             {
                 return Conflict("Cannot submit Site, one or more selections dependent on the Health Authority are invalid.");
             }
 
+            var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            // TODO duplicate PEC allowed but only in same Health Authority
+
+            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+
+            // TODO send site registration submission notification
 
             return NoContent();
         }

@@ -20,7 +20,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
-import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { RemoteUsersFormState } from '../remote-users-page/remote-users-form-state.class';
 
 @Component({
@@ -60,10 +60,8 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private configService: ConfigService,
-    private healthAuthorityFormStateService: HealthAuthorityFormStateService,
+    private healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     private healthAuthoritySiteService: HealthAuthoritySiteService,
-    // TODO even if we don't move the single method out to @lib/utils and don't use dependencies from other feature modules
-    private enrolmentService: EnrolmentService,
     route: ActivatedRoute,
     router: Router
   ) {
@@ -97,15 +95,9 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * Removes a certification from the list in response to an
    * emitted event from college certifications. Does not allow
    * the list of certifications to empty.
-   *
-   * @param index to be removed
    */
   public removeCertification(index: number): void {
     this.remoteUserCertifications.removeAt(index);
-  }
-
-  public onBack(): void {
-    this.routeUtils.routeRelativeTo(['./']);
   }
 
   public collegeFilterPredicate(): (collegeConfig: CollegeConfig) => boolean {
@@ -114,8 +106,11 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public licenceFilterPredicate(): (licenceConfig: LicenseConfig) => boolean {
-    return (licenceConfig: LicenseConfig) =>
-      this.enrolmentService.hasAllowedRemoteAccessLicences(licenceConfig);
+    return (licenceConfig: LicenseConfig) => this.hasAllowedRemoteAccessLicences(licenceConfig);
+  }
+
+  public onBack(): void {
+    this.routeUtils.routeRelativeTo(['./']);
   }
 
   public ngOnInit(): void {
@@ -126,7 +121,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected createFormInstance(): void {
     // Be aware that this is the parent form state and should only
     // be used for it's API and on submission
-    this.formState = this.healthAuthorityFormStateService.remoteUserFormState;
+    this.formState = this.healthAuthoritySiteFormStateService.remoteUserFormState;
   }
 
   protected patchForm(): void {
@@ -135,7 +130,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
     // Attempt to patch if needed on a refresh, otherwise do not forcibly
     // update the form state as it will drop unsaved updates
-    this.healthAuthorityFormStateService.setForm(site);
+    this.healthAuthoritySiteFormStateService.setForm(site);
 
     // Extract an existing remoteUser from the parent form for updates, otherwise new
     const remoteUser = this.formState.getRemoteUsers()[+this.remoteUserIndex] ?? null;
@@ -223,5 +218,9 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     if (!noEmptyCert && !this.remoteUserCertifications.controls.length) {
       this.addCertification();
     }
+  }
+
+  private hasAllowedRemoteAccessLicences(licenceConfig: LicenseConfig): boolean {
+    return (licenceConfig.licensedToProvideCare && licenceConfig.namedInImReg);
   }
 }

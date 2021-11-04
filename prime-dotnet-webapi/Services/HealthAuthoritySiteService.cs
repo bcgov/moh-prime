@@ -29,6 +29,15 @@ namespace Prime.Services
             _businessEventService = businessEventService;
         }
 
+        public async Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId)
+        {
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Where(s => s.Id == siteId)
+                .Select(s => new PermissionsRecord { UserId = s.AuthorizedUser.Party.UserId })
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId)
         {
             return await _context.HealthAuthoritySites
@@ -52,7 +61,8 @@ namespace Prime.Services
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
                 HealthAuthorityVendorId = createModel.HealthAuthorityVendorId,
-                AuthorizedUserId = createModel.AuthorizedUserId
+                AuthorizedUserId = createModel.AuthorizedUserId,
+                CareSettingCode = (int)CareSettingType.HealthAuthority
             };
             site.AddStatus(SiteStatusType.Editable);
 

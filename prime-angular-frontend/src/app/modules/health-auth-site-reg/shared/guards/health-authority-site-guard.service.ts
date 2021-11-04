@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SiteStatusType } from '@lib/enums/site-status.enum';
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
@@ -49,7 +50,7 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
   private routeDestination(routePath: string, params: Params, healthAuthoritySite: HealthAuthoritySite): boolean {
     switch (healthAuthoritySite?.status) {
       case SiteStatusType.EDITABLE: {
-        return this.manageEditableHealthAuthoritySite(routePath, params);
+        return this.manageEditableHealthAuthoritySite(routePath, params, healthAuthoritySite);
       }
       case SiteStatusType.IN_REVIEW: {
         return this.manageInReviewHealthAuthoritySite(routePath, params);
@@ -67,31 +68,50 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
    * @description
    * Restrict access to routes permitted when "Editable".
    */
-  // TODO what is editable in health authority site registration?
-  // TODO editable and !approved vs editable and approved
-  private manageEditableHealthAuthoritySite(routePath: string, params: Params): boolean {
-    return true;
+  private manageEditableHealthAuthoritySite(routePath: string, params: Params, healthAuthoritySite: HealthAuthoritySite): boolean {
+    return (healthAuthoritySite.isApproved())
+      ? this.manageApprovedHealthAuthoritySite(routePath, params)
+      : this.manageIncompleteHealthAuthoritySite(routePath, params, healthAuthoritySite);
+  }
+
+  /**
+   * @description
+   * Restrict access to routes permitted when "Editable" and "Incomplete".
+   */
+  private manageIncompleteHealthAuthoritySite(routePath: string, { haid, sid }: Params, healthAuthoritySite: HealthAuthoritySite): boolean {
+    const nextRouteSegment = RouteUtils.currentRoutePath(routePath);
+    return (HealthAuthSiteRegRoutes.siteIsIncompleteRoutes().includes(nextRouteSegment))
+      ? true
+      : this.navigate(routePath, this.createSiteRoutePath({ haid, sid },
+        (healthAuthoritySite.completed)
+          ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
+          : HealthAuthSiteRegRoutes.VENDOR
+      ));
+  }
+
+  /**
+   * @description
+   * Restrict access to routes permitted when "Editable" and "Approved".
+   */
+  private manageApprovedHealthAuthoritySite(routePath: string, { haid, sid }: Params): boolean {
+    const nextRouteSegment = RouteUtils.currentRoutePath(routePath);
+    return (HealthAuthSiteRegRoutes.siteIsApprovedRoutes().includes(nextRouteSegment))
+      ? true
+      : this.navigate(routePath, this.createSiteRoutePath({ haid, sid }, HealthAuthSiteRegRoutes.SITE_OVERVIEW));
   }
 
   /**
    * @description
    * Restrict access to routes permitted when "In Review".
    */
-  private manageInReviewHealthAuthoritySite(routePath: string, params: Params): boolean {
-    return this.navigate(routePath, [
-      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
-      params.haid,
-      HealthAuthSiteRegRoutes.SITES,
-      params.sid,
-      HealthAuthSiteRegRoutes.SITE_OVERVIEW
-    ]);
+  private manageInReviewHealthAuthoritySite(routePath: string, { haid, sid }: Params): boolean {
+    return this.navigate(routePath, this.createSiteRoutePath({ haid, sid }, HealthAuthSiteRegRoutes.SITE_OVERVIEW));
   }
 
   /**
    * @description
    * Restrict access to routes permitted when "Locked".
    */
-  // TODO what does locking a site mean in health authority site registration?
   private manageLockedHealthAuthoritySite(routePath: string, params: Params): boolean {
     return this.navigate(routePath, [
       HealthAuthSiteRegRoutes.SITE_MANAGEMENT
@@ -103,16 +123,11 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
    * Restrict access to routes permitted when the site
    * does not exist.
    */
-  private manageNoHealthAuthoritySite(routePath: string, params: Params): boolean {
-    const newSiteRoutePath = [
-      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
-      params.haid,
-      HealthAuthSiteRegRoutes.SITES,
-      0,
-      HealthAuthSiteRegRoutes.VENDOR
-    ].join('/');
+  private manageNoHealthAuthoritySite(routePath: string, { haid }: Params): boolean {
+    const sid = 0;
+    const newSiteRoutePath = this.createSiteRoutePath({ haid, sid }, HealthAuthSiteRegRoutes.VENDOR);
 
-    if (routePath.includes(newSiteRoutePath)) {
+    if (routePath.includes(newSiteRoutePath.join('/'))) {
       return true;
     }
 
@@ -123,12 +138,26 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
     ]);
   }
 
+  private createSiteRoutePath(params: { haid: number, sid: number }, destinationRouteSegment: RoutePath): (string | number)[] {
+    destinationRouteSegment = (Array.isArray(destinationRouteSegment))
+      ? destinationRouteSegment
+      : [destinationRouteSegment];
+
+    return [
+      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
+      params.haid,
+      HealthAuthSiteRegRoutes.SITES,
+      params.sid,
+      ...destinationRouteSegment
+    ];
+  }
+
   /**
    * @description
    * Prevent infinite route loops by navigating to a route only
    * when the current route path is not the destination path.
    */
-  private navigate(routePath: string, destinationSegments: string[]): boolean {
+  private navigate(routePath: string, destinationSegments: (string | number)[]): boolean {
     const destinationPath = HealthAuthSiteRegRoutes.routePath(destinationSegments.join('/'));
 
     // Route path may contain query parameters, which should be ignored

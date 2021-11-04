@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
@@ -18,6 +19,7 @@ describe('OverviewPageComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
+        ReactiveFormsModule,
         MatDialogModule,
         MatSnackBarModule
       ],

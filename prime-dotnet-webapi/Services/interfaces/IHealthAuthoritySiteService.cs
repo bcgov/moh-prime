@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
-
+using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
 {
     public interface IHealthAuthoritySiteService
     {
+        Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId);
         Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId);
         Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel);
         Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int? healthAuthorityId = null);
@@ -14,8 +15,6 @@ namespace Prime.Services
         Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel);
         Task SetSiteCompletedAsync(int siteId);
         Task SiteSubmissionAsync(int siteId);
-
-        // New Line
         Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId);
     }
 }

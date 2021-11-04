@@ -33,7 +33,7 @@ describe('DocumentAttachmentsComponent', () => {
       documentGuid: '333-333-333',
       documentType: 3
     },
-  ]
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -50,7 +50,7 @@ describe('DocumentAttachmentsComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: AppConfig
-        },
+        }
       ]
     })
       .compileComponents();

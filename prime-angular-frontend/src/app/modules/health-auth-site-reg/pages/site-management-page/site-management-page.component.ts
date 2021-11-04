@@ -27,7 +27,6 @@ export class SiteManagementPageComponent implements OnInit {
   public healthAuthority: HealthAuthority;
   public healthAuthoritySites: HealthAuthoritySite[];
   public routeUtils: RouteUtils;
-  public SiteRoutes = HealthAuthSiteRegRoutes;
   public HealthAuthorityEnum = HealthAuthorityEnum;
   public SiteStatusType = SiteStatusType;
 
@@ -63,7 +62,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.redirectTo(healthAuthorityId, healthAuthoritySiteId, HealthAuthSiteRegRoutes.REMOTE_USERS);
   }
 
-  public inComplete(healthAuthoritySite: HealthAuthoritySite): boolean {
+  public isInComplete(healthAuthoritySite: HealthAuthoritySite): boolean {
     return !healthAuthoritySite.submittedDate || (
       healthAuthoritySite.submittedDate &&
       !healthAuthoritySite.approvedDate &&
@@ -80,12 +79,11 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public isApproved(healthAuthoritySite: HealthAuthoritySite): boolean {
-    return (healthAuthoritySite.status === SiteStatusType.EDITABLE && !!healthAuthoritySite.approvedDate);
+    return healthAuthoritySite.status === SiteStatusType.EDITABLE && !!healthAuthoritySite.approvedDate;
   }
 
-  // TODO do health authority sites need to renew?
   public requiresRenewal(healthAuthoritySite: HealthAuthoritySite): boolean {
-    return DateUtils.withinRenewalPeriod(HealthAuthoritySite.getExpiryDate(healthAuthoritySite));
+    return healthAuthoritySite.withinRenewalPeriod();
   }
 
   public getApprovedSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
@@ -95,8 +93,7 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
-  // TODO do health authority sites need to renew?
-  public getRenewalRequiredSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
+  public getWithinRenewalPeriodSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
     return {
       icon: 'notification_important',
       text: 'This site requires renewal.',

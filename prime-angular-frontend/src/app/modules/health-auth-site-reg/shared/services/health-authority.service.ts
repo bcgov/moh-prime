@@ -23,7 +23,7 @@ export class HealthAuthorityService {
 
   public set healthAuthority(healthAuthority: HealthAuthority) {
     // Make immutable to prevent changes to the model
-    this._healthAuthority.next(ObjectUtils.deepFreeze(healthAuthority));
+    this._healthAuthority.next(healthAuthority);
   }
 
   public get healthAuthority(): HealthAuthority | null {

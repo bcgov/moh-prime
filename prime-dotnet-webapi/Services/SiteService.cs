@@ -218,24 +218,26 @@ namespace Prime.Services
                 return Enumerable.Empty<RemoteAccessSearchViewModel>();
             }
 
-            var predicate = PredicateBuilder.New<RemoteUserCertification>();
-            foreach (var cert in certs)
+            var matchesAnyCert = PredicateBuilder.New<RemoteUserCertification>();
+            foreach (var searchedCert in certs)
             {
-                predicate.Or(ruc => ruc.CollegeCode == cert.CollegeCode && ruc.LicenseNumber == cert.LicenceNumber);
+                matchesAnyCert.Or(ruc => ruc.CollegeCode == searchedCert.CollegeCode && ruc.LicenseNumber == searchedCert.LicenceNumber);
             }
 
-            var remoteUsers = await _context.RemoteUserCertifications
+            IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications
                 .AsNoTracking()
                 .AsExpandable()
-                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate != null)
-                .Where(predicate)
-                .Select(ruc => ruc.RemoteUser)
-                .ProjectTo<RemoteAccessSearchViewModel>(_mapper.ConfigurationProvider)
+                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate.HasValue)
+                .Where(matchesAnyCert)
+                .ProjectTo<RemoteAccessSearchDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            return remoteUsers
+            // Remove duplicates since one RemoteUser could have multiple certs matching the search
+            searchResults = searchResults
                 .GroupBy(user => user.RemoteUserId)
                 .Select(group => group.First());
+
+            return _mapper.Map<IEnumerable<RemoteAccessSearchViewModel>>(searchResults);
         }
 
         private async Task DeleteContactFromSite(int? contactId)

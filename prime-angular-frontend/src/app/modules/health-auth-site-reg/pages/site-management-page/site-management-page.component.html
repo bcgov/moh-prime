@@ -50,7 +50,7 @@
                             { key: 'Vendor', value: healthAuthoritySite.healthAuthorityVendor.vendorCode | configCode : 'vendors' }
                       ]"
                       (action)="viewSiteRemoteUsers(healthAuthority.id, healthAuthoritySite.id)">
-      <ng-container *ngIf="inComplete(healthAuthoritySite)"
+      <ng-container *ngIf="isInComplete(healthAuthoritySite)"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
                       props: {
@@ -88,7 +88,7 @@
       <ng-container *ngIf="isApproved(healthAuthoritySite) && requiresRenewal(healthAuthoritySite)"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
-                      props: getRenewalRequiredSiteNotificationProperties(healthAuthoritySite)
+                      props: getWithinRenewalPeriodSiteNotificationProperties(healthAuthoritySite)
                     }">
       </ng-container>
     </app-summary-card>
@@ -146,11 +146,12 @@
     <mat-menu #menu="matMenu"
               aria-label="Health authority site actions menu">
       <button mat-menu-item
+              [disabled]="healthAuthoritySite.status === SiteStatusType.LOCKED"
               (click)="viewSite(healthAuthorityId, healthAuthoritySite)">
         <span>View/Update Site Information</span>
       </button>
       <button mat-menu-item
-              [disabled]="!healthAuthoritySite.completed || healthAuthoritySite.status === SiteStatusType.IN_REVIEW"
+              [disabled]="!healthAuthoritySite.completed || [SiteStatusType.IN_REVIEW, SiteStatusType.LOCKED].includes(healthAuthoritySite.status)"
               (click)="viewSiteRemoteUsers(healthAuthorityId, healthAuthoritySite.id)">
         <span>View/Update Remote Practitioners</span>
       </button>
