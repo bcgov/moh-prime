@@ -213,6 +213,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
+        /// <param name="updateModel"></param>
         [HttpPost("{siteId}/submissions", Name = nameof(HealthAuthoritySiteSubmission))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
