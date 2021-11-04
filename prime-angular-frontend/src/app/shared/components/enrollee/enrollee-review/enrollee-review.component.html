@@ -166,6 +166,8 @@
   </app-page-subheader>
 
   <app-enrollee-property title="Device Provider ID"
+                         [hasError]="enrolmentErrors?.deviceProviderOrOboSite && enrolmentErrors?.deviceProvider"
+                         errorMessage="Must have a device provider ID or job site information"
                          [makeBold]="true">
     {{ enrolment.deviceProviderIdentifier | default }}
   </app-enrollee-property>
@@ -216,7 +218,7 @@
 
   <app-enrollee-property *ngIf="!hasCertification"
                          title="College Certification"
-                         [hasError]="enrolmentErrors?.certificateOrOboSite"
+                         [hasError]="enrolmentErrors?.certificateOrOboSite && enrolmentErrors?.certificate"
                          errorMessage="Must have a college certificate or job site information"
                          [makeBold]="true">
     None
@@ -225,7 +227,8 @@
 </app-page-section>
 
 <app-page-section>
-  <ng-container *ngIf="enrolment.oboSites?.length || enrolment.jobs?.length || enrolmentErrors?.certificateOrOboSite;">
+  <ng-container
+                *ngIf="enrolment.oboSites?.length || enrolment.jobs?.length || (enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite);">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
 
@@ -237,7 +240,8 @@
       </button>
     </app-page-subheader>
   </ng-container>
-  <ng-container *ngIf="enrolment.oboSites?.length || enrolmentErrors?.certificateOrOboSite; else legacyJobInfo">
+  <ng-container
+                *ngIf="enrolment.oboSites?.length || (enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite); else legacyJobInfo">
     <ng-container *ngFor="let careSetting of enrolment.careSettings">
       <ng-container *ngFor="let site of enrolment?.oboSites">
         <ng-container *ngIf="site.careSettingCode === careSetting.careSettingCode">
@@ -298,8 +302,14 @@
 
     <app-enrollee-property *ngIf="!enrolment.oboSites.length"
                            title="Job Sites"
-                           [hasError]="enrolmentErrors?.certificateOrOboSite"
-                           errorMessage="Must have a college certificate or job site information"
+                           [hasError]="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite"
+                           errorMessage="Must have a {{
+                             enrolmentErrors?.certificate && enrolmentErrors?.deviceProvider
+                             ? 'college certificate and a device provider ID'
+                             : enrolmentErrors?.certificate
+                                ? 'college certificate'
+                                : 'device provider ID'
+                            }} or job site information"
                            [makeBold]="true">
       None
     </app-enrollee-property>
