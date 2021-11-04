@@ -24,7 +24,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.AdministratorPharmaNet, f => new ContactFactory().Generate());
             RuleFor(x => x.PrivacyOfficer, f => new ContactFactory().Generate());
             RuleFor(x => x.TechnicalSupport, f => new ContactFactory().Generate());
-            RuleFor(x => x.CareSetting, f => f.PickRandom(CareSettingLookup.SiteCareSettings));
+            RuleFor(x => x.CareSettingCode, f => f.PickRandom(CareSettingLookup.SiteCareSettings).Code);
             // TODO: Signing Authority now must provide?
             RuleFor(x => x.PEC, f => f.Lorem.Letter(3).OrNull(f));
             RuleFor(x => x.DoingBusinessAs, f => f.Company.CompanyName());
@@ -43,7 +43,7 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.PrivacyOfficerId);
             Ignore(x => x.TechnicalSupportId);
             Ignore(x => x.ProvisionerId);
-            Ignore(x => x.CareSettingCode);
+            Ignore(x => x.CareSetting);
             Ignore(x => x.AdjudicatorId);
             // The following are not used in the application?
             Ignore(x => x.SiteRegistrationReviewDocuments);

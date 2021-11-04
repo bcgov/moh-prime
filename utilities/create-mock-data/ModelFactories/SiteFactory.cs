@@ -24,7 +24,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.AdministratorPharmaNet, f => new ContactFactory().Generate());
             RuleFor(x => x.PrivacyOfficer, f => new ContactFactory().Generate());
             RuleFor(x => x.TechnicalSupport, f => new ContactFactory().Generate());
-//            RuleFor(x => x.CareSetting, f => f.PickRandom(CareSettingLookup.SiteCareSettings));
+            RuleFor(x => x.CareSettingCode, f => f.PickRandom(CareSettingLookup.SiteCareSettings).Code);
             // TODO: Signing Authority now must provide?
             RuleFor(x => x.PEC, f => f.Lorem.Letter(3).OrNull(f));
             RuleFor(x => x.DoingBusinessAs, f => f.Company.CompanyName());
@@ -35,7 +35,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Flagged, f => f.Random.Bool(0.1f));
             // TODO: What dates are generated?
             RuleFor(x => x.SubmittedDate, f => f.Date.Past(1).OrNull(f, 0.2f));
-//            RuleFor(x => x.SiteVendors, (f, x) => new SiteVendorFactory(x).GenerateBetween(1, 3));
+            RuleFor(x => x.SiteVendors, (f, x) => new SiteVendorFactory(x).GenerateBetween(1, 3));
             // TODO: is BusinessLicenceFactory complete?
             RuleFor(x => x.BusinessLicences, (f, x) => new BusinessLicenceFactory(x).GenerateBetween(1, 3));
 
@@ -43,7 +43,7 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.PrivacyOfficerId);
             Ignore(x => x.TechnicalSupportId);
             Ignore(x => x.ProvisionerId);
-            Ignore(x => x.CareSettingCode);
+            Ignore(x => x.CareSetting);
             Ignore(x => x.AdjudicatorId);
             // The following are not used in the application?
             Ignore(x => x.SiteRegistrationReviewDocuments);

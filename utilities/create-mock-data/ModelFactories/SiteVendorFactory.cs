@@ -11,14 +11,14 @@ namespace PrimeTests.ModelFactories
         {
 //            this.SetBaseRules();
 
-            RuleFor(x => x.Id, () => IdCounter++);
+//            RuleFor(x => x.Id, () => IdCounter++);
             RuleFor(x => x.Site, f => site);
-            RuleFor(x => x.Vendor,
-                (f, x) => f.PickRandom(VendorLookup.AllowedFor(
-                    x.Site.CareSetting.Code)));
+            RuleFor(x => x.VendorCode,
+                f => f.PickRandom(VendorLookup.AllowedFor(
+                    site.CareSettingCode ?? default(int))).Code);
 
             Ignore(x => x.SiteId);
-            Ignore(x => x.VendorCode);
+            Ignore(x => x.Vendor);
         }
     }
 }
