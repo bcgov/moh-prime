@@ -159,7 +159,7 @@
 
     <button *ngIf="showEditRedirect"
             mat-icon-button
-            matTooltip="Edit College Licenses"
+            matTooltip="Edit Device Provider ID"
             (click)="onRoute(EnrolmentRoutes.REGULATORY)">
       <mat-icon>edit</mat-icon>
     </button>
@@ -171,7 +171,6 @@
                          [makeBold]="true">
     {{ enrolment.deviceProviderIdentifier | default }}
   </app-enrollee-property>
-
 </app-page-section>
 
 <app-page-section>

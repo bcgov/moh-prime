@@ -199,7 +199,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
     const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-    const isDeviceProviderIdentifier = this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.value;
+    const isDeviceProviderIdentifier = this.enrolmentService.enrolment.deviceProviderIdentifier;
 
     return {
       certificate: !enrolment.certifications?.length,

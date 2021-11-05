@@ -121,6 +121,12 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
     return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
       .pipe(
+        // If no device provider care setting was selected, clear the device provider identifier
+        exhaustMap(() =>
+          (!payload.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER))
+            ? this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id)
+            : of(null)
+        ),
         exhaustMap(() =>
           (this.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)

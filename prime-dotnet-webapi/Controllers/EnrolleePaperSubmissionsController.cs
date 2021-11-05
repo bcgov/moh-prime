@@ -118,6 +118,27 @@ namespace Prime.Controllers
             return Ok();
         }
 
+        // PUT: api/enrollees/5/paper-submissions/device-provider
+        /// <summary>
+        /// Updates a Paper Submission's Device Provider Informaion.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/device-provider", Name = nameof(UpdateEnrolleePaperSubmissionDeviceProvider))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionDeviceProvider(int enrolleeId, FromBodyText deviceProviderIdentifier)
+        {
+            if (!await _enrolleePaperSubmissionService.PaperSubmissionIsEditableAsync(enrolleeId))
+            {
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
+            }
+
+            await _enrolleePaperSubmissionService.UpdateDeviceProviderAsync(enrolleeId, deviceProviderIdentifier);
+            return Ok();
+        }
+
         // PUT: api/enrollees/5/paper-submissions/demographics
         /// <summary>
         /// Updates a Paper Submission's demographic information.

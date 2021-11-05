@@ -11,7 +11,9 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
@@ -26,6 +28,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   public formState: RegulatoryFormState;
   public routeUtils: RouteUtils;
   public enrollee: HttpEnrollee;
+  public isDeviceProvider: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -49,6 +52,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public ngOnInit(): void {
+
     this.createFormInstance();
     this.initForm();
     this.patchForm();
@@ -82,6 +86,9 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
           this.enrollee = enrollee;
           // Attempt to patch the form if not already patched
           const { certifications, deviceProviderIdentifier } = enrollee;
+          this.isDeviceProvider = enrollee.enrolleeCareSettings.some((careSetting) =>
+            careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+          this.enableDeviceProviderValidator();
           this.formState.patchValue({ certifications, deviceProviderIdentifier });
         }
       });
@@ -91,11 +98,15 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.formState.removeIncompleteCertifications(true);
     this.formState.form.markAsPristine();
 
-    const payload = this.formState.json.certifications;
+    const certifications = this.formState.json.certifications;
+    const deviceProviderIdentifier = this.formState.json.deviceProviderIdentifier;
     const oboSites = this.removeOboSites(this.enrollee.oboSites);
 
-    return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, payload)
+    return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, certifications)
       .pipe(
+        exhaustMap(() =>
+          this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, deviceProviderIdentifier)
+        ),
         exhaustMap(() =>
           (this.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
@@ -105,10 +116,12 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected afterSubmitIsSuccessful(): void {
+    const collegeCertifications = this.formState.collegeCertifications;
+    const formDeviceProviderIdentifier = this.formState.deviceProviderIdentifier.value;
     // Force obo sites to always be checked regardless of the profile being
     // completed so validations are applied prior to overview pushing the
     // responsibility of validation to obo sites
-    const nextRoutePath = (!this.formState.collegeCertifications.length)
+    const nextRoutePath = (!collegeCertifications.length || (this.isDeviceProvider && !formDeviceProviderIdentifier))
       ? PaperEnrolmentRoutes.OBO_SITES
       : (this.enrollee.profileCompleted)
         ? PaperEnrolmentRoutes.OVERVIEW
@@ -130,5 +143,14 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     }
 
     return oboSites;
+  }
+
+  private enableDeviceProviderValidator(): void {
+    this.isDeviceProvider
+      ? this.formUtilsService.setValidators(this.formState.deviceProviderIdentifier, [
+        FormControlValidators.requiredLength(5),
+        FormControlValidators.numeric
+      ])
+      : this.formUtilsService.resetAndClearValidators(this.formState.deviceProviderIdentifier);
   }
 }

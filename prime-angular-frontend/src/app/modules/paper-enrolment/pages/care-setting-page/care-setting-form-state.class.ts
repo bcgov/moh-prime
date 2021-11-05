@@ -94,14 +94,6 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     return this.fb.control(checkState);
   }
 
-  public disableCareSetting(careSettingCode: number): boolean {
-    return ![
-      CareSettingEnum.COMMUNITY_PHARMACIST,
-      CareSettingEnum.HEALTH_AUTHORITY,
-      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
-    ].includes(careSettingCode);
-  }
-
   public addCareSetting() {
     const careSetting = this.buildCareSettingForm();
     this.enrolleeCareSettings.push(careSetting);

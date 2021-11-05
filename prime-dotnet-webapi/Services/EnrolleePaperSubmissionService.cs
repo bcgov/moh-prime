@@ -151,6 +151,15 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateDeviceProviderAsync(int enrolleeId, string deviceProviderIdentifier)
+        {
+            var enrollee = await _context.Enrollees
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            enrollee.DeviceProviderIdentifier = deviceProviderIdentifier;
+
+            await _context.SaveChangesAsync();
+        }
         public async Task UpdateSelfDeclarationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> viewModels)
         {
             var newDeclarations = _mapper.Map<IEnumerable<SelfDeclaration>>(viewModels);

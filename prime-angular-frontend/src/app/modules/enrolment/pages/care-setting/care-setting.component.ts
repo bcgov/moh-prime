@@ -94,6 +94,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       this.setHealthAuthorityValidator();
     }
 
+    // remove device provider identifier if it Device Provider is no longer selected
+    if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
+      this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.setValue(null);
+      // this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.clearValidators;
+    }
+
     // If an individual health authority was deselected, its Obo Sites
     // should be removed as well
     this.enrolmentFormStateService.removeUnselectedHAOboSites();

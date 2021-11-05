@@ -89,10 +89,10 @@
       <ng-container appPageSubheaderTitle>
         {{
         (isInitialEnrolment)
-          ? 'Enrolment Review'
-          : (withinDaysOfRenewal)
-            ? 'Renew Enrolment'
-            : 'Enrolment Information'
+        ? 'Enrolment Review'
+        : (withinDaysOfRenewal)
+        ? 'Renew Enrolment'
+        : 'Enrolment Information'
         }}
       </ng-container>
 
@@ -129,7 +129,7 @@
     Request Remote Access
   </button>
 
-  <app-alert *ngIf="enrolmentErrors?.certificateOrOboSite"
+  <app-alert *ngIf="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite"
              type="danger"
              icon="error">
     <ng-container #alertContent
@@ -151,7 +151,7 @@
 
     <ng-container>
       <app-enrollee-property
-        [title]=" (paperEnrolleeGpid) ? 'Paper enrolment GPID' : 'No manual enrolment GPID provided.'">
+                             [title]=" (paperEnrolleeGpid) ? 'Paper enrolment GPID' : 'No manual enrolment GPID provided.'">
         {{ paperEnrolleeGpid }}
       </app-enrollee-property>
     </ng-container>

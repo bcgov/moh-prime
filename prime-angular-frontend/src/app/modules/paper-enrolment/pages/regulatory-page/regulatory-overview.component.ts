@@ -11,6 +11,24 @@ import { RegulatoryForm } from './regulatory-form.model';
   template: `
     <app-page-section>
       <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
+
+        <button *ngIf="showEditRedirect"
+                mat-icon-button
+                matTooltip="Edit Device Provider ID"
+                (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </app-page-subheader>
+
+      <app-enrollee-property title="Device Provider ID"
+                            [makeBold]="true">
+        {{ deviceProviderIdentifier | default }}
+      </app-enrollee-property>
+    </app-page-section>
+
+    <app-page-section>
+      <app-page-subheader>
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
 
         <button mat-icon-button
@@ -61,6 +79,7 @@ import { RegulatoryForm } from './regulatory-form.model';
 })
 export class RegulatoryOverviewComponent extends AbstractOverview {
   @Input() public regulatory: RegulatoryForm;
+  @Input() public deviceProviderIdentifier: string;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
 
   constructor(
