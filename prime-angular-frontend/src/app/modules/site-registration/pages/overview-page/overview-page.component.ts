@@ -213,7 +213,7 @@ export class OverviewPageComponent implements OnInit {
    *
    * NOTE: Not possible to validate some form states due to validators
    * being dynamically applied when the view is loaded. Use the passed
-   * enrolment for checking validation instead of form state.
+   * site for checking validation instead of form state.
    */
   private getSiteErrors(site: Site): ValidationErrors {
     return {
