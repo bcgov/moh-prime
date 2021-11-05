@@ -2,7 +2,7 @@ import * as faker from 'faker';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 
 import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
 import { ISatEnrolleeService } from '@sat/shared/services/sat-enrollee.service';

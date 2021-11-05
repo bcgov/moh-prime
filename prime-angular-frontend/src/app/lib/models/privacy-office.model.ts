@@ -1,4 +1,4 @@
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 
 export interface PrivacyOffice {
   email: string;

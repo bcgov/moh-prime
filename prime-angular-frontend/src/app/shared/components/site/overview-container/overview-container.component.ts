@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 
@@ -10,7 +11,6 @@ import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-overview-container',

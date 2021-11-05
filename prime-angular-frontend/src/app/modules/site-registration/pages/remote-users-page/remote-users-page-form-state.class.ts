@@ -3,8 +3,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { RemoteUser } from '@lib/models/remote-user.model';
+import { RemoteUserCertification } from '@lib/models/remote-user-certification.model';
 
 export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
   public constructor(
@@ -76,8 +76,6 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
         [],
         []
       )
-      // TODO at least one remote users is required
-      // [FormArrayValidators.atLeast(1)]
     });
   }
 

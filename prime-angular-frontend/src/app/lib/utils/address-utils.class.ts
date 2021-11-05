@@ -1,5 +1,5 @@
 // TODO move into lib module which shouldn't have shared dependency
-import { Address, AddressType, addressTypes } from '@shared/models/address.model';
+import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 
 export class AddressUtils {
   /**

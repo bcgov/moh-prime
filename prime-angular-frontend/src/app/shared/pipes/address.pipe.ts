@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { StringUtils } from '@lib/utils/string-utils.class';
-import { Address, optionalAddressLineItems } from '@shared/models/address.model';
+import { Address, optionalAddressLineItems } from '@lib/models/address.model';
 
 @Pipe({
   name: 'address'

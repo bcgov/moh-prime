@@ -14,7 +14,7 @@ import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-to
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { PageSubheader2MoreInfoDirective } from '@shared/components/pages/page-subheader2/page-subheader2-more-info.directive';
 import { SameAsComponent } from '@shared/components/site/same-as/same-as.component';
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 import { Contact } from '@lib/models/contact.model';
 import { PageFooterComponent } from '@shared/components/pages/page-footer/page-footer.component';
 
@@ -114,7 +114,7 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
    * Event handler for the address toggle.
    */
   public onAddressChange({ checked }: MatSlideToggleChange) {
-    if(!this.hasAddressToggle || this.excludeList.includes('physicalAddress')) {
+    if (!this.hasAddressToggle || this.excludeList.includes('physicalAddress')) {
       return;
     }
 

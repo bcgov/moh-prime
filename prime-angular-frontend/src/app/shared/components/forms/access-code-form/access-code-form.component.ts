@@ -15,6 +15,5 @@ export class AccessCodeFormComponent implements OnInit {
     return this.form.get('accessCode') as FormControl;
   }
 
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 }

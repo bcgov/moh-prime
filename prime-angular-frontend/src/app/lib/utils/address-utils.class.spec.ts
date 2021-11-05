@@ -1,6 +1,5 @@
 import { AddressUtils } from '@lib/utils/address-utils.class';
-// TODO move into lib module which shouldn't have shared dependency
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 
 describe('ArrayUtils', () => {
   const util = AddressUtils;
@@ -81,7 +80,7 @@ describe('ArrayUtils', () => {
     it('should result in the same address that was provided for an address type', () => {
       const result = {
         verifiedAddress: address,
-          physicalAddress: address,
+        physicalAddress: address,
         mailingAddress: address
       };
       util.denormalizeAddresses(result);
