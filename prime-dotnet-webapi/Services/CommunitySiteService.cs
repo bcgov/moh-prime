@@ -196,40 +196,41 @@ namespace Prime.Services
 
         private void UpdateRemoteUsers(Site current, CommunitySiteUpdateModel updated)
         {
-            // Wholesale replace the remote users
-            foreach (var remoteUser in current.RemoteUsers)
+            if (updated.RemoteUsers == null)
             {
-                foreach (var certification in remoteUser.RemoteUserCertifications)
-                {
-                    _context.Remove(certification);
-                }
-                _context.RemoteUsers.Remove(remoteUser);
+                return;
             }
 
-            if (updated?.RemoteUsers != null && updated?.RemoteUsers.Count() != 0)
+            foreach (var updateRemoteUser in updated.RemoteUsers)
             {
-                foreach (var remoteUser in updated.RemoteUsers)
-                {
-                    remoteUser.SiteId = current.Id;
-                    var remoteUserCertifications = new List<RemoteUserCertification>();
+                var existingRemoteUser = _context.RemoteUsers
+                    .FirstOrDefault(u => u.Id == updateRemoteUser.Id);
 
-                    foreach (var certification in remoteUser.RemoteUserCertifications)
+                if (existingRemoteUser == null)
+                {
+                    current.RemoteUsers.Add(updateRemoteUser);
+                }
+                else
+                {
+                    _context.Entry(existingRemoteUser).CurrentValues.SetValues(updateRemoteUser);
+                    foreach (var certification in existingRemoteUser.RemoteUserCertifications)
                     {
-                        var newCertification = new RemoteUserCertification
-                        {
-                            RemoteUser = remoteUser,
-                            CollegeCode = certification.CollegeCode,
-                            LicenseNumber = certification.LicenseNumber,
-                            LicenseCode = certification.LicenseCode
-                        };
-                        _context.Entry(newCertification).State = EntityState.Added;
-                        remoteUserCertifications.Add(newCertification);
-                    }
-                    remoteUser.RemoteUserCertifications = remoteUserCertifications;
+                        var existingCertification = existingRemoteUser.RemoteUserCertifications
+                            .FirstOrDefault(c => c.Id == certification.Id);
 
-                    _context.Entry(remoteUser).State = EntityState.Added;
+                        if (existingCertification == null)
+                        {
+                            existingRemoteUser.RemoteUserCertifications.Add(certification);
+                        }
+                        else
+                        {
+                            _context.Entry(existingCertification).CurrentValues.SetValues(certification);
+                        }
+                    }
                 }
             }
+
+            _context.RemoteUsers.RemoveRange(current.RemoteUsers.Where(u => !updated.RemoteUsers.Contains(u)));
         }
 
         private void UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated)
