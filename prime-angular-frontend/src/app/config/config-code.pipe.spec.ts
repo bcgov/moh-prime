@@ -1,5 +1,6 @@
 import { TestBed, waitForAsync, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
@@ -14,7 +15,8 @@ describe('ConfigCodePipe', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        MatSnackBarModule
       ],
       providers: [
         {

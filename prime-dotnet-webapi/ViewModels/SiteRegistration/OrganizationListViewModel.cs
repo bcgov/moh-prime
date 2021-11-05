@@ -15,7 +15,7 @@ namespace Prime.ViewModels
         public Party SigningAuthority { get; set; }
         public bool PendingTransfer { get; set; }
         public string DoingBusinessAs { get; set; }
-        public IEnumerable<SiteListViewModel> Sites { get; set; }
+        public IEnumerable<CommunitySiteListViewModel> Sites { get; set; }
         public bool Completed { get; set; }
         public bool HasAcceptedAgreement { get; set; }
         public bool HasSubmittedSite { get; set; }

@@ -8,16 +8,15 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { BusinessDayHours } from '@lib/models/business-day-hours.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-// TODO move to /lib
-import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
+import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { HoursOperationFormState } from './hours-operation-form-state.class';
 
 export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
@@ -35,7 +34,7 @@ export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   templateUrl: './hours-operation-page.component.html',
   styleUrls: ['./hours-operation-page.component.scss']
 })
-export class HoursOperationPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegistrationPage implements OnInit {
   public formState: HoursOperationFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -65,12 +64,14 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    protected route: ActivatedRoute,
+    protected healthAuthoritySiteService: HealthAuthoritySiteService,
+    protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
+    protected healthAuthorityResource: HealthAuthorityResource,
     private fb: FormBuilder,
-    private healthAuthorityResource: HealthAuthorityResource,
-    private route: ActivatedRoute,
     router: Router,
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -125,7 +126,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected createFormInstance(): void {
-    this.formState = new HoursOperationFormState(this.fb);
+    this.formState = this.healthAuthoritySiteFormStateService.hoursOperationFormState;
     this.lessThanErrorStateMatcher = new LessThanErrorStateMatcher();
   }
 
@@ -133,21 +134,19 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     const healthAuthId = +this.route.snapshot.params.haid;
     const healthAuthSiteId = +this.route.snapshot.params.sid;
     if (!healthAuthId || !healthAuthSiteId) {
-      return;
+      throw new Error('No health authority site ID was provided');
     }
 
-    this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
-      .subscribe(({ businessHours, completed }: HealthAuthoritySite) => {
-        this.isCompleted = completed;
-        this.formState.patchValue({ businessHours });
+    const site = this.healthAuthoritySiteService.site;
+    this.isCompleted = site?.completed;
+    this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
 
-        // TODO needs to be refactored and move into FormState
-        this.formState.businessDays.controls.forEach((group: FormGroup) => {
-          if (this.is24Hours(group)) {
-            this.allowEditingHours(group, false);
-          }
-        });
-      });
+    // TODO move this into form state, and perform individual, but expose for controller
+    this.formState.businessDays.controls.forEach((group: FormGroup) => {
+      if (this.is24Hours(group)) {
+        this.allowEditingHours(group, false);
+      }
+    });
   }
 
   protected checkValidity(form: FormGroup | FormArray): boolean {
@@ -166,13 +165,6 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
 
   protected onSubmitFormIsInvalid(): void {
     this.hasNoBusinessHoursError = true;
-  }
-
-  protected performSubmission(): NoContent {
-    const payload = this.formState.json;
-    const { haid, sid } = this.route.snapshot.params;
-
-    return this.healthAuthorityResource.updateHealthAuthoritySiteHoursOperation(haid, sid, payload);
   }
 
   protected afterSubmitIsSuccessful(): void {

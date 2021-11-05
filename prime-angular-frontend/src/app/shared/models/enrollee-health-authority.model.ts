@@ -1,4 +1,4 @@
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 
 export interface EnrolleeHealthAuthority {
   id: number;

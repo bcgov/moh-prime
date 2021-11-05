@@ -4,7 +4,7 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
-import { PrivacyOffice } from '@adjudication/shared/models/privacy-office.model';
+import { PrivacyOffice } from '@lib/models/privacy-office.model';
 
 export class PrivacyOfficePageFormState extends AbstractFormState<PrivacyOffice> {
   public constructor(

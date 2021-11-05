@@ -15,7 +15,7 @@ namespace Prime.Models
         public int SiteId { get; set; }
 
         [JsonIgnore]
-        public Site Site { get; set; }
+        public CommunitySite Site { get; set; }
 
         public string DeferredLicenceReason { get; set; }
 

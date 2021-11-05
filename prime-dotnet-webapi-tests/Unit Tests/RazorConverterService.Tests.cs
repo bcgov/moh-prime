@@ -1,21 +1,20 @@
-using System;
-using System.Collections.Generic;
+using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
 using Xunit;
-using FakeItEasy;
 
 using Prime;
 using Prime.Models;
+using Prime.Models.Documents;
 using Prime.Services;
 using Prime.Services.Razor;
-using Prime.ViewModels.Emails;
 using Prime.ViewModels.Agreements;
-using Prime.Models.Documents;
-using Prime.ViewModels.SiteRegistration;
+using Prime.ViewModels.SiteRegistration.ReviewDocument;
 
 namespace PrimeTests.UnitTests
 {

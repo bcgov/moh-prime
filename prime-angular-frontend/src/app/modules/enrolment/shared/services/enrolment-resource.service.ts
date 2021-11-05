@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
+import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -11,7 +12,6 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
-import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';

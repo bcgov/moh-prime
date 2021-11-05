@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { MockSiteService } from 'test/mocks/mock-site.service';
+import { MockCommunitySiteService } from 'test/mocks/mock-community-site.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
@@ -45,7 +45,7 @@ describe('RemoteUserPageComponent', () => {
         },
         {
           provide: SiteService,
-          useClass: MockSiteService
+          useClass: MockCommunitySiteService
         },
         SiteFormStateService
       ],
