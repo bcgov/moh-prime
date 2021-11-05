@@ -6,18 +6,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-regulatory-page',
@@ -52,7 +52,6 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public ngOnInit(): void {
-
     this.createFormInstance();
     this.initForm();
     this.patchForm();
