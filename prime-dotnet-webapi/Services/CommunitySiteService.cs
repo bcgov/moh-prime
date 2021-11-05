@@ -195,27 +195,6 @@ namespace Prime.Services
             }
         }
 
-        private async Task UpdateIndividualDeviceProviders(int siteId, CommunitySiteUpdateModel updated)
-        {
-            var currentProviders = await _context.IndividualDeviceProviders
-                .Where(p => p.CommunitySiteId == siteId)
-                .ToListAsync();
-
-            _context.IndividualDeviceProviders.RemoveRange(currentProviders);
-
-            if (updated.IndividualDeviceProviders == null)
-            {
-                return;
-            }
-
-            foreach (var provider in updated?.IndividualDeviceProviders)
-            {
-                var newModel = _mapper.Map<IndividualDeviceProvider>(provider);
-                newModel.CommunitySiteId = siteId;
-                _context.IndividualDeviceProviders.Add(newModel);
-            }
-        }
-
         private void UpdateRemoteUsers(Site current, CommunitySiteUpdateModel updated)
         {
             // Wholesale replace the remote users
@@ -276,6 +255,27 @@ namespace Prime.Services
 
                     _context.Entry(siteVendor).State = EntityState.Added;
                 }
+            }
+        }
+
+        private async Task UpdateIndividualDeviceProviders(int siteId, CommunitySiteUpdateModel updated)
+        {
+            var currentProviders = await _context.IndividualDeviceProviders
+                .Where(p => p.CommunitySiteId == siteId)
+                .ToListAsync();
+            _context.IndividualDeviceProviders.RemoveRange(currentProviders);
+
+
+            if (updated.IndividualDeviceProviders == null)
+            {
+                return;
+            }
+
+            foreach (var provider in updated?.IndividualDeviceProviders)
+            {
+                var newModel = _mapper.Map<IndividualDeviceProvider>(provider);
+                newModel.CommunitySiteId = siteId;
+                _context.IndividualDeviceProviders.Add(newModel);
             }
         }
 
