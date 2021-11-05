@@ -104,12 +104,12 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     let oboSites = this.enrollee.oboSites;
     const payload = this.formState.json;
 
-    // Remove health authorities if health authority care setting not chosen
+    // Remove health authorities when health authority care setting no longer selected
     if (!payload.careSettings.some(code => code === CareSettingEnum.HEALTH_AUTHORITY)) {
       payload.healthAuthorities = [];
     }
 
-    // Remove any oboSites belonging to careSetting which is no longer selected
+    // Remove obo sites when associated their care setting is no longer selected
     this.careSettingTypes.forEach(type => {
       if (!payload.careSettings.some(code => code === type.code)) {
         oboSites = oboSites.filter((site: OboSite) => site.careSettingCode !== type.code);
@@ -121,7 +121,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
     return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
       .pipe(
-        // If no device provider care setting was selected, clear the device provider identifier
+        // Remove device provider identifier when care setting no longer selected
         exhaustMap(() =>
           (!payload.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER))
             ? this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id)
