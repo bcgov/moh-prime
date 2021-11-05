@@ -251,8 +251,6 @@ namespace Prime.Controllers
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionDetailsToHIBCAsync(siteId);
 
-            // TODO send site registration submission notification
-
             return NoContent();
         }
     }
