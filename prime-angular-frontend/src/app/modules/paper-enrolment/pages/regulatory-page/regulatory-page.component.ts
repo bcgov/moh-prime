@@ -117,11 +117,12 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   protected afterSubmitIsSuccessful(): void {
     const collegeCertifications = this.formState.collegeCertifications;
-    const formDeviceProviderIdentifier = this.formState.deviceProviderIdentifier.value;
+    const isDeviceProviderWithNoIdentifier = this.isDeviceProvider && !this.formState.deviceProviderIdentifier.value;
+
     // Force obo sites to always be checked regardless of the profile being
     // completed so validations are applied prior to overview pushing the
     // responsibility of validation to obo sites
-    const nextRoutePath = (!collegeCertifications.length || (this.isDeviceProvider && !formDeviceProviderIdentifier))
+    const nextRoutePath = (!collegeCertifications.length || isDeviceProviderWithNoIdentifier)
       ? PaperEnrolmentRoutes.OBO_SITES
       : (this.enrollee.profileCompleted)
         ? PaperEnrolmentRoutes.OVERVIEW

@@ -199,13 +199,13 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
     const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-    const isDeviceProviderIdentifier = this.enrolmentService.enrolment.deviceProviderIdentifier;
+    const hasDeviceProviderIdentifier = this.enrolmentService.enrolment.deviceProviderIdentifier;
 
     return {
       certificate: !enrolment.certifications?.length,
       certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length,
-      deviceProvider: isDeviceProvider && !isDeviceProviderIdentifier,
-      deviceProviderOrOboSite: (isDeviceProvider && !isDeviceProviderIdentifier) && !enrolment.oboSites?.length
+      deviceProvider: isDeviceProvider && !hasDeviceProviderIdentifier,
+      deviceProviderOrOboSite: (isDeviceProvider && !hasDeviceProviderIdentifier) && !enrolment.oboSites?.length
     };
   }
 }
