@@ -38,7 +38,7 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
       .pipe(
         map((healthAuthoritySite: HealthAuthoritySite) =>
           // Store the site for access throughout registration, which
-          // will allows be the most up-to-date site information
+          // will always be the most up-to-date site information
           this.healthAuthoritySiteService.site = healthAuthoritySite
         ),
         map((healthAuthoritySite: HealthAuthoritySite) =>
