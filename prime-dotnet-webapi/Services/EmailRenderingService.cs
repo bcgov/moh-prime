@@ -194,5 +194,16 @@ namespace Prime.Services.EmailInternal
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteActiveBeforeRegistrationSubmission, viewModel)
             );
         }
+
+        public async Task<Email> RenderPaperEnrolleeSubmissionEmail(string enrolleeEmail, PaperEnrolleeSubmission viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: enrolleeEmail,
+                subject: "Paper Enrolment Submission",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.PaperEnrolleeSubmission, viewModel)
+            );
+        }
     }
 }

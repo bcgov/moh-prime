@@ -21,16 +21,19 @@ namespace Prime.Controllers
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAdminService _adminService;
+        private readonly IEmailService _emailService;
 
         public EnrolleePaperSubmissionsController(
             IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
             IEnrolleeService enrolleeService,
-            IAdminService adminService
+            IAdminService adminService,
+            IEmailService emailService
         )
         {
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
             _enrolleeService = enrolleeService;
             _adminService = adminService;
+            _emailService = emailService;
         }
 
         // POST: api/enrollees/paper-submissions
@@ -267,6 +270,7 @@ namespace Prime.Controllers
             }
 
             await _enrolleePaperSubmissionService.FinalizeSubmissionAsync(enrolleeId);
+            await _emailService.SendPaperEnrolmentSubmissionEmailAsync(enrolleeId);
 
             return Ok();
         }
