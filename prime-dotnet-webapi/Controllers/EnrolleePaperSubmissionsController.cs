@@ -18,22 +18,22 @@ namespace Prime.Controllers
     [ApiController]
     public class EnrolleePaperSubmissionsController : PrimeControllerBase
     {
-        private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
-        private readonly IEnrolleeService _enrolleeService;
         private readonly IAdminService _adminService;
         private readonly IEmailService _emailService;
+        private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
+        private readonly IEnrolleeService _enrolleeService;
 
         public EnrolleePaperSubmissionsController(
-            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
-            IEnrolleeService enrolleeService,
             IAdminService adminService,
-            IEmailService emailService
+            IEmailService emailService,
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
+            IEnrolleeService enrolleeService
         )
         {
-            _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
-            _enrolleeService = enrolleeService;
             _adminService = adminService;
             _emailService = emailService;
+            _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
+            _enrolleeService = enrolleeService;
         }
 
         // POST: api/enrollees/paper-submissions

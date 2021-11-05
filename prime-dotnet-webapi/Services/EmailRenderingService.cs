@@ -195,7 +195,7 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderPaperEnrolleeSubmissionEmail(string enrolleeEmail, PaperEnrolleeSubmission viewModel)
+        public async Task<Email> RenderPaperEnrolleeSubmissionEmail(string enrolleeEmail, PaperEnrolleeSubmissionEmailViewModel viewModel)
         {
             return new Email
             (

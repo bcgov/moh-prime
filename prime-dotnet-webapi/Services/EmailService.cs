@@ -300,7 +300,7 @@ namespace Prime.Services
                 })
                 .SingleOrDefaultAsync();
 
-            var email = await _emailRenderingService.RenderPaperEnrolleeSubmissionEmail(enrolleeDto.Email, new PaperEnrolleeSubmission(enrolleeDto.GPID));
+            var email = await _emailRenderingService.RenderPaperEnrolleeSubmissionEmail(enrolleeDto.Email, new PaperEnrolleeSubmissionEmailViewModel(enrolleeDto.GPID));
             await Send(email);
         }
 
