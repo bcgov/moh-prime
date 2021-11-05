@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 
 import { PermissionService } from '@auth/shared/services/permission.service';
@@ -98,6 +98,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
           ),
         enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId),
         plrInfo: this.adjudicationResource.getPlrInfoByEnrolleeId(enrolleeId)
+        .pipe(catchError(_ => ))
       })
         .subscribe(({ enrollee, enrolleeNavigation, plrInfo }) => {
           this.enrollee = enrollee.enrollee;
