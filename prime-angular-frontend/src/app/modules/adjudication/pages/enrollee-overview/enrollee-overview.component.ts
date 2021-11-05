@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, map } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { ToastService } from '@core/services/toast.service';
@@ -75,14 +75,10 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
 
     this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id)
-      .subscribe(documents => {
-        this.documents = documents
-      });
+      .subscribe(documents => this.documents = documents);
 
     this.enrolmentResource.getCurrentEnrolleeAbsence(+this.route.snapshot.params.id)
-      .subscribe((absence: EnrolleeAbsence) => {
-        this.absence = absence
-      });
+      .subscribe((absence: EnrolleeAbsence) => this.absence = absence);
   }
 
   private loadEnrollee(enrolleeId: number): void {
@@ -98,7 +94,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
           ),
         enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId),
         plrInfo: this.adjudicationResource.getPlrInfoByEnrolleeId(enrolleeId)
-        .pipe(catchError(_ => ))
+          .pipe(catchError(_ => of([])))
       })
         .subscribe(({ enrollee, enrolleeNavigation, plrInfo }) => {
           this.enrollee = enrollee.enrollee;
