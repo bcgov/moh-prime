@@ -820,7 +820,7 @@ objects:
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
             resources:
               limits:
-                cpu: 25m
+                cpu: 80m
                 memory: 200Mi
               requests:
                 cpu: 10m
@@ -882,9 +882,9 @@ objects:
                 port: 6001
                 scheme: HTTP
               timeoutSeconds: 1
-              periodSeconds: 35
+              periodSeconds: 20
               successThreshold: 1
-              failureThreshold: 30
+              failureThreshold: 4
             readinessProbe:
               httpGet:
                 path: /healthcheck
