@@ -3,9 +3,8 @@ import { FormArray, FormBuilder } from '@angular/forms';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { StringUtils } from '@lib/utils/string-utils.class';
-// TODO moved to lib or shared module
-import { BusinessDay } from '@registration/shared/models/business-day.model';
-import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
+import { BusinessDay } from '@lib/models/business-day.model';
+import { BusinessDayHours } from '@lib/models/business-day-hours.model';
 
 export interface HoursOperationPageFormModel {
   businessDays: BusinessDayHours[];

@@ -3,9 +3,8 @@ import { FormArray, FormBuilder } from '@angular/forms';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { StringUtils } from '@lib/utils/string-utils.class';
-// TODO moved to lib into /common
-import { BusinessDay } from '@registration/shared/models/business-day.model';
-import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
+import { BusinessDay } from '@lib/models/business-day.model';
+import { BusinessDayHours } from '@lib/models/business-day-hours.model';
 import { HoursOperationForm } from './hours-operation-form.model';
 
 export class HoursOperationFormState extends AbstractFormState<HoursOperationForm> {
@@ -26,20 +25,19 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
       return;
     }
 
-    const businessHours = this.formInstance.getRawValue().businessDays
-      .map((hours: BusinessDayHours, dayOfWeek: number) => {
-        if (hours.startTime && hours.endTime) {
-          hours.startTime = StringUtils.splice(hours.startTime, 2, ':');
-          hours.endTime = StringUtils.splice(hours.endTime, 2, ':');
+    const { businessDays } = this.formInstance.getRawValue();
+
+    const businessHours = businessDays
+      .map(({ startTime, endTime }: BusinessDayHours, day: number) => {
+        if (!startTime || !endTime) {
+          return null;
         }
-        return new BusinessDay(dayOfWeek, hours.startTime, hours.endTime);
+
+        startTime = StringUtils.splice(startTime, 2, ':');
+        endTime = StringUtils.splice(endTime, 2, ':');
+        return new BusinessDay(day, startTime, endTime);
       })
-      .filter((day: BusinessDay) => day.startTime)
-      .map((businessDay: BusinessDay) => {
-        businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
-        businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
-        return businessDay;
-      });
+      .filter((day: BusinessDay) => day instanceof BusinessDay);
 
     return { businessHours };
   }
@@ -49,15 +47,11 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
       return;
     }
 
-    businessHours = businessHours.map((businessDay: BusinessDay) => {
-      businessDay.startTime = BusinessDayHours.fromTimeSpan(businessDay.startTime);
-      businessDay.endTime = BusinessDayHours.fromTimeSpan(businessDay.endTime);
-      return businessDay;
-    });
-
+    // Create a business day for each day of the week, and
+    // hydrate with the hours of operation where applicable
     const businessDays = [...Array(7).keys()]
       .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
-        const day = businessHours.find(bh => bh.day === dayOfWeek);
+        let day = businessHours.find(bh => bh.day === dayOfWeek);
         if (day) {
           day.startTime = day.startTime.replace(':', '');
           day.endTime = day.endTime.replace(':', '');

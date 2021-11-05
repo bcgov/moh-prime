@@ -17,15 +17,14 @@
 
       <ng-container *ngIf="isInitial">
 
-        <!-- TODO for demo and should use a generic overview that filters sections based on input bindings -->
         <app-overview-section title="Health Authority Care Types"
                               [showEditRedirect]="true"
                               [editRoute]="AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES"
                               (route)="onRouteRelative($event)">
           <ng-container *ngIf="healthAuthority?.careTypes.length; else noCareTypes">
-            <app-enrollee-property *ngFor="let careType of healthAuthority.careTypes"
+            <app-enrollee-property *ngFor="let healthAuthorityCareType of healthAuthority.careTypes"
                                    title="Care Type">
-              {{ careType }}
+              {{ healthAuthorityCareType.careType }}
             </app-enrollee-property>
           </ng-container>
 
@@ -40,10 +39,10 @@
                               [showEditRedirect]="true"
                               [editRoute]="AdjudicationRoutes.HEALTH_AUTH_VENDORS"
                               (route)="onRouteRelative($event)">
-          <ng-container *ngIf="healthAuthority?.vendorCodes.length; else noVendors">
-            <app-enrollee-property *ngFor="let vendorCode of healthAuthority.vendorCodes"
+          <ng-container *ngIf="healthAuthority?.vendors.length; else noVendors">
+            <app-enrollee-property *ngFor="let vendor of healthAuthority.vendors"
                                    title="Vendor">
-              {{ vendorCode | configCode: 'vendors' }}
+              {{ vendor.vendorCode | configCode: 'vendors' }}
             </app-enrollee-property>
           </ng-container>
 

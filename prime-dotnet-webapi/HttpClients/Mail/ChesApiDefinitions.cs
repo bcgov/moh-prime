@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Prime.Helpers;
 
 namespace Prime.HttpClients.Mail.ChesApiDefinitions
 {

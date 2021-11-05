@@ -61,7 +61,7 @@ export class AuthorizedUserGuard extends BaseGuard {
       );
   }
 
-  private routeDestination(routePath: string, params: Params, authorizedUser: AuthorizedUser | null) {
+  private routeDestination(routePath: string, params: Params, authorizedUser: AuthorizedUser | null): boolean {
     // On login the user will always be redirected to the collection notice
     if (routePath.includes(HealthAuthSiteRegRoutes.COLLECTION_NOTICE)) {
       return true;

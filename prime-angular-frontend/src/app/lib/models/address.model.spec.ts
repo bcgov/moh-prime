@@ -1,5 +1,5 @@
 import { AddressUtils } from '@lib/utils/address-utils.class';
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 
 describe('ArrayUtils', () => {
   const util = AddressUtils;
