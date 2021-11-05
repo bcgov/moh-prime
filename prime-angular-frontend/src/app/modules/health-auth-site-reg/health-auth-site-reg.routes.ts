@@ -29,10 +29,69 @@ export class HealthAuthSiteRegRoutes {
     return `/${HealthAuthSiteRegRoutes.MODULE_PATH}/${route}`;
   }
 
-  // Used to indicate the routes and order of registration for sites
+  /**
+   * @description
+   * Used to indicate the routes and order of registration for sites.
+   */
   public static siteRegistrationRouteOrder(): string[] {
     return [
       this.VENDOR,
+      this.SITE_INFORMATION,
+      this.HEALTH_AUTH_CARE_TYPE,
+      this.SITE_ADDRESS,
+      this.HOURS_OPERATION,
+      this.REMOTE_USERS,
+      this.ADMINISTRATOR,
+      this.TECHNICAL_SUPPORT,
+      this.SITE_OVERVIEW
+    ];
+  }
+
+  /**
+   * @description
+   * Routes allowed when site registration is incomplete.
+   */
+  public static siteIsIncompleteRoutes(): string[] {
+    return this.siteRegistrationRouteOrder();
+  }
+
+  /**
+   * @description
+   * Routes allowed when site registration is incomplete.
+   */
+  public static siteIsInReviewRoutes(): string[] {
+    return [
+      this.SITE_OVERVIEW
+    ];
+  }
+
+  /**
+   * @description
+   * Routes allowed when site is locked.
+   */
+  public static siteIsLockedRoutes(): string[] {
+    return this.siteIsInReviewRoutes();
+  }
+
+  /**
+   * @description
+   * Routes allowed when site is approved.
+   */
+  public static siteIsApprovedRoutes(): string[] {
+    return [
+      this.REMOTE_USERS,
+      this.ADMINISTRATOR,
+      this.TECHNICAL_SUPPORT,
+      this.SITE_OVERVIEW
+    ];
+  }
+
+  /**
+   * @description
+   * Routes allowed when site is within renewal period.
+   */
+  public static siteIsApprovedAndWithinRenewalPeriod(): string[] {
+    return [
       this.SITE_INFORMATION,
       this.HEALTH_AUTH_CARE_TYPE,
       this.SITE_ADDRESS,

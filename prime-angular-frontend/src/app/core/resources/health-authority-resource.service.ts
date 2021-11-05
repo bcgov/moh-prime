@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { HttpStatusCode } from '@angular/common/http';
 
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
-import { forkJoin, Observable, of, pipe, UnaryFunction } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
@@ -252,10 +253,14 @@ export class HealthAuthorityResource {
       );
   }
 
+  // TODO doesn't contain business hours or remote users and will need typing adjusted
   public getHealthAuthoritySites(healthAuthId: HealthAuthorityEnum): Observable<HealthAuthoritySite[]> {
     return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/${healthAuthId}/sites`)
       .pipe(
         map((response: ApiHttpResponse<HealthAuthoritySite[]>) => response.result),
+        map((healthAuthoritySiteDtos: HealthAuthoritySiteDto[]) =>
+          healthAuthoritySiteDtos.map(hasd => HealthAuthoritySite.toHealthAuthoritySite(hasd))
+        ),
         tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority sites could not be retrieved');
@@ -269,6 +274,7 @@ export class HealthAuthorityResource {
     const path = `health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`;
     return forkJoin({
       healthAuthoritySite: this.apiResource.get<Omit<HealthAuthoritySiteDto, 'businessHours' | 'remoteUsers'>>(`${path}`, null, null, true),
+      // TODO convert to hours and minutes in view model and drop this adapter
       businessHours: this.apiResource.get<BusinessDay[]>(`${path}/hours-operation`, null, null, true)
         .pipe(map((businessHours: BusinessDay[]) =>
           businessHours.map((businessDay: BusinessDay) => BusinessDay.asHoursAndMins(businessDay))
@@ -286,7 +292,7 @@ export class HealthAuthorityResource {
         map((healthAuthoritySiteDto: HealthAuthoritySiteDto) => HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto)),
         tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
         catchError((error: any) => {
-          if (error.status === 404) {
+          if (error.status === HttpStatusCode.NotFound) {
             return of(null);
           }
 
@@ -320,10 +326,10 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySite(healthAuthId: HealthAuthorityEnum, siteId: number, updateModel: HealthAuthoritySiteUpdate): NoContent {
-    updateModel.businessHours = updateModel.businessHours
+  public updateHealthAuthoritySite(healthAuthId: HealthAuthorityEnum, siteId: number, updatedModel: HealthAuthoritySiteUpdate): NoContent {
+    updatedModel.businessHours = updatedModel.businessHours
       .map((businessDay: BusinessDay) => BusinessDay.asTimespan(businessDay));
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}`, updateModel)
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}`, updatedModel)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -355,8 +361,10 @@ export class HealthAuthorityResource {
    * @description
    * Submit the health authority site registration.
    */
-  public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number): NoContent {
-    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submissions`)
+  public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number, updatedModel: HealthAuthoritySiteUpdate): NoContent {
+    updatedModel.businessHours = updatedModel.businessHours
+      .map((businessDay: BusinessDay) => BusinessDay.asTimespan(businessDay));
+    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submissions`, updatedModel)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -382,17 +390,4 @@ export class HealthAuthorityResource {
         })
       );
   }
-
-  private resultPipe<T>(result404: any): UnaryFunction<Observable<ApiHttpResponse<T>>, Observable<any[] | T>> {
-    return pipe(
-      map((response: ApiHttpResponse<T>) => response.result),
-      catchError((error: any) => {
-        if (error.status === 404) {
-          return of(result404);
-        }
-
-        throw error;
-      })
-    );
-  };
 }

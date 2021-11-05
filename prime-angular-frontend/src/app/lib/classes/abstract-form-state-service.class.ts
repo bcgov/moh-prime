@@ -74,6 +74,16 @@ export abstract class AbstractFormStateService<T> {
 
   /**
    * @description
+   * Check that all constituent forms are valid specifically
+   * for submission allowing for the application of a more
+   * extensive set of rules and messaging on submission.
+   */
+  public get isValidSubmission(): boolean {
+    return this.isValid;
+  }
+
+  /**
+   * @description
    * Check that at least one constituent form is dirty.
    */
   public get isDirty(): boolean {

@@ -5,8 +5,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { HealthAuthoritySiteGuard } from './health-authority-site-guard.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
+import { HealthAuthoritySiteGuard } from './health-authority-site-guard.service';
 
 describe('HealthAuthoritySiteGuard', () => {
   let guard: HealthAuthoritySiteGuard;
@@ -24,7 +25,8 @@ describe('HealthAuthoritySiteGuard', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        CapitalizePipe
       ]
     });
     guard = TestBed.inject(HealthAuthoritySiteGuard);

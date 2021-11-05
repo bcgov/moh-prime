@@ -1,7 +1,7 @@
 import moment from 'moment';
 
-import { NonFunctionProperties } from '@lib/types';
 import { Address } from '@lib/models/address.model';
+import { DateUtils } from '@lib/utils/date-utils.class';
 import { RemoteUser } from '@lib/models/remote-user.model';
 import { BusinessDay } from '@lib/models/business-day.model';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
@@ -12,10 +12,27 @@ import { HealthAuthorityCareType } from '@health-auth/shared/models/health-autho
 import { HealthAuthoritySiteUpdate } from '@health-auth/shared/models/health-authority-site-update.model';
 import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-authority-site-create.model';
 
-// TODO reverse the implementation so HealthAuthoritySite extends the DTO and adds methods
-export interface HealthAuthoritySiteDto extends NonFunctionProperties<HealthAuthoritySite> {}
+// TODO split up Site, CommunitySite, and HealthAuthoritySite into separate interfaces/classes
+export interface HealthAuthoritySiteDto {
+  id?: number;
+  healthAuthorityOrganizationId: HealthAuthorityEnum;
+  healthAuthorityVendor: HealthAuthorityVendor;
+  healthAuthorityCareType: HealthAuthorityCareType;
+  siteName;
+  pec: string;
+  securityGroupCode: number;
+  physicalAddress: Address;
+  businessHours: BusinessDay[];
+  remoteUsers: RemoteUser[];
+  healthAuthorityPharmanetAdministratorId: number;
+  healthAuthorityTechnicalSupportId: number;
+  readonly completed: boolean;
+  readonly submittedDate: string;
+  readonly approvedDate: string;
+  readonly status: SiteStatusType;
+}
 
-export class HealthAuthoritySite {
+export class HealthAuthoritySite implements HealthAuthoritySiteDto {
   constructor(
     public healthAuthorityOrganizationId: HealthAuthorityEnum,
     public healthAuthorityVendor: HealthAuthorityVendor,
@@ -124,14 +141,33 @@ export class HealthAuthoritySite {
     };
   }
 
-  // TODO do health authority sites need to renew?
-  public static getExpiryDate(healthAuthoritySite: HealthAuthoritySite): string | null {
-    if (!healthAuthoritySite) {
-      return null;
-    }
+  public isIncomplete(): boolean {
+    return !this.submittedDate || (
+      this.submittedDate &&
+      !this.approvedDate &&
+      this.status === SiteStatusType.EDITABLE
+    );
+  }
 
-    return (healthAuthoritySite.submittedDate)
-        ? moment(healthAuthoritySite.submittedDate).add(1, 'year').format()
-        : null;
+  public isInReview(): boolean {
+    return this.status === SiteStatusType.IN_REVIEW;
+  }
+
+  public isLocked(): boolean {
+    return this.status === SiteStatusType.LOCKED;
+  }
+
+  public isApproved(): boolean {
+    return this.status === SiteStatusType.EDITABLE && !!this.approvedDate;
+  }
+
+  public withinRenewalPeriod(): boolean {
+    return DateUtils.withinRenewalPeriod(this.getExpiryDate());
+  }
+
+  public getExpiryDate(): string | null {
+    return (this.submittedDate)
+      ? moment(this.submittedDate).add(1, 'year').format()
+      : null;
   }
 }

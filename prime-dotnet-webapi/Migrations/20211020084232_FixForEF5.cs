@@ -50,28 +50,6 @@ namespace Prime.Migrations
                 principalTable: "HealthAuthorityOrganization",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
-
-            // TODO: Code to go into migration once made for Health Authorities
-            // Note we might have to deal with id sequence unless it is based off of site
-            // Table then we are all good.
-            migrationBuilder.Sql(@"
-                    insert into ""CommunitySite""(
-                        ""Id"",
-                        ""OrganizationId"",
-                        ""AdministratorPharmaNetId"",
-                        ""PrivacyOfficerId"",
-                        ""TechnicalSupportId"",
-                        ""ProvisionerId""
-                    )
-                    select
-                        ""Id"",
-                        ""OrganizationId"",
-                        ""AdministratorPharmaNetId"",
-                        ""PrivacyOfficerId"",
-                        ""TechnicalSupportId"",
-                        ""ProvisionerId""
-                    from ""Site"";
-            ");
         }
     }
 }

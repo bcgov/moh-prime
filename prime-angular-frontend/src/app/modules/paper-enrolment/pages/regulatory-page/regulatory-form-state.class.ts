@@ -17,8 +17,6 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
    * Removes a certification from the list in response to an
    * emitted event from college certifications. Does not allow
    * the list of certifications to empty.
-   *
-   * @param index to be removed
    */
   public removeCertification(index: number) {
     this.certifications.removeAt(index);

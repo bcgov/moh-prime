@@ -192,8 +192,6 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // GET: api/health-authorities/1/technical-supports/4
-
         // PUT: api/health-authorities/1/technical-supports
         /// <summary>
         /// Updates the Technical Support contacts on a Health Authority
@@ -210,8 +208,6 @@ namespace Prime.Controllers
             await _healthAuthorityService.UpdateContactsAsync<HealthAuthorityTechnicalSupport>(healthAuthorityId, contacts);
             return NoContent();
         }
-
-        // GET: api/health-authorities/1/pharmanet-administrators/2
 
         // PUT: api/health-authorities/1/pharmanet-administrators
         /// <summary>

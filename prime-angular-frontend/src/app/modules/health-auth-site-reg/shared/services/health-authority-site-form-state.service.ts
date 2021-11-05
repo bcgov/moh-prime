@@ -30,7 +30,7 @@ import { HealthAuthorityService } from '@health-auth/shared/services/health-auth
 @Injectable({
   providedIn: 'root'
 })
-export class HealthAuthorityFormStateService extends AbstractFormStateService<HealthAuthoritySite> {
+export class HealthAuthoritySiteFormStateService extends AbstractFormStateService<HealthAuthoritySite> {
   public vendorFormState: VendorFormState;
   public siteInformationFormState: SiteInformationFormState;
   public healthAuthCareTypeFormState: HealthAuthCareTypeFormState;
@@ -48,8 +48,6 @@ export class HealthAuthorityFormStateService extends AbstractFormStateService<He
   private healthAuthoritySiteReference: Pick<HealthAuthoritySite,
     'id' |
     'healthAuthorityOrganizationId' |
-    'healthAuthorityPharmanetAdministratorId' |
-    'healthAuthorityTechnicalSupportId' |
     'completed' |
     'submittedDate' |
     'approvedDate' |
@@ -172,8 +170,6 @@ export class HealthAuthorityFormStateService extends AbstractFormStateService<He
     const {
       id,
       healthAuthorityOrganizationId,
-      healthAuthorityPharmanetAdministratorId,
-      healthAuthorityTechnicalSupportId,
       completed,
       submittedDate,
       approvedDate,
@@ -182,8 +178,6 @@ export class HealthAuthorityFormStateService extends AbstractFormStateService<He
     this.healthAuthoritySiteReference = {
       id,
       healthAuthorityOrganizationId,
-      healthAuthorityPharmanetAdministratorId,
-      healthAuthorityTechnicalSupportId,
       completed,
       submittedDate,
       approvedDate,

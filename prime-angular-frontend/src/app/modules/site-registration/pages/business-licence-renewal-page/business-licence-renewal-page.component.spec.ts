@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { MockSiteService } from 'test/mocks/mock-site.service';
+import { MockCommunitySiteService } from 'test/mocks/mock-community-site.service';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
@@ -34,7 +34,7 @@ describe('BusinessLicenceRenewalPageComponent', () => {
         },
         {
           provide: SiteService,
-          useClass: MockSiteService
+          useClass: MockCommunitySiteService
         },
         SiteFormStateService
       ],

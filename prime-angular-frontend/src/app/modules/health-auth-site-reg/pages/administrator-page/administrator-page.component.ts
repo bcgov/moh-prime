@@ -13,7 +13,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
-import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { AdministratorFormState } from './administrator-form-state.class';
 
@@ -34,13 +34,13 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
     protected formUtilsService: FormUtilsService,
     protected route: ActivatedRoute,
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
-    protected healthAuthorityFormStateService: HealthAuthorityFormStateService,
+    protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthorityResource: HealthAuthorityResource,
     private fb: FormBuilder,
     private healthAuthorityService: HealthAuthorityService,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthorityFormStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -62,7 +62,7 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
   }
 
   protected createFormInstance(): void {
-    this.formState = this.healthAuthorityFormStateService.administratorFormState;
+    this.formState = this.healthAuthoritySiteFormStateService.administratorFormState;
   }
 
   protected patchForm(): void {
@@ -78,7 +78,7 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
 
     const site = this.healthAuthoritySiteService.site;
     this.isCompleted = site?.completed;
-    this.healthAuthorityFormStateService.setForm(site, !this.hasBeenSubmitted);
+    this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
   protected afterSubmitIsSuccessful(): void {

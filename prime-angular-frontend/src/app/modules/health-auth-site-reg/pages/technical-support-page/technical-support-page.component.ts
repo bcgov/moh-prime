@@ -15,7 +15,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
-import { HealthAuthorityFormStateService } from '@health-auth/shared/services/health-authority-form-state.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { TechnicalSupportFormState } from './technical-support-form-state.class';
 
@@ -35,14 +35,14 @@ export class TechnicalSupportPageComponent extends AbstractHealthAuthoritySiteRe
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     protected route: ActivatedRoute,
-    protected siteService: HealthAuthoritySiteService,
-    protected formStateService: HealthAuthorityFormStateService,
+    protected healthAuthoritySiteService: HealthAuthoritySiteService,
+    protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthorityResource: HealthAuthorityResource,
     private fb: FormBuilder,
     private healthAuthorityService: HealthAuthorityService,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, siteService, formStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -64,7 +64,7 @@ export class TechnicalSupportPageComponent extends AbstractHealthAuthoritySiteRe
   }
 
   protected createFormInstance(): void {
-    this.formState = this.formStateService.technicalSupportFormState;
+    this.formState = this.healthAuthoritySiteFormStateService.technicalSupportFormState;
   }
 
   protected patchForm(): void {
@@ -78,9 +78,9 @@ export class TechnicalSupportPageComponent extends AbstractHealthAuthoritySiteRe
       .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
     this.technicalSupports.next(technicalSupportContacts);
 
-    const site = this.siteService.site;
+    const site = this.healthAuthoritySiteService.site;
     this.isCompleted = site?.completed;
-    this.formStateService.setForm(site, !this.hasBeenSubmitted);
+    this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
   protected submissionRequest(): NoContent {

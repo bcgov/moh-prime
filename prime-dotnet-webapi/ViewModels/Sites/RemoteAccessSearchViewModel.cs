@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Prime.Models;
 
-namespace Prime.ViewModels
+namespace Prime.ViewModels.Sites
 {
     public class RemoteAccessSearchViewModel
     {

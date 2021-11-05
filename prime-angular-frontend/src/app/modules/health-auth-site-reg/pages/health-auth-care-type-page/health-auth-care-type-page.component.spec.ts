@@ -15,7 +15,7 @@ import { HealthAuthCareTypePageComponent } from './health-auth-care-type-page.co
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
-fdescribe('HealthAuthCareTypePageComponent', () => {
+describe('HealthAuthCareTypePageComponent', () => {
   let component: HealthAuthCareTypePageComponent;
   let fixture: ComponentFixture<HealthAuthCareTypePageComponent>;
   let spyOnRouteRelativeTo;
@@ -58,8 +58,8 @@ fdescribe('HealthAuthCareTypePageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe("testing onBack() with a completed profile", () => {
-    it("should call routeToRelativePath with HealthAuthSiteRegRoutes.SITE_OVERVIEW", () => {
+  describe('testing onBack() with a completed profile', () => {
+    it('should call routeToRelativePath with HealthAuthSiteRegRoutes.SITE_OVERVIEW', () => {
       component.isCompleted = true;
 
       component.onBack();
@@ -67,8 +67,8 @@ fdescribe('HealthAuthCareTypePageComponent', () => {
     });
   });
 
-  describe("testing onBack() with an incomplete profile", () => {
-    it("should call routeToRelativePath with HealthAuthSiteRegRoutes.SITE_INFORMATION", () => {
+  describe('testing onBack() with an incomplete profile', () => {
+    it('should call routeToRelativePath with HealthAuthSiteRegRoutes.SITE_INFORMATION', () => {
       component.isCompleted = false;
 
       component.onBack();

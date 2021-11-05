@@ -123,7 +123,10 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public onBack(): void {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+    this.routeUtils.routeTo([
+      SiteRoutes.MODULE_PATH,
+      SiteRoutes.SITE_MANAGEMENT
+    ]);
   }
 
   public nextRoute(): void {
