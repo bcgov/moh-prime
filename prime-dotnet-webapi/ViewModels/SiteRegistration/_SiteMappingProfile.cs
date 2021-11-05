@@ -24,7 +24,9 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<SiteSubmissionViewModel, CommunitySiteUpdateModel>();
             CreateMap<SiteBusinessLicenceViewModel, BusinessLicence>();
+
             CreateMap<IndividualDeviceProvider, IndividualDeviceProviderViewModel>();
+            CreateMap<IndividualDeviceProviderChangeModel, IndividualDeviceProvider>();
         }
     }
 }

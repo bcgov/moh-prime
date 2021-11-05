@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
@@ -25,6 +25,7 @@ import { Site, SiteListViewModel } from '@registration/shared/models/site.model'
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { IndividualDeviceProvider } from '@registration/shared/models/individual-device-provider.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,9 +56,14 @@ export class SiteResource {
 
   public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
     const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
-    return this.apiResource.get<Site>(`sites/${siteId}`, params)
+    return forkJoin({
+      site: this.apiResource.get<Site>(`sites/${siteId}`, params)
+        .pipe(map((response: ApiHttpResponse<Site>) => response.result)),
+      individualDeviceProviders: this.apiResource.get<IndividualDeviceProvider[]>(`sites/${siteId}/individual-device-providers`)
+        .pipe(map((response: ApiHttpResponse<IndividualDeviceProvider[]>) => response.result)),
+    })
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
+        map(({ site, individualDeviceProviders }) => ({ ...site, individualDeviceProviders })),
         map((site: Site) => {
           site.businessHours = site.businessHours
             .map((businessDay: BusinessDay) => {

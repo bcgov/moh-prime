@@ -13,11 +13,11 @@
 
   <app-page-section>
 
-    <ng-container *ngIf="deviceProviders">
-      <ng-container *ngIf="isEditing || !deviceProviders?.length; else showList">
+    <ng-container *ngIf="formState.json">
+      <ng-container *ngIf="isEditing || !formState.json?.length; else showList">
 
         <form (ngSubmit)="onSubmit()"
-              [formGroup]="formState.form">
+              [formGroup]="form">
 
           <div class="row">
             <div class="col-6">
@@ -25,7 +25,7 @@
                 <input matInput
                        placeholder="First Name"
                        formControlName="firstName">
-                <mat-error *ngIf="formState.firstName.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="form.get('firstName').hasError('required')">Required</mat-error>
               </mat-form-field>
             </div>
             <div class="col-6">
@@ -42,7 +42,7 @@
                 <input matInput
                        placeholder="Last Name"
                        formControlName="lastName">
-                <mat-error *ngIf="formState.lastName.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="form.get('lastName').hasError('required')">Required</mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -71,8 +71,8 @@
                 <input matInput
                        placeholder="Email"
                        formControlName="email">
-                <mat-error *ngIf="formState.email.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="formState.email.hasError('email')">Must be a valid email address</mat-error>
+                <mat-error *ngIf="form.get('email').hasError('required')">Required</mat-error>
+                <mat-error *ngIf="form.get('email').hasError('email')">Must be a valid email address</mat-error>
               </mat-form-field>
             </div>
           </div>
@@ -97,7 +97,7 @@
   </app-page-section>
 
   <app-page-footer [hasSecondaryAction]="true"
-                   [primaryActionLabel]="(isEditing) ? 'Save and Continue' : 'Continue'"
-                   (save)="(isEditing) ? onSubmit() : onContinue()"
-                   (back)="onBack()"></app-page-footer>
+                   [primaryActionLabel]="(isEditing) ? 'Continue' : 'Save and Continue'"
+                   (save)="(isEditing) ? onContinue() : onSubmit()"
+                   (back)="(isEditing) ? onCancel() : onBack()"></app-page-footer>
 </app-page>

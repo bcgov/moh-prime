@@ -9,6 +9,7 @@ import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { Admin } from '@auth/shared/models/admin.model';
 import { Vendor } from './vendor.model';
 import { BusinessLicence } from './business-licence.model';
+import { IndividualDeviceProvider } from './individual-device-provider.model';
 
 // TODO rename to CommunitySite and split out common properties to Site interface
 export class Site {
@@ -32,6 +33,7 @@ export class Site {
   privacyOfficer: Contact;
   technicalSupportId?: number;
   technicalSupport: Contact;
+  individualDeviceProviders: IndividualDeviceProvider[];
   // States -----
   // Indicates that a user has progressed through the entire enrolment, and
   // reached the overview page switching them from wizard to spoking navigation

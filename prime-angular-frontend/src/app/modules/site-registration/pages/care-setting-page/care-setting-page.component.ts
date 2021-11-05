@@ -21,6 +21,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { CareSettingPageFormState } from './care-setting-page-form-state.class';
+import { NoContent } from '@core/resources/abstract-resource';
 
 @UntilDestroy()
 @Component({
@@ -105,13 +106,15 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
         exhaustMap(([prevCareSettingCode, nextCareSettingCode]: [number, number]) => {
           const deferredLicenceReason = this.siteFormStateService.businessLicenceFormState.deferredLicenceReason;
 
-          // Reset the deferred licence reason when changing from Community Pharmacist as
-          // no other care setting allows for deferment of the business licence upload
+          const allowableDeferedCareSettings = [CareSettingEnum.COMMUNITY_PHARMACIST, CareSettingEnum.DEVICE_PROVIDER];
+          // Reset the deferred licence reason when changing from a care setting that can defer business
+          // licence upload to one that can't.
           if (
-            prevCareSettingCode !== CareSettingEnum.COMMUNITY_PHARMACIST ||
-            !deferredLicenceReason.value ||
+            !allowableDeferedCareSettings.includes(prevCareSettingCode)
+            || allowableDeferedCareSettings.includes(nextCareSettingCode)
+            || !deferredLicenceReason.value
             // When a document has been uploaded the business licence can no longer be updated
-            this.siteService.site?.businessLicence?.completed
+            || this.siteService.site?.businessLicence?.completed
           ) {
             return of(nextCareSettingCode); // No reset required
           }
@@ -147,6 +150,14 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
       });
 
     this.patchForm();
+  }
+
+  protected submissionRequest(): NoContent {
+    if (this.formState.json.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER) {
+      this.siteFormStateService.deviceProviderFormState.patchValue([]);
+    }
+    const payload = this.siteFormStateService.json;
+    return this.siteResource.updateSite(payload);
   }
 
   protected onSubmitFormIsValid(): void {

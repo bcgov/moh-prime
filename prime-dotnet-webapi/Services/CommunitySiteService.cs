@@ -99,6 +99,7 @@ namespace Prime.Services
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
             UpdateRemoteUsers(currentSite, updatedSite);
+            await UpdateIndividualDeviceProviders(siteId, updatedSite);
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
@@ -191,6 +192,27 @@ namespace Prime.Services
                     businessHour.SiteId = current.Id;
                     _context.Entry(businessHour).State = EntityState.Added;
                 }
+            }
+        }
+
+        private async Task UpdateIndividualDeviceProviders(int siteId, CommunitySiteUpdateModel updated)
+        {
+            var currentProviders = await _context.IndividualDeviceProviders
+                .Where(p => p.CommunitySiteId == siteId)
+                .ToListAsync();
+
+            _context.IndividualDeviceProviders.RemoveRange(currentProviders);
+
+            if (updated.IndividualDeviceProviders == null)
+            {
+                return;
+            }
+
+            foreach (var provider in updated?.IndividualDeviceProviders)
+            {
+                var newModel = _mapper.Map<IndividualDeviceProvider>(provider);
+                newModel.CommunitySiteId = siteId;
+                _context.IndividualDeviceProviders.Add(newModel);
             }
         }
 

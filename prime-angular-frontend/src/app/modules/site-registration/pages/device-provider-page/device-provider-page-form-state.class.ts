@@ -1,9 +1,11 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+
 import { IndividualDeviceProvider } from '@registration/shared/models/individual-device-provider.model';
 
-export class DeviceProviderPageFormState extends AbstractFormState<IndividualDeviceProvider> {
+export class DeviceProviderPageFormState extends AbstractFormState<IndividualDeviceProvider[]> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -12,45 +14,40 @@ export class DeviceProviderPageFormState extends AbstractFormState<IndividualDev
     this.buildForm();
   }
 
-  public get firstName(): FormControl {
-    return this.formInstance.get('firstName') as FormControl;
+  public get individualDeviceProviders(): FormArray {
+    return this.formInstance.get('individualDeviceProviders') as FormArray;
   }
 
-  public get middleName(): FormControl {
-    return this.formInstance.get('middleName') as FormControl;
-  }
-
-  public get lastName(): FormControl {
-    return this.formInstance.get('lastName') as FormControl;
-  }
-
-  public get dateOfBirth(): FormControl {
-    return this.formInstance.get('dateOfBirth') as FormControl;
-  }
-
-  public get email(): FormControl {
-    return this.formInstance.get('email') as FormControl;
-  }
-
-  public get json(): IndividualDeviceProvider {
+  public get json(): IndividualDeviceProvider[] {
     if (!this.formInstance) {
       return;
     }
 
-    return this.formInstance.getRawValue();
+    return this.individualDeviceProviders.getRawValue();
   }
 
-  public patchValue(model: IndividualDeviceProvider): void {
-    if (!this.formInstance) {
+  public patchValue(providers: IndividualDeviceProvider[]): void {
+    if (!this.formInstance || !Array.isArray(providers)) {
       return;
     }
 
-    this.formInstance.patchValue(model);
+    this.individualDeviceProviders.clear(); // Clear out existing indices
+
+    providers.forEach((p: IndividualDeviceProvider) => this.push(p));
+  }
+
+  public at(index: number): FormGroup {
+    return this.individualDeviceProviders.at(index) as FormGroup;
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      id: [0, []],
+      individualDeviceProviders: this.fb.array([]),
+    });
+  }
+
+  public buildIndividualDeviceProvider(): FormGroup {
+    return this.fb.group({
       firstName: [null, [
         Validators.required
       ]],
@@ -66,5 +63,11 @@ export class DeviceProviderPageFormState extends AbstractFormState<IndividualDev
         Validators.required
       ]]
     });
+  }
+
+  private push(p: IndividualDeviceProvider) {
+    const provider = this.buildIndividualDeviceProvider();
+    provider.patchValue(p);
+    this.individualDeviceProviders.push(provider);
   }
 }

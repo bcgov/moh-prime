@@ -1,7 +1,7 @@
 export interface IndividualDeviceProvider {
-  id: number;
+  id?: number;
   firstName: string;
-  middleName: string;
+  middleName?: string;
   lastName: string;
   dateOfBirth: string;
   email: string;

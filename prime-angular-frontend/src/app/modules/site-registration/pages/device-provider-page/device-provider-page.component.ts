@@ -1,21 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NoContent } from '@core/resources/abstract-resource';
-import { SiteResource } from '@core/resources/site-resource.service';
-import { FormUtilsService } from '@core/services/form-utils.service';
+import { Subscription } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import moment from 'moment';
+
 import { MINIMUM_AGE } from '@lib/constants';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+
+import { SiteResource } from '@core/resources/site-resource.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+
+import { CardListItem } from '@shared/components/card-list/card-list.component';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { IndividualDeviceProvider } from '@registration/shared/models/individual-device-provider.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { CardListItem } from '@shared/components/card-list/card-list.component';
-import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
-import moment from 'moment';
-import { noop, Observable, of, Subscription } from 'rxjs';
 import { DeviceProviderPageFormState } from './device-provider-page-form-state.class';
 
 @Component({
@@ -24,15 +28,18 @@ import { DeviceProviderPageFormState } from './device-provider-page-form-state.c
   styleUrls: ['./device-provider-page.component.scss'],
   providers: [FormatDatePipe]
 })
-export class DeviceProviderPageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class DeviceProviderPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: DeviceProviderPageFormState;
+  public form: FormGroup;
+
+  public currentIndex: number;
+
   public title: string;
   public isCompleted: boolean;
   public isEditing: boolean;
   public maxDateOfBirth: moment.Moment;
   public busy: Subscription;
 
-  public deviceProviders: IndividualDeviceProvider[];
   public contactCardListItems: CardListItem[];
 
   public routeUtils: RouteUtils;
@@ -40,6 +47,7 @@ export class DeviceProviderPageComponent extends AbstractSiteRegistrationPage im
   private site: Site;
 
   constructor(
+    protected fb: FormBuilder,
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     protected siteService: SiteService,
@@ -50,13 +58,13 @@ export class DeviceProviderPageComponent extends AbstractSiteRegistrationPage im
     router: Router
   ) {
     super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
-    this.deviceProviders = [];
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
 
     // Must be 18 years of age or older
     this.maxDateOfBirth = moment().subtract(MINIMUM_AGE, 'years');
+    this.currentIndex = -1;
   }
 
   public onBack() {
@@ -67,34 +75,37 @@ export class DeviceProviderPageComponent extends AbstractSiteRegistrationPage im
     this.routeUtils.routeRelativeTo(nextRoute);
   }
 
+  public onCancel() {
+    this.isEditing = false;
+  }
+
   public onAdd(): void {
+    this.currentIndex = -1;
+    this.form = this.formState.buildIndividualDeviceProvider();
     this.isEditing = true;
-    this.formState.form.reset({ id: 0 });
   }
 
   public onEdit(index: number): void {
+    this.currentIndex = index;
+    this.form = this.formState.at(index);
     this.isEditing = true;
-    this.formState.patchValue(this.deviceProviders[index]);
+  }
+
+  public onContinue(): void {
+    if (this.formUtilsService.checkValidity(this.form)) {
+      if (this.currentIndex !== -1) {
+        this.formState.individualDeviceProviders.at(this.currentIndex).patchValue(this.form);
+      } else {
+        this.formState.individualDeviceProviders.push(this.form);
+      }
+      this.updateCardList(this.formState.json);
+      this.isEditing = false;
+    }
   }
 
   public onRemove(index: number): void {
-    this.busy = this.siteResource.removeIndividualDeviceProvider(this.route.snapshot.params.sid, this.deviceProviders[index].id)
-      .subscribe(() => {
-        this.deviceProviders.splice(index, 1);
-        this.updateCardList(this.deviceProviders);
-      });
-  }
-
-  /**
-   * @description
-   * Continue to next view when at least one provider exists.
-   */
-  public onContinue(): void {
-    // Protection from routing, but not necessary as the view
-    // toggles when the list of contacts is empty
-    if (this.deviceProviders.length) {
-      this.routeToNextRoute();
-    }
+    this.formState.individualDeviceProviders.removeAt(index);
+    this.updateCardList(this.formState.json);
   }
 
   ngOnInit(): void {
@@ -102,29 +113,17 @@ export class DeviceProviderPageComponent extends AbstractSiteRegistrationPage im
     this.patchForm();
   }
 
-  protected performSubmission(): Observable<IndividualDeviceProvider | NoContent> {
-    if (this.isCompleted) {
-      // Store in form state and don't save
-    }
-
-    const createOrUpdateModel = this.formState.json;
-    const siteId = this.route.snapshot.params.sid;
-    if (createOrUpdateModel.id) {
-      return this.siteResource.updateIndividualDeviceProvider(siteId, createOrUpdateModel.id, createOrUpdateModel);
-    } else {
-      return this.siteResource.createIndividualDeviceProvider(siteId, createOrUpdateModel);
-    }
+  protected createFormInstance() {
+    this.formState = this.siteFormStateService.deviceProviderFormState;
+    this.form = this.formState.buildIndividualDeviceProvider();
   }
 
-  protected afterSubmitIsSuccessful(provider?: IndividualDeviceProvider): void {
-    if (provider) {
-      this.deviceProviders.push(this.formState.json);
-    } else {
-      const update = this.formState.json;
-      this.deviceProviders = this.deviceProviders.map((provider: IndividualDeviceProvider) => (update.id === provider.id) ? update : provider);
-    }
-    this.updateCardList(this.deviceProviders);
-    this.isEditing = false;
+  protected patchForm(): void {
+    this.site = this.siteService.site;
+    this.isCompleted = this.site?.completed;
+    this.siteFormStateService.setForm(this.site, !this.hasBeenSubmitted);
+    this.updateCardList(this.formState.json);
+    this.isEditing = !this.formState.json.length;
   }
 
   /**
@@ -136,6 +135,7 @@ export class DeviceProviderPageComponent extends AbstractSiteRegistrationPage im
 
     if (!deviceProviders.length) {
       this.isEditing = true;
+      this.form = this.formState.buildIndividualDeviceProvider();
     }
   }
 
@@ -157,17 +157,13 @@ export class DeviceProviderPageComponent extends AbstractSiteRegistrationPage im
     });
   }
 
-  protected createFormInstance() {
-    this.formState = this.siteFormStateService.deviceProviderFormState;
+  protected additionalValidityChecks(obj: { individualDeviceProviders: IndividualDeviceProvider[] }): boolean {
+    // At least one provider needs to exist
+    return (obj.individualDeviceProviders.length > 0);
   }
 
-  protected patchForm(): void {
-    this.site = this.siteService.site;
-    this.isCompleted = this.site?.completed;
-    this.siteFormStateService.setForm(this.site, !this.hasBeenSubmitted);
-    this.formState.form.markAsPristine();
-
-    this.isEditing = true;
+  protected afterSubmitIsSuccessful(): void {
+    this.routeToNextRoute();
   }
 
   private routeToNextRoute(): void {
