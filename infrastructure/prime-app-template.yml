@@ -853,6 +853,8 @@ objects:
                   configMapKeyRef:
                     name: keycloak
                     key: JWT_WELL_KNOWN_CONFIG
+              - name: SQLALCHEMY_DATABASE_URI
+                value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
             envFrom:
               - configMapRef:
                   name: document-manager
