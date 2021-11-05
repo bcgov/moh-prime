@@ -52,7 +52,6 @@ objects:
 #   Frontend Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-frontend
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -422,7 +421,6 @@ objects:
 #   Frontend Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-frontend
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -492,7 +490,6 @@ objects:
                     number: 8888
 - apiVersion: route.openshift.io/v1
   kind: Route
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-mutualauth
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -517,7 +514,6 @@ objects:
 #   Backend Web API Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-webapi
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -742,7 +738,6 @@ objects:
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-webapi
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -762,7 +757,6 @@ objects:
 #   PIP Frontend Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-pip-frontend
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -924,7 +918,6 @@ objects:
 #   Frontend Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-pip-frontend
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -944,7 +937,6 @@ objects:
 #   PIP API Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-pip
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -1103,7 +1095,6 @@ objects:
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-pip
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -1123,7 +1114,6 @@ objects:
 #   Document Manager (backend) Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-document-manager
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -1315,7 +1305,6 @@ objects:
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-document-manager
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -1335,7 +1324,6 @@ objects:
 #   Redis Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-redis
     namespace: ${OC_LICENSE_PLATE}-dev
