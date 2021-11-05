@@ -1258,8 +1258,8 @@ objects:
                   name: document-manager
             resources:
               limits:
-                cpu: 25m
-                memory: 198Mi
+                cpu: 80m
+                memory: 200Mi
               requests:
                 cpu: 10m
                 memory: 28Mi
@@ -1276,8 +1276,11 @@ objects:
               httpGet:
                 path: /healthcheck
                 port: 6001
-              failureThreshold: 30
-              periodSeconds: 35
+                scheme: HTTP
+              timeoutSeconds: 1
+              periodSeconds: 30
+              successThreshold: 1
+              failureThreshold: 4
             readinessProbe:
               httpGet:
                 path: /healthcheck
