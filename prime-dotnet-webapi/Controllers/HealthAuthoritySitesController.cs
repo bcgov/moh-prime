@@ -19,21 +19,22 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.PrimeEnrollee)]
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
-        private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
-        private readonly IHealthAuthorityService _healthAuthorityService;
-        private readonly ISiteService _siteService;
         private readonly IEmailService _emailService;
+        private readonly IHealthAuthorityService _healthAuthorityService;
+        private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
+        private readonly ISiteService _siteService;
 
         public HealthAuthoritySitesController(
-            IHealthAuthoritySiteService healthAuthoritySiteService,
+            IEmailService emailService,
             IHealthAuthorityService healthAuthorityService,
-            ISiteService siteService,
-            IEmailService emailService)
+            IHealthAuthoritySiteService healthAuthoritySiteService,
+            ISiteService siteService
+            )
         {
-            _healthAuthoritySiteService = healthAuthoritySiteService;
-            _healthAuthorityService = healthAuthorityService;
-            _siteService = siteService;
             _emailService = emailService;
+            _healthAuthorityService = healthAuthorityService;
+            _healthAuthoritySiteService = healthAuthoritySiteService;
+            _siteService = siteService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -249,7 +250,7 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
-            await _emailService.SendHealthAuthoritySiteRegistrationSubmissionDetailsToHIBCAsync(siteId);
+            await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
 
             return NoContent();
         }

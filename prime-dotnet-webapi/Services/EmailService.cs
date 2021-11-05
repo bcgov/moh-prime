@@ -89,14 +89,15 @@ namespace Prime.Services
             await _emailDocumentService.SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
         }
 
-        public async Task SendHealthAuthoritySiteRegistrationSubmissionDetailsToHIBCAsync(int healthAuthoritySiteId)
+        public async Task SendHealthAuthoritySiteRegistrationSubmissionAsync(int healthAuthoritySiteId)
         {
 
             var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(null), CareSettingType.HealthAuthority);
-            email.Attachments = await _emailDocumentService.GenerateHealthAuthoritySiteRegistrationSubmissionAttachmentsAsync(healthAuthoritySiteId);
+            var attachment = await _emailDocumentService.GenerateHealthAuthorityRegistrationReviewAttachmentAsync(healthAuthoritySiteId);
+            email.Attachments = new[] { attachment };
             await Send(email);
 
-            var siteRegReviewPdf = email.Attachments.Single(a => a.Filename == "HealthAuthoritySiteRegistrationReview.pdf");
+            var siteRegReviewPdf = attachment;
             await _emailDocumentService.SaveSiteRegistrationReview(healthAuthoritySiteId, siteRegReviewPdf);
         }
 

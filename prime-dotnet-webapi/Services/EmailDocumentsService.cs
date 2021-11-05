@@ -49,15 +49,6 @@ namespace Prime.Services.EmailInternal
                 await GenerateOrganizationAgreementAttachmentAsync(siteId)
             };
         }
-
-        public async Task<IEnumerable<Pdf>> GenerateHealthAuthoritySiteRegistrationSubmissionAttachmentsAsync(int healthAuthoritySiteId)
-        {
-            return new[]
-            {
-                await GenerateHealthAuthorityRegistrationReviewAttachmentAsync(healthAuthoritySiteId)
-            };
-        }
-
         public async Task<string> GetBusinessLicenceDownloadLink(int businessLicenceId)
         {
             var document = await _context.BusinessLicenceDocuments
@@ -80,7 +71,7 @@ namespace Prime.Services.EmailInternal
             await _context.SaveChangesAsync();
         }
 
-        private async Task<Pdf> GenerateHealthAuthorityRegistrationReviewAttachmentAsync(int healthAuthoritySiteId)
+        public async Task<Pdf> GenerateHealthAuthorityRegistrationReviewAttachmentAsync(int healthAuthoritySiteId)
         {
             var model = await _context.HealthAuthoritySites
                 .Where(has => has.Id == healthAuthoritySiteId)
