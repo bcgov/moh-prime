@@ -6,9 +6,9 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 
 import { SiteAddressForm } from './site-address-form.model';
 
-// TODO address view shouldn't manage routing internally refactor to emit redirectRoutePath
 @Component({
   selector: 'app-site-address-overview',
+  // TODO address view shouldn't manage routing internally refactor to emit redirectRoutePath
   template: `
     <app-address-view title="Site Address"
                       [address]="siteAddress?.physicalAddress"

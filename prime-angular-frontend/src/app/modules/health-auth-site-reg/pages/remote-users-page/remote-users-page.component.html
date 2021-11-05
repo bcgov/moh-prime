@@ -25,7 +25,7 @@
   </form>
 
   <section>
-    <ng-container *ngFor="let remoteUser of formState.remoteUsers.controls; let i = index; let last = last">
+    <ng-container *ngFor="let remoteUser of formState.remoteUsers.controls; let index = index; let last = last">
 
       <app-summary-card icon="account_circle"
                         [title]="remoteUser.value | fullname"
@@ -33,8 +33,8 @@
                         [properties]="getRemoteUserProperties(remoteUser)"
                         actionButtonTitle="Update Information"
                         [actionDisabled]="false"
-                        (remove)="onRemove(i)"
-                        (action)="onEdit(i)"></app-summary-card>
+                        (remove)="onRemove(index)"
+                        (action)="onEdit(index)"></app-summary-card>
 
       <ng-template #remoteUserMenu
                    let-remoteUser="remoteUser">
@@ -42,7 +42,7 @@
                 mat-icon-button
                 color="primary"
                 matTooltip="Remove Remote User"
-                (click)="onRemove(i)">
+                (click)="onRemove(index)">
           <mat-icon>close</mat-icon>
         </button>
       </ng-template>
@@ -72,17 +72,16 @@
           type="button"
           color="primary"
           class="mb-3"
-          [disabled]="true"
           [routerLink]="['new']">
     <mat-icon class="add-icon">add</mat-icon>
     Add Remote Practitioners
   </button>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [primaryActionLabel]="(hasBeenSubmitted) ? 'Continue' : 'Save and Continue'"
                    [hasSecondaryAction]="true"
-                   [primaryActionLabel]="submitButtonText"
                    (save)="onSubmit()"
-                   (back)="onBack()"
-                   (continue)="onBack()"></app-page-footer>
+                   (continue)="onBack()"
+                   (back)="onBack()"></app-page-footer>
 
 </app-page>

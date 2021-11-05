@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
-import { MockSiteService } from 'test/mocks/mock-site.service';
+import { MockCommunitySiteService } from 'test/mocks/mock-community-site.service';
 
 import { ContactProfileFormComponent } from './contact-profile-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -42,7 +42,7 @@ describe('ContactProfileFormComponent', () => {
         },
         {
           provide: SiteService,
-          useClass: MockSiteService
+          useClass: MockCommunitySiteService
         },
         SiteFormStateService
       ],

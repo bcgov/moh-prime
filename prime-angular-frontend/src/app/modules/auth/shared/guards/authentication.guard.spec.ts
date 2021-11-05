@@ -1,6 +1,7 @@
-import { TestBed, waitForAsync, inject } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
@@ -14,7 +15,8 @@ describe('AuthenticationGuard', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        RouterTestingModule
+        RouterTestingModule,
+        MatSnackBarModule
       ],
       providers: [
         AuthenticationGuard,

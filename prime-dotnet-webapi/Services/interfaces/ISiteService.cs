@@ -1,18 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Prime.Models;
 using Prime.ViewModels;
-using System.Security.Claims;
+using Prime.ViewModels.Sites;
+
 namespace Prime.Services
 {
     public interface ISiteService
     {
-        Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null);
-        Task<Site> GetSiteAsync(int siteId);
-        Task<int> CreateSiteAsync(int organizationId);
-        Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite);
-        Task<int> UpdateCompletedAsync(int siteId, bool completed);
+        Task<bool> PecAssignableAsync(int siteId, string pec);
+        Task UpdateCompletedAsync(int siteId, bool completed);
         Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null);
         Task<Site> UpdatePecCode(int siteId, string pecCode);
         Task DeleteSiteAsync(int siteId);
@@ -21,38 +18,12 @@ namespace Prime.Services
         Task<Site> UnrejectSite(int siteId);
         Task<Site> EnableEditingSite(int siteId);
         Task<Site> SubmitRegistrationAsync(int siteId);
-        Task<Site> GetSiteNoTrackingAsync(int siteId);
-        Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId);
-        Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, BusinessLicence businessLicence, Guid documentGuid);
-        Task<BusinessLicence> UpdateBusinessLicenceAsync(int businessLicenceId, BusinessLicence updateBusinessLicence);
-        Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId);
-        Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId);
-        Task<BusinessLicenceDocument> AddOrReplaceBusinessLicenceDocumentAsync(int businessLicenceId, Guid documentGuid);
-        Task DeleteBusinessLicenceDocumentAsync(int businessLicenceId);
-        Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId);
-        Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId);
+        Task<IEnumerable<BusinessDayViewModel>> GetBusinessHoursAsync(int siteId);
+        Task<IEnumerable<RemoteUserViewModel>> GetRemoteUsersAsync(int siteId);
         Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId);
-        Task<IEnumerable<RemoteAccessSearchViewModel>> GetRemoteUserInfoAsync(IEnumerable<CertSearchViewModel> certs);
-        Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(Site site);
-
-        /// <summary>
-        /// Returns business events related to a site or to the organization that site belongs to.
-        /// </summary>
-        Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes);
-
-        Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId);
-        Task DeleteSiteAdjudicationDocumentAsync(int documentId);
-        Task<SiteNotification> CreateSiteNotificationAsync(int siteRegistrationNoteId, int adminId, int assineeId);
-        Task RemoveSiteNotificationAsync(int siteNotificationId);
-        Task<IEnumerable<SiteRegistrationNoteViewModel>> GetNotificationsAsync(int siteId, int adminId);
-        Task<SiteNotification> GetSiteNotificationAsync(int siteNotificationId);
-        Task RemoveNotificationsAsync(int siteId);
-        Task UpdateSiteFlag(int siteId, bool flagged);
+        Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(int siteId);
         Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId);
-        Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user);
-        Task<bool> SiteExists(int siteId);
-        Task<bool> PecAssignableAsync(string pec);
-        Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId);
+        Task<IEnumerable<RemoteAccessSearchViewModel>> GetRemoteUserInfoAsync(IEnumerable<CertSearchViewModel> certs);
 
         /// <summary>
         /// Save the fact that the given <c>notifiedUsers</c> were notified by email.

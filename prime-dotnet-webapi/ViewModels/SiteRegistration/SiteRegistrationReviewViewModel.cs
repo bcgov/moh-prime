@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+
 using Prime.Models;
 
-namespace Prime.ViewModels.SiteRegistration
+namespace Prime.ViewModels.SiteRegistration.ReviewDocument
 {
     public class SiteRegistrationReviewViewModel
     {

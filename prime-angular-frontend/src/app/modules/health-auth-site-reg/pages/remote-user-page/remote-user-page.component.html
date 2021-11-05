@@ -2,25 +2,25 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <form [formGroup]="formState.form"
+  <form [formGroup]="form"
         (ngSubmit)="onSubmit()"
         novalidate
         autocomplete="off">
 
-    <app-page-subheader2>
-      <ng-container appPageSubheader2Title>
-        Remote Practitioner
-      </ng-container>
-      <ng-container appPageSubheader2Summary>
-        Enter information for this remote practitioner.
-      </ng-container>
-      <ng-container appPageSubheader2MoreInfo>
-        Remote access to PharmaNet is access from outside a private community health practice approved for PharmaNet
-        (e.g., from home). Remote access is not permitted from another health care setting.
-      </ng-container>
-    </app-page-subheader2>
+    <app-page-section>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>
+          Remote Practitioner
+        </ng-container>
+        <ng-container appPageSubheader2Summary>
+          Enter information for this remote practitioner.
+        </ng-container>
+        <ng-container appPageSubheader2MoreInfo>
+          Remote access to PharmaNet is access from outside a private community health practice approved for PharmaNet
+          (e.g., from home). Remote access is not permitted from another health care setting.
+        </ng-container>
+      </app-page-subheader2>
 
-    <section class="mb-3">
       <div class="row">
         <div class="col-12">
 
@@ -83,7 +83,7 @@
         </div>
       </div>
 
-    </section>
+    </app-page-section>
 
     <app-page-footer primaryActionLabel="Continue"
                      [hasSecondaryAction]="true"

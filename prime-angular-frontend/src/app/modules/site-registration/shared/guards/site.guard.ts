@@ -14,7 +14,6 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteService } from '@registration/shared/services/site.service';
-import { ArrayUtils } from '@lib/utils/array-utils.class';
 
 @Injectable({
   providedIn: 'root'

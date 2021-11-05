@@ -2,19 +2,21 @@ import { FormBuilder, FormControl } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { VendorForm } from './vendor-form.model';
 
 export class VendorFormState extends AbstractFormState<VendorForm> {
   public constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private healthAuthorityService: HealthAuthorityService
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get vendorCode(): FormControl {
-    return this.formInstance.get('vendorCode') as FormControl;
+  public get healthAuthorityVendorId(): FormControl {
+    return this.formInstance.get('healthAuthorityVendorId') as FormControl;
   }
 
   public get json(): VendorForm {
@@ -22,20 +24,25 @@ export class VendorFormState extends AbstractFormState<VendorForm> {
       return;
     }
 
-    return this.formInstance.getRawValue();
+    const { healthAuthorityVendorId } = this.formInstance.getRawValue();
+    const healthAuthorityVendor = this.healthAuthorityService.healthAuthority.vendors
+      .find(hav => hav.id === healthAuthorityVendorId);
+
+    return { healthAuthorityVendor };
   }
 
   public patchValue(model: VendorForm): void {
-    if (!this.formInstance) {
+    const healthAuthorityVendorId = model.healthAuthorityVendor?.id;
+    if (!this.formInstance || !healthAuthorityVendorId) {
       return;
     }
 
-    this.formInstance.patchValue(model);
+    this.formInstance.patchValue({ healthAuthorityVendorId });
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      vendorCode: [
+      healthAuthorityVendorId: [
         0,
         [FormControlValidators.requiredIndex]
       ]
