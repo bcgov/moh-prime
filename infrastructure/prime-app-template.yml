@@ -161,7 +161,13 @@ objects:
               readOnly: true
               mountPath: /opt/app-root/src/assets/config-map.json
               subPath: config-map.json
-            resources: {}
+            resources:
+              limits:
+                cpu: 50m
+                memory: 50Mi
+              requests:
+                cpu: 15m
+                memory: 10Mi
             envFrom:
               - configMapRef:
                   name: keycloak
@@ -572,12 +578,21 @@ objects:
               - bash
               - '-c'
               - dotnet ./prime.dll -v 2>&1> /dev/stdout
+            resources:
+              limits:
+                cpu: 100m
+                memory: 1Gi
+              requests:
+                cpu: 10m
+                memory: 500Mi
             env:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 valueFrom:
                   configMapKeyRef:
                     name: document-manager
                     key: DOCUMENT_MANAGER_CLIENT_ID
+              - name: OC_APP
+                value: ${OC_APP}
               - name: DOCUMENT_MANAGER_URL
                 value: http://${SVC_NAME}-document-manager:6001
               - name: PHARMANET_SSL_CERT_FILENAME
@@ -730,8 +745,8 @@ objects:
         updatePeriodSeconds: 1
         intervalSeconds: 1
         timeoutSeconds: 120
-        maxSurge: "20%"
-        maxUnavailable: "10%"
+        maxSurge: "50%"
+        maxUnavailable: 0
     template:
       metadata:
         labels:
@@ -742,6 +757,12 @@ objects:
         - name: run-migrations
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
+          command:
+            # Script force waits migration pod execution until PostgreSQL is verified to
+            # be open to query connections.
+            - /opt/app-root/src/app.sh
+          args:
+            - migrate
           env:
             - name: CACHE_REDIS_HOST
               value: redis
@@ -752,78 +773,49 @@ objects:
                   key: database-password
             - name: CACHE_REDIS_PORT
               value: "6379"
-            - name: DB_HOST
+            - name: PGHOST
               valueFrom:
                   configMapKeyRef:
                     name: database-cm
                     key: database-host
-            - name: DB_NAME
+            - name: PGDATABASE
               valueFrom:
                 secretKeyRef:
                   name: ${SVC_NAME}-patroni-secret
                   key: app-db-name
-            - name: DB_PASS
+            - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   name: ${SVC_NAME}-patroni-secret
                   key: app-db-password
-            - name: DB_PORT
-              valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-port
-            - name: DB_USER
+            - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   name: ${SVC_NAME}-patroni-secret
                   key: app-db-username
             - name: DOCUMENT_MANAGER_URL
               value: "https://${VANITY_URL}/api/docman/"
-            - name: FLASK_ENV
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_ENV
-            - name: FLASK_RUN_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_RUN_HOST
-            - name: FLASK_DEBUG
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_DEBUG
-            - name: FLASK_APP
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_APP
-            - name: FLASK_RUN_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_RUN_PORT
             - name: JWT_OIDC_WELL_KNOWN_CONFIG
               valueFrom:
                 configMapKeyRef:
                   name: keycloak
                   key: JWT_WELL_KNOWN_CONFIG
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ${SVC_NAME}-patroni-secret
-                  key: app-db-password
-          command:
-            # Script force waits migration pod execution until PostgreSQL is verified to
-            # be open to query connections.
-            - /opt/app-root/src/app.sh
-          args:
-            - migrate
+            - name: SQLALCHEMY_DATABASE_URI
+              value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
+          envFrom:
+            - configMapRef:
+                name: document-manager
         containers:
           - name: ${SVC_NAME}-document-manager
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
+            resources:
+              limits:
+                cpu: 25m
+                memory: 200Mi
+              requests:
+                cpu: 10m
+                memory: 28Mi
             env:
               - name: CACHE_REDIS_HOST
                 value: ${SVC_NAME}-redis
@@ -834,68 +826,36 @@ objects:
                     key: database-password
               - name: CACHE_REDIS_PORT
                 value: "6379"
-              - name: DB_HOST
+              - name: PGHOST
                 valueFrom:
                   configMapKeyRef:
                     name: database-cm
                     key: database-host
-              - name: DB_NAME
+              - name: PGDATABASE
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-patroni-secret
                     key: app-db-name
-              - name: DB_PASS
+              - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-patroni-secret
                     key: app-db-password
-              - name: DB_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-port
-              - name: DB_USER
+              - name: PGUSER
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-patroni-secret
                     key: app-db-username
               - name: DOCUMENT_MANAGER_URL
                 value: "https://${VANITY_URL}/api/docman/"
-              - name: FLASK_ENV
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_ENV
-              - name: FLASK_RUN_HOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_RUN_HOST
-              - name: FLASK_DEBUG
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_DEBUG
-              - name: FLASK_APP
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_APP
-              - name: FLASK_RUN_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_RUN_PORT
               - name: JWT_OIDC_WELL_KNOWN_CONFIG
                 valueFrom:
                   configMapKeyRef:
                     name: keycloak
                     key: JWT_WELL_KNOWN_CONFIG
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-patroni-secret
-                    key: app-db-password
+            envFrom:
+              - configMapRef:
+                  name: document-manager
             volumeMounts:
             # Mount Document Manager to PVC
               - mountPath: /app/
@@ -999,9 +959,24 @@ objects:
           - name: ${SVC_NAME}-redis-data
             emptyDir: {}
         containers:
-          - resources:
+          - name: redis
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:latest
+            resources:
               limits:
+                cpu: 25m
                 memory: 512Mi
+              requests:
+                cpu: 5m
+                memory: 50Mi 
+            env:
+              - name: REDIS_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: redis
+                    key: database-password
+              - name: REDIS_PORT
+                value: "6379"
             readinessProbe:
               exec:
                 command:
@@ -1017,7 +992,6 @@ objects:
               successThreshold: 1
               failureThreshold: 3
             terminationMessagePath: /dev/termination-log
-            name: redis
             livenessProbe:
               tcpSocket:
                 port: 6379
@@ -1026,14 +1000,6 @@ objects:
               periodSeconds: 10
               successThreshold: 1
               failureThreshold: 3
-            env:
-              - name: REDIS_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: redis
-                    key: database-password
-              - name: REDIS_PORT
-                value: "6379"
             securityContext:
               capabilities: {}
               privileged: false
@@ -1045,8 +1011,6 @@ objects:
               - name: ${SVC_NAME}-redis-data
                 mountPath: /var/lib/redis/data
             terminationMessagePolicy: File
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:latest
         restartPolicy: Always
         dnsPolicy: ClusterFirst
 
