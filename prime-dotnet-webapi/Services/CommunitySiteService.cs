@@ -12,6 +12,7 @@ using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
+using Prime.Engines;
 
 namespace Prime.Services
 {
@@ -98,7 +99,7 @@ namespace Prime.Services
             UpdateAddress(currentSite, updatedSite);
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
-            UpdateRemoteUsers(currentSite, updatedSite);
+            UpdateRemoteUsers(currentSite, updatedSite.RemoteUsers);
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
@@ -194,41 +195,32 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateRemoteUsers(Site current, CommunitySiteUpdateModel updated)
+        private void UpdateRemoteUsers(Site current, IEnumerable<RemoteUser> updated)
         {
-            // Wholesale replace the remote users
-            foreach (var remoteUser in current.RemoteUsers)
+            // All RemoteUserCertifications will be dropped and re-added, so we must set all incoming Ids to 0
+            // This can be removed when / if the updated Certs become a View Model without Id.
+            foreach (var cert in updated.SelectMany(x => x.RemoteUserCertifications))
             {
-                foreach (var certification in remoteUser.RemoteUserCertifications)
-                {
-                    _context.Remove(certification);
-                }
-                _context.RemoteUsers.Remove(remoteUser);
+                cert.Id = 0;
             }
 
-            if (updated?.RemoteUsers != null && updated?.RemoteUsers.Count() != 0)
+            var matches = EntityMatcher
+                .MatchUsing((RemoteUser r) => r.Id)
+                .Match(current.RemoteUsers, updated);
+
+            _context.RemoteUsers.RemoveRange(matches.Dropped);
+
+            foreach (var (existing, incoming) in matches.Updated)
             {
-                foreach (var remoteUser in updated.RemoteUsers)
-                {
-                    remoteUser.SiteId = current.Id;
-                    var remoteUserCertifications = new List<RemoteUserCertification>();
+                _context.RemoteUserCertifications.RemoveRange(existing.RemoteUserCertifications);
+                _context.Entry(existing).CurrentValues.SetValues(incoming);
+                existing.RemoteUserCertifications = incoming.RemoteUserCertifications;
+            }
 
-                    foreach (var certification in remoteUser.RemoteUserCertifications)
-                    {
-                        var newCertification = new RemoteUserCertification
-                        {
-                            RemoteUser = remoteUser,
-                            CollegeCode = certification.CollegeCode,
-                            LicenseNumber = certification.LicenseNumber,
-                            LicenseCode = certification.LicenseCode
-                        };
-                        _context.Entry(newCertification).State = EntityState.Added;
-                        remoteUserCertifications.Add(newCertification);
-                    }
-                    remoteUser.RemoteUserCertifications = remoteUserCertifications;
-
-                    _context.Entry(remoteUser).State = EntityState.Added;
-                }
+            foreach (var added in matches.Added)
+            {
+                added.Id = 0;
+                current.RemoteUsers.Add(added);
             }
         }
 

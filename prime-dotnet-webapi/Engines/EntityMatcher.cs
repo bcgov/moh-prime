@@ -22,7 +22,7 @@ namespace Prime.Engines
             _incomingKeySelector = incomingKeySelector;
         }
 
-        public MatchingResult Sort(IEnumerable<TExisting> existingEntities, IEnumerable<TIncoming> incoming)
+        public MatchingResult Match(IEnumerable<TExisting> existingEntities, IEnumerable<TIncoming> incoming)
         {
             var result = new MatchingResult();
             var incomingDictionary = incoming.ToDictionary(x => _incomingKeySelector.Invoke(x), x => x);
@@ -50,9 +50,14 @@ namespace Prime.Engines
 
     public class EntityMatcher
     {
-        public static EntityMatcher<TExisting, TIncoming, TKey> MatchingOn<TExisting, TIncoming, TKey>(Func<TExisting, TKey> existingKeySelector, Func<TIncoming, TKey> incomingKeySelector) where TExisting : class where TIncoming : class where TKey : struct
+        public static EntityMatcher<TExisting, TIncoming, TKey> MatchUsing<TExisting, TIncoming, TKey>(Func<TExisting, TKey> existingKeySelector, Func<TIncoming, TKey> incomingKeySelector) where TExisting : class where TIncoming : class where TKey : struct
         {
             return new EntityMatcher<TExisting, TIncoming, TKey>(existingKeySelector, incomingKeySelector);
+        }
+
+        public static EntityMatcher<TExisting, TExisting, TKey> MatchUsing<TExisting, TKey>(Func<TExisting, TKey> matchingTypeKeySelector) where TExisting : class where TKey : struct
+        {
+            return MatchUsing(matchingTypeKeySelector, matchingTypeKeySelector);
         }
     }
 }
