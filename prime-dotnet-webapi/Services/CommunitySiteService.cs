@@ -98,7 +98,7 @@ namespace Prime.Services
             UpdateAddress(currentSite, updatedSite);
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
-            UpdateRemoteUsers(currentSite, updatedSite);
+            UpdateRemoteUsers(currentSite, updatedSite.RemoteUsers);
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
@@ -194,17 +194,17 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateRemoteUsers(Site current, CommunitySiteUpdateModel updated)
+        private void UpdateRemoteUsers(Site current, IEnumerable<RemoteUser> updateRemoteUsers)
         {
-            if (updated.RemoteUsers == null)
+            if (updateRemoteUsers == null)
             {
                 return;
             }
 
-            foreach (var updateRemoteUser in updated.RemoteUsers)
+            foreach (var updateRemoteUser in updateRemoteUsers)
             {
                 var existingRemoteUser = _context.RemoteUsers
-                    .FirstOrDefault(u => u.Id == updateRemoteUser.Id);
+                    .SingleOrDefault(u => u.Id == updateRemoteUser.Id);
 
                 if (existingRemoteUser == null)
                 {
@@ -230,7 +230,7 @@ namespace Prime.Services
                 }
             }
 
-            _context.RemoteUsers.RemoveRange(current.RemoteUsers.Where(u => !updated.RemoteUsers.Contains(u)));
+            _context.RemoteUsers.RemoveRange(current.RemoteUsers.Where(u => !updateRemoteUsers.Contains(u)));
         }
 
         private void UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated)
