@@ -377,7 +377,7 @@ export class HealthAuthorityResource {
 
   /**
    * @description
-   * Check if the provided PEC is used by another health Authority site
+   * Checks if the provided PEC is already assigned to another site under another Health Authority
    */
   public checkPecExistsInOtherHEalthAuthority(healthAuthCode: number, pec: string): Observable<boolean> {
     // In order to use this method with the AsyncValidator, we're inverting the results here.

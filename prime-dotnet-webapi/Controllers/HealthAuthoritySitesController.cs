@@ -254,7 +254,7 @@ namespace Prime.Controllers
 
         // HEAD: api/health-authorities/5/sites/duplicate-pec?pec=abc
         /// <summary>
-        /// Checks if a PEC is already assigned to another Health Authoriyt site
+        /// Checks if the provided PEC is already assigned to another site under another Health Authority
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="pec"></param>
