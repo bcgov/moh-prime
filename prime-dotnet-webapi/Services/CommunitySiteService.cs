@@ -208,6 +208,7 @@ namespace Prime.Services
 
                 if (existingRemoteUser == null)
                 {
+                    updateRemoteUser.Id = 0;
                     current.RemoteUsers.Add(updateRemoteUser);
                 }
                 else
