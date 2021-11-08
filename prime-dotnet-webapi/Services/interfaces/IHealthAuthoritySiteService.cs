@@ -16,5 +16,6 @@ namespace Prime.Services
         Task SetSiteCompletedAsync(int siteId);
         Task SiteSubmissionAsync(int siteId);
         Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId);
+        Task<bool> CheckForDuplicatePecAsync(int healthAuthorityId, string pec);
     }
 }

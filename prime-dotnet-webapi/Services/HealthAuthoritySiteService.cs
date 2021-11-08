@@ -153,5 +153,16 @@ namespace Prime.Services
 
             await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Submitted");
         }
+
+        public async Task<bool> CheckForDuplicatePecAsync(int healthAuthorityId, string pec)
+        {
+            var site = await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Where(s => string.Equals(s.PEC, pec)
+                && s.HealthAuthorityOrganizationId != healthAuthorityId)
+                .SingleOrDefaultAsync();
+
+            return site != null;
+        }
     }
 }

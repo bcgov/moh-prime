@@ -29,7 +29,9 @@
             <mat-label>Site ID/PEC Code</mat-label>
             <input matInput
                    [formControl]="formState.pec">
-            <mat-error>Required</mat-error>
+            <mat-error *ngIf="formState.pec.hasError('duplicate')">
+              Site ID has already been used by another health authority site
+            </mat-error>
           </mat-form-field>
 
         </div>

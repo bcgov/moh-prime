@@ -283,10 +283,10 @@ export class HealthAuthorityResource {
     })
       .pipe(
         map(({
-               healthAuthoritySite,
-               businessHours,
-               remoteUsers
-             }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[], remoteUsers: RemoteUser[] }) => {
+          healthAuthoritySite,
+          businessHours,
+          remoteUsers
+        }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[], remoteUsers: RemoteUser[] }) => {
           return { ...healthAuthoritySite, businessHours, remoteUsers };
         }),
         map((healthAuthoritySiteDto: HealthAuthoritySiteDto) => HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto)),
@@ -370,6 +370,28 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be submitted');
           this.logger.error('[Core] HealthAuthorityResource::healthAuthoritySiteSubmit error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * @description
+   * Check if the provided PEC is used by another health Authority site
+   */
+  public checkPecExistsInOtherHEalthAuthority(healthAuthCode: number, pec: string): Observable<boolean> {
+    // In order to use this method with the AsyncValidator, we're inverting the results here.
+    // If we get a 204 meaning there's a duplicate PEC, we return false as asyncValidator inverts that result: (Error)
+    // If we get a 404 meaning no duplicate PECs we return true: (No Error)
+    const params = this.apiResourceUtilsService.makeHttpParams({ pec });
+    return this.apiResource.head<boolean>(`health-authorities/${healthAuthCode}/sites/duplicate-pec`, params)
+      .pipe(
+        map(() => false),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(true);
+          }
+          this.logger.error('[Core] HealthAuthorityResource::healthAuthorityPecCheck error has occurred: ', error);
           throw error;
         })
       );
