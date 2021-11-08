@@ -6,6 +6,7 @@ using Prime.Models;
 using Prime.Services;
 using Prime.ViewModels;
 using PrimeTests.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace PrimeTests.UnitTests
 {
@@ -27,14 +28,30 @@ namespace PrimeTests.UnitTests
                         Id = 1,
                         FirstName = "1",
                         LastName = "",
-                        Email = ""
+                        Email = "",
+                        RemoteUserCertifications = new List<RemoteUserCertification>
+                        {
+                            new RemoteUserCertification
+                            {
+                                CollegeCode = 1,
+                                LicenseNumber = "11111"
+                            }
+                        }
                     },
                     new RemoteUser
                     {
                         Id = 2,
                         FirstName = "Dropped",
                         LastName = "",
-                        Email = ""
+                        Email = "",
+                        RemoteUserCertifications = new List<RemoteUserCertification>
+                        {
+                            new RemoteUserCertification
+                            {
+                                CollegeCode = 1,
+                                LicenseNumber = "Dropped"
+                            }
+                        }
                     }
                 }
             };
@@ -51,28 +68,46 @@ namespace PrimeTests.UnitTests
                         Id = 1,
                         FirstName = "Updated1",
                         LastName = "",
-                        Email = ""
+                        Email = "",
+                        RemoteUserCertifications = new[]
+                        {
+                            new RemoteUserCertification
+                            {
+                                CollegeCode = 1,
+                                LicenseNumber = "Updated1"
+                            }
+                        }
                     },
                     new RemoteUser
                     {
                         Id = 0,
                         FirstName = "Added1",
                         LastName = "",
-                        Email = ""
+                        Email = "",
+                        RemoteUserCertifications = new[]
+                        {
+                            new RemoteUserCertification
+                            {
+                                CollegeCode = 1,
+                                LicenseNumber = "Added1"
+                            }
+                        }
                     },
                     new RemoteUser
                     {
                         Id = 0,
                         FirstName = "Added2",
                         LastName = "",
-                        Email = ""
+                        Email = "",
+                        RemoteUserCertifications = new RemoteUserCertification[]{}
                     },
                     new RemoteUser
                     {
                         Id = 77,
                         FirstName = "Added3",
                         LastName = "",
-                        Email = ""
+                        Email = "",
+                        RemoteUserCertifications = new RemoteUserCertification[]{}
                     }
                 }
             };
@@ -81,19 +116,26 @@ namespace PrimeTests.UnitTests
             await MockDependenciesFor<CommunitySiteService>().UpdateSiteAsync(site.Id, update);
 
             // Assert
+            // Drops
             Assert.False(TestDb.RemoteUsers.Any(user => user.FirstName == "Dropped"));
+            Assert.False(TestDb.RemoteUserCertifications.Any(cert => cert.LicenseNumber == "Dropped"));
 
             var siteUsers = TestDb.RemoteUsers
+                .Include(user => user.RemoteUserCertifications)
                 .Where(user => user.SiteId == site.Id)
                 .ToList();
 
+            // Updates
             var updated = siteUsers.SingleOrDefault(user => user.Id == 1);
             Assert.NotNull(updated);
             Assert.Equal("Updated1", updated.FirstName);
+            Assert.Equal("Updated1", updated.RemoteUserCertifications.SingleOrDefault()?.LicenseNumber);
 
+            // Adds
             var added1 = siteUsers.SingleOrDefault(user => user.FirstName == "Added1");
             Assert.NotNull(added1);
             Assert.NotEqual(0, added1.Id);
+            Assert.Equal("Added1", added1.RemoteUserCertifications.SingleOrDefault()?.LicenseNumber);
 
             var added2 = siteUsers.SingleOrDefault(user => user.FirstName == "Added2");
             Assert.NotNull(added2);
