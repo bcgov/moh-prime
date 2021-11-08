@@ -201,6 +201,7 @@ namespace Prime.Services
                 return;
             }
 
+            var updatedRemoteUserIds = new List<int>();
             foreach (var updateRemoteUser in updateRemoteUsers)
             {
                 var existingRemoteUser = _context.RemoteUsers
@@ -210,29 +211,18 @@ namespace Prime.Services
                 {
                     updateRemoteUser.Id = 0;
                     current.RemoteUsers.Add(updateRemoteUser);
+                    updatedRemoteUserIds.Add(0);
                 }
                 else
                 {
                     updateRemoteUser.SiteId = current.Id;
                     _context.Entry(existingRemoteUser).CurrentValues.SetValues(updateRemoteUser);
-                    foreach (var certification in existingRemoteUser.RemoteUserCertifications)
-                    {
-                        var existingCertification = _context.RemoteUserCertifications
-                            .FirstOrDefault(c => c.Id == certification.Id);
-
-                        if (existingCertification == null)
-                        {
-                            existingRemoteUser.RemoteUserCertifications.Add(certification);
-                        }
-                        else
-                        {
-                            _context.Entry(existingCertification).CurrentValues.SetValues(certification);
-                        }
-                    }
+                    existingRemoteUser.RemoteUserCertifications = updateRemoteUser.RemoteUserCertifications;
+                    updatedRemoteUserIds.Add(existingRemoteUser.Id);
                 }
             }
 
-            _context.RemoteUsers.RemoveRange(current.RemoteUsers.Where(u => !updateRemoteUsers.Contains(u)));
+            _context.RemoteUsers.RemoveRange(current.RemoteUsers.Where(u => !updatedRemoteUserIds.Contains(u.Id)));
         }
 
         private void UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated)
