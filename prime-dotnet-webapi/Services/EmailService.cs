@@ -103,7 +103,6 @@ namespace Prime.Services
 
         public async Task SendSiteReviewedNotificationAsync(int siteId, string note)
         {
-
             var viewModel = await _context.Sites
                 .Where(s => s.Id == siteId)
                 .Select(s => new SiteReviewedEmailViewModel
