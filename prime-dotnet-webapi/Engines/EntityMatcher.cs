@@ -4,13 +4,16 @@ using System.Linq;
 
 namespace Prime.Engines
 {
-    public class EntityMatcher<TExisting, TIncoming, TKey> where TExisting : class where TIncoming : class where TKey : struct
+    public class EntityMatcher<TExisting, TIncoming, TKey>
+        where TExisting : class
+        where TIncoming : class
+        where TKey : IComparable<TKey>
     {
         public class MatchingResult
         {
             public ICollection<(TExisting existing, TIncoming incoming)> Updated { get; set; } = new List<(TExisting existing, TIncoming incoming)>();
-            public ICollection<TExisting> Dropped { get; set; } = new List<TExisting>();
-            public ICollection<TIncoming> Added { get; set; }
+            public ICollection<TExisting> Dropped { get; set; }
+            public ICollection<TIncoming> Added { get; set; } = new List<TIncoming>();
         }
 
         private readonly Func<TExisting, TKey> _existingKeySelector;
@@ -22,27 +25,27 @@ namespace Prime.Engines
             _incomingKeySelector = incomingKeySelector;
         }
 
-        public MatchingResult Match(IEnumerable<TExisting> existingEntities, IEnumerable<TIncoming> incoming)
+        public MatchingResult Match(IEnumerable<TExisting> existingEntities, IEnumerable<TIncoming> incomingObjects)
         {
             var result = new MatchingResult();
-            var incomingDictionary = incoming.ToDictionary(x => _incomingKeySelector.Invoke(x), x => x);
+            var existingDict = existingEntities.ToDictionary(x => _existingKeySelector.Invoke(x), x => x);
 
-            foreach (var entity in existingEntities)
+            foreach (var incoming in incomingObjects)
             {
-                var key = _existingKeySelector.Invoke(entity);
+                var key = _incomingKeySelector.Invoke(incoming);
 
-                if (incomingDictionary.TryGetValue(key, out var value))
+                if (existingDict.TryGetValue(key, out var existing))
                 {
-                    result.Updated.Add(new(entity, value));
-                    incomingDictionary.Remove(key);
+                    result.Updated.Add(new(existing, incoming));
+                    existingDict.Remove(key);
                 }
                 else
                 {
-                    result.Dropped.Add(entity);
+                    result.Added.Add(incoming);
                 }
             }
 
-            result.Added = incomingDictionary.Values;
+            result.Dropped = existingDict.Values;
 
             return result;
         }
@@ -50,12 +53,12 @@ namespace Prime.Engines
 
     public class EntityMatcher
     {
-        public static EntityMatcher<TExisting, TIncoming, TKey> MatchUsing<TExisting, TIncoming, TKey>(Func<TExisting, TKey> existingKeySelector, Func<TIncoming, TKey> incomingKeySelector) where TExisting : class where TIncoming : class where TKey : struct
+        public static EntityMatcher<TExisting, TIncoming, TKey> MatchUsing<TExisting, TIncoming, TKey>(Func<TExisting, TKey> existingKeySelector, Func<TIncoming, TKey> incomingKeySelector) where TExisting : class where TIncoming : class where TKey : IComparable<TKey>
         {
             return new EntityMatcher<TExisting, TIncoming, TKey>(existingKeySelector, incomingKeySelector);
         }
 
-        public static EntityMatcher<TExisting, TExisting, TKey> MatchUsing<TExisting, TKey>(Func<TExisting, TKey> matchingTypeKeySelector) where TExisting : class where TKey : struct
+        public static EntityMatcher<TExisting, TExisting, TKey> MatchUsing<TExisting, TKey>(Func<TExisting, TKey> matchingTypeKeySelector) where TExisting : class where TKey : IComparable<TKey>
         {
             return MatchUsing(matchingTypeKeySelector, matchingTypeKeySelector);
         }

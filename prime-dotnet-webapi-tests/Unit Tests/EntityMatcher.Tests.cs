@@ -5,6 +5,8 @@ using Xunit;
 using Prime.Models;
 using Prime.Engines;
 using PrimeTests.Utils;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace PrimeTests.UnitTests
 {
@@ -16,8 +18,9 @@ namespace PrimeTests.UnitTests
             var existing = new Entity[] { };
             var incoming = new[]
             {
-                new ViewModel(1),
-                new ViewModel(2)
+                new ViewModel(0),
+                new ViewModel(0),
+                new ViewModel(1)
             };
 
             var matches = EntityMatcher
@@ -48,35 +51,78 @@ namespace PrimeTests.UnitTests
             Assert.Empty(matches.Added);
         }
 
+        // [Fact]
+        // public void TestEntityMatcher_Updates()
+        // {
+        //     var exis
+
+
+        //     var existing = new[]
+        //     {
+        //         new Entity(1),
+        //         new Entity(2),
+        //         new Entity(3),
+        //         new Entity(4)
+        //     };
+        //     var incoming = new[]
+        //     {
+        //         new ViewModel(0),
+        //         new ViewModel(0),
+        //         new ViewModel(2),
+        //         new ViewModel(3),
+        //         new ViewModel(12)
+        //     };
+
+        //     var matches = EntityMatcher
+        //         .MatchUsing((Entity e) => e.Id, (ViewModel v) => v.Id)
+        //         .Match(existing, incoming);
+
+        //     Assert.Equal(matches.Updated);
+        //     Assert.Equal(existing, matches.Dropped);
+        //     Assert.Empty(matches.Added);
+        // }
+
         [Fact]
-        public void TestEntityMatcher_Updates()
+        public void TestEntityMatcher_ComplexKey()
         {
-            var exis
-
-
             var existing = new[]
             {
-                new Entity(1),
-                new Entity(2),
-                new Entity(3),
-                new Entity(4)
+                new Certification
+                {
+                    Id = 1,
+                    CollegeCode = 1,
+                    LicenseNumber = "11111"
+                },
+                new Certification
+                {
+                    Id = 2,
+                    CollegeCode = 2,
+                    LicenseNumber = "22222"
+                }
             };
             var incoming = new[]
             {
-                new ViewModel(0),
-                new ViewModel(0),
-                new ViewModel(2),
-                new ViewModel(3),
-                new ViewModel(12)
+                new Certification
+                {
+                    Id = 1,
+                    CollegeCode = 3,
+                    LicenseNumber = "33333"
+                },
+                new Certification
+                {
+                    Id = 0,
+                    CollegeCode = 2,
+                    LicenseNumber = "22222"
+                }
             };
 
             var matches = EntityMatcher
-                .MatchUsing((Entity e) => e.Id, (ViewModel v) => v.Id)
+                .MatchUsing((Certification c) => $"{c.CollegeCode},{c.LicenseNumber}")
                 .Match(existing, incoming);
 
-            Assert.Equal(matches.Updated);
-            Assert.Equal(existing, matches.Dropped);
-            Assert.Empty(matches.Added);
+            Assert.Equal(new (Certification, Certification)[] { new(existing.Single(c => c.Id == 2), incoming.Single(c => c.Id == 0)) }, matches.Updated);
+            Assert.Equal(existing.Where(c => c.Id == 1), matches.Dropped);
+            Assert.Equal(incoming.Where(c => c.Id == 1), matches.Added);
         }
 
         public class Entity
