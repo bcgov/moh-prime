@@ -211,18 +211,22 @@ namespace Prime.Services
                 {
                     updateRemoteUser.Id = 0;
                     current.RemoteUsers.Add(updateRemoteUser);
-                    updatedRemoteUserIds.Add(0);
                 }
                 else
                 {
                     updateRemoteUser.SiteId = current.Id;
                     _context.Entry(existingRemoteUser).CurrentValues.SetValues(updateRemoteUser);
-                    existingRemoteUser.RemoteUserCertifications = updateRemoteUser.RemoteUserCertifications;
+                    existingRemoteUser.RemoteUserCertifications.Clear();
+                    foreach (var certification in updateRemoteUser.RemoteUserCertifications)
+                    {
+                        certification.RemoteUserId = existingRemoteUser.Id;
+                        existingRemoteUser.RemoteUserCertifications.Add(certification);
+                    }
                     updatedRemoteUserIds.Add(existingRemoteUser.Id);
                 }
             }
 
-            _context.RemoteUsers.RemoveRange(current.RemoteUsers.Where(u => !updatedRemoteUserIds.Contains(u.Id)));
+            current.RemoteUsers = current.RemoteUsers.Where(u => u.Id == 0 || updatedRemoteUserIds.Contains(u.Id)).ToList();
         }
 
         private void UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated)
