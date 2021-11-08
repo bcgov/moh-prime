@@ -91,7 +91,6 @@ namespace Prime.Services
 
         public async Task SendHealthAuthoritySiteRegistrationSubmissionAsync(int healthAuthoritySiteId)
         {
-
             var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(null), CareSettingType.HealthAuthority);
             var attachment = await _emailDocumentService.GenerateHealthAuthorityRegistrationReviewAttachmentAsync(healthAuthoritySiteId);
             email.Attachments = new[] { attachment };
