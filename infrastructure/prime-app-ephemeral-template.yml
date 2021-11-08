@@ -536,7 +536,8 @@ objects:
             command:
               - /bin/bash
               - -c
-              - createdb -O $(APPUSER) prime-${SVC_NAME}
+              - >
+                createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
             env:
               - name: PGHOST
                 valueFrom:
@@ -959,7 +960,8 @@ objects:
             command:
               - /bin/ash
               - -c
-              - createdb -O $(APPUSER) pip-${SVC_NAME}
+              - >
+                createdb -O $(APPUSER) pip-${SVC_NAME} 2> /dev/null || echo "database already exists"
             env:
               - name: PGHOST
                 valueFrom:
@@ -1136,7 +1138,8 @@ objects:
             command:
               - /bin/bash
               - -c
-              - createdb -O $(APPUSER) prime-${SVC_NAME}
+              - >
+                createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
             env:
               - name: PGHOST
                 valueFrom:
