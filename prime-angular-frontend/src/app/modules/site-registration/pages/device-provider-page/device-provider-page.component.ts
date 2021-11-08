@@ -108,7 +108,7 @@ export class DeviceProviderPageComponent extends AbstractCommunitySiteRegistrati
     this.updateCardList(this.formState.json);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
   }
