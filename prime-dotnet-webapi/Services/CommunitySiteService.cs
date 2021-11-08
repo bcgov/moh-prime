@@ -217,7 +217,7 @@ namespace Prime.Services
                     _context.Entry(existingRemoteUser).CurrentValues.SetValues(updateRemoteUser);
                     foreach (var certification in existingRemoteUser.RemoteUserCertifications)
                     {
-                        var existingCertification = existingRemoteUser.RemoteUserCertifications
+                        var existingCertification = _context.RemoteUserCertifications
                             .FirstOrDefault(c => c.Id == certification.Id);
 
                         if (existingCertification == null)
