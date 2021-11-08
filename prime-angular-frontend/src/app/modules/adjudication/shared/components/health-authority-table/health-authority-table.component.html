@@ -37,21 +37,36 @@
             *matCellDef="let row;"> {{ row.siteName | default }} </td>
       </ng-container>
 
+      <ng-container matColumnDef="authorizedUser">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Authorized User </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.authorizedUserName | default }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="vendor">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Vendor </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.healthAuthorityVendor.vendorCode | configCode: 'vendors' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="siteId">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Site ID (PEC) </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.pec | default }} </td>
+      </ng-container>
+
       <ng-container matColumnDef="submissionDate">
         <th mat-header-cell
             *matHeaderCellDef
             scope="col"> Submission Date </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.submittedDate | formatDate }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="assignedTo">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Assigned To </th>
-        <!-- TODO missing adjudicatorIdir on model to populate column -->
-        <td mat-cell
-            *matCellDef="let row;"> {{ null | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="state">
@@ -69,20 +84,13 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="siteId">
+      <ng-container matColumnDef="assignedTo">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Site ID </th>
+            scope="col"> Assigned To </th>
+        <!-- TODO missing adjudicatorIdir on model to populate column -->
         <td mat-cell
-            *matCellDef="let row;"> {{ row.siteId | default }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="remoteUsers">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Remote Users </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.remoteUsers?.length | yesNo: true }} </td>
+            *matCellDef="let row;"> {{ null | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="haActions">

@@ -24,6 +24,7 @@ import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { HealthAuthoritySite, HealthAuthoritySiteDto } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-authority-site-create.model';
 import { HealthAuthoritySiteUpdate } from '@health-auth/shared/models/health-authority-site-update.model';
+import { HealthAuthoritySiteListItem } from '@health-auth/shared/models/health-authority-site-list.model';
 
 // TODO split this into multiple resources to reduce responsibility and have the
 //      resource name accurately describe the service, possibly:
@@ -68,11 +69,11 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getAllHealthAuthoritySites(): Observable<HealthAuthoritySite[]> {
-    return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/sites`)
+  public getAllHealthAuthoritySites(): Observable<HealthAuthoritySiteListItem[]> {
+    return this.apiResource.get<HealthAuthoritySiteListItem[]>(`health-authorities/sites`)
       .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySite[]>) => response.result),
-        tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
+        map((response: ApiHttpResponse<HealthAuthoritySiteListItem[]>) => response.result),
+        tap((healthAuthoritySites: HealthAuthoritySiteListItem[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority sites could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getAllHealthAuthoritySites error has occurred: ', error);
@@ -283,10 +284,10 @@ export class HealthAuthorityResource {
     })
       .pipe(
         map(({
-               healthAuthoritySite,
-               businessHours,
-               remoteUsers
-             }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[], remoteUsers: RemoteUser[] }) => {
+          healthAuthoritySite,
+          businessHours,
+          remoteUsers
+        }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[], remoteUsers: RemoteUser[] }) => {
           return { ...healthAuthoritySite, businessHours, remoteUsers };
         }),
         map((healthAuthoritySiteDto: HealthAuthoritySiteDto) => HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto)),
