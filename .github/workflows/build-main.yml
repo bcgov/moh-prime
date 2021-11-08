@@ -200,7 +200,7 @@ jobs:
         run: |
           oc process -f infrastructure/prime-app-template.yml \
             -p ASP_ENV=Production \
-            -p VANITY_URL=prod.pharmanetenrolment.gov.bc.ca \
+            -p VANITY_URL=pharmanetenrolment.gov.bc.ca \
             -p IMAGE_TAG=prod \
             -p SVC_NAME=prod \
             -p OC_LICENSE_PLATE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
