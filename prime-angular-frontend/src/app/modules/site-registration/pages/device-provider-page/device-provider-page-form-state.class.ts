@@ -33,10 +33,14 @@ export class DeviceProviderPageFormState extends AbstractFormState<IndividualDev
 
     this.individualDeviceProviders.clear(); // Clear out existing indices
 
-    providers.forEach((p: IndividualDeviceProvider) => this.push(p));
+    providers.forEach((p: IndividualDeviceProvider) => {
+      const provider = this.buildIndividualDeviceProvider();
+      provider.patchValue(p);
+      this.individualDeviceProviders.push(provider);
+    });
   }
 
-  public at(index: number): FormGroup {
+  public individualDeviceProviderAt(index: number): FormGroup {
     return this.individualDeviceProviders.at(index) as FormGroup;
   }
 
@@ -63,11 +67,5 @@ export class DeviceProviderPageFormState extends AbstractFormState<IndividualDev
         Validators.required
       ]]
     });
-  }
-
-  private push(p: IndividualDeviceProvider) {
-    const provider = this.buildIndividualDeviceProvider();
-    provider.patchValue(p);
-    this.individualDeviceProviders.push(provider);
   }
 }

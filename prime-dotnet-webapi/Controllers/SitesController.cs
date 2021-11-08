@@ -1198,5 +1198,27 @@ namespace Prime.Controllers
             await _communitySiteService.UpdateSiteFlag(siteId, flagged);
             return Ok(site);
         }
+
+        // GET: api/sites/5/individual-device-providers
+        /// <summary>
+        ///     get individual device providers for a community (device provider) site
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/individual-device-providers", Name = nameof(GetIndividualDeviceProviders))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<IndividualDeviceProviderViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetIndividualDeviceProviders(int siteId)
+        {
+            var site = await _communitySiteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            var providers = await _communitySiteService.GetIndividualDeviceProvidersAsync(siteId);
+            return Ok(providers);
+        }
     }
 }

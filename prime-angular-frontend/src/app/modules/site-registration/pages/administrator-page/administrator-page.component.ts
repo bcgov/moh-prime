@@ -58,19 +58,20 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
 
   public onBack() {
     let nextRoute: string;
-    switch (this.siteService.site.careSettingCode) {
-      case CareSettingEnum.COMMUNITY_PHARMACIST:
-        nextRoute = SiteRoutes.HOURS_OPERATION;
-        break;
-      case CareSettingEnum.DEVICE_PROVIDER:
-        nextRoute = SiteRoutes.DEVICE_PROVIDER;
-        break;
-      default:
-        nextRoute = SiteRoutes.REMOTE_USERS;
-        break;
-    }
     if (this.isCompleted) {
       nextRoute = SiteRoutes.SITE_REVIEW;
+    } else {
+      switch (this.siteService.site.careSettingCode) {
+        case CareSettingEnum.COMMUNITY_PHARMACIST:
+          nextRoute = SiteRoutes.HOURS_OPERATION;
+          break;
+        case CareSettingEnum.DEVICE_PROVIDER:
+          nextRoute = SiteRoutes.DEVICE_PROVIDER;
+          break;
+        default:
+          nextRoute = SiteRoutes.REMOTE_USERS;
+          break;
+      }
     }
 
     this.routeUtils.routeRelativeTo(nextRoute);

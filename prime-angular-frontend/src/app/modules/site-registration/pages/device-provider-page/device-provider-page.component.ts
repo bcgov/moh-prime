@@ -87,14 +87,14 @@ export class DeviceProviderPageComponent extends AbstractCommunitySiteRegistrati
 
   public onEdit(index: number): void {
     this.currentIndex = index;
-    this.form = this.formState.at(index);
+    this.form = this.formState.individualDeviceProviderAt(index);
     this.isEditing = true;
   }
 
   public onContinue(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       if (this.currentIndex !== -1) {
-        this.formState.individualDeviceProviders.at(this.currentIndex).patchValue(this.form);
+        this.formState.individualDeviceProviderAt(this.currentIndex).patchValue(this.form);
       } else {
         this.formState.individualDeviceProviders.push(this.form);
       }
@@ -159,7 +159,7 @@ export class DeviceProviderPageComponent extends AbstractCommunitySiteRegistrati
 
   protected additionalValidityChecks(obj: { individualDeviceProviders: IndividualDeviceProvider[] }): boolean {
     // At least one provider needs to exist
-    return (obj.individualDeviceProviders.length > 0);
+    return obj.individualDeviceProviders.length > 0;
   }
 
   protected afterSubmitIsSuccessful(): void {

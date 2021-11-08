@@ -163,22 +163,23 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
     const site = this.siteService.site;
     let routePath;
 
-    switch (site.careSettingCode) {
-      case CareSettingEnum.COMMUNITY_PHARMACIST:
-        routePath = SiteRoutes.ADMINISTRATOR;
-        break;
-      case CareSettingEnum.DEVICE_PROVIDER:
-        routePath = SiteRoutes.DEVICE_PROVIDER;
-        break;
-      case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
-        routePath = SiteRoutes.REMOTE_USER;
-        break;
-      default:
-        routePath = SiteRoutes.ADMINISTRATOR;
-        break;
-    }
     if (this.isCompleted) {
       routePath = SiteRoutes.SITE_REVIEW;
+    } else {
+      switch (site.careSettingCode) {
+        case CareSettingEnum.COMMUNITY_PHARMACIST:
+          routePath = SiteRoutes.ADMINISTRATOR;
+          break;
+        case CareSettingEnum.DEVICE_PROVIDER:
+          routePath = SiteRoutes.DEVICE_PROVIDER;
+          break;
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
+          routePath = SiteRoutes.REMOTE_USER;
+          break;
+        default:
+          routePath = SiteRoutes.ADMINISTRATOR;
+          break;
+      }
     }
 
     this.routeUtils.routeRelativeTo(routePath);

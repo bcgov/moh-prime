@@ -519,6 +519,14 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
+        public async Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId)
+        {
+            return await _context.IndividualDeviceProviders
+                .Where(p => p.CommunitySiteId == siteId)
+                .ProjectTo<IndividualDeviceProviderViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
         private IQueryable<CommunitySite> GetBaseSiteQuery()
         {
             return _context.CommunitySites

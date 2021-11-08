@@ -57,10 +57,8 @@ export class SiteResource {
   public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
     const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
     return forkJoin({
-      site: this.apiResource.get<Site>(`sites/${siteId}`, params)
-        .pipe(map((response: ApiHttpResponse<Site>) => response.result)),
-      individualDeviceProviders: this.apiResource.get<IndividualDeviceProvider[]>(`sites/${siteId}/individual-device-providers`)
-        .pipe(map((response: ApiHttpResponse<IndividualDeviceProvider[]>) => response.result)),
+      site: this.apiResource.get<Site>(`sites/${siteId}`, params, null, true),
+      individualDeviceProviders: this.apiResource.get<IndividualDeviceProvider[]>(`sites/${siteId}/individual-device-providers`, null, null, true),
     })
       .pipe(
         map(({ site, individualDeviceProviders }) => ({ ...site, individualDeviceProviders })),
