@@ -212,6 +212,7 @@ namespace Prime.Services
                 }
                 else
                 {
+                    updateRemoteUser.SiteId = current.Id;
                     _context.Entry(existingRemoteUser).CurrentValues.SetValues(updateRemoteUser);
                     foreach (var certification in existingRemoteUser.RemoteUserCertifications)
                     {
