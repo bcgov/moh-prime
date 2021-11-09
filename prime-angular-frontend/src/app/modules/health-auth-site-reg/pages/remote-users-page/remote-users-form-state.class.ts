@@ -37,7 +37,14 @@ export class RemoteUsersFormState extends AbstractFormState<RemoteUsersForm> {
       return;
     }
 
-    return this.formInstance.getRawValue().remoteUsers;
+    const remoteUsers = this.formInstance.getRawValue().remoteUsers
+      .map((ru: RemoteUser) => {
+        // Remove the ID from the remote user to simplify updates on the server
+        const { id, ...remoteUser } = ru;
+        return remoteUser;
+      });
+
+    return { remoteUsers };
   }
 
   public patchValue({ remoteUsers }: RemoteUsersForm): void {
