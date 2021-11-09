@@ -240,18 +240,18 @@ export class HealthAuthorityResource {
       );
   }
 
-  public createHealthAuthoritySite(healthAuthId: HealthAuthorityEnum, createModel: HealthAuthoritySiteCreate): Observable<HealthAuthoritySite> {
-    return this.apiResource.post<HealthAuthoritySite>(`health-authorities/${healthAuthId}/sites`, createModel)
-      .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result),
-        tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTH_SITE', healthAuthoritySite)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site could not be created');
-          this.logger.error('[Core] HealthAuthorityResource::createHealthAuthoritySite error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
+  // public createHealthAuthoritySite(healthAuthId: HealthAuthorityEnum, createModel: HealthAuthoritySiteCreate): Observable<HealthAuthoritySite> {
+  //   return this.apiResource.post<HealthAuthoritySite>(`health-authorities/${healthAuthId}/sites`, createModel)
+  //     .pipe(
+  //       map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result),
+  //       tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTH_SITE', healthAuthoritySite)),
+  //       catchError((error: any) => {
+  //         this.toastService.openErrorToast('Health authority site could not be created');
+  //         this.logger.error('[Core] HealthAuthorityResource::createHealthAuthoritySite error has occurred: ', error);
+  //         throw error;
+  //       })
+  //     );
+  // }
 
   // TODO doesn't contain business hours or remote users and will need typing adjusted
   public getHealthAuthoritySites(healthAuthId: HealthAuthorityEnum): Observable<HealthAuthoritySite[]> {
