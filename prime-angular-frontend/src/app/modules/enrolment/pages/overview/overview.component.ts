@@ -73,7 +73,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public onSubmit(): void {
-    if (!this.enrolmentFormStateService.isValid) {
+    if (!this.enrolmentFormStateService.isValidSubmission) {
       this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
       return;
@@ -128,6 +128,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
   public onCopy(): void {
     this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
+  }
+
+  public hasErrors() {
+    return Object.values(this.getEnrolmentErrors(this.enrolment))
+      .some((value) => value);
   }
 
   public ngOnInit(): void {

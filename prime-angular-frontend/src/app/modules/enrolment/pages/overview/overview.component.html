@@ -203,7 +203,7 @@
 
       <button mat-flat-button
               color="primary"
-              [disabled]="!accept.checked || enrolmentErrors?.certificateOrOboSite"
+              [disabled]="!accept.checked || hasErrors()"
               (click)="onSubmit()">Submit Enrolment
       </button>
 

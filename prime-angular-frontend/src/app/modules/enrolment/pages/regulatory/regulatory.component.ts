@@ -101,7 +101,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected initForm() {
-    this.enableDeviceProviderValidator();
+    this.toggleDeviceProviderValidator();
 
     // Always have at least one certification ready for
     // the enrollee to fill out
@@ -210,12 +210,12 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     [remoteAccessSites, enrolleeRemoteUsers, remoteLocations].forEach(f => f.clear());
   }
 
-  private enableDeviceProviderValidator(): void {
+  private toggleDeviceProviderValidator(): void {
     this.isDeviceProvider
-    ? this.formUtilsService.setValidators(this.formState.deviceProviderIdentifier, [
+      ? this.formUtilsService.setValidators(this.formState.deviceProviderIdentifier, [
         FormControlValidators.requiredLength(5),
         FormControlValidators.numeric
       ])
-    :this.formUtilsService.resetAndClearValidators(this.formState.deviceProviderIdentifier);
+      : this.formUtilsService.resetAndClearValidators(this.formState.deviceProviderIdentifier);
   }
 }

@@ -160,14 +160,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   /**
    * @description
-   * Check that all constituent forms are valid.
-   */
-  public get isValid(): boolean {
-    return super.isValid && this.hasCertificateOrOboSite();
-  }
-
-  /**
-   * @description
    * Check for the requirement of at least one certification, or one obo site/job.
    */
   // TODO refactor this method as it can't be scanned and understood
@@ -199,6 +191,28 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     // When you set certifications to 'None' there still exists an item in
     // the FormArray, and this checks for its existence
     return (oboSites.length && hasOboSiteForEveryHA) || (certifications.length && certifications.value[0].licenseNumber);
+  }
+
+  /**
+  * @description
+  * Check that all constituent forms are valid for submission.
+  */
+  public get isValidSubmission(): boolean {
+    const careSettingControl = this.careSettingsForm.value;
+    const deviceProviderControl = this.regulatoryFormState.deviceProviderIdentifier.value;
+    const certificationControl = this.regulatoryFormState.certifications.value;
+    const oboSiteControl = this.oboSitesForm.value;
+
+    let isValidDevideProvider = true;
+
+    if (careSettingControl.careSettings.some((cs) => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
+      isValidDevideProvider = deviceProviderControl && certificationControl.length
+        || (!deviceProviderControl && oboSiteControl.deviceProviderSites.length)
+    }
+
+    const isValidCertification = this.hasCertificateOrOboSite();
+
+    return isValidDevideProvider && isValidCertification && this.isValid
   }
 
   /**
