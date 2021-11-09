@@ -159,61 +159,14 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   }
 
   /**
-   * @description
-   * Check for the requirement of at least one certification, or one obo site/job.
-   */
-  // TODO refactor this method as it can't be scanned and understood
-  public hasCertificateOrOboSite(): boolean {
-    const oboSites = this.oboSitesForm.get('oboSites') as FormArray;
-    const certifications = this.regulatoryFormState.certifications;
-    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
-    let hasOboSiteForEveryHA = true;
-    // Using `for` loop rather than `every()` method for ease of debugging
-    for (let i = 0; i < enrolleeHealthAuthorities.controls.length; i++) {
-      const checkbox = enrolleeHealthAuthorities.controls[i];
-      // For every selected Health Authority ...
-      if (checkbox.value === true) {
-        let foundMatchingHAOboSite = false;
-        // ... there must be at least one Obo Site for that Health Authority
-        for (let j = 0; j < oboSites.controls.length; j++) {
-          const oboSiteForm = oboSites.controls[j] as FormGroup;
-          if (oboSiteForm.controls.healthAuthorityCode.value === this.configService.healthAuthorities[i].code) {
-            foundMatchingHAOboSite = true;
-            break;
-          }
-        }
-        if (!foundMatchingHAOboSite) {
-          hasOboSiteForEveryHA = false;
-          break;
-        }
-      }
-    }
-    // When you set certifications to 'None' there still exists an item in
-    // the FormArray, and this checks for its existence
-    return (oboSites.length && hasOboSiteForEveryHA) || (certifications.length && certifications.value[0].licenseNumber);
-  }
-
-  /**
   * @description
   * Check that all constituent forms are valid for submission.
   */
   public get isValidSubmission(): boolean {
-    const careSettingControl = this.careSettingsForm.value;
-    const deviceProviderControl = this.regulatoryFormState.deviceProviderIdentifier.value;
-    const certificationControl = this.regulatoryFormState.certifications.value;
-    const oboSiteControl = this.oboSitesForm.value;
-
-    let isValidDeviceProvider = true;
-
-    if (careSettingControl.careSettings.some((cs) => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
-      isValidDeviceProvider = deviceProviderControl && certificationControl.length
-        || (!deviceProviderControl && oboSiteControl.deviceProviderSites.length)
-    }
-
-    const isValidCertification = this.hasCertificateOrOboSite();
-
-    return isValidDeviceProvider && isValidCertification && this.isValid
+    return this.isValid && this.hasDeviceProviderOrOboSite() && this.hasCertificateOrOboSite();
   }
+
+
 
   /**
    * @description
@@ -702,5 +655,57 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     ]
       .map((formArrayName: string) => this.selfDeclarationForm.get(formArrayName) as FormArray)
       .forEach((formArray: FormArray) => formArray.clear());
+  }
+
+  /**
+   * @description
+   * Check for the requirement of at least one certification, or one obo site/job.
+   */
+  // TODO refactor this method as it can't be scanned and understood
+  private hasCertificateOrOboSite(): boolean {
+    const oboSites = this.oboSitesForm.get('oboSites') as FormArray;
+    const certifications = this.regulatoryFormState.certifications;
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    let hasOboSiteForEveryHA = true;
+    // Using `for` loop rather than `every()` method for ease of debugging
+    for (let i = 0; i < enrolleeHealthAuthorities.controls.length; i++) {
+      const checkbox = enrolleeHealthAuthorities.controls[i];
+      // For every selected Health Authority ...
+      if (checkbox.value === true) {
+        let foundMatchingHAOboSite = false;
+        // ... there must be at least one Obo Site for that Health Authority
+        for (let j = 0; j < oboSites.controls.length; j++) {
+          const oboSiteForm = oboSites.controls[j] as FormGroup;
+          if (oboSiteForm.controls.healthAuthorityCode.value === this.configService.healthAuthorities[i].code) {
+            foundMatchingHAOboSite = true;
+            break;
+          }
+        }
+        if (!foundMatchingHAOboSite) {
+          hasOboSiteForEveryHA = false;
+          break;
+        }
+      }
+    }
+    // When you set certifications to 'None' there still exists an item in
+    // the FormArray, and this checks for its existence
+    return (oboSites.length && hasOboSiteForEveryHA) || (certifications.length && certifications.value[0].licenseNumber);
+  }
+
+  /**
+   * @description
+   * Check if the user selected Device Provider as Care Setting
+   * then they shuold provide either Device Provider ID or Obo Site
+   */
+  private hasDeviceProviderOrOboSite(): boolean {
+    const {
+      careSettings,
+      certifications,
+      deviceProviderIdentifier,
+      oboSites } = this.json;
+
+    return (careSettings.some((cs) => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER))
+      ? !!(deviceProviderIdentifier && certifications.length || (!deviceProviderIdentifier && oboSites.length))
+      : true
   }
 }
