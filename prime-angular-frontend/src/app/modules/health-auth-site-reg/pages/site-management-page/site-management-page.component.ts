@@ -15,6 +15,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthoritySiteListItem } from '@health-auth/shared/models/health-authority-site-list.model';
 
 @Component({
   selector: 'app-site-management-page',
@@ -25,7 +26,7 @@ export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public healthAuthority: HealthAuthority;
-  public healthAuthoritySites: HealthAuthoritySite[];
+  public healthAuthoritySites: HealthAuthoritySiteListItem[];
   public routeUtils: RouteUtils;
   public HealthAuthorityEnum = HealthAuthorityEnum;
   public SiteStatusType = SiteStatusType;
@@ -117,7 +118,7 @@ export class SiteManagementPageComponent implements OnInit {
         map((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority),
         exhaustMap((healthAuthority: HealthAuthority) => this.healthAuthorityResource.getHealthAuthoritySites(healthAuthority.id))
       )
-      .subscribe((healthAuthoritySites: HealthAuthoritySite[]) => this.healthAuthoritySites = healthAuthoritySites);
+      .subscribe((healthAuthoritySites: HealthAuthoritySiteListItem[]) => this.healthAuthoritySites = healthAuthoritySites);
   }
 
   private redirectTo(healthAuthorityId: number, healthAuthoritySiteId: number, pagePath: string): void {

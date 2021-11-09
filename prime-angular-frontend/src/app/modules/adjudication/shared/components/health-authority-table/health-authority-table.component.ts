@@ -111,10 +111,10 @@ export class HealthAuthorityTableComponent implements OnInit {
 
     if (this.activatedRoute.snapshot.params.sid && this.activatedRoute.snapshot.params.haid) {
       request$ = this.healthAuthorityResource
-        .getHealthAuthoritySiteById(this.activatedRoute.snapshot.params.haid, this.activatedRoute.snapshot.params.sid)
+        .getHealthAuthoritySites(this.activatedRoute.snapshot.params.haid, this.activatedRoute.snapshot.params.sid)
         .pipe(
-          map((site: HealthAuthoritySite) => {
-            this.dataSource.data = [site];
+          map((sites: HealthAuthoritySiteListItem[]) => {
+            this.dataSource.data = sites;
           })
         );
     }

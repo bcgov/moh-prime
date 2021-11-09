@@ -68,18 +68,19 @@ namespace Prime.Controllers
             );
         }
 
-        // GET: api/health-authorities/5/sites
+        // GET: api/health-authorities/5/sites?healthAuthoritySiteId=1
         /// <summary>
         /// Gets all of the sites for a health authority.
         /// </summary>
         /// <param name="healthAuthorityId"></param>
+        /// <param name="healthAuthoritySiteId"></param>
         [HttpGet(Name = nameof(GetHealthAuthoritySites))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetHealthAuthoritySites(int healthAuthorityId)
+        public async Task<ActionResult> GetHealthAuthoritySites(int healthAuthorityId, [FromQuery] int healthAuthoritySiteId)
         {
-            return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId));
+            return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId, healthAuthoritySiteId));
         }
 
         // GET: api/health-authorities/5/sites/5

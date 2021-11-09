@@ -13,7 +13,7 @@ import { SiteRegistrationListViewModel } from '@registration/shared/models/site-
   styleUrls: ['./site-registration-actions.component.scss']
 })
 export class SiteRegistrationActionsComponent implements OnInit {
-  @Input() siteRegistration: SiteRegistrationListViewModel | HealthAuthoritySiteList;
+  @Input() siteRegistration: SiteRegistrationListViewModel;
   @Output() public approve: EventEmitter<number>;
   @Output() public decline: EventEmitter<number>;
   @Output() public unreject: EventEmitter<number>;
