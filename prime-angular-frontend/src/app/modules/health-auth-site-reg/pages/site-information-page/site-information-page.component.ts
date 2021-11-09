@@ -8,7 +8,6 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { asyncValidator } from '@lib/validators/form-async.validators';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
