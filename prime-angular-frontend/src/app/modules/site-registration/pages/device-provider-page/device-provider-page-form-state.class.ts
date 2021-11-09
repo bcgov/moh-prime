@@ -31,7 +31,7 @@ export class DeviceProviderPageFormState extends AbstractFormState<IndividualDev
       return;
     }
 
-    this.individualDeviceProviders.clear(); // Clear out existing indices
+    this.clearIndividualDeviceProviders();
 
     providers.forEach((p: IndividualDeviceProvider) => {
       const provider = this.buildIndividualDeviceProvider();
@@ -42,6 +42,10 @@ export class DeviceProviderPageFormState extends AbstractFormState<IndividualDev
 
   public individualDeviceProviderAt(index: number): FormGroup {
     return this.individualDeviceProviders.at(index) as FormGroup;
+  }
+
+  public clearIndividualDeviceProviders(): void {
+    this.individualDeviceProviders.clear();
   }
 
   public buildForm(): void {

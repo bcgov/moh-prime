@@ -157,9 +157,8 @@ export class DeviceProviderPageComponent extends AbstractCommunitySiteRegistrati
     });
   }
 
-  protected additionalValidityChecks(obj: { individualDeviceProviders: IndividualDeviceProvider[] }): boolean {
-    // At least one provider needs to exist
-    return obj.individualDeviceProviders.length > 0;
+  protected additionalValidityChecks({ individualDeviceProviders }: Pick<Site, 'individualDeviceProviders'>): boolean {
+    return !!individualDeviceProviders?.length;
   }
 
   protected afterSubmitIsSuccessful(): void {

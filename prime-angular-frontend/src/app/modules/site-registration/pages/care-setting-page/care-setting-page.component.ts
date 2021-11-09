@@ -154,7 +154,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
 
   protected submissionRequest(): NoContent {
     if (this.formState.json.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER) {
-      this.siteFormStateService.deviceProviderFormState.patchValue([]);
+      this.siteFormStateService.deviceProviderFormState.clearIndividualDeviceProviders();
     }
     const payload = this.siteFormStateService.json;
     return this.siteResource.updateSite(payload);
