@@ -5,12 +5,14 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { map } from 'rxjs/operators';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
 
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -18,10 +20,8 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { RegulatoryFormState } from './regulatory-form-state';
-import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-regulatory',
