@@ -201,41 +201,41 @@ namespace Prime.Services
                 return;
             }
 
-            foreach (var updateRemoteUser in updateRemoteUsers)
+            // All RemoteUserCertifications will be dropped and re-added, so we must set all incoming PKs/FKs to 0
+            // This can be removed when / if the updated Certs become a View Model without FKs.
+            foreach (var cert in updateRemoteUsers.SelectMany(x => x.RemoteUserCertifications))
             {
-                var existingRemoteUser = current.RemoteUsers
-                    .SingleOrDefault(u => u.Id == updateRemoteUser.Id);
+                cert.Id = 0;
+                cert.RemoteUserId = 0;
+            }
 
-                updateRemoteUser.SiteId = current.Id;
+            var existingUsers = current.RemoteUsers.ToDictionary(x => x.Id, x => x);
 
-                if (existingRemoteUser == null)
+            foreach (var updatedUser in updateRemoteUsers)
+            {
+                if (existingUsers.TryGetValue(updatedUser.Id, out var existing))
                 {
-                    updateRemoteUser.Id = 0;
-                    _context.Add(updateRemoteUser);
+                    existingUsers.Remove(updatedUser.Id);
+
+                    updatedUser.SiteId = current.Id;
+                    _context.Entry(existing).CurrentValues.SetValues(updatedUser);
+
+                    _context.RemoteUserCertifications.RemoveRange(existing.RemoteUserCertifications);
+                    foreach (var cert in updatedUser.RemoteUserCertifications)
+                    {
+                        cert.RemoteUserId = updatedUser.Id;
+                        _context.RemoteUserCertifications.Add(cert);
+                    }
                 }
                 else
                 {
-                    // Update existing remote user
-                    _context.Entry(existingRemoteUser).CurrentValues.SetValues(updateRemoteUser);
-                    // Drop all certification of existing remote user, and re-add
-                    existingRemoteUser.RemoteUserCertifications.Clear();
-                    foreach (var certification in updateRemoteUser.RemoteUserCertifications)
-                    {
-                        certification.Id = 0;
-                        certification.RemoteUserId = existingRemoteUser.Id;
-                        existingRemoteUser.RemoteUserCertifications.Add(certification);
-                    }
+                    updatedUser.Id = 0;
+                    updatedUser.SiteId = current.Id;
+                    _context.RemoteUsers.Add(updatedUser);
                 }
             }
 
-            // Remove remote users that do not exist in the update model
-            foreach (var currentRemoteUser in current.RemoteUsers)
-            {
-                if (!updateRemoteUsers.Any(u => u.Id == currentRemoteUser.Id))
-                {
-                    _context.Remove(currentRemoteUser);
-                }
-            }
+            _context.RemoteUsers.RemoveRange(existingUsers.Values);
         }
 
         private void UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated)
