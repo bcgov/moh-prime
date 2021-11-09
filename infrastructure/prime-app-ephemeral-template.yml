@@ -1368,14 +1368,14 @@ objects:
             readinessProbe:
               exec:
                 command:
-                  - /bin/sh
+                  - /bin/bash
                   - '-i'
                   - '-c'
                   - >-
                     test "$(redis-cli -h 127.0.0.1 -a $REDIS_PASSWORD ping)" ==
                     "PONG"
-              initialDelaySeconds: 5
-              timeoutSeconds: 1
+              initialDelaySeconds: 10
+              timeoutSeconds: 2
               periodSeconds: 10
               successThreshold: 1
               failureThreshold: 3
@@ -1385,7 +1385,7 @@ objects:
               tcpSocket:
                 port: 6379
               initialDelaySeconds: 30
-              timeoutSeconds: 1
+              timeoutSeconds: 2
               periodSeconds: 10
               successThreshold: 1
               failureThreshold: 3
