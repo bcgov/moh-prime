@@ -76,7 +76,7 @@ namespace Prime.Controllers
         [HttpGet(Name = nameof(GetHealthAuthoritySites))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthoritySites(int healthAuthorityId)
         {
             return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId));

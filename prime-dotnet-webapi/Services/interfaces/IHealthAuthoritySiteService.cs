@@ -10,7 +10,7 @@ namespace Prime.Services
         Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId);
         Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId);
         Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel);
-        Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int? healthAuthorityId = null);
+        Task<IEnumerable<HealthAuthoritySiteListViewModel>> GetSitesAsync(int? healthAuthorityId = null);
         Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
         Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel);
         Task SetSiteCompletedAsync(int siteId);
