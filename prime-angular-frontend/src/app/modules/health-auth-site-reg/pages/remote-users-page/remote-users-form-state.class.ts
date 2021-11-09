@@ -37,7 +37,7 @@ export class RemoteUsersFormState extends AbstractFormState<RemoteUsersForm> {
       return;
     }
 
-    return this.formInstance.getRawValue();
+    return this.formInstance.getRawValue().remoteUsers;
   }
 
   public patchValue({ remoteUsers }: RemoteUsersForm): void {
