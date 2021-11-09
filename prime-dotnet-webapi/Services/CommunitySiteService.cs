@@ -201,32 +201,41 @@ namespace Prime.Services
                 return;
             }
 
-            var updatedRemoteUserIds = new List<int>();
             foreach (var updateRemoteUser in updateRemoteUsers)
             {
-                var existingRemoteUser = _context.RemoteUsers
+                var existingRemoteUser = current.RemoteUsers
                     .SingleOrDefault(u => u.Id == updateRemoteUser.Id);
+
+                updateRemoteUser.SiteId = current.Id;
 
                 if (existingRemoteUser == null)
                 {
                     updateRemoteUser.Id = 0;
-                    current.RemoteUsers.Add(updateRemoteUser);
+                    _context.Add(updateRemoteUser);
                 }
                 else
                 {
-                    updateRemoteUser.SiteId = current.Id;
+                    // Update existing remote user
                     _context.Entry(existingRemoteUser).CurrentValues.SetValues(updateRemoteUser);
+                    // Drop all certification of existing remote user, and re-add
                     existingRemoteUser.RemoteUserCertifications.Clear();
                     foreach (var certification in updateRemoteUser.RemoteUserCertifications)
                     {
+                        certification.Id = 0;
                         certification.RemoteUserId = existingRemoteUser.Id;
                         existingRemoteUser.RemoteUserCertifications.Add(certification);
                     }
-                    updatedRemoteUserIds.Add(existingRemoteUser.Id);
                 }
             }
 
-            current.RemoteUsers = current.RemoteUsers.Where(u => u.Id == 0 || updatedRemoteUserIds.Contains(u.Id)).ToList();
+            // Remove remote users that do not exist in the update model
+            foreach (var currentRemoteUser in current.RemoteUsers)
+            {
+                if (!updateRemoteUsers.Any(u => u.Id == currentRemoteUser.Id))
+                {
+                    _context.Remove(currentRemoteUser);
+                }
+            }
         }
 
         private void UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated)
