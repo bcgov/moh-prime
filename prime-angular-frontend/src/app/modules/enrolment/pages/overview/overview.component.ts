@@ -131,7 +131,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public hasErrors() {
-    return Object.values(this.getEnrolmentErrors(this.enrolment))
+    const { certificateOrOboSite, deviceProviderOrOboSite } = this.getEnrolmentErrors(this.enrolment);
+    return Object.values({ certificateOrOboSite, deviceProviderOrOboSite })
       .some((value) => value);
   }
 

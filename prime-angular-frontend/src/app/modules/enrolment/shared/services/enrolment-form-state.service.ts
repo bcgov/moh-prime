@@ -703,9 +703,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       certifications,
       deviceProviderIdentifier,
       oboSites } = this.json;
+    const careSettingPredicate = (cs) => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER;
 
-    return (careSettings.some((cs) => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER))
-      ? !!(deviceProviderIdentifier && certifications.length || (!deviceProviderIdentifier && oboSites.length))
+    return (careSettings.some(careSettingPredicate))
+      ? !!((deviceProviderIdentifier && certifications.length)
+        || (!deviceProviderIdentifier && oboSites.filter(careSettingPredicate).length))
       : true
   }
 }
