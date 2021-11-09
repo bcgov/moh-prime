@@ -203,16 +203,16 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const certificationControl = this.regulatoryFormState.certifications.value;
     const oboSiteControl = this.oboSitesForm.value;
 
-    let isValidDevideProvider = true;
+    let isValidDeviceProvider = true;
 
     if (careSettingControl.careSettings.some((cs) => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
-      isValidDevideProvider = deviceProviderControl && certificationControl.length
+      isValidDeviceProvider = deviceProviderControl && certificationControl.length
         || (!deviceProviderControl && oboSiteControl.deviceProviderSites.length)
     }
 
     const isValidCertification = this.hasCertificateOrOboSite();
 
-    return isValidDevideProvider && isValidCertification && this.isValid
+    return isValidDeviceProvider && isValidCertification && this.isValid
   }
 
   /**
