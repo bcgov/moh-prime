@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpStatusCode } from '@angular/common/http';
 
-import { NoContent, NoContentResponse } from './abstract-resource';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
