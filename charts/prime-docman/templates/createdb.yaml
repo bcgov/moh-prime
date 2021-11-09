@@ -1,0 +1,18 @@
+{{- if .Values.database.autoCreate }}
+apiVersion: v1
+kind: Job
+metadata:
+  name: {{ include "prime-docman.fullname" . }}-createdb
+  annotations:
+    "helm.sh/hook": "pre-install"
+  labels:
+    {{- include "prime-docman.labels" . | nindent 4 }}
+spec:
+  containers:
+  - name: hook1-container
+    image: busybox
+    imagePullPolicy: IfNotPresent
+    command: ['sh', '-c', 'echo The pre-install hook Pod is running  - hook-preinstall && sleep 15']
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 0
+{{- end }}

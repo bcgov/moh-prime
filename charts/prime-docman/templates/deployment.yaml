@@ -1,0 +1,139 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "prime-docman.fullname" . }}
+  labels:
+    {{- include "prime-docman.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "prime-docman.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "prime-docman.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "prime-docman.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: run-migrations
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - flask
+            - db 
+            - upgrade
+            - `${FLASK_RUN_PARAMS}`
+          env:
+            - name: CACHE_REDIS_URL
+            {{- if .Values.cache.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cache.existingSecret }}
+                  key: redis_url
+            {{- else }}
+              value: {{ .Values.cache.redisUrl }}
+            {{- end }}
+            - name: SQLALCHEMY_DATABASE_URI
+            {{- if .Values.database.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.existingSecret }}
+                  key: database_url
+            {{- else }}
+              value: {{ .Values.database.databaseUrl }}
+            {{- end }}
+          {{- range $name, $value := .Values.envVars }}
+          {{- if not (empty $value) }}
+            - name: {{ $name | quote }}
+              value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 6001
+              protocol: TCP
+            - name: stats
+              containerPort: 9191
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /healthcheck
+              port: 6001
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 6001
+            initialDelaySeconds: 5
+            periodSeconds: 5
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: CACHE_REDIS_URL
+            {{- if .Values.cache.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cache.existingSecret }}
+                  key: redis_url
+            {{- else }}
+              value: {{ .Values.cache.redisUrl }}
+            {{- end }}
+            - name: SQLALCHEMY_DATABASE_URI
+            {{- if .Values.database.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.existingSecret }}
+                  key: database_url
+            {{- else }}
+              value: {{ .Values.database.databaseUrl }}
+            {{- end }}
+          {{- range $name, $value := .Values.envVars }}
+          {{- if not (empty $value) }}
+            - name: {{ $name | quote }}
+              value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /app/
+              name: docman-files
+      volumes:
+        - name: docman-files
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "prime-docman.fullname" . }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
