@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpStatusCode } from '@angular/common/http';
 
-import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { ApiHttpResponse } from '@core/models/api-http-response.model';
-import { ApiResource } from '@core/resources/api-resource.service';
 import { BusinessDay } from '@lib/models/business-day.model';
-import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { RemoteUser } from '@lib/models/remote-user.model';
+import { ApiHttpResponse } from '@core/models/api-http-response.model';
+import { ApiResource } from '@core/resources/api-resource.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ToastService } from '@core/services/toast.service';
 
 import { HealthAuthoritySite, HealthAuthoritySiteDto } from '@health-auth/shared/models/health-authority-site.model';
