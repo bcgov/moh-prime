@@ -15,7 +15,6 @@ import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-
 import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { SiteInformationFormState } from './site-information-form-state.class';
-import { Observable, pipe } from 'rxjs';
 
 @Component({
   selector: 'app-site-information-page',
@@ -63,7 +62,6 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
 
   protected createFormInstance(): void {
     this.formState = this.healthAuthoritySiteFormStateService.siteInformationFormState;
-    this.addAsyncValidator();
   }
 
   protected patchForm(): void {
@@ -84,18 +82,5 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
       : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;
 
     this.routeUtils.routeRelativeTo(nextRoutePath);
-  }
-
-  private addAsyncValidator() {
-    this.formState.pec.addAsyncValidators(
-      asyncValidator(this.checkPec(), 'duplicate')
-    );
-  }
-
-  private checkPec(): (value: string) => Observable<boolean> {
-    return (value: string) => this.healthAuthorityResource.checkPecExistsInOtherHEalthAuthority(
-      this.healthAuthoritySiteService.site.healthAuthorityOrganizationId,
-      value
-    );
   }
 }

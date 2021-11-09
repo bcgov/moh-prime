@@ -42,10 +42,28 @@ namespace Prime.Services
                 })
                 .SingleAsync();
 
-            if (siteDto.CareSettingCode == (int)CareSettingType.HealthAuthority
-                || siteDto.PEC == pec)
+            if (siteDto.PEC == pec)
             {
                 return true;
+            }
+
+            if (siteDto.CareSettingCode == (int)CareSettingType.HealthAuthority)
+            {
+                var healthAuthorityDto = await _context.HealthAuthoritySites
+                    .Where(has => has.Id == siteId)
+                    .Select(healthAuthoritySite => new
+                    {
+                        healthAuthoritySite.HealthAuthorityOrganizationId
+                    })
+                    .SingleAsync();
+
+                return !await _context.HealthAuthoritySites
+                    .AsNoTracking()
+                    .Where(
+                        s => s.PEC == pec
+                        && s.HealthAuthorityOrganizationId != healthAuthorityDto.HealthAuthorityOrganizationId
+                        )
+                    .AnyAsync();
             }
 
             return !await _context.Sites

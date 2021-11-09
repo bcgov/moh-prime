@@ -683,15 +683,11 @@ namespace Prime.Controllers
         public async Task<ActionResult> PecAssignable(int siteId, string pec)
         {
             var site = await _communitySiteService.GetSiteAsync(siteId);
-            if (site == null)
-            {
-                return NotFound($"Site not found with id {siteId}");
-            }
             if (string.IsNullOrWhiteSpace(pec))
             {
                 return BadRequest("PEC cannot be empty.");
             }
-            if (site.PEC == pec)
+            if (site != null && site.PEC == pec)
             {
                 return Ok(true);
             }

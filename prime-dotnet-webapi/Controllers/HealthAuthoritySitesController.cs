@@ -251,30 +251,5 @@ namespace Prime.Controllers
 
             return NoContent();
         }
-
-        // HEAD: api/health-authorities/5/sites/duplicate-pec?pec=abc
-        /// <summary>
-        /// Checks if the provided PEC is already assigned to another site under another Health Authority
-        /// </summary>
-        /// <param name="healthAuthorityId"></param>
-        /// <param name="pec"></param>
-        [HttpHead("duplicate-pec", Name = nameof(CheckPecExistsInOtherHealthAuthority))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CheckPecExistsInOtherHealthAuthority(int healthAuthorityId, [FromQuery] string pec)
-        {
-            if (string.IsNullOrEmpty(pec))
-            {
-                return NotFound();
-            }
-            if (await _healthAuthoritySiteService.CheckForDuplicatePecAsync(healthAuthorityId, pec))
-            {
-                return Ok();
-            }
-
-            return NotFound();
-        }
     }
 }

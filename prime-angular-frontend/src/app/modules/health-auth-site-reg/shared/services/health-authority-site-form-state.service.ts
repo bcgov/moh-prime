@@ -17,6 +17,7 @@ import { RemoteUsersFormState } from '@health-auth/pages/remote-users-page/remot
 import { AdministratorFormState } from '@health-auth/pages/administrator-page/administrator-form-state.class';
 import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-page/technical-support-form-state.class';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 /**
  * @description
@@ -60,7 +61,8 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     // Must apply HealthAuthorityResolver to routable views that
     // consume the FormStateService, otherwise this will be null
     private healthAuthorityService: HealthAuthorityService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private siteResource: SiteResource,
   ) {
     super(fb, routeStateService, logger);
 
@@ -133,7 +135,7 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
    */
   protected buildForms(): void {
     this.vendorFormState = new VendorFormState(this.fb, this.healthAuthorityService);
-    this.siteInformationFormState = new SiteInformationFormState(this.fb);
+    this.siteInformationFormState = new SiteInformationFormState(this.fb, this.siteResource);
     this.healthAuthCareTypeFormState = new HealthAuthCareTypeFormState(this.fb, this.healthAuthorityService);
     this.siteAddressFormState = new SiteAddressFormState(this.fb, this.formUtilsService);
     this.hoursOperationFormState = new HoursOperationFormState(this.fb);
