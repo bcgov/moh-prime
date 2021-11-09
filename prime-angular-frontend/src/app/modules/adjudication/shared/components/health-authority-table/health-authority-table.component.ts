@@ -1,5 +1,5 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 
@@ -13,6 +13,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { Role } from '@auth/shared/enum/role.enum';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 
 @Component({
   selector: 'app-health-authority-table',
@@ -36,7 +37,7 @@ export class HealthAuthorityTableComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private healthAuthorityResource: HealthAuthorityResource
+    private healthAuthorityResource: HealthAuthorityResource,
   ) {
     this.siteColumns = [
       'prefixes',
@@ -94,7 +95,7 @@ export class HealthAuthorityTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    forkJoin({
+    let request$ = forkJoin({
       healthAuthorities: this.healthAuthorityResource.getHealthAuthorities(),
       healthAuthoritySites: this.healthAuthorityResource.getAllHealthAuthoritySites()
     }).pipe(
@@ -105,7 +106,19 @@ export class HealthAuthorityTableComponent implements OnInit {
         // Group sites under their associated health authorities
         this.dataSource.data = [...healthAuthorities, ...healthAuthoritySites].sort(this.sortData());
       })
-    ).subscribe();
+    );
+
+    if (this.activatedRoute.snapshot.params.sid && this.activatedRoute.snapshot.params.haid) {
+      request$ = this.healthAuthorityResource
+        .getHealthAuthoritySiteById(this.activatedRoute.snapshot.params.haid, this.activatedRoute.snapshot.params.sid)
+        .pipe(
+          map((site: HealthAuthoritySite) => {
+            this.dataSource.data = [site];
+          })
+        );
+    }
+
+    request$.subscribe();
   }
 
   /**

@@ -13,7 +13,7 @@ import { SiteRegistrationListViewModel } from '@registration/shared/models/site-
   styleUrls: ['./site-registration-actions.component.scss']
 })
 export class SiteRegistrationActionsComponent implements OnInit {
-  @Input() siteRegistration: SiteRegistrationListViewModel;
+  @Input() siteRegistration: SiteRegistrationListViewModel | HealthAuthoritySiteList;
   @Output() public approve: EventEmitter<number>;
   @Output() public decline: EventEmitter<number>;
   @Output() public unreject: EventEmitter<number>;
@@ -63,6 +63,17 @@ export class SiteRegistrationActionsComponent implements OnInit {
   }
 
   public onContactSigningAuthority() {
+    const signingAuthority = this.siteRegistration?.signingAuthority;
+    if (signingAuthority) {
+      EmailUtils.openEmailClient(
+        signingAuthority.email,
+        `PRIME Site Registration - ${this.siteRegistration.name}`,
+        `Dear ${signingAuthority.firstName} ${signingAuthority.lastName},`
+      );
+    }
+  }
+
+  public onContactAuthorizedUser() {
     const signingAuthority = this.siteRegistration?.signingAuthority;
     if (signingAuthority) {
       EmailUtils.openEmailClient(
