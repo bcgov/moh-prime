@@ -52,7 +52,6 @@ objects:
 #   Frontend Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-frontend
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -422,7 +421,6 @@ objects:
 #   Frontend Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-frontend
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -492,7 +490,6 @@ objects:
                     number: 8888
 - apiVersion: route.openshift.io/v1
   kind: Route
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-mutualauth
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -517,7 +514,6 @@ objects:
 #   Backend Web API Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-webapi
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -540,7 +536,8 @@ objects:
             command:
               - /bin/bash
               - -c
-              - createdb -O $(APPUSER) prime-${SVC_NAME}
+              - >
+                createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
             env:
               - name: PGHOST
                 valueFrom:
@@ -742,7 +739,6 @@ objects:
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-webapi
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -762,7 +758,6 @@ objects:
 #   PIP Frontend Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-pip-frontend
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -924,7 +919,6 @@ objects:
 #   Frontend Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-pip-frontend
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -944,7 +938,6 @@ objects:
 #   PIP API Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-pip
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -967,7 +960,8 @@ objects:
             command:
               - /bin/ash
               - -c
-              - createdb -O $(APPUSER) pip-${SVC_NAME}
+              - >
+                createdb -O $(APPUSER) pip-${SVC_NAME} 2> /dev/null || echo "database already exists"
             env:
               - name: PGHOST
                 valueFrom:
@@ -1103,7 +1097,6 @@ objects:
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-pip
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -1123,7 +1116,6 @@ objects:
 #   Document Manager (backend) Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-document-manager
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -1146,7 +1138,8 @@ objects:
             command:
               - /bin/bash
               - -c
-              - createdb -O $(APPUSER) prime-${SVC_NAME}
+              - >
+                createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
             env:
               - name: PGHOST
                 valueFrom:
@@ -1268,8 +1261,8 @@ objects:
                   name: document-manager
             resources:
               limits:
-                cpu: 25m
-                memory: 198Mi
+                cpu: 80m
+                memory: 200Mi
               requests:
                 cpu: 10m
                 memory: 28Mi
@@ -1286,8 +1279,11 @@ objects:
               httpGet:
                 path: /healthcheck
                 port: 6001
-              failureThreshold: 30
-              periodSeconds: 35
+                scheme: HTTP
+              timeoutSeconds: 1
+              periodSeconds: 30
+              successThreshold: 1
+              failureThreshold: 4
             readinessProbe:
               httpGet:
                 path: /healthcheck
@@ -1315,7 +1311,6 @@ objects:
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-document-manager
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -1335,7 +1330,6 @@ objects:
 #   Redis Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-redis
     namespace: ${OC_LICENSE_PLATE}-dev
@@ -1374,14 +1368,14 @@ objects:
             readinessProbe:
               exec:
                 command:
-                  - /bin/sh
+                  - /bin/bash
                   - '-i'
                   - '-c'
                   - >-
                     test "$(redis-cli -h 127.0.0.1 -a $REDIS_PASSWORD ping)" ==
                     "PONG"
-              initialDelaySeconds: 5
-              timeoutSeconds: 1
+              initialDelaySeconds: 10
+              timeoutSeconds: 2
               periodSeconds: 10
               successThreshold: 1
               failureThreshold: 3
@@ -1391,7 +1385,7 @@ objects:
               tcpSocket:
                 port: 6379
               initialDelaySeconds: 30
-              timeoutSeconds: 1
+              timeoutSeconds: 2
               periodSeconds: 10
               successThreshold: 1
               failureThreshold: 3
