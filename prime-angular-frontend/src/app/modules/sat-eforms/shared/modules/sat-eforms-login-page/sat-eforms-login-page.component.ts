@@ -21,8 +21,8 @@ export class SatEformsLoginPageComponent implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
   ) {
-    this.title = route.snapshot.data.title;
-    this.loginLabel = 'Login using your BCSC';
+    this.title = 'Enrol for access to Special Authority eForms';
+    this.loginLabel = 'Enrol using your BCSC';
   }
 
   public onLogin() {
