@@ -11,7 +11,10 @@ describe('SiteRegAccessComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [SiteRegAccessComponent],
       providers: [
-        { provide: APP_CONFIG, useValue: AppConfig }
+        { 
+          provide: APP_CONFIG, 
+          useValue: AppConfig 
+        }
       ]
     })
     .compileComponents();
