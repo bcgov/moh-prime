@@ -1,6 +1,6 @@
+using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
-using Newtonsoft.Json;
 
 using Prime.Configuration.Auth;
 using Prime.Models;

@@ -1,5 +1,6 @@
-using System;
 using Newtonsoft.Json;
+using System;
+
 using Prime.Models;
 
 namespace Prime.ViewModels.Parties
