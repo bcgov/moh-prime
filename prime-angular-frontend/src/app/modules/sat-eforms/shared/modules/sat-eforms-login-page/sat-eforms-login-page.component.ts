@@ -15,6 +15,7 @@ import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 export class SatEformsLoginPageComponent implements OnInit {
   public title: string;
   public loginLabel: string;
+  public bcscMobileSetupUrl: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,12 +24,13 @@ export class SatEformsLoginPageComponent implements OnInit {
   ) {
     this.title = 'Enrol for access to Special Authority eForms';
     this.loginLabel = 'Enrol using your BCSC';
+    this.bcscMobileSetupUrl = config.bcscMobileSetupUrl;
   }
 
   public onLogin() {
     // Route to COLLECTION_NOTICE which determines the direction of routing
     const redirectRoute = SatEformsRoutes.routePath(SatEformsRoutes.COLLECTION_NOTICE);
-    const redirectUri = `${ this.config.loginRedirectUrl }${ redirectRoute }`;
+    const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
       idpHint: IdentityProviderEnum.BCSC,
