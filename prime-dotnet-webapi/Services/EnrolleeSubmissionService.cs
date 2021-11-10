@@ -72,9 +72,6 @@ namespace Prime.Services
                 .Include(e => e.RemoteAccessSites)
                     .ThenInclude(ras => ras.Site)
                         .ThenInclude(ras => ras.PhysicalAddress)
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(ras => ras.SiteVendors)
                 .Include(r => r.RemoteAccessLocations)
                     .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(e => e.EnrolmentStatuses)
@@ -87,12 +84,6 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.IdentificationDocuments)
                 .Include(e => e.Agreements)
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(site => site.PhysicalAddress)
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(site => site.SiteVendors)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             var enrolleeSubmission = new Submission

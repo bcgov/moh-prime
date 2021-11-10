@@ -547,7 +547,7 @@ namespace Prime.Services
 
         public async Task<IEnumerable<RemoteAccessSiteViewModel>> GetRemoteAccessSitesAsync(int enrolleeId)
         {
-            // Currently, only maps from Community Sites as Remote users are disabled on Health Authorities
+            // Currently, only maps from Community Sites as Remote Users are disabled on Health Authorities
             return await _context.RemoteAccessSites
                 .AsNoTracking()
                 .Where(ras => ras.EnrolleeId == enrolleeId)
