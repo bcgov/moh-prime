@@ -96,7 +96,7 @@ export class HealthAuthorityTableComponent implements OnInit {
   public ngOnInit(): void {
     forkJoin({
       healthAuthorities: this.healthAuthorityResource.getHealthAuthorities(),
-      healthAuthoritySiteLists: this.healthAuthorityResource.getHealthAuthoritySiteLists()
+      healthAuthoritySiteLists: this.healthAuthorityResource.getAllHealthAuthoritySiteLists()
     }).pipe(
       map(({ healthAuthorities, healthAuthoritySiteLists }) => {
         this.flaggedHealthAuthorities = healthAuthorities.reduce((fhas: number[], ha: HealthAuthorityRow) =>
