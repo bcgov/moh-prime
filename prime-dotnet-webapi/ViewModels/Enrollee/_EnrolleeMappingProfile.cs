@@ -1,5 +1,5 @@
-using System.Linq;
 using AutoMapper;
+using System.Linq;
 
 using Prime.DTOs.AgreementEngine;
 using Prime.Models;
@@ -45,7 +45,10 @@ namespace Prime.ViewModels.Profiles
             CreateMap<EnrolleeRemoteUser, EnrolleeRemoteUserViewModel>();
             CreateMap<OboSite, OboSiteViewModel>();
             CreateMap<RemoteAccessLocation, RemoteAccessLocationViewModel>();
-            CreateMap<RemoteAccessSite, RemoteAccessSiteViewModel>();
+            CreateMap<RemoteAccessSite, RemoteAccessSiteViewModel>()
+                .ForMember(dest => dest.Site, opt => opt.MapFrom(src => src.Site as CommunitySite));
+            CreateMap<CommunitySite, RemoteAccessSiteViewModel.SiteViewModel>();
+            CreateMap<SiteVendor, RemoteAccessSiteViewModel.VendorViewModel>();
             CreateMap<SelfDeclaration, SelfDeclarationViewModel>()
                 .ForMember(dest => dest.Answered, opt => opt.MapFrom(src => true));
             CreateMap<SelfDeclarationDocument, SelfDeclarationDocumentViewModel>();

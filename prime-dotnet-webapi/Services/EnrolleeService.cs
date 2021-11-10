@@ -530,6 +530,7 @@ namespace Prime.Services
         public async Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId)
         {
             return await _context.Set<OboSite>()
+                .AsNoTracking()
                 .Where(os => os.EnrolleeId == enrolleeId)
                 .ProjectTo<OboSiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -538,6 +539,7 @@ namespace Prime.Services
         public async Task<IEnumerable<RemoteAccessLocationViewModel>> GetRemoteAccessLocationsAsync(int enrolleeId)
         {
             return await _context.Set<RemoteAccessLocation>()
+                .AsNoTracking()
                 .Where(ral => ral.EnrolleeId == enrolleeId)
                 .ProjectTo<RemoteAccessLocationViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -545,7 +547,9 @@ namespace Prime.Services
 
         public async Task<IEnumerable<RemoteAccessSiteViewModel>> GetRemoteAccessSitesAsync(int enrolleeId)
         {
+            // Currently, only maps from Community Sites as Remote users are disabled on Health Authorities
             return await _context.RemoteAccessSites
+                .AsNoTracking()
                 .Where(ras => ras.EnrolleeId == enrolleeId)
                 .ProjectTo<RemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
