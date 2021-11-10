@@ -144,11 +144,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   protected nextRouteAfterSubmit() {
     const certifications = this.formState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value as CareSetting[];
-    const formDeviceProviderIdentifier = this.formState.deviceProviderIdentifier.value;
+    const deviceProviderIdentifier = this.formState.deviceProviderIdentifier.value;
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = (!certifications.length || (this.isDeviceProvider && !formDeviceProviderIdentifier))
+      nextRoutePath = (!certifications.length || (this.isDeviceProvider && !deviceProviderIdentifier))
         ? EnrolmentRoutes.OBO_SITES
         : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
           ? EnrolmentRoutes.REMOTE_ACCESS

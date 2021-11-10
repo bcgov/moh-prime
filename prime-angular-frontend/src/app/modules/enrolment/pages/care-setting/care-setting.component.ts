@@ -96,7 +96,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     // Remove device provider identifier if Device Provider is no longer selected
     if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
-      this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.setValue(null);
+      this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.reset();
     }
 
     // If an individual health authority was deselected, its Obo Sites

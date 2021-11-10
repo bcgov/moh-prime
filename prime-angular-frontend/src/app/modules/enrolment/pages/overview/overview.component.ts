@@ -133,7 +133,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public hasErrors() {
     const { certificateOrOboSite, deviceProviderOrOboSite } = this.getEnrolmentErrors(this.enrolment);
     return Object.values({ certificateOrOboSite, deviceProviderOrOboSite })
-      .some((value) => value);
+      .some((error) => error);
   }
 
   public ngOnInit(): void {

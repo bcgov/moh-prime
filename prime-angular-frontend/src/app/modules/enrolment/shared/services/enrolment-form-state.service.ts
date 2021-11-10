@@ -15,6 +15,7 @@ import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -659,37 +660,24 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   /**
    * @description
-   * Check for the requirement of at least one certification, or one obo site/job.
+   * Check that at least one certificate or OBO site exists, and that each
+   * chosen health authority has at least one site.
    */
-  // TODO refactor this method as it can't be scanned and understood
   private hasCertificateOrOboSite(): boolean {
-    const oboSites = this.oboSitesForm.get('oboSites') as FormArray;
-    const certifications = this.regulatoryFormState.certifications;
-    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
-    let hasOboSiteForEveryHA = true;
-    // Using `for` loop rather than `every()` method for ease of debugging
-    for (let i = 0; i < enrolleeHealthAuthorities.controls.length; i++) {
-      const checkbox = enrolleeHealthAuthorities.controls[i];
-      // For every selected Health Authority ...
-      if (checkbox.value === true) {
-        let foundMatchingHAOboSite = false;
-        // ... there must be at least one Obo Site for that Health Authority
-        for (let j = 0; j < oboSites.controls.length; j++) {
-          const oboSiteForm = oboSites.controls[j] as FormGroup;
-          if (oboSiteForm.controls.healthAuthorityCode.value === this.configService.healthAuthorities[i].code) {
-            foundMatchingHAOboSite = true;
-            break;
-          }
-        }
-        if (!foundMatchingHAOboSite) {
-          hasOboSiteForEveryHA = false;
-          break;
-        }
-      }
-    }
-    // When you set certifications to 'None' there still exists an item in
-    // the FormArray, and this checks for its existence
-    return (oboSites.length && hasOboSiteForEveryHA) || (certifications.length && certifications.value[0].licenseNumber);
+    const { certifications, oboSites } = this.json;
+
+    // When you set certifications to 'None' there still exists an item in the
+    // list, and this checks for the existence of at least one valid certification
+    const hasCertification = certifications.some(c => c?.licenseNumber);
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities').value as boolean[];
+    const hasOboSiteForEveryChosenHealthAuth = enrolleeHealthAuthorities
+      .every((wasChosen: boolean, healthAuthorityCode: HealthAuthorityEnum) =>
+        (wasChosen)
+          ? oboSites.some(os => os.healthAuthorityCode === healthAuthorityCode)
+          : true
+      );
+
+    return hasCertification || (oboSites.length && hasOboSiteForEveryChosenHealthAuth);
   }
 
   /**
@@ -698,16 +686,12 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * then they shuold provide either Device Provider ID or Obo Site
    */
   private hasDeviceProviderOrOboSite(): boolean {
-    const {
-      careSettings,
-      certifications,
-      deviceProviderIdentifier,
-      oboSites } = this.json;
+    const { careSettings, certifications, deviceProviderIdentifier, oboSites } = this.json;
     const careSettingPredicate = (cs) => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER;
 
     return (careSettings.some(careSettingPredicate))
-      ? !!((deviceProviderIdentifier && certifications.length)
-        || (!deviceProviderIdentifier && oboSites.filter(careSettingPredicate).length))
+      ? ((deviceProviderIdentifier && !!certifications.length)
+        || (!deviceProviderIdentifier && !!oboSites.filter(careSettingPredicate).length))
       : true
   }
 }
