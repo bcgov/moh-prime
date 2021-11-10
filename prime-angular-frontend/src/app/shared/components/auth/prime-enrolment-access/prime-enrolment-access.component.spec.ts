@@ -11,7 +11,10 @@ describe('PrimeEnrolmentAccessComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [PrimeEnrolmentAccessComponent],
       providers: [
-        { provide: APP_CONFIG, useValue: AppConfig }
+        { 
+          provide: APP_CONFIG, 
+          useValue: AppConfig
+        }
       ]
     })
     .compileComponents();
