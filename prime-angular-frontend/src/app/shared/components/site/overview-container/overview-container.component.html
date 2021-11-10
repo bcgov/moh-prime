@@ -96,7 +96,7 @@
     <ng-container *ngIf="site.businessLicence?.businessLicenceDocument && !admin; else businessLicenceListView">
       <app-enrollee-property title="Expiry"
                              [hasError]="!site.businessLicence?.expiryDate"
-                             [errorMessage]="'Expiry date is required'">
+                             [errorMessage]="'Business licence expiry date is required'">
         {{ site.businessLicence?.expiryDate | formatDate | default }}
       </app-enrollee-property>
 
