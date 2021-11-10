@@ -51,36 +51,39 @@ namespace PrimeTests.UnitTests
             Assert.Empty(matches.Added);
         }
 
-        // [Fact]
-        // public void TestEntityMatcher_Updates()
-        // {
-        //     var exis
+        [Fact]
+        public void TestEntityMatcher_Updates()
+        {
+            var existing = new[]
+            {
+                new Entity(1),
+                new Entity(2),
+                new Entity(3),
+                new Entity(4)
+            };
+            var incoming = new[]
+            {
+                new ViewModel(0),
+                new ViewModel(0),
+                new ViewModel(2),
+                new ViewModel(3),
+                new ViewModel(12)
+            };
 
+            var matches = EntityMatcher
+                .MatchUsing((Entity e) => e.Id, (ViewModel v) => v.Id)
+                .Match(existing, incoming);
 
-        //     var existing = new[]
-        //     {
-        //         new Entity(1),
-        //         new Entity(2),
-        //         new Entity(3),
-        //         new Entity(4)
-        //     };
-        //     var incoming = new[]
-        //     {
-        //         new ViewModel(0),
-        //         new ViewModel(0),
-        //         new ViewModel(2),
-        //         new ViewModel(3),
-        //         new ViewModel(12)
-        //     };
-
-        //     var matches = EntityMatcher
-        //         .MatchUsing((Entity e) => e.Id, (ViewModel v) => v.Id)
-        //         .Match(existing, incoming);
-
-        //     Assert.Equal(matches.Updated);
-        //     Assert.Equal(existing, matches.Dropped);
-        //     Assert.Empty(matches.Added);
-        // }
+            var expectedUpdated = new[]
+            {
+                (existing.Single(x => x.Id == 2), incoming.Single(x => x.Id == 2)),
+                (existing.Single(x => x.Id == 3), incoming.Single(x => x.Id == 3))
+            };
+            Assert.Equal(expectedUpdated, matches.Updated);
+            Assert.Equal(existing.Where(x => new[] { 1, 4 }.Contains(x.Id)), matches.Dropped);
+            Assert.Equal(incoming.Where(x => new[] { 0, 12 }.Contains(x.Id)), matches.Added);
+            Assert.Equal(3, matches.Added.Count);
+        }
 
         [Fact]
         public void TestEntityMatcher_ComplexKey()
