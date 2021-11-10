@@ -9,11 +9,11 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -43,8 +43,9 @@ export class EnrolmentGuard extends BaseGuard {
    * status, as well as, their authentication provider.
    */
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
-    return this.enrolmentResource.enrollee()
+    return this.authService.getUser$()
       .pipe(
+        exhaustMap((user: BcscUser) => this.enrolmentResource.enrollee(user.userId)),
         tap((enrolment: Enrolment) => {
           // Store the enrolment for access throughout enrolment, which will
           // allows be the most up-to-date enrolment (source of truth)
