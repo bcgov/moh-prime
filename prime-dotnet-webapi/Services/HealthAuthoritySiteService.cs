@@ -99,7 +99,6 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .Include(site => site.PhysicalAddress)
                 .Include(site => site.BusinessHours)
-                .Include(site => site.RemoteUsers)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             _context.Entry(site).CurrentValues.SetValues(updateModel);
@@ -117,14 +116,6 @@ namespace Prime.Services
             {
                 _context.RemoveRange(site.BusinessHours);
                 site.BusinessHours = _mapper.Map<ICollection<BusinessDay>>(updateModel.BusinessHours);
-            }
-
-            // TODO refactor to allow for updates without orphaning records in EnrolleeRemoteUsers
-            //      for community site registration and health authority site registration
-            if (updateModel.RemoteUsers != null)
-            {
-                _context.RemoveRange(site.RemoteUsers);
-                site.RemoteUsers = _mapper.Map<ICollection<RemoteUser>>(updateModel.RemoteUsers);
             }
 
             await _context.SaveChangesAsync();

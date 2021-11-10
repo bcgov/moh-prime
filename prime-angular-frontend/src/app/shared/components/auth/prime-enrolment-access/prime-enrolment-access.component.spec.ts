@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { PrimeEnrolmentAccessComponent } from './prime-enrolment-access.component';
 
 describe('PrimeEnrolmentAccessComponent', () => {
@@ -8,7 +9,13 @@ describe('PrimeEnrolmentAccessComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PrimeEnrolmentAccessComponent ]
+      declarations: [PrimeEnrolmentAccessComponent],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: AppConfig
+        }
+      ]
     })
     .compileComponents();
   });
