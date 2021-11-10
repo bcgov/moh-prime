@@ -10,10 +10,10 @@ namespace Prime.Configuration.Database
             get
             {
                 return new[] {
-                    new SelfDeclarationType { Code = 1, Name = "Has Conviction"             },
-                    new SelfDeclarationType { Code = 2, Name = "Has Registration Suspended" },
-                    new SelfDeclarationType { Code = 3, Name = "Has Disciplinary Action"    },
-                    new SelfDeclarationType { Code = 4, Name = "Has PharmaNet Suspended"    },
+                    new SelfDeclarationType { Code = (int)SelfDeclarationTypeCode.Conviction,            Name = "Has Conviction"             },
+                    new SelfDeclarationType { Code = (int)SelfDeclarationTypeCode.RegistrationSuspended, Name = "Has Registration Suspended" },
+                    new SelfDeclarationType { Code = (int)SelfDeclarationTypeCode.DisciplinaryAction,    Name = "Has Disciplinary Action"    },
+                    new SelfDeclarationType { Code = (int)SelfDeclarationTypeCode.PharmaNetSuspended,    Name = "Has PharmaNet Suspended"    },
                 };
             }
         }
