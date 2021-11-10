@@ -10,8 +10,7 @@ Many ModelFactories and Lookups files are copied verbatim from `prime-dotnet-web
 1. `RuleFor` re: the `Id` of the object is disabled since we let the database assign the `Id`.  For `EnrolleeFactory` we do not disable assigning the `Id` 
 because of some foreign key relationships that need to be established.
 
-2. For `EnrolleeFactory`, set `IdCounter` to a high enough value to not conflict with any existing `Enrollee` rows in the target database (`select max(e."Id")
-from "Enrollee" e`).  Creating AdjudicatorNotes and EnrolleeAbsences is disabled at the moment due to database referential integrity issues; more investigation needed.
+2. For `EnrolleeFactory`, change the access modifier of `IdCounter` from `private` to `public`.  Creating AdjudicatorNotes and EnrolleeAbsences is disabled at the moment due to database referential integrity issues; more investigation needed.
 
 
 # Trouble-shooting

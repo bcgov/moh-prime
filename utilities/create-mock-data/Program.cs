@@ -31,6 +31,8 @@ namespace create_mock_data
             if (numEnrollees > 0)
             {
                 var enrolleeFactory = new EnrolleeFactory();
+                // Avoid primary key conflicts 
+                EnrolleeFactory.IdCounter = (dbContext.Enrollees.Max(e => e.Id) + 1);
                 try
                 {
                     Log.Information($"Beginning to generate {numEnrollees} enrollees at {DateTime.Now}");

@@ -10,7 +10,7 @@ namespace PrimeTests.ModelFactories
 {
     public class EnrolleeFactory : Faker<Enrollee>
     {
-        private static int IdCounter = 150000;
+        public static int IdCounter = 1;
 
         public EnrolleeFactory()
         {
