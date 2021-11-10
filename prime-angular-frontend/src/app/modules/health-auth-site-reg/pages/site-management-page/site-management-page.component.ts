@@ -58,10 +58,6 @@ export class SiteManagementPageComponent implements OnInit {
     this.redirectTo(healthAuthorityId, healthAuthoritySite.id, pagePath);
   }
 
-  public viewSiteRemoteUsers(healthAuthorityId: number, healthAuthoritySiteId: number): void {
-    this.redirectTo(healthAuthorityId, healthAuthoritySiteId, HealthAuthSiteRegRoutes.REMOTE_USERS);
-  }
-
   public isInComplete(healthAuthoritySite: HealthAuthoritySite): boolean {
     return !healthAuthoritySite.submittedDate || (
       healthAuthoritySite.submittedDate &&
