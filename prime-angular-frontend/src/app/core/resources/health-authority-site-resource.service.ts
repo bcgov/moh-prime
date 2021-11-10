@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpStatusCode } from '@angular/common/http';
 
-
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -133,7 +132,7 @@ export class HealthAuthoritySiteResource {
    * Set the set as completed indicating the workflow has been entirely traversed
    * in wizard mode, and will now spoke between the views from overview.
    */
-   public setHealthAuthoritySiteCompleted(healthAuthCode: number, siteId: number): NoContent {
+  public setHealthAuthoritySiteCompleted(healthAuthCode: number, siteId: number): NoContent {
     return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/site-completed`)
       .pipe(
         NoContentResponse,
@@ -149,7 +148,7 @@ export class HealthAuthoritySiteResource {
    * @description
    * Submit the health authority site registration.
    */
-   public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number, updatedModel: HealthAuthoritySiteUpdate): NoContent {
+  public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number, updatedModel: HealthAuthoritySiteUpdate): NoContent {
     updatedModel.businessHours = updatedModel.businessHours
       .map((businessDay: BusinessDay) => BusinessDay.asTimespan(businessDay));
     return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submissions`, updatedModel)
