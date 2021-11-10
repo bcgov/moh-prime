@@ -49,6 +49,7 @@ namespace Prime.Services.EmailInternal
                 await GenerateOrganizationAgreementAttachmentAsync(siteId)
             };
         }
+
         public async Task<string> GetBusinessLicenceDownloadLink(int businessLicenceId)
         {
             var document = await _context.BusinessLicenceDocuments
