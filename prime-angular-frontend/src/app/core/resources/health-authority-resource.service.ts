@@ -22,6 +22,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 
 import { HealthAuthoritySite, HealthAuthoritySiteDto } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthoritySiteList } from '@health-auth/shared/models/health-authority-site-list.model';
 import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-authority-site-create.model';
 import { HealthAuthoritySiteUpdate } from '@health-auth/shared/models/health-authority-site-update.model';
 
@@ -76,6 +77,19 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority sites could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getAllHealthAuthoritySites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getHealthAuthoritySiteLists(): Observable<HealthAuthoritySiteList[]> {
+    return this.apiResource.get<HealthAuthoritySiteList[]>(`health-authorities/site-lists`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthoritySiteList[]>) => response.result),
+        tap((healthAuthoritySiteLists: HealthAuthoritySiteList[]) => this.logger.info('HEALTH_AUTHORITY_SITE_LISTS', healthAuthoritySiteLists)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site lists could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteLists error has occurred: ', error);
           throw error;
         })
       );

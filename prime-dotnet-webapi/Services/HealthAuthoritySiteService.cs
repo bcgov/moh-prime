@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DelegateDecompiler;
 using DelegateDecompiler.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
@@ -80,6 +79,15 @@ namespace Prime.Services
                 .AsNoTracking()
                 .If(healthAuthorityId.HasValue, q => q.Where(site => site.HealthAuthorityOrganizationId == healthAuthorityId))
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<HealthAuthoritySiteListViewModel>> GetSiteListsAsync()
+        {
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .ProjectTo<HealthAuthoritySiteListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
         }

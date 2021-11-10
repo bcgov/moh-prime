@@ -49,9 +49,8 @@
         <th mat-header-cell
             *matHeaderCellDef
             scope="col"> Assigned To </th>
-        <!-- TODO missing adjudicatorIdir on model to populate column -->
         <td mat-cell
-            *matCellDef="let row;"> {{ null | default }} </td>
+            *matCellDef="let row;"> {{ row.adjudicatorIdir | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="state">
@@ -74,7 +73,7 @@
             *matHeaderCellDef
             scope="col"> Site ID </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.siteId | default }} </td>
+            *matCellDef="let row;"> {{ row.pec | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="remoteUsers">
@@ -82,7 +81,7 @@
             *matHeaderCellDef
             scope="col"> Remote Users </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.remoteUsers?.length | yesNo: true }} </td>
+            *matCellDef="let row;"> {{ row.hasRemoteUsers | yesNo: true }} </td>
       </ng-container>
 
       <ng-container matColumnDef="haActions">
@@ -226,7 +225,7 @@
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
                 [disabled]="true || !(Role.EDIT_SITE | inRole)"
-                (click)="(!row?.adjudicatorIdir) ? onAssign(row.siteId) : onReassign(row.siteId)">
+                (click)="(!row?.adjudicatorIdir) ? onAssign(row.id) : onReassign(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>{{ (!row?.adjudicatorIdir) ? 'Assign Registration' : 'Reassign Registration' }}</span>
         </button>

@@ -12,7 +12,7 @@ import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { Role } from '@auth/shared/enum/role.enum';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthoritySiteList } from '@health-auth/shared/models/health-authority-site-list.model';
 
 @Component({
   selector: 'app-health-authority-table',
@@ -27,7 +27,7 @@ export class HealthAuthorityTableComponent implements OnInit {
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
   public siteColumns: string[];
-  public dataSource: MatTableDataSource<HealthAuthorityRow | HealthAuthoritySite>;
+  public dataSource: MatTableDataSource<HealthAuthorityRow | HealthAuthoritySiteList>;
   public flaggedHealthAuthorities: HealthAuthorityEnum[];
   public Role = Role;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -54,7 +54,7 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.notify = new EventEmitter<{ siteId: number, healthAuthorityOrganizationId: HealthAuthorityEnum }>();
     this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
-    this.dataSource = new MatTableDataSource<HealthAuthorityRow | HealthAuthoritySite>([]);
+    this.dataSource = new MatTableDataSource<HealthAuthorityRow | HealthAuthoritySiteList>([]);
     this.expandedHealthAuthId = 0;
   }
 
@@ -78,12 +78,12 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  public isHealthAuthority(row: HealthAuthorityRow | HealthAuthoritySite): boolean {
+  public isHealthAuthority(row: HealthAuthorityRow | HealthAuthoritySiteList): boolean {
     return row.hasOwnProperty('hasUnderReviewUsers');
   }
 
-  public isGroup(): (index: number, row: HealthAuthorityRow | HealthAuthoritySite) => boolean {
-    return (index: number, row: HealthAuthorityRow | HealthAuthoritySite): boolean =>
+  public isGroup(): (index: number, row: HealthAuthorityRow | HealthAuthoritySiteList) => boolean {
+    return (index: number, row: HealthAuthorityRow | HealthAuthoritySiteList): boolean =>
       this.isHealthAuthority(row);
   }
 
@@ -96,14 +96,14 @@ export class HealthAuthorityTableComponent implements OnInit {
   public ngOnInit(): void {
     forkJoin({
       healthAuthorities: this.healthAuthorityResource.getHealthAuthorities(),
-      healthAuthoritySites: this.healthAuthorityResource.getAllHealthAuthoritySites()
+      healthAuthoritySiteLists: this.healthAuthorityResource.getHealthAuthoritySiteLists()
     }).pipe(
-      map(({ healthAuthorities, healthAuthoritySites }) => {
+      map(({ healthAuthorities, healthAuthoritySiteLists }) => {
         this.flaggedHealthAuthorities = healthAuthorities.reduce((fhas: number[], ha: HealthAuthorityRow) =>
           [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
         );
         // Group sites under their associated health authorities
-        this.dataSource.data = [...healthAuthorities, ...healthAuthoritySites].sort(this.sortData());
+        this.dataSource.data = [...healthAuthorities, ...healthAuthoritySiteLists].sort(this.sortData());
       })
     ).subscribe();
   }
@@ -112,20 +112,20 @@ export class HealthAuthorityTableComponent implements OnInit {
    * @description
    * Sort health authorities and their grouped sites in ascending order by ID.
    */
-  private sortData(): (a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite) => number {
-    return (a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite): number => {
+  private sortData(): (a: HealthAuthorityRow | HealthAuthoritySiteList, b: HealthAuthorityRow | HealthAuthoritySiteList) => number {
+    return (a: HealthAuthorityRow | HealthAuthoritySiteList, b: HealthAuthorityRow | HealthAuthoritySiteList): number => {
       if (this.isHealthAuthority(a) && this.isHealthAuthority(b)) {
         return a.id - b.id;
       } else if (this.isHealthAuthority(a)) {
-        return (a.id !== (b as HealthAuthoritySite).healthAuthorityOrganizationId)
-          ? a.id - (b as HealthAuthoritySite).healthAuthorityOrganizationId
+        return (a.id !== (b as HealthAuthoritySiteList).healthAuthorityOrganizationId)
+          ? a.id - (b as HealthAuthoritySiteList).healthAuthorityOrganizationId
           : -1;
       } else if (this.isHealthAuthority(b)) {
-        return (b.id !== (a as HealthAuthoritySite).healthAuthorityOrganizationId)
-          ? (a as HealthAuthoritySite).healthAuthorityOrganizationId - b.id
+        return (b.id !== (a as HealthAuthoritySiteList).healthAuthorityOrganizationId)
+          ? (a as HealthAuthoritySiteList).healthAuthorityOrganizationId - b.id
           : 1;
       } else {
-        return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
+        return (a as HealthAuthoritySiteList).healthAuthorityOrganizationId - (b as HealthAuthoritySiteList).healthAuthorityOrganizationId;
       }
     };
   }
