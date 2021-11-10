@@ -23,7 +23,6 @@ export interface HealthAuthoritySiteDto {
   securityGroupCode: number;
   physicalAddress: Address;
   businessHours: BusinessDay[];
-  remoteUsers: RemoteUser[];
   healthAuthorityPharmanetAdministratorId: number;
   healthAuthorityTechnicalSupportId: number;
   readonly completed: boolean;
@@ -42,7 +41,6 @@ export class HealthAuthoritySite implements HealthAuthoritySiteDto {
     public securityGroupCode: number,
     public physicalAddress: Address,
     public businessHours: BusinessDay[],
-    public remoteUsers: RemoteUser[],
     public healthAuthorityPharmanetAdministratorId: number,
     public healthAuthorityTechnicalSupportId: number,
     public readonly completed: boolean,
@@ -59,7 +57,6 @@ export class HealthAuthoritySite implements HealthAuthoritySiteDto {
     this.securityGroupCode = securityGroupCode;
     this.physicalAddress = physicalAddress;
     this.businessHours = businessHours;
-    this.remoteUsers = remoteUsers;
     this.healthAuthorityPharmanetAdministratorId = healthAuthorityPharmanetAdministratorId;
     this.healthAuthorityTechnicalSupportId = healthAuthorityTechnicalSupportId;
     // Indicates that a user has progressed through the entire registration, and
@@ -90,7 +87,6 @@ export class HealthAuthoritySite implements HealthAuthoritySiteDto {
       healthAuthoritySite.securityGroupCode,
       healthAuthoritySite.physicalAddress,
       healthAuthoritySite.businessHours,
-      healthAuthoritySite.remoteUsers,
       healthAuthoritySite.healthAuthorityPharmanetAdministratorId,
       healthAuthoritySite.healthAuthorityTechnicalSupportId,
       healthAuthoritySite.completed,
@@ -133,7 +129,6 @@ export class HealthAuthoritySite implements HealthAuthoritySiteDto {
       securityGroupCode: this.securityGroupCode,
       physicalAddress: { ...this.physicalAddress },
       businessHours: [...this.businessHours],
-      remoteUsers: [...this.remoteUsers],
       healthAuthorityPharmanetAdministratorId: this.healthAuthorityPharmanetAdministratorId ?? null,
       healthAuthorityTechnicalSupportId: this.healthAuthorityTechnicalSupportId ?? null,
       healthAuthorityVendorId: this.healthAuthorityVendor?.id ?? null,
