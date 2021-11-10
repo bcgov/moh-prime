@@ -2,11 +2,8 @@ using System;
 using System.Linq;
 using Xunit;
 
-using Prime.Models;
 using Prime.Engines;
-using PrimeTests.Utils;
-using System.Collections;
-using System.Collections.Generic;
+using Prime.Models;
 
 namespace PrimeTests.UnitTests
 {
