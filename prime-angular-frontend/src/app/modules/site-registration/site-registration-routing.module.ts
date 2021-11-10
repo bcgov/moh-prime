@@ -80,18 +80,6 @@ const routes: Routes = [
               //   data: { title: 'Claim Organization' }
               // },
               {
-                path: SiteRoutes.ORGANIZATION_CLAIM,
-                component: OrganizationClaimPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Claim Organization' }
-              },
-              {
-                path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
-                component: OrganizationClaimConfirmationPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Next Steps' }
-              },
-              {
                 path: SiteRoutes.ORGANIZATION_NAME,
                 component: OrganizationNamePageComponent,
                 canDeactivate: [CanDeactivateFormGuard],
