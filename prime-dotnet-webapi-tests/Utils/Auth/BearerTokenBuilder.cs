@@ -100,7 +100,7 @@ namespace PrimeTests.Utils.Auth
 
         public BearerTokenBuilder NotBefore(DateTime notBefore)
         {
-            _notBefore = notBefore!;
+            _notBefore = notBefore;
 
             return this;
         }
