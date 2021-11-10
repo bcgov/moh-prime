@@ -7,7 +7,6 @@ import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
-import { RemoteUser } from '@lib/models/remote-user.model';
 import { BusinessDay } from '@lib/models/business-day.model';
 import { PrivacyOffice } from '@lib/models/privacy-office.model';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
@@ -278,16 +277,14 @@ export class HealthAuthorityResource {
       businessHours: this.apiResource.get<BusinessDay[]>(`${path}/hours-operation`, null, null, true)
         .pipe(map((businessHours: BusinessDay[]) =>
           businessHours.map((businessDay: BusinessDay) => BusinessDay.asHoursAndMins(businessDay))
-        )),
-      remoteUsers: this.apiResource.get<RemoteUser[]>(`${path}/remote-users`, null, null, true)
+        ))
     })
       .pipe(
         map(({
                healthAuthoritySite,
-               businessHours,
-               remoteUsers
-             }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[], remoteUsers: RemoteUser[] }) => {
-          return { ...healthAuthoritySite, businessHours, remoteUsers };
+               businessHours
+             }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[] }) => {
+          return { ...healthAuthoritySite, businessHours };
         }),
         map((healthAuthoritySiteDto: HealthAuthoritySiteDto) => HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto)),
         tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
