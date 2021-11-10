@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20211109190227_EnsureTransactionIdIsUnique")]
-    partial class EnsureTransactionIdIsUnique
+    [Migration("20211110213453_AddTransactionIdUniqueIndex")]
+    partial class AddTransactionIdUniqueIndex
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
