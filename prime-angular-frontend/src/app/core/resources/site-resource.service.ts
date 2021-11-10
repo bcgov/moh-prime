@@ -4,6 +4,10 @@ import { Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { DateUtils } from '@lib/utils/date-utils.class';
+import { RemoteUser } from '@lib/models/remote-user.model';
+import { BusinessDay } from '@lib/models/business-day.model';
+import { BusinessDayHours } from '@lib/models/business-day-hours.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -17,11 +21,8 @@ import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-searc
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 
-import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
@@ -60,8 +61,8 @@ export class SiteResource {
         map((site: Site) => {
           site.businessHours = site.businessHours
             .map((businessDay: BusinessDay) => {
-              businessDay.startTime = BusinessDayHours.fromTimeSpan(businessDay.startTime);
-              businessDay.endTime = BusinessDayHours.fromTimeSpan(businessDay.endTime);
+              businessDay.startTime = DateUtils.fromTimespan(businessDay.startTime);
+              businessDay.endTime = DateUtils.fromTimespan(businessDay.endTime);
               return businessDay;
             });
           return site;
@@ -116,8 +117,8 @@ export class SiteResource {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
-          businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
+          businessDay.startTime = DateUtils.toTimespan(businessDay.startTime);
+          businessDay.endTime = DateUtils.toTimespan(businessDay.endTime);
           return businessDay;
         });
     } else {
@@ -164,18 +165,6 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Remote users update email could not be sent');
           this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmailAdmin error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public sendRemoteUsersEmailUser(siteId: number, newRemoteUsers: RemoteUser[]): NoContent {
-    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-user`, newRemoteUsers)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Remote users email could not be sent');
-          this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmailUser error has occurred: ', error);
           throw error;
         })
       );
@@ -260,8 +249,8 @@ export class SiteResource {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
-          businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
+          businessDay.startTime = DateUtils.toTimespan(businessDay.startTime);
+          businessDay.endTime = DateUtils.toTimespan(businessDay.endTime);
           return businessDay;
         });
     } else {

@@ -549,7 +549,8 @@ namespace Prime.Services
                         .ThenInclude(ras => ras.PhysicalAddress)
                 .Include(e => e.RemoteAccessSites)
                     .ThenInclude(ras => ras.Site)
-                        .ThenInclude(ras => ras.SiteVendors)
+                // TODO so the code compiles
+                // .ThenInclude(ras => ras.SiteVendors)
                 .Include(r => r.RemoteAccessLocations)
                     .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(e => e.EnrolmentStatuses)
@@ -567,13 +568,14 @@ namespace Prime.Services
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
         {
             var entity = await GetBaseEnrolleeQuery()
+                .AsNoTracking()
                 .Include(e => e.RemoteAccessSites)
                     .ThenInclude(ras => ras.Site)
                         .ThenInclude(site => site.PhysicalAddress)
                 .Include(e => e.RemoteAccessSites)
                     .ThenInclude(ras => ras.Site)
-                        .ThenInclude(site => site.SiteVendors)
-                .AsNoTracking()
+                // TODO so the code compiles
+                // .ThenInclude(site => site.SiteVendors)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             return entity;

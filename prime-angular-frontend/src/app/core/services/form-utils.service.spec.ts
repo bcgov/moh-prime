@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { Person } from '@lib/models/person.model';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 import { FormUtilsService } from './form-utils.service';
 
 describe('FormUtilsService', () => {

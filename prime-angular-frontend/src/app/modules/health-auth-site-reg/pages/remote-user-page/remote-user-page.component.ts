@@ -8,28 +8,21 @@ import { noop, of } from 'rxjs';
 import { CollegeConfig, LicenseConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AddressLine } from '@lib/models/address.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { RemoteUser } from '@lib/models/remote-user.model';
+import { RemoteUserCertification } from '@lib/models/remote-user-certification.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { AddressLine } from '@shared/models/address.model';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-form-state.class';
+import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
+import { RemoteUsersFormState } from '../remote-users-page/remote-users-form-state.class';
 
-// TODO refactor into list/form composite component used in health authority organization information
-// TODO copy of the remote users and remote user have been pulled from site registration
-//      and do not fit the current workflow for health authorities. Remote users should
-//      be set up similar to adjudication/pages/health-authorities/vendor-page where
-//      the list and form exist in one page and allow for a single form state to be
-//      shared since form state service is not used
-// TODO test bed has been skipped until the above update occurs
 @Component({
   selector: 'app-remote-user-page',
   templateUrl: './remote-user-page.component.html',
@@ -41,7 +34,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * FormState of the parent form, which has reuse in child form
    * with regards to helper methods.
    */
-  public formState: RemoteUsersPageFormState;
+  public formState: RemoteUsersFormState;
   /**
    * @description
    * Local form for adding and updating a single model that is
@@ -67,10 +60,8 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private configService: ConfigService,
-    private healthAuthoritySiteService: HealthAuthSiteRegService,
-    // TODO do we need this in health authority?
-    // TODO even if we don't move the single method out to @lib/utils and don't use dependencies from other feature modules
-    private enrolmentService: EnrolmentService,
+    private healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
+    private healthAuthoritySiteService: HealthAuthoritySiteService,
     route: ActivatedRoute,
     router: Router
   ) {
@@ -79,47 +70,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.licenses = this.configService.licenses;
     this.remoteUserIndex = route.snapshot.params.index;
-  }
-
-  // TODO remove this method add to allow routing between pages
-  public onSubmit(): void {
-    this.hasAttemptedSubmission = true;
-
-    if (this.checkValidity()) {
-      this.onSubmitFormIsValid();
-
-      // Set the parent form for updating on submission, but otherwise use the
-      // local form group for all changes prior to submission
-      const parent = this.formState.form;
-      const remoteUsersFormArray = parent.get('remoteUsers') as FormArray;
-
-      if (this.remoteUserIndex !== 'new') {
-        const remoteUserFormGroup = remoteUsersFormArray.at(+this.remoteUserIndex);
-        const certificationFormArray = remoteUserFormGroup.get('remoteUserCertifications') as FormArray;
-
-        // Changes in the amount of certificates requires adjusting the number of
-        // certificates in the parent, which is not handled automatically
-        if (this.remoteUserCertifications.length !== certificationFormArray.length) {
-          certificationFormArray.clear();
-
-          Object.keys(this.remoteUserCertifications.controls)
-            .map((_) => this.formState.remoteUserCertificationFormGroup())
-            .forEach((certification: FormGroup) => certificationFormArray.push(certification));
-        }
-
-        // Replace the updated remote user in the parent form for submission
-        remoteUserFormGroup.reset(this.form.getRawValue());
-      } else {
-        // Store the new remote user in the parent form for submission
-        remoteUsersFormArray.push(this.form);
-      }
-
-      parent.markAsPristine();
-
-      this.afterSubmitIsSuccessful();
-    } else {
-      this.onSubmitFormIsInvalid();
-    }
   }
 
   /**
@@ -145,15 +95,9 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * Removes a certification from the list in response to an
    * emitted event from college certifications. Does not allow
    * the list of certifications to empty.
-   *
-   * @param index to be removed
    */
   public removeCertification(index: number): void {
     this.remoteUserCertifications.removeAt(index);
-  }
-
-  public onBack(): void {
-    this.routeUtils.routeRelativeTo(['./']);
   }
 
   public collegeFilterPredicate(): (collegeConfig: CollegeConfig) => boolean {
@@ -162,8 +106,11 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public licenceFilterPredicate(): (licenceConfig: LicenseConfig) => boolean {
-    return (licenceConfig: LicenseConfig) =>
-      this.enrolmentService.hasAllowedRemoteAccessLicences(licenceConfig);
+    return (licenceConfig: LicenseConfig) => this.hasAllowedRemoteAccessLicences(licenceConfig);
+  }
+
+  public onBack(): void {
+    this.routeUtils.routeRelativeTo(['./']);
   }
 
   public ngOnInit(): void {
@@ -174,7 +121,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected createFormInstance(): void {
     // Be aware that this is the parent form state and should only
     // be used for it's API and on submission
-    this.formState = new RemoteUsersPageFormState(this.fb);
+    this.formState = this.healthAuthoritySiteFormStateService.remoteUserFormState;
   }
 
   protected patchForm(): void {
@@ -183,7 +130,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
     // Attempt to patch if needed on a refresh, otherwise do not forcibly
     // update the form state as it will drop unsaved updates
-    // this.formStateService.setForm(site);
+    this.healthAuthoritySiteFormStateService.setForm(site);
 
     // Extract an existing remoteUser from the parent form for updates, otherwise new
     const remoteUser = this.formState.getRemoteUsers()[+this.remoteUserIndex] ?? null;
@@ -271,5 +218,9 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     if (!noEmptyCert && !this.remoteUserCertifications.controls.length) {
       this.addCertification();
     }
+  }
+
+  private hasAllowedRemoteAccessLicences(licenceConfig: LicenseConfig): boolean {
+    return (licenceConfig.licensedToProvideCare && licenceConfig.namedInImReg);
   }
 }

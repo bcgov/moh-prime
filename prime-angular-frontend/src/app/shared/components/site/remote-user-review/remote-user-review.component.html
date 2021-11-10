@@ -1,9 +1,9 @@
-<ng-container *ngIf="remoteUsers?.length">
-  <app-overview-section title="Remote Users"
-                        [showEditRedirect]="showEditRedirect"
-                        [editRoute]="editRoute"
-                        (route)="onRoute($event)">
+<app-overview-section title="Remote Users"
+                      [showEditRedirect]="showEditRedirect"
+                      [editRoute]="editRoute"
+                      (route)="onRoute($event)">
 
+  <ng-container *ngIf="remoteUsers?.length; else noRemoteUsers">
     <ng-container *ngFor="let remoteUser of remoteUsers">
 
       <div class="mb-3">
@@ -13,13 +13,11 @@
       </div>
 
       <ng-container *ngFor="let remoteUserCertification of remoteUser.remoteUserCertifications">
-
         <div class="mb-3">
           <strong>Certification</strong>
         </div>
 
         <div class="ml-4 mb-3">
-
           <app-enrollee-property title="College">
             {{ remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
           </app-enrollee-property>
@@ -27,12 +25,13 @@
           <app-enrollee-property title="Licence">
             {{ remoteUserCertification.licenseNumber | default }}
           </app-enrollee-property>
-
         </div>
-
       </ng-container>
 
     </ng-container>
+  </ng-container>
 
-  </app-overview-section>
-</ng-container>
+  <ng-template #noRemoteUsers>
+    None
+  </ng-template>
+</app-overview-section>

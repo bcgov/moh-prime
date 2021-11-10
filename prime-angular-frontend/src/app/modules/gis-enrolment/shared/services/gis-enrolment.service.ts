@@ -37,7 +37,7 @@ export class GisEnrolmentService implements IEnrolmentService<GisEnrolment> {
   }
 
   public get enrolment$(): Observable<GisEnrolment> {
-    // Allow subscriptions, but make immutable
+    // Allow subscriptions, but make the subject immutable
     return this._enrolment.asObservable();
   }
 }

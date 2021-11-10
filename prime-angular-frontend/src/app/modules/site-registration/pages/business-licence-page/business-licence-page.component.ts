@@ -14,7 +14,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
@@ -28,7 +28,7 @@ import { BusinessLicenceFormState } from './business-licence-form-state.class';
   templateUrl: './business-licence-page.component.html',
   styleUrls: ['./business-licence-page.component.scss']
 })
-export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: BusinessLicenceFormState;
   public title: string;
   public routeUtils: RouteUtils;
