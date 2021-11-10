@@ -77,10 +77,12 @@ namespace Prime.Services
                 .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
                 .ToListAsync();
 
+            // If a PlrViewModel has ExpertiseCodes, translate the codes to human-readable text
             // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manually before return
             return plr.Select(p =>
                 {
-                    p.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e => p.ExpertiseCode.Contains(e.Code)).Select(e => e.Name));
+                    p.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e =>
+                        (p.ExpertiseCode != null && p.ExpertiseCode.Contains(e.Code))).Select(e => e.Name));
                     return p;
                 });
         }
