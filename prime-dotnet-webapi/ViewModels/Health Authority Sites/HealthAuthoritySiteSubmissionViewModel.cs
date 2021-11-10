@@ -13,6 +13,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public string NewOrExisting { get; set; }
         public string Vendor { get; set; }
         public HealthAuthorityContactViewModel PharmaNetAdministrator { get; set; }
+        
         public class HealthAuthorityContactViewModel
         {
             public string JobTitle { get; set; }
@@ -23,5 +24,4 @@ namespace Prime.ViewModels.HealthAuthoritySites
             public string Email { get; set; }
         }
     }
-
 }
