@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
@@ -35,12 +35,12 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
     protected route: ActivatedRoute,
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
     protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
-    protected healthAuthorityResource: HealthAuthorityResource,
+    protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private fb: FormBuilder,
     private healthAuthorityService: HealthAuthorityService,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthoritySiteResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);

@@ -14,7 +14,7 @@ import { RemoteUser } from '@lib/models/remote-user.model';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
@@ -43,10 +43,10 @@ export class RemoteUsersPageComponent extends AbstractHealthAuthoritySiteRegistr
     protected route: ActivatedRoute,
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
     protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
-    protected healthAuthorityResource: HealthAuthorityResource,
+    protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthoritySiteResource);
 
     this.canDeactivateAllowlist = ['hasRemoteUsers'];
 
