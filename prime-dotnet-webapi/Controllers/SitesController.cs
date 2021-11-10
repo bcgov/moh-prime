@@ -1201,7 +1201,7 @@ namespace Prime.Controllers
 
         // GET: api/sites/5/individual-device-providers
         /// <summary>
-        ///     get individual device providers for a community (device provider) site
+        /// Gets the Individual Device Providers for a Device Provider Site.
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/individual-device-providers", Name = nameof(GetIndividualDeviceProviders))]
