@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -12,7 +13,6 @@ import { ToastService } from '@core/services/toast.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
-import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 // TODO move to lib
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
