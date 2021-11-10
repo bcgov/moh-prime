@@ -37,6 +37,23 @@ export class AuthorizedUserResource {
       );
   }
 
+  public getAuthorizedUserById(authorizedUserId: number): Observable<AuthorizedUser | null> {
+    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${authorizedUserId}`)
+      .pipe(
+        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
+        tap((authorizedUser: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', authorizedUser)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Authorized user could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getAuthorizedUser error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public createAuthorizedUser(authorizedUser: AuthorizedUser): Observable<AuthorizedUser> {
     return this.apiResource.post<AuthorizedUser>('parties/authorized-users', authorizedUser)
       .pipe(
