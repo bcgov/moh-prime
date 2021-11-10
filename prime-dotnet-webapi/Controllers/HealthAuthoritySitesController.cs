@@ -16,7 +16,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/health-authorities/{healthAuthorityId}/sites")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeEnrollee)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
@@ -40,6 +40,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="payload"></param>
         [HttpPost(Name = nameof(CreateHealthAuthoritySite))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -160,6 +161,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="updateModel"></param>
         [HttpPut("{siteId}", Name = nameof(UpdateHealthAuthoritySite))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -188,6 +190,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/site-completed", Name = nameof(SetHealthAuthoritySiteCompleted))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -216,6 +219,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="updateModel"></param>
         [HttpPost("{siteId}/submissions", Name = nameof(HealthAuthoritySiteSubmission))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

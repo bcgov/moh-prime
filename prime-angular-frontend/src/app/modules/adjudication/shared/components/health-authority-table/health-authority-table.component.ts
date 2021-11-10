@@ -1,10 +1,8 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 
-import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
@@ -12,23 +10,27 @@ import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { Role } from '@auth/shared/enum/role.enum';
+
 import { HealthAuthoritySiteListItem } from '@health-auth/shared/models/health-authority-site-list.model';
-import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 
 @Component({
   selector: 'app-health-authority-table',
   templateUrl: './health-authority-table.component.html',
   styleUrls: ['./health-authority-table.component.scss']
 })
-export class HealthAuthorityTableComponent implements OnInit {
+export class HealthAuthorityTableComponent implements OnInit, OnChanges {
+  @Input() public sites: (HealthAuthorityRow | HealthAuthoritySiteListItem)[];
+  @Input() public showHealthAuthorities: boolean = true;
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
   @Output() public notify: EventEmitter<{ siteId: number, healthAuthorityOrganizationId: HealthAuthorityEnum }>;
   @Output() public reload: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
-  public siteColumns: string[];
   public dataSource: MatTableDataSource<HealthAuthorityRow | HealthAuthoritySiteListItem>;
+  public healthAuthorities: HealthAuthorityRow[];
+
+  public siteColumns: string[];
   public flaggedHealthAuthorities: HealthAuthorityEnum[];
   public Role = Role;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -51,13 +53,16 @@ export class HealthAuthorityTableComponent implements OnInit {
       'assignedTo',
       'siteActions'
     ];
+    this.expandedHealthAuthId = 0;
+    this.healthAuthorities = [];
+
     this.assign = new EventEmitter<number>();
     this.reassign = new EventEmitter<number>();
     this.notify = new EventEmitter<{ siteId: number, healthAuthorityOrganizationId: HealthAuthorityEnum }>();
     this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
+
     this.dataSource = new MatTableDataSource<HealthAuthorityRow | HealthAuthoritySiteListItem>([]);
-    this.expandedHealthAuthId = 0;
   }
 
   public onAssign(siteId: number): void {
@@ -96,30 +101,26 @@ export class HealthAuthorityTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    let request$ = forkJoin({
-      healthAuthorities: this.healthAuthorityResource.getHealthAuthorities(),
-      HealthAuthoritySites: this.healthAuthorityResource.getAllHealthAuthoritySites()
-    }).pipe(
-      map(({ healthAuthorities, HealthAuthoritySites }) => {
-        this.flaggedHealthAuthorities = healthAuthorities.reduce((fhas: number[], ha: HealthAuthorityRow) =>
+    if (this.showHealthAuthorities) {
+      this.healthAuthorityResource.getHealthAuthorities().subscribe((has: HealthAuthorityRow[]) => {
+        this.flaggedHealthAuthorities = has.reduce((fhas: number[], ha: HealthAuthorityRow) =>
           [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
         );
-        // Group sites under their associated health authorities
-        this.dataSource.data = [...healthAuthorities, ...HealthAuthoritySites].sort(this.sortData());
+        this.healthAuthorities = has;
+        this.dataSource.data = Object.assign([], this.sites).concat(has).sort(this.sortData());
       })
-    );
-
-    if (this.activatedRoute.snapshot.params.sid && this.activatedRoute.snapshot.params.haid) {
-      request$ = this.healthAuthorityResource
-        .getHealthAuthoritySites(this.activatedRoute.snapshot.params.haid, this.activatedRoute.snapshot.params.sid)
-        .pipe(
-          map((sites: HealthAuthoritySiteListItem[]) => {
-            this.dataSource.data = sites;
-          })
-        );
+    } else {
+      this.dataSource.data = Object.assign([], this.sites).sort(this.sortData());
     }
+  };
 
-    request$.subscribe();
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.sites.currentValue) {
+      this.dataSource.data = Object.assign([], this.sites)
+        .concat((this.showHealthAuthorities) ? this.healthAuthorities : [])
+        .sort(this.sortData());
+    }
+    console.log(this.dataSource.data);
   }
 
   /**

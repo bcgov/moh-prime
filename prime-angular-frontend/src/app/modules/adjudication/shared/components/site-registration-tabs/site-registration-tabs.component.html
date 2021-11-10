@@ -32,7 +32,8 @@
              [id]="CareSettingEnum.HEALTH_AUTHORITY">
       <ng-template matTabContent>
         <div class="pt-3">
-          <app-health-authority-table (assign)="onAssign($event)"
+          <app-health-authority-table [sites]="healthAuthoritySites"
+                                      (assign)="onAssign($event)"
                                       (reassign)="onReassign($event)"
                                       (notify)="onNotify($event)"
                                       (route)="onRoute($event)"></app-health-authority-table>

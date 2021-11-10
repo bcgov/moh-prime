@@ -13,7 +13,8 @@ namespace Prime.ViewModels.HealthAuthoritySites
         {
             CreateMap<HealthAuthoritySite, HealthAuthoritySiteViewModel>();
             CreateMap<HealthAuthoritySite, HealthAuthoritySiteListViewModel>()
-                .ForMember(dest => dest.AuthorizedUserName, opt => opt.MapFrom(src => src.AuthorizedUser.Party.FirstName + " " + src.AuthorizedUser.Party.LastName));
+                .ForMember(dest => dest.AuthorizedUserName, opt => opt.MapFrom(src => src.AuthorizedUser.Party.FirstName + " " + src.AuthorizedUser.Party.LastName))
+                .ForMember(dest => dest.HealthAuthorityName, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.Name));
 
             CreateMap<HealthAuthorityPharmanetAdministrator, HealthAuthoritySite>();
 

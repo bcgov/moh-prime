@@ -26,7 +26,7 @@
             *matHeaderCellDef
             scope="col"> Health Authority Name </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row?.name | default: '' }} </td>
+            *matCellDef="let row;"> {{ row?.healthAuthorityName | default: '' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="siteName">
@@ -142,7 +142,7 @@
           *matHeaderRowDef="siteColumns; sticky: true"></tr>
       <tr mat-row
           *matRowDef="let row; columns: siteColumns;"
-          [hidden]="row.healthAuthorityOrganizationId !== expandedHealthAuthId"></tr>
+          [hidden]="showHealthAuthorities && row.healthAuthorityOrganizationId !== expandedHealthAuthId"></tr>
     </table>
 
     <p *ngIf="!dataSource?.data?.length"
@@ -189,7 +189,6 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                [disabled]="true"
                 (click)="onRoute([
                   AdjudicationRoutes.HEALTH_AUTHORITIES,
                   row.healthAuthorityOrganizationId,
