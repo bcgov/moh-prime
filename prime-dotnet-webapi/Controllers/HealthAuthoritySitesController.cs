@@ -128,29 +128,6 @@ namespace Prime.Controllers
             return Ok(siteHoursOfOperation);
         }
 
-        // GET: api/health-authorities/5/sites/5/remote-users
-        /// <summary>
-        /// Gets a sites remote users.
-        /// </summary>
-        /// <param name="healthAuthorityId"></param>
-        /// <param name="siteId"></param>
-        [HttpGet("{siteId}/remote-users", Name = nameof(GetRemoteUsers))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<RemoteUserViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetRemoteUsers(int healthAuthorityId, int siteId)
-        {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            {
-                return NotFound($"Health authority site not found with id {siteId}");
-            }
-
-            var siteRemoteUsers = await _siteService.GetRemoteUsersAsync(siteId);
-
-            return Ok(siteRemoteUsers);
-        }
-
         // PUT: api/health-authorities/5/sites/5
         /// <summary>
         /// Updates a health authority site.
