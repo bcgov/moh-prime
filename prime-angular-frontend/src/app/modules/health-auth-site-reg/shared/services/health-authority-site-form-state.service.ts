@@ -62,7 +62,7 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     // consume the FormStateService, otherwise this will be null
     private healthAuthorityService: HealthAuthorityService,
     private formUtilsService: FormUtilsService,
-    private siteResource: SiteResource,
+    private siteResource: SiteResource
   ) {
     super(fb, routeStateService, logger);
 
@@ -154,7 +154,7 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     }
 
     this.vendorFormState.patchValue(healthAuthoritySite);
-    this.siteInformationFormState.patchValue(healthAuthoritySite);
+    this.siteInformationFormState.patchValue(healthAuthoritySite, healthAuthoritySite.id);
     this.healthAuthCareTypeFormState.patchValue(healthAuthoritySite);
     this.siteAddressFormState.patchValue(healthAuthoritySite);
     this.hoursOperationFormState.patchValue(healthAuthoritySite);

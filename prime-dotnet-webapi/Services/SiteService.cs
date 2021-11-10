@@ -49,19 +49,16 @@ namespace Prime.Services
 
             if (siteDto.CareSettingCode == (int)CareSettingType.HealthAuthority)
             {
-                var healthAuthorityDto = await _context.HealthAuthoritySites
+                var healthAuthorityId = await _context.HealthAuthoritySites
                     .Where(has => has.Id == siteId)
-                    .Select(healthAuthoritySite => new
-                    {
-                        healthAuthoritySite.HealthAuthorityOrganizationId
-                    })
+                    .Select(has => has.HealthAuthorityOrganizationId)
                     .SingleAsync();
 
                 return !await _context.HealthAuthoritySites
                     .AsNoTracking()
                     .Where(
                         s => s.PEC == pec
-                        && s.HealthAuthorityOrganizationId != healthAuthorityDto.HealthAuthorityOrganizationId
+                        && s.HealthAuthorityOrganizationId != healthAuthorityId
                         )
                     .AnyAsync();
             }
@@ -325,6 +322,13 @@ namespace Prime.Services
             {
             }
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> SiteExists(int siteId)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .AnyAsync(s => s.Id == siteId);
         }
     }
 }
