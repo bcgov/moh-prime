@@ -14,7 +14,7 @@ import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -52,7 +52,7 @@ export class OverviewPageComponent implements OnInit {
     private healthAuthorityService: HealthAuthorityService,
     private healthAuthoritySiteService: HealthAuthoritySiteService,
     private healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
-    private healthAuthorityResource: HealthAuthorityResource,
+    private healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private formUtilsService: FormUtilsService,
     private toastService: ToastService
   ) {
@@ -86,7 +86,7 @@ export class OverviewPageComponent implements OnInit {
             : EMPTY
         ),
         exhaustMap((healthAuthoritySite: HealthAuthoritySite) =>
-          this.healthAuthorityResource.healthAuthoritySiteSubmit(haid, sid, healthAuthoritySite.forUpdate())
+          this.healthAuthoritySiteResource.healthAuthoritySiteSubmit(haid, sid, healthAuthoritySite.forUpdate())
         )
       )
       .subscribe(() => this.nextRoute());
