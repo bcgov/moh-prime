@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
+
+using Serilog;
+
 using Prime;
 using Prime.Models;
 using PrimeTests.ModelFactories;
-using Serilog;
 
 namespace create_mock_data
 {
@@ -27,12 +30,13 @@ namespace create_mock_data
             int numEnrollees = int.Parse(args[0]);
             if (numEnrollees > 0)
             {
+                var enrolleeFactory = new EnrolleeFactory();
                 try
                 {
                     Log.Information($"Beginning to generate {numEnrollees} enrollees at {DateTime.Now}");
                     for (int i = 0; i < numEnrollees; i++)
                     {
-                        Enrollee enrollee = new EnrolleeFactory().Generate();
+                        Enrollee enrollee = enrolleeFactory.Generate();
                         dbContext.Enrollees.Add(enrollee);
                     }
                     dbContext.SaveChanges();
@@ -47,12 +51,13 @@ namespace create_mock_data
             int numSites = int.Parse(args[1]);
             if (numSites > 0)
             {
+                var siteFactory = new SiteFactory();
                 try
                 {
                     Log.Information($"Beginning to generate {numSites} sites at {DateTime.Now}");
                     for (int i = 0; i < numSites; i++)
                     {
-                        Site site = new SiteFactory().Generate();
+                        Site site = siteFactory.Generate();
                         dbContext.Sites.Add(site);
                     }
                     dbContext.SaveChanges();
