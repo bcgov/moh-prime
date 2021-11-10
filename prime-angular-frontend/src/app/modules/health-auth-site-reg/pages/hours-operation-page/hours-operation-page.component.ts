@@ -169,7 +169,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
 
   protected afterSubmitIsSuccessful(): void {
     const nextRoutePath = (!this.isCompleted)
-      ? HealthAuthSiteRegRoutes.REMOTE_USERS
+      ? HealthAuthSiteRegRoutes.ADMINISTRATOR
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
 
     this.routeUtils.routeRelativeTo(nextRoutePath);

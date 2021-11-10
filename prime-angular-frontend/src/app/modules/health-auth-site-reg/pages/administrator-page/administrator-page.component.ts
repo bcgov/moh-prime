@@ -50,7 +50,7 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
   public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.REMOTE_USERS;
+      : HealthAuthSiteRegRoutes.HOURS_OPERATION;
 
     this.routeUtils.routeRelativeTo(backRoutePath);
   }
