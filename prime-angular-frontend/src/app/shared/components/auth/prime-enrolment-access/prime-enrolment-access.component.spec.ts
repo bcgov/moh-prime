@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { PrimeEnrolmentAccessComponent } from './prime-enrolment-access.component';
