@@ -23,7 +23,7 @@
 
 <div class="ml-2 mb-2">
   <h5>Authorized User Name</h5>
-  <span class="ml-2">@(Model.AuthorizedUserName ?? "-")</span>
+  <span class="ml-2">@(Model.AuthorizedUserFullName ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
@@ -48,7 +48,7 @@
 
 <div class="ml-2 mb-2">
   <h5>Vendor</h5>
-  <span class="ml-2">@(Model.Vendor ?? "-")</span>
+  <span class="ml-2">@(Model.VendorName ?? "-")</span>
 </div>
 
 <h2 class="mb-3">Site Address</h2>
@@ -87,12 +87,12 @@
 
 <div class="ml-2 mb-2">
   <h5>Name</h5>
-  <span class="ml-2">@(Model.PharmaNetAdministrator.FullName ?? "-")</span>
+  <span class="ml-2">@($"{Model.PharmaNetAdministrator.FirstName} {Model.PharmaNetAdministrator.LastName}" ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Job Title</h5>
-  <span class="ml-2">@(Model.PharmaNetAdministrator.JobTitle ?? "-")</span>
+  <span class="ml-2">@(Model.PharmaNetAdministrator.JobRoleTitle ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
@@ -107,7 +107,7 @@
 
 <div class="ml-2 mb-2">
   <h5>SMS Phone</h5>
-  <span class="ml-2">@(Model.PharmaNetAdministrator.SmsPhone ?? "-")</span>
+  <span class="ml-2">@(Model.PharmaNetAdministrator.SMSPhone ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">

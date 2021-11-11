@@ -96,8 +96,7 @@ namespace Prime.Services
             email.Attachments = new[] { attachment };
             await Send(email);
 
-            var siteRegReviewPdf = attachment;
-            await _emailDocumentService.SaveSiteRegistrationReview(healthAuthoritySiteId, siteRegReviewPdf);
+            await _emailDocumentService.SaveSiteRegistrationReview(healthAuthoritySiteId, attachment);
         }
 
         public async Task SendSiteReviewedNotificationAsync(int siteId, string note)

@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using DelegateDecompiler.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
 
 using Prime.HttpClients;
 using Prime.Models;
@@ -21,12 +24,14 @@ namespace Prime.Services.EmailInternal
         private readonly IOrganizationService _organizationService;
         private readonly IPdfService _pdfService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IMapper _mapper;
 
         public EmailDocumentsService(
             ApiDbContext context,
-            ILogger<EmailDocumentsService> logger,
             IDocumentAccessTokenService documentAccessTokenService,
             IDocumentManagerClient documentClient,
+            ILogger<EmailDocumentsService> logger,
+            IMapper mapper,
             IOrganizationAgreementService organizationAgreementService,
             IOrganizationService organizationService,
             IPdfService pdfService,
@@ -39,6 +44,7 @@ namespace Prime.Services.EmailInternal
             _organizationService = organizationService;
             _pdfService = pdfService;
             _razorConverterService = razorConverterService;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Pdf>> GenerateSiteRegistrationSubmissionAttachmentsAsync(int siteId)
@@ -75,28 +81,9 @@ namespace Prime.Services.EmailInternal
         public async Task<Pdf> GenerateHealthAuthorityRegistrationReviewAttachmentAsync(int healthAuthoritySiteId)
         {
             var model = await _context.HealthAuthoritySites
+                .AsNoTracking()
                 .Where(has => has.Id == healthAuthoritySiteId)
-                .Select(has => new HealthAuthoritySiteSubmissionViewModel
-                {
-                    SiteName = has.SiteName,
-                    SiteAddress = has.PhysicalAddress,
-                    AuthorizedUserName = $"{has.AuthorizedUser.Party.FirstName} {has.AuthorizedUser.Party.LastName}",
-                    HealthAuthorityName = has.HealthAuthorityOrganization.Name,
-                    PEC = has.PEC,
-                    CareType = has.HealthAuthorityCareType.CareType,
-                    NewOrExisting = string.IsNullOrWhiteSpace(has.PEC) ? "New Site" : "Existing Site",
-                    Vendor = has.HealthAuthorityVendor.Vendor.Name,
-
-                    PharmaNetAdministrator = new HealthAuthoritySiteSubmissionViewModel.HealthAuthorityContactViewModel
-                    {
-                        JobTitle = has.HealthAuthorityPharmanetAdministrator.Contact.JobRoleTitle,
-                        FullName = $"{has.HealthAuthorityPharmanetAdministrator.Contact.FirstName} {has.HealthAuthorityPharmanetAdministrator.Contact.LastName}",
-                        Phone = has.HealthAuthorityPharmanetAdministrator.Contact.Phone,
-                        Fax = has.HealthAuthorityPharmanetAdministrator.Contact.Fax,
-                        SmsPhone = has.HealthAuthorityPharmanetAdministrator.Contact.SMSPhone,
-                        Email = has.HealthAuthorityPharmanetAdministrator.Contact.Email
-                    },
-                })
+                .ProjectTo<HealthAuthoritySiteSubmissionViewModel>(_mapper.ConfigurationProvider)
                 .SingleAsync();
 
             var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.HealthAuthoritySiteRegistrationReview, model);

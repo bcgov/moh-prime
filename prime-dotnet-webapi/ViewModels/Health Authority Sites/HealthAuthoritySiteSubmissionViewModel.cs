@@ -1,27 +1,27 @@
+using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
 namespace Prime.ViewModels.HealthAuthoritySites
 {
+    [Keyless]
     public class HealthAuthoritySiteSubmissionViewModel
     {
         public string SiteName { get; set; }
-        public PhysicalAddress SiteAddress { get; set; }
-        public string AuthorizedUserName { get; set; }
+        public AddressViewModel SiteAddress { get; set; }
+        public string AuthorizedUserFullName { get; set; }
         public string HealthAuthorityName { get; set; }
-        public string PEC { get; set; }
         public string CareType { get; set; }
-        public string NewOrExisting { get; set; }
-        public string Vendor { get; set; }
-        public HealthAuthorityContactViewModel PharmaNetAdministrator { get; set; }
-        
-        public class HealthAuthorityContactViewModel
+        public string PEC { get; set; }
+        public string NewOrExisting
         {
-            public string JobTitle { get; set; }
-            public string FullName { get; set; }
-            public string Phone { get; set; }
-            public string Fax { get; set; }
-            public string SmsPhone { get; set; }
-            public string Email { get; set; }
+            get
+            {
+                return string.IsNullOrEmpty(PEC)
+                ? "New Site"
+                : "Existing Site";
+            }
         }
+        public string VendorName { get; set; }
+        public ContactViewModel PharmaNetAdministrator { get; set; }
     }
 }
