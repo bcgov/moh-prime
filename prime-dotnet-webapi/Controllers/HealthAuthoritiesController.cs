@@ -86,7 +86,7 @@ namespace Prime.Controllers
             return Ok(users);
         }
 
-        // GET: api/health-authorities/site-lists
+        // GET: api/health-authorities/sites
         /// <summary>
         /// Gets all sites for health authority.
         /// </summary>
