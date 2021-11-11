@@ -60,21 +60,19 @@ export class HealthAuthoritySiteResource {
   public getHealthAuthoritySiteById(healthAuthId: HealthAuthorityEnum, healthAuthSiteId: number): Observable<HealthAuthoritySite | null> {
     const path = `health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`;
     return forkJoin({
-      healthAuthoritySite: this.apiResource.get<Omit<HealthAuthoritySiteDto, 'businessHours' | 'remoteUsers'>>(`${path}`, null, null, true),
+      healthAuthoritySite: this.apiResource.get<Omit<HealthAuthoritySiteDto, 'businessHours'>>(`${path}`, null, null, true),
       // TODO convert to hours and minutes in view model and drop this adapter
       businessHours: this.apiResource.get<BusinessDay[]>(`${path}/hours-operation`, null, null, true)
         .pipe(map((businessHours: BusinessDay[]) =>
           businessHours.map((businessDay: BusinessDay) => BusinessDay.asHoursAndMins(businessDay))
-        )),
-      remoteUsers: this.apiResource.get<RemoteUser[]>(`${path}/remote-users`, null, null, true)
+        ))
     })
       .pipe(
         map(({
           healthAuthoritySite,
-          businessHours,
-          remoteUsers
-        }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[], remoteUsers: RemoteUser[] }) => {
-          return { ...healthAuthoritySite, businessHours, remoteUsers };
+          businessHours
+        }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[] }) => {
+          return { ...healthAuthoritySite, businessHours };
         }),
         map((healthAuthoritySiteDto: HealthAuthoritySiteDto) => HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto)),
         tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
