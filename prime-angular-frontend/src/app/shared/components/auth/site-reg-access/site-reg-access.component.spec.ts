@@ -9,11 +9,11 @@ describe('SiteRegAccessComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SiteRegAccessComponent ],
+      declarations: [SiteRegAccessComponent],
       providers: [
-        {
-          provide: APP_CONFIG,
-          useValue: AppConfig
+        { 
+          provide: APP_CONFIG, 
+          useValue: AppConfig 
         }
       ]
     })
