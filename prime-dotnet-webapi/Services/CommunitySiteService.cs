@@ -99,7 +99,7 @@ namespace Prime.Services
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
             UpdateRemoteUsers(currentSite, updatedSite.RemoteUsers);
-            await UpdateIndividualDeviceProviders(siteId, updatedSite);
+            await UpdateIndividualDeviceProviders(siteId, updatedSite.IndividualDeviceProviders);
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
@@ -264,20 +264,19 @@ namespace Prime.Services
             }
         }
 
-        private async Task UpdateIndividualDeviceProviders(int siteId, CommunitySiteUpdateModel updated)
+        private async Task UpdateIndividualDeviceProviders(int siteId, IEnumerable<IndividualDeviceProviderChangeModel> updated)
         {
+            if (updated == null)
+            {
+                return;
+            }
+
             var currentProviders = await _context.IndividualDeviceProviders
                 .Where(p => p.CommunitySiteId == siteId)
                 .ToListAsync();
             _context.IndividualDeviceProviders.RemoveRange(currentProviders);
 
-
-            if (updated.IndividualDeviceProviders == null)
-            {
-                return;
-            }
-
-            foreach (var provider in updated?.IndividualDeviceProviders)
+            foreach (var provider in updated)
             {
                 var newModel = _mapper.Map<IndividualDeviceProvider>(provider);
                 newModel.CommunitySiteId = siteId;
