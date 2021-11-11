@@ -6,6 +6,9 @@ namespace Prime.ViewModels.Emails
     {
         public string GPID { get; set; }
 
-        public PaperEnrolleeSubmissionEmailViewModel(string gpid) => GPID = gpid;
+        public PaperEnrolleeSubmissionEmailViewModel(string gpid)
+        {
+            GPID = gpid;
+        }
     }
 }
