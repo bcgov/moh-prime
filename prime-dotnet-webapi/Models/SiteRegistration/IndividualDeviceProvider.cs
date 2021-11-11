@@ -11,10 +11,8 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public int CommunitySiteId { get; set; }
 
-        [JsonIgnore]
         public CommunitySite CommunitySite { get; set; }
 
         [Required]

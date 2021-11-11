@@ -1211,14 +1211,17 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<IndividualDeviceProviderViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetIndividualDeviceProviders(int siteId)
         {
-            var site = await _communitySiteService.GetSiteAsync(siteId);
-            if (site == null)
+            var record = await _communitySiteService.GetPermissionsRecordAsync(siteId);
+            if (record == null)
             {
                 return NotFound($"Site not found with id {siteId}");
             }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
 
-            var providers = await _communitySiteService.GetIndividualDeviceProvidersAsync(siteId);
-            return Ok(providers);
+            return Ok(await _communitySiteService.GetIndividualDeviceProvidersAsync(siteId));
         }
     }
 }
