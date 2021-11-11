@@ -88,14 +88,14 @@ namespace Prime.Controllers
 
         // GET: api/health-authorities/site-lists
         /// <summary>
-        /// Gets all site-lists for health authority.
+        /// Gets all sites for health authority.
         /// </summary>
-        [HttpGet("sites", Name = nameof(GetAllHealthAuthoritySiteLists))]
+        [HttpGet("sites", Name = nameof(GetAllHealthAuthoritySites))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAllHealthAuthoritySiteLists()
+        public async Task<ActionResult> GetAllHealthAuthoritySites()
         {
             return Ok(await _healthAuthoritySiteService.GetSitesAsync());
         }
