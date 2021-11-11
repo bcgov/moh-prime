@@ -14,6 +14,5 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public int? HealthAuthorityPharmanetAdministratorId { get; set; }
         public int? HealthAuthorityTechnicalSupportId { get; set; }
         public ICollection<BusinessDayViewModel> BusinessHours { get; set; }
-        public ICollection<RemoteUserViewModel> RemoteUsers { get; set; }
     }
 }
