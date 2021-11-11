@@ -12,6 +12,5 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public string AdjudicatorIdir { get; set; }
         public SiteStatusType Status { get; set; }
         public string PEC { get; set; }
-        public bool HasRemoteUsers { get; set; }
     }
 }

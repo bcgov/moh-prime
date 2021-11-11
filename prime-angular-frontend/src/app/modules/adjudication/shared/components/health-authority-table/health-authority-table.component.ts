@@ -46,7 +46,6 @@ export class HealthAuthorityTableComponent implements OnInit {
       'assignedTo',
       'state',
       'siteId',
-      'remoteUsers',
       'siteActions'
     ];
     this.assign = new EventEmitter<number>();

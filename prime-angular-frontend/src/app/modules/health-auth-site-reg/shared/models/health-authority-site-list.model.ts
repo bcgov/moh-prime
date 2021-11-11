@@ -8,5 +8,4 @@ export interface HealthAuthoritySiteList {
 	adjudicatorIdir: string;
 	status: SiteStatusType;
 	pec: string;
-	hasRemoteUsers: boolean;
 }

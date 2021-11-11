@@ -76,14 +76,6 @@
             *matCellDef="let row;"> {{ row.pec | default }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="remoteUsers">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Remote Users </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.hasRemoteUsers | yesNo: true }} </td>
-      </ng-container>
-
       <ng-container matColumnDef="haActions">
         <th mat-header-cell
             *matHeaderCellDef
