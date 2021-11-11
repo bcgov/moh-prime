@@ -47,7 +47,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService,
-    toastService: ToastService,
+    toastService: ToastService
   ) {
     super(defaultOptions,
       route,
@@ -70,9 +70,6 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       .subscribe(params => this.loadEnrollee(params.id));
 
     this.action.subscribe(() => this.loadEnrollee(+this.route.snapshot.params.id));
-
-    this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.id)
-      .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
 
     this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id)
       .subscribe(documents => this.documents = documents);
