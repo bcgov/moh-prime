@@ -154,7 +154,7 @@ namespace Prime.Services
         public async Task UpdateDeviceProviderAsync(int enrolleeId, string deviceProviderIdentifier)
         {
             var enrollee = await _context.Enrollees
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+                .SingleAsync(e => e.Id == enrolleeId);
 
             enrollee.DeviceProviderIdentifier = deviceProviderIdentifier;
 
