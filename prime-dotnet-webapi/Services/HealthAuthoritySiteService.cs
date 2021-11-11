@@ -83,7 +83,7 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<HealthAuthoritySiteListViewModel>> GetSiteListsAsync()
+        public async Task<IEnumerable<HealthAuthoritySiteListViewModel>> GetSitesAsync()
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()

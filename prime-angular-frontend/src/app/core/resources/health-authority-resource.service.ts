@@ -69,7 +69,7 @@ export class HealthAuthorityResource {
   }
 
   public getAllHealthAuthoritySiteLists(): Observable<HealthAuthoritySiteList[]> {
-    return this.apiResource.get<HealthAuthoritySiteList[]>(`health-authorities/site-lists`)
+    return this.apiResource.get<HealthAuthoritySiteList[]>(`health-authorities/sites`)
       .pipe(
         map((response: ApiHttpResponse<HealthAuthoritySiteList[]>) => response.result),
         tap((healthAuthoritySiteLists: HealthAuthoritySiteList[]) => this.logger.info('HEALTH_AUTHORITY_SITE_LISTS', healthAuthoritySiteLists)),

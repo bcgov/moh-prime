@@ -11,7 +11,7 @@ namespace Prime.Services
         Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId);
         Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel);
         Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int? healthAuthorityId = null);
-        Task<IEnumerable<HealthAuthoritySiteListViewModel>> GetSiteListsAsync();
+        Task<IEnumerable<HealthAuthoritySiteListViewModel>> GetSitesAsync();
         Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
         Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel);
         Task SetSiteCompletedAsync(int siteId);
