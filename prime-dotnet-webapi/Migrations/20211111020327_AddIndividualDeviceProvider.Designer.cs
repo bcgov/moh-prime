@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20211105194036_AddIndividualDeviceProviders")]
-    partial class AddIndividualDeviceProviders
+    [Migration("20211111020327_AddIndividualDeviceProvider")]
+    partial class AddIndividualDeviceProvider
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

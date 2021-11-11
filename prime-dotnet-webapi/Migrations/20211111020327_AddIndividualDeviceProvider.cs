@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class AddIndividualDeviceProviders : Migration
+    public partial class AddIndividualDeviceProvider : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
