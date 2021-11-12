@@ -11,7 +11,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { BusinessDayHours } from '@lib/models/business-day-hours.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
@@ -67,11 +67,11 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
     protected route: ActivatedRoute,
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
     protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
-    protected healthAuthorityResource: HealthAuthorityResource,
+    protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private fb: FormBuilder,
     router: Router,
   ) {
-    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthoritySiteResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -169,7 +169,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
 
   protected afterSubmitIsSuccessful(): void {
     const nextRoutePath = (!this.isCompleted)
-      ? HealthAuthSiteRegRoutes.REMOTE_USERS
+      ? HealthAuthSiteRegRoutes.ADMINISTRATOR
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
 
     this.routeUtils.routeRelativeTo(nextRoutePath);

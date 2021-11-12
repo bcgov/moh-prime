@@ -4,12 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
-import { DateUtils } from '@lib/utils/date-utils.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
@@ -34,7 +34,8 @@ export class SiteManagementPageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authorizedUserService: AuthorizedUserService,
-    private healthAuthorityResource: HealthAuthorityResource
+    private healthAuthorityResource: HealthAuthorityResource,
+    private healthAuthoritySiteResource: HealthAuthoritySiteResource
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -56,10 +57,6 @@ export class SiteManagementPageComponent implements OnInit {
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.VENDOR;
     this.redirectTo(healthAuthorityId, healthAuthoritySite.id, pagePath);
-  }
-
-  public viewSiteRemoteUsers(healthAuthorityId: number, healthAuthoritySiteId: number): void {
-    this.redirectTo(healthAuthorityId, healthAuthoritySiteId, HealthAuthSiteRegRoutes.REMOTE_USERS);
   }
 
   public isInComplete(healthAuthoritySite: HealthAuthoritySite): boolean {
@@ -115,7 +112,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthorityId)
       .pipe(
         map((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority),
-        exhaustMap((healthAuthority: HealthAuthority) => this.healthAuthorityResource.getHealthAuthoritySites(healthAuthority.id))
+        exhaustMap((healthAuthority: HealthAuthority) => this.healthAuthoritySiteResource.getHealthAuthoritySites(healthAuthority.id))
       )
       .subscribe((healthAuthoritySites: HealthAuthoritySite[]) => this.healthAuthoritySites = healthAuthoritySites);
   }

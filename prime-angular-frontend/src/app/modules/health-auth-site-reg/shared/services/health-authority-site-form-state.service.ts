@@ -13,7 +13,6 @@ import { SiteInformationFormState } from '@health-auth/pages/site-information-pa
 import { HealthAuthCareTypeFormState } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-form-state.class';
 import { SiteAddressFormState } from '@health-auth/pages/site-address-page/site-address-form-state.class';
 import { HoursOperationFormState } from '@health-auth/pages/hours-operation-page/hours-operation-form-state.class';
-import { RemoteUsersFormState } from '@health-auth/pages/remote-users-page/remote-users-form-state.class';
 import { AdministratorFormState } from '@health-auth/pages/administrator-page/administrator-form-state.class';
 import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-page/technical-support-form-state.class';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
@@ -36,7 +35,6 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
   public healthAuthCareTypeFormState: HealthAuthCareTypeFormState;
   public siteAddressFormState: SiteAddressFormState;
   public hoursOperationFormState: HoursOperationFormState;
-  public remoteUserFormState: RemoteUsersFormState;
   public administratorFormState: AdministratorFormState;
   public technicalSupportFormState: TechnicalSupportFormState;
 
@@ -92,7 +90,6 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     const healthAuthCareTypeFormState = this.healthAuthCareTypeFormState.json;
     const siteAddressFormState = this.siteAddressFormState.json;
     const hoursOperationFormState = this.hoursOperationFormState.json;
-    const remoteUserFormState = this.remoteUserFormState.json;
     const administratorFormState = this.administratorFormState.json;
     const technicalSupportFormState = this.technicalSupportFormState.json;
 
@@ -103,7 +100,6 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
       ...healthAuthCareTypeFormState,
       ...siteAddressFormState,
       ...hoursOperationFormState,
-      ...remoteUserFormState,
       ...administratorFormState,
       ...technicalSupportFormState
     });
@@ -120,7 +116,6 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
       this.healthAuthCareTypeFormState.form,
       this.siteAddressFormState.form,
       this.hoursOperationFormState.form,
-      this.remoteUserFormState.form,
       this.administratorFormState.form,
       this.technicalSupportFormState.form
     ];
@@ -137,7 +132,6 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     this.healthAuthCareTypeFormState = new HealthAuthCareTypeFormState(this.fb, this.healthAuthorityService);
     this.siteAddressFormState = new SiteAddressFormState(this.fb, this.formUtilsService);
     this.hoursOperationFormState = new HoursOperationFormState(this.fb);
-    this.remoteUserFormState = new RemoteUsersFormState(this.fb);
     this.administratorFormState = new AdministratorFormState(this.fb);
     this.technicalSupportFormState = new TechnicalSupportFormState(this.fb);
   }
@@ -156,7 +150,6 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     this.healthAuthCareTypeFormState.patchValue(healthAuthoritySite);
     this.siteAddressFormState.patchValue(healthAuthoritySite);
     this.hoursOperationFormState.patchValue(healthAuthoritySite);
-    this.remoteUserFormState.patchValue(healthAuthoritySite);
     this.administratorFormState.patchValue(healthAuthoritySite);
     this.technicalSupportFormState.patchValue(healthAuthoritySite);
   }

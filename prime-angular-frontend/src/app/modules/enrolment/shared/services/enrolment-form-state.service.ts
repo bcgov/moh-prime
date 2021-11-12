@@ -242,25 +242,25 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    */
 
   private convertSelfDeclarationsToJson(): SelfDeclaration[] {
-    const selfDeclarations = this.selfDeclarationForm.getRawValue();
+    const selfDeclarationsFormData = this.selfDeclarationForm.getRawValue();
     const selfDeclarationsTypes = {
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
       hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
       hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
     };
+
     return Object.keys(selfDeclarationsTypes)
       .reduce((sds: SelfDeclaration[], sd: string) => {
-        if (selfDeclarations[sd]) {
-          sds.push(
-            new SelfDeclaration(
-              selfDeclarationsTypes[sd],
-              selfDeclarations[`${sd}Details`],
-              selfDeclarations[`${sd}DocumentGuids`],
-              this.enrolleeId
-            )
-          );
-        }
+        sds.push(
+          new SelfDeclaration(
+            selfDeclarationsTypes[sd],
+            selfDeclarationsFormData[`${sd}Details`],
+            selfDeclarationsFormData[`${sd}DocumentGuids`],
+            this.enrolleeId,
+            selfDeclarationsFormData[sd]
+          )
+        );
         return sds;
       }, []);
   }

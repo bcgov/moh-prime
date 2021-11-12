@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -53,8 +53,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.initForm();
-    this.patchForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   public ngOnDestroy(): void {
@@ -73,24 +72,26 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     }
   }
 
-  protected patchForm(): void {
+  protected patchForm(): Observable<void> {
     const enrolleeId = +this.route.snapshot.params.eid;
     if (!enrolleeId) {
       throw new Error('No enrollee ID was provided');
     }
 
-    this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
-      .subscribe((enrollee: HttpEnrollee) => {
-        if (enrollee) {
-          this.enrollee = enrollee;
-          // Attempt to patch the form if not already patched
-          const { certifications, deviceProviderIdentifier } = enrollee;
-          this.isDeviceProvider = enrollee.enrolleeCareSettings.some((careSetting) =>
-            careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-          this.enableDeviceProviderValidator();
-          this.formState.patchValue({ certifications, deviceProviderIdentifier });
-        }
-      });
+    return this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+      .pipe(
+        map((enrollee: HttpEnrollee) => {
+          if (enrollee) {
+            this.enrollee = enrollee;
+            // Attempt to patch the form if not already patched
+            const { certifications, deviceProviderIdentifier } = enrollee;
+            this.isDeviceProvider = enrollee.enrolleeCareSettings.some((careSetting) =>
+              careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+            this.enableDeviceProviderValidator();
+            this.formState.patchValue({ certifications, deviceProviderIdentifier });
+          }
+        })
+      );
   }
 
   protected performSubmission(): Observable<number> {

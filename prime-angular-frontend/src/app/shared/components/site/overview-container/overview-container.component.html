@@ -72,7 +72,7 @@
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
 
-    <button *ngIf="showEditRedirect && withinRenewalPeriod"
+    <button *ngIf="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && withinRenewalPeriod"
             mat-flat-button
             color="primary"
             class="mb-4"
@@ -152,6 +152,7 @@
     <app-enrollee-property title="Country">
       {{ site?.physicalAddress?.countryCode | configCode: 'countries' | default }}
     </app-enrollee-property>
+
   </app-overview-section>
 
   <app-overview-section title="Hours of Operation"
@@ -165,6 +166,48 @@
         </ng-container>
       </app-enrollee-property>
     </ng-container>
+  </app-overview-section>
+
+  <app-overview-section *ngIf="site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER"
+                        title="Individual Device Providers"
+                        [showEditRedirect]="showEditRedirect && site.status === SiteStatusType.EDITABLE"
+                        [editRoute]="SiteRoutes.DEVICE_PROVIDER"
+                        (route)="onRouteRelative($event)">
+
+    <ng-container *ngIf="site.individualDeviceProviders?.length; else noDeviceProviders">
+      <ng-container *ngFor="let provider of site.individualDeviceProviders">
+
+        <app-enrollee-property title="First Name">
+          {{ provider.firstName | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property *ngIf="provider.middleName"
+                               title="Middle Name">
+          {{ provider.middleName | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Last Name">
+          {{ provider.lastName | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Date of Birth">
+          {{ provider.dateOfBirth | formatDate | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Email">
+          {{ provider.email | default }}
+        </app-enrollee-property>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #noDeviceProviders>
+      <app-enrollee-property title="Device Providers"
+                             [hasError]="siteErrors?.deviceProviderSite"
+                             errorMessage="Device provider sites must have at least one individual device provider">
+        None
+      </app-enrollee-property>
+    </ng-template>
+
   </app-overview-section>
 
   <app-remote-user-review [remoteUsers]="site.remoteUsers"
