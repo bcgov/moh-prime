@@ -30,7 +30,7 @@
             <input matInput
                    [formControl]="formState.pec">
             <mat-error *ngIf="formState.pec.hasError('assignable')">
-              Site ID/PEC Code has already been used by another health authority site
+              Site ID/PEC Code exists in another Health Authority
             </mat-error>
             <mat-error>Required</mat-error>
           </mat-form-field>
