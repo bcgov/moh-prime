@@ -38,5 +38,7 @@ namespace Prime.ViewModels
         public ICollection<BusinessDay> BusinessHours { get; set; }
 
         public bool ActiveBeforeRegistration { get; set; }
+
+        public IEnumerable<IndividualDeviceProviderChangeModel> IndividualDeviceProviders { get; set; }
     }
 }

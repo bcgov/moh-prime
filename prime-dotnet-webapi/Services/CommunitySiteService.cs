@@ -98,7 +98,8 @@ namespace Prime.Services
             UpdateAddress(currentSite, updatedSite);
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
-            UpdateRemoteUsers(currentSite, updatedSite);
+            UpdateRemoteUsers(currentSite, updatedSite.RemoteUsers);
+            await UpdateIndividualDeviceProviders(siteId, updatedSite.IndividualDeviceProviders);
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
@@ -194,42 +195,48 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateRemoteUsers(Site current, CommunitySiteUpdateModel updated)
+        private void UpdateRemoteUsers(Site current, IEnumerable<RemoteUser> updateRemoteUsers)
         {
-            // Wholesale replace the remote users
-            foreach (var remoteUser in current.RemoteUsers)
+            if (updateRemoteUsers == null)
             {
-                foreach (var certification in remoteUser.RemoteUserCertifications)
-                {
-                    _context.Remove(certification);
-                }
-                _context.RemoteUsers.Remove(remoteUser);
+                return;
             }
 
-            if (updated?.RemoteUsers != null && updated?.RemoteUsers.Count() != 0)
+            // All RemoteUserCertifications will be dropped and re-added, so we must set all incoming PKs/FKs to 0
+            // This can be removed when / if the updated Certs become a View Model without FKs.
+            foreach (var cert in updateRemoteUsers.SelectMany(x => x.RemoteUserCertifications))
             {
-                foreach (var remoteUser in updated.RemoteUsers)
-                {
-                    remoteUser.SiteId = current.Id;
-                    var remoteUserCertifications = new List<RemoteUserCertification>();
+                cert.Id = 0;
+                cert.RemoteUserId = 0;
+            }
 
-                    foreach (var certification in remoteUser.RemoteUserCertifications)
+            var existingUsers = current.RemoteUsers.ToDictionary(x => x.Id, x => x);
+
+            foreach (var updatedUser in updateRemoteUsers)
+            {
+                if (existingUsers.TryGetValue(updatedUser.Id, out var existing))
+                {
+                    existingUsers.Remove(updatedUser.Id);
+
+                    updatedUser.SiteId = current.Id;
+                    _context.Entry(existing).CurrentValues.SetValues(updatedUser);
+
+                    _context.RemoteUserCertifications.RemoveRange(existing.RemoteUserCertifications);
+                    foreach (var cert in updatedUser.RemoteUserCertifications)
                     {
-                        var newCertification = new RemoteUserCertification
-                        {
-                            RemoteUser = remoteUser,
-                            CollegeCode = certification.CollegeCode,
-                            LicenseNumber = certification.LicenseNumber,
-                            LicenseCode = certification.LicenseCode
-                        };
-                        _context.Entry(newCertification).State = EntityState.Added;
-                        remoteUserCertifications.Add(newCertification);
+                        cert.RemoteUserId = updatedUser.Id;
+                        _context.RemoteUserCertifications.Add(cert);
                     }
-                    remoteUser.RemoteUserCertifications = remoteUserCertifications;
-
-                    _context.Entry(remoteUser).State = EntityState.Added;
+                }
+                else
+                {
+                    updatedUser.Id = 0;
+                    updatedUser.SiteId = current.Id;
+                    _context.RemoteUsers.Add(updatedUser);
                 }
             }
+
+            _context.RemoteUsers.RemoveRange(existingUsers.Values);
         }
 
         private void UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated)
@@ -254,6 +261,26 @@ namespace Prime.Services
 
                     _context.Entry(siteVendor).State = EntityState.Added;
                 }
+            }
+        }
+
+        private async Task UpdateIndividualDeviceProviders(int siteId, IEnumerable<IndividualDeviceProviderChangeModel> updated)
+        {
+            if (updated == null)
+            {
+                return;
+            }
+
+            var currentProviders = await _context.IndividualDeviceProviders
+                .Where(p => p.CommunitySiteId == siteId)
+                .ToListAsync();
+            _context.IndividualDeviceProviders.RemoveRange(currentProviders);
+
+            foreach (var provider in updated)
+            {
+                var newModel = _mapper.Map<IndividualDeviceProvider>(provider);
+                newModel.CommunitySiteId = siteId;
+                _context.IndividualDeviceProviders.Add(newModel);
             }
         }
 
@@ -495,6 +522,14 @@ namespace Prime.Services
             return await _context.Sites
                 .AsNoTracking()
                 .AnyAsync(s => s.Id == siteId);
+        }
+
+        public async Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId)
+        {
+            return await _context.IndividualDeviceProviders
+                .Where(p => p.CommunitySiteId == siteId)
+                .ProjectTo<IndividualDeviceProviderViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         private IQueryable<CommunitySite> GetBaseSiteQuery()

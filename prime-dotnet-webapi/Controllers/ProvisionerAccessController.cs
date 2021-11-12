@@ -93,7 +93,7 @@ namespace Prime.Controllers
                 return BadRequest("The email(s) provided are not valid.");
             }
 
-            var enrollee = await _enrolleeService.GetEnrolleeNoTrackingAsync(enrolleeId);
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             if (enrollee == null)
             {
                 return NotFound("No enrollee exists for this User Id.");
@@ -110,6 +110,7 @@ namespace Prime.Controllers
             {
                 return BadRequest("The enrollee for this User Id is not in an editable state.");
             }
+
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
 
             await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
@@ -132,9 +133,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetGpid()
         {
-            var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId(), true);
-
-            return Ok(enrollee?.GPID);
+            return Ok(await _enrolleeService.GetActiveGpidAsync(User.GetPrimeUserId()));
         }
 
         // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222

@@ -1092,7 +1092,7 @@ namespace Prime.Controllers
             return Ok(notification);
         }
 
-        // DELETE: api/Enrollees/5/site-registration-notes/6/notification
+        // DELETE: api/sites/5/site-registration-notes/6/notification
         /// <summary>
         /// deletes the notification on an site registration note.
         /// </summary>
@@ -1192,6 +1192,31 @@ namespace Prime.Controllers
             }
             await _communitySiteService.UpdateSiteFlag(siteId, flagged);
             return Ok(site);
+        }
+
+        // GET: api/sites/5/individual-device-providers
+        /// <summary>
+        /// Gets the Individual Device Providers for a Device Provider Site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/individual-device-providers", Name = nameof(GetIndividualDeviceProviders))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<IndividualDeviceProviderViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetIndividualDeviceProviders(int siteId)
+        {
+            var record = await _communitySiteService.GetPermissionsRecordAsync(siteId);
+            if (record == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _communitySiteService.GetIndividualDeviceProvidersAsync(siteId));
         }
     }
 }

@@ -1,7 +1,8 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 
@@ -17,12 +18,15 @@ import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 export class PrimeEnrolmentAccessComponent implements OnInit {
   @Output() public login: EventEmitter<void>;
   public locationCode: BannerLocationCode;
+  public bcscMobileSetupUrl: string;
 
   constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private viewportService: ViewportService
   ) {
     this.login = new EventEmitter<void>();
     this.locationCode = BannerLocationCode.ENROLMENT_LANDING_PAGE;
+    this.bcscMobileSetupUrl = config.bcscMobileSetupUrl;
   }
 
   public get isMobile(): boolean {
