@@ -11,7 +11,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { Role } from '@auth/shared/enum/role.enum';
 
-import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 
 @Component({
   selector: 'app-health-authority-table',

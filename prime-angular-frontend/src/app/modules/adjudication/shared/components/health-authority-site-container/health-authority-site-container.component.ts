@@ -8,7 +8,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Site } from '@registration/shared/models/site.model';
-import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
 @Component({

@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
+import { AuthorizedUserResource } from '@core/resources/authorized-user-resource.service';
+// TODO move to @lib when less PRs are open
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
-import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
+import { HealthAuthoritySiteList } from '@health-auth/shared/models/health-authority-site-list.model';
+import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 
 @Component({
   selector: 'app-site-management-page',
@@ -25,8 +24,8 @@ import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
-  public healthAuthority: HealthAuthority;
-  public healthAuthoritySites: HealthAuthoritySiteAdminList[];
+  public healthAuthorityId: number;
+  public healthAuthoritySites$: Observable<HealthAuthoritySiteList[] | null>;
   public routeUtils: RouteUtils;
   public HealthAuthorityEnum = HealthAuthorityEnum;
   public SiteStatusType = SiteStatusType;
@@ -35,8 +34,7 @@ export class SiteManagementPageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authorizedUserService: AuthorizedUserService,
-    private healthAuthorityResource: HealthAuthorityResource,
-    private healthAuthoritySiteResource: HealthAuthoritySiteResource
+    private authorizedUserResource: AuthorizedUserResource
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -60,30 +58,6 @@ export class SiteManagementPageComponent implements OnInit {
     this.redirectTo(healthAuthorityId, healthAuthoritySite.id, pagePath);
   }
 
-  public isInComplete(healthAuthoritySite: HealthAuthoritySite): boolean {
-    return !healthAuthoritySite.submittedDate || (
-      healthAuthoritySite.submittedDate &&
-      !healthAuthoritySite.approvedDate &&
-      healthAuthoritySite.status === SiteStatusType.EDITABLE
-    );
-  }
-
-  public isInReview(healthAuthoritySite: HealthAuthoritySite): boolean {
-    return healthAuthoritySite.submittedDate && healthAuthoritySite.status === SiteStatusType.IN_REVIEW;
-  }
-
-  public isLocked(healthAuthoritySite: HealthAuthoritySite): boolean {
-    return healthAuthoritySite.status === SiteStatusType.LOCKED;
-  }
-
-  public isApproved(healthAuthoritySite: HealthAuthoritySite): boolean {
-    return healthAuthoritySite.status === SiteStatusType.EDITABLE && !!healthAuthoritySite.approvedDate;
-  }
-
-  public requiresRenewal(healthAuthoritySite: HealthAuthoritySite): boolean {
-    return healthAuthoritySite.withinRenewalPeriod();
-  }
-
   public getApprovedSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
     return {
       icon: 'task_alt',
@@ -96,7 +70,7 @@ export class SiteManagementPageComponent implements OnInit {
       icon: 'notification_important',
       text: 'This site requires renewal.',
       label: 'Renew Site',
-      route: () => this.viewSite(this.healthAuthority.id, healthAuthoritySite)
+      route: () => this.viewSite(this.healthAuthorityId, healthAuthoritySite)
     };
   }
 
@@ -105,17 +79,8 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.getHealthAuthorities();
-  }
-
-  private getHealthAuthorities(): void {
-    const healthAuthorityId = this.authorizedUserService.authorizedUser.healthAuthorityCode;
-    this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthorityId)
-      .pipe(
-        map((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority),
-        exhaustMap((healthAuthority: HealthAuthority) => this.healthAuthoritySiteResource.getHealthAuthorityAdminSites(healthAuthority.id))
-      )
-      .subscribe((healthAuthoritySites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = healthAuthoritySites);
+    this.healthAuthorityId = this.authorizedUserService.authorizedUser.healthAuthorityCode;
+    this.healthAuthoritySites$ = this.authorizedUserResource.getAuthorizedUserSites(this.healthAuthorityId);
   }
 
   private redirectTo(healthAuthorityId: number, healthAuthoritySiteId: number, pagePath: string): void {

@@ -17,7 +17,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
-import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 
 @Injectable({
   providedIn: 'root'

@@ -6,7 +6,7 @@ import { SiteAdjudicationAction } from '@lib/enums/site-adjudication-action.enum
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
-import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 
 @Component({

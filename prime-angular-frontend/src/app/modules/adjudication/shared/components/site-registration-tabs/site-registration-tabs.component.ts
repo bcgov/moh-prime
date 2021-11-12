@@ -27,7 +27,7 @@ import {
   OrganizationSearchListViewModel
 } from '@registration/shared/models/site-registration.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
