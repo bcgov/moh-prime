@@ -40,7 +40,6 @@ export interface HttpEnrollee extends Enrollee {
   previousStatus: EnrolmentStatus;
   currentTOAStatus: string;
   assignedTOAType: number;
-  hasNewestAgreement: boolean;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
   accessAgreementNote: EnrolleeNote;
@@ -52,6 +51,7 @@ export interface HttpEnrollee extends Enrollee {
   alwaysManual: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
+  adjudicatorIdir: string;
   base64QRCode: string;
   gpid: string;
   requiresConfirmation: boolean;
@@ -94,7 +94,6 @@ export interface Enrolment {
   previousStatus: EnrolmentStatus;
   currentTOAStatus: string;
   assignedTOAType: number;
-  hasNewestAgreement: boolean;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
   accessAgreementNote: EnrolleeNote;
@@ -106,6 +105,7 @@ export interface Enrolment {
   alwaysManual: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
+  adjudicatorIdir: string;
   base64QRCode: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
@@ -126,7 +126,6 @@ export interface EnrolleeListViewModel {
   currentTOAStatus: string;
   assignedTOAType: number;
   previousStatus: EnrolmentStatus;
-  hasNewestAgreement: boolean;
   adjudicatorIdir: string;
   alwaysManual: boolean;
   remoteAccess: boolean;

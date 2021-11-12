@@ -17,6 +17,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { OrgBookAutocompleteHttpResponse } from '@registration/shared/models/orgbook.model';

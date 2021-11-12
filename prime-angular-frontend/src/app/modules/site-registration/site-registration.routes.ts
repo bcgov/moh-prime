@@ -24,6 +24,7 @@ export class SiteRoutes {
   public static BUSINESS_LICENCE = 'business-licence';
   public static SITE_ADDRESS = 'site-address';
   public static HOURS_OPERATION = 'hours-operation';
+  public static DEVICE_PROVIDER = 'device-provider';
   public static ADMINISTRATOR = 'site-administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
   public static TECHNICAL_SUPPORT = 'technical-support';
@@ -67,7 +68,6 @@ export class SiteRoutes {
     return [
       this.COLLECTION_NOTICE,
       this.ORGANIZATION_SIGNING_AUTHORITY,
-      this.ORGANIZATION_CLAIM,
       this.ORGANIZATION_NAME
     ];
   }
@@ -79,6 +79,7 @@ export class SiteRoutes {
       this.BUSINESS_LICENCE,
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
+      this.DEVICE_PROVIDER,
       this.REMOTE_USERS,
       this.ADMINISTRATOR,
       this.PRIVACY_OFFICER,

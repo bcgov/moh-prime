@@ -4847,6 +4847,53 @@ namespace Prime.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Prime.Models.IndividualDeviceProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("CommunitySiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunitySiteId");
+
+                    b.ToTable("IndividualDeviceProvider");
+                });
+
             modelBuilder.Entity("Prime.Models.Job", b =>
                 {
                     b.Property<int>("Id")
@@ -6125,7 +6172,8 @@ namespace Prime.Migrations
 
                     b.HasIndex("PharmacyId");
 
-                    b.HasIndex("TransactionId");
+                    b.HasIndex("TransactionId")
+                        .IsUnique();
 
                     b.HasIndex("TxDateTime");
 
@@ -10962,6 +11010,17 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.Navigation("Enrollee");
+                });
+
+            modelBuilder.Entity("Prime.Models.IndividualDeviceProvider", b =>
+                {
+                    b.HasOne("Prime.Models.CommunitySite", "CommunitySite")
+                        .WithMany()
+                        .HasForeignKey("CommunitySiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CommunitySite");
                 });
 
             modelBuilder.Entity("Prime.Models.Job", b =>

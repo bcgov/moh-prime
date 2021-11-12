@@ -275,7 +275,7 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // HEAD: api/Enrollees/paper-submissions?dateOfBirth=1977-09-22
+        // HEAD: api/enrollees/paper-submissions?dateOfBirth=1977-09-22
         /// <summary>
         /// Checks if there are any unclaimed paper Enrollees submissions with the supplied date of birth.
         /// </summary>
@@ -296,7 +296,7 @@ namespace Prime.Controllers
             return NotFound();
         }
 
-        // PUT: api/Enrollees/5/linked-gpid
+        // PUT: api/enrollees/5/linked-gpid
         /// <summary>
         /// User supplied GPID to match with a previously submitted Paper Enrolment.
         /// Cannot set a linked GPID on Paper Submissions or on Enrollees already linked to a Paper Submission.
@@ -328,7 +328,7 @@ namespace Prime.Controllers
             return Conflict($"Could not create/update linked GPID. Enrollee with id {enrolleeId} is either a Paper Submission or is already linked to a Paper Submission.");
         }
 
-        // GET: api/Enrollees/5/linked-gpid
+        // GET: api/enrollees/5/linked-gpid
         /// <summary>
         /// Gets the linked GPID
         /// </summary>

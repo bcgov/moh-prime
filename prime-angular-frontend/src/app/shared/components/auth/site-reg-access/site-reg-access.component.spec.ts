@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { SiteRegAccessComponent } from './site-reg-access.component';
 
 describe('SiteRegAccessComponent', () => {
@@ -8,7 +9,13 @@ describe('SiteRegAccessComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SiteRegAccessComponent ]
+      declarations: [SiteRegAccessComponent],
+      providers: [
+        { 
+          provide: APP_CONFIG, 
+          useValue: AppConfig 
+        }
+      ]
     })
     .compileComponents();
   });

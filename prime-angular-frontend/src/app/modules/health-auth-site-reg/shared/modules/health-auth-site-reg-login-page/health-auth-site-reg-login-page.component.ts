@@ -27,6 +27,10 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
   }
 
   public onLogin(type: SiteRegistrationTypeEnum) {
+    if (this.disableLogin) {
+      return;
+    }
+
     // Route to COLLECTION_NOTICE which determines the direction of routing
     const redirectRoute = HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.COLLECTION_NOTICE);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
