@@ -1,14 +1,14 @@
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { MatDialog } from '@angular/material/dialog';
+import { concat, EMPTY, noop, of, Subscription } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
+
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
-import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { EmailUtils } from '@lib/utils/email-utils.class';
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
-import { Site } from '@registration/shared/models/site.model';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
+
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { AssignAction, AssignActionEnum, ClaimNoteComponent, ClaimType } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
@@ -16,10 +16,11 @@ import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manu
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
-import { concat, EMPTY, noop, of, Subscription } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { Site } from '@registration/shared/models/site.model';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
 
 export abstract class AbstractSiteAdminPage {

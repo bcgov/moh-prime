@@ -43,24 +43,7 @@ export class HealthAuthoritySiteResource {
       );
   }
 
-  // TODO doesn't contain business hours or remote users and will need typing adjusted
-  // public getHealthAuthoritySites(healthAuthId: HealthAuthorityEnum): Observable<HealthAuthoritySite[]> {
-  //   return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/${healthAuthId}/sites`)
-  //     .pipe(
-  //       map((response: ApiHttpResponse<HealthAuthoritySite[]>) => response.result),
-  //       map((healthAuthoritySiteDtos: HealthAuthoritySiteDto[]) =>
-  //         healthAuthoritySiteDtos.map(hasd => HealthAuthoritySite.toHealthAuthoritySite(hasd))
-  //       ),
-  //       tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
-  //       catchError((error: any) => {
-  //         this.toastService.openErrorToast('Health authority sites could not be retrieved');
-  //         this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySites error has occurred: ', error);
-  //         throw error;
-  //       })
-  //     );
-  // }
-
-  public getHealthAuthoritySites(healthAuthId: HealthAuthorityEnum, healthAuthoritySiteId: number = null): Observable<HealthAuthoritySiteAdminList[]> {
+  public getHealthAuthorityAdminSites(healthAuthId: HealthAuthorityEnum, healthAuthoritySiteId: number = null): Observable<HealthAuthoritySiteAdminList[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ healthAuthoritySiteId });
     return this.apiResource.get<HealthAuthoritySiteAdminList[]>(`health-authorities/${healthAuthId}/sites`, params)
       .pipe(
@@ -68,7 +51,7 @@ export class HealthAuthoritySiteResource {
         tap((healthAuthoritySites: HealthAuthoritySiteAdminList[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority sites could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySites error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityAdminSites error has occurred: ', error);
           throw error;
         })
       );

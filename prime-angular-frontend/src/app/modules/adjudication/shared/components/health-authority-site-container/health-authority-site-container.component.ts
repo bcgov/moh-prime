@@ -21,7 +21,7 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
   @Input() public actions: TemplateRef<any>;
   @Input() public hasActions: boolean;
 
-  public healthAuthoritySites: HealthAuthoritySiteAdminList[];
+  public healthAuthoritySite: HealthAuthoritySiteAdminList;
 
   constructor(
     protected route: ActivatedRoute,
@@ -46,11 +46,15 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
 
   protected getDataset(): void {
     this.busy = this.healthAuthSiteResource
-      .getHealthAuthoritySites(this.route.snapshot.params.haid, this.route.snapshot.params.sid)
-      .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = sites);
+      .getHealthAuthorityAdminSites(this.route.snapshot.params.haid, this.route.snapshot.params.sid)
+      .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySite = sites[0]);
   }
   protected updateSite(updatedSite: Site): void {
-    throw new Error('Method not implemented.');
+    const updateHASite = {
+      ...this.healthAuthoritySite,
+      ...updatedSite
+    };
+    this.healthAuthoritySite = updateHASite;
   }
 
 }

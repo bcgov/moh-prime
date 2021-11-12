@@ -5,7 +5,7 @@
 
   <ng-content select="app-page-subheader"></ng-content>
 
-  <app-health-authority-table [sites]="healthAuthoritySites"
+  <app-health-authority-table [sites]="healthAuthoritySite ? [healthAuthoritySite] : []"
                               [showHealthAuthorities]="false"
                               (assign)="onAssign($event)"
                               (reassign)="onReassign($event)"
@@ -18,7 +18,7 @@
       <div class="col py-5">
 
         <ng-container [ngTemplateOutlet]="content"
-                      [ngTemplateOutletContext]="{ siteRegistration: healthAuthoritySites?.[0] }"></ng-container>
+                      [ngTemplateOutletContext]="{ siteRegistration: healthAuthoritySite }"></ng-container>
 
       </div>
       <div *ngIf="hasActions"
@@ -27,13 +27,13 @@
         <ng-container *ngIf="actions; else defaultActions">
 
           <ng-container [ngTemplateOutlet]="actions"
-                        [ngTemplateOutletContext]="{ siteRegistration: healthAuthoritySites?.[0] }"></ng-container>
+                        [ngTemplateOutletContext]="{ siteRegistration: healthAuthoritySite }"></ng-container>
 
         </ng-container>
 
         <ng-template #defaultActions>
 
-          <app-site-registration-actions [siteRegistration]="healthAuthoritySites?.[0]"
+          <app-site-registration-actions [siteRegistration]="healthAuthoritySite"
                                          (approve)="onApprove($event)"
                                          (decline)="onDecline($event)"
                                          (escalate)="onEscalate($event)"

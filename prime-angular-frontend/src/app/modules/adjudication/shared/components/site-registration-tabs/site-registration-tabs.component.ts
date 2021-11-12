@@ -7,8 +7,6 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Subscription, Observable, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
-import { EmailUtils } from '@lib/utils/email-utils.class';
-import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';

@@ -94,7 +94,7 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteListViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteAdminListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAllHealthAuthoritySites()
         {
             return Ok(await _healthAuthoritySiteService.GetSitesAsync());

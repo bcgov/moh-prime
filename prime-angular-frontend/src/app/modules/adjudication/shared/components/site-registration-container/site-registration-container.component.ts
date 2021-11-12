@@ -465,7 +465,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       approvedDate,
       careSettingCode,
       siteVendors,
-      remoteUserCount: remoteUsers.length,
+      remoteUserCount: remoteUsers?.length,
       adjudicatorIdir: adjudicator?.idir,
       pec,
       status,

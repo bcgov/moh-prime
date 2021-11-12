@@ -12,7 +12,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public HealthAuthoritySiteMappingProfile()
         {
             CreateMap<HealthAuthoritySite, HealthAuthoritySiteViewModel>();
-            CreateMap<HealthAuthoritySite, HealthAuthoritySiteListViewModel>()
+            CreateMap<HealthAuthoritySite, HealthAuthoritySiteAdminListViewModel>()
                 .ForMember(dest => dest.AuthorizedUserName, opt => opt.MapFrom(src => src.AuthorizedUser.Party.FirstName + " " + src.AuthorizedUser.Party.LastName))
                 .ForMember(dest => dest.AuthorizedUserEmail, opt => opt.MapFrom(src => src.AuthorizedUser.Party.Email))
                 .ForMember(dest => dest.HealthAuthorityName, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.Name));

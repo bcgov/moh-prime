@@ -113,7 +113,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthorityId)
       .pipe(
         map((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority),
-        exhaustMap((healthAuthority: HealthAuthority) => this.healthAuthoritySiteResource.getHealthAuthoritySites(healthAuthority.id))
+        exhaustMap((healthAuthority: HealthAuthority) => this.healthAuthoritySiteResource.getHealthAuthorityAdminSites(healthAuthority.id))
       )
       .subscribe((healthAuthoritySites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = healthAuthoritySites);
   }

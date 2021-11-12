@@ -1,11 +1,9 @@
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using DelegateDecompiler.EntityFrameworkCore;
 using Prime.HttpClients;
@@ -368,135 +366,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes)
-        {
-            return await _context.BusinessEvents
-                .Include(e => e.Admin)
-                .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
-                .Where(e => e.SiteId == siteId
-                        || e.Organization.Sites.Any(s => s.Id == siteId))
-                .OrderByDescending(e => e.EventDate)
-                .ToListAsync();
-        }
-
-        public async Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId)
-        {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SiteAdjudicationDocuments);
-            if (string.IsNullOrWhiteSpace(filename))
-            {
-                return null;
-            }
-
-            var document = new SiteAdjudicationDocument
-            {
-                DocumentGuid = documentGuid,
-                SiteId = siteId,
-                Filename = filename,
-                UploadedDate = DateTimeOffset.Now,
-                AdjudicatorId = adminId
-            };
-            _context.SiteAdjudicationDocuments.Add(document);
-
-            await _context.SaveChangesAsync();
-
-            return document;
-        }
-
-        public async Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId)
-        {
-            return await _context.SiteAdjudicationDocuments
-                .Where(bl => bl.SiteId == siteId)
-                .Include(bl => bl.Adjudicator)
-                .OrderByDescending(bl => bl.UploadedDate)
-                .ToListAsync();
-        }
-
-        public async Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId)
-        {
-            return await _context.SiteAdjudicationDocuments
-                .SingleOrDefaultAsync(d => d.Id == documentId);
-        }
-
-        public async Task DeleteSiteAdjudicationDocumentAsync(int documentId)
-        {
-            var document = await _context.SiteAdjudicationDocuments
-                .SingleOrDefaultAsync(d => d.Id == documentId);
-            if (document == null)
-            {
-                return;
-            }
-            _context.SiteAdjudicationDocuments.Remove(document);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<SiteNotification> CreateSiteNotificationAsync(int siteRegistrationNoteId, int adminId, int assineeId)
-        {
-            var notification = new SiteNotification
-            {
-                SiteRegistrationNoteId = siteRegistrationNoteId,
-                AdminId = adminId,
-                AssigneeId = assineeId
-            };
-
-            _context.SiteNotifications.Add(notification);
-
-            await _context.SaveChangesAsync();
-
-            return notification;
-        }
-
-        public async Task RemoveSiteNotificationAsync(int siteNotificationId)
-        {
-            var notification = await _context.SiteNotifications
-                .SingleOrDefaultAsync(se => se.Id == siteNotificationId);
-            if (notification == null)
-            {
-                return;
-            }
-            _context.SiteNotifications.Remove(notification);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetNotificationsAsync(int siteId, int adminId)
-        {
-            return await _context.SiteRegistrationNotes
-                .Include(n => n.Adjudicator)
-                .Include(n => n.SiteNotification)
-                    .ThenInclude(ee => ee.Admin)
-                .Where(n => n.SiteId == siteId)
-                .Where(n => n.SiteNotification != null && n.SiteNotification.AssigneeId == adminId)
-                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
-
-        public async Task RemoveNotificationsAsync(int siteId)
-        {
-            var notifications = await _context.SiteNotifications
-                .Where(en => en.SiteRegistrationNote.SiteId == siteId)
-                .ToListAsync();
-
-            _context.SiteNotifications.RemoveRange(notifications);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateSiteFlag(int siteId, bool flagged)
-        {
-            var site = await _context.Sites
-                .SingleAsync(s => s.Id == siteId);
-
-            site.Flagged = flagged;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user)
-        {
-            return await _context.SiteRegistrationNotes
-                .Where(en => en.SiteNotification != null && en.SiteNotification.Assignee.UserId == user.GetPrimeUserId())
-                .Select(en => en.SiteId)
-                .ToListAsync();
-        }
-
-        public async Task<bool> SiteExists(int siteId)
+        public async Task<bool> SiteExistsAsync(int siteId)
         {
             return await _context.Sites
                 .AsNoTracking()

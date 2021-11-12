@@ -604,14 +604,14 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<SiteAdjudicationDocument>), StatusCodes.Status200OK)]
         public async Task<ActionResult> CreateSiteAdjudicationDocument(int siteId, [FromQuery] Guid documentGuid)
         {
-            if (!await _communitySiteService.SiteExists(siteId))
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
-            var document = await _communitySiteService.AddSiteAdjudicationDocumentAsync(siteId, documentGuid, admin.Id);
+            var document = await _siteService.AddSiteAdjudicationDocumentAsync(siteId, documentGuid, admin.Id);
             if (document == null)
             {
                 return BadRequest("Site Adjudication Document could not be created; network error or upload is already submitted");
@@ -633,12 +633,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<SiteAdjudicationDocument>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSiteAdjudicationDocuments(int siteId)
         {
-            if (!await _communitySiteService.SiteExists(siteId))
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var documents = await _communitySiteService.GetSiteAdjudicationDocumentsAsync(siteId);
+            var documents = await _siteService.GetSiteAdjudicationDocumentsAsync(siteId);
 
             return Ok(documents);
         }
@@ -657,7 +657,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSiteAdjudicationDocument(int siteId, int documentId)
         {
-            if (!await _communitySiteService.SiteExists(siteId))
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
@@ -682,7 +682,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
         public async Task<ActionResult> PecAssignable(int siteId, string pec)
         {
-            var site = await _communitySiteService.GetSiteAsync(siteId);
+            var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
                 return NotFound($"Site not found with id {siteId}");
@@ -706,6 +706,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="pecCode"></param>
         [HttpPut("{siteId}/pec", Name = nameof(UpdatePecCode))]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -713,19 +714,13 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdatePecCode(int siteId, FromBodyText pecCode)
         {
-            if (string.IsNullOrWhiteSpace(pecCode))
-            {
-                return BadRequest("PEC Code was not provided");
-            }
-
-            var record = await _communitySiteService.GetPermissionsRecordAsync(siteId);
-            if (record == null)
+            if (await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!record.AccessableBy(User))
+            if (string.IsNullOrWhiteSpace(pecCode))
             {
-                return Forbid();
+                return BadRequest("PEC Code was not provided");
             }
 
             if (!await _siteService.PecAssignableAsync(siteId, pecCode))
@@ -815,7 +810,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendSiteReviewedNotificationEmail(int siteId, FromBodyText note)
         {
-            if (!await _communitySiteService.SiteExists(siteId))
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
@@ -837,7 +832,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> ApproveSite(int siteId)
         {
-            var site = await _communitySiteService.GetSiteAsync(siteId);
+            var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
                 return NotFound($"Site not found with id {siteId}");
@@ -848,19 +843,27 @@ namespace Prime.Controllers
             }
 
             var updatedSite = await _siteService.ApproveSite(siteId);
-            if (site.ActiveBeforeRegistration)
+
+            // TODO: This is the only difference in path between Community Site and Health Authority Site
+            if (await _communitySiteService.SiteExistsAsync(siteId))
             {
-                await _emailService.SendSiteActiveBeforeRegistrationAsync(site.Id, site.Organization.SigningAuthority.Email);
+                var communitySite = await _communitySiteService.GetSiteAsync(siteId);
+
+                if (communitySite.ActiveBeforeRegistration)
+                {
+                    await _emailService.SendSiteActiveBeforeRegistrationAsync(site.Id);
+                }
+                else
+                {
+                    await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(communitySite);
+                    await _emailService.SendSiteApprovedSigningAuthorityAsync(communitySite);
+                }
+                await _emailService.SendSiteApprovedHIBCAsync(communitySite);
+
+                var remoteUsersToNotify = site.RemoteUsers.Where(ru => !ru.Notified);
+                await _emailService.SendRemoteUserNotificationsAsync(communitySite, remoteUsersToNotify);
+                await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
             }
-            else
-            {
-                await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(site);
-                await _emailService.SendSiteApprovedSigningAuthorityAsync(site);
-            }
-            await _emailService.SendSiteApprovedHIBCAsync(site);
-            var remoteUsersToNotify = site.RemoteUsers.Where(ru => !ru.Notified);
-            await _emailService.SendRemoteUserNotificationsAsync(site, remoteUsersToNotify);
-            await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
 
             return Ok(updatedSite);
         }
@@ -878,7 +881,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> DeclineSite(int siteId)
         {
-            var site = await _communitySiteService.GetSiteAsync(siteId);
+            var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
                 return NotFound($"Site not found with id {siteId}");
@@ -905,7 +908,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
         public async Task<ActionResult> EnableEditingSite(int siteId)
         {
-            var site = await _communitySiteService.GetSiteAsync(siteId);
+            var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
                 return NotFound($"Site not found with id {siteId}");
@@ -932,7 +935,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
         public async Task<ActionResult> UnrejectSite(int siteId)
         {
-            var site = await _communitySiteService.GetSiteAsync(siteId);
+            var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
                 return NotFound($"Site not found with id {siteId}");
@@ -966,7 +969,7 @@ namespace Prime.Controllers
                 return BadRequest("site registration notes can't be null or empty.");
             }
 
-            if (!await _communitySiteService.SiteExists(siteId))
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
@@ -991,8 +994,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSiteRegistrationNotes(int siteId)
         {
-            var site = await _communitySiteService.GetSiteAsync(siteId);
-            if (site == null)
+            if (await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
@@ -1031,12 +1033,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessEvent>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSiteBusinessEvents(int siteId, [FromQuery] IEnumerable<int> businessEventTypeCodes)
         {
-            if (!await _communitySiteService.SiteExists(siteId))
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var events = await _communitySiteService.GetSiteBusinessEventsAsync(siteId, businessEventTypeCodes);
+            var events = await _siteService.GetSiteBusinessEventsAsync(siteId, businessEventTypeCodes);
 
             return Ok(events);
         }
@@ -1054,13 +1056,13 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> DeleteSiteAdjudicationDocument(int documentId)
         {
-            var document = await _communitySiteService.GetSiteAdjudicationDocumentAsync(documentId);
+            var document = await _siteService.GetSiteAdjudicationDocumentAsync(documentId);
             if (document == null)
             {
                 return NotFound($"Document not found with id {documentId}");
             }
 
-            await _communitySiteService.DeleteSiteAdjudicationDocumentAsync(documentId);
+            await _siteService.DeleteSiteAdjudicationDocumentAsync(documentId);
 
             return Ok(document);
         }
@@ -1080,7 +1082,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<SiteNotification>), StatusCodes.Status200OK)]
         public async Task<ActionResult> CreateSiteNotification(int siteId, int siteRegistrationNoteId, FromBodyData<int> assigneeId)
         {
-            if (!await _communitySiteService.SiteExists(siteId))
+            if (await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
@@ -1092,7 +1094,7 @@ namespace Prime.Controllers
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
-            var notification = await _communitySiteService.CreateSiteNotificationAsync(note.Id, admin.Id, assigneeId);
+            var notification = await _siteService.CreateSiteNotificationAsync(note.Id, admin.Id, assigneeId);
 
             return Ok(notification);
         }
@@ -1111,7 +1113,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult> DeleteSiteNotification(int siteId, int siteRegistrationNoteId)
         {
-            if (!await _communitySiteService.SiteExists(siteId))
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
@@ -1122,7 +1124,7 @@ namespace Prime.Controllers
                 return NotFound($"Site Registration Note with notification not found with id {siteRegistrationNoteId}");
             }
 
-            await _communitySiteService.RemoveSiteNotificationAsync(note.SiteNotification.Id);
+            await _siteService.RemoveSiteNotificationAsync(note.SiteNotification.Id);
 
             return Ok();
         }
@@ -1140,14 +1142,14 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<SiteRegistrationNoteViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSiteNotifications(int siteId)
         {
-            if (!await _communitySiteService.SiteExists(siteId))
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
-            var notes = await _communitySiteService.GetNotificationsAsync(siteId, admin.Id);
+            var notes = await _siteService.GetNotificationsAsync(siteId, admin.Id);
 
             return Ok(notes);
         }
@@ -1165,12 +1167,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult> DeleteSiteNotifications(int siteId)
         {
-            if (!await _communitySiteService.SiteExists(siteId))
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            await _communitySiteService.RemoveNotificationsAsync(siteId);
+            await _siteService.RemoveNotificationsAsync(siteId);
 
             return Ok();
         }
@@ -1190,12 +1192,13 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult> FlagSite(int siteId, FromBodyData<bool> flagged)
         {
-            var site = await _communitySiteService.GetSiteAsync(siteId);
+            var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            await _communitySiteService.UpdateSiteFlag(siteId, flagged);
+
+            await _siteService.UpdateSiteFlag(siteId, flagged);
             return Ok(site);
         }
     }

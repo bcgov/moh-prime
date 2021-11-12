@@ -28,6 +28,7 @@ namespace Prime.Controllers
         private readonly IOrganizationAgreementService _organizationAgreementService;
         private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IOrganizationService _organizationService;
+        private readonly ISiteService _siteService;
         private readonly IPartyService _partyService;
 
 
@@ -40,6 +41,7 @@ namespace Prime.Controllers
             IOrganizationAgreementService organizationAgreementService,
             IOrganizationClaimService organizationClaimService,
             IOrganizationService organizationService,
+            ISiteService siteService,
             IPartyService partyService)
         {
             _adminService = adminService;
@@ -50,6 +52,7 @@ namespace Prime.Controllers
             _organizationAgreementService = organizationAgreementService;
             _organizationClaimService = organizationClaimService;
             _organizationService = organizationService;
+            _siteService = siteService;
             _partyService = partyService;
         }
 
@@ -66,7 +69,7 @@ namespace Prime.Controllers
         {
             var organizations = await _organizationService.GetOrganizationsAsync(search);
 
-            var notifiedIds = await _communitySiteService.GetNotifiedSiteIdsForAdminAsync(User);
+            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
             foreach (var site in organizations.Select(o => o.Organization).SelectMany(o => o.Sites))
             {
                 site.HasNotification = notifiedIds.Contains(site.Id);

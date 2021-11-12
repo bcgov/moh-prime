@@ -180,16 +180,19 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteActiveBeforeRegistrationAsync(int siteId, string signingAuthorityEmail)
+        public async Task SendSiteActiveBeforeRegistrationAsync(int siteId)
         {
-            var viewModel = await _context.Sites
+            var dto = await _context.Sites
             .Where(s => s.Id == siteId)
             .Select(s => new SiteActiveBeforeRegistrationEmailViewModel
             {
-                Pec = s.PEC
+                Pec = s.PEC,
             })
             .SingleAsync();
-            var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(signingAuthorityEmail, viewModel);
+
+            string emailAddress = await GetSiteEmailAddressAsync(siteId);
+
+            var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(emailAddress, dto);
             await Send(email);
         }
 
@@ -317,6 +320,22 @@ namespace Prime.Services
             _context.EmailLogs.Add(EmailLog.FromEmail(email, sendType, msgId));
 
             await _context.SaveChangesAsync();
+        }
+        private async Task<string> GetSiteEmailAddressAsync(int siteId)
+        {
+            var careSettingCode = await _context.Sites
+            .Where(s => s.Id == siteId)
+            .Select(s => s.CareSettingCode)
+            .SingleAsync();
+
+            string emailAddress;
+            if ((CareSettingType)careSettingCode == CareSettingType.HealthAuthority)
+            {
+                return await _context.CommunitySites.Where(s => s.Id == siteId).Select(s => s.Organization.SigningAuthority.Email).SingleAsync();
+            }
+
+            return emailAddress = await _context.HealthAuthoritySites.Where(s => s.Id == siteId).Select(s => s.AuthorizedUser.Party.Email).SingleAsync();
+
         }
     }
 }
