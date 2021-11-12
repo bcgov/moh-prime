@@ -6,7 +6,6 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { BusinessDay } from '@lib/models/business-day.model';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
-import { RemoteUser } from '@lib/models/remote-user.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
@@ -34,7 +33,7 @@ export class HealthAuthoritySiteResource {
         tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTH_SITE', healthAuthoritySite)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be created');
-          this.logger.error('[Core] HealthAuthorityResource::createHealthAuthoritySite error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthoritySiteResource::createHealthAuthoritySite error has occurred: ', error);
           throw error;
         })
       );
@@ -51,7 +50,7 @@ export class HealthAuthoritySiteResource {
         tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority sites could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySites error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthoritySiteResource::getHealthAuthoritySites error has occurred: ', error);
           throw error;
         })
       );
@@ -82,7 +81,7 @@ export class HealthAuthoritySiteResource {
           }
 
           this.toastService.openErrorToast('Health authority site could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteById error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthoritySiteResource::getHealthAuthoritySiteById error has occurred: ', error);
           throw error;
         })
       );
@@ -105,7 +104,7 @@ export class HealthAuthoritySiteResource {
         ]),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site contacts could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteContacts error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthoritySiteResource::getHealthAuthoritySiteContacts error has occurred: ', error);
           throw error;
         })
       );
@@ -119,7 +118,7 @@ export class HealthAuthoritySiteResource {
         NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySite error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthoritySiteResource::updateHealthAuthoritySite error has occurred: ', error);
           throw error;
         })
       );
@@ -136,7 +135,7 @@ export class HealthAuthoritySiteResource {
         NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be marked as completed');
-          this.logger.error('[Core] HealthAuthorityResource::healthAuthoritySiteCompleted error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthoritySiteResource::setHealthAuthoritySiteCompleted error has occurred: ', error);
           throw error;
         })
       );
@@ -154,7 +153,7 @@ export class HealthAuthoritySiteResource {
         NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be submitted');
-          this.logger.error('[Core] HealthAuthorityResource::healthAuthoritySiteSubmit error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthoritySiteResource::healthAuthoritySiteSubmit error has occurred: ', error);
           throw error;
         })
       );

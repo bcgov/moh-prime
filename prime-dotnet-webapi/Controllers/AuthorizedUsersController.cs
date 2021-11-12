@@ -17,21 +17,15 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/parties/authorized-users")]
     [ApiController]
-    // [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class AuthorizedUsersController : PrimeControllerBase
     {
         private readonly IAuthorizedUserService _authorizedUserService;
-        private readonly IMapper _mapper;
-        private readonly IOrganizationService _organizationService;
 
         public AuthorizedUsersController(
-            IAuthorizedUserService authorizedUserService,
-            IMapper mapper,
-            IOrganizationService organizationService)
+            IAuthorizedUserService authorizedUserService)
         {
             _authorizedUserService = authorizedUserService;
-            _mapper = mapper;
-            _organizationService = organizationService;
         }
 
         // GET: api/parties/authorized-users/5fdd17a6-1797-47a4-97b7-5b27949dd614
@@ -101,10 +95,10 @@ namespace Prime.Controllers
             {
                 return NotFound($"Authorized user not found with id {authorizedUserId}");
             }
-            // if (!authorizedUser.PermissionsRecord().AccessableBy(User))
-            // {
-            //     return Forbid();
-            // }
+            if (!authorizedUser.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
 
             var healthAuthoritySites = await _authorizedUserService.GetAuthorizedUserSitesAsync(authorizedUser.Id);
 
