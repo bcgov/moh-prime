@@ -3,7 +3,6 @@ using Prime.Models;
 
 namespace Prime.ViewModels.HealthAuthoritySites
 {
-    [Keyless]
     public class HealthAuthoritySiteSubmissionViewModel
     {
         public string SiteName { get; set; }

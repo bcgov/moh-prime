@@ -28,9 +28,9 @@ namespace Prime.Services.EmailInternal
 
         public EmailDocumentsService(
             ApiDbContext context,
+            ILogger<EmailDocumentsService> logger,
             IDocumentAccessTokenService documentAccessTokenService,
             IDocumentManagerClient documentClient,
-            ILogger<EmailDocumentsService> logger,
             IMapper mapper,
             IOrganizationAgreementService organizationAgreementService,
             IOrganizationService organizationService,
