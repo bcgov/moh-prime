@@ -27,12 +27,25 @@
       <mat-icon>arrow_circle_up</mat-icon>
       <span>Unreject Site</span>
     </button>
-    <button mat-menu-item
-            [disabled]="!(Role.VIEW_SITE | inRole)"
-            (click)="onContactSigningAuthority()">
-      <mat-icon>mail</mat-icon>
-      <span>Contact Signing Authority</span>
-    </button>
+
+    <ng-container *ngIf="isCommunitySite()">
+      <button mat-menu-item
+              [disabled]="!(Role.VIEW_SITE | inRole)"
+              (click)="onContactSigningAuthority()">
+        <mat-icon>mail</mat-icon>
+        <span>Contact Signing Authority</span>
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="isHealthAuthoritySite()">
+      <button mat-menu-item
+              [disabled]="!(Role.VIEW_SITE | inRole)"
+              (click)="onContactAuthorizedUser()">
+        <mat-icon>mail</mat-icon>
+        <span>Contact Authorized User</span>
+      </button>
+    </ng-container>
+
     <button mat-menu-item
             [disabled]="!((Role.EDIT_SITE | inRole) || siteRegistration.adjudicatorIdir)"
             (click)="onEscalate()">
@@ -57,16 +70,22 @@
 
     <button mat-menu-item
             [disabled]="!(Role.SUPER_ADMIN | inRole)"
-            (click)="onDelete({ organizationId: siteRegistration.organizationId })">
-      <mat-icon>delete</mat-icon>
-      <span>Delete Organization</span>
-    </button>
-    <button mat-menu-item
-            [disabled]="!(Role.SUPER_ADMIN | inRole)"
-            (click)="onDelete({ siteId: siteRegistration.siteId })">
+            (click)="onDelete({ siteId: siteRegistration.id })">
       <mat-icon>delete</mat-icon>
       <span>Delete Site</span>
     </button>
+
+    <ng-container *ngIf="isCommunitySite()">
+      <button mat-menu-item
+              [disabled]="!(Role.SUPER_ADMIN | inRole)"
+              (click)="onDelete({ organizationId: getSiteOrganizationId() })">
+        <mat-icon>delete</mat-icon>
+        <span>Delete Organization</span>
+      </button>
+    </ng-container>
+
+
+
   </mat-menu>
 
 </ng-container>

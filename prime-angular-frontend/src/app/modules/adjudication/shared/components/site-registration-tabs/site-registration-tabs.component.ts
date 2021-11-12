@@ -29,7 +29,7 @@ import {
   OrganizationSearchListViewModel
 } from '@registration/shared/models/site-registration.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { HealthAuthoritySiteListItem } from '@health-auth/shared/models/health-authority-site-list.model';
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 
 @Component({
@@ -42,7 +42,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
   @Input() public refresh: Observable<boolean>;
 
   public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
-  public healthAuthoritySites: HealthAuthoritySiteListItem[];
+  public healthAuthoritySites: HealthAuthoritySiteAdminList[];
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -151,7 +151,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
 
     if (careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
       this.healthAuthResource.getAllHealthAuthoritySites()
-        .subscribe((sites: HealthAuthoritySiteListItem[]) => this.healthAuthoritySites = sites)
+        .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = sites)
     } else {
       this.busy = this.getOrganizations({ careSettingCode, ...queryParams })
         .pipe(
@@ -162,7 +162,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
   }
 
   protected updateSite(updatedSite: Site) {
-    const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.siteId === updatedSite.id);
+    const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.id === updatedSite.id);
     const updatedSiteRegistration = {
       ...siteRegistration,
       ...this.toSiteViewModelPartial(updatedSite)
@@ -232,10 +232,10 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
       const { matchOn, organization: ovm } = result;
       const { id: organizationId, sites, ...organization } = ovm;
       const registration = sites.map((svm: Site, index: number) => {
-        const { id: siteId, doingBusinessAs, ...site } = svm;
+        const { id, doingBusinessAs, ...site } = svm;
         return (!index)
-          ? { organizationId, ...organization, siteId, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn }
-          : { organizationId, siteId, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn };
+          ? { organizationId, ...organization, id, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn }
+          : { organizationId, id, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn };
       });
       registrations.push(registration);
       return registrations;
@@ -246,7 +246,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
 
   private toSiteViewModelPartial(site: Site): SiteListViewModelPartial {
     const {
-      id: siteId,
+      id,
       physicalAddress,
       doingBusinessAs,
       submittedDate,
@@ -262,7 +262,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     } = site;
 
     return {
-      siteId,
+      id,
       physicalAddress,
       siteDoingBusinessAs: doingBusinessAs,
       submittedDate,

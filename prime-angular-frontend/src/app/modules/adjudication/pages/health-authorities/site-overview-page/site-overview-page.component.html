@@ -1,1 +1,8 @@
-<app-health-authority-site-container></app-health-authority-site-container>
+<app-health-authority-site-container [hasActions]="true"
+                                     [content]="content">
+  <app-page-header>Overview</app-page-header>
+</app-health-authority-site-container>
+
+<ng-template #content>
+  <div>Hello</div>
+</ng-template>

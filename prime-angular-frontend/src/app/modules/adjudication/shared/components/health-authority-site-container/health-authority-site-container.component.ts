@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -8,7 +8,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Site } from '@registration/shared/models/site.model';
-import { HealthAuthoritySiteListItem } from '@health-auth/shared/models/health-authority-site-list.model';
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
 
 @Component({
   selector: 'app-health-authority-site-container',
@@ -16,7 +16,11 @@ import { HealthAuthoritySiteListItem } from '@health-auth/shared/models/health-a
   styleUrls: ['./health-authority-site-container.component.scss']
 })
 export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage implements OnInit {
-  public healthAuthoritySites: HealthAuthoritySiteListItem[];
+  @Input() public content: TemplateRef<any>;
+  @Input() public actions: TemplateRef<any>;
+  @Input() public hasActions: boolean;
+
+  public healthAuthoritySites: HealthAuthoritySiteAdminList[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -27,6 +31,12 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
     protected healthAuthResource: HealthAuthorityResource,
   ) {
     super(route, router, dialog, siteResource, adjudicationResource, healthAuthResource);
+
+    this.hasActions = false;
+  }
+
+  public onRefresh(): void {
+    this.getDataset();
   }
 
   ngOnInit(): void {
@@ -36,7 +46,7 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
   protected getDataset(): void {
     this.busy = this.healthAuthResource
       .getHealthAuthoritySites(this.route.snapshot.params.haid, this.route.snapshot.params.sid)
-      .subscribe((sites: HealthAuthoritySiteListItem[]) => this.healthAuthoritySites = sites);
+      .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = sites);
   }
   protected updateSite(updatedSite: Site): void {
     throw new Error('Method not implemented.');

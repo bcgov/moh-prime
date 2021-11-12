@@ -23,7 +23,7 @@ import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { HealthAuthoritySite, HealthAuthoritySiteDto } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-authority-site-create.model';
 import { HealthAuthoritySiteUpdate } from '@health-auth/shared/models/health-authority-site-update.model';
-import { HealthAuthoritySiteListItem } from '@health-auth/shared/models/health-authority-site-list.model';
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
 
 // TODO split this into multiple resources to reduce responsibility and have the
 //      resource name accurately describe the service, possibly:
@@ -68,11 +68,11 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getAllHealthAuthoritySites(): Observable<HealthAuthoritySiteListItem[]> {
-    return this.apiResource.get<HealthAuthoritySiteListItem[]>(`health-authorities/sites`)
+  public getAllHealthAuthoritySites(): Observable<HealthAuthoritySiteAdminList[]> {
+    return this.apiResource.get<HealthAuthoritySiteAdminList[]>(`health-authorities/sites`)
       .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySiteListItem[]>) => response.result),
-        tap((healthAuthoritySites: HealthAuthoritySiteListItem[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
+        map((response: ApiHttpResponse<HealthAuthoritySiteAdminList[]>) => response.result),
+        tap((healthAuthoritySites: HealthAuthoritySiteAdminList[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority sites could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getAllHealthAuthoritySites error has occurred: ', error);
@@ -253,12 +253,12 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthoritySites(healthAuthId: HealthAuthorityEnum, healthAuthoritySiteId: number = null): Observable<HealthAuthoritySiteListItem[]> {
+  public getHealthAuthoritySites(healthAuthId: HealthAuthorityEnum, healthAuthoritySiteId: number = null): Observable<HealthAuthoritySiteAdminList[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ healthAuthoritySiteId });
-    return this.apiResource.get<HealthAuthoritySiteListItem[]>(`health-authorities/${healthAuthId}/sites`, params)
+    return this.apiResource.get<HealthAuthoritySiteAdminList[]>(`health-authorities/${healthAuthId}/sites`, params)
       .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySiteListItem[]>) => response.result),
-        tap((healthAuthoritySites: HealthAuthoritySiteListItem[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
+        map((response: ApiHttpResponse<HealthAuthoritySiteAdminList[]>) => response.result),
+        tap((healthAuthoritySites: HealthAuthoritySiteAdminList[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority sites could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySites error has occurred: ', error);
@@ -279,9 +279,9 @@ export class HealthAuthorityResource {
     })
       .pipe(
         map(({
-               healthAuthoritySite,
-               businessHours
-             }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[] }) => {
+          healthAuthoritySite,
+          businessHours
+        }: { healthAuthoritySite: HealthAuthoritySite, businessHours: BusinessDay[] }) => {
           return { ...healthAuthoritySite, businessHours };
         }),
         map((healthAuthoritySiteDto: HealthAuthoritySiteDto) => HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto)),

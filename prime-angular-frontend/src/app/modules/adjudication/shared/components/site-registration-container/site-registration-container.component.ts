@@ -51,7 +51,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
   @Input() public actions: TemplateRef<any>;
   @Input() public content: TemplateRef<any>;
   @Input() public refresh: Observable<boolean>;
-  @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
   public columns: string[];
@@ -74,8 +73,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
     private permissionService: PermissionService
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
-
-    this.action = new EventEmitter<void>();
 
     this.hasActions = false;
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
@@ -202,7 +199,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
   }
 
   public onApprove(siteId: number): void {
-    if(!this.dataSource.data.find(s => s.siteId === siteId).pec) {
+    if (!this.dataSource.data.find(s => s.id === siteId).pec) {
       this.toastService.openErrorToast('Site cannot be approved without a Site ID/PEC')
       return;
     }
@@ -285,7 +282,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.busy = this.siteResource.flagSite(siteId, flagged)
       .subscribe((updatedSite: Site) => {
         this.updateSite(updatedSite);
-        this.action.emit();
       });
   }
 
@@ -345,7 +341,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
   }
 
   private updateSite(updatedSite: Site) {
-    const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.siteId === updatedSite.id);
+    const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.id === updatedSite.id);
     const updatedSiteRegistration = {
       ...siteRegistration,
       ...this.toSiteViewModelPartial(updatedSite)
@@ -446,7 +442,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   private toSiteViewModelPartial(site: Site): SiteListViewModelPartial {
     const {
-      id: siteId,
+      id,
       physicalAddress,
       doingBusinessAs,
       submittedDate,
@@ -462,7 +458,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     } = site;
 
     return {
-      siteId,
+      id,
       physicalAddress,
       siteDoingBusinessAs: doingBusinessAs,
       submittedDate,

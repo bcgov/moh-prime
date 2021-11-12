@@ -1,0 +1,8 @@
+<app-health-authority-site-container [content]="content">
+  <app-page-header>Events</app-page-header>
+</app-health-authority-site-container>
+
+<ng-template #content>
+  <app-adjudicator-events [businessEvents$]="businessEvents$"
+                          (getBusinessEvents)="getBusinessEvents($event)"></app-adjudicator-events>
+</ng-template>

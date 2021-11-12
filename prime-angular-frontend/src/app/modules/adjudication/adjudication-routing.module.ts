@@ -52,6 +52,8 @@ import {
   LicenseClassesMaintenancePageComponent
 } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
 import { SiteOverviewPageComponent } from './pages/health-authorities/site-overview-page/site-overview-page.component';
+import { SiteEventsPageComponent } from './pages/health-authorities/site-events-page/site-events-page.component';
+import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
 
 const routes: Routes = [
   {
@@ -378,14 +380,12 @@ const routes: Routes = [
                   },
                   {
                     path: AdjudicationRoutes.EVENT_LOG,
-                    // TODO replace with health authority site equivalent page component
-                    component: SiteEventsComponent,
+                    component: SiteEventsPageComponent,
                     data: { title: 'Event Log' }
                   },
                   {
                     path: AdjudicationRoutes.ADJUDICATOR_NOTES,
-                    // TODO replace with health authority site equivalent page component
-                    component: SiteAdjudicatorNotesComponent,
+                    component: SiteNotesPageComponent,
                     data: { title: 'Adjudicator Notes' }
                   }
                 ]

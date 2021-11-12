@@ -2,8 +2,7 @@ import { SiteListViewModel } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
 export interface SiteListViewModelPartial extends
-  Omit<SiteListViewModel, 'id' | 'completed' | 'doingBusinessAs'> {
-  siteId: number;
+  Omit<SiteListViewModel, 'completed' | 'doingBusinessAs'> {
   siteDoingBusinessAs: string;
   flagged: boolean;
 }

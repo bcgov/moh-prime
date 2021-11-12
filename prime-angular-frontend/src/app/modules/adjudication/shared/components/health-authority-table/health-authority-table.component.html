@@ -199,7 +199,6 @@
           <span>Overview</span>
         </button>
         <button mat-menu-item
-                [disabled]="true"
                 (click)="onRoute([
                   AdjudicationRoutes.HEALTH_AUTHORITIES,
                   row.healthAuthorityOrganizationId,
@@ -211,7 +210,6 @@
           <span>Event Log</span>
         </button>
         <button mat-menu-item
-                [disabled]="true"
                 (click)="onRoute([
                   AdjudicationRoutes.HEALTH_AUTHORITIES,
                   row.healthAuthorityOrganizationId,
@@ -224,7 +222,6 @@
         </button>
 
         <button mat-menu-item
-                [disabled]="true"
                 (click)="onNotify(row.id, row.healthAuthorityOrganizationId)">
           <mat-icon>email</mat-icon>
           <span>Send Email</span>
@@ -232,8 +229,8 @@
 
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
-                [disabled]="true || !(Role.EDIT_SITE | inRole)"
-                (click)="(!row?.adjudicatorIdir) ? onAssign(row.siteId) : onReassign(row.siteId)">
+                [disabled]="!(Role.EDIT_SITE | inRole)"
+                (click)="(!row?.adjudicatorIdir) ? onAssign(row.id) : onReassign(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>{{ (!row?.adjudicatorIdir) ? 'Assign Registration' : 'Reassign Registration' }}</span>
         </button>

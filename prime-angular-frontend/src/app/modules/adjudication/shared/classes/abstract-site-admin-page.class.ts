@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { EmailUtils } from '@lib/utils/email-utils.class';
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
@@ -42,6 +43,13 @@ export abstract class AbstractSiteAdminPage {
 
   public onRefresh(): void {
     this.getDataset(this.route.snapshot.queryParams);
+  }
+
+  public onToggleFlagSite({ siteId, flagged }: { siteId: number, flagged: boolean }) {
+    this.busy = this.siteResource.flagSite(siteId, flagged)
+      .subscribe((updatedSite: Site) => {
+        this.updateSite(updatedSite);
+      });
   }
 
   public onAssign(siteId: number) {
@@ -213,7 +221,7 @@ export abstract class AbstractSiteAdminPage {
       .subscribe();
   }
 
-  protected abstract getDataset(queryParams?: { careSetting?: CareSettingEnum, textSearch?: string }): void;
+  protected abstract getDataset(queryParams?: unknown): void;
 
-  protected abstract updateSite(updatedSite: Site): void;
+  protected abstract updateSite(updatedSite: Site | HealthAuthoritySite): void;
 }

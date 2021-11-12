@@ -1,6 +1,50 @@
-<app-health-authority-table [sites]="healthAuthoritySites"
-                            [showHealthAuthorities]="false"
-                            (assign)="onAssign($event)"
-                            (reassign)="onReassign($event)"
-                            (notify)="onNotify($event)"
-                            (route)="onRoute($event)"></app-health-authority-table>
+<app-page [busy]="busy"
+          mode="full">
+
+  <ng-content select="app-page-header"></ng-content>
+
+  <ng-content select="app-page-subheader"></ng-content>
+
+  <app-health-authority-table [sites]="healthAuthoritySites"
+                              [showHealthAuthorities]="false"
+                              (assign)="onAssign($event)"
+                              (reassign)="onReassign($event)"
+                              (notify)="onNotify($event)"
+                              (route)="onRoute($event)"></app-health-authority-table>
+
+  <ng-container *ngIf="content">
+
+    <div class="row">
+      <div class="col py-5">
+
+        <ng-container [ngTemplateOutlet]="content"
+                      [ngTemplateOutletContext]="{ siteRegistration: healthAuthoritySites?.[0] }"></ng-container>
+
+      </div>
+      <div *ngIf="hasActions"
+           class="col-auto py-5">
+
+        <ng-container *ngIf="actions; else defaultActions">
+
+          <ng-container [ngTemplateOutlet]="actions"
+                        [ngTemplateOutletContext]="{ siteRegistration: healthAuthoritySites?.[0] }"></ng-container>
+
+        </ng-container>
+
+        <ng-template #defaultActions>
+
+          <app-site-registration-actions [siteRegistration]="healthAuthoritySites?.[0]"
+                                         (approve)="onApprove($event)"
+                                         (decline)="onDecline($event)"
+                                         (escalate)="onEscalate($event)"
+                                         (flag)="onToggleFlagSite($event)">
+          </app-site-registration-actions>
+
+        </ng-template>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+</app-page>

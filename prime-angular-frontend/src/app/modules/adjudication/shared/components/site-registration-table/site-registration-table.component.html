@@ -12,12 +12,12 @@
         <button *ngIf="row.hasClaim"
                 mat-icon-button
                 color="warn"
-                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId])">
+                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id])">
           <mat-icon>front_hand</mat-icon>
         </button>
         <app-contextual-site-notification *ngIf="row.hasNotification"
                                           class="align-self-start"
-                                          [siteId]="row.siteId"
+                                          [siteId]="row.id"
                                           (removed)="onReload($event)"></app-contextual-site-notification>
       </div>
     </td>
@@ -183,30 +183,30 @@
 
   <mat-menu #menu="matMenu">
     <button mat-menu-item
-            (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId])">
+            (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id])">
       <mat-icon>all_inclusive</mat-icon>
       <span>Overview</span>
     </button>
     <button mat-menu-item
-            (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.EVENT_LOG])">
+            (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id, AdjudicationRoutes.EVENT_LOG])">
       <mat-icon>list_alt</mat-icon>
       <span>Event Log</span>
     </button>
     <button mat-menu-item
-            (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.ADJUDICATOR_NOTES])">
+            (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id, AdjudicationRoutes.ADJUDICATOR_NOTES])">
       <mat-icon>message</mat-icon>
       <span>Add and View Notes</span>
     </button>
 
     <button mat-menu-item
-            (click)="onNotify(row.siteId)">
+            (click)="onNotify(row.id)">
       <mat-icon>email</mat-icon>
       <span>Send Email</span>
     </button>
 
     <button mat-menu-item
             [disabled]="!(Role.EDIT_SITE | inRole)"
-            (click)="(!row?.adjudicatorIdir) ? onAssign(row.siteId) : onReassign(row.siteId)">
+            (click)="(!row?.adjudicatorIdir) ? onAssign(row.id) : onReassign(row.id)">
       <mat-icon>pan_tool</mat-icon>
       <span>{{ (!row?.adjudicatorIdir) ? 'Assign' : 'Reassign' }} Registration</span>
     </button>
