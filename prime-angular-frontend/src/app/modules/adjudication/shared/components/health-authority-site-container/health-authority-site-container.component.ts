@@ -9,6 +9,7 @@ import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-sit
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Site } from '@registration/shared/models/site.model';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
 @Component({
   selector: 'app-health-authority-site-container',
@@ -28,9 +29,9 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
     protected dialog: MatDialog,
     protected siteResource: SiteResource,
     protected adjudicationResource: AdjudicationResource,
-    protected healthAuthResource: HealthAuthorityResource,
+    protected healthAuthSiteResource: HealthAuthoritySiteResource
   ) {
-    super(route, router, dialog, siteResource, adjudicationResource, healthAuthResource);
+    super(route, router, dialog, siteResource, adjudicationResource, healthAuthSiteResource);
 
     this.hasActions = false;
   }
@@ -44,7 +45,7 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
   }
 
   protected getDataset(): void {
-    this.busy = this.healthAuthResource
+    this.busy = this.healthAuthSiteResource
       .getHealthAuthoritySites(this.route.snapshot.params.haid, this.route.snapshot.params.sid)
       .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = sites);
   }

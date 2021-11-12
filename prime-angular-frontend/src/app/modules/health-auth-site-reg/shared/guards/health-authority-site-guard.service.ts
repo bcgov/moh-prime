@@ -8,8 +8,8 @@ import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { ToastService } from '@core/services/toast.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -27,14 +27,14 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private healthAuthoritySiteService: HealthAuthoritySiteService,
-    private healthAuthorityResource: HealthAuthorityResource,
+    private healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private toastService: ToastService
   ) {
     super(authService, logger);
   }
 
   protected checkAccess(routePath: string, params?: Params): Observable<boolean> | Promise<boolean> {
-    return this.healthAuthorityResource.getHealthAuthoritySiteById(params.haid, params.sid)
+    return this.healthAuthoritySiteResource.getHealthAuthoritySiteById(params.haid, params.sid)
       .pipe(
         map((healthAuthoritySite: HealthAuthoritySite) =>
           // Store the site for access throughout registration, which

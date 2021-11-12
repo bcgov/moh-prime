@@ -2,6 +2,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
@@ -32,7 +33,7 @@ export abstract class AbstractSiteAdminPage {
     protected dialog: MatDialog,
     protected siteResource: SiteResource,
     protected adjudicationResource: AdjudicationResource,
-    protected healthAuthResource: HealthAuthorityResource
+    protected healthAuthSiteResource: HealthAuthoritySiteResource,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
@@ -125,7 +126,7 @@ export abstract class AbstractSiteAdminPage {
 
   public onNotify({ siteId, healthAuthorityOrganizationId }: { siteId: number, healthAuthorityOrganizationId?: HealthAuthorityEnum }) {
     const request$ = (healthAuthorityOrganizationId)
-      ? this.healthAuthResource.getHealthAuthoritySiteContacts(healthAuthorityOrganizationId, siteId)
+      ? this.healthAuthSiteResource.getHealthAuthoritySiteContacts(healthAuthorityOrganizationId, siteId)
       : this.siteResource.getSiteContacts(siteId);
 
     request$

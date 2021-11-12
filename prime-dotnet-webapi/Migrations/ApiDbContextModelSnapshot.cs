@@ -6114,7 +6114,8 @@ namespace Prime.Migrations
 
                     b.HasIndex("PharmacyId");
 
-                    b.HasIndex("TransactionId");
+                    b.HasIndex("TransactionId")
+                        .IsUnique();
 
                     b.HasIndex("TxDateTime");
 

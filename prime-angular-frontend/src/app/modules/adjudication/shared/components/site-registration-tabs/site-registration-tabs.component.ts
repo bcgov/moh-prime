@@ -7,12 +7,12 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Subscription, Observable, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
+import { EmailUtils } from '@lib/utils/email-utils.class';
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { UtilsService } from '@core/services/utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -31,6 +31,7 @@ import {
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-site-list.model';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 @Component({
   selector: 'app-site-registration-tabs',
@@ -62,12 +63,12 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     protected siteResource: SiteResource,
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthResource: HealthAuthorityResource,
+    protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
     private organizationResource: OrganizationResource,
     private permissionService: PermissionService,
-    private utilResource: UtilsService,
   ) {
-    super(route, router, dialog, siteResource, adjudicationResource, healthAuthResource);
+    super(route, router, dialog, siteResource, adjudicationResource, healthAuthoritySiteResource);
 
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
 
