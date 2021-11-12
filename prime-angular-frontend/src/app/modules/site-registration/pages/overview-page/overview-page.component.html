@@ -13,6 +13,15 @@
     </ng-container>
   </app-expiry-alert>
 
+  <app-alert *ngIf="siteErrors?.deviceProviderSite"
+             type="danger"
+             icon="error">
+    <ng-container #alertContent
+                  class="alert-content">
+      Your site registration contains an error that will need to be updated before submission.
+    </ng-container>
+  </app-alert>
+
   <div class="mb-5">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Information Review</ng-container>
@@ -24,7 +33,8 @@
 
   <app-overview-container [showEditRedirect]="showEditRedirect"
                           [organization]="organization"
-                          [site]="site"></app-overview-container>
+                          [site]="site"
+                          [siteErrors]="siteErrors"></app-overview-container>
 
   <ng-container *ngIf="showSubmissionAction; else showBack">
     <div class="footer mb-4">
@@ -40,7 +50,7 @@
       <div class="col text-right">
         <button mat-flat-button
                 color="primary"
-                [disabled]="!accept.checked"
+                [disabled]="!accept.checked || siteErrors?.deviceProviderSite"
                 (click)="onSubmit()">
           Submit
         </button>

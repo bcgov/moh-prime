@@ -57,11 +57,22 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
   }
 
   public onBack() {
-    const nextRoute = (!this.isCompleted)
-      ? (this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
-        ? SiteRoutes.HOURS_OPERATION
-        : SiteRoutes.REMOTE_USERS
-      : SiteRoutes.SITE_REVIEW;
+    let nextRoute: string;
+    if (this.isCompleted) {
+      nextRoute = SiteRoutes.SITE_REVIEW;
+    } else {
+      switch (this.siteService.site.careSettingCode) {
+        case CareSettingEnum.COMMUNITY_PHARMACIST:
+          nextRoute = SiteRoutes.HOURS_OPERATION;
+          break;
+        case CareSettingEnum.DEVICE_PROVIDER:
+          nextRoute = SiteRoutes.DEVICE_PROVIDER;
+          break;
+        default:
+          nextRoute = SiteRoutes.REMOTE_USERS;
+          break;
+      }
+    }
 
     this.routeUtils.routeRelativeTo(nextRoute);
   }
