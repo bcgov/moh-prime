@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211111020327_AddIndividualDeviceProvider")]
+    partial class AddIndividualDeviceProvider
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -6161,8 +6163,7 @@ namespace Prime.Migrations
 
                     b.HasIndex("PharmacyId");
 
-                    b.HasIndex("TransactionId")
-                        .IsUnique();
+                    b.HasIndex("TransactionId");
 
                     b.HasIndex("TxDateTime");
 
