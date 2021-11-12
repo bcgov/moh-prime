@@ -50,17 +50,15 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
   public buildForm(): void {
     this.formInstance = this.fb.group({
       siteName: ['', [Validators.required]],
-      pec: [null, {
-        asyncValidators: asyncValidator(this.pecValidator(), 'assignable'),
-        updateOn: 'blur'
-      }],
+      pec: [null, []],
       securityGroupCode: [null, [Validators.required]]
     });
   }
 
-  private pecValidator(): (value: string) => Observable<boolean> {
-    return (value: string) => (value)
-      ? this.siteResource.pecAssignable(this.siteId, value)
-      : of(true);
-  }
+  // TODO, add the asyncValidator back to the PEC field or remove it completely when client updates
+  // private pecValidator(): (value: string) => Observable<boolean> {
+  //   return (value: string) => (value)
+  //     ? this.siteResource.pecAssignable(this.siteId, value)
+  //     : of(true);
+  // }
 }

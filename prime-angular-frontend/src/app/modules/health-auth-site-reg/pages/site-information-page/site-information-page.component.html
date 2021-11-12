@@ -29,10 +29,10 @@
             <mat-label>Site ID/PEC Code</mat-label>
             <input matInput
                    [formControl]="formState.pec">
+            <!-- TODO, add the asyncValidator back to the PEC field or remove it completely when client updates
             <mat-error *ngIf="formState.pec.hasError('assignable')">
               Site ID/PEC Code exists in another Health Authority
-            </mat-error>
-            <mat-error>Required</mat-error>
+            </mat-error> -->
           </mat-form-field>
 
         </div>

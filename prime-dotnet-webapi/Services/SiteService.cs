@@ -49,13 +49,19 @@ namespace Prime.Services
 
             if (siteDto.healthAuthorityId.HasValue)
             {
-                return !await _context.HealthAuthoritySites
+                var communitySites = await _context.CommunitySites
+                    .Where(cs => cs.PEC == pec)
+                    .AnyAsync();
+
+                var otherHealthAuthoritySites = await _context.HealthAuthoritySites
                     .AsNoTracking()
                     .Where(
                         s => s.PEC == pec
                         && s.HealthAuthorityOrganizationId != siteDto.healthAuthorityId
                         )
                     .AnyAsync();
+
+                return !communitySites && !otherHealthAuthoritySites;
             }
 
             return !await _context.Sites
