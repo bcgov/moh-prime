@@ -48,8 +48,7 @@
                             { key: 'Site Name', value: healthAuthoritySite.siteName },
                             { key: 'Site ID', value: healthAuthoritySite.pec },
                             { key: 'Vendor', value: healthAuthoritySite.healthAuthorityVendor.vendorCode | configCode : 'vendors' }
-                      ]"
-                      (action)="viewSiteRemoteUsers(healthAuthority.id, healthAuthoritySite.id)">
+                      ]">
       <ng-container *ngIf="isInComplete(healthAuthoritySite)"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
@@ -149,11 +148,6 @@
               [disabled]="healthAuthoritySite.status === SiteStatusType.LOCKED"
               (click)="viewSite(healthAuthorityId, healthAuthoritySite)">
         <span>View/Update Site Information</span>
-      </button>
-      <button mat-menu-item
-              [disabled]="!healthAuthoritySite.completed || [SiteStatusType.IN_REVIEW, SiteStatusType.LOCKED].includes(healthAuthoritySite.status)"
-              (click)="viewSiteRemoteUsers(healthAuthorityId, healthAuthoritySite.id)">
-        <span>View/Update Remote Practitioners</span>
       </button>
     </mat-menu>
   </ng-template>

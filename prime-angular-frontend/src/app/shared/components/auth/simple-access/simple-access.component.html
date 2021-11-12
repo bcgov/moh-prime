@@ -23,6 +23,7 @@
           <button mat-flat-button
                   color="primary"
                   class="large"
+                  [disabled]="disableLogin"
                   (click)="onLogin()">{{ loginLabel }}</button>
 
         </div>

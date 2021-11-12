@@ -33,6 +33,7 @@ import { BusinessLicenceRenewalPageComponent } from './pages/business-licence-re
 import { ElectronicOrganizationAgreementPageComponent } from './pages/electronic-organization-agreement-page/electronic-organization-agreement-page.component';
 import { ElectronicAgreementGuard } from './shared/guards/electronic-agreement.guard';
 import { PendingTransferGuard } from './shared/guards/pending-transfer.guard';
+import { DeviceProviderPageComponent } from './pages/device-provider-page/device-provider-page.component';
 
 const routes: Routes = [
   {
@@ -72,18 +73,6 @@ const routes: Routes = [
                 component: OrganizationSigningAuthorityPageComponent,
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Signing Authority' }
-              },
-              {
-                path: SiteRoutes.ORGANIZATION_CLAIM,
-                component: OrganizationClaimPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Claim Organization' }
-              },
-              {
-                path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
-                component: OrganizationClaimConfirmationPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Next Steps' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_NAME,
@@ -146,6 +135,13 @@ const routes: Routes = [
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Hours of Operation' }
+                  },
+                  {
+                    path: SiteRoutes.DEVICE_PROVIDER,
+                    component: DeviceProviderPageComponent,
+                    canActivate: [SiteGuard],
+                    canDeactivate: [CanDeactivateFormGuard],
+                    data: { title: 'Individual Device Providers' }
                   },
                   {
                     path: SiteRoutes.REMOTE_USERS,

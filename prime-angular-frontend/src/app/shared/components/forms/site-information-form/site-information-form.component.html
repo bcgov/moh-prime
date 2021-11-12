@@ -39,9 +39,11 @@
         This is a new Site without a Site ID
       </mat-slide-toggle>
     </div>
+
     <ng-container *ngIf="isNewSite.value && !isCommunityPharmacy(); else notNewSite">
       If this is a new Site you will receive your Site ID upon approval.
     </ng-container>
+
     <ng-template #notNewSite>
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Site ID</ng-container>
@@ -66,14 +68,13 @@
           </mat-error>
         </mat-form-field>
       </ng-container>
-    </ng-template>
-    <div class="mb-3">
+
       <mat-checkbox formControlName="activeBeforeRegistration">
         <div class="pl-3">
           This site is already operational and submitting PharmaNet transactions.
         </div>
       </mat-checkbox>
-    </div>
+    </ng-template>
   </section>
 
 </ng-container>

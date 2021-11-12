@@ -2,8 +2,8 @@
   <h2 class="h3 mb-4">
     Status:
     <span class="status"
-          [class]="enrollee?.currentStatus.statusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
-      {{ enrollee?.currentStatus.status.name }}
+          [class]="enrollee.currentStatus?.statusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
+      {{ enrollee.currentStatus?.statusCode | configCode: 'statuses' }}
     </span>
   </h2>
 

@@ -99,6 +99,7 @@ namespace Prime.Services
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
             UpdateRemoteUsers(currentSite, updatedSite.RemoteUsers);
+            await UpdateIndividualDeviceProviders(siteId, updatedSite.IndividualDeviceProviders);
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
@@ -260,6 +261,26 @@ namespace Prime.Services
 
                     _context.Entry(siteVendor).State = EntityState.Added;
                 }
+            }
+        }
+
+        private async Task UpdateIndividualDeviceProviders(int siteId, IEnumerable<IndividualDeviceProviderChangeModel> updated)
+        {
+            if (updated == null)
+            {
+                return;
+            }
+
+            var currentProviders = await _context.IndividualDeviceProviders
+                .Where(p => p.CommunitySiteId == siteId)
+                .ToListAsync();
+            _context.IndividualDeviceProviders.RemoveRange(currentProviders);
+
+            foreach (var provider in updated)
+            {
+                var newModel = _mapper.Map<IndividualDeviceProvider>(provider);
+                newModel.CommunitySiteId = siteId;
+                _context.IndividualDeviceProviders.Add(newModel);
             }
         }
 
@@ -501,6 +522,14 @@ namespace Prime.Services
             return await _context.Sites
                 .AsNoTracking()
                 .AnyAsync(s => s.Id == siteId);
+        }
+
+        public async Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId)
+        {
+            return await _context.IndividualDeviceProviders
+                .Where(p => p.CommunitySiteId == siteId)
+                .ProjectTo<IndividualDeviceProviderViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         private IQueryable<CommunitySite> GetBaseSiteQuery()
