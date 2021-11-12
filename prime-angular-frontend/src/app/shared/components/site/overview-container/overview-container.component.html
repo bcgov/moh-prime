@@ -72,7 +72,7 @@
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
 
-    <button *ngIf="showEditRedirect && withinRenewalPeriod"
+    <button *ngIf="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && withinRenewalPeriod"
             mat-flat-button
             color="primary"
             class="mb-4"
