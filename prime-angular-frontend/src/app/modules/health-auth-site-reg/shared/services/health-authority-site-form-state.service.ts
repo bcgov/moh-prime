@@ -5,6 +5,7 @@ import { AbstractFormStateService } from '@lib/classes/abstract-form-state-servi
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
@@ -16,7 +17,6 @@ import { HoursOperationFormState } from '@health-auth/pages/hours-operation-page
 import { AdministratorFormState } from '@health-auth/pages/administrator-page/administrator-form-state.class';
 import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-page/technical-support-form-state.class';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
-import { SiteResource } from '@core/resources/site-resource.service';
 
 /**
  * @description
