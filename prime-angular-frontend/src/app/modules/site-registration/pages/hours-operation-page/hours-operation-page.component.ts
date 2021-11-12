@@ -174,7 +174,7 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
           routePath = SiteRoutes.DEVICE_PROVIDER;
           break;
         case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
-          routePath = SiteRoutes.REMOTE_USER;
+          routePath = SiteRoutes.REMOTE_USERS;
           break;
         default:
           routePath = SiteRoutes.ADMINISTRATOR;
