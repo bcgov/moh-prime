@@ -160,6 +160,7 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
         }
+
         public async Task UpdateSelfDeclarationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> viewModels)
         {
             var newDeclarations = _mapper.Map<IEnumerable<SelfDeclaration>>(viewModels);
