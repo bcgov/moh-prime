@@ -3,8 +3,8 @@ import { Observable, of } from 'rxjs';
 
 import { asyncValidator } from '@lib/validators/form-async.validators';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { SiteInformationForm } from './site-information-form.model';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { SiteInformationForm } from './site-information-form.model';
 
 export class SiteInformationFormState extends AbstractFormState<SiteInformationForm> {
   private siteId: number;
