@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ValidationErrors } from '@angular/forms';
 
 import { EMPTY, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
@@ -22,6 +22,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-overview-page',
@@ -38,6 +39,7 @@ export class OverviewPageComponent implements OnInit {
   public isUnderReview: boolean;
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
+  public siteErrors: ValidationErrors;
 
   public SiteRoutes = SiteRoutes;
   public SiteStatusType = SiteStatusType;
@@ -177,6 +179,8 @@ export class OverviewPageComponent implements OnInit {
       };
     }
 
+    this.siteErrors = this.getSiteErrors(site);
+
     // Store a local copy of the site for overview
     this.site = site;
 
@@ -201,5 +205,20 @@ export class OverviewPageComponent implements OnInit {
       .pipe(
         map(sites => sites.filter(site => site.careSettingCode === currentCareSettingCode).length < 2)
       );
+  }
+
+  /**
+   * @description
+   * Get a set of site errors.
+   *
+   * NOTE: Not possible to validate some form states due to validators
+   * being dynamically applied when the view is loaded. Use the passed
+   * site for checking validation instead of form state.
+   */
+  private getSiteErrors(site: Site): ValidationErrors {
+    return {
+      deviceProviderSite: !site.individualDeviceProviders?.length
+        && site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER
+    };
   }
 }

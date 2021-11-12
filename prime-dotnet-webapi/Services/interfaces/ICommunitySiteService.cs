@@ -20,5 +20,6 @@ namespace Prime.Services
         Task DeleteBusinessLicenceDocumentAsync(int businessLicenceId);
         Task<bool> SiteExistsAsync(int siteId);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId);
+        Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId);
     }
 }
