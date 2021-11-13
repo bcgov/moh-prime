@@ -49,8 +49,8 @@ namespace Prime.Services
 
             if (siteDto.healthAuthorityId.HasValue)
             {
-                var communitySites = await _context.CommunitySites
-                    .Where(cs => cs.PEC == pec)
+                var sites = await _context.Sites
+                    .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
                     .AnyAsync();
 
                 var otherHealthAuthoritySites = await _context.HealthAuthoritySites
@@ -61,7 +61,7 @@ namespace Prime.Services
                         )
                     .AnyAsync();
 
-                return !communitySites && !otherHealthAuthoritySites;
+                return !sites && !otherHealthAuthoritySites;
             }
 
             return !await _context.Sites
