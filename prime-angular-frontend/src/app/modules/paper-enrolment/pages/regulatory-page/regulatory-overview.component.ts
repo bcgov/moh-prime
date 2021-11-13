@@ -23,7 +23,7 @@ import { RegulatoryForm } from './regulatory-form.model';
 
       <app-enrollee-property title="Device Provider ID"
                             [makeBold]="true">
-        {{ deviceProviderIdentifier | default }}
+        {{ regulatory?.deviceProviderIdentifier | default }}
       </app-enrollee-property>
     </app-page-section>
 
@@ -79,7 +79,6 @@ import { RegulatoryForm } from './regulatory-form.model';
 })
 export class RegulatoryOverviewComponent extends AbstractOverview {
   @Input() public regulatory: RegulatoryForm;
-  @Input() public deviceProviderIdentifier: string;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
 
   constructor(

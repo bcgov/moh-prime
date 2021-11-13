@@ -12,6 +12,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { Role } from '@auth/shared/enum/role.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
@@ -45,7 +47,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    protected authService: AuthService
+    protected authService: AuthService,
+    private permissionService: PermissionService
   ) {
     super(
       route,
@@ -104,6 +107,15 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     this.enrolmentFormStateService.removeUnselectedHAOboSites();
 
     super.onSubmit();
+  }
+
+  public disableCareSetting(careSettingCode: number): boolean {
+    switch (careSettingCode) {
+      case CareSettingEnum.DEVICE_PROVIDER:
+        return !this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER);
+      default:
+        return false;
+    }
   }
 
   public addCareSetting() {

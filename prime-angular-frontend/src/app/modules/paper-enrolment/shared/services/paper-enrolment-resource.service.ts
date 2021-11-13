@@ -128,8 +128,8 @@ export class PaperEnrolmentResource {
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
-          this.toastService.openErrorToast('Paper Enrolment certifications could not be updated');
-          this.logger.error('[Core] PaperEnrolmentResource::updateCertifications error has occurred: ', error);
+          this.toastService.openErrorToast('Paper Enrolment device provider ID could not be updated');
+          this.logger.error('[Core] PaperEnrolmentResource::updateDeviceProvider error has occurred: ', error);
           throw error;
         })
       );

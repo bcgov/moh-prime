@@ -4,10 +4,8 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ConfigService } from '@config/config.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
-import { Enrolment } from '@shared/models/enrolment.model';
 
-export interface EnrolmentRegulatoryForm extends Pick<Enrolment, 'certifications' | 'deviceProviderIdentifier'> { }
-
+import { EnrolmentRegulatoryForm } from './enrolment-regulatory-form.model';
 export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryForm> {
   public constructor(
     private fb: FormBuilder,

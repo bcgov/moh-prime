@@ -28,6 +28,7 @@
                   <mat-label>Care Setting</mat-label>
                   <mat-select formControlName="careSettingCode">
                     <mat-option *ngFor="let careSettingType of formState.filterCareSettingTypes(careSetting)"
+                                [disabled]="disableCareSetting(careSettingType.code)"
                                 [value]="careSettingType.code">
                       {{ careSettingType.name }}
                     </mat-option>

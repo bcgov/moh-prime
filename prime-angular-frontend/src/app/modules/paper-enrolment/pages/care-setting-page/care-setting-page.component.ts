@@ -15,6 +15,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { Role } from '@auth/shared/enum/role.enum';
 
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
@@ -41,7 +43,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     private configService: ConfigService,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private route: ActivatedRoute,
-    router: Router
+    router: Router,
+    private permissionService: PermissionService
   ) {
     super(dialog, formUtilsService);
 
@@ -53,6 +56,15 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   public onBack() {
     this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.DEMOGRAPHIC]);
+  }
+
+  public disableCareSetting(careSettingCode: number): boolean {
+    switch (careSettingCode) {
+      case CareSettingEnum.DEVICE_PROVIDER:
+        return !this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER);
+      default:
+        return false;
+    }
   }
 
   public ngOnInit(): void {
