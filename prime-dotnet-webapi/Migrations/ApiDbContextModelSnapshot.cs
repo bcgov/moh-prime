@@ -3641,7 +3641,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EmailType = 17,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "Your request for PharmaNet access has been approved and recorded in PRIME. When it is possible for you to do so, you must enrol in PRIME using your mobile BC Services Card. <br> <br> <strong> Your temporary GPID is @Model.GPID. </strong> <br> <br> The first time you log into PRIME you should be asked if you have previously received permission to access PharmaNet via an offline process. If you do not see this prompt, please stop your enrollment and contact <a href=\"mailto:PRIMEsupport@gov.bc.ca",
+                            Template = "Your request for PharmaNet access has been approved and recorded in PRIME. When it is possible for you to do so, you must enrol in PRIME using your mobile BC Services Card. <br> <br> <strong> Your temporary GPID is @Model.GPID. </strong> <br> <br> The first time you log into PRIME you should be asked if you have previously received permission to access PharmaNet via an offline process. If you do not see this prompt, please stop your enrollment and contact <a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
