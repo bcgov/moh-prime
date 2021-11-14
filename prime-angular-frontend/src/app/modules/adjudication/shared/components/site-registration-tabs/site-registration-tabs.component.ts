@@ -4,21 +4,16 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 
-import { Subscription, Observable, EMPTY, of, noop } from 'rxjs';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { Subscription, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { PermissionService } from '@auth/shared/services/permission.service';
-import { Role } from '@auth/shared/enum/role.enum';
-import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import {
@@ -62,9 +57,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthResource: HealthAuthorityResource,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
-    @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
     private organizationResource: OrganizationResource,
-    private permissionService: PermissionService,
   ) {
     super(route, router, dialog, siteResource, adjudicationResource, healthAuthoritySiteResource);
 
@@ -113,12 +106,6 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     this.routeUtils.updateQueryParams({ status });
   }
 
-  public onDelete(record: { [key: string]: number }) {
-    (record.organizationId)
-      ? this.deleteOrganization(record.organizationId)
-      : this.deleteSite(record.siteId);
-  }
-
   public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
     this.routeUtils.updateQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index] });
   }
@@ -160,11 +147,11 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     }
   }
 
-  protected updateSite(updatedSite: Site) {
-    const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.id === updatedSite.id);
+  protected updateSite(siteId: number, updatedSiteFields: {}): void {
+    const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.id === siteId);
     const updatedSiteRegistration = {
       ...siteRegistration,
-      ...this.toSiteViewModelPartial(updatedSite)
+      ...updatedSiteFields
     };
     this.dataSource.data = MatTableDataSourceUtils
       .update<SiteRegistrationListViewModel>(this.dataSource, 'siteId', updatedSiteRegistration);
@@ -177,53 +164,6 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
       .pipe(
         tap(() => this.showSearchFilter = true)
       );
-  }
-
-  private deleteOrganization(organizationId: number) {
-    if (organizationId) {
-      const request$ = this.organizationResource.deleteOrganization(organizationId);
-      const supplementaryMessage = 'Deleting an organization also deletes all the organization\'s sites, including remote users.';
-      this.busy = this.deleteResource<Organization>(this.defaultOptions.delete('organization', supplementaryMessage), request$)
-        .subscribe((organization: Organization) =>
-          this.dataSource.data = MatTableDataSourceUtils
-            .delete<SiteRegistrationListViewModel>(this.dataSource, 'organizationId', organization.id)
-        );
-    }
-  }
-
-  private deleteSite(siteId: number) {
-    if (siteId) {
-      const request$ = this.siteResource.deleteSite(siteId);
-      this.busy = this.deleteResource<Site>(this.defaultOptions.delete('site'), request$)
-        .subscribe((site: Site) => {
-          this.dataSource.data = MatTableDataSourceUtils
-            .delete<SiteRegistrationListViewModel>(this.dataSource, 'siteId', site.id);
-        });
-    }
-  }
-
-  private deleteResource<T>(dialogOptions: DialogOptions, deleteRequest$: Observable<T>): Observable<T> {
-    if (this.permissionService.hasRoles(Role.SUPER_ADMIN)) {
-      return this.dialog.open(ConfirmDialogComponent, { data: dialogOptions })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? of(noop)
-              : EMPTY
-          ),
-          exhaustMap(() => deleteRequest$),
-          exhaustMap((resource: T) => {
-            // Route on singular resource views after deletion to refresh results
-            if (this.route.snapshot.data.oid) {
-              this.routeUtils.routeTo(AdjudicationRoutes.SITE_REGISTRATIONS);
-              return EMPTY;
-            }
-            // Otherwise, stay on the list resource view and remove locally
-            return of(resource);
-          })
-        );
-    }
   }
 
   private toSiteRegistrations(results: OrganizationSearchListViewModel[]): SiteRegistrationListViewModel[] {
@@ -241,40 +181,6 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     }, []);
 
     return [].concat(...siteRegistrations);
-  }
-
-  private toSiteViewModelPartial(site: Site): SiteListViewModelPartial {
-    const {
-      id,
-      physicalAddress,
-      doingBusinessAs,
-      submittedDate,
-      approvedDate,
-      careSettingCode,
-      siteVendors,
-      remoteUsers,
-      adjudicator,
-      pec,
-      status,
-      businessLicence,
-      flagged
-    } = site;
-
-    return {
-      id,
-      physicalAddress,
-      siteDoingBusinessAs: doingBusinessAs,
-      submittedDate,
-      approvedDate,
-      careSettingCode,
-      siteVendors,
-      remoteUserCount: remoteUsers.length,
-      adjudicatorIdir: adjudicator?.idir,
-      pec,
-      status,
-      businessLicence,
-      flagged
-    };
   }
 
 }

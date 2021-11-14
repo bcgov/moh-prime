@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
@@ -187,15 +187,12 @@ export class SiteResource {
       );
   }
 
-  public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
+  public updatePecCode(siteId: number, pecCode: string): NoContent {
     const payload = { data: pecCode };
-    return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
+    return this.apiResource.put<NoContent>(`sites/${siteId}/pec`, payload)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap((site: Site) => {
-          this.toastService.openSuccessToast('Site has been updated');
-          this.logger.info('UPDATED_SITE', site);
-        }),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been updated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updatePecCode error has occurred: ', error);
@@ -204,13 +201,12 @@ export class SiteResource {
       );
   }
 
-  public setSiteAdjudicator(siteId: number, adjudicatorId?: number): Observable<Site> {
+  public setSiteAdjudicator(siteId: number, adjudicatorId?: number): NoContent {
     const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
-    return this.apiResource.put<Site>(`sites/${siteId}/adjudicator`, null, params)
+    return this.apiResource.put<NoContent>(`sites/${siteId}/adjudicator`, null, params)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        map((site: Site) => site),
-        tap((site: Site) => this.logger.info('UPDATED_SITE', site)),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been updated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator could not be assigned');
           this.logger.error('[Adjudication] AdjudicationResource::setSiteAdjudicator error has occurred: ', error);
@@ -219,12 +215,11 @@ export class SiteResource {
       );
   }
 
-  public removeSiteAdjudicator(siteId: number): Observable<Site> {
-    return this.apiResource.delete<Site>(`sites/${siteId}/adjudicator`)
+  public removeSiteAdjudicator(siteId: number): NoContent {
+    return this.apiResource.delete<NoContent>(`sites/${siteId}/adjudicator`)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        map((site: Site) => site),
-        tap((site: Site) => this.logger.info('UPDATED_SITE', site)),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been updated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator could not be unassigned');
           this.logger.error('[Adjudication] AdjudicationResource::removeSiteAdjudicator error has occurred: ', error);
@@ -233,14 +228,11 @@ export class SiteResource {
       );
   }
 
-  public deleteSite(siteId: number): Observable<Site> {
-    return this.apiResource.delete<Site>(`sites/${siteId}`)
+  public deleteSite(siteId: number): NoContent {
+    return this.apiResource.delete<NoContent>(`sites/${siteId}`)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap((site: Site) => {
-          this.toastService.openSuccessToast('Site has been deleted');
-          this.logger.info('DELETED_SITE', site);
-        }),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been deleted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be deleted');
           this.logger.error('[SiteRegistration] SiteResource::deleteSite error has occurred: ', error);
@@ -249,7 +241,7 @@ export class SiteResource {
       );
   }
 
-  public submitSite(siteId: number, site: Site & { businessLicence: { documentGuid: string } }): Observable<string> {
+  public submitSite(siteId: number, site: Site & { businessLicence: { documentGuid: string } }): NoContent {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
@@ -260,10 +252,10 @@ export class SiteResource {
     } else {
       site.businessHours = null;
     }
-    return this.apiResource.post<string>(`sites/${siteId}/submissions`, site)
+    return this.apiResource.post<NoContent>(`sites/${siteId}/submissions`, site)
       .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Site registration has been submitted')),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been submitted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration could not be submitted');
           this.logger.error('[SiteRegistration] SiteResource::submitSite error has occurred: ', error);
@@ -413,11 +405,11 @@ export class SiteResource {
       );
   }
 
-  public approveSite(siteId: number): Observable<Site> {
-    return this.apiResource.put<Site>(`sites/${siteId}/approve`)
+  public approveSite(siteId: number): NoContent {
+    return this.apiResource.put<NoContent>(`sites/${siteId}/approve`)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Site registration has been approved')),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been approved')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration could not be approved');
           this.logger.error('[SiteRegistration] SiteResource::approveSite error has occurred: ', error);
@@ -426,11 +418,11 @@ export class SiteResource {
       );
   }
 
-  public declineSite(siteId: number): Observable<Site> {
-    return this.apiResource.put<Site>(`sites/${siteId}/decline`)
+  public declineSite(siteId: number): NoContent {
+    return this.apiResource.put<NoContent>(`sites/${siteId}/decline`)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Site registration has been declined')),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been declined')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration could not be declined');
           this.logger.error('[SiteRegistration] SiteResource::declineSite error has occurred: ', error);
@@ -439,11 +431,11 @@ export class SiteResource {
       );
   }
 
-  public enableEditingSite(siteId: number): Observable<Site> {
-    return this.apiResource.put<Site>(`sites/${siteId}/enable-editing`)
+  public enableEditingSite(siteId: number): NoContent {
+    return this.apiResource.put<NoContent>(`sites/${siteId}/enable-editing`)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Site registration editing has been enabled')),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site editing has been enabled')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration editing could not be enabled');
           this.logger.error('[SiteRegistration] SiteResource::enableEditingSite error has occurred: ', error);
@@ -452,10 +444,10 @@ export class SiteResource {
       );
   }
 
-  public unrejectSite(siteId: number): Observable<Site> {
-    return this.apiResource.put<Site>(`sites/${siteId}/unreject`)
+  public unrejectSite(siteId: number): NoContent {
+    return this.apiResource.put<NoContent>(`sites/${siteId}/unreject`)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
+        NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Site has been unrejected')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration could not be unrejected');
@@ -465,16 +457,15 @@ export class SiteResource {
       );
   }
 
-  public flagSite(siteId: number, flagged: boolean): Observable<Site> {
+  public flagSite(siteId: number, flagged: boolean): NoContent {
     const url = `sites/${siteId}/flag`;
     const body = { data: flagged };
-    const request$ = this.apiResource.put<Site>(url, body);
+    const request$ = this.apiResource.put<NoContent>(url, body);
 
     return request$
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        map((site: Site) => site),
-        tap((site: Site) => this.logger.info('UPDATED SITE', site)),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been flagged')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site flag could not be updated');
           this.logger.error('[Site] SiteResource::flagSite error has occurred:'

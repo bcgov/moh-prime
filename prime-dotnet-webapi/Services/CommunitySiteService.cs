@@ -10,6 +10,7 @@ using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
+using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
 {

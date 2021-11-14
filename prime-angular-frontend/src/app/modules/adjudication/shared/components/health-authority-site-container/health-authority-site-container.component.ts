@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
@@ -49,12 +48,13 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
       .getHealthAuthorityAdminSites(this.route.snapshot.params.haid, this.route.snapshot.params.sid)
       .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySite = sites[0]);
   }
-  protected updateSite(updatedSite: Site): void {
-    const updateHASite = {
-      ...this.healthAuthoritySite,
-      ...updatedSite
-    };
-    this.healthAuthoritySite = updateHASite;
+  protected updateSite(siteId: number, updatedSiteFields: {}): void {
+    // TODO: fix updated site shit
+    // const updateHASite = {
+    //   ...this.healthAuthoritySite,
+    //   ...updatedSite
+    // };
+    // this.healthAuthoritySite = updateHASite;
   }
 
 }

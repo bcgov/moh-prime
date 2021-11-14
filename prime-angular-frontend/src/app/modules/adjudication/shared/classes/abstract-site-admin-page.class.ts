@@ -22,6 +22,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 
 export abstract class AbstractSiteAdminPage {
   public busy: Subscription;
@@ -49,9 +50,7 @@ export abstract class AbstractSiteAdminPage {
 
   public onToggleFlagSite({ siteId, flagged }: { siteId: number, flagged: boolean }) {
     this.busy = this.siteResource.flagSite(siteId, flagged)
-      .subscribe((updatedSite: Site) => {
-        this.updateSite(updatedSite);
-      });
+      .subscribe(() => this.updateSite(siteId, { flagged }));
   }
 
   public onAssign(siteId: number) {
@@ -177,7 +176,7 @@ export abstract class AbstractSiteAdminPage {
         exhaustMap((note: string) =>
           this.siteResource.approveSite(siteId)
             .pipe(
-              map((updatedSite: Site) => this.updateSite(updatedSite)),
+              map(() => this.updateSite(siteId, { status: SiteStatusType.EDITABLE })),
               map(() => note)
             )
         ),
@@ -210,7 +209,7 @@ export abstract class AbstractSiteAdminPage {
         exhaustMap((note: string) =>
           this.siteResource.declineSite(siteId)
             .pipe(
-              map((updatedSite: Site) => this.updateSite(updatedSite)),
+              map(() => this.updateSite(siteId, { status: SiteStatusType.LOCKED })),
               map(() => note)
             )
         ),
@@ -223,7 +222,17 @@ export abstract class AbstractSiteAdminPage {
       .subscribe();
   }
 
+  public onEnableEditing(siteId: number) {
+    this.busy = this.siteResource.enableEditingSite(siteId)
+      .subscribe(() => this.updateSite(siteId, { status: SiteStatusType.EDITABLE }));
+  }
+
+  public onUnreject(siteId: number) {
+    this.busy = this.siteResource.unrejectSite(siteId)
+      .subscribe(() => this.updateSite(siteId, { status: SiteStatusType.IN_REVIEW }));
+  }
+
   protected abstract getDataset(queryParams?: unknown): void;
 
-  protected abstract updateSite(updatedSite: Site | HealthAuthoritySite): void;
+  protected abstract updateSite(siteId: number, updatedSiteFields: {}): void;
 }

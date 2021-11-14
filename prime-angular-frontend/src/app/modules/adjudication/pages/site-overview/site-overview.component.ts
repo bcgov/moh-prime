@@ -29,65 +29,58 @@ import { SiteRegistrationListViewModel } from '@registration/shared/models/site-
 import { Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 
 @Component({
   selector: 'app-site-overview',
   templateUrl: './site-overview.component.html',
   styleUrls: ['./site-overview.component.scss']
 })
-export class SiteOverviewComponent extends SiteRegistrationContainerComponent implements OnInit {
-  @Input() public hasActions: boolean;
-  @Input() public actions: TemplateRef<any>;
-  @Input() public content: TemplateRef<any>;
-  @Output() public action: EventEmitter<void>;
-
+export class SiteOverviewComponent implements OnInit {
   public busy: Subscription;
-  public columns: string[];
+  public hasActions: boolean;
   public organization: Organization;
-  public site: Site;
+
+  public refresh: BehaviorSubject<boolean>;
+
   public orgClaim: OrganizationClaim;
   public newSigningAuthority: Party;
   public businessLicences: BusinessLicence[];
   public form: FormGroup;
-  public refresh: BehaviorSubject<boolean>;
 
   public showSendNotification: boolean;
   public isNotificationSent: boolean;
-  public showSearchFilter: boolean;
+
   public AdjudicationRoutes = AdjudicationRoutes;
 
+  private routeUtils: RouteUtils;
+
   constructor(
-    @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,
     protected route: ActivatedRoute,
     protected router: Router,
-    protected adjudicationResource: AdjudicationResource,
-    protected organizationResource: OrganizationResource,
+    protected dialog: MatDialog,
     protected siteResource: SiteResource,
+    protected adjudicationResource: AdjudicationResource,
+    protected healthAuthSiteResource: HealthAuthoritySiteResource,
+
+    private organizationResource: OrganizationResource,
     private formUtilsService: FormUtilsService,
     private fb: FormBuilder,
-    permissionService: PermissionService,
-    dialog: MatDialog,
-    toastService: ToastService
-  ) {
-    super(
-      defaultOptions,
-      route,
-      router,
-      organizationResource,
-      siteResource,
-      adjudicationResource,
-      dialog,
-      toastService,
-      permissionService
-    );
 
+  ) {
     this.hasActions = true;
     this.refresh = new BehaviorSubject<boolean>(null);
-    this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
 
   public get pec(): FormControl {
     return this.form.get('pec') as FormControl;
+  }
+
+  public onRoute(routePath: RoutePath) {
+    this.routeUtils.routeWithin(routePath);
   }
 
   public onSubmit(): void {
@@ -95,30 +88,17 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       const siteId = this.route.snapshot.params.sid;
       this.busy = this.siteResource
         .updatePecCode(siteId, this.form.value.pec)
-        .subscribe((site: Site) => {
+        .subscribe(() => {
           this.refresh.next(true);
-          this.site = site;
         });
     }
-  }
-
-  public onApprove(siteId: number) {
-    if (!this.formUtilsService.checkValidity(this.form)) {
-      return;
-    }
-
-    super.onApprove(siteId);
   }
 
   public onApproveOrgClaim(): void {
     this.busy = this.organizationResource
       .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
-      .pipe(
-        exhaustMap(() => this.organizationResource.getOrganizationById(this.organization.id))
-      )
-      .subscribe((organization: Organization) => {
+      .subscribe(() => {
         this.refresh.next(true);
-        this.organization = organization;
       });
   }
 
@@ -143,8 +123,6 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   }
 
   public ngOnInit(): void {
-    super.ngOnInit();
-
     this.createFormInstance();
 
     const { oid, sid } = this.route.snapshot.params;
@@ -155,9 +133,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       this.siteResource.getBusinessLicences(sid),
       this.organizationResource.getOrganizationClaimByOrgId(oid)
     ]).pipe(
-      exhaustMap(([organization, site, businessLicences, orgClaim]: [Organization, Site, BusinessLicence[], OrganizationClaim]) => {
-        this.organization = organization;
-        this.site = site;
+      exhaustMap(([org, site, businessLicences, orgClaim]: [Organization, Site, BusinessLicence[], OrganizationClaim]) => {
+        this.organization = org;
         this.businessLicences = businessLicences;
         this.orgClaim = orgClaim;
         this.initForm(site);
@@ -173,6 +150,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
           : of(null)
       )
     ).subscribe((signingAuthority: Party | null) => this.newSigningAuthority = signingAuthority);
+
+    this.pec.markAsTouched();
   }
 
   private createFormInstance() {
@@ -190,6 +169,6 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   }
 
   private checkPecIsAssignable(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecAssignable(this.site.id, value);
+    return (value: string) => this.siteResource.pecAssignable(this.route.snapshot.params.sid, value);
   }
 }

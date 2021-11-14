@@ -49,6 +49,9 @@
                                          (flag)="onToggleFlagSite($event)">
           </app-site-registration-actions>
 
+          <ng-container [ngTemplateOutlet]="belowActions"
+                        [ngTemplateOutletContext]="{ siteRegistration: dataSource?.data[0] }"></ng-container>
+
         </ng-template>
 
       </div>

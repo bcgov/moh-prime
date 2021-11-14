@@ -241,14 +241,11 @@ export class OrganizationResource {
       );
   }
 
-  public deleteOrganization(organizationId: number): Observable<Organization> {
-    return this.apiResource.delete<Organization>(`organizations/${organizationId}`)
+  public deleteOrganization(organizationId: number): NoContent {
+    return this.apiResource.delete<NoContent>(`organizations/${organizationId}`)
       .pipe(
-        map((response: ApiHttpResponse<Organization>) => response.result),
-        tap((organization: Organization) => {
-          this.toastService.openSuccessToast('Organization has been deleted');
-          this.logger.info('DELETED_ORGANIZATION', organization);
-        }),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization has been deleted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be deleted');
           this.logger.error('[Core] OrganizationResource::deleteOrganization error has occurred: ', error);

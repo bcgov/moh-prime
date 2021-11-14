@@ -9,7 +9,7 @@
 
   <mat-menu #menu>
     <button mat-menu-item
-            [disabled]="!(Role.EDIT_SITE | inRole) || !isActionAllowed(SiteAdjudicationAction.APPROVE)"
+            [disabled]="!(Role.EDIT_SITE | inRole) || !isActionAllowed(SiteAdjudicationAction.APPROVE) || !siteRegistration.pec"
             (click)="onApprove()">
       <mat-icon>check_circle_outline</mat-icon>
       <span>Approve Site</span>

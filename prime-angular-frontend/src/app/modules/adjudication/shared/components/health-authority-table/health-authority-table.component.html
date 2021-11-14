@@ -88,9 +88,8 @@
         <th mat-header-cell
             *matHeaderCellDef
             scope="col"> Assigned To </th>
-        <!-- TODO missing adjudicatorIdir on model to populate column -->
         <td mat-cell
-            *matCellDef="let row;"> {{ null | default }} </td>
+            *matCellDef="let row;"> {{ row.adjudicatorIdir | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="haActions">
@@ -228,7 +227,6 @@
         </button>
 
         <button mat-menu-item
-                *ngIf="!row?.adjudicatorIdir"
                 [disabled]="!(Role.EDIT_SITE | inRole)"
                 (click)="(!row?.adjudicatorIdir) ? onAssign(row.id) : onReassign(row.id)">
           <mat-icon>pan_tool</mat-icon>
