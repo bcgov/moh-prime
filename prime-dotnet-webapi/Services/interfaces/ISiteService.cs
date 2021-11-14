@@ -11,7 +11,7 @@ namespace Prime.Services
     public interface ISiteService
     {
         Task<bool> SiteExistsAsync(int siteId);
-        Task<Site> GetSiteAsync(int siteId);
+        Task<SiteStatusType> GetSiteStatusAsync(int siteId);
         Task<bool> PecAssignableAsync(int siteId, string pec);
         Task UpdateCompletedAsync(int siteId, bool completed);
         Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null);
@@ -47,5 +47,6 @@ namespace Prime.Services
         Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user);
         Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId);
         Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId);
+        Task<string> GetSitePecAsync(int siteId);
     }
 }

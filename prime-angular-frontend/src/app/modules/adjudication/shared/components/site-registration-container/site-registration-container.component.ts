@@ -98,6 +98,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
 
   protected getDataset(queryParams: { textSearch?: string }): void {
     const { oid, sid } = this.route.snapshot.params;
+    // TODO: remove the joining of the org/site models to make the list view model.
+    // This should be done in the backend through view model projection
     const request$ = (oid)
       ? combineLatest([
         this.getOrganizationById(oid),

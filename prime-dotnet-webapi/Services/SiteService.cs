@@ -39,9 +39,13 @@ namespace Prime.Services
         {
             return await _context.Sites.AnyAsync(s => s.Id == siteId);
         }
-        public async Task<Site> GetSiteAsync(int siteId)
+
+        public async Task<SiteStatusType> GetSiteStatusAsync(int siteId)
         {
-            return await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            return await _context.Sites
+                .Where(s => s.Id == siteId)
+                .Select(s => s.Status)
+                .SingleOrDefaultAsync();
         }
 
         public async Task<bool> PecAssignableAsync(int siteId, string pec)
@@ -453,6 +457,14 @@ namespace Prime.Services
                         || e.Organization.Sites.Any(s => s.Id == siteId))
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
+        }
+
+        public async Task<string> GetSitePecAsync(int siteId)
+        {
+            return await _context.Sites
+                .Where(s => s.Id == siteId)
+                .Select(s => s.PEC)
+                .SingleOrDefaultAsync();
         }
     }
 }

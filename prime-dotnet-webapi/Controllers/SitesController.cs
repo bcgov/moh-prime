@@ -677,16 +677,18 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
         public async Task<ActionResult> PecAssignable(int siteId, string pec)
         {
-            var site = await _siteService.GetSiteAsync(siteId);
-            if (site == null)
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
+
             if (string.IsNullOrWhiteSpace(pec))
             {
                 return BadRequest("PEC cannot be empty.");
             }
-            if (site.PEC == pec)
+
+            var currentPec = await _siteService.GetSitePecAsync(siteId);
+            if (currentPec == pec)
             {
                 return Ok(true);
             }
@@ -827,16 +829,19 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> ApproveSite(int siteId)
         {
-            var site = await _siteService.GetSiteAsync(siteId);
-            if (site == null)
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, site.Status))
+
+            var status = await _siteService.GetSiteStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, status))
             {
                 return BadRequest("Action could not be performed.");
             }
-            if (site.PEC == null)
+
+            var pec = await _siteService.GetSitePecAsync(siteId);
+            if (pec == null)
             {
                 return BadRequest("Site approval requires a site ID/PEC code.");
             }
@@ -850,7 +855,7 @@ namespace Prime.Controllers
 
                 if (communitySite.ActiveBeforeRegistration)
                 {
-                    await _emailService.SendSiteActiveBeforeRegistrationAsync(site.Id);
+                    await _emailService.SendSiteActiveBeforeRegistrationAsync(siteId);
                 }
                 else
                 {
@@ -859,7 +864,7 @@ namespace Prime.Controllers
                 }
                 await _emailService.SendSiteApprovedHIBCAsync(communitySite);
 
-                var remoteUsersToNotify = site.RemoteUsers.Where(ru => !ru.Notified);
+                var remoteUsersToNotify = communitySite.RemoteUsers.Where(ru => !ru.Notified);
                 await _emailService.SendRemoteUserNotificationsAsync(communitySite, remoteUsersToNotify);
                 await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
             }
@@ -880,12 +885,13 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> DeclineSite(int siteId)
         {
-            var site = await _siteService.GetSiteAsync(siteId);
-            if (site == null)
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Reject, site.Status))
+
+            var status = await _siteService.GetSiteStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -907,12 +913,13 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> EnableEditingSite(int siteId)
         {
-            var site = await _siteService.GetSiteAsync(siteId);
-            if (site == null)
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.RequestChange, site.Status))
+
+            var status = await _siteService.GetSiteStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -934,12 +941,13 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UnrejectSite(int siteId)
         {
-            var site = await _siteService.GetSiteAsync(siteId);
-            if (site == null)
+            if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Unreject, site.Status))
+
+            var status = await _siteService.GetSiteStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, status))
             {
                 return BadRequest("Action could not be performed.");
             }

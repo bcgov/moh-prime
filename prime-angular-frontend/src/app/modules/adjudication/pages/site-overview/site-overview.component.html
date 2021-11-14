@@ -1,13 +1,13 @@
 <app-site-registration-container [content]="content"
                                  [hasActions]="hasActions"
-                                 [belowActions]="belowActions">
+                                 [belowActions]="belowActions"
+                                 [refresh]="refresh">
 
   <app-page-header>Overview</app-page-header>
 
 </app-site-registration-container>
 
-<ng-template #content
-             let-siteRegistration="siteRegistration">
+<ng-template #content>
   <app-page-section *ngIf="organization?.hasClaim">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>
@@ -46,7 +46,7 @@
       </ng-container>
       <button mat-icon-button
               matTooltip="View Organization"
-              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, siteRegistration.id, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
         <mat-icon>navigate_next icon</mat-icon>
       </button>
     </app-page-subheader>
@@ -68,14 +68,14 @@
       </ng-container>
       <button mat-icon-button
               matTooltip="View Site"
-              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, siteRegistration.id, AdjudicationRoutes.SITE_INFORMATION])">
+              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_INFORMATION])">
         <mat-icon>navigate_next icon</mat-icon>
       </button>
     </app-page-subheader>
 
     <mat-card>
       <mat-card-content>
-        <app-overview-container [site]="siteRegistration"
+        <app-overview-container [site]="site"
                                 [showEditRedirect]="false"
                                 [admin]="true"
                                 [businessLicences]="businessLicences"></app-overview-container>
@@ -83,7 +83,7 @@
     </mat-card>
   </app-page-section>
 
-  <app-page-section *ngIf="siteRegistration?.remoteUsers?.length">
+  <app-page-section *ngIf="site?.remoteUsers?.length">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>
         <mat-icon class="mr-2">account_circle</mat-icon>
@@ -91,14 +91,14 @@
       </ng-container>
       <button mat-icon-button
               matTooltip="View Remote Practitioners"
-              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, siteRegistration.id, AdjudicationRoutes.SITE_REMOTE_USERS])">
+              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_REMOTE_USERS])">
         <mat-icon>navigate_next icon</mat-icon>
       </button>
     </app-page-subheader>
 
     <mat-card>
       <mat-card-content>
-        <app-remote-user-review [remoteUsers]="siteRegistration?.remoteUsers"></app-remote-user-review>
+        <app-remote-user-review [remoteUsers]="site?.remoteUsers"></app-remote-user-review>
       </mat-card-content>
     </mat-card>
   </app-page-section>

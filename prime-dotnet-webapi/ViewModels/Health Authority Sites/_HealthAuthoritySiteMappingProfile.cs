@@ -16,8 +16,18 @@ namespace Prime.ViewModels.HealthAuthoritySites
                 .ForMember(dest => dest.AuthorizedUserName, opt => opt.MapFrom(src => $"{src.AuthorizedUser.Party.FirstName} {src.AuthorizedUser.Party.LastName}"))
                 .ForMember(dest => dest.AuthorizedUserEmail, opt => opt.MapFrom(src => src.AuthorizedUser.Party.Email))
                 .ForMember(dest => dest.HealthAuthorityName, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.Name))
-                .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.AdjudicatorId != null ? src.Adjudicator.IDIR : null));
-            CreateMap<HealthAuthoritySite, HealthAuthoritySiteListViewModel>();
+                .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.AdjudicatorId != null ? src.Adjudicator.IDIR : null))
+                .ForMember(dest => dest.Status,
+                    opt => opt.MapFrom(src => src.SiteStatuses.Count > 0
+                        ? src.SiteStatuses.OrderByDescending(s => s.StatusDate).ThenByDescending(s => s.Id).FirstOrDefault().StatusType
+                        : SiteStatusType.Editable
+                ));
+            CreateMap<HealthAuthoritySite, HealthAuthoritySiteListViewModel>()
+                .ForMember(dest => dest.Status,
+                        opt => opt.MapFrom(src => src.SiteStatuses.Count > 0
+                            ? src.SiteStatuses.OrderByDescending(s => s.StatusDate).ThenByDescending(s => s.Id).FirstOrDefault().StatusType
+                            : SiteStatusType.Editable
+                    )); ;
             CreateMap<HealthAuthorityPharmanetAdministrator, HealthAuthoritySite>();
 
             CreateMap<HealthAuthoritySite, SiteSelectionDto>();

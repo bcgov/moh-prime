@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, EMPTY, forkJoin, Observable, of, Subscription } from 'rxjs';
@@ -12,24 +11,17 @@ import { asyncValidator } from '@lib/validators/form-async.validators';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { ToastService } from '@core/services/toast.service';
-import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
-import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
-import { PermissionService } from '@auth/shared/services/permission.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { SiteRegistrationContainerComponent } from '@adjudication/shared/components/site-registration-container/site-registration-container.component';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
-import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 
@@ -42,6 +34,7 @@ export class SiteOverviewComponent implements OnInit {
   public busy: Subscription;
   public hasActions: boolean;
   public organization: Organization;
+  public site: Site;
 
   public refresh: BehaviorSubject<boolean>;
 
@@ -134,7 +127,9 @@ export class SiteOverviewComponent implements OnInit {
       this.organizationResource.getOrganizationClaimByOrgId(oid)
     ]).pipe(
       exhaustMap(([org, site, businessLicences, orgClaim]: [Organization, Site, BusinessLicence[], OrganizationClaim]) => {
+        // Full objects are needed to display overview components
         this.organization = org;
+        this.site = site;
         this.businessLicences = businessLicences;
         this.orgClaim = orgClaim;
         this.initForm(site);
