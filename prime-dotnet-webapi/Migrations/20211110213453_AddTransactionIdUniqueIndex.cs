@@ -6,6 +6,10 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_PharmanetTransactionLog_TransactionId",
+                table: "PharmanetTransactionLog");
+
             migrationBuilder.CreateIndex(
                 name: "IX_PharmanetTransactionLog_TransactionId",
                 table: "PharmanetTransactionLog",
@@ -18,6 +22,11 @@ namespace Prime.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_PharmanetTransactionLog_TransactionId",
                 table: "PharmanetTransactionLog");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PharmanetTransactionLog_TransactionId",
+                table: "PharmanetTransactionLog",
+                column: "TransactionId");
         }
     }
 }
