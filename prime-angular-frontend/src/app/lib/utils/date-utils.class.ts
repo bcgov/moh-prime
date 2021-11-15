@@ -22,7 +22,7 @@ export class DateUtils {
 
   /**
    * @description
-   * Check that a date is within the 90 day renewal period.
+   * Check that a date is within the renewal period.
    */
   public static withinRenewalPeriod(date: string | Moment | null): boolean {
     return DateUtils.withinDaysBeforeDate(date, RENEWAL_PERIOD);
