@@ -59,12 +59,9 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   public disableCareSetting(careSettingCode: number): boolean {
-    switch (careSettingCode) {
-      case CareSettingEnum.DEVICE_PROVIDER:
-        return !this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER);
-      default:
-        return false;
-    }
+    return (careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
+      ? !this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER)
+      : false;
   }
 
   public ngOnInit(): void {
