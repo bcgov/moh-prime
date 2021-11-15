@@ -1,6 +1,18 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
 
+  <app-expiry-alert [expiryDates]="siteExpiryDate">
+    <!-- Work around for ngProjectAs not passing class reference to alert when applied to ng-content -->
+    <ng-container #alertTitle
+                  class="alert-title">
+      This site requires renewal.
+    </ng-container>
+    <ng-container #alertContent
+                  class="alert-content">
+      Review information and upload a valid business licence.
+    </ng-container>
+  </app-expiry-alert>
+
   <div class="mb-5">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Information Review</ng-container>
@@ -10,18 +22,24 @@
     </app-page-subheader2>
   </div>
 
-  <app-vendor-overview [vendor]="healthAuthoritySite"></app-vendor-overview>
-  <app-site-information-overview [siteInformation]="healthAuthoritySite"></app-site-information-overview>
-  <app-health-auth-care-type-overview [healthAuthCareType]="healthAuthoritySite"></app-health-auth-care-type-overview>
-  <app-site-address-overview [siteAddress]="healthAuthoritySite"></app-site-address-overview>
-  <app-hours-operation-overview [hoursOperation]="healthAuthoritySite"></app-hours-operation-overview>
-  <app-remote-users-overview [remoteUsers]="healthAuthoritySite"></app-remote-users-overview>
+  <app-vendor-overview [vendor]="healthAuthoritySite"
+                       [showEditRedirect]="siteIsIncomplete"></app-vendor-overview>
+  <app-site-information-overview [siteInformation]="healthAuthoritySite"
+                                 [showEditRedirect]="siteIsIncomplete"></app-site-information-overview>
+  <app-health-auth-care-type-overview [healthAuthCareType]="healthAuthoritySite"
+                                      [showEditRedirect]="siteIsIncomplete"></app-health-auth-care-type-overview>
+  <app-site-address-overview [siteAddress]="healthAuthoritySite"
+                             [showEditRedirect]="siteIsIncomplete"></app-site-address-overview>
+  <app-hours-operation-overview [hoursOperation]="healthAuthoritySite"
+                                [showEditRedirect]="siteIsIncomplete"></app-hours-operation-overview>
   <app-administrator-overview [administrator]="healthAuthoritySite"
-                              [pharmanetAdministrators]="pharmanetAdministrators"></app-administrator-overview>
+                              [pharmanetAdministrators]="pharmanetAdministrators"
+                              [showEditRedirect]="siteIsIncomplete || siteIsApproved"></app-administrator-overview>
   <app-technical-support-overview [technicalSupport]="healthAuthoritySite"
-                                  [technicalSupports]="technicalSupports"></app-technical-support-overview>
+                                  [technicalSupports]="technicalSupports"
+                                  [showEditRedirect]="siteIsIncomplete || siteIsApproved"></app-technical-support-overview>
 
-  <ng-container *ngIf="!healthAuthoritySite?.submittedDate; else showBack">
+  <ng-container *ngIf="showSubmissionAction; else showBack">
     <div class="footer mb-4">
       <mat-checkbox #accept>
         <div class="pl-3">

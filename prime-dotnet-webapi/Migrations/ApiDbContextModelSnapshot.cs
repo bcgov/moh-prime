@@ -16,7 +16,7 @@ namespace Prime.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.6")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
@@ -570,9 +570,6 @@ namespace Prime.Migrations
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("interval");
 
-                    b.Property<int?>("HealthAuthoritySiteId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("SiteId")
                         .HasColumnType("integer");
 
@@ -586,8 +583,6 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HealthAuthoritySiteId");
 
                     b.HasIndex("SiteId");
 
@@ -4495,88 +4490,6 @@ namespace Prime.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthoritySite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int?>("AdjudicatorId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset?>("ApprovedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CareType")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Completed")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("HealthAuthorityOrganizationId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("HealthAuthorityPharmanetAdministratorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("HealthAuthorityTechnicalSupportId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("PEC")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("PhysicalAddressId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("ProvisionerId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SecurityGroupCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SiteId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SiteName")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset?>("SubmittedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("VendorCode")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdjudicatorId");
-
-                    b.HasIndex("HealthAuthorityOrganizationId");
-
-                    b.HasIndex("HealthAuthorityPharmanetAdministratorId");
-
-                    b.HasIndex("HealthAuthorityTechnicalSupportId");
-
-                    b.HasIndex("PhysicalAddressId");
-
-                    b.ToTable("HealthAuthoritySite");
-                });
-
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
                 {
                     b.Property<int>("Id")
@@ -4921,6 +4834,53 @@ namespace Prime.Migrations
                             Code = "2.16.840.1.113883.4.530",
                             Name = "RDID"
                         });
+                });
+
+            modelBuilder.Entity("Prime.Models.IndividualDeviceProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("CommunitySiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunitySiteId");
+
+                    b.ToTable("IndividualDeviceProvider");
                 });
 
             modelBuilder.Entity("Prime.Models.Job", b =>
@@ -6200,6 +6160,9 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PharmacyId");
+
+                    b.HasIndex("TransactionId")
+                        .IsUnique();
 
                     b.HasIndex("TxDateTime");
 
@@ -9238,12 +9201,12 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("HealthAuthoritySiteId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("Notified")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("SiteId")
                         .HasColumnType("integer");
@@ -9255,8 +9218,6 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HealthAuthoritySiteId");
 
                     b.HasIndex("SiteId");
 
@@ -9476,9 +9437,6 @@ namespace Prime.Migrations
                     b.Property<int?>("AdjudicatorId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("AdministratorPharmaNetId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset?>("ApprovedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -9500,26 +9458,14 @@ namespace Prime.Migrations
                     b.Property<bool>("Flagged")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("PEC")
                         .HasColumnType("text");
 
                     b.Property<int?>("PhysicalAddressId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("PrivacyOfficerId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("ProvisionerId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset?>("SubmittedDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("TechnicalSupportId")
-                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -9531,19 +9477,9 @@ namespace Prime.Migrations
 
                     b.HasIndex("AdjudicatorId");
 
-                    b.HasIndex("AdministratorPharmaNetId");
-
                     b.HasIndex("CareSettingCode");
 
-                    b.HasIndex("OrganizationId");
-
                     b.HasIndex("PhysicalAddressId");
-
-                    b.HasIndex("PrivacyOfficerId");
-
-                    b.HasIndex("ProvisionerId");
-
-                    b.HasIndex("TechnicalSupportId");
 
                     b.ToTable("Site");
                 });
@@ -9570,9 +9506,6 @@ namespace Prime.Migrations
                     b.Property<string>("Filename")
                         .HasColumnType("text");
 
-                    b.Property<int?>("HealthAuthoritySiteId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("SiteId")
                         .HasColumnType("integer");
 
@@ -9588,8 +9521,6 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdjudicatorId");
-
-                    b.HasIndex("HealthAuthoritySiteId");
 
                     b.HasIndex("SiteId");
 
@@ -9652,9 +9583,6 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("HealthAuthoritySiteId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Note")
                         .IsRequired()
                         .HasColumnType("text");
@@ -9674,8 +9602,6 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdjudicatorId");
-
-                    b.HasIndex("HealthAuthoritySiteId");
 
                     b.HasIndex("SiteId");
 
@@ -9701,9 +9627,6 @@ namespace Prime.Migrations
                     b.Property<string>("Filename")
                         .HasColumnType("text");
 
-                    b.Property<int?>("HealthAuthoritySiteId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("SiteId")
                         .HasColumnType("integer");
 
@@ -9717,8 +9640,6 @@ namespace Prime.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HealthAuthoritySiteId");
 
                     b.HasIndex("SiteId");
 
@@ -10386,6 +10307,81 @@ namespace Prime.Migrations
                     b.HasDiscriminator().HasValue("HealthAuthorityTechnicalSupport");
                 });
 
+            modelBuilder.Entity("Prime.Models.CommunitySite", b =>
+                {
+                    b.HasBaseType("Prime.Models.Site");
+
+                    b.Property<int?>("AdministratorPharmaNetId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PrivacyOfficerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProvisionerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TechnicalSupportId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("AdministratorPharmaNetId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("PrivacyOfficerId");
+
+                    b.HasIndex("ProvisionerId");
+
+                    b.HasIndex("TechnicalSupportId");
+
+                    b.ToTable("CommunitySite");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthoritySite", b =>
+                {
+                    b.HasBaseType("Prime.Models.Site");
+
+                    b.Property<int>("AuthorizedUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("HealthAuthorityCareTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("HealthAuthorityOrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("HealthAuthorityPharmanetAdministratorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("HealthAuthorityTechnicalSupportId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("HealthAuthorityVendorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SecurityGroupCode")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SiteName")
+                        .HasColumnType("text");
+
+                    b.HasIndex("AuthorizedUserId");
+
+                    b.HasIndex("HealthAuthorityCareTypeId");
+
+                    b.HasIndex("HealthAuthorityOrganizationId");
+
+                    b.HasIndex("HealthAuthorityPharmanetAdministratorId");
+
+                    b.HasIndex("HealthAuthorityTechnicalSupportId");
+
+                    b.HasIndex("HealthAuthorityVendorId");
+
+                    b.ToTable("HealthAuthoritySite");
+                });
+
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
@@ -10498,10 +10494,6 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.BusinessDay", b =>
                 {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthoritySite", null)
-                        .WithMany("BusinessHours")
-                        .HasForeignKey("HealthAuthoritySiteId");
-
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("BusinessHours")
                         .HasForeignKey("SiteId")
@@ -10554,7 +10546,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.BusinessLicence", b =>
                 {
-                    b.HasOne("Prime.Models.Site", "Site")
+                    b.HasOne("Prime.Models.CommunitySite", "Site")
                         .WithMany("BusinessLicences")
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -10962,41 +10954,6 @@ namespace Prime.Migrations
                     b.Navigation("Contact");
                 });
 
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthoritySite", b =>
-                {
-                    b.HasOne("Prime.Models.Admin", "Adjudicator")
-                        .WithMany()
-                        .HasForeignKey("AdjudicatorId");
-
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", "HealthAuthorityPharmanetAdministrator")
-                        .WithMany()
-                        .HasForeignKey("HealthAuthorityPharmanetAdministratorId");
-
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", "HealthAuthorityTechnicalSupport")
-                        .WithMany()
-                        .HasForeignKey("HealthAuthorityTechnicalSupportId");
-
-                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
-                        .WithMany()
-                        .HasForeignKey("PhysicalAddressId");
-
-                    b.Navigation("Adjudicator");
-
-                    b.Navigation("HealthAuthorityPharmanetAdministrator");
-
-                    b.Navigation("HealthAuthorityTechnicalSupport");
-
-                    b.Navigation("Organization");
-
-                    b.Navigation("PhysicalAddress");
-                });
-
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
                 {
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
@@ -11042,6 +10999,17 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.Navigation("Enrollee");
+                });
+
+            modelBuilder.Entity("Prime.Models.IndividualDeviceProvider", b =>
+                {
+                    b.HasOne("Prime.Models.CommunitySite", "CommunitySite")
+                        .WithMany()
+                        .HasForeignKey("CommunitySiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CommunitySite");
                 });
 
             modelBuilder.Entity("Prime.Models.Job", b =>
@@ -11265,10 +11233,6 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.RemoteUser", b =>
                 {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthoritySite", null)
-                        .WithMany("RemoteUsers")
-                        .HasForeignKey("HealthAuthoritySiteId");
-
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("RemoteUsers")
                         .HasForeignKey("SiteId")
@@ -11360,51 +11324,19 @@ namespace Prime.Migrations
                         .WithMany()
                         .HasForeignKey("AdjudicatorId");
 
-                    b.HasOne("Prime.Models.Contact", "AdministratorPharmaNet")
-                        .WithMany()
-                        .HasForeignKey("AdministratorPharmaNetId");
-
                     b.HasOne("Prime.Models.CareSetting", "CareSetting")
                         .WithMany()
                         .HasForeignKey("CareSettingCode");
-
-                    b.HasOne("Prime.Models.Organization", "Organization")
-                        .WithMany("Sites")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()
                         .HasForeignKey("PhysicalAddressId");
 
-                    b.HasOne("Prime.Models.Contact", "PrivacyOfficer")
-                        .WithMany()
-                        .HasForeignKey("PrivacyOfficerId");
-
-                    b.HasOne("Prime.Models.Party", "Provisioner")
-                        .WithMany()
-                        .HasForeignKey("ProvisionerId");
-
-                    b.HasOne("Prime.Models.Contact", "TechnicalSupport")
-                        .WithMany()
-                        .HasForeignKey("TechnicalSupportId");
-
                     b.Navigation("Adjudicator");
-
-                    b.Navigation("AdministratorPharmaNet");
 
                     b.Navigation("CareSetting");
 
-                    b.Navigation("Organization");
-
                     b.Navigation("PhysicalAddress");
-
-                    b.Navigation("PrivacyOfficer");
-
-                    b.Navigation("Provisioner");
-
-                    b.Navigation("TechnicalSupport");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteAdjudicationDocument", b =>
@@ -11414,10 +11346,6 @@ namespace Prime.Migrations
                         .HasForeignKey("AdjudicatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthoritySite", null)
-                        .WithMany("SiteAdjudicationDocuments")
-                        .HasForeignKey("HealthAuthoritySiteId");
 
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("SiteAdjudicationDocuments")
@@ -11465,10 +11393,6 @@ namespace Prime.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthoritySite", null)
-                        .WithMany("SiteRegistrationNotes")
-                        .HasForeignKey("HealthAuthoritySiteId");
-
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("SiteRegistrationNotes")
                         .HasForeignKey("SiteId")
@@ -11482,10 +11406,6 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationReviewDocument", b =>
                 {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthoritySite", null)
-                        .WithMany("SiteRegistrationReviewDocuments")
-                        .HasForeignKey("HealthAuthoritySiteId");
-
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("SiteRegistrationReviewDocuments")
                         .HasForeignKey("SiteId")
@@ -11508,7 +11428,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
                 {
-                    b.HasOne("Prime.Models.Site", "Site")
+                    b.HasOne("Prime.Models.CommunitySite", "Site")
                         .WithMany("SiteVendors")
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -11589,6 +11509,98 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.Navigation("HealthAuthorityOrganization");
+                });
+
+            modelBuilder.Entity("Prime.Models.CommunitySite", b =>
+                {
+                    b.HasOne("Prime.Models.Contact", "AdministratorPharmaNet")
+                        .WithMany()
+                        .HasForeignKey("AdministratorPharmaNetId");
+
+                    b.HasOne("Prime.Models.Site", null)
+                        .WithOne()
+                        .HasForeignKey("Prime.Models.CommunitySite", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Organization", "Organization")
+                        .WithMany("Sites")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Contact", "PrivacyOfficer")
+                        .WithMany()
+                        .HasForeignKey("PrivacyOfficerId");
+
+                    b.HasOne("Prime.Models.Party", "Provisioner")
+                        .WithMany()
+                        .HasForeignKey("ProvisionerId");
+
+                    b.HasOne("Prime.Models.Contact", "TechnicalSupport")
+                        .WithMany()
+                        .HasForeignKey("TechnicalSupportId");
+
+                    b.Navigation("AdministratorPharmaNet");
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("PrivacyOfficer");
+
+                    b.Navigation("Provisioner");
+
+                    b.Navigation("TechnicalSupport");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthoritySite", b =>
+                {
+                    b.HasOne("Prime.Models.AuthorizedUser", "AuthorizedUser")
+                        .WithMany()
+                        .HasForeignKey("AuthorizedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityCareType", "HealthAuthorityCareType")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityCareTypeId");
+
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityOrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", "HealthAuthorityPharmanetAdministrator")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityPharmanetAdministratorId");
+
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", "HealthAuthorityTechnicalSupport")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityTechnicalSupportId");
+
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityVendor", "HealthAuthorityVendor")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityVendorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Site", null)
+                        .WithOne()
+                        .HasForeignKey("Prime.Models.HealthAuthoritySite", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AuthorizedUser");
+
+                    b.Navigation("HealthAuthorityCareType");
+
+                    b.Navigation("HealthAuthorityOrganization");
+
+                    b.Navigation("HealthAuthorityPharmanetAdministrator");
+
+                    b.Navigation("HealthAuthorityTechnicalSupport");
+
+                    b.Navigation("HealthAuthorityVendor");
                 });
 
             modelBuilder.Entity("Prime.Models.Admin", b =>
@@ -11699,19 +11711,6 @@ namespace Prime.Migrations
                     b.Navigation("Vendors");
                 });
 
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthoritySite", b =>
-                {
-                    b.Navigation("BusinessHours");
-
-                    b.Navigation("RemoteUsers");
-
-                    b.Navigation("SiteAdjudicationDocuments");
-
-                    b.Navigation("SiteRegistrationNotes");
-
-                    b.Navigation("SiteRegistrationReviewDocuments");
-                });
-
             modelBuilder.Entity("Prime.Models.License", b =>
                 {
                     b.Navigation("Certifications");
@@ -11783,8 +11782,6 @@ namespace Prime.Migrations
                 {
                     b.Navigation("BusinessHours");
 
-                    b.Navigation("BusinessLicences");
-
                     b.Navigation("RemoteUsers");
 
                     b.Navigation("SiteAdjudicationDocuments");
@@ -11794,8 +11791,6 @@ namespace Prime.Migrations
                     b.Navigation("SiteRegistrationReviewDocuments");
 
                     b.Navigation("SiteStatuses");
-
-                    b.Navigation("SiteVendors");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>
@@ -11815,6 +11810,13 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Vendor", b =>
                 {
+                    b.Navigation("SiteVendors");
+                });
+
+            modelBuilder.Entity("Prime.Models.CommunitySite", b =>
+                {
+                    b.Navigation("BusinessLicences");
+
                     b.Navigation("SiteVendors");
                 });
 #pragma warning restore 612, 618

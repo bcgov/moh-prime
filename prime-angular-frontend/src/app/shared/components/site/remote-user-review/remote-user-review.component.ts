@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
+import { RemoteUser } from '@lib/models/remote-user.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
 
 @Component({
   selector: 'app-remote-user-review',
@@ -9,10 +9,27 @@ import { RemoteUser } from '@registration/shared/models/remote-user.model';
   styleUrls: ['./remote-user-review.component.scss']
 })
 export class RemoteUserReviewComponent implements OnInit {
+  /**
+   * @description
+   * List of remote users to be displayed.
+   */
   @Input() public remoteUsers: RemoteUser[];
+  /**
+   * @description
+   * Show the edit remote user(s) redirect icon.
+   */
   @Input() public showEditRedirect: boolean;
+  /**
+   * @description
+   * Route path for editing the remote user(s).
+   */
   @Input() public editRoute: string;
+  /**
+   * @description
+   * Route action emitter.
+   */
   @Output() public route: EventEmitter<string>;
+
   public SiteRoutes = SiteRoutes;
 
   constructor() {

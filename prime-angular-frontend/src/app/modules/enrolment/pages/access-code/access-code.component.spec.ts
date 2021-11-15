@@ -3,18 +3,16 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-
-import { KeycloakService } from 'keycloak-angular';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { AccessCodeComponent } from './access-code.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { ConfigService } from '@config/config.service';
-import { MockConfigService } from 'test/mocks/mock-config.service';
-import { SharedModule } from '@shared/shared.module';
 
 describe('AccessCodeComponent', () => {
   let component: AccessCodeComponent;
@@ -27,10 +25,9 @@ describe('AccessCodeComponent', () => {
         RouterTestingModule,
         HttpClientTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule,
-        SharedModule
+        NgxMaterialModule
       ],
-      declarations: [],
+      declarations: [AccessCodeComponent],
       providers: [
         {
           provide: APP_CONFIG,
@@ -43,9 +40,9 @@ describe('AccessCodeComponent', () => {
         {
           provide: ConfigService,
           useClass: MockConfigService
-        },
-        KeycloakService
-      ]
+        }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));

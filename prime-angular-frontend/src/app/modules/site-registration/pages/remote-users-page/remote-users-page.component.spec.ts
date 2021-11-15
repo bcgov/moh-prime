@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { MockSiteService } from 'test/mocks/mock-site.service';
+import { MockCommunitySiteService } from 'test/mocks/mock-community-site.service';
 
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -41,7 +41,7 @@ describe('RemoteUsersPageComponent', () => {
         },
         {
           provide: SiteService,
-          useClass: MockSiteService
+          useClass: MockCommunitySiteService
         },
         AddressPipe,
         KeycloakService

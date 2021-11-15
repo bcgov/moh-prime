@@ -7,6 +7,7 @@ export class ConfigMap {
   apiEndpoint: string;
   loginRedirectUrl: string;
   documentManagerUrl: string;
+  bcscMobileSetupUrl: string;
   keycloakConfig: KeycloakOptions;
   mohKeycloakConfig: KeycloakOptions;
 }

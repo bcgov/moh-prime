@@ -8,7 +8,6 @@ using Newtonsoft.Json.Linq;
 using System.Text;
 using Prime.Models.VerifiableCredentials;
 using System.Linq;
-using System.Reflection;
 
 namespace Prime.HttpClients
 {

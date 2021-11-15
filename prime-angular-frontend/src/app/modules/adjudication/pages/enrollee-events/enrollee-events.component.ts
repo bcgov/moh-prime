@@ -18,17 +18,23 @@ export class EnrolleeEventsComponent implements OnInit {
   public businessEvents$: Observable<DateContent[]>;
   public hasActions: boolean;
 
+  private businessEventTypes: BusinessEventTypeEnum[];
+
   constructor(
     private route: ActivatedRoute,
     private adjucationResource: AdjudicationResource,
   ) {
     this.hasActions = true;
+    this.businessEventTypes = [];
   }
 
   public getBusinessEvents(businessEventTypes?: BusinessEventTypeEnum[]) {
+    if (businessEventTypes !== undefined) {
+      this.businessEventTypes = businessEventTypes;
+    }
     const enrolleeId = this.route.snapshot.params.id;
     this.businessEvents$ = this.adjucationResource
-      .getEnrolleeBusinessEvents(enrolleeId, businessEventTypes ?? [])
+      .getEnrolleeBusinessEvents(enrolleeId, this.businessEventTypes)
       .pipe(
         map((businessEvents: BusinessEvent[]) =>
           businessEvents.map((businessEvent: BusinessEvent) => {

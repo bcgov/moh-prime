@@ -2,7 +2,7 @@ import * as faker from 'faker';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
 import { IOrganizationService } from '@registration/shared/services/organization.service';
 import { Organization } from '@registration/shared/models/organization.model';
 

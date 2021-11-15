@@ -6,14 +6,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { Address, optionalAddressLineItems } from '@lib/models/address.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { AuthorizedUserResource } from '@core/resources/authorized-user-resource.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
-import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -46,7 +46,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private healthAuthorityResource: HealthAuthorityResource,
+    private authorizedUserResource: AuthorizedUserResource,
     private authService: AuthService,
     private configService: ConfigService,
     private authorizedUserService: AuthorizedUserService,
@@ -135,9 +135,9 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     const payload = this.formState.json;
 
     return (!authorizedUserId)
-      ? this.healthAuthorityResource.createAuthorizedUser({ ...this.bcscUser, ...payload })
+      ? this.authorizedUserResource.createAuthorizedUser({ ...this.bcscUser, ...payload })
         .pipe(NoContentResponse)
-      : this.healthAuthorityResource.updateAuthorizedUser({ ...payload, id: authorizedUserId });
+      : this.authorizedUserResource.updateAuthorizedUser({ ...payload, id: authorizedUserId });
   }
 
   protected afterSubmitIsSuccessful(): void {

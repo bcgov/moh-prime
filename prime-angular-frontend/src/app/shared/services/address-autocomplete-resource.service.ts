@@ -3,11 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
+import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } from '@lib/models/address-autocomplete.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } from '@shared/models/address-autocomplete.model';
 
 @Injectable({
   providedIn: 'root'

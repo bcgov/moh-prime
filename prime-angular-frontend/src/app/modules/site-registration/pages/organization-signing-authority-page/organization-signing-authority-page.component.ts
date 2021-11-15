@@ -8,10 +8,10 @@ import { map } from 'rxjs/operators';
 
 import { Party } from '@lib/models/party.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { Address, optionalAddressLineItems } from '@lib/models/address.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -154,9 +154,9 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     } else {
       routePath = (this.isCompleted)
         ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
-        : organization
+        : (organization)
           ? ['../', organization.id, SiteRoutes.ORGANIZATION_NAME]
-          : ['../', 0, SiteRoutes.ORGANIZATION_CLAIM];
+          : ['../', 0, SiteRoutes.ORGANIZATION_NAME];
     }
     this.routeUtils.routeRelativeTo(routePath);
   }

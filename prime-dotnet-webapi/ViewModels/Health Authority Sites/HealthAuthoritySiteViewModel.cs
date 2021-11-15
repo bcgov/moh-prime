@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Prime.Models;
-using Prime.Models.HealthAuthorities;
+using Prime.ViewModels.Sites;
 
 namespace Prime.ViewModels.HealthAuthoritySites
 {
@@ -9,24 +9,17 @@ namespace Prime.ViewModels.HealthAuthoritySites
     {
         public int Id { get; set; }
         public int HealthAuthorityOrganizationId { get; set; }
-        // TODO should we use a relationship or direct data type?
-        // public int HealthAuthorityVendorId { get; set; }
-        public int VendorCode { get; set; }
         public string SiteName { get; set; }
-        public string SiteId { get; set; }
+        public string PEC { get; set; }
         public int SecurityGroupCode { get; set; }
-        // TODO should we use a relationship or direct data type?
-        // public int HealthAuthorityCareTypeId { get; set; }
-        public string CareType { get; set; }
-        public PhysicalAddress PhysicalAddress { get; set; }
-        public ICollection<BusinessDay> BusinessHours { get; set; }
-        public ICollection<RemoteUser> RemoteUsers { get; set; }
+        public AddressViewModel PhysicalAddress { get; set; }
+        public HealthAuthorityVendorViewModel HealthAuthorityVendor { get; set; }
+        public HealthAuthorityCareTypeViewModel HealthAuthorityCareType { get; set; }
         public int? HealthAuthorityPharmanetAdministratorId { get; set; }
-        public HealthAuthorityPharmanetAdministrator HealthAuthorityPharmanetAdministrator { get; set; }
         public int? HealthAuthorityTechnicalSupportId { get; set; }
-        public HealthAuthorityTechnicalSupport HealthAuthorityTechnicalSupport { get; set; }
         public bool Completed { get; set; }
         public DateTimeOffset? SubmittedDate { get; set; }
         public DateTimeOffset? ApprovedDate { get; set; }
+        public SiteStatusType Status { get; set; }
     }
 }

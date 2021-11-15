@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { EmailUtils } from '@lib/utils/email-utils.class';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
+import { SiteAdjudicationAction } from '@lib/enums/site-adjudication-action.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
-import { SiteAdjudicationAction } from '@registration/shared/enum/site-adjudication-action.enum';
 
 @Component({
   selector: 'app-site-registration-actions',

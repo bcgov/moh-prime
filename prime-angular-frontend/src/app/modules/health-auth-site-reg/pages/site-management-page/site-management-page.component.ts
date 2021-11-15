@@ -6,15 +6,15 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
-// TODO move to /lib
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-site-management-page',
@@ -27,7 +27,6 @@ export class SiteManagementPageComponent implements OnInit {
   public healthAuthority: HealthAuthority;
   public healthAuthoritySites: HealthAuthoritySite[];
   public routeUtils: RouteUtils;
-  public SiteRoutes = HealthAuthSiteRegRoutes;
   public HealthAuthorityEnum = HealthAuthorityEnum;
   public SiteStatusType = SiteStatusType;
 
@@ -35,7 +34,8 @@ export class SiteManagementPageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authorizedUserService: AuthorizedUserService,
-    private healthAuthorityResource: HealthAuthorityResource
+    private healthAuthorityResource: HealthAuthorityResource,
+    private healthAuthoritySiteResource: HealthAuthoritySiteResource
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -59,29 +59,48 @@ export class SiteManagementPageComponent implements OnInit {
     this.redirectTo(healthAuthorityId, healthAuthoritySite.id, pagePath);
   }
 
-  public viewSiteRemoteUsers(healthAuthorityId: number, healthAuthoritySiteId: number): void {
-    this.redirectTo(healthAuthorityId, healthAuthoritySiteId, HealthAuthSiteRegRoutes.REMOTE_USERS);
+  public isInComplete(healthAuthoritySite: HealthAuthoritySite): boolean {
+    return !healthAuthoritySite.submittedDate || (
+      healthAuthoritySite.submittedDate &&
+      !healthAuthoritySite.approvedDate &&
+      healthAuthoritySite.status === SiteStatusType.EDITABLE
+    );
   }
 
-  public isUnderReview(healthAuthoritySite: HealthAuthoritySite): boolean {
-    // TODO what are the status types?
-    // TODO move into template
-    // return healthAuthoritySite.submittedDate && healthAuthoritySite.status === SiteStatusType.IN_REVIEW;
-    return !!healthAuthoritySite.submittedDate;
+  public isInReview(healthAuthoritySite: HealthAuthoritySite): boolean {
+    return healthAuthoritySite.submittedDate && healthAuthoritySite.status === SiteStatusType.IN_REVIEW;
+  }
+
+  public isLocked(healthAuthoritySite: HealthAuthoritySite): boolean {
+    return healthAuthoritySite.status === SiteStatusType.LOCKED;
   }
 
   public isApproved(healthAuthoritySite: HealthAuthoritySite): boolean {
-    // TODO what are the status types?
-    // TODO move into template
-    // return healthAuthoritySite.status === SiteStatusType.APPROVED;
-    return false;
+    return healthAuthoritySite.status === SiteStatusType.EDITABLE && !!healthAuthoritySite.approvedDate;
   }
 
-  public isDeclined(healthAuthoritySite: HealthAuthoritySite): boolean {
-    // TODO what are the status types?
-    // TODO move into template
-    // return healthAuthoritySite.status === SiteStatusType.DECLINED;
-    return false;
+  public requiresRenewal(healthAuthoritySite: HealthAuthoritySite): boolean {
+    return healthAuthoritySite.withinRenewalPeriod();
+  }
+
+  public getApprovedSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
+    return {
+      icon: 'task_alt',
+      text: `Site Approved<br>Site ID: ${healthAuthoritySite.pec}`
+    };
+  }
+
+  public getWithinRenewalPeriodSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
+    return {
+      icon: 'notification_important',
+      text: 'This site requires renewal.',
+      label: 'Renew Site',
+      route: () => this.viewSite(this.healthAuthority.id, healthAuthoritySite)
+    };
+  }
+
+  public trackBySiteId(index: number, healthAuthoritySite: HealthAuthoritySite) {
+    return healthAuthoritySite.id;
   }
 
   public ngOnInit(): void {
@@ -93,7 +112,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthorityId)
       .pipe(
         map((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority),
-        exhaustMap((healthAuthority: HealthAuthority) => this.healthAuthorityResource.getHealthAuthoritySites(healthAuthority.id))
+        exhaustMap((healthAuthority: HealthAuthority) => this.healthAuthoritySiteResource.getHealthAuthoritySites(healthAuthority.id))
       )
       .subscribe((healthAuthoritySites: HealthAuthoritySite[]) => this.healthAuthoritySites = healthAuthoritySites);
   }
