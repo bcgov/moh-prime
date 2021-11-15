@@ -2,19 +2,14 @@
 
 namespace Prime.Migrations
 {
-    public partial class AddTransactionIdUniqueIndex : Migration
+    public partial class AddTransactionIdIndex : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_PharmanetTransactionLog_TransactionId",
-                table: "PharmanetTransactionLog");
-
             migrationBuilder.CreateIndex(
                 name: "IX_PharmanetTransactionLog_TransactionId",
                 table: "PharmanetTransactionLog",
-                column: "TransactionId",
-                unique: true);
+                column: "TransactionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -22,11 +17,6 @@ namespace Prime.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_PharmanetTransactionLog_TransactionId",
                 table: "PharmanetTransactionLog");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PharmanetTransactionLog_TransactionId",
-                table: "PharmanetTransactionLog",
-                column: "TransactionId");
         }
     }
 }
