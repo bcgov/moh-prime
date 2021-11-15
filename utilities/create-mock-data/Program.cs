@@ -32,7 +32,7 @@ namespace create_mock_data
             {
                 var enrolleeFactory = new EnrolleeFactory();
                 // Avoid primary key conflicts 
-                EnrolleeFactory.IdCounter = (dbContext.Enrollees.Max(e => e.Id) + 1);
+                EnrolleeFactory.IdCounter = (dbContext.Enrollees.Count() != 0) ? (dbContext.Enrollees.Max(e => e.Id) + 1) : 1;
                 try
                 {
                     Log.Information($"Beginning to generate {numEnrollees} enrollees at {DateTime.Now}");
@@ -59,7 +59,7 @@ namespace create_mock_data
                     Log.Information($"Beginning to generate {numSites} sites at {DateTime.Now}");
                     for (int i = 0; i < numSites; i++)
                     {
-                        Site site = siteFactory.Generate();
+                        CommunitySite site = siteFactory.Generate();
                         dbContext.Sites.Add(site);
                     }
                     dbContext.SaveChanges();
