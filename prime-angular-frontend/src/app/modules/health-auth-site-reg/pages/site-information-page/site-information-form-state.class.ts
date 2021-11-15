@@ -54,11 +54,4 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
       securityGroupCode: [null, [Validators.required]]
     });
   }
-
-  // TODO, add the asyncValidator back to the PEC field or remove it completely when client updates
-  // private pecValidator(): (value: string) => Observable<boolean> {
-  //   return (value: string) => (value)
-  //     ? this.siteResource.pecAssignable(this.siteId, value)
-  //     : of(true);
-  // }
 }
