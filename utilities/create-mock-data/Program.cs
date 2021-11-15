@@ -53,7 +53,7 @@ namespace create_mock_data
             int numSites = int.Parse(args[1]);
             if (numSites > 0)
             {
-                var siteFactory = new SiteFactory();
+                var siteFactory = new CommunitySiteFactory();
                 try
                 {
                     Log.Information($"Beginning to generate {numSites} sites at {DateTime.Now}");
