@@ -7,4 +7,4 @@ export const MINIMUM_AGE = 18;
  * @description
  * Renewal period in days.
  */
-export const RENEWAL_PERIOD = 90;
+export const RENEWAL_PERIOD = 30;
