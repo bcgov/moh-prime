@@ -35,7 +35,7 @@ namespace Prime.Services.Rules
     }
 
     /// <summary>
-    /// Update must be more than 90 days away from renewal date
+    /// Update must be more than 30 days away from renewal date
     /// </summary>
     public class DateRule : MinorUpdateRule
     {
@@ -47,7 +47,7 @@ namespace Prime.Services.Rules
             }
 
             TimeSpan diff = enrollee.ExpiryDate.Value - DateTimeOffset.Now;
-            return Task.FromResult(diff > TimeSpan.FromDays(90));
+            return Task.FromResult(diff > TimeSpan.FromDays(30));
         }
     }
 
