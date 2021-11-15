@@ -42,7 +42,9 @@ namespace Prime.Services
 
         public async Task<SiteStatusType> GetSiteStatusAsync(int siteId)
         {
+            // TODO: Remove include and use mapping?
             return await _context.Sites
+                .Include(s => s.SiteStatuses)
                 .Where(s => s.Id == siteId)
                 .Select(s => s.Status)
                 .SingleOrDefaultAsync();

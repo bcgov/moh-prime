@@ -251,7 +251,7 @@ namespace Prime.Controllers
             }
 
             await _siteService.UpdateSiteAdjudicator(siteId, admin.Id);
-            await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin claimed site");
+            await _businessEventService.CreateSiteEventAsync(siteId, "Admin claimed site");
 
             return Ok();
         }
@@ -275,7 +275,7 @@ namespace Prime.Controllers
             }
 
             await _siteService.UpdateSiteAdjudicator(siteId);
-            await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin disclaimed site");
+            await _businessEventService.CreateSiteEventAsync(siteId, "Admin disclaimed site");
 
             return Ok();
         }
@@ -849,6 +849,8 @@ namespace Prime.Controllers
             await _siteService.ApproveSite(siteId);
 
             // TODO: This is the only difference in path between Community Site and Health Authority Site
+            // As well maybe we should try/catch email errors so failure on sending an email doesn't fail
+            // the call
             if (await _communitySiteService.SiteExistsAsync(siteId))
             {
                 var communitySite = await _communitySiteService.GetSiteAsync(siteId);
@@ -891,7 +893,7 @@ namespace Prime.Controllers
             }
 
             var status = await _siteService.GetSiteStatusAsync(siteId);
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Reject, status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -919,7 +921,7 @@ namespace Prime.Controllers
             }
 
             var status = await _siteService.GetSiteStatusAsync(siteId);
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.RequestChange, status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -947,7 +949,7 @@ namespace Prime.Controllers
             }
 
             var status = await _siteService.GetSiteStatusAsync(siteId);
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Unreject, status))
             {
                 return BadRequest("Action could not be performed.");
             }

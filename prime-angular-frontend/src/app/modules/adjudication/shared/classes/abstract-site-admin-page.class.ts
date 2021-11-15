@@ -19,8 +19,6 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { Site } from '@registration/shared/models/site.model';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 
@@ -82,7 +80,7 @@ export abstract class AbstractSiteAdminPage {
         ),
         exhaustMap((adjudicatorId: number) => this.siteResource.setSiteAdjudicator(siteId, adjudicatorId)),
       )
-      .subscribe(() => this.getDataset(this.route.snapshot.queryParams));
+      .subscribe(() => this.onRefresh());
   }
 
   public onReassign(siteId: number) {
@@ -121,7 +119,7 @@ export abstract class AbstractSiteAdminPage {
             )
         )
       )
-      .subscribe(() => this.getDataset(this.route.snapshot.queryParams));
+      .subscribe(() => this.onRefresh());
   }
 
   public onNotify({ siteId, healthAuthorityOrganizationId }: { siteId: number, healthAuthorityOrganizationId?: HealthAuthorityEnum }) {
@@ -186,7 +184,7 @@ export abstract class AbstractSiteAdminPage {
             : of(noop)
         )
       )
-      .subscribe();
+      .subscribe(() => this.onRefresh());
   }
 
   public onDecline(siteId: number) {
@@ -219,20 +217,28 @@ export abstract class AbstractSiteAdminPage {
             : of(noop)
         )
       )
-      .subscribe();
+      .subscribe(() => this.onRefresh());
   }
 
   public onEnableEditing(siteId: number) {
     this.busy = this.siteResource.enableEditingSite(siteId)
-      .subscribe(() => this.updateSite(siteId, { status: SiteStatusType.EDITABLE }));
+      .subscribe(() => this.onRefresh());
   }
 
   public onUnreject(siteId: number) {
     this.busy = this.siteResource.unrejectSite(siteId)
-      .subscribe(() => this.updateSite(siteId, { status: SiteStatusType.IN_REVIEW }));
+      .subscribe(() => this.onRefresh());
   }
 
+  /**
+   * @description
+   * Get the current data set
+   */
   protected abstract getDataset(queryParams?: unknown): void;
 
+  /**
+   * @description
+   * Update a site in the current data set
+   */
   protected abstract updateSite(siteId: number, updatedSiteFields: {}): void;
 }

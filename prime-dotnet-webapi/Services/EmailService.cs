@@ -331,11 +331,9 @@ namespace Prime.Services
             string emailAddress;
             if ((CareSettingType)careSettingCode == CareSettingType.HealthAuthority)
             {
-                return await _context.CommunitySites.Where(s => s.Id == siteId).Select(s => s.Organization.SigningAuthority.Email).SingleAsync();
+                return emailAddress = await _context.HealthAuthoritySites.Where(s => s.Id == siteId).Select(s => s.AuthorizedUser.Party.Email).SingleAsync();
             }
-
-            return emailAddress = await _context.HealthAuthoritySites.Where(s => s.Id == siteId).Select(s => s.AuthorizedUser.Party.Email).SingleAsync();
-
+            return await _context.CommunitySites.Where(s => s.Id == siteId).Select(s => s.Organization.SigningAuthority.Email).SingleAsync();
         }
     }
 }

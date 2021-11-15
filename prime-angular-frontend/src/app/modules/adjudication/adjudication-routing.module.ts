@@ -54,6 +54,7 @@ import {
 import { SiteOverviewPageComponent } from './pages/health-authorities/site-overview-page/site-overview-page.component';
 import { SiteEventsPageComponent } from './pages/health-authorities/site-events-page/site-events-page.component';
 import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
+import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
 
 const routes: Routes = [
   {
@@ -387,6 +388,11 @@ const routes: Routes = [
                     path: AdjudicationRoutes.ADJUDICATOR_NOTES,
                     component: SiteNotesPageComponent,
                     data: { title: 'Adjudicator Notes' }
+                  },
+                  {
+                    path: AdjudicationRoutes.DOCUMENT_UPLOAD,
+                    component: SiteDocumentsPageComponent,
+                    data: { title: 'Adjudicator Documents' }
                   }
                 ]
               },
