@@ -27,7 +27,6 @@ import { DeviceProviderPageFormState } from '@registration/pages/device-provider
 export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingPageFormState: CareSettingPageFormState;
   public businessLicenceFormState: BusinessLicenceFormState;
-  public businessLicenceRenewalFormState: BusinessLicenceRenewalPageFormState;
   public siteAddressPageFormState: SiteAddressPageFormState;
   public hoursOperationPageFormState: HoursOperationPageFormState;
   public remoteUsersPageFormState: RemoteUsersPageFormState;
@@ -203,7 +202,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   protected buildForms(): void {
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
     this.businessLicenceFormState = new BusinessLicenceFormState(this.fb, this.siteResource);
-    this.businessLicenceRenewalFormState = new BusinessLicenceRenewalPageFormState(this.fb);
     this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersPageFormState = new RemoteUsersPageFormState(this.fb);

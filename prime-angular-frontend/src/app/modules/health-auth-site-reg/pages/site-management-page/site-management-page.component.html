@@ -14,13 +14,13 @@
     </app-page-subheader2>
   </section>
 
-  <ng-container *ngIf="this.healthAuthority">
+  <ng-container *ngIf="healthAuthorityId">
 
     <app-summary-card icon="business"
                       title="Organization Information"
                       [menu]="healthAuthorityMenu"
                       [properties]="[
-                        { key: 'Health Authority', value: HealthAuthorityEnum[this.healthAuthority.id] | case : 'snake' : 'space' | capitalize : true }
+                        { key: 'Health Authority', value: HealthAuthorityEnum[healthAuthorityId] | case : 'snake' : 'space' | capitalize : true }
                       ]">
     </app-summary-card>
 
@@ -38,18 +38,18 @@
 
   </ng-container>
 
-  <ng-container *ngFor="let healthAuthoritySite of healthAuthoritySites; trackBy: trackBySiteId">
+  <ng-container *ngFor="let healthAuthoritySite of healthAuthoritySites$ | async; trackBy: trackBySiteId">
 
     <app-summary-card icon="store"
                       title="Site Information"
                       [menu]="healthAuthoritySiteMenu"
-                      [menuOutletContext]="{ healthAuthoritySite: healthAuthoritySite, healthAuthorityId: healthAuthority.id }"
+                      [menuOutletContext]="{ healthAuthoritySite: healthAuthoritySite, healthAuthorityId: healthAuthorityId }"
                       [properties]="[
-                            { key: 'Site Name', value: healthAuthoritySite.siteName },
-                            { key: 'Site ID', value: healthAuthoritySite.pec },
-                            { key: 'Vendor', value: healthAuthoritySite.healthAuthorityVendor.vendorCode | configCode : 'vendors' }
+                            { key: 'Site Name', value: healthAuthoritySite?.siteName },
+                            { key: 'Site ID', value: healthAuthoritySite?.pec },
+                            { key: 'Vendor', value: healthAuthoritySite?.healthAuthorityVendor.vendorCode | configCode : 'vendors' }
                       ]">
-      <ng-container *ngIf="isInComplete(healthAuthoritySite)"
+      <ng-container *ngIf="healthAuthoritySite.isIncomplete()"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
                       props: {
@@ -60,7 +60,7 @@
                       }
                     }">
       </ng-container>
-      <ng-container *ngIf="isInReview(healthAuthoritySite)"
+      <ng-container *ngIf="healthAuthoritySite.isInReview()"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
                       props: {
@@ -69,7 +69,7 @@
                       }
                     }">
       </ng-container>
-      <ng-container *ngIf="isLocked(healthAuthoritySite)"
+      <ng-container *ngIf="healthAuthoritySite.isLocked()"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
                       props: {
@@ -78,13 +78,13 @@
                       }
                     }">
       </ng-container>
-      <ng-container *ngIf="isApproved(healthAuthoritySite) && !requiresRenewal(healthAuthoritySite)"
+      <ng-container *ngIf="healthAuthoritySite.isApproved() && !healthAuthoritySite.withinRenewalPeriod()"
                     [ngTemplateOutlet]="success_notification"
                     [ngTemplateOutletContext]="{
                       props: getApprovedSiteNotificationProperties(healthAuthoritySite)
                     }">
       </ng-container>
-      <ng-container *ngIf="isApproved(healthAuthoritySite) && requiresRenewal(healthAuthoritySite)"
+      <ng-container *ngIf="healthAuthoritySite.isApproved() && healthAuthoritySite.withinRenewalPeriod()"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
                       props: getWithinRenewalPeriodSiteNotificationProperties(healthAuthoritySite)
@@ -104,7 +104,7 @@
               mat-flat-button
               color="primary"
               class="ml-auto"
-              (click)="viewSite(healthAuthority.id, props.healthAuthority)">{{ props.label }}</button>
+              (click)="viewSite(healthAuthorityId, props.healthAuthority)">{{ props.label }}</button>
     </div>
   </ng-template>
 
@@ -145,7 +145,7 @@
     <mat-menu #menu="matMenu"
               aria-label="Health authority site actions menu">
       <button mat-menu-item
-              [disabled]="healthAuthoritySite.status === SiteStatusType.LOCKED"
+              [disabled]="healthAuthoritySite?.status === SiteStatusType.LOCKED"
               (click)="viewSite(healthAuthorityId, healthAuthoritySite)">
         <span>View/Update Site Information</span>
       </button>
