@@ -14,7 +14,7 @@ export class PrimePhoneComponent {
     @Inject(APP_CONFIG) private config: AppConfig
   ) {
     this.mode = 'normal';
-    this.phoneNumber = 'prime';
+    this.phoneNumber = 'director';
   }
 
   public get primePhoneHref(): string {
