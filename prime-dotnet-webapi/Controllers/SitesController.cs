@@ -390,6 +390,7 @@ namespace Prime.Controllers
                     return true;
                 }
 
+                // Duplicating existing business licence for creation of a new business licence
                 var licenceDto = _mapper.Map<BusinessLicence>(existingLicence);
                 licenceDto.Id = 0;
                 licenceDto.ExpiryDate = newLicence.ExpiryDate;
