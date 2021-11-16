@@ -56,8 +56,8 @@ namespace PrimeTests.UnitTests
             return new[]
             {
                 new object[] { null, true },
-                new object[] { DateTimeOffset.Now.AddDays(91), true },
-                new object[] { DateTimeOffset.Now.AddDays(89), false },
+                new object[] { DateTimeOffset.Now.AddDays(31), true },
+                new object[] { DateTimeOffset.Now.AddDays(29), false },
                 new object[] { DateTimeOffset.Now.AddDays(-1), false },
             };
         }
