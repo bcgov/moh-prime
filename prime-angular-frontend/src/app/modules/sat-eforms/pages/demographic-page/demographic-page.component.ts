@@ -9,9 +9,8 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { Address, optionalAddressLineItems } from '@lib/models/address.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Address, optionalAddressLineItems } from '@shared/models/address.model';
-// TODO move to a bcsc module
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 

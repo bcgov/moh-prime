@@ -105,7 +105,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendRemoteUsersUpdatedAsync(Site site)
+        public async Task SendRemoteUsersUpdatedAsync(CommunitySite site)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.Id);
             var viewModel = new RemoteUsersUpdatedEmailViewModel
@@ -122,7 +122,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
+        public async Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers)
         {
             if (!remoteUsers.Any())
             {
@@ -148,7 +148,7 @@ namespace Prime.Services
             }
         }
 
-        public async Task SendBusinessLicenceUploadedAsync(Site site)
+        public async Task SendBusinessLicenceUploadedAsync(CommunitySite site)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.BusinessLicence.Id);
 
@@ -156,7 +156,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedPharmaNetAdministratorAsync(Site site)
+        public async Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
@@ -168,7 +168,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedSigningAuthorityAsync(Site site)
+        public async Task SendSiteApprovedSigningAuthorityAsync(CommunitySite site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
@@ -193,7 +193,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedHIBCAsync(Site site)
+        public async Task SendSiteApprovedHIBCAsync(CommunitySite site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {

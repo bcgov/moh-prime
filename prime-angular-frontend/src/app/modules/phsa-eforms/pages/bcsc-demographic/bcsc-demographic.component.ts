@@ -6,9 +6,9 @@ import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { Address, optionalAddressLineItems } from '@lib/models/address.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { UtilsService } from '@core/services/utils.service';
-import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';

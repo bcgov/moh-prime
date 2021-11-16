@@ -1,9 +1,9 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 
 import { AuthorizedUserForm } from './authorized-user-form.model';
 

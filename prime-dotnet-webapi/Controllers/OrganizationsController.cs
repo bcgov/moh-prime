@@ -20,38 +20,37 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class OrganizationsController : PrimeControllerBase
     {
-        private readonly IOrganizationService _organizationService;
-
-        private readonly IOrganizationAgreementService _organizationAgreementService;
-        private readonly IPartyService _partyService;
-        private readonly IDocumentService _documentService;
-        private readonly ISiteService _siteService;
-        private readonly IOrganizationClaimService _organizationClaimService;
-        private readonly IBusinessEventService _businessEventService;
         private readonly IAdminService _adminService;
+        private readonly IBusinessEventService _businessEventService;
+        private readonly ICommunitySiteService _communitySiteService;
+        private readonly IDocumentService _documentService;
         private readonly IEmailService _emailService;
+        private readonly IOrganizationAgreementService _organizationAgreementService;
+        private readonly IOrganizationClaimService _organizationClaimService;
+        private readonly IOrganizationService _organizationService;
+        private readonly IPartyService _partyService;
 
 
         public OrganizationsController(
-            IOrganizationService organizationService,
-            IOrganizationAgreementService organizationAgreementService,
-            IPartyService partyService,
-            IDocumentService documentService,
-            ISiteService siteService,
-            IOrganizationClaimService organizationClaimService,
-            IBusinessEventService businessEventService,
             IAdminService adminService,
-            IEmailService emailService)
+            IBusinessEventService businessEventService,
+            ICommunitySiteService communitySiteService,
+            IDocumentService documentService,
+            IEmailService emailService,
+            IOrganizationAgreementService organizationAgreementService,
+            IOrganizationClaimService organizationClaimService,
+            IOrganizationService organizationService,
+            IPartyService partyService)
         {
-            _organizationService = organizationService;
-            _organizationAgreementService = organizationAgreementService;
-            _partyService = partyService;
-            _documentService = documentService;
-            _siteService = siteService;
-            _organizationClaimService = organizationClaimService;
-            _businessEventService = businessEventService;
             _adminService = adminService;
+            _businessEventService = businessEventService;
+            _communitySiteService = communitySiteService;
+            _documentService = documentService;
             _emailService = emailService;
+            _organizationAgreementService = organizationAgreementService;
+            _organizationClaimService = organizationClaimService;
+            _organizationService = organizationService;
+            _partyService = partyService;
         }
 
         // GET: api/Organizations
@@ -67,7 +66,7 @@ namespace Prime.Controllers
         {
             var organizations = await _organizationService.GetOrganizationsAsync(search);
 
-            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
+            var notifiedIds = await _communitySiteService.GetNotifiedSiteIdsForAdminAsync(User);
             foreach (var site in organizations.Select(o => o.Organization).SelectMany(o => o.Sites))
             {
                 site.HasNotification = notifiedIds.Contains(site.Id);

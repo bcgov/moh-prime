@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, Subscription, Observable, of, noop } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
+import { Address } from '@lib/models/address.model';
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -13,7 +14,6 @@ import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Address } from '@shared/models/address.model';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';

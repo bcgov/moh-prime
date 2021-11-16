@@ -1,6 +1,4 @@
-using System;
 using FluentValidation;
-using Prime.Models.HealthAuthorities;
 
 namespace Prime.ViewModels.HealthAuthoritySites
 {

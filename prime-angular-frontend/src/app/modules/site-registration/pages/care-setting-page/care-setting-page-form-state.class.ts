@@ -4,7 +4,7 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { Site } from '@registration/shared/models/site.model';
 
-interface CareSettingPageDataModel extends Pick<Site, 'careSettingCode' | 'siteVendors'> { }
+interface CareSettingPageDataModel extends Pick<Site, 'careSettingCode' | 'siteVendors'> {}
 
 export class CareSettingPageFormState extends AbstractFormState<CareSettingPageDataModel> {
   private siteId: number;

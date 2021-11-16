@@ -1,5 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ApiResource } from './api-resource.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -9,6 +10,7 @@ describe('ApiResource', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
+        MatSnackBarModule
       ],
       providers: [
         ApiResource,

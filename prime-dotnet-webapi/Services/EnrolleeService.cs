@@ -60,6 +60,15 @@ namespace Prime.Services
                 .AnyAsync(e => e.GPID == gpid);
         }
 
+        public async Task<EnrolleeStub> GetEnrolleeStubAsync(Guid userId)
+        {
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.UserId == userId)
+                .Select(e => new EnrolleeStub { Id = e.Id, UserId = e.UserId })
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId)
         {
             return await _context.Enrollees
@@ -69,37 +78,40 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
+        /// <summary>
+        /// Gets the GPID for an Enrollee.
+        /// Returns null if no Enrollee exists with the given UserId or if the Enrollee is in the 'Declined' status
+        /// </summary>
+        /// <param name="userId"></param>
+        public async Task<string> GetActiveGpidAsync(Guid userId)
         {
-            IQueryable<Enrollee> query = GetBaseEnrolleeQuery()
-                .Include(e => e.Submissions);
+            return await _context.Enrollees
+                .Where(enrollee => enrollee.UserId == userId
+                    && enrollee.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Select(enrollee => enrollee.GPID)
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
+        }
 
-            if (isAdmin)
-            {
-                // TODO create an enrollee admin view model
-                query = query.Include(e => e.Adjudicator)
-                    .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.EnrolmentStatusReference)
-                            .ThenInclude(esr => esr.AdjudicatorNote)
-                    .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.EnrolmentStatusReference)
-                            .ThenInclude(esr => esr.Adjudicator);
-            }
-
-            var enrollee = await query
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-            var newestAgreementIds = await _context.AgreementVersions
+        public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId)
+        {
+            var newestAgreementIds = _context.AgreementVersions
                 .Select(a => a.AgreementType)
                 .Distinct()
                 .Select(type => _context.AgreementVersions
                     .OrderByDescending(a => a.EffectiveDate)
                     .First(a => a.AgreementType == type)
                     .Id
-                )
-                .ToListAsync();
+                );
 
-            return _mapper.Map<Enrollee, EnrolleeViewModel>(enrollee,
-                opt => opt.AfterMap((src, dest) => dest.HasNewestAgreement = newestAgreementIds.Any(n => n == src.CurrentAgreementId)));
+            var dto = await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .ProjectTo<EnrolleeDTO>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
+
+            return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
@@ -156,21 +168,6 @@ namespace Prime.Services
                 .FirstOrDefaultAsync();
 
             return new EnrolleeNavigation { NextId = nextId, PreviousId = previousId };
-        }
-
-        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
-        {
-            Enrollee enrollee = await GetBaseEnrolleeQuery()
-                .AsNoTracking()
-                .SingleOrDefaultAsync(e => e.UserId == userId);
-
-            if (enrollee == null
-                || (excludeDecline && enrollee.CurrentStatus.IsType(StatusType.Declined)))
-            {
-                return null;
-            }
-
-            return enrollee;
         }
 
         public async Task<int> CreateEnrolleeAsync(EnrolleeCreateModel createModel)
@@ -300,7 +297,6 @@ namespace Prime.Services
                 }
             }
         }
-
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
         {
@@ -496,6 +492,100 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<AccessAgreementNoteViewModel> GetAccessAgreementNoteAsync(int enrolleeId)
+        {
+            return await _context.Set<AccessAgreementNote>()
+                .ProjectTo<AccessAgreementNoteViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(a => a.EnrolleeId == enrolleeId);
+        }
+
+        public async Task<CareSettingViewModel> GetCareSettingsAsync(int enrolleeId)
+        {
+            return await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => new CareSettingViewModel
+                {
+                    EnrolleeCareSettings = e.EnrolleeCareSettings,
+                    EnrolleeHealthAuthorities = e.EnrolleeHealthAuthorities
+                })
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<CertificationViewModel>> GetCertificationsAsync(int enrolleeId)
+        {
+            return await _context.Set<Certification>()
+                .Where(c => c.EnrolleeId == enrolleeId)
+                .ProjectTo<CertificationViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<EnrolleeRemoteUserViewModel>> GetEnrolleeRemoteUsersAsync(int enrolleeId)
+        {
+            return await _context.EnrolleeRemoteUsers
+                .Where(eru => eru.EnrolleeId == enrolleeId)
+                .ProjectTo<EnrolleeRemoteUserViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId)
+        {
+            return await _context.Set<OboSite>()
+                .AsNoTracking()
+                .Where(os => os.EnrolleeId == enrolleeId)
+                .ProjectTo<OboSiteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<RemoteAccessLocationViewModel>> GetRemoteAccessLocationsAsync(int enrolleeId)
+        {
+            return await _context.Set<RemoteAccessLocation>()
+                .AsNoTracking()
+                .Where(ral => ral.EnrolleeId == enrolleeId)
+                .ProjectTo<RemoteAccessLocationViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<RemoteAccessSiteViewModel>> GetRemoteAccessSitesAsync(int enrolleeId)
+        {
+            // Currently, only maps from Community Sites as Remote Users are disabled on Health Authorities
+            return await _context.RemoteAccessSites
+                .AsNoTracking()
+                .Where(ras => ras.EnrolleeId == enrolleeId)
+                .ProjectTo<RemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Returns a View Model for each Self Declaration Question, including ones answered "No"
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        public async Task<IEnumerable<SelfDeclarationViewModel>> GetSelfDeclarationsAsync(int enrolleeId)
+        {
+            var answered = await _context.Set<SelfDeclaration>()
+                .Where(sd => sd.EnrolleeId == enrolleeId)
+                .ProjectTo<SelfDeclarationViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            var unAnswered = Enum.GetValues(typeof(SelfDeclarationTypeCode))
+                .Cast<int>()
+                .Except(answered.Select(a => a.SelfDeclarationTypeCode))
+                .Select(code => new SelfDeclarationViewModel
+                {
+                    EnrolleeId = enrolleeId,
+                    SelfDeclarationTypeCode = code
+                });
+
+            return answered.Concat(unAnswered);
+        }
+
+        public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId)
+        {
+            return await _context.SelfDeclarationDocuments
+                .Where(sdd => sdd.EnrolleeId == enrolleeId)
+                .ProjectTo<SelfDeclarationDocumentViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
         public async Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType)
         {
             var submission = await _context.Submissions
@@ -506,15 +596,14 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId)
+        public async Task<IEnumerable<EnrolmentStatusAdminViewModel>> GetEnrolmentStatusesAsync(int enrolleeId)
         {
-            IQueryable<EnrolmentStatus> query = _context.EnrolmentStatuses
-                .Include(es => es.Status)
-                .Where(es => es.EnrolleeId == enrolleeId);
-
-            var items = await query.ToListAsync();
-
-            return items;
+            return await _context.EnrolmentStatuses
+                .Where(es => es.EnrolleeId == enrolleeId)
+                .OrderByDescending(es => es.StatusDate)
+                    .ThenByDescending(s => s.Id)
+                .ProjectTo<EnrolmentStatusAdminViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck)
@@ -530,53 +619,6 @@ namespace Prime.Services
             }
 
             return statusCodesToCheck.Contains(enrollee.CurrentStatus.GetStatusType());
-        }
-
-        private IQueryable<Enrollee> GetBaseEnrolleeQuery()
-        {
-            return _context.Enrollees
-                .Include(e => e.Addresses)
-                    .ThenInclude(ea => ea.Address)
-                .Include(e => e.Certifications)
-                    .ThenInclude(c => c.License)
-                .Include(e => e.OboSites)
-                    .ThenInclude(s => s.PhysicalAddress)
-                .Include(e => e.EnrolleeCareSettings)
-                .Include(e => e.EnrolleeHealthAuthorities)
-                .Include(e => e.EnrolleeRemoteUsers)
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(ras => ras.PhysicalAddress)
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(ras => ras.SiteVendors)
-                .Include(r => r.RemoteAccessLocations)
-                    .ThenInclude(rul => rul.PhysicalAddress)
-                .Include(e => e.EnrolmentStatuses)
-                    .ThenInclude(es => es.Status)
-                .Include(e => e.EnrolmentStatuses)
-                    .ThenInclude(es => es.EnrolmentStatusReasons)
-                        .ThenInclude(esr => esr.StatusReason)
-                .Include(e => e.AccessAgreementNote)
-                .Include(e => e.SelfDeclarations)
-                .Include(e => e.SelfDeclarationDocuments)
-                .Include(e => e.IdentificationDocuments)
-                .Include(e => e.Agreements);
-        }
-
-        public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
-        {
-            var entity = await GetBaseEnrolleeQuery()
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(site => site.PhysicalAddress)
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
-                        .ThenInclude(site => site.SiteVendors)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            return entity;
         }
 
         public async Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId)
@@ -903,18 +945,15 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<EnrolmentStatus> GetEnrolleeCurrentStatusAsync(int enrolleeId)
+        public async Task<EnrolmentStatusAdminViewModel> GetEnrolleeCurrentStatusAsync(int enrolleeId)
         {
-            var enrollee = await _context.Enrollees
-                .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.EnrolmentStatusReasons)
-                            .ThenInclude(esr => esr.StatusReason)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-            if (enrollee != null)
-            {
-                return enrollee.CurrentStatus;
-            }
-            return null;
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(enrollee => enrollee.Id == enrolleeId)
+                .Select(enrollee => enrollee.CurrentStatus)
+                .ProjectTo<EnrolmentStatusAdminViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user)
@@ -1021,6 +1060,14 @@ namespace Prime.Services
                 _context.EnrolleeAbsences.Remove(absence);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<string> GetAdjudicatorIdirForEnrolleeAsync(int enrolleeId)
+        {
+            return await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => e.Adjudicator.IDIR)
+                .SingleOrDefaultAsync();
         }
     }
 }

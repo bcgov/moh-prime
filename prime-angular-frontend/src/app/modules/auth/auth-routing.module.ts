@@ -21,7 +21,9 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.BCSC_LOGIN,
         canLoad: [AuthorizationRedirectGuard],
-        data: { locationCode: BannerLocationCode.ENROLMENT_LANDING_PAGE },
+        data: {
+          locationCode: BannerLocationCode.ENROLMENT_LANDING_PAGE
+        },
         loadChildren: () => import('@enrolment/shared/modules/bcsc-enrolment-login-page/bcsc-enrolment-login-page.module')
           .then(m => m.BcscEnrolmentLoginPageModule)
       },
@@ -34,7 +36,9 @@ const routes: Routes = [
       {
         path: SiteRoutes.LOGIN_PAGE,
         canLoad: [AuthorizationRedirectGuard],
-        data: { locationCode: BannerLocationCode.SITE_REGISTRATION_LANDING_PAGE },
+        data: {
+          locationCode: BannerLocationCode.SITE_REGISTRATION_LANDING_PAGE
+        },
         loadChildren: () => import('@registration/shared/modules/site-registration-login-page/site-registration-login-page.module')
           .then(m => m.SiteRegistrationLoginPageModule)
       },

@@ -3,19 +3,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
-import { EMPTY } from 'rxjs';
-import { exhaustMap, tap } from 'rxjs/operators';
-
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { ConfigService } from '@config/config.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HealthAuthority } from '@shared/models/health-authority.model';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthorityCareType } from '@health-auth/shared/models/health-authority-care-type.model';
+import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
+import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { HealthAuthCareTypeFormState } from './health-auth-care-type-form-state.class';
 
 @Component({
@@ -23,23 +20,25 @@ import { HealthAuthCareTypeFormState } from './health-auth-care-type-form-state.
   templateUrl: './health-auth-care-type-page.component.html',
   styleUrls: ['./health-auth-care-type-page.component.scss']
 })
-export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage implements OnInit {
+export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySiteRegistrationPage implements OnInit {
   public formState: HealthAuthCareTypeFormState;
   public title: string;
   public routeUtils: RouteUtils;
-  public careTypes: string[];
+  public healthAuthorityCareTypes: HealthAuthorityCareType[];
   public isCompleted: boolean;
 
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    protected route: ActivatedRoute,
+    protected healthAuthoritySiteService: HealthAuthoritySiteService,
+    protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
+    protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private fb: FormBuilder,
     private configService: ConfigService,
-    private healthAuthorityResource: HealthAuthorityResource,
-    private route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthoritySiteResource);
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -59,36 +58,20 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
   }
 
   protected createFormInstance() {
-    this.formState = new HealthAuthCareTypeFormState(this.fb);
+    this.formState = this.healthAuthoritySiteFormStateService.healthAuthCareTypeFormState;
   }
 
   protected patchForm(): void {
     const healthAuthId = +this.route.snapshot.params.haid;
     const healthAuthSiteId = +this.route.snapshot.params.sid;
     if (!healthAuthId || !healthAuthSiteId) {
-      return;
+      throw new Error('No health authority site ID was provided');
     }
 
-    this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
-      .pipe(
-        tap(({ careTypes }: HealthAuthority) => this.careTypes = careTypes),
-        exhaustMap((_: HealthAuthority) =>
-          (healthAuthSiteId)
-            ? this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
-            : EMPTY
-        )
-      )
-      .subscribe(({ careType, completed }: HealthAuthoritySite) => {
-        this.isCompleted = completed;
-        this.formState.patchValue({ careType });
-      });
-  }
-
-  protected performSubmission(): NoContent {
-    const payload = this.formState.json;
-    const { haid, sid } = this.route.snapshot.params;
-
-    return this.healthAuthorityResource.updateHealthAuthoritySiteCareType(haid, sid, payload);
+    const site = this.healthAuthoritySiteService.site;
+    this.healthAuthorityCareTypes = this.route.snapshot.data.healthAuthority?.careTypes ?? [];
+    this.isCompleted = site?.completed;
+    this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
   protected afterSubmitIsSuccessful(): void {

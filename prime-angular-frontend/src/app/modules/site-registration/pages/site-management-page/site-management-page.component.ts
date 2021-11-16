@@ -7,13 +7,15 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { DateUtils } from '@lib/utils/date-utils.class';
+import { optionalAddressLineItems } from '@lib/models/address.model';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
-import { optionalAddressLineItems } from '@shared/models/address.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AddressPipe } from '@shared/pipes/address.pipe';
@@ -22,10 +24,8 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
-import { DateUtils } from '@lib/utils/date-utils.class';
 
 @Component({
   selector: 'app-site-management-page',
@@ -111,6 +111,11 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public getSiteProperties(site: SiteListViewModel): KeyValue<string, string>[] {
+    // TODO update API to only provide a single vendor
+    //      initially only as VM change, then API update
+    const siteVendorCode = (Array.isArray(site.siteVendors) && site.siteVendors.length)
+      ? site.siteVendors[0].vendorCode
+      : null;
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
@@ -118,7 +123,7 @@ export class SiteManagementPageComponent implements OnInit {
         key: 'Site Address',
         value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode'])
       },
-      { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
+      { key: 'Vendor', value: this.configCodePipe.transform(siteVendorCode, 'vendors') }
     ];
   }
 
@@ -161,7 +166,7 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public isLocked(site: SiteListViewModel): boolean {
-    return (site.status === SiteStatusType.LOCKED);
+    return site.status === SiteStatusType.LOCKED;
   }
 
   public getLockedSiteNotificationProperties() {

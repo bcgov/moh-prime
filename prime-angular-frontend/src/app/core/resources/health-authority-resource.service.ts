@@ -1,33 +1,22 @@
 import { Injectable } from '@angular/core';
 
-import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
-
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { Contact } from '@lib/models/contact.model';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
+import { PrivacyOffice } from '@lib/models/privacy-office.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
-import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
+import { ToastService } from '@core/services/toast.service';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
-// TODO move models into lib
-import { PrivacyOffice } from '@adjudication/shared/models/privacy-office.model';
+
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
-import { VendorForm } from '@health-auth/pages/vendor-page/vendor-form.model';
-import { SiteInformationForm } from '@health-auth/pages/site-information-page/site-information-form.model';
-import { HealthAuthCareTypeForm } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-form.model';
-import { SiteAddressForm } from '@health-auth/pages/site-address-page/site-address-form.model';
-import { HoursOperationForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
-import { RemoteUsersForm } from '@health-auth/pages/remote-users-page/remote-users-form.model';
-import { AdministratorForm } from '@health-auth/pages/administrator-page/administrator-form.model';
-import { TechnicalSupportForm } from '@health-auth/pages/technical-support-page/technical-support-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +24,6 @@ import { TechnicalSupportForm } from '@health-auth/pages/technical-support-page/
 export class HealthAuthorityResource {
   constructor(
     private apiResource: ApiResource,
-    private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
     private logger: ConsoleLoggerService,
     private capitalizePipe: CapitalizePipe
@@ -62,6 +50,19 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAllHealthAuthoritySites(): Observable<HealthAuthoritySite[]> {
+    return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/sites`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthoritySite[]>) => response.result),
+        tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority sites could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getAllHealthAuthoritySites error has occurred: ', error);
           throw error;
         })
       );
@@ -111,329 +112,14 @@ export class HealthAuthorityResource {
     return this.updateContacts(healthAuthorityId, 'pharmanet-administrators', contacts);
   }
 
-  public getAuthorizedUserByUserId(userId: string): Observable<AuthorizedUser | null> {
-    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${userId}`)
-      .pipe(
-        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
-        tap((authorizedUser: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', authorizedUser)),
-        catchError((error: any) => {
-          if (error.status === 404) {
-            return of(null);
-          }
-
-          this.toastService.openErrorToast('Authorized user could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getAuthorizedUserByUserId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getAuthorizedUserById(authorizedUserId: number): Observable<AuthorizedUser | null> {
-    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${authorizedUserId}`)
-      .pipe(
-        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
-        tap((authorizedUser: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', authorizedUser)),
-        catchError((error: any) => {
-          if (error.status === 404) {
-            return of(null);
-          }
-
-          this.toastService.openErrorToast('Authorized user could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getAuthorizedUser error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public createAuthorizedUser(authorizedUser: AuthorizedUser): Observable<AuthorizedUser> {
-    return this.apiResource.post<AuthorizedUser>('parties/authorized-users', authorizedUser)
-      .pipe(
-        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
-        tap((newAuthorizedUser: AuthorizedUser) => {
-          this.toastService.openSuccessToast('Authorized user has been created');
-          this.logger.info('NEW_AUTHORIZED_USER', newAuthorizedUser);
-        }),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Authorized user could not be created');
-          this.logger.error('[Core] HealthAuthorityResource::createAuthorizedUser error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public updateAuthorizedUser(authorizedUser: AuthorizedUser): NoContent {
-    return this.apiResource.put<NoContent>(`parties/authorized-users/${authorizedUser.id}`, authorizedUser)
-      .pipe(
-        NoContentResponse,
-        tap(() => this.toastService.openSuccessToast('Authorized user has been updated')),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Authorized user could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateAuthorizedUser error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public activateAuthorizedUser(authorizedUserId: number): NoContent {
-    return this.apiResource.post<NoContent>(`parties/authorized-users/${authorizedUserId}/activate`)
-      .pipe(
-        NoContentResponse,
-        tap(() => this.toastService.openSuccessToast('Authorized user has been activated')),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Authorized user could not be activated');
-          this.logger.error('[Core] HealthAuthorityResource::activateAuthorizedUser error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public approveAuthorizedUser(authorizedUserId: number): NoContent {
-    return this.apiResource.post<NoContent>(`parties/authorized-users/${authorizedUserId}/approve`)
-      .pipe(
-        NoContentResponse,
-        tap(() => this.toastService.openSuccessToast('Authorized user has been approved')),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Authorized user could not be approved');
-          this.logger.error('[Core] HealthAuthorityResource::approveAuthorizedUser error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public deleteAuthorizedUser(authorizedUserId: number): NoContent {
-    return this.apiResource.delete<NoContent>(`parties/authorized-users/${authorizedUserId}`)
-      .pipe(
-        NoContentResponse,
-        tap(() => this.toastService.openSuccessToast('Authorized user has been deleted')),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Authorized user could not be deleted');
-          this.logger.error('[Core] HealthAuthorityResource::deleteAuthorizedUser error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getAuthorizedUsersByHealthAuthority(healthAuthorityCode: HealthAuthorityEnum): Observable<AuthorizedUser[]> {
-    return this.apiResource.get<AuthorizedUser[]>(`health-authorities/${healthAuthorityCode}/authorized-users`)
+  public getAuthorizedUsersByHealthAuthority(healthAuthId: HealthAuthorityEnum): Observable<AuthorizedUser[]> {
+    return this.apiResource.get<AuthorizedUser[]>(`health-authorities/${healthAuthId}/authorized-users`)
       .pipe(
         map((response: ApiHttpResponse<AuthorizedUser[]>) => response.result),
         tap((authorizedUsers: AuthorizedUser[]) => this.logger.info('AUTHORIZED_USERS', authorizedUsers)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized users could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getAuthorizedUsersByHealthAuthority error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public createHealthAuthoritySite(healthAuthId: number, payload: VendorForm): Observable<HealthAuthoritySite> {
-    return this.apiResource.post<HealthAuthoritySite>(`health-authorities/${healthAuthId}/sites`, payload)
-      .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result),
-        tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTH_SITE', healthAuthoritySite)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site could not be created');
-          this.logger.error('[Core] HealthAuthorityResource::createHealthAuthoritySite error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getAllHealthAuthoritySites(): Observable<HealthAuthoritySite[]> {
-    return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/sites`)
-      .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySite[]>) => response.result),
-        tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority sites could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getAllHealthAuthoritySites error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getHealthAuthoritySites(healthAuthId: number): Observable<HealthAuthoritySite[]> {
-    return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/${healthAuthId}/sites`)
-      .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySite[]>) => response.result),
-        tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority sites could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySites error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getHealthAuthoritySiteById(healthAuthId: number, healthAuthSiteId: number): Observable<HealthAuthoritySite> {
-    return this.apiResource.get<HealthAuthoritySite>(`health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`)
-      .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result),
-        tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteById error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getHealthAuthoritySiteContacts(healthAuthId: number, healthAuthSiteId: number): Observable<{ label: string, email: string }[]> {
-    return this.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
-      .pipe(
-        map((healthAuthSite: HealthAuthoritySite) => [
-          // TODO no authorized user on health auth site view model
-          // {
-          //   label: 'Authorized User',
-          //   email: healthAuthSite?.authorizedUser?.email
-          // },
-          ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityPharmanetAdministrator, {
-            label: 'PharmaNet Administrator',
-            email: healthAuthSite?.healthAuthorityPharmanetAdministrator?.email
-          }),
-          // TODO no privacy officer on health auth site view model
-          // ...ArrayUtils.insertIf(healthAuthSite?.privacyOfficer.email, {
-          //   label: 'Privacy Officer',
-          //   email: healthAuthSite?.privacyOfficer.email
-          // }),
-          // TODO no technical support on health auth site view model
-          // ...ArrayUtils.insertIf(healthAuthSite?.technicalSupport.email, {
-          //   label: 'Technical Support Contact',
-          //   email: healthAuthSite?.technicalSupport.email
-          // })
-        ]),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site contacts could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteContacts error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public updateHealthAuthoritySiteVendor(healthAuthId: number, siteId: number, payload: VendorForm): Observable<NoContent> {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}/vendor`, payload)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site vendor could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteVendor error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public updateHealthAuthoritySiteInfo(healthAuthCode: number, siteId: number, payload: SiteInformationForm): NoContent {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/site-info`, payload)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site information could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteInfo error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public updateHealthAuthoritySiteCareType(healthAuthId: number, siteId: number, payload: HealthAuthCareTypeForm): NoContent {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}/care-type`, payload)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority care type could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteCareType error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public updateHealthAuthoritySitePhysicalAddress(healthAuthId: number, siteId: number, payload: SiteAddressForm): NoContent {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}/address`, payload.physicalAddress)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site address could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySitePhysicalAddress error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public updateHealthAuthoritySiteHoursOperation(healthAuthId: number, siteId: number, payload: HoursOperationForm): NoContent {
-    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/hours-operation`, payload)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority hours of operation could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteHoursOperation error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public updateHealthAuthoritySiteRemoteUsers(healthAuthId: number, siteId: number, payload: RemoteUsersForm): NoContent {
-    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/remote-users`, payload)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority remote users could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteRemoteUsers error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public updateHealthAuthoritySitePharmanetAdministrator(healthAuthId: number, siteId: number, payload: AdministratorForm): NoContent {
-    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/administrator`, payload)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority administrator could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteAdministrator error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public updateHealthAuthoritySiteTechnicalSupport(healthAuthId: number, siteId: number, payload: TechnicalSupportForm): NoContent {
-    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/technical-support`, payload)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority technical support could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthorityTechnicalSupport error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  /**
-   * @description
-   * Mark the as completed indicating the workflow has been entirely traversed
-   * in wizard mode, and will now spoke between the views from overview.
-   */
-  public healthAuthoritySiteCompleted(healthAuthCode: number, siteId: number): NoContent {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/site-completed`)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site could not be marked as completed');
-          this.logger.error('[Core] HealthAuthorityResource::completed error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  /**
-   * @description
-   * Submit the health authority site registration.
-   */
-  public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number): NoContent {
-    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submit`)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site could not be submitted');
-          this.logger.error('[Core] HealthAuthorityResource::healthAuthoritySiteSubmit error has occurred: ', error);
           throw error;
         })
       );

@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
 
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Role } from '@auth/shared/enum/role.enum';
-import { ActivatedRoute } from '@angular/router';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-site-registration-table',

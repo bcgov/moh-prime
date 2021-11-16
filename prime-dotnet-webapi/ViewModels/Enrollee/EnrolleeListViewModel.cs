@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+
 using Prime.Models;
 
 namespace Prime.ViewModels
@@ -65,16 +65,10 @@ namespace Prime.ViewModels
 
         public bool HasNotification { get; set; }
 
-        public EnrolleeListViewModel SetNotification(bool value)
-        {
-            HasNotification = value;
-            return this;
-        }
-
         public bool RequiresConfirmation { get; set; }
 
         public bool Confirmed { get; set; }
-        
+
         public string GPID { get; set; }
     }
 }

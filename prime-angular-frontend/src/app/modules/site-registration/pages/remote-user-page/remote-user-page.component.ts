@@ -7,20 +7,20 @@ import { noop, of } from 'rxjs';
 
 import { CollegeConfig, LicenseConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { AddressLine } from '@lib/models/address.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RemoteUser } from '@lib/models/remote-user.model';
+import { RemoteUserCertification } from '@lib/models/remote-user-certification.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { AddressLine } from '@shared/models/address.model';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
-import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page-form-state.class';
 
 @Component({
@@ -77,7 +77,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * Remote user certifications specific to the local form.
    */
   public get remoteUserCertifications(): FormArray {
-    // TODO use formState
     return this.form.get('remoteUserCertifications') as FormArray;
   }
 

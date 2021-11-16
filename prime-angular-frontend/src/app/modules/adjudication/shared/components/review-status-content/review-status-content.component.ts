@@ -13,6 +13,7 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { ConfigCodePipe } from '@config/config-code.pipe';
 
 class Status {
   constructor(
@@ -50,6 +51,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   constructor(
     private utilsService: UtilsService,
     private enrolmentResource: EnrolmentResource,
+    private configPipe: ConfigCodePipe
   ) {
     this.hideStatusHistory = false;
   }
@@ -89,7 +91,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
       .reduce((statuses: Status[], enrolmentStatus: EnrolmentStatus) => {
         const status = new Status(
           enrolmentStatus.statusDate,
-          enrolmentStatus.status.name,
+          this.configPipe.transform(enrolmentStatus.statusCode, 'statuses'),
           enrolmentStatus.statusCode,
           this.parseReasons(enrolmentStatus)
         );
@@ -121,10 +123,10 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
         }
 
         if (esr.statusReasonCode === EnrolmentStatusReasonEnum.IDENTITY_PROVIDER) {
-          return reasons.concat(new Reason(esr.statusReason.name, esr.reasonNote, this.enrollee.identificationDocuments));
+          return reasons.concat(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statuses'), esr.reasonNote, this.enrollee.identificationDocuments));
         }
 
-        reasons.push(new Reason(esr.statusReason.name, esr.reasonNote));
+        reasons.push(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statuses'), esr.reasonNote));
         return reasons;
       }, []);
   }

@@ -97,7 +97,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAllHealthAuthoritySites()
         {
-            return Ok(await _healthAuthoritySiteService.GetAllSitesAsync());
+            return Ok(await _healthAuthoritySiteService.GetSitesAsync());
         }
 
         // PUT: api/health-authorities/5/care-types
