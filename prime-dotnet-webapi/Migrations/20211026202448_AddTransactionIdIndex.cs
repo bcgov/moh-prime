@@ -2,7 +2,7 @@
 
 namespace Prime.Migrations
 {
-    public partial class AddTransactionIdUniqueIndex : Migration
+    public partial class AddTransactionIdIndex : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
