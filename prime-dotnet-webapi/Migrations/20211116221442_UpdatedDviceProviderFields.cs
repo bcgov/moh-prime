@@ -2,10 +2,14 @@
 
 namespace Prime.Migrations
 {
-    public partial class UpdatedDeviceProviderFields : Migration
+    public partial class UpdatedDviceProviderFields : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_PharmanetTransactionLog_TransactionId",
+                table: "PharmanetTransactionLog");
+
             migrationBuilder.DropColumn(
                 name: "IsInsulinPumpProvider",
                 table: "Enrollee");
@@ -28,10 +32,20 @@ namespace Prime.Migrations
                 keyValue: 8,
                 column: "Name",
                 value: "Device Provider");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PharmanetTransactionLog_TransactionId",
+                table: "PharmanetTransactionLog",
+                column: "TransactionId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_PharmanetTransactionLog_TransactionId",
+                table: "PharmanetTransactionLog");
+
             migrationBuilder.RenameColumn(
                 name: "DeviceProviderIdentifier",
                 table: "Enrollee",
@@ -56,6 +70,11 @@ namespace Prime.Migrations
                 keyValue: 8,
                 column: "Name",
                 value: "Insulin Pump Provider");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PharmanetTransactionLog_TransactionId",
+                table: "PharmanetTransactionLog",
+                column: "TransactionId");
         }
     }
 }
