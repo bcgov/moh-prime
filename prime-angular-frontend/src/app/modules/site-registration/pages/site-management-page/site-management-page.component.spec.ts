@@ -14,6 +14,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { ConfigService } from '@config/config.service';
 import { ConfigCodePipe } from '@config/config-code.pipe';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -36,7 +37,8 @@ describe('SiteManagementPageComponent', () => {
         SiteManagementPageComponent,
         FullnamePipe,
         AddressPipe,
-        ConfigCodePipe
+        ConfigCodePipe,
+        CapitalizePipe
       ],
       providers: [
         {
@@ -54,7 +56,8 @@ describe('SiteManagementPageComponent', () => {
         KeycloakService,
         FullnamePipe,
         AddressPipe,
-        ConfigCodePipe
+        ConfigCodePipe,
+        CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
