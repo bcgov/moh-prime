@@ -47,7 +47,7 @@ namespace Prime.Services.Rules
             }
 
             TimeSpan diff = enrollee.ExpiryDate.Value - DateTimeOffset.Now;
-            return Task.FromResult(diff > TimeSpan.FromDays(30));
+            return Task.FromResult(diff > TimeSpan.FromDays(90));
         }
     }
 
