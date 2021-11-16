@@ -124,16 +124,18 @@ namespace Prime.Services
 
         private void UpdateAddress(Site current, CommunitySiteUpdateModel updated)
         {
-            if (updated?.PhysicalAddress != null)
+            if (updated.PhysicalAddress == null)
             {
-                if (current.PhysicalAddress == null)
-                {
-                    current.PhysicalAddress = updated.PhysicalAddress;
-                }
-                else
-                {
-                    _context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
-                }
+                return;
+            }
+
+            if (current.PhysicalAddress == null)
+            {
+                current.PhysicalAddress = updated.PhysicalAddress;
+            }
+            else
+            {
+                _context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
             }
         }
 
@@ -177,21 +179,23 @@ namespace Prime.Services
 
         private void UpdateBusinessHours(Site current, CommunitySiteUpdateModel updated)
         {
-            if (updated?.BusinessHours != null)
+            if (updated.BusinessHours == null)
             {
-                if (current.BusinessHours != null)
-                {
-                    foreach (var businessHour in current.BusinessHours)
-                    {
-                        _context.Remove(businessHour);
-                    }
-                }
+                return;
+            }
 
-                foreach (var businessHour in updated.BusinessHours)
+            if (current.BusinessHours != null)
+            {
+                foreach (var businessHour in current.BusinessHours)
                 {
-                    businessHour.SiteId = current.Id;
-                    _context.Entry(businessHour).State = EntityState.Added;
+                    _context.Remove(businessHour);
                 }
+            }
+
+            foreach (var businessHour in updated.BusinessHours)
+            {
+                businessHour.SiteId = current.Id;
+                _context.Entry(businessHour).State = EntityState.Added;
             }
         }
 
@@ -202,8 +206,8 @@ namespace Prime.Services
                 return;
             }
 
-            // All RemoteUserCertifications will be dropped and re-added, so we must set all incoming PKs/FKs to 0
-            // This can be removed when / if the updated Certs become a View Model without FKs.
+            // All RemoteUserCertifications will be dropped and re-added, so we must set all incoming PKs/FKs to 0
+            // This can be removed when / if the updated Certs become a View Model without FKs.
             foreach (var cert in updateRemoteUsers.SelectMany(x => x.RemoteUserCertifications))
             {
                 cert.Id = 0;
