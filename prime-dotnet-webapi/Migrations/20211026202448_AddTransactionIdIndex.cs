@@ -9,7 +9,8 @@ namespace Prime.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PharmanetTransactionLog_TransactionId",
                 table: "PharmanetTransactionLog",
-                column: "TransactionId");
+                column: "TransactionId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
