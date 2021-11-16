@@ -28,6 +28,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
                             ? src.SiteStatuses.OrderByDescending(s => s.StatusDate).ThenByDescending(s => s.Id).FirstOrDefault().StatusType
                             : SiteStatusType.Editable
                     )); ;
+
             CreateMap<HealthAuthorityPharmanetAdministrator, HealthAuthoritySite>();
 
             CreateMap<HealthAuthoritySite, SiteSelectionDto>();

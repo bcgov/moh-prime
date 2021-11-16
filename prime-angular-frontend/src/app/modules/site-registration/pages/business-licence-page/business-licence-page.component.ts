@@ -23,6 +23,7 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { BusinessLicenceFormState } from './business-licence-form-state.class';
 
+// TODO refactor business licence pages into a single page
 @Component({
   selector: 'app-business-licence-page',
   templateUrl: './business-licence-page.component.html',
@@ -64,11 +65,10 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   }
 
   public canDefer(): boolean {
-    const code = this.siteService.site.careSettingCode;
     return [
       CareSettingEnum.COMMUNITY_PHARMACIST,
       CareSettingEnum.DEVICE_PROVIDER
-    ].includes(code);
+    ].includes(this.siteService.site.careSettingCode);
   }
 
   public onUpload(document: BaseDocument): void {

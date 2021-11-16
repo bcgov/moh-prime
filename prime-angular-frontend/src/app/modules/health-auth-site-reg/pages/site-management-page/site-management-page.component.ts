@@ -79,8 +79,9 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.healthAuthorityId = this.authorizedUserService.authorizedUser.healthAuthorityCode;
-    this.healthAuthoritySites$ = this.authorizedUserResource.getAuthorizedUserSites(this.healthAuthorityId);
+    const authorizedUser = this.authorizedUserService.authorizedUser;
+    this.healthAuthorityId = authorizedUser.healthAuthorityCode;
+    this.healthAuthoritySites$ = this.authorizedUserResource.getAuthorizedUserSites(authorizedUser.id);
   }
 
   private redirectTo(healthAuthorityId: number, healthAuthoritySiteId: number, pagePath: string): void {
