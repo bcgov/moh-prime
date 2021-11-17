@@ -48,11 +48,11 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
     }
 
     if (organization.signingAuthorityId === party.id) {
-      return this.manageAlreadySigningAuthority(routePath);
+      return this.manageAlreadySigningAuthorityRouting(routePath);
     }
 
     if (organization.hasClaim) {
-      return this.manageExistingClaim(routePath, organization.id);
+      return this.manageExistingClaimRouting(routePath, organization.id);
     }
 
     // When the organization ID mismatches the organizations route ID
@@ -84,18 +84,21 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
    * @description
    * Manage routing when the party is already the signing authority
    * for the organization.
+   *
+   * NOTE: Organization management can only occur in the default workflow.
    */
-  protected manageAlreadySigningAuthority(routePath: string): boolean {
-    // Already the signing authority and should be pushed into
-    // the default workflow
+  protected manageAlreadySigningAuthorityRouting(routePath: string): boolean {
     return this.navigate(routePath, [SiteRoutes.ORGANIZATIONS]);
   }
 
   /**
    * @description
    * Manage routing when a claim exists on an organization.
+   *
+   * NOTE: Claiming an organization can only occur in the change
+   * signing authority workflow.
    */
-  protected manageExistingClaim(routePath: string, organizationId: number): boolean {
+  protected manageExistingClaimRouting(routePath: string, organizationId: number): boolean {
     return this.navigate(routePath, this.getExistingClaimRouteRedirect(organizationId));
   }
 

@@ -13,9 +13,9 @@ namespace PrimeTests.ModelFactories
 
         public CommunitySiteFactory(Organization org = null)
         {
-            this.SetBaseRules();
+//            this.SetBaseRules();
 
-            RuleFor(x => x.Id, () => IdCounter++);
+//            RuleFor(x => x.Id, () => IdCounter++);
             RuleFor(x => x.PhysicalAddress, f => new PhysicalAddressFactory().Generate());
             RuleFor(x => x.Organization, f => org != null ? org : new OrganizationFactory(new PartyFactory().Generate()).Generate());
             RuleFor(x => x.OrganizationId, (f, x) => x.Organization.Id);

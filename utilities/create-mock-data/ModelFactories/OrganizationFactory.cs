@@ -11,7 +11,7 @@ namespace PrimeTests.ModelFactories
         {
             // this.SetBaseRules();  ...
 
-            RuleFor(x => x.Id, () => IdCounter++);
+//            RuleFor(x => x.Id, () => IdCounter++);
             RuleFor(x => x.Name, f => f.Company.CompanyName());
 
             RuleFor(x => x.SigningAuthority, () => signingAuthority);
