@@ -688,7 +688,7 @@ namespace Prime.Controllers
             {
                 return BadRequest("PEC cannot be empty.");
             }
-
+            
             var currentPec = await _siteService.GetSitePecAsync(siteId);
             if (currentPec == pec)
             {

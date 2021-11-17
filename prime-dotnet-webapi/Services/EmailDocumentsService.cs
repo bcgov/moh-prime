@@ -1,13 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using DelegateDecompiler.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
 
 using Prime.HttpClients;
 using Prime.Models;
 using Prime.Models.Documents;
 using Prime.Services.Razor;
+using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.SiteRegistration.ReviewDocument;
 
 namespace Prime.Services.EmailInternal
@@ -20,12 +24,14 @@ namespace Prime.Services.EmailInternal
         private readonly IOrganizationService _organizationService;
         private readonly IPdfService _pdfService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IMapper _mapper;
 
         public EmailDocumentsService(
             ApiDbContext context,
             ILogger<EmailDocumentsService> logger,
             IDocumentAccessTokenService documentAccessTokenService,
             IDocumentManagerClient documentClient,
+            IMapper mapper,
             IOrganizationAgreementService organizationAgreementService,
             IOrganizationService organizationService,
             IPdfService pdfService,
@@ -38,6 +44,7 @@ namespace Prime.Services.EmailInternal
             _organizationService = organizationService;
             _pdfService = pdfService;
             _razorConverterService = razorConverterService;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Pdf>> GenerateSiteRegistrationSubmissionAttachmentsAsync(int siteId)
@@ -69,6 +76,18 @@ namespace Prime.Services.EmailInternal
 
             _context.SiteRegistrationReviewDocuments.Add(new SiteRegistrationReviewDocument(siteId, documentGuid, pdf.Filename));
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Pdf> GenerateHealthAuthorityRegistrationReviewAttachmentAsync(int healthAuthoritySiteId)
+        {
+            var model = await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Where(has => has.Id == healthAuthoritySiteId)
+                .ProjectTo<HealthAuthoritySiteSubmissionViewModel>(_mapper.ConfigurationProvider)
+                .SingleAsync();
+
+            var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.HealthAuthoritySiteRegistrationReview, model);
+            return new Pdf("HealthAuthoritySiteRegistrationReview.pdf", _pdfService.Generate(html));
         }
 
         private async Task<Pdf> GenerateRegistrationReviewAttachmentAsync(int siteId)
