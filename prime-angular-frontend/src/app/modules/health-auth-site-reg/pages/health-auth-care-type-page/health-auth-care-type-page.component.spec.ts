@@ -20,7 +20,7 @@ describe('HealthAuthCareTypePageComponent', () => {
   const mockActivatedRoute = {
     snapshot: {
       data: {
-        title: 'Technical Support',
+        title: 'Health Authority Care Type',
       },
       params: {
         haid: 1,

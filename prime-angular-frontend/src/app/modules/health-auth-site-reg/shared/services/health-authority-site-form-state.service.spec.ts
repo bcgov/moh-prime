@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { HealthAuthoritySiteFormStateService } from './health-authority-site-form-state.service';
@@ -12,7 +14,9 @@ describe('HealthAuthoritySiteFormStateService', () => {
     TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientTestingModule,
+        MatSnackBarModule
       ],
       providers: [
 

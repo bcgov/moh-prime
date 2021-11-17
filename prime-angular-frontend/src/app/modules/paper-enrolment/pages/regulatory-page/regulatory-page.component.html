@@ -7,6 +7,33 @@
         autocomplete="off"
         novalidate>
 
+    <section *ngIf="isDeviceProvider"
+             class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Provide your Device Provider ID if you have one.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   maxlength="5"
+                   placeholder="Device Provider ID"
+                   formControlName="deviceProviderIdentifier">
+            <mat-error
+                       *ngIf="formState.deviceProviderIdentifier.hasError('numeric') || formState.deviceProviderIdentifier.hasError('length')">
+              Must be 5 digits in length
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </section>
+
     <app-page-section>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>

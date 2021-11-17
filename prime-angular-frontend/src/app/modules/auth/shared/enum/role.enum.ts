@@ -10,6 +10,7 @@ export enum Role {
   // Feature Flags
   FEATURE_VC_ISSUANCE = 'feature_vc_issuance',
   FEATURE_SITE_PHARMACIST = 'feature_site_pharmacist',
+  // Also used for device provider user enrolment and device provider paper enrolment
   FEATURE_SITE_DEVICE_PROVIDER = 'feature_site_device_provider',
 
   VIEW_ENROLLEE = 'enrollee_view',

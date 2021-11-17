@@ -47,9 +47,7 @@ namespace Prime.ViewModels
 
         public string PhoneExtension { get; set; }
 
-        public string DeviceProviderNumber { get; set; }
-
-        public bool? IsInsulinPumpProvider { get; set; }
+        public string DeviceProviderIdentifier { get; set; }
 
         public bool ProfileCompleted { get; set; }
 
