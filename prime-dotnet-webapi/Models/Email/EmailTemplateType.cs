@@ -17,6 +17,7 @@ namespace Prime.Models
         SiteRegistrationSubmission = 13,
         OrganizationClaimApprovalNotification = 14,
         SiteReviewedNotification = 15,
-        SiteActiveBeforeRegistrationSubmission = 16
+        SiteActiveBeforeRegistrationSubmission = 16,
+        PaperEnrolleeSubmission = 17
     }
 }
