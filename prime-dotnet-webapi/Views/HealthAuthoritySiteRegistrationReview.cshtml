@@ -1,0 +1,116 @@
+@using Prime.ViewModels.HealthAuthoritySites
+@model HealthAuthoritySiteSubmissionViewModel
+
+@{
+  Layout = "~/Views/Partials/_BaseLayout.cshtml";
+}
+
+@section Title { Site Registration Review }
+
+@section Theme {
+@await Html.PartialAsync("~/Views/Partials/_BootstrapTheme.cshtml")
+@await Html.PartialAsync("~/Views/Partials/_FontTheme.cshtml")
+}
+
+<h1 class="mb-4">HEALTH AUTHORITY SITE REGISTRATION REVIEW</h1>
+
+<h2 class="mb-3">Site Information</h2>
+
+<div class="ml-2 mb-2">
+  <h5>Site Name (doing business as)</h5>
+  <span class="ml-2">@(Model.SiteName ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Authorized User Name</h5>
+  <span class="ml-2">@(Model.AuthorizedUserFullName ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Health Authority Name</h5>
+  <span class="ml-2">@(Model.HealthAuthorityName ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>New or existing site?</h5>
+  <span class="ml-2">@(Model.NewOrExisting)</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>PEC/Site ID</h5>
+  <span class="ml-2">@(Model.PEC ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>CareType</h5>
+  <span class="ml-2">@(Model.CareType ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Vendor</h5>
+  <span class="ml-2">@(Model.VendorName ?? "-")</span>
+</div>
+
+<h2 class="mb-3">Site Address</h2>
+
+<div class="ml-2 mb-2">
+  <h5>Address</h5>
+  <span class="ml-2">@(Model.SiteAddress.Street ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Address 2</h5>
+  <span class="ml-2">@(Model.SiteAddress.Street2 ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>City</h5>
+  <span class="ml-2">@(Model.SiteAddress.City ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Province</h5>
+  <span class="ml-2">@(Model.SiteAddress.ProvinceCode ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Postal Code</h5>
+  <span class="ml-2">@(Model.SiteAddress.Postal ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Country</h5>
+  <span class="ml-2">@(Model.SiteAddress.CountryCode ?? "-")</span>
+</div>
+
+<h2 class="mb-3">PharmaNet Administrator</h2>
+
+<div class="ml-2 mb-2">
+  <h5>Name</h5>
+  <span class="ml-2">@($"{Model.PharmaNetAdministrator.FirstName} {Model.PharmaNetAdministrator.LastName}" ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Job Title</h5>
+  <span class="ml-2">@(Model.PharmaNetAdministrator.JobRoleTitle ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Phone</h5>
+  <span class="ml-2">@(Model.PharmaNetAdministrator.Phone ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Fax</h5>
+  <span class="ml-2">@(Model.PharmaNetAdministrator.Fax ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>SMS Phone</h5>
+  <span class="ml-2">@(Model.PharmaNetAdministrator.SMSPhone ?? "-")</span>
+</div>
+
+<div class="ml-2 mb-2">
+  <h5>Email</h5>
+  <span class="ml-2">@(Model.PharmaNetAdministrator.Email ?? "-")</span>
+</div>
