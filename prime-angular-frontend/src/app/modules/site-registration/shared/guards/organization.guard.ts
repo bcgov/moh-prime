@@ -1,70 +1,44 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router, Params } from '@angular/router';
 
-import { Observable, forkJoin } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
-
 import { Party } from '@lib/models/party.model';
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
-import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { AbstractRoutingWorkflowGuard } from '@registration/shared/classes/abstract-routing-workflow-guard.class';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrganizationGuard extends BaseGuard {
+export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
   constructor(
+    protected organizationService: OrganizationService,
+    protected organizationResource: OrganizationResource,
     protected authService: AuthService,
     protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router,
-    private organizationService: OrganizationService,
-    private organizationResource: OrganizationResource
+    private router: Router
   ) {
-    super(authService, logger);
-  }
-
-  protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    return this.authService.getUser$()
-      .pipe(
-        // Having no signing authority or organizations results in the same
-        // redirection logic for the user, and therefore not handled individually
-        exhaustMap((user: BcscUser) =>
-          forkJoin([
-            this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
-              .pipe(
-                map((organizations: Organization[]) => (organizations?.length) ? organizations[0] : null)
-              ),
-            this.organizationResource.getSigningAuthorityByUserId(user.userId),
-            this.organizationResource.getOrganizationClaim({ userId: user.userId })
-          ])
-        ),
-        map(([organization, party, claimed]: [Organization | null, Party, boolean]) => {
-          // Store the organization for access throughout registration, which
-          // will allows be the most up-to-date organization
-          this.organizationService.organization = organization;
-
-          // Determine the next route based on whether this is the initial
-          // registration of an organization and site, or subsequent
-          // registration of sites under an existing organization
-          return this.routeDestination(routePath, params, organization, party, claimed);
-        })
-      );
+    super(organizationService, organizationResource, authService, logger);
   }
 
   /**
    * @description
    * Determine the route destination based on the organization status.
    */
-  private routeDestination(routePath: string, params: Params, organization: Organization | null, party: Party, hasOrgClaim: boolean) {
+  protected routeDestination(
+    routePath: string,
+    params: Params,
+    organization: Organization | null,
+    party: Party,
+    hasOrgClaim: boolean
+  ): boolean {
     // On login the user will always be redirected to the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
