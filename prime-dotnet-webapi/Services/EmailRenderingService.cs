@@ -149,14 +149,22 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode)
         {
-            var recipientEmails = careSettingCode == CareSettingType.CommunityPharmacy
-                ? new[] { PrimeSupportEmail }
-                : new[] { MohEmail, PrimeSupportEmail };
+            if (careSettingCode == CareSettingType.CommunityPharmacy)
+            {
+                return new Email
+                (
+                    from: PrimeEmail,
+                    to: PrimeSupportEmail,
+                    subject: "PRIME Site Registration Submission",
+                    body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
+                );
+            }
 
             return new Email
             (
                 from: PrimeEmail,
-                to: recipientEmails,
+                to: MohEmail,
+                cc: PrimeSupportEmail,
                 subject: "PRIME Site Registration Submission",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
             );
