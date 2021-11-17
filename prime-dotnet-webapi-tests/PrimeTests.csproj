@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.7" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
@@ -39,6 +39,9 @@
     <EmbeddedResource Include=".\Utils\Auth\well-known\microsoft-wellknown-keys.json" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="testsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update=".\Integration\PRPM_IN301030CA - missing message id.xml" CopyToOutputDirectory="PreserveNewest" />
     <None Update=".\Integration\PRPM_IN301030CA - missing IPC.xml" CopyToOutputDirectory="PreserveNewest" />
     <None Update=".\README.md" CopyToOutputDirectory="PreserveNewest" />

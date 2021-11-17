@@ -89,9 +89,18 @@ namespace Prime.Services
             await _emailDocumentService.SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
         }
 
+        public async Task SendHealthAuthoritySiteRegistrationSubmissionAsync(int healthAuthoritySiteId)
+        {
+            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(null), CareSettingType.HealthAuthority);
+            var attachment = await _emailDocumentService.GenerateHealthAuthorityRegistrationReviewAttachmentAsync(healthAuthoritySiteId);
+            email.Attachments = new[] { attachment };
+            await Send(email);
+
+            await _emailDocumentService.SaveSiteRegistrationReview(healthAuthoritySiteId, attachment);
+        }
+
         public async Task SendSiteReviewedNotificationAsync(int siteId, string note)
         {
-
             var viewModel = await _context.Sites
                 .Where(s => s.Id == siteId)
                 .Select(s => new SiteReviewedEmailViewModel
@@ -105,7 +114,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendRemoteUsersUpdatedAsync(Site site)
+        public async Task SendRemoteUsersUpdatedAsync(CommunitySite site)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.Id);
             var viewModel = new RemoteUsersUpdatedEmailViewModel
@@ -122,7 +131,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
+        public async Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers)
         {
             if (!remoteUsers.Any())
             {
@@ -148,7 +157,7 @@ namespace Prime.Services
             }
         }
 
-        public async Task SendBusinessLicenceUploadedAsync(Site site)
+        public async Task SendBusinessLicenceUploadedAsync(CommunitySite site)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.BusinessLicence.Id);
 
@@ -156,7 +165,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedPharmaNetAdministratorAsync(Site site)
+        public async Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
@@ -168,7 +177,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedSigningAuthorityAsync(Site site)
+        public async Task SendSiteApprovedSigningAuthorityAsync(CommunitySite site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
@@ -193,7 +202,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedHIBCAsync(Site site)
+        public async Task SendSiteApprovedHIBCAsync(CommunitySite site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
@@ -287,6 +296,21 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return totalCount;
+        }
+
+        public async Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId)
+        {
+            var enrolleeDto = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => new
+                {
+                    e.Email,
+                    e.GPID
+                })
+                .SingleOrDefaultAsync();
+
+            var email = await _emailRenderingService.RenderPaperEnrolleeSubmissionEmail(enrolleeDto.Email, new PaperEnrolleeSubmissionEmailViewModel(enrolleeDto.GPID));
+            await Send(email);
         }
 
         private async Task Send(Email email)

@@ -13,7 +13,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
@@ -34,7 +34,7 @@ export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   templateUrl: './hours-operation-page.component.html',
   styleUrls: ['./hours-operation-page.component.scss']
 })
-export class HoursOperationPageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: HoursOperationPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -161,12 +161,25 @@ export class HoursOperationPageComponent extends AbstractSiteRegistrationPage im
 
   protected afterSubmitIsSuccessful(): void {
     const site = this.siteService.site;
-    let routePath = SiteRoutes.REMOTE_USERS;
+    let routePath;
 
-    if (site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST || site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER) {
-      routePath = SiteRoutes.ADMINISTRATOR;
-    } else if (this.isCompleted) {
+    if (this.isCompleted) {
       routePath = SiteRoutes.SITE_REVIEW;
+    } else {
+      switch (site.careSettingCode) {
+        case CareSettingEnum.COMMUNITY_PHARMACIST:
+          routePath = SiteRoutes.ADMINISTRATOR;
+          break;
+        case CareSettingEnum.DEVICE_PROVIDER:
+          routePath = SiteRoutes.DEVICE_PROVIDER;
+          break;
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
+          routePath = SiteRoutes.REMOTE_USERS;
+          break;
+        default:
+          routePath = SiteRoutes.ADMINISTRATOR;
+          break;
+      }
     }
 
     this.routeUtils.routeRelativeTo(routePath);

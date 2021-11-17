@@ -78,16 +78,20 @@
                         (action)="viewSiteRemoteUsers(organization.id, site)">
         <ng-container *ngIf="inComplete(site)"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props: getNotSubmittedSiteNotificationProperties(organization.id, site) }">
+                      [ngTemplateOutletContext]="{
+                        props: getNotSubmittedSiteNotificationProperties(organization.id, site)
+                      }">
         </ng-container>
         <ng-container *ngIf="isInReview(site)"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props: getInReviewSiteNotificationProperties(site) }">
+                      [ngTemplateOutletContext]="{
+                        props: getInReviewSiteNotificationProperties(site)
+                      }">
         </ng-container>
         <ng-container *ngIf="isLocked(site)"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props:
-                        {
+                      [ngTemplateOutletContext]="{
+                        props: {
                           icon: 'not_interested',
                           text: 'Declined'
                         }
@@ -95,11 +99,15 @@
         </ng-container>
         <ng-container *ngIf="isApproved(site) && !requiresRenewal(site)"
                       [ngTemplateOutlet]="success_notification"
-                      [ngTemplateOutletContext]="{ props: getApprovedSiteNotificationProperties(site) }">
+                      [ngTemplateOutletContext]="{
+                        props: getApprovedSiteNotificationProperties(site)
+                      }">
         </ng-container>
         <ng-container *ngIf="isApproved(site) && requiresRenewal(site)"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props: getRenewalRequiredSiteNotificationProperties(organization.id, site) }">
+                      [ngTemplateOutletContext]="{
+                        props: getRenewalRequiredSiteNotificationProperties(organization.id, site)
+                      }">
         </ng-container>
       </app-summary-card>
 

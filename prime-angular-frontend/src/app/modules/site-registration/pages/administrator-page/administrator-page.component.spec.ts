@@ -8,7 +8,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { MockSiteService } from 'test/mocks/mock-site.service';
+import { MockCommunitySiteService } from 'test/mocks/mock-community-site.service';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SiteService } from '@registration/shared/services/site.service';
@@ -38,7 +38,7 @@ describe('AdministratorPageComponent', () => {
         },
         {
           provide: SiteService,
-          useClass: MockSiteService
+          useClass: MockCommunitySiteService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]

@@ -3,9 +3,6 @@ import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
@@ -15,6 +12,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { Role } from '@auth/shared/enum/role.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
@@ -48,7 +47,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    protected authService: AuthService
+    protected authService: AuthService,
+    private permissionService: PermissionService
   ) {
     super(
       route,
@@ -97,24 +97,28 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       this.setHealthAuthorityValidator();
     }
 
-    // If an individual health authority was deselected, its Obo Sites should be removed as well
+    // Remove device provider identifier if Device Provider is no longer selected
+    if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
+      this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.reset();
+    }
+
+    // If an individual health authority was deselected, its Obo Sites
+    // should be removed as well
     this.enrolmentFormStateService.removeUnselectedHAOboSites();
 
     super.onSubmit();
+  }
+
+  public disableCareSetting(careSettingCode: number): boolean {
+    return (careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
+      ? !this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER)
+      : false;
   }
 
   public addCareSetting() {
     const careSetting = this.enrolmentFormStateService.buildCareSettingForm();
     this.careSettings.push(careSetting);
     this.setHealthAuthorityValidator();
-  }
-
-  public disableCareSetting(careSettingCode: number): boolean {
-    return ![
-      CareSettingEnum.COMMUNITY_PHARMACIST,
-      CareSettingEnum.HEALTH_AUTHORITY,
-      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
-    ].includes(careSettingCode);
   }
 
   public removeCareSetting(index: number, careSettingCode: number) {
@@ -164,21 +168,13 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       });
   }
 
-  public canDeactivate(): Observable<boolean> | boolean {
-    const canDeactivate = super.canDeactivate();
-
-    return (canDeactivate instanceof Observable)
-      ? canDeactivate.pipe(tap(() => this.removeIncompleteOrganizations()))
-      : canDeactivate;
-  }
-
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());
   }
 
   public ngOnDestroy() {
-    this.removeIncompleteOrganizations();
+    this.removeIncompleteCareSettings();
   }
 
   protected createFormInstance() {
@@ -195,6 +191,16 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     this.setHealthAuthorityValidator();
 
     this.careSettings.valueChanges.subscribe(() => this.setHealthAuthorityValidator());
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    const { careSettings, enrolleeHealthAuthorities } = this.enrolmentService.enrolment;
+    this.enrolmentFormStateService.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
   }
 
   protected onSubmitFormIsValid(): void {
@@ -214,6 +220,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
+    } else if (this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.OVERVIEW;
     } else if (oboSites?.length) {
       // Should edit existing Job/OboSites next
       nextRoutePath = EnrolmentRoutes.OBO_SITES;
@@ -225,7 +233,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private removeIncompleteOrganizations() {
+  private removeIncompleteCareSettings() {
     this.careSettings.controls
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('careSettingCode').value;
@@ -245,7 +253,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   /**
    * @description
-   * Remove obo sites by care setting if a care setting was removed from the enrolment
+   * Remove obo sites by care setting if a care setting
+   * was removed from the enrolment.
    */
   private removeOboSites(careSettingCode: number): void {
     const form = this.enrolmentFormStateService.oboSitesForm;

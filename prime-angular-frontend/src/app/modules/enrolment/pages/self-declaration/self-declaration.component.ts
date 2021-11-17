@@ -13,7 +13,7 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -117,17 +117,18 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm
       .get('careSettings').value as CareSetting[];
+    const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
+      careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+    const deviceProviderIdentifier = this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.value;
 
-    let backRoutePath: string;
+
+    let backRoutePath = EnrolmentRoutes.OVERVIEW;
     if (!this.isProfileComplete) {
-      backRoutePath = (
-        this.enrolmentService
-          .canRequestRemoteAccess(certifications, careSettings)
-      )
+      backRoutePath = (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
         ? EnrolmentRoutes.REMOTE_ACCESS
-        : (certifications.length)
-          ? EnrolmentRoutes.REGULATORY
-          : EnrolmentRoutes.OBO_SITES;
+        : (!certifications.length || (isDeviceProvider && !deviceProviderIdentifier))
+          ? EnrolmentRoutes.OBO_SITES
+          : EnrolmentRoutes.REGULATORY;
     }
 
     this.routeTo(backRoutePath);
@@ -166,6 +167,16 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
         this.toggleSelfDeclarationValidators(value, this.hasPharmaNetSuspendedDetails);
         this.showUnansweredQuestionsError = this.showUnansweredQuestions();
       });
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    const { selfDeclarations, profileCompleted } = this.enrolmentService.enrolment;
+    this.enrolmentFormStateService.patchSelfDeclarations({ selfDeclarations, profileCompleted });
   }
 
   protected onSubmitFormIsInvalid() {

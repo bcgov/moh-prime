@@ -37,7 +37,7 @@ export class OrganizationService implements IOrganizationService {
   }
 
   public get organization$(): Observable<Organization | null> {
-    // Allow subscriptions, but make immutable
+    // Allow subscriptions, but make the subject immutable
     return this._organization.asObservable();
   }
 }

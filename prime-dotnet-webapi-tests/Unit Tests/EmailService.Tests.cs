@@ -1,16 +1,13 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
 using Xunit;
 using FakeItEasy;
 
-using Prime;
 using Prime.Models;
 using Prime.Services;
 using Prime.Services.EmailInternal;
 using PrimeTests.Utils;
-using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.ViewModels.Emails;
 using PrimeTests.ModelFactories;
@@ -91,9 +88,9 @@ namespace PrimeTests.UnitTests
         [Fact]
         public async void TestSendRemoteUserNotificationsAsync_NoRemoteUsersDoesNotThrow()
         {
-            var service = MockDependenciesFor<EmailService>();
-            var site = new SiteFactory().Generate();
+            var site = new CommunitySiteFactory().Generate();
             var remoteUsers = Enumerable.Empty<RemoteUser>();
+            var service = MockDependenciesFor<EmailService>();
 
             var exceptions = await Record.ExceptionAsync(() => service.SendRemoteUserNotificationsAsync(site, remoteUsers));
 

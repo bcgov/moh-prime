@@ -17,10 +17,10 @@ import { SiteInformationForm } from './site-information-form.model';
         {{ siteInformation?.siteName | default }}
       </app-enrollee-property>
       <app-enrollee-property title="Site ID/PEC Code">
-        {{ siteInformation?.siteId | default }}
+        {{ siteInformation?.pec | default }}
       </app-enrollee-property>
       <app-enrollee-property title="Security Group">
-        {{ siteInformation?.securityGroupCode | default }}
+        {{ siteInformation?.securityGroupCode | configCode: 'securityGroups' | default }}
       </app-enrollee-property>
     </app-overview-section>
   `,

@@ -6,9 +6,9 @@ import { pairwise, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { Config, ProvinceConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 
+import { Country } from '@lib/enums/country.enum';
+import { Address, AddressLine } from '@lib/models/address.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Country } from '@shared/enums/country.enum';
-import { Address, AddressLine } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-address-form',

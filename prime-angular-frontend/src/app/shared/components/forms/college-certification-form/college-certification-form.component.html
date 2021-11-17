@@ -7,8 +7,9 @@
       <mat-form-field class="w-100">
         <mat-label>College Licences</mat-label>
         <mat-select formControlName="collegeCode">
-          <mat-option *ngIf="!condensed"
-                      value="">None
+          <mat-option *ngIf="!condensed && defaultOption"
+                      value="">
+            None
           </mat-option>
           <mat-option *ngFor="let college of allowedColleges()"
                       [value]="college.code">
@@ -162,7 +163,8 @@
               <mat-form-field class="w-100">
                 <input matInput
                        placeholder="Prescriber ID"
-                       formControlName="practitionerId">
+                       formControlName="practitionerId"
+                       maxlength="5">
                 <mat-error *ngIf="practitionerId.hasError('required')">Required</mat-error>
                 <mat-error *ngIf="practitionerId.hasError('numeric') || practitionerId.hasError('length')">
                   Must contain only 5 numeric characters

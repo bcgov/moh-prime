@@ -4,15 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
+import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
+import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { SiteInformationFormState } from './site-information-form-state.class';
 
 @Component({
@@ -20,7 +20,7 @@ import { SiteInformationFormState } from './site-information-form-state.class';
   templateUrl: './site-information-page.component.html',
   styleUrls: ['./site-information-page.component.scss']
 })
-export class SiteInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteRegistrationPage implements OnInit {
   public formState: SiteInformationFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -30,13 +30,15 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    protected route: ActivatedRoute,
+    protected healthAuthoritySiteService: HealthAuthoritySiteService,
+    protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
+    protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private fb: FormBuilder,
     private configService: ConfigService,
-    private healthAuthorityResource: HealthAuthorityResource,
-    private route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthoritySiteResource);
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -58,7 +60,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected createFormInstance(): void {
-    this.formState = new SiteInformationFormState(this.fb);
+    this.formState = this.healthAuthoritySiteFormStateService.siteInformationFormState;
   }
 
   protected patchForm(): void {
@@ -68,18 +70,9 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
       return;
     }
 
-    this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
-      .subscribe(({ siteName, siteId, securityGroupCode, completed }: HealthAuthoritySite) => {
-        this.isCompleted = completed;
-        this.formState.patchValue({ siteName, siteId, securityGroupCode });
-      });
-  }
-
-  protected performSubmission(): NoContent {
-    const payload = this.formState.json;
-    const { haid, sid } = this.route.snapshot.params;
-
-    return this.healthAuthorityResource.updateHealthAuthoritySiteInfo(haid, sid, payload);
+    const site = this.healthAuthoritySiteService.site;
+    this.isCompleted = site?.completed;
+    this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
   protected afterSubmitIsSuccessful(): void {

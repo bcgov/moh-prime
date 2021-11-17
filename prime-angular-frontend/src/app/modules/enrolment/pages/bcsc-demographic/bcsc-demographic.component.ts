@@ -6,12 +6,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { Address, optionalAddressLineItems } from '@lib/models/address.model';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -128,6 +128,15 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
     this.hasMailingAddress = Address.isNotEmpty(this.formState.mailingAddress.value);
     this.toggleAddressLineValidators(this.hasMailingAddress, this.formState.mailingAddress, this.hasVerifiedAddress);
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.formState.patchValue(this.enrolmentService.enrolment.enrollee);
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {

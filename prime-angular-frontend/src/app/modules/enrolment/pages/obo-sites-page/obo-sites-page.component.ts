@@ -6,12 +6,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -78,6 +78,10 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     return this.form.get('communityPharmacySites') as FormArray;
   }
 
+  public get deviceProviderSites(): FormArray {
+    return this.form.get('deviceProviderSites') as FormArray;
+  }
+
   public get healthAuthoritySites(): FormGroup {
     return this.form.get('healthAuthoritySites') as FormGroup;
   }
@@ -124,6 +128,10 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         this.enrolmentFormStateService.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
         break;
       }
+      case CareSettingEnum.DEVICE_PROVIDER: {
+        this.enrolmentFormStateService.addNonHealthAuthorityOboSite(site, this.deviceProviderSites);
+        break;
+      }
       case CareSettingEnum.HEALTH_AUTHORITY: {
         this.enrolmentFormStateService.addHealthAuthorityOboSite(site, this.healthAuthoritySites, healthAuthorityCode);
         break;
@@ -139,6 +147,10 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
         this.communityPharmacySites.removeAt(index);
+        break;
+      }
+      case CareSettingEnum.DEVICE_PROVIDER: {
+        this.deviceProviderSites.removeAt(index);
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
@@ -187,6 +199,13 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
             }
             break;
           }
+          case CareSettingEnum.DEVICE_PROVIDER: {
+            this.deviceProviderSites.setValidators([FormArrayValidators.atLeast(1)]);
+            if (!this.deviceProviderSites.length) {
+              this.addOboSite(careSettingCode);
+            }
+            break;
+          }
           case CareSettingEnum.HEALTH_AUTHORITY: {
             this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
               if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
@@ -200,6 +219,15 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     });
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.enrolmentFormStateService.patchOboSitesForm(this.enrolmentService.enrolment.oboSites);
+  }
+
   protected onSubmitFormIsValid() {
     // Enrollees can not have jobs and certifications
     this.removeCollegeCertifications();
@@ -208,10 +236,10 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.oboSites.clear();
     this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
+    this.deviceProviderSites.controls.forEach((site) => this.oboSites.push(site));
     Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
       const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
-      sitesOfHealthAuthority.controls.forEach((site) =>
-        this.oboSites.push(site));
+      sitesOfHealthAuthority.controls.forEach((site) => this.oboSites.push(site));
     });
     this.removeCareSettingSites();
   }
@@ -263,8 +291,13 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     // Clear out sites so validation doesn't interrupt submissions
     this.communityHealthSites.clearValidators();
     this.communityHealthSites.updateValueAndValidity();
+
     this.communityPharmacySites.clearValidators();
     this.communityPharmacySites.updateValueAndValidity();
+
+    this.deviceProviderSites.clearValidators();
+    this.deviceProviderSites.updateValueAndValidity();
+
     Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
       const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
       sitesOfHealthAuthority.clearValidators();

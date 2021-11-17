@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, Subscription, Observable, of, noop } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
+import { Address } from '@lib/models/address.model';
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -13,10 +14,10 @@ import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Address } from '@shared/models/address.model';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
@@ -72,7 +73,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public onSubmit(): void {
-    if (!this.enrolmentFormStateService.isValid) {
+    if (!this.enrolmentFormStateService.isValidSubmission) {
       this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
       return;
@@ -129,6 +130,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
   }
 
+  public hasErrors() {
+    const { certificateOrOboSite, deviceProviderOrOboSite } = this.getEnrolmentErrors(this.enrolment);
+    return certificateOrOboSite || deviceProviderOrOboSite;
+  }
+
   public ngOnInit(): void {
     this.isMatchingPaperEnrollee = this.enrolmentService.isMatchingPaperEnrollee;
     this.authService.getUser$()
@@ -145,8 +151,13 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // Form being patched indicates that there is possibly changes that reside
           // in the form for submission, and they should be reflected in the view
           if (this.enrolmentFormStateService.isPatched) {
-            // Replace enrolment with the version from the form
-            enrolment = this.enrolmentFormStateService.json;
+            // Replace enrolment with the version from the form for the user
+            // to review, but maintain a subset of immutable properties
+            const { selfDeclarationDocuments } = enrolment;
+            enrolment = {
+              ...this.enrolmentFormStateService.json,
+              selfDeclarationDocuments
+            };
           }
 
           // Allow for BCSC information to be updated on each submission of the enrolment
@@ -191,8 +202,15 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
    * enrolment for checking validation instead of form state.
    */
   private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
+    const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
+      careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+    const hasDeviceProviderIdentifier = this.enrolmentService.enrolment.deviceProviderIdentifier;
+
     return {
-      certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length
+      certificate: !enrolment.certifications?.length,
+      certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length,
+      deviceProvider: isDeviceProvider && !hasDeviceProviderIdentifier,
+      deviceProviderOrOboSite: (isDeviceProvider && !hasDeviceProviderIdentifier) && !enrolment.oboSites?.length
     };
   }
 }

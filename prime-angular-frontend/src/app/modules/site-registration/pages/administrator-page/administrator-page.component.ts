@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Address } from '@lib/models/address.model';
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Address } from '@shared/models/address.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -23,7 +23,7 @@ import { AdministratorPageFormState } from './administrator-page-form-state.clas
   templateUrl: './administrator-page.component.html',
   styleUrls: ['./administrator-page.component.scss']
 })
-export class AdministratorPageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class AdministratorPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: AdministratorPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -57,11 +57,22 @@ export class AdministratorPageComponent extends AbstractSiteRegistrationPage imp
   }
 
   public onBack() {
-    const nextRoute = (!this.isCompleted)
-      ? (this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
-        ? SiteRoutes.HOURS_OPERATION
-        : SiteRoutes.REMOTE_USERS
-      : SiteRoutes.SITE_REVIEW;
+    let nextRoute: string;
+    if (this.isCompleted) {
+      nextRoute = SiteRoutes.SITE_REVIEW;
+    } else {
+      switch (this.siteService.site.careSettingCode) {
+        case CareSettingEnum.COMMUNITY_PHARMACIST:
+          nextRoute = SiteRoutes.HOURS_OPERATION;
+          break;
+        case CareSettingEnum.DEVICE_PROVIDER:
+          nextRoute = SiteRoutes.DEVICE_PROVIDER;
+          break;
+        default:
+          nextRoute = SiteRoutes.REMOTE_USERS;
+          break;
+      }
+    }
 
     this.routeUtils.routeRelativeTo(nextRoute);
   }

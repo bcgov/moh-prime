@@ -3,10 +3,8 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -89,14 +87,15 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     this.form.valueChanges
       .subscribe(({ careTypes }: { careTypes: { careType: string }[] }) => {
         const selectedCareTypes = careTypes.map(ct => ct.careType);
-        const filteredCareTypes = this.configService.careTypes.filter(ct => !selectedCareTypes.includes(ct.name)).map(ct => ct.name);
+        const filteredCareTypes = this.configService.careTypes
+          .filter(ct => !selectedCareTypes.includes(ct.name)).map(ct => ct.name);
         this.filteredCareTypes.next(filteredCareTypes);
       });
 
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ careTypes }: HealthAuthority) =>
         (careTypes?.length)
-          ? careTypes.map(ct => this.addCareType(ct))
+          ? careTypes.map(ct => this.addCareType(ct.careType))
           : this.addCareType()
       );
   }

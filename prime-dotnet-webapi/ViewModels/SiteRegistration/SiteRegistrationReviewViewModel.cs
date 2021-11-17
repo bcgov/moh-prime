@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
+
 using Prime.Models;
 
-namespace Prime.ViewModels.SiteRegistration
+namespace Prime.ViewModels.SiteRegistration.ReviewDocument
 {
     public class SiteRegistrationReviewViewModel
     {
         public string OrganizationName { get; set; }
         public string OrganizationRegistrationId { get; set; }
         public string OrganizationDoingBusinessAs { get; set; }
+        public int OrganizationReferenceId { get; set; }
         public string SiteName { get; set; }
         public string PEC { get; set; }
         public PhysicalAddress SiteAddress { get; set; }

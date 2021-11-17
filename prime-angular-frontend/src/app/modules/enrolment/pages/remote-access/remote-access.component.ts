@@ -173,6 +173,16 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     this.sites.patchValue(checked);
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    const { enrolleeRemoteUsers, remoteAccessSites} = this.enrolmentService.enrolment;
+    this.enrolmentFormStateService.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
+  }
+
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {

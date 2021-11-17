@@ -7,12 +7,13 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Subscription, Observable, EMPTY, of, noop, concat } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
-import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { EmailUtils } from '@lib/utils/email-utils.class';
-import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -20,7 +21,6 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import {
   AssignAction,
@@ -29,14 +29,11 @@ import {
   ClaimType
 } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
-
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { UtilsService } from '@core/services/utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { Role } from '@auth/shared/enum/role.enum';
 import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
-import { Role } from '@auth/shared/enum/role.enum';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import {
   SiteRegistrationListViewModel,
   SiteListViewModelPartial,
@@ -44,7 +41,6 @@ import {
 } from '@registration/shared/models/site-registration.model';
 import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
 @Component({
   selector: 'app-site-registration-tabs',
@@ -67,7 +63,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
 
   private routeUtils: RouteUtils;
   private tabIndexToCareSettingMap: Record<number, CareSettingEnum>;
-  private careSettingToTabIndexMap: { [key in CareSettingEnum]?: number }
+  private careSettingToTabIndexMap: { [key in CareSettingEnum]?: number };
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
@@ -75,10 +71,9 @@ export class SiteRegistrationTabsComponent implements OnInit {
     private router: Router,
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource,
-    private healthAuthResource: HealthAuthorityResource,
+    private healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private adjudicationResource: AdjudicationResource,
     private permissionService: PermissionService,
-    private utilResource: UtilsService,
     private dialog: MatDialog
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
@@ -203,7 +198,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
 
   public onNotify({ siteId, healthAuthorityOrganizationId }: { siteId: number, healthAuthorityOrganizationId?: HealthAuthorityEnum }) {
     const request$ = (healthAuthorityOrganizationId)
-      ? this.healthAuthResource.getHealthAuthoritySiteContacts(healthAuthorityOrganizationId, siteId)
+      ? this.healthAuthoritySiteResource.getHealthAuthoritySiteContacts(healthAuthorityOrganizationId, siteId)
       : this.siteResource.getSiteContacts(siteId);
 
     request$
@@ -222,7 +217,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
       .subscribe((email: string) => EmailUtils.openEmailClient(email));
   }
 
-  public onRoute(routePath: string | (string | number)[]) {
+  public onRoute(routePath: RoutePath) {
     this.routeUtils.routeWithin(routePath);
   }
 
@@ -319,7 +314,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
     this.route.queryParams
       .subscribe((queryParams: { [key: string]: any }) => {
         this.siteTabIndex = this.careSettingToTabIndexMap[+queryParams.careSetting];
-        this.getDataset(queryParams)
+        this.getDataset(queryParams);
       });
 
     // Listen for requests to refresh the data layer

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { from, forkJoin, Observable, of } from 'rxjs';
+import { catchError, map, tap, exhaustMap, mergeMap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
+import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -11,19 +12,24 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
-import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
+import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,16 +42,41 @@ export class EnrolmentResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public enrollee(): Observable<Enrolment> {
-    return this.apiResource.get<HttpEnrollee[]>('enrollees')
+  public enrollee(userId: string): Observable<Enrolment> {
+    return this.apiResource.get<HttpEnrollee>(`enrollees/${userId}`)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee[]>) => response.result),
-        tap((enrollees) => this.logger.info('ENROLLEE', enrollees[0])),
-        map((enrollees) =>
-          // Only a single enrollee will be provided
-          (enrollees.length) ? this.enrolleeAdapterResponse(enrollees.pop()) : null
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee) => this.logger.info('ENROLLEE', enrollee)),
+        exhaustMap((enrollee) =>
+          forkJoin({
+            enrolleeCareSettings: this.apiResource.get<CareSetting>(`enrollees/${enrollee.id}/care-settings`)
+              .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
+            certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrollee.id}/certifications`)
+              .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+            enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrollee.id}/remote-users`)
+              .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
+            oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrollee.id}/obo-sites`)
+              .pipe(map((response: ApiHttpResponse<OboSite[]>) => response.result)),
+            remoteAccessLocations: this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrollee.id}/remote-locations`)
+              .pipe(map((response: ApiHttpResponse<RemoteAccessLocation[]>) => response.result)),
+            remoteAccessSites: this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrollee.id}/remote-sites`)
+              .pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
+            selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrollee.id}/self-declarations`)
+              .pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
+            selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrollee.id}/self-declarations/documents`)
+              .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result))
+          })
+            .pipe(
+              map(({ enrolleeCareSettings, ...remainder }) => {
+                return { ...enrollee, ...enrolleeCareSettings, ...remainder }
+              }),
+            ),
         ),
+        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
         catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
           this.logger.error('[Enrolment] EnrolmentResource::enrollee error has occurred: ', error);
           throw error;
         })
@@ -82,7 +113,7 @@ export class EnrolmentResource {
   }
 
   public createOrUpdateLinkedGpid(enrolleeId: number, paperEnrolleeGpid: string): Observable<NoContent> {
-    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/linked-gpid`, { data: paperEnrolleeGpid})
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/linked-gpid`, { data: paperEnrolleeGpid })
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         catchError((error: any) => {
@@ -496,6 +527,18 @@ export class EnrolmentResource {
       enrollee.remoteAccessSites = [];
     }
 
+    if (!enrollee.enrolleeHealthAuthorities) {
+      enrollee.enrolleeHealthAuthorities = [];
+    }
+
+    if (!enrollee.remoteAccessLocations) {
+      enrollee.remoteAccessLocations = [];
+    }
+
+    if (!enrollee.selfDeclarations) {
+      enrollee.selfDeclarations = [];
+    }
+
     // Reorganize the shape of the enrollee into an enrolment
     return this.enrolmentAdapter(enrollee);
   }
@@ -561,8 +604,7 @@ export class EnrolmentResource {
       }
     });
 
-    enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
-    enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
+    enrolment.selfDeclarations = this.removeUnansweredSelfDeclarationQuestions(enrolment.selfDeclarations);
 
     return this.enrolleeAdapter(enrolment);
   }
@@ -585,22 +627,7 @@ export class EnrolmentResource {
   // Sanitization Helpers
   // ---
 
-  private removeIncompleteCollegeCertifications(certifications: CollegeCertification[]) {
-    return certifications.filter((certification: CollegeCertification) =>
-      this.collegeCertificationIsIncomplete(certification)
-    );
-  }
-
-  private collegeCertificationIsIncomplete(certification: CollegeCertification): boolean {
-    const allowlist = ['practiceCode', 'practitionerId'];
-
-    return Object.keys(certification)
-      .every((key: string) =>
-        (!allowlist.includes(key) && !certification[key]) ? certification[key] : true
-      );
-  }
-
-  private removeIncompleteCareSettings(careSettings: CareSetting[]) {
-    return careSettings.filter((careSetting: CareSetting) => careSetting.careSettingCode);
+  private removeUnansweredSelfDeclarationQuestions(selfDeclarations: SelfDeclaration[]) {
+    return selfDeclarations.filter((selfDeclaration: SelfDeclaration) => selfDeclaration.answered);
   }
 }

@@ -1,18 +1,12 @@
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ConfigService } from '@config/config.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
-export interface RegulatoryFormModel {
-  certifications: CollegeCertification[];
-}
-
-// TODO use RegulatoryFormModel instead of CollegeCertification[], which
-// makes the passing in and out of form state more like using specific
-// keys from the original model
-export class RegulatoryFormState extends AbstractFormState<CollegeCertification[]> {
+import { EnrolmentRegulatoryForm } from './enrolment-regulatory-form.model';
+export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryForm> {
   public constructor(
     private fb: FormBuilder,
     private configService: ConfigService
@@ -25,6 +19,10 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
     return this.formInstance.get('certifications') as FormArray;
   }
 
+  public get deviceProviderIdentifier(): FormControl {
+    return this.formInstance.get('deviceProviderIdentifier') as FormControl;
+  }
+
   /**
    * @description
    * Access to college certifications where a self-documenting
@@ -33,38 +31,42 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
    * @alias json
    */
   public get collegeCertifications(): CollegeCertification[] {
-    return this.json;
+    return this.json.certifications;
   }
 
-  public get json(): CollegeCertification[] {
+  public get json(): EnrolmentRegulatoryForm {
     if (!this.formInstance) {
       return;
     }
 
-    return this.certifications.getRawValue().map(c => {
+    const { certifications: rawCertifications, deviceProviderIdentifier } = this.formInstance.getRawValue();
+    const certifications = rawCertifications.map(c => {
       const { nurseCategory, ...collegeCertification } = c;
       return collegeCertification;
     });
+
+    return { certifications, deviceProviderIdentifier }
   }
 
-  public patchValue(certifications: CollegeCertification[]): void {
-    if (!this.formInstance || !Array.isArray(certifications) || !certifications.length) {
+  public patchValue({ certifications, deviceProviderIdentifier }: EnrolmentRegulatoryForm): void {
+
+    if (!this.formInstance || !Array.isArray(certifications)) {
       return;
     }
 
+    this.removeCollegeCertifications();
+
     if (certifications.length) {
-      this.removeCollegeCertifications();
-      certifications.forEach((c: CollegeCertification) =>
-        this.addCollegeCertification(c)
-      );
+      certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
     }
 
-    this.certifications.patchValue(certifications);
+    this.formInstance.patchValue({ certifications, deviceProviderIdentifier });
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
       certifications: this.fb.array([]),
+      deviceProviderIdentifier: [null, []]
     });
   }
 

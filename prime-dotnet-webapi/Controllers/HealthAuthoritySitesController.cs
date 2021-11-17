@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
 using Prime.Configuration.Auth;
+using Prime.Engines;
+using Prime.Models.Api;
 using Prime.Services;
-using Prime.Models.HealthAuthorities;
-using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
+using Prime.ViewModels.Sites;
 
 namespace Prime.Controllers
 {
@@ -18,11 +19,22 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.PrimeEnrollee)]
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
+        private readonly IEmailService _emailService;
+        private readonly IHealthAuthorityService _healthAuthorityService;
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
+        private readonly ISiteService _siteService;
 
-        public HealthAuthoritySitesController(IHealthAuthoritySiteService healthAuthoritySiteService)
+        public HealthAuthoritySitesController(
+            IEmailService emailService,
+            IHealthAuthorityService healthAuthorityService,
+            IHealthAuthoritySiteService healthAuthoritySiteService,
+            ISiteService siteService
+            )
         {
+            _emailService = emailService;
+            _healthAuthorityService = healthAuthorityService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
+            _siteService = siteService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -35,13 +47,26 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySite>), StatusCodes.Status201Created)]
-        public async Task<ActionResult> CreateHealthAuthoritySite(int healthAuthorityId, HealthAuthoritySiteVendorViewModel payload)
+        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteViewModel>), StatusCodes.Status201Created)]
+        public async Task<ActionResult> CreateHealthAuthoritySite(int healthAuthorityId, HealthAuthoritySiteCreateModel payload)
         {
-            var createdSite = await _healthAuthoritySiteService.CreateSiteAsync(healthAuthorityId, payload.VendorCode);
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+            }
+            if (!await _healthAuthorityService.AuthorizedUserExistsOnHealthAuthorityAsync(healthAuthorityId, payload.AuthorizedUserId))
+            {
+                return Forbid();
+            }
+            if (!await _healthAuthorityService.VendorExistsOnHealthAuthorityAsync(healthAuthorityId, payload.HealthAuthorityVendorId))
+            {
+                return NotFound($"Health Authority Vendor not found with id {payload.HealthAuthorityVendorId}");
+            }
+
+            var createdSite = await _healthAuthoritySiteService.CreateSiteAsync(healthAuthorityId, payload);
 
             return CreatedAtAction(
-                nameof(GetHealthAuthoritySiteById),
+                nameof(GetHealthAuthoritySite),
                 new { healthAuthorityId, siteId = createdSite.Id },
                 createdSite
             );
@@ -67,12 +92,12 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
-        [HttpGet("{siteId}", Name = nameof(GetHealthAuthoritySiteById))]
+        [HttpGet("{siteId}", Name = nameof(GetHealthAuthoritySite))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetHealthAuthoritySiteById(int healthAuthorityId, int siteId)
+        public async Task<ActionResult> GetHealthAuthoritySite(int healthAuthorityId, int siteId)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
             {
@@ -84,200 +109,59 @@ namespace Prime.Controllers
             return Ok(site);
         }
 
-        // PUT: api/health-authorities/5/sites/5/vendor
+        // GET: api/health-authorities/5/sites/5/hours-operation
         /// <summary>
-        /// Updates a specific health authority site vendor.
+        /// Gets a Site's hours of operations.
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
-        /// <param name="payload"></param>
-        [HttpPut("{siteId}/vendor", Name = nameof(UpdateVendor))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateVendor(int healthAuthorityId, int siteId, HealthAuthoritySiteVendorViewModel payload)
-        {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            {
-                return NotFound($"Health authority site not found with id {siteId}");
-            }
-
-            await _healthAuthoritySiteService.UpdateVendorAsync(siteId, payload.VendorCode);
-
-            return NoContent();
-        }
-
-        // PUT: api/health-authorities/5/sites/5/site-info
-        /// <summary>
-        /// Updates a specific health authority site's information.
-        /// </summary>
-        /// <param name="healthAuthorityId"></param>
-        /// <param name="siteId"></param>
-        /// <param name="payload"></param>
-        [HttpPut("{siteId}/site-info", Name = nameof(UpdateSiteInfo))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateSiteInfo(int healthAuthorityId, int siteId, HealthAuthoritySiteInfoViewModel payload)
-        {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            {
-                return NotFound($"Health authority site not found with id {siteId}");
-            }
-
-            await _healthAuthoritySiteService.UpdateSiteInfoAsync(siteId, payload);
-
-            return NoContent();
-        }
-
-        // PUT: api/health-authorities/5/sites/5/care-type
-        /// <summary>
-        /// Updates a specific Health Authority Site's care type.
-        /// </summary>
-        /// <param name="healthAuthorityId"></param>
-        /// <param name="siteId"></param>
-        /// <param name="payload"></param>
-        [HttpPut("{siteId}/care-type", Name = nameof(UpdateCareType))]
+        [HttpGet("{siteId}/hours-operation", Name = nameof(GetHoursOfOperation))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateCareType(int healthAuthorityId, int siteId, HealthAuthoritySiteCareTypeViewModel payload)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessDayViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetHoursOfOperation(int healthAuthorityId, int siteId)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateCareTypeAsync(siteId, payload.CareType);
+            var siteHoursOfOperation = await _siteService.GetBusinessHoursAsync(siteId);
 
-            return NoContent();
+            return Ok(siteHoursOfOperation);
         }
 
-        // PUT: api/health-authorities/5/sites/5/address
+        // PUT: api/health-authorities/5/sites/5
         /// <summary>
-        /// Updates a specific health authority site's address.
+        /// Updates a health authority site.
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
-        /// <param name="payload"></param>
-        [HttpPut("{siteId}/address", Name = nameof(UpdateAddress))]
+        /// <param name="updateModel"></param>
+        [HttpPut("{siteId}", Name = nameof(UpdateHealthAuthoritySite))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateAddress(int healthAuthorityId, int siteId, AddressViewModel payload)
+        public async Task<ActionResult> UpdateHealthAuthoritySite(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
             {
-                return NotFound($"Health authority site not found with id {siteId}");
+                return NotFound($"No Editable Health Authority Site found with id {siteId}");
+            }
+            if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, updateModel))
+            {
+                return BadRequest();
             }
 
-            await _healthAuthoritySiteService.UpdatePhysicalAddressAsync(siteId, payload);
+            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
 
             return NoContent();
         }
 
-        // PUT: api/health-authorities/5/sites/5/hours-operation
-        /// <summary>
-        /// Updates a specific health authority site's hours operation.
-        /// </summary>
-        /// <param name="healthAuthorityId"></param>
-        /// <param name="siteId"></param>
-        /// <param name="payload"></param>
-        [HttpPut("{siteId}/hours-operation", Name = nameof(UpdateHoursOperation))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateHoursOperation(int healthAuthorityId, int siteId, HealthAuthoritySiteHoursOperationViewModel payload)
-        {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            {
-                return NotFound($"Health authority site not found with id {siteId}");
-            }
-
-            // await _healthAuthoritySiteService.UpdateHoursOperationAsync(siteId, payload.BusinessHours);
-
-            return NoContent();
-        }
-
-        // PUT: api/health-authorities/5/sites/5/remote-users
-        /// <summary>
-        /// Updates a specific health authority site's remote users.
-        /// </summary>
-        /// <param name="healthAuthorityId"></param>
-        /// <param name="siteId"></param>
-        /// <param name="payload"></param>
-        [HttpPut("{siteId}/remote-users", Name = nameof(UpdateRemoteUsers))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateRemoteUsers(int healthAuthorityId, int siteId, HealthAuthoritySiteRemoteUsersViewModel payload)
-        {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            {
-                return NotFound($"Health authority site not found with id {siteId}");
-            }
-
-            // await _healthAuthoritySiteService.UpdateRemoteUsersAsync(siteId, payload.RemoteUsers);
-
-            return NoContent();
-        }
-
-        // PUT: api/health-authorities/5/sites/5/administrator
-        /// <summary>
-        /// Updates a specific health authority site's administrator.
-        /// </summary>
-        /// <param name="healthAuthorityId"></param>
-        /// <param name="siteId"></param>
-        /// <param name="payload"></param>
-        [HttpPut("{siteId}/administrator", Name = nameof(UpdateAdministrator))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateAdministrator(int healthAuthorityId, int siteId, HealthAuthoritySiteAdministratorViewModel payload)
-        {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            {
-                return NotFound($"Health authority site not found with id {siteId}");
-            }
-
-            await _healthAuthoritySiteService.UpdatePharmanetAdministratorAsync(siteId, payload.HealthAuthorityPharmanetAdministratorId);
-
-            return NoContent();
-        }
-
-        // PUT: api/health-authorities/5/sites/5/technical-support
-        /// <summary>
-        /// Updates a specific health authority site's technical support.
-        /// </summary>
-        /// <param name="healthAuthorityId"></param>
-        /// <param name="siteId"></param>
-        /// <param name="payload"></param>
-        [HttpPut("{siteId}/technical-support", Name = nameof(UpdateTechnicalSupport))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateTechnicalSupport(int healthAuthorityId, int siteId, HealthAuthoritySiteTechnicalSupportViewModel payload)
-        {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
-            {
-                return NotFound($"Health authority site not found with id {siteId}");
-            }
-
-            await _healthAuthoritySiteService.UpdateTechnicalSupportAsync(siteId, payload.HealthAuthorityTechnicalSupportId);
-
-            return NoContent();
-        }
-
-        // PUT: api/health-authorities/5/sites/5/finalize/site-completed
+        // PUT: api/health-authorities/5/sites/5/site-completed
         /// <summary>
         /// Sets the health authority site as "completed", allowing frontend and backend behavioural changes.
         /// </summary>
@@ -287,40 +171,65 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SetHealthAuthoritySiteCompleted(int healthAuthorityId, int siteId)
         {
-            // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
-            // {
-            //     return NotFound($"No editable health authority site found with site id {siteId}");
-            // }
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
+            if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"No editable health authority site found with site id {siteId}");
+            }
 
             await _healthAuthoritySiteService.SetSiteCompletedAsync(siteId);
 
-            return Ok();
+            return NoContent();
         }
 
-        // POST: api/health-authorities/5/sites/5/submit
+        // POST: api/health-authorities/5/sites/5/submissions
         /// <summary>
-        /// Finalizes a specific health authority site.
+        /// Submits a health authority site.
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/submit", Name = nameof(HealthAuthoritySiteSubmission))]
+        /// <param name="updateModel"></param>
+        [HttpPost("{siteId}/submissions", Name = nameof(HealthAuthoritySiteSubmission))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId, HealthAuthoritySiteUpdateModel updateModel)
         {
-            // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
-            // {
-            //     return NotFound($"No editable health authority site found with site id {siteId}");
-            // }
+            if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"No editable Health Authority Site found with Id {siteId}");
+            }
 
+            var record = await _healthAuthoritySiteService.GetPermissionsRecordAsync(siteId);
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+            if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, siteId))
+            {
+                return Conflict("Cannot submit Site, one or more selections dependent on the Health Authority are invalid.");
+            }
+
+            var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            // TODO duplicate PEC allowed but only in same Health Authority
+
+            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+            await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

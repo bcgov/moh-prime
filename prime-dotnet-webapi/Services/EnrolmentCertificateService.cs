@@ -52,12 +52,9 @@ namespace Prime.Services
                 Expires = DateTimeOffset.Now.Add(EnrolmentCertificateAccessToken.Lifespan),
                 Active = true
             };
-            _context.EnrolmentCertificateAccessTokens.Add(token);
 
-            if (await _context.SaveChangesAsync() < 1)
-            {
-                throw new InvalidOperationException("Could not create Enrolment Certificate access token.");
-            }
+            _context.EnrolmentCertificateAccessTokens.Add(token);
+            await _context.SaveChangesAsync();
 
             return token;
         }
@@ -65,7 +62,8 @@ namespace Prime.Services
         public async Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUserIdAsync(Guid userId)
         {
             return await _context.EnrolmentCertificateAccessTokens
-                .Where(t => t.Enrollee.UserId == userId && t.Active)
+                .Where(t => t.Enrollee.UserId == userId
+                    && t.Active)
                 .ToListAsync();
         }
 
@@ -86,10 +84,7 @@ namespace Prime.Services
                 token.ViewCount++;
             }
 
-            if (await _context.SaveChangesAsync() < 1)
-            {
-                throw new InvalidOperationException("Could not update Enrolment Certificate access token.");
-            }
+            await _context.SaveChangesAsync();
         }
     }
 }

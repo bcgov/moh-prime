@@ -1,9 +1,9 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 
 import { DemographicForm } from '@sat/pages/demographic-page/demographic-form.model';
 
@@ -19,6 +19,10 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
 
   public get preferredFirstName(): FormControl {
     return this.formInstance.get('preferredFirstName') as FormControl;
+  }
+
+  public get preferredMiddleName(): FormControl {
+    return this.formInstance.get('preferredMiddleName') as FormControl;
   }
 
   public get preferredLastName(): FormControl {

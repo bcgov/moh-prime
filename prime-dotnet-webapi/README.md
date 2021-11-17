@@ -23,12 +23,13 @@ If you have already built the binaries, you will need to re-build to include `wk
 
 [ASP.NET Core User Secrets](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-5.0&tabs=windows)
 
-After aquiring the secrets.json file from the appropriate source, open a terminal in the the prime-dotnet-webapi folder and run
+After acquiring the secrets.json file from the appropriate source, open a terminal in the the prime-dotnet-webapi folder and run
 `type .\secrets.json | dotnet user-secrets set` on Windows or
 `cat ./secrets.json | dotnet user-secrets set` on macOS / Linux
 to set the secrets for local development.
-On Windows, they are stored at `%APPDATA%\Microsoft\UserSecrets\<user_secrets_id>\secrets.json`. On macOS / Linux, they are stored at `~/.microsoft/usersecrets/<user_secrets_id>/secrets.json`.
+After running the command, the original secrets.json file is no longer needed and should be deleted to avoid accidentally committing it to the repo.
 
+On Windows, the secrets are automatically stored and retrieved from `%APPDATA%\Microsoft\UserSecrets\<user_secrets_id>\secrets.json`. On macOS / Linux, the location is `~/.microsoft/usersecrets/<user_secrets_id>/secrets.json`.
 Running the application in Visual Studio Code should be OS agnostic. The local Docker container for the API, however, mounts the secrets file when brought up using `docker-compose`. Since they are stored at a different location for macOS / Linux, review the following lines in the main `docker-compose.yml`:
 ```yaml
 volumes:

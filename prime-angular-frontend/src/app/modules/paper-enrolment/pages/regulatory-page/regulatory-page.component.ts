@@ -4,18 +4,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-regulatory-page',
@@ -26,6 +28,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   public formState: RegulatoryFormState;
   public routeUtils: RouteUtils;
   public enrollee: HttpEnrollee;
+  public isDeviceProvider: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -50,8 +53,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.initForm();
-    this.patchForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   public ngOnDestroy(): void {
@@ -70,31 +72,41 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     }
   }
 
-  protected patchForm(): void {
+  protected patchForm(): Observable<void> {
     const enrolleeId = +this.route.snapshot.params.eid;
     if (!enrolleeId) {
       throw new Error('No enrollee ID was provided');
     }
 
-    this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
-      .subscribe((enrollee: HttpEnrollee) => {
-        if (enrollee) {
-          this.enrollee = enrollee;
-          // Attempt to patch the form if not already patched
-          this.formState.patchValue(enrollee.certifications);
-        }
-      });
+    return this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+      .pipe(
+        map((enrollee: HttpEnrollee) => {
+          if (enrollee) {
+            this.enrollee = enrollee;
+            // Attempt to patch the form if not already patched
+            const { certifications, deviceProviderIdentifier } = enrollee;
+            this.isDeviceProvider = enrollee.enrolleeCareSettings.some((careSetting) =>
+              careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+            this.enableDeviceProviderValidator();
+            this.formState.patchValue({ certifications, deviceProviderIdentifier });
+          }
+        })
+      );
   }
 
   protected performSubmission(): Observable<number> {
     this.formState.removeIncompleteCertifications(true);
     this.formState.form.markAsPristine();
 
-    const payload = this.formState.json;
+    const certifications = this.formState.json.certifications;
+    const deviceProviderIdentifier = this.formState.json.deviceProviderIdentifier;
     const oboSites = this.removeOboSites(this.enrollee.oboSites);
 
-    return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, payload)
+    return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, certifications)
       .pipe(
+        exhaustMap(() =>
+          this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, deviceProviderIdentifier)
+        ),
         exhaustMap(() =>
           (this.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
@@ -104,10 +116,13 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected afterSubmitIsSuccessful(): void {
+    const collegeCertifications = this.formState.collegeCertifications;
+    const isDeviceProviderWithNoIdentifier = this.isDeviceProvider && !this.formState.deviceProviderIdentifier.value;
+
     // Force obo sites to always be checked regardless of the profile being
     // completed so validations are applied prior to overview pushing the
     // responsibility of validation to obo sites
-    const nextRoutePath = (!this.formState.collegeCertifications.length)
+    const nextRoutePath = (!collegeCertifications.length || isDeviceProviderWithNoIdentifier)
       ? PaperEnrolmentRoutes.OBO_SITES
       : (this.enrollee.profileCompleted)
         ? PaperEnrolmentRoutes.OVERVIEW
@@ -129,5 +144,14 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     }
 
     return oboSites;
+  }
+
+  private enableDeviceProviderValidator(): void {
+    this.isDeviceProvider
+      ? this.formUtilsService.setValidators(this.formState.deviceProviderIdentifier, [
+        FormControlValidators.requiredLength(5),
+        FormControlValidators.numeric
+      ])
+      : this.formUtilsService.resetAndClearValidators(this.formState.deviceProviderIdentifier);
   }
 }
