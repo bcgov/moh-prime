@@ -29,5 +29,6 @@ namespace Prime.Services
         /// Save the fact that the given <c>notifiedUsers</c> were notified by email.
         /// </summary>
         Task MarkUsersAsNotifiedAsync(IEnumerable<RemoteUser> notifiedUsers);
+        Task<bool> SiteExists(int siteId);
     }
 }
