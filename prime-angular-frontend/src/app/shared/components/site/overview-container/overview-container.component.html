@@ -2,7 +2,7 @@
 
   <app-overview-section title="Signing Authority"
                         [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
+                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
                         (route)="onRoute($event)">
     <app-bcsc-profile [user]="organization?.signingAuthority"></app-bcsc-profile>
   </app-overview-section>
@@ -11,19 +11,19 @@
                     [address]="organization?.signingAuthority.physicalAddress"
                     [showRedirect]="showEditRedirect"
                     [showIfEmpty]="true"
-                    (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
+                    (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
   </app-address-view>
 
   <app-address-view title="Mailing Address"
                     [address]="organization?.signingAuthority.mailingAddress"
                     [showRedirect]="showEditRedirect"
                     [showIfEmpty]="true"
-                    (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
+                    (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
   </app-address-view>
 
   <app-overview-section title="Contact Information"
                         [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
+                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
                         (route)="onRoute($event)">
     <app-party-review [party]="organization?.signingAuthority"
                       [excludeList]="['name']"></app-party-review>
@@ -31,7 +31,7 @@
 
   <app-overview-section title="Organization Information"
                         [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_NAME]"
+                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_NAME]"
                         (route)="onRoute($event)">
     <app-enrollee-property title="Reference ID">
       {{ organization?.displayId | default }}

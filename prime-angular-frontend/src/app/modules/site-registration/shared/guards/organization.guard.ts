@@ -100,7 +100,7 @@ export class OrganizationGuard extends BaseGuard {
     return (params.oid && (
       (organizationId && organizationId !== +params.oid) || (!organizationId && +params.oid !== 0)
     ))
-      ? routePath.replace(`${SiteRoutes.SITE_MANAGEMENT}/${params.oid}`, `${SiteRoutes.SITE_MANAGEMENT}/${organizationId}`)
+      ? routePath.replace(`${SiteRoutes.ORGANIZATIONS}/${params.oid}`, `${SiteRoutes.ORGANIZATIONS}/${organizationId}`)
       : null;
   }
 
@@ -111,7 +111,7 @@ export class OrganizationGuard extends BaseGuard {
   private manageCompleteOrganizationRouting(routePath: string, organization: Organization) {
     // Provides a default of the main management view unless current view
     // can be determined through state of the organization
-    return this.manageRouting(routePath, SiteRoutes.SITE_MANAGEMENT, organization);
+    return this.manageRouting(routePath, SiteRoutes.ORGANIZATIONS, organization);
   }
 
   /**
@@ -140,7 +140,7 @@ export class OrganizationGuard extends BaseGuard {
 
     // During initial registration the ID will be set to zero indicating the
     // organization does not exist
-    return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, destPath, 0);
+    return this.navigate(routePath, SiteRoutes.ORGANIZATIONS, destPath, 0);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
@@ -151,8 +151,8 @@ export class OrganizationGuard extends BaseGuard {
     // route does not exist in the list of allowed routes
     if (!allowedRoutes.includes(currentRoute)) {
       return (organization.completed)
-        ? this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT)
-        : this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, defaultRoute, organization.id);
+        ? this.navigate(routePath, SiteRoutes.ORGANIZATIONS)
+        : this.navigate(routePath, SiteRoutes.ORGANIZATIONS, defaultRoute, organization.id);
     }
 
     // Otherwise, allow access to the route
