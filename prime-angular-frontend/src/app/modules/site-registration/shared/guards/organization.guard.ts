@@ -30,7 +30,7 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
 
   /**
    * @description
-   * Determine the route destination based on the organization status.
+   * Determine the route destination base on the organization state.
    */
   protected routeDestination(
     routePath: string,
@@ -64,18 +64,17 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
 
   /**
    * @description
-   * Detect an organization ID mismatch to provide confidence in
-   * the organization ID URI param.
-   *
-   * NOTE: Dependent on the assumption that there is only a
-   * single organization per signing authority.
+   * Manage routing when an organization does not exist, or initial
+   * registration has not been completed.
    */
-  private detectRouteMismatch(routePath, params: Params, organizationId: number): string | null {
-    return (params.oid && (
-      (organizationId && organizationId !== +params.oid) || (!organizationId && +params.oid !== 0)
-    ))
-      ? routePath.replace(`${SiteRoutes.ORGANIZATIONS}/${params.oid}`, `${SiteRoutes.ORGANIZATIONS}/${organizationId}`)
-      : null;
+  protected manageNoOrganizationRouting(routePath: string, party: Party, hasOrgClaim: boolean): boolean {
+    const destPath = (party)
+      ? SiteRoutes.ORGANIZATION_NAME
+      : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
+
+    // During initial registration the ID will be set to zero indicating the
+    // organization does not exist
+    return this.navigate(routePath, SiteRoutes.ORGANIZATIONS, destPath, 0);
   }
 
   /**
@@ -102,21 +101,6 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
     return this.manageRouting(routePath, destPath, organization);
   }
 
-  /**
-   * @description
-   * Manage routing when an organization does not exist, or initial
-   * registration has not been completed.
-   */
-  private manageNoOrganizationRouting(routePath: string, party: Party, hasOrgClaim: boolean) {
-    const destPath = (party)
-      ? SiteRoutes.ORGANIZATION_NAME
-      : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
-
-    // During initial registration the ID will be set to zero indicating the
-    // organization does not exist
-    return this.navigate(routePath, SiteRoutes.ORGANIZATIONS, destPath, 0);
-  }
-
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
     const currentRoute = this.getCurrentRoute(routePath);
     const allowedRoutes = this.getAllowedRoutes(organization);
@@ -131,27 +115,6 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
 
     // Otherwise, allow access to the route
     return true;
-  }
-
-  /**
-   * @description
-   * Get the route URI param that is the current route attempting
-   * to be resolved, or replace as required.
-   */
-  private getCurrentRoute(routePath: string) {
-    // Remote users has a child view that should not be a point of
-    // redirection so the parent is purposefully targeted, otherwise
-    // get the last URI param to determine the current route
-    let currentRoute = routePath.includes(SiteRoutes.REMOTE_USERS)
-      ? SiteRoutes.REMOTE_USERS
-      : routePath.split('/').pop();
-
-    // Strip off queries when they exist
-    if (currentRoute.includes('?')) {
-      currentRoute = currentRoute.split('?')[0];
-    }
-
-    return currentRoute;
   }
 
   /**

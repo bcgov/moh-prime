@@ -29,7 +29,7 @@ export class SiteRegistrationDashboardComponent implements OnInit, IDashboard {
 
   private getDashboardMenuItems(): Observable<DashboardMenuItem[]> {
     return of([
-      new DashboardRouteMenuItem('Site Management', SiteRoutes.SITE_MANAGEMENT, 'store', true)
+      new DashboardRouteMenuItem('Site Management', SiteRoutes.ORGANIZATIONS, 'store', true)
     ]);
   }
 }

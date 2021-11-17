@@ -31,7 +31,7 @@ export class CollectionNoticePageComponent implements OnInit {
     this.authService.hasJustLoggedIn = false;
     // Attempt to redirect to centralized default route, and the guard will
     // redirect an appropriate route when not allowed
-    this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT]);
+    this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATIONS]);
   }
 
   public ngOnInit(): void {

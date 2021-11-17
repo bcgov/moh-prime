@@ -8,7 +8,7 @@ import { SiteRoutes } from './site-registration.routes';
 import { RegistrantGuard } from './shared/guards/registrant.guard';
 import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
 
-import { changeSigningAuthorityWorkflow, defaultCommunitySiteWorkflow } from '@health-auth/health-auth-site-reg-routing.workflows';
+import { changeSigningAuthorityWorkflow, defaultCommunitySiteWorkflow } from '@registration/site-registration-routing.workflows';
 
 const routes: Routes = [
   {

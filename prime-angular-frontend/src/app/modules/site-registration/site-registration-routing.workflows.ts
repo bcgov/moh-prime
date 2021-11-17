@@ -61,7 +61,15 @@ export const defaultCommunitySiteWorkflow = [
             path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
             component: OrganizationSigningAuthorityPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Signing Authority' }
+            data: {
+              title: 'Signing Authority',
+              // Provides an workflow and next route segments so route
+              // configuration drives routing vs the component
+              redirectRouteSegments: {
+                workflow: SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW,
+                nextRoute: SiteRoutes.ORGANIZATION_CLAIM
+              }
+            }
           },
           {
             path: SiteRoutes.ORGANIZATION_NAME,
@@ -230,7 +238,12 @@ export const changeSigningAuthorityWorkflow = [
         canDeactivate: [CanDeactivateFormGuard],
         data: {
           title: 'Signing Authority',
-          redirectRouteSegment: ''
+          // Provides an workflow and next route segments so route
+          // configuration drives routing vs the component
+          redirectRouteSegments: {
+            workflow: SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW,
+            nextRoute: SiteRoutes.ORGANIZATION_CLAIM
+          }
         }
       },
       {
@@ -246,15 +259,15 @@ export const changeSigningAuthorityWorkflow = [
         data: { title: 'Next Steps' }
       },
       {
-        path: '', // Equivalent to `/`
+        path: '', // Equivalent to `/` alias for default route
         redirectTo: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
         pathMatch: 'full'
       }
     ]
   },
   {
-    path: '', // Equivalent to `/`
-    redirectTo: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
+    path: '', // Equivalent to `/` alias for default route
+    redirectTo: `${SiteRoutes.ORGANIZATIONS}/0`,
     pathMatch: 'full'
   }
 ];

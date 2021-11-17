@@ -25,7 +25,7 @@ describe('CollectionNoticePageComponent', () => {
         SiteRegistrationModule,
         RouterTestingModule.withRoutes([
           {
-            path: SiteRoutes.SITE_MANAGEMENT,
+            path: SiteRoutes.ORGANIZATIONS,
             children: [
               {
                 path: ':oid',
