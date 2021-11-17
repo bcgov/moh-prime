@@ -16,7 +16,7 @@ import { HealthAuthCareTypePageComponent } from './health-auth-care-type-page.co
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
-fdescribe('HealthAuthCareTypePageComponent', () => {
+describe('HealthAuthCareTypePageComponent', () => {
   const mockActivatedRoute = {
     snapshot: {
       data: {
