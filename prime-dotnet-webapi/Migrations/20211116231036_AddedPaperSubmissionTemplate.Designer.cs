@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211116231036_AddedPaperSubmissionTemplate")]
+    partial class AddedPaperSubmissionTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3669,7 +3671,7 @@ namespace Prime.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("DeviceProviderIdentifier")
+                    b.Property<string>("DeviceProviderNumber")
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
@@ -3696,6 +3698,9 @@ namespace Prime.Migrations
 
                     b.Property<string>("IdentityProvider")
                         .HasColumnType("text");
+
+                    b.Property<bool?>("IsInsulinPumpProvider")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -9798,7 +9803,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 4,
-                            Name = "College License, Practitioner ID, or Device Provider ID not in PharmaNet table"
+                            Name = "College License or Practitioner ID not in PharmaNet table"
                         },
                         new
                         {
@@ -9818,7 +9823,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 8,
-                            Name = "Device Provider"
+                            Name = "Insulin Pump Provider"
                         },
                         new
                         {
