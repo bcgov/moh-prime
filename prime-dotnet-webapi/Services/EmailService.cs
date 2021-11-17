@@ -298,6 +298,21 @@ namespace Prime.Services
             return totalCount;
         }
 
+        public async Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId)
+        {
+            var enrolleeDto = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => new
+                {
+                    e.Email,
+                    e.GPID
+                })
+                .SingleOrDefaultAsync();
+
+            var email = await _emailRenderingService.RenderPaperEnrolleeSubmissionEmail(enrolleeDto.Email, new PaperEnrolleeSubmissionEmailViewModel(enrolleeDto.GPID));
+            await Send(email);
+        }
+
         private async Task Send(Email email)
         {
             if (!PrimeConfiguration.IsProduction())
