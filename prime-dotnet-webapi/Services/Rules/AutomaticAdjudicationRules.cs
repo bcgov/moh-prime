@@ -86,7 +86,8 @@ namespace Prime.Services.Rules
             {
                 certifications = certifications.Append(new Certification
                 {
-                    License = new License { Prefix = "Prefix place holder" },
+                    // ATTN: the prefix below is a placeholder
+                    License = new License { Prefix = "P1" },
                     LicenseNumber = enrollee.DeviceProviderIdentifier
                 });
             }
