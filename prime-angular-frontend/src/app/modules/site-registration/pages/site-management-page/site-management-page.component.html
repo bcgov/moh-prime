@@ -44,74 +44,67 @@
     </app-page-subheader2>
   </section>
 
-  <ng-container *ngFor="let organization of organizations; let first = first">
+  <app-summary-card icon="business"
+                    title="Organization Information"
+                    [menu]="organizationMenu"
+                    [menuOutletContext]="{ organization: organization }"
+                    [properties]="getOrganizationProperties(organization)"></app-summary-card>
 
-    <app-summary-card icon="business"
-                      title="Organization Information"
-                      [menu]="organizationMenu"
-                      [menuOutletContext]="{ organization: organization }"
-                      [properties]="getOrganizationProperties(organization)">
+  <hr class="divider">
+
+  <div class="add-site">
+    <button mat-button
+            type="button"
+            color="primary"
+            [disabled]="!organization.completed || isPendingTransfer()"
+            (click)="addSite(organization.id)">
+      <mat-icon>add_business</mat-icon>
+      Add Site
+    </button>
+  </div>
+
+  <ng-container *ngFor="let site of organization.sites">
+
+    <app-summary-card icon="store"
+                      title="Site Information"
+                      [menu]="siteMenu"
+                      [menuOutletContext]="{ site: site, organizationId: organization.id }"
+                      [properties]="getSiteProperties(site)"
+                      (action)="viewSiteRemoteUsers(organization.id, site)">
+      <ng-container *ngIf="inComplete(site)"
+                    [ngTemplateOutlet]="notification"
+                    [ngTemplateOutletContext]="{
+                      props: getNotSubmittedSiteNotificationProperties(organization.id, site)
+                    }">
+      </ng-container>
+      <ng-container *ngIf="isInReview(site)"
+                    [ngTemplateOutlet]="notification"
+                    [ngTemplateOutletContext]="{
+                      props: getInReviewSiteNotificationProperties(site)
+                    }">
+      </ng-container>
+      <ng-container *ngIf="isLocked(site)"
+                    [ngTemplateOutlet]="notification"
+                    [ngTemplateOutletContext]="{
+                      props: {
+                        icon: 'not_interested',
+                        text: 'Declined'
+                      }
+                    }">
+      </ng-container>
+      <ng-container *ngIf="isApproved(site) && !requiresRenewal(site)"
+                    [ngTemplateOutlet]="success_notification"
+                    [ngTemplateOutletContext]="{
+                      props: getApprovedSiteNotificationProperties(site)
+                    }">
+      </ng-container>
+      <ng-container *ngIf="isApproved(site) && requiresRenewal(site)"
+                    [ngTemplateOutlet]="notification"
+                    [ngTemplateOutletContext]="{
+                      props: getRenewalRequiredSiteNotificationProperties(organization.id, site)
+                    }">
+      </ng-container>
     </app-summary-card>
-
-    <hr *ngIf="first"
-        class="divider">
-
-    <div *ngIf="first"
-         class="add-site">
-      <button mat-button
-              type="button"
-              color="primary"
-              [disabled]="!organization.completed || isPendingTransfer()"
-              (click)="addSite(organization.id)">
-        <mat-icon>add_business</mat-icon>
-        Add Site
-      </button>
-    </div>
-
-    <ng-container *ngFor="let site of organization.sites">
-
-      <app-summary-card icon="store"
-                        title="Site Information"
-                        [menu]="siteMenu"
-                        [menuOutletContext]="{ site: site, organizationId: organization.id }"
-                        [properties]="getSiteProperties(site)"
-                        (action)="viewSiteRemoteUsers(organization.id, site)">
-        <ng-container *ngIf="inComplete(site)"
-                      [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{
-                        props: getNotSubmittedSiteNotificationProperties(organization.id, site)
-                      }">
-        </ng-container>
-        <ng-container *ngIf="isInReview(site)"
-                      [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{
-                        props: getInReviewSiteNotificationProperties(site)
-                      }">
-        </ng-container>
-        <ng-container *ngIf="isLocked(site)"
-                      [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{
-                        props: {
-                          icon: 'not_interested',
-                          text: 'Declined'
-                        }
-                      }">
-        </ng-container>
-        <ng-container *ngIf="isApproved(site) && !requiresRenewal(site)"
-                      [ngTemplateOutlet]="success_notification"
-                      [ngTemplateOutletContext]="{
-                        props: getApprovedSiteNotificationProperties(site)
-                      }">
-        </ng-container>
-        <ng-container *ngIf="isApproved(site) && requiresRenewal(site)"
-                      [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{
-                        props: getRenewalRequiredSiteNotificationProperties(organization.id, site)
-                      }">
-        </ng-container>
-      </app-summary-card>
-
-    </ng-container>
 
   </ng-container>
 

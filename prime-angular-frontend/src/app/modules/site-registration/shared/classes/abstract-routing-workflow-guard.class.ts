@@ -31,22 +31,15 @@ export abstract class AbstractRoutingWorkflowGuard extends BaseGuard {
         // redirection logic for the user, and therefore not handled individually
         exhaustMap((user: BcscUser) =>
           forkJoin([
-            this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
-              .pipe(
-                map((organizations: Organization[]) => (organizations?.length) ? organizations[0] : null)
-              ),
             this.organizationResource.getSigningAuthorityByUserId(user.userId),
+            this.organizationResource.getSigningAuthorityOrganizationByUserId(user.userId),
             this.organizationResource.getOrganizationClaim({ userId: user.userId })
           ])
         ),
-        map(([organization, party, claimed]: [Organization | null, Party, boolean]) => {
+        map(([party, organization, claimed]: [Party | null, Organization | null, boolean]) => {
           // Store the organization for access throughout registration, which
           // will allows be the most up-to-date organization
           this.organizationService.organization = organization;
-
-          // Determine the next route based on whether this is the initial
-          // registration of an organization and site, or subsequent
-          // registration of sites under an existing organization
           return this.routeDestination(routePath, params, organization, party, claimed);
         })
       );
