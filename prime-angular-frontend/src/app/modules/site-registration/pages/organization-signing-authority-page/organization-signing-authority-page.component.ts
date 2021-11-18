@@ -123,8 +123,8 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.organization = this.organizationService.organization;
     this.isCompleted = this.organization?.completed;
 
-    // User could already be a party, but may not have created or 
-    // claimed an organization, and should be patched
+    // User could already be a party which should be patched into
+    // the form if they haven't created/claimed an organization
     if(!this.organization && this.signingAuthorityService.signingAuthority) {
       this.formState.patchValue(this.signingAuthorityService.signingAuthority);
     } else {
