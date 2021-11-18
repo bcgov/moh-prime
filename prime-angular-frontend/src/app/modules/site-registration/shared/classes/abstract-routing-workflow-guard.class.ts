@@ -86,7 +86,6 @@ export abstract class AbstractRoutingWorkflowGuard extends BaseGuard {
     return currentRoute;
   }
 
-
   /**
    * @description
    * Provides the route segments to redirect to the existing

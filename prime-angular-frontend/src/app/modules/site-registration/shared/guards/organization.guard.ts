@@ -45,11 +45,21 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
     params: Params,
     organization: Organization | null,
     signingAuthority: Party | null,
-    hasOrgClaim: boolean
+    hasClaim: boolean
   ): boolean {
     // On login the user will always be redirected to the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
+    }
+
+    // When a claim exists for a signing authority access to the organization
+    // is not allowed, and they are redirected to the claim organization workflow
+    if (hasClaim) {
+      this.router.navigate([
+        SiteRoutes.MODULE_PATH,
+        ...this.getExistingClaimRouteRedirect()
+      ]);
+      return false;
     }
 
     // When the organization ID mismatches the organizations route ID
@@ -67,7 +77,7 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
     }
 
     // Otherwise, no organization exists
-    return this.manageNoOrganizationRouting(routePath, signingAuthority, hasOrgClaim);
+    return this.manageNoOrganizationRouting(routePath, signingAuthority);
   }
 
   /**
@@ -75,7 +85,7 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
    * Manage routing when an organization does not exist, or initial
    * registration has not been completed.
    */
-  private manageNoOrganizationRouting(routePath: string, signingAuthority: Party, hasOrgClaim: boolean): boolean {
+  private manageNoOrganizationRouting(routePath: string, signingAuthority: Party): boolean {
     const destPath = (signingAuthority)
       ? SiteRoutes.ORGANIZATION_NAME
       : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
