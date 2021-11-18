@@ -64,7 +64,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.nextRoute = this.route.snapshot.data.redirectRouteSegments.nextRoute;
+    this.nextRoute = this.route.snapshot.data?.redirectRouteSegments?.nextRoute;
 
     this.organizationId = +this.route.snapshot.params.oid;
   }
