@@ -182,5 +182,4 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
 
     return [].concat(...siteRegistrations);
   }
-
 }
