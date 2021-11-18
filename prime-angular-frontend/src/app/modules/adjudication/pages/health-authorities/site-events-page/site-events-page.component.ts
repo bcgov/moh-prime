@@ -1,11 +1,13 @@
-import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
-import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
-import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SiteResource } from '@core/resources/site-resource.service';
+
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { SiteResource } from '@core/resources/site-resource.service';
+import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
+import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
+import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
 
 @Component({
   selector: 'app-site-events-page',
