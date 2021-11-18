@@ -22,7 +22,7 @@ export class SiteEventsPageComponent implements OnInit {
     private siteResource: SiteResource,
   ) { }
 
-  public getBusinessEvents(businessEventTypes?: BusinessEventTypeEnum[]) {
+  public getBusinessEvents(businessEventTypes?: BusinessEventTypeEnum[]): void {
     const siteId = this.route.snapshot.params.sid;
     this.businessEvents$ = this.siteResource
       .getSiteBusinessEvents(siteId, businessEventTypes ?? [])
@@ -39,7 +39,7 @@ export class SiteEventsPageComponent implements OnInit {
       );
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.getBusinessEvents();
   }
 }
