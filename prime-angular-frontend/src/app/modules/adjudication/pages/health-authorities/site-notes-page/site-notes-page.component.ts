@@ -13,7 +13,5 @@ export class SiteNotesPageComponent implements OnInit {
     this.noteType = NoteType.SiteRegistrationNote;
   }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
