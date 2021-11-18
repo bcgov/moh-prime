@@ -53,8 +53,8 @@ export class AdjudicationResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public getEnrollees(textSearch?: string, statusCode?: number): Observable<EnrolleeListViewModel[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode });
+  public getEnrollees(textSearch?: string, statusCode?: number, isLinkedPaperEnrolment?: boolean): Observable<EnrolleeListViewModel[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode, isLinkedPaperEnrolment });
     return this.apiResource.get<EnrolleeListViewModel[]>('enrollees', params)
       .pipe(
         map((response: ApiHttpResponse<EnrolleeListViewModel[]>) => response.result),

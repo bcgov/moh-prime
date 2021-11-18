@@ -455,7 +455,18 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   private getEnrollees({ textSearch, status }: { textSearch?: string, status?: number }) {
-    return this.adjudicationResource.getEnrollees(textSearch, status)
+    // Transform the "statuses" for (un)linked paper enrollees into their own query string
+    var isLinkedPaper = null;
+    if (status == 42) {
+      isLinkedPaper = false;
+      status = null;
+    }
+    else if (status == 43) {
+      isLinkedPaper = true;
+      status = null;
+    }
+
+    return this.adjudicationResource.getEnrollees(textSearch, status, isLinkedPaper)
       .pipe(
         tap(() => this.showSearchFilter = true)
       );

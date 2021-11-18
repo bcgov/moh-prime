@@ -35,10 +35,10 @@ export class SearchFormComponent implements OnInit {
   ) {
     this.statuses = this.configService.statuses;
 
-    // MacGyver paper enrollee filter into the status filter. Arbitrarily chose 42.
-    // EnrolleeService GetEnrolleesAsync() has other reference to this value.
-    const manualEnrolleeStatus = new Config<number>(42, 'Manual (Paper) Enrollees');
-    this.statuses.push(manualEnrolleeStatus);
+    // MacGyver paper enrollee filter into the status filter. Arbitrarily chose 42/43.
+    const unlinkedPaperStatus = new Config<number>(42, 'Unclaimed Manual (Paper) Enrollees');
+    const linkedPaperStatus = new Config<number>(43, 'Claimed Manual (Paper) Enrollees');
+    this.statuses.push(unlinkedPaperStatus, linkedPaperStatus);
 
     this.search = new EventEmitter<string>();
     this.filter = new EventEmitter<EnrolmentStatusEnum>();
