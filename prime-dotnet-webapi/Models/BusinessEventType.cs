@@ -18,6 +18,7 @@ namespace Prime.Models
         public const int ADMIN_VIEW_CODE = 7;
         public const int ORGANIZATION_CODE = 8;
         public const int PHARMANET_API_CALL_CODE = 9;
+        public const int PAPER_ENROLMENT_LINK_CODE = 10;
 
         [Key]
         public int Code { get; set; }

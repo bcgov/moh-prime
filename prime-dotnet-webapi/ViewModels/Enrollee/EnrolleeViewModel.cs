@@ -1,10 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
-using DelegateDecompiler;
 using Prime.Models;
 
 namespace Prime.ViewModels
@@ -70,6 +64,10 @@ namespace Prime.ViewModels
         public AgreementType? AssignedTOAType { get; set; }
 
         public bool Confirmed { get; set; }
+
+        public int LinkedEnrolleeId { get; set; }
+
+        public bool PossiblePaperEnrolmentMatch { get; set; }
 
         public bool RequiresConfirmation { get => !Confirmed && PreviousStatus?.IsType(StatusType.UnderReview) == true; }
 

@@ -64,5 +64,9 @@ namespace Prime.ViewModels
         public AgreementType? AssignedTOAType { get; set; }
 
         public bool Confirmed { get; set; }
+
+        public int LinkedEnrolleeId { get; set; }
+
+        public bool PossiblePaperEnrolmentMatch { get; set; }
     }
 }

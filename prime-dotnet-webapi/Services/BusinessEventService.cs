@@ -188,6 +188,20 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        public async Task<BusinessEvent> CreatePaperEnrolmentLinkEventAsync(int enrolleeId, string description)
+        {
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.PAPER_ENROLMENT_LINK_CODE, enrolleeId, description);
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create paper enrolment link event.");
+            }
+
+            return businessEvent;
+        }
+
         private async Task<BusinessEvent> CreateBusinessEvent(int BusinessEventTypeCode, int enrolleeId, string description)
         {
             var userId = _httpContext.HttpContext.User.GetPrimeUserId();

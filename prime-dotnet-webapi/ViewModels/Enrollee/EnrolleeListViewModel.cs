@@ -19,6 +19,8 @@ namespace Prime.ViewModels
 
         public int CurrentStatusCode { get; set; }
 
+        public DateTime DateOfBirth { get; set; }
+
         public DateTimeOffset? AppliedDate { get; set; }
 
         public DateTimeOffset? ApprovedDate { get; set; }
@@ -70,5 +72,9 @@ namespace Prime.ViewModels
         public bool Confirmed { get; set; }
 
         public string GPID { get; set; }
+
+        public int LinkedEnrolleeId { get; set; }
+
+        public bool PossiblePaperEnrolmentMatch { get; set; }
     }
 }

@@ -23,10 +23,14 @@ namespace Prime.ViewModels.Profiles
                     !src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed
                     && src.PreviousStatus.StatusCode == (int)StatusType.RequiresToa
                 ))
+                .ForMember(dest => dest.LinkedEnrolleeId, opt => opt.MapFrom(src => (src.PaperEnrolment == null) ? src.LinkedEnrolment.EnrolleeId : src.PaperEnrolment.PaperEnrolleeId))
+                .ForMember(dest => dest.PossiblePaperEnrolmentMatch, opt => opt.Ignore())
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true));
 
             CreateMap<Enrollee, EnrolleeDTO>()
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true))
+                .ForMember(dest => dest.LinkedEnrolleeId, opt => opt.MapFrom(src => (src.PaperEnrolment == null) ? src.LinkedEnrolment.EnrolleeId : src.PaperEnrolment.PaperEnrolleeId))
+                .ForMember(dest => dest.PossiblePaperEnrolmentMatch, opt => opt.Ignore())
                 .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(id => id == src.CurrentAgreementId)));
 
             CreateMap<EnrolleeDTO, EnrolleeViewModel>();

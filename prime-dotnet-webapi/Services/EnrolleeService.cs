@@ -22,6 +22,8 @@ namespace Prime.Services
 {
     public class EnrolleeService : BaseService, IEnrolleeService
     {
+        private const string PaperGpidPrefix = "NOBCSC";
+
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
@@ -111,6 +113,20 @@ namespace Prime.Services
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
 
+            if (dto.GPID != null && dto.GPID.StartsWith(PaperGpidPrefix))
+            {
+                dto.PossiblePaperEnrolmentMatch = false;
+            }
+            else
+            {
+                dto.PossiblePaperEnrolmentMatch = await _context.Enrollees
+                    .AsNoTracking()
+                    .AnyAsync(e => e.GPID.StartsWith(PaperGpidPrefix)
+                        && e.DateOfBirth.Date == dto.DateOfBirth.Date
+                        && !_context.EnrolleeLinkedEnrolments
+                            .Any(link => link.PaperEnrolleeId == e.Id));
+            }
+
             return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
@@ -127,7 +143,14 @@ namespace Prime.Services
                     .Id
                 );
 
-            return await _context.Enrollees
+            var unlinkedPaperEnrolments = await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.GPID.StartsWith(PaperGpidPrefix)
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id))
+                .ToListAsync();
+
+            var result = await _context.Enrollees
                 .AsNoTracking()
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(e => e.FirstName,
@@ -151,6 +174,13 @@ namespace Prime.Services
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();
+
+            foreach (var enrollee in result)
+            {
+                enrollee.PossiblePaperEnrolmentMatch = unlinkedPaperEnrolments.Any(e => e.DateOfBirth.Date == enrollee.DateOfBirth.Date);
+            }
+
+            return result;
         }
 
         public async Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId)
