@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,7 @@ namespace Prime.Services
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
         public SiteService(
@@ -27,11 +29,13 @@ namespace Prime.Services
             ILogger<SiteService> logger,
             IBusinessEventService businessEventService,
             IDocumentManagerClient documentClient,
+            IEmailService emailService,
             IMapper mapper)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
             _documentClient = documentClient;
+            _emailService = emailService;
             _mapper = mapper;
         }
 
@@ -323,8 +327,8 @@ namespace Prime.Services
         public async Task MarkUsersAsNotifiedAsync(IEnumerable<RemoteUser> notifiedUsers)
         {
             foreach (var wasNotified in notifiedUsers)
-                wasNotified.Notified = true;
             {
+                wasNotified.Notified = true;
             }
             await _context.SaveChangesAsync();
         }
@@ -467,6 +471,56 @@ namespace Prime.Services
                 .Where(s => s.Id == siteId)
                 .Select(s => s.PEC)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task SendApprovalEmailsAsync(int siteId)
+        {
+            var site = await _context.Sites
+                .Include(s => s.CareSetting)
+                .Where(s => s.Id == siteId)
+                .SingleOrDefaultAsync();
+            if (site == null)
+            {
+                return;
+            }
+
+            try
+            {
+                if (site.ActiveBeforeRegistration)
+                {
+                    await _emailService.SendSiteActiveBeforeRegistrationAsync(siteId);
+                }
+                else if (site.CareSetting.Code == (int)CareSettingType.CommunityPharmacy ||
+                         site.CareSetting.Code == (int)CareSettingType.CommunityPractice)
+                {
+                    var communitySiteDto = await _context.CommunitySites
+                        .Include(s => s.AdministratorPharmaNet)
+                        .Include(s => s.Provisioner)
+                        .Where(s => s.Id == siteId)
+                        .Select(s => new
+                        {
+                            DoingBusinessAs = s.DoingBusinessAs,
+                            PEC = s.PEC,
+                            AdministratorPharmaNetEmail = s.AdministratorPharmaNet.Email,
+                            ProvisionerEmail = s.Provisioner.Email
+                        })
+                        .SingleOrDefaultAsync();
+                    await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(communitySiteDto.DoingBusinessAs, communitySiteDto.PEC, communitySiteDto.AdministratorPharmaNetEmail);
+                    // TODO: For HA Sites, email Authorized User and what template?
+                    await _emailService.SendSiteApprovedSigningAuthorityAsync(communitySiteDto.DoingBusinessAs, communitySiteDto.PEC, communitySiteDto.ProvisionerEmail);
+                }
+
+                // TODO: For HA Sites, need to notify HIBC?
+                await _emailService.SendSiteApprovedHIBCAsync(site);
+
+                var remoteUsersNotified = await _emailService.SendRemoteUserNotificationsAsync(siteId);
+                await MarkUsersAsNotifiedAsync(remoteUsersNotified);
+            }
+            catch (SmtpException e)
+            {
+                // Don't let a problem sending email alarm the user
+                _logger.LogError(e, "Error sending emails following approval");
+            }
         }
     }
 }

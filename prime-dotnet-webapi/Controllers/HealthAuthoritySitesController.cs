@@ -22,15 +22,18 @@ namespace Prime.Controllers
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly IHealthAuthorityService _healthAuthorityService;
         private readonly ISiteService _siteService;
+        private readonly IEmailService _emailService;
 
         public HealthAuthoritySitesController(
             IHealthAuthoritySiteService healthAuthoritySiteService,
             IHealthAuthorityService healthAuthorityService,
-            ISiteService siteService)
+            ISiteService siteService,
+            IEmailService emailService)
         {
             _healthAuthoritySiteService = healthAuthoritySiteService;
             _healthAuthorityService = healthAuthorityService;
             _siteService = siteService;
+            _emailService = emailService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -229,7 +232,9 @@ namespace Prime.Controllers
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
 
-            // TODO send site registration submission notification
+            // TODO send site registration submission notification:
+            // Different email template needed as no business licence to be linked to.
+            // await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
 
             return NoContent();
         }

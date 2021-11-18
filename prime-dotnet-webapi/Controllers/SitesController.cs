@@ -849,29 +849,7 @@ namespace Prime.Controllers
             }
 
             await _siteService.ApproveSite(siteId);
-
-            // TODO: This is the only difference in path between Community Site and Health Authority Site
-            // As well maybe we should try/catch email errors so failure on sending an email doesn't fail
-            // the call
-            if (await _communitySiteService.SiteExistsAsync(siteId))
-            {
-                var communitySite = await _communitySiteService.GetSiteAsync(siteId);
-
-                if (communitySite.ActiveBeforeRegistration)
-                {
-                    await _emailService.SendSiteActiveBeforeRegistrationAsync(siteId);
-                }
-                else
-                {
-                    await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(communitySite);
-                    await _emailService.SendSiteApprovedSigningAuthorityAsync(communitySite);
-                }
-                await _emailService.SendSiteApprovedHIBCAsync(communitySite);
-
-                var remoteUsersToNotify = communitySite.RemoteUsers.Where(ru => !ru.Notified);
-                await _emailService.SendRemoteUserNotificationsAsync(communitySite, remoteUsersToNotify);
-                await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
-            }
+            await _siteService.SendApprovalEmailsAsync(siteId);
 
             return Ok();
         }

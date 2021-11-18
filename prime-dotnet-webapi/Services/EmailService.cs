@@ -122,19 +122,39 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers)
+        public async Task<IEnumerable<RemoteUser>> SendRemoteUserNotificationsAsync(int siteId)
         {
-            if (!remoteUsers.Any())
+            // Use DTO to just return what is necessary
+            var communitySiteDto = await _context.CommunitySites
+                .Include(s => s.RemoteUsers)
+                .Include(s => s.Organization)
+                .Include(s => s.PhysicalAddress)
+                .Where(s => s.Id == siteId)
+                .Select(s => new
+                {
+                    OrganizationName = s.Organization.Name,
+                    SiteStreetAddress = s.PhysicalAddress.Street,
+                    SiteCity = s.PhysicalAddress.City,
+                    PrimeUrl = PrimeConfiguration.Current.FrontendUrl,
+                    RemoteUsers = s.RemoteUsers
+                })
+                .SingleOrDefaultAsync();
+            if (communitySiteDto == null)
             {
-                return;
+                return new List<RemoteUser>();
+            }
+            var remoteUsersToNotify = communitySiteDto.RemoteUsers.Where(ru => !ru.Notified);
+            if (!remoteUsersToNotify.Any())
+            {
+                return new List<RemoteUser>();
             }
 
-            var recipients = remoteUsers.Select(ru => ru.Email);
+            var recipients = remoteUsersToNotify.Select(ru => ru.Email);
             var viewModel = new RemoteUserNotificationEmailViewModel
             {
-                OrganizationName = site.Organization.Name,
-                SiteStreetAddress = site.PhysicalAddress.Street,
-                SiteCity = site.PhysicalAddress.City,
+                OrganizationName = communitySiteDto.OrganizationName,
+                SiteStreetAddress = communitySiteDto.SiteStreetAddress,
+                SiteCity = communitySiteDto.SiteCity,
                 PrimeUrl = PrimeConfiguration.Current.FrontendUrl
             };
 
@@ -146,6 +166,7 @@ namespace Prime.Services
                 email.To = new[] { recipient };
                 await Send(email);
             }
+            return remoteUsersToNotify;
         }
 
         public async Task SendBusinessLicenceUploadedAsync(CommunitySite site)
@@ -156,27 +177,27 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site)
+        public async Task SendSiteApprovedPharmaNetAdministratorAsync(string doingBusinessAs, string pec, string administratorPharmaNetEmail)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
-                DoingBusinessAs = site.DoingBusinessAs,
-                Pec = site.PEC
+                DoingBusinessAs = doingBusinessAs,
+                Pec = pec
             };
 
-            var email = await _emailRenderingService.RenderSiteApprovedPharmaNetAdministratorEmailAsync(site.AdministratorPharmaNet.Email, viewModel);
+            var email = await _emailRenderingService.RenderSiteApprovedPharmaNetAdministratorEmailAsync(administratorPharmaNetEmail, viewModel);
             await Send(email);
         }
 
-        public async Task SendSiteApprovedSigningAuthorityAsync(CommunitySite site)
+        public async Task SendSiteApprovedSigningAuthorityAsync(string doingBusinessAs, string pec, string provisionerEmail)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
-                DoingBusinessAs = site.DoingBusinessAs,
-                Pec = site.PEC
+                DoingBusinessAs = doingBusinessAs,
+                Pec = pec
             };
 
-            var email = await _emailRenderingService.RenderSiteApprovedSigningAuthorityEmailAsync(site.Provisioner.Email, viewModel);
+            var email = await _emailRenderingService.RenderSiteApprovedSigningAuthorityEmailAsync(provisionerEmail, viewModel);
             await Send(email);
         }
 
@@ -196,7 +217,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedHIBCAsync(CommunitySite site)
+        public async Task SendSiteApprovedHIBCAsync(Site site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {

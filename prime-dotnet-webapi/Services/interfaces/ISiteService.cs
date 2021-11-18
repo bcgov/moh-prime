@@ -48,5 +48,6 @@ namespace Prime.Services
         Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId);
         Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId);
         Task<string> GetSitePecAsync(int siteId);
+        Task SendApprovalEmailsAsync(int siteId);
     }
 }
