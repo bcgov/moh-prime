@@ -35,7 +35,7 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
     this.hasActions = false;
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getDataset();
   }
 
