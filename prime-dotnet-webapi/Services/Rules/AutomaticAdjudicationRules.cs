@@ -290,7 +290,7 @@ namespace Prime.Services.Rules
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.UnableToLinkToPaperEnrolment, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
                     return false;
                 }
-                await _businessEventService.CreatePaperEnrolmentLinkEventAsync(enrollee.Id, "Paper enrolment has been linked.");
+                await _businessEventService.CreatePaperEnrolmentLinkEventAsync(enrollee.Id, "Paper enrolment has been linked");
                 return true;
             }
             // if yes and GPID not provided - flag with "Possible match with paper enrolment"
