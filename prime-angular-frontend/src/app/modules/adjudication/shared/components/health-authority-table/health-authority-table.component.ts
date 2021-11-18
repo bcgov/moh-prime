@@ -120,7 +120,6 @@ export class HealthAuthorityTableComponent implements OnInit, OnChanges {
         .concat((this.showHealthAuthorities) ? this.healthAuthorities : [])
         .sort(this.sortData());
     }
-    console.log(this.dataSource.data);
   }
 
   /**
