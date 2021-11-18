@@ -381,7 +381,6 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onRoute(routePath: string | (string | number)[], routeToSiteModule?: boolean) {
-    console.log("I AM AN OBNOXIOUS SENTENCE", routePath, routeToSiteModule);
     (routeToSiteModule)
     ? this.routeUtilsSite.routeWithin(routePath)
     : this.routeUtils.routeWithin(routePath);
