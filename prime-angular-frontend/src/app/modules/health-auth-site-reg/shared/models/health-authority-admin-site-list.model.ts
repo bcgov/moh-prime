@@ -14,6 +14,7 @@ export interface HealthAuthorityAdminSiteListDto extends BaseHealthAuthoritySite
   readonly authorizedUserEmail: string;
   readonly adjudicatorIdir: string;
 }
+
 export class HealthAuthoritySiteAdminList extends AbstractBaseHealthAuthoritySite implements HealthAuthorityAdminSiteListDto {
   constructor(
     public id: number,
