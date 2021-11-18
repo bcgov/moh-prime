@@ -276,6 +276,8 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         this.addOboSite(careSetting.careSettingCode);
       }
     });
+
+    this.removeEmptyOboSiteForms();
   }
 
   /**
@@ -303,5 +305,35 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       sitesOfHealthAuthority.clearValidators();
       sitesOfHealthAuthority.updateValueAndValidity();
     });
+  }
+
+  /**
+ * @description
+ * Remove forms that were created when no certificate/device provider id were provided
+ * but then page was left with empty forms.
+ */
+  private removeEmptyOboSiteForms(): void {
+    for (const [key, value] of Object.entries(this.enrolmentFormStateService.oboSitesForm.controls)) {
+      if (!value.valid) {
+        let form;
+        let healthAuthorityCode;
+
+        if (key === 'healthAuthoritySites') {
+          const healthAuthorityFormGroup = this.enrolmentFormStateService.oboSitesForm.controls[key] as FormGroup;
+          healthAuthorityCode = Object.keys(healthAuthorityFormGroup.controls)[0];
+          form = healthAuthorityFormGroup.controls[healthAuthorityCode] as FormArray;
+        } else {
+          form = this.enrolmentFormStateService.oboSitesForm.controls[key] as FormArray;
+        }
+
+        form.controls.forEach((control: FormArray, index: number) => {
+          if (control.invalid) {
+            const careSetting = control.get('careSettingCode').value;
+
+            this.removeOboSite(index, careSetting, healthAuthorityCode);
+          }
+        })
+      }
+    }
   }
 }
