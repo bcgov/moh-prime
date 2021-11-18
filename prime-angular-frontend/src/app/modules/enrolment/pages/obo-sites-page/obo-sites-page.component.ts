@@ -314,7 +314,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
  */
   private removeEmptyOboSiteForms(): void {
     for (const [key, value] of Object.entries(this.enrolmentFormStateService.oboSitesForm.controls)) {
-      if (!value.valid) {
+      if (value.invalid) {
         let form;
         let healthAuthorityCode;
 
