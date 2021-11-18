@@ -11,11 +11,11 @@ import { ApiResource } from '@core/resources/api-resource.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ToastService } from '@core/services/toast.service';
+import { ApiResourceUtilsService } from './api-resource-utils.service';
 
 import { HealthAuthoritySite, HealthAuthoritySiteDto } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-authority-site-create.model';
 import { HealthAuthoritySiteUpdate } from '@health-auth/shared/models/health-authority-site-update.model';
-import { ApiResourceUtilsService } from './api-resource-utils.service';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 
 @Injectable({
