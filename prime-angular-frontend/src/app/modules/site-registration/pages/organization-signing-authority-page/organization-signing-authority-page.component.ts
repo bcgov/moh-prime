@@ -17,6 +17,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { SigningAuthorityService } from '@registration/shared/services/signing-authority.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
@@ -51,6 +52,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    private signingAuthorityService: SigningAuthorityService,
     private organizationService: OrganizationService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
@@ -121,8 +123,14 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.organization = this.organizationService.organization;
     this.isCompleted = this.organization?.completed;
 
-    // Attempt to patch the form if not already patched
-    this.organizationFormStateService.setForm(this.organization, true);
+    // User may already be associated with a party, but not created
+    // or claimed an organization so they should still get patched
+    if(!this.organization && this.signingAuthorityService.signingAuthority) {
+      this.formState.patchValue(this.signingAuthorityService.signingAuthority);
+    } else {
+      // Attempt to patch the form if not already patched
+      this.organizationFormStateService.setForm(this.organization, true);
+    }
   }
 
   protected initForm(): void {

@@ -51,7 +51,15 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
     }
 
     if (hasClaim) {
-      return this.managePartyAlreadyHasExistingClaimRouting(routePath);
+      return this.manageSigningAuthorityHasExistingClaimRouting(routePath);
+    }
+
+    // Route exclusions when no organization or claim exists
+    if ([
+      SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
+      SiteRoutes.ORGANIZATION_CLAIMED
+    ].includes(this.getCurrentRoute(routePath))) {
+      return this.manageRestrictedRouting(routePath);
     }
 
     // Otherwise, allow the user to attempt claiming an organization
@@ -63,8 +71,8 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
    * Manage routing when the authenticated user has no
    * associated party.
    *
-   * NOTE: Creation of a party from the authenticated user
-   * can occur in both workflows.
+   * NOTE: Creation of a signing authority from an
+   * authenticated user can occur in both workflows.
    */
   protected manageNoPartyExistsRouting(routePath: string): boolean {
     return this.navigate(routePath, [
@@ -75,37 +83,37 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
 
   /**
    * @description
-   * Manage routing when the authenticated user already
-   * has a claim on any organization.
-   *
-   * NOTE: No requirement to identify the organization that has
-   * a claim under review by the user.
-   */
-  protected managePartyAlreadyHasExistingClaimRouting(routePath: string): boolean {
-    return this.navigate(routePath, this.getExistingClaimRouteRedirect());
-  }
-
-  /**
-   * @description
-   * Manage routing when a claim already exists on an organization.
-   *
-   * NOTE: Claiming an organization can only occur in the
-   * change signing authority workflow.
-   */
-  protected manageOrganizationHasExistingClaimRouting(routePath: string): boolean {
-    return this.navigate(routePath, this.getExistingClaimRouteRedirect());
-  }
-
-  /**
-   * @description
    * Manage routing when the party is already the signing authority
-   * for the organization.
+   * for an organization.
    *
    * NOTE: Organization management can only occur in the
    * default workflow.
    */
   protected manageAlreadySigningAuthorityRouting(routePath: string): boolean {
-    return this.navigate(routePath, [SiteRoutes.ORGANIZATIONS]);
+    return this.navigate(routePath, [
+      SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW,
+      SiteRoutes.ORGANIZATION_CLAIMED
+    ]);
+  }
+
+  /**
+   * @description
+   * Manage routing when the authenticated user already
+   * has a claim.
+   */
+  protected manageSigningAuthorityHasExistingClaimRouting(routePath: string): boolean {
+    return this.navigate(routePath, this.getExistingClaimRouteRedirect());
+  }
+
+  /**
+   * @description
+   * Restrict routing from terminal
+   */
+  protected manageRestrictedRouting(routePath: string): boolean {
+    return this.navigate(routePath, [
+      SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW,
+      SiteRoutes.ORGANIZATION_CLAIM
+    ]);
   }
 
   /**

@@ -11,6 +11,7 @@ import { CollectionNoticePageComponent } from '@registration/pages/collection-no
 import { OrganizationSigningAuthorityPageComponent } from '@registration/pages/organization-signing-authority-page/organization-signing-authority-page.component';
 import { OrganizationClaimPageComponent } from '@registration/pages/organization-claim-page/organization-claim-page.component';
 import { OrganizationClaimConfirmationPageComponent } from '@registration/pages/organization-claim-confirmation-page/organization-claim-confirmation-page.component';
+import { OrganizationClaimedPageComponent } from '@registration/pages/organization-claimed-page/organization-claimed-page.component';
 import { OrganizationNamePageComponent } from '@registration/pages/organization-name-page/organization-name-page.component';
 import { SiteManagementPageComponent } from '@registration/pages/site-management-page/site-management-page.component';
 import { CareSettingPageComponent } from '@registration/pages/care-setting-page/care-setting-page.component';
@@ -257,8 +258,13 @@ export const changeSigningAuthorityWorkflow = [
     path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
     component: OrganizationClaimConfirmationPageComponent,
     canActivate: [ChangeSigningAuthorityGuard],
-    canDeactivate: [CanDeactivateFormGuard],
     data: { title: 'Next Steps' }
+  },
+  {
+    path: SiteRoutes.ORGANIZATION_CLAIMED,
+    component: OrganizationClaimedPageComponent,
+    canActivate: [ChangeSigningAuthorityGuard],
+    data: { title: 'Organization Claimed' }
   },
   {
     path: '', // Equivalent to `/` and alias for default route
