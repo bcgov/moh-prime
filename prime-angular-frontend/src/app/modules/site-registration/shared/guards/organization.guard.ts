@@ -9,6 +9,7 @@ import { OrganizationResource } from '@core/resources/organization-resource.serv
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { SigningAuthorityService } from '@registration/shared/services/signing-authority.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { AbstractRoutingWorkflowGuard } from '@registration/shared/classes/abstract-routing-workflow-guard.class';
@@ -18,6 +19,7 @@ import { AbstractRoutingWorkflowGuard } from '@registration/shared/classes/abstr
 })
 export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
   constructor(
+    protected signingAuthorityService: SigningAuthorityService,
     protected organizationService: OrganizationService,
     protected organizationResource: OrganizationResource,
     protected authService: AuthService,
@@ -25,7 +27,13 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router
   ) {
-    super(organizationService, organizationResource, authService, logger);
+    super(
+      signingAuthorityService,
+      organizationService,
+      organizationResource,
+      authService,
+      logger
+    );
   }
 
   /**
@@ -36,7 +44,7 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
     routePath: string,
     params: Params,
     organization: Organization | null,
-    party: Party,
+    signingAuthority: Party | null,
     hasOrgClaim: boolean
   ): boolean {
     // On login the user will always be redirected to the collection notice
@@ -55,11 +63,11 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
     if (organization) {
       return (organization.completed)
         ? this.manageCompleteOrganizationRouting(routePath, organization)
-        : this.manageIncompleteOrganizationRouting(routePath, organization, party);
+        : this.manageIncompleteOrganizationRouting(routePath, organization, signingAuthority);
     }
 
     // Otherwise, no organization exists
-    return this.manageNoOrganizationRouting(routePath, party, hasOrgClaim);
+    return this.manageNoOrganizationRouting(routePath, signingAuthority, hasOrgClaim);
   }
 
   /**
@@ -67,8 +75,8 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
    * Manage routing when an organization does not exist, or initial
    * registration has not been completed.
    */
-  protected manageNoOrganizationRouting(routePath: string, party: Party, hasOrgClaim: boolean): boolean {
-    const destPath = (party)
+  private manageNoOrganizationRouting(routePath: string, signingAuthority: Party, hasOrgClaim: boolean): boolean {
+    const destPath = (signingAuthority)
       ? SiteRoutes.ORGANIZATION_NAME
       : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
 
@@ -92,10 +100,10 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
    * Manage routing when an organization initial registration has
    * not been completed.
    */
-  private manageIncompleteOrganizationRouting(routePath: string, organization: Organization, party: Party) {
+  private manageIncompleteOrganizationRouting(routePath: string, organization: Organization, signingAuthority: Party) {
     // Provides a default of the initial site registration view unless the current view
     // can be determined through state of the organization
-    const destPath = (party)
+    const destPath = (signingAuthority)
       ? SiteRoutes.ORGANIZATION_NAME
       : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
     return this.manageRouting(routePath, destPath, organization);
@@ -149,6 +157,22 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
     }
 
     return allowedRoutes;
+  }
+
+  /**
+   * @description
+   * Detect an organization ID mismatch to provide confidence in
+   * the organization ID URI param.
+   *
+   * NOTE: Dependent on the assumption that there is only a
+   * single organization per signing authority.
+   */
+  private detectRouteMismatch(routePath, params: Params, organizationId: number): string | null {
+    return (params.oid && (
+      (organizationId && organizationId !== +params.oid) || (!organizationId && +params.oid !== 0)
+    ))
+      ? routePath.replace(`${SiteRoutes.ORGANIZATIONS}/${params.oid}`, `${SiteRoutes.ORGANIZATIONS}/${organizationId}`)
+      : null;
   }
 
   /**

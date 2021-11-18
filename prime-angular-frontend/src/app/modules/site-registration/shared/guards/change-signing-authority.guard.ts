@@ -3,7 +3,7 @@ import { Params, Router } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Party } from '@lib/models/party.model';
-import { RoutePath, RouteSegments } from '@lib/utils/route-utils.class';
+import { RouteSegments } from '@lib/utils/route-utils.class';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -11,12 +11,14 @@ import { AbstractRoutingWorkflowGuard } from '@registration/shared/classes/abstr
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { SigningAuthorityService } from '@registration/shared/services/signing-authority.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
   constructor(
+    protected signingAuthorityService: SigningAuthorityService,
     protected organizationService: OrganizationService,
     protected organizationResource: OrganizationResource,
     protected authService: AuthService,
@@ -24,43 +26,32 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router
   ) {
-    super(organizationService, organizationResource, authService, logger);
+    super(
+      signingAuthorityService,
+      organizationService,
+      organizationResource,
+      authService,
+      logger
+    );
   }
 
   protected routeDestination(
     routePath: string,
     params: Params,
     organization: Organization | null,
-    party: Party,
-    hasOrgClaim: boolean
+    signingAuthority: Party | null,
+    hasClaim: boolean
   ): boolean {
-    // On login the user will always be redirected to the collection notice
-    if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
-      return true;
+    if (!signingAuthority) {
+      return this.manageNoPartyExistsRouting(routePath);
     }
 
-    // TODO if already a signing authority of a different organization redirect to page with link
-
-    // No organization exists and should be pushed into the default
-    // workflow which the only place you can create an organization
-    if (!organization) {
-      return this.manageNoOrganizationRouting(routePath);
-    }
-
-    if (organization.signingAuthorityId === party.id) {
+    if (organization) {
       return this.manageAlreadySigningAuthorityRouting(routePath);
     }
 
-    if (organization.hasClaim) {
-      return this.manageExistingClaimRouting(routePath, organization.id);
-    }
-
-    // When the organization ID mismatches the organizations route ID
-    // correct the route immediately
-    const redirectPath = this.detectRouteMismatch(routePath, params, organization?.id);
-    if (redirectPath) {
-      this.router.navigate([redirectPath]);
-      return false;
+    if (hasClaim) {
+      return this.managePartyAlreadyHasExistingClaimRouting(routePath);
     }
 
     // Otherwise, allow the user to attempt claiming an organization
@@ -69,15 +60,40 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
 
   /**
    * @description
-   * Manage routing when an organization does not exist, or initial
-   * registration has not been completed.
+   * Manage routing when the authenticated user has no
+   * associated party.
    *
-   * NOTE: Organization creation can only occur in the default workflow.
+   * NOTE: Creation of a party from the authenticated user
+   * can occur in both workflows.
    */
-  protected manageNoOrganizationRouting(routePath: string): boolean {
-    // During initial registration the ID will be set to zero indicating the
-    // organization does not exist
-    return this.navigate(routePath, [SiteRoutes.ORGANIZATIONS, 0]);
+  protected manageNoPartyExistsRouting(routePath: string): boolean {
+    return this.navigate(routePath, [
+      SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW,
+      SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY
+    ]);
+  }
+
+  /**
+   * @description
+   * Manage routing when the authenticated user already
+   * has a claim on any organization.
+   *
+   * NOTE: No requirement to identify the organization that has
+   * a claim under review by the user.
+   */
+  protected managePartyAlreadyHasExistingClaimRouting(routePath: string): boolean {
+    return this.navigate(routePath, this.getExistingClaimRouteRedirect());
+  }
+
+  /**
+   * @description
+   * Manage routing when a claim already exists on an organization.
+   *
+   * NOTE: Claiming an organization can only occur in the
+   * change signing authority workflow.
+   */
+  protected manageOrganizationHasExistingClaimRouting(routePath: string): boolean {
+    return this.navigate(routePath, this.getExistingClaimRouteRedirect());
   }
 
   /**
@@ -85,21 +101,11 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
    * Manage routing when the party is already the signing authority
    * for the organization.
    *
-   * NOTE: Organization management can only occur in the default workflow.
+   * NOTE: Organization management can only occur in the
+   * default workflow.
    */
   protected manageAlreadySigningAuthorityRouting(routePath: string): boolean {
     return this.navigate(routePath, [SiteRoutes.ORGANIZATIONS]);
-  }
-
-  /**
-   * @description
-   * Manage routing when a claim exists on an organization.
-   *
-   * NOTE: Claiming an organization can only occur in the change
-   * signing authority workflow.
-   */
-  protected manageExistingClaimRouting(routePath: string, organizationId: number): boolean {
-    return this.navigate(routePath, this.getExistingClaimRouteRedirect(organizationId));
   }
 
   /**

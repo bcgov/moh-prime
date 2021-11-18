@@ -38,13 +38,18 @@ export const defaultCommunitySiteWorkflow = [
   {
     path: SiteRoutes.COLLECTION_NOTICE,
     component: CollectionNoticePageComponent,
-    data: { title: 'Collection Notice' }
+    data: {
+      title: 'Collection Notice',
+      // Provides the next route segments so route
+      // configuration drives routing vs the component
+      redirectRouteSegments: {
+        nextRoute: SiteRoutes.ORGANIZATIONS
+      }
+    }
   },
   {
-    // TODO only able to have a single organization now which would simplify routing and guards
     path: SiteRoutes.ORGANIZATIONS,
     children: [
-      // TODO move site management out of organizations and into root routes
       {
         path: '',
         component: SiteManagementPageComponent,
@@ -61,15 +66,7 @@ export const defaultCommunitySiteWorkflow = [
             path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
             component: OrganizationSigningAuthorityPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
-            data: {
-              title: 'Signing Authority',
-              // Provides an workflow and next route segments so route
-              // configuration drives routing vs the component
-              redirectRouteSegments: {
-                workflow: SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW,
-                nextRoute: SiteRoutes.ORGANIZATION_CLAIM
-              }
-            }
+            data: { title: 'Signing Authority' }
           },
           {
             path: SiteRoutes.ORGANIZATION_NAME,
@@ -200,7 +197,7 @@ export const defaultCommunitySiteWorkflow = [
                 data: { title: 'Next Steps' }
               },
               {
-                path: '', // Equivalent to `/` and alias for `site-review`
+                path: '', // Equivalent to `/` and alias for default route
                 redirectTo: SiteRoutes.SITE_REVIEW,
                 pathMatch: 'full'
               }
@@ -211,7 +208,7 @@ export const defaultCommunitySiteWorkflow = [
     ]
   },
   {
-    path: '', // Equivalent to `/` and alias for `organizations`
+    path: '', // Equivalent to `/` and alias for default route
     redirectTo: SiteRoutes.ORGANIZATIONS,
     pathMatch: 'full'
   }
@@ -226,48 +223,46 @@ export const changeSigningAuthorityWorkflow = [
   {
     path: SiteRoutes.COLLECTION_NOTICE,
     component: CollectionNoticePageComponent,
-    data: { title: 'Collection Notice' }
-  },
-  {
-    path: `${SiteRoutes.ORGANIZATIONS}/:oid`,
-    canActivateChild: [ChangeSigningAuthorityGuard],
-    children: [
-      {
-        path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
-        component: OrganizationSigningAuthorityPageComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: {
-          title: 'Signing Authority',
-          // Provides an workflow and next route segments so route
-          // configuration drives routing vs the component
-          redirectRouteSegments: {
-            workflow: SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW,
-            nextRoute: SiteRoutes.ORGANIZATION_CLAIM
-          }
-        }
-      },
-      {
-        path: SiteRoutes.ORGANIZATION_CLAIM,
-        component: OrganizationClaimPageComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Claim Organization' }
-      },
-      {
-        path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
-        component: OrganizationClaimConfirmationPageComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Next Steps' }
-      },
-      {
-        path: '', // Equivalent to `/` alias for default route
-        redirectTo: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
-        pathMatch: 'full'
+    data: {
+      title: 'Collection Notice',
+      // Provides a workflow and next route segments so route
+      // configuration drives routing vs the component
+      redirectRouteSegments: {
+        nextRoute: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY
       }
-    ]
+    }
   },
   {
-    path: '', // Equivalent to `/` alias for default route
-    redirectTo: `${SiteRoutes.ORGANIZATIONS}/0`,
+    path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
+    component: OrganizationSigningAuthorityPageComponent,
+    canActivate: [ChangeSigningAuthorityGuard],
+    canDeactivate: [CanDeactivateFormGuard],
+    data: {
+      title: 'Signing Authority',
+      // Provides the next route segments so route
+      // configuration drives routing vs the component
+      redirectRouteSegments: {
+        nextRoute: SiteRoutes.ORGANIZATION_CLAIM
+      }
+    }
+  },
+  {
+    path: SiteRoutes.ORGANIZATION_CLAIM,
+    component: OrganizationClaimPageComponent,
+    canActivate: [ChangeSigningAuthorityGuard],
+    canDeactivate: [CanDeactivateFormGuard],
+    data: { title: 'Claim Organization' }
+  },
+  {
+    path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
+    component: OrganizationClaimConfirmationPageComponent,
+    canActivate: [ChangeSigningAuthorityGuard],
+    canDeactivate: [CanDeactivateFormGuard],
+    data: { title: 'Next Steps' }
+  },
+  {
+    path: '', // Equivalent to `/` and alias for default route
+    redirectTo: SiteRoutes.COLLECTION_NOTICE,
     pathMatch: 'full'
   }
 ];

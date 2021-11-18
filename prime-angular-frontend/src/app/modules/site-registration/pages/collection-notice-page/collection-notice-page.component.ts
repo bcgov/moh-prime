@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -15,7 +15,9 @@ import { OrganizationService } from '@registration/shared/services/organization.
 })
 export class CollectionNoticePageComponent implements OnInit {
   public isFull: boolean;
-  public routeUtils: RouteUtils;
+
+  private readonly routeUtils: RouteUtils;
+  private readonly nextRoute: RoutePath;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,13 +27,14 @@ export class CollectionNoticePageComponent implements OnInit {
   ) {
     this.isFull = true;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.nextRoute = this.route.snapshot.data.redirectRouteSegments.nextRoute;
   }
 
   public onAccept(): void {
     this.authService.hasJustLoggedIn = false;
     // Attempt to redirect to centralized default route, and the guard will
     // redirect an appropriate route when not allowed
-    this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeRelativeTo(this.nextRoute);
   }
 
   public ngOnInit(): void {

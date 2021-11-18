@@ -4,18 +4,20 @@ import { forkJoin, Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { Party } from '@lib/models/party.model';
+import { RouteSegments } from '@lib/utils/route-utils.class';
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { SigningAuthorityService } from '@registration/shared/services/signing-authority.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RouteSegments } from '@lib/utils/route-utils.class';
 
 export abstract class AbstractRoutingWorkflowGuard extends BaseGuard {
   protected constructor(
+    protected signingAuthorityService: SigningAuthorityService,
     protected organizationService: OrganizationService,
     protected organizationResource: OrganizationResource,
     protected authService: AuthService,
@@ -24,23 +26,29 @@ export abstract class AbstractRoutingWorkflowGuard extends BaseGuard {
     super(authService, logger);
   }
 
+  /**
+   * @description
+   * Get the signing authority, organization, and claim information
+   * required to make appropriate decisions in the guards.
+   */
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
     return this.authService.getUser$()
       .pipe(
         // Having no signing authority or organizations results in the same
         // redirection logic for the user, and therefore not handled individually
-        exhaustMap((user: BcscUser) =>
+        exhaustMap(({ userId }: BcscUser) =>
           forkJoin([
-            this.organizationResource.getSigningAuthorityByUserId(user.userId),
-            this.organizationResource.getSigningAuthorityOrganizationByUserId(user.userId),
-            this.organizationResource.getOrganizationClaim({ userId: user.userId })
+            this.organizationResource.getSigningAuthorityByUserId(userId),
+            this.organizationResource.getSigningAuthorityOrganizationByUserId(userId),
+            this.organizationResource.getOrganizationClaim({ userId })
           ])
         ),
-        map(([party, organization, claimed]: [Party | null, Organization | null, boolean]) => {
+        map(([signingAuthority, organization, claimed]: [Party | null, Organization | null, boolean]) => {
           // Store the organization for access throughout registration, which
           // will allows be the most up-to-date organization
+          this.signingAuthorityService.signingAuthority = signingAuthority;
           this.organizationService.organization = organization;
-          return this.routeDestination(routePath, params, organization, party, claimed);
+          return this.routeDestination(routePath, params, organization, signingAuthority, claimed);
         })
       );
   }
@@ -49,30 +57,13 @@ export abstract class AbstractRoutingWorkflowGuard extends BaseGuard {
    * @description
    * Determine the route destination based on organization.
    */
-  protected abstract routeDestination(routePath: string, params: Params, organization: Organization | null, party: Party, hasOrgClaim: boolean): boolean;
-
-  /**
-   * @description
-   * Manage routing when an organization does not exist, or initial
-   * registration has not been completed.
-   */
-  protected abstract manageNoOrganizationRouting(routePath: string, party: Party, hasOrgClaim: boolean): boolean;
-
-  /**
-   * @description
-   * Detect an organization ID mismatch to provide confidence in
-   * the organization ID URI param.
-   *
-   * NOTE: Dependent on the assumption that there is only a
-   * single organization per signing authority.
-   */
-  protected detectRouteMismatch(routePath, params: Params, organizationId: number): string | null {
-    return (params.oid && (
-      (organizationId && organizationId !== +params.oid) || (!organizationId && +params.oid !== 0)
-    ))
-      ? routePath.replace(`${SiteRoutes.ORGANIZATIONS}/${params.oid}`, `${SiteRoutes.ORGANIZATIONS}/${organizationId}`)
-      : null;
-  }
+  protected abstract routeDestination(
+    routePath: string,
+    params: Params,
+    organization: Organization | null,
+    party: Party | null,
+    hasOrgClaim: boolean
+  ): boolean;
 
   /**
    * @description
@@ -95,16 +86,18 @@ export abstract class AbstractRoutingWorkflowGuard extends BaseGuard {
     return currentRoute;
   }
 
+
   /**
    * @description
    * Provides the route segments to redirect to the existing
    * claim confirmation route.
+   *
+   * NOTE: Can be detected in either workflow, but will always
+   * redirect to the change signing authority workflow
    */
-  protected getExistingClaimRouteRedirect(organizationId: number): RouteSegments {
+  protected getExistingClaimRouteRedirect(): RouteSegments {
     return [
       SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW,
-      SiteRoutes.ORGANIZATIONS,
-      organizationId,
       SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION
     ];
   }

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Party } from '@lib/models/party.model';
-import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { Address, optionalAddressLineItems } from '@lib/models/address.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -44,7 +44,9 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
-  private routeUtils: RouteUtils;
+
+  private readonly routeUtils: RouteUtils;
+  private readonly nextRoute: RoutePath;
 
   constructor(
     protected dialog: MatDialog,
@@ -60,6 +62,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.nextRoute = this.route.snapshot.data.redirectRouteSegments.nextRoute;
 
     this.organizationId = +this.route.snapshot.params.oid;
   }
@@ -158,7 +161,10 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
           ? ['../', organization.id, SiteRoutes.ORGANIZATION_NAME]
           : ['../', 0, SiteRoutes.ORGANIZATION_NAME];
     }
-    this.routeUtils.routeRelativeTo(routePath);
+
+    // Allow the next route to be overridden by the route config to
+    // provide reuse during the claiming of an organization workflow
+    this.routeUtils.routeRelativeTo(this.nextRoute ?? routePath);
   }
 
   private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {

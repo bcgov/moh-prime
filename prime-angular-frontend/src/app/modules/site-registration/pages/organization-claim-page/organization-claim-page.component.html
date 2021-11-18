@@ -11,7 +11,7 @@
         You will need to know at least one of your organization’s SiteID/PEC codes.
       </ng-container>
     </app-page-subheader2>
-    <mat-slide-toggle #claimExistingOrg
+    <mat-slide-toggle #claimExistingOrganization
                       color="primary"
                       [checked]="isClaimExistingOrg"
                       (change)="onClaimOrgChange($event)">
@@ -19,7 +19,7 @@
     </mat-slide-toggle>
   </app-page-section>
 
-  <form *ngIf="claimExistingOrg.checked"
+  <form *ngIf="claimExistingOrganization.checked"
         [formGroup]="formState.form"
         (ngSubmit)="onSubmit()"
         novalidate
@@ -69,8 +69,9 @@
   </form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   primaryActionLabel="Save and Continue"
+                   [disableSave]="!claimExistingOrganization.checked"
                    [hasSecondaryAction]="true"
-                   [primaryActionLabel]="claimExistingOrg.checked ? 'Save and Continue' : 'Continue'"
                    (back)="onBack()"
                    (save)="onSubmit()"></app-page-footer>
 
