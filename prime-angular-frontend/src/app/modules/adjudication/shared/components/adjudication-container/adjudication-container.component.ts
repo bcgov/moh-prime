@@ -53,6 +53,7 @@ export class AdjudicationContainerComponent implements OnInit {
   public AdjudicationRoutes = AdjudicationRoutes;
 
   protected routeUtils: RouteUtils;
+  protected routeUtilsSite: RouteUtils;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
@@ -65,6 +66,7 @@ export class AdjudicationContainerComponent implements OnInit {
     protected toastService: ToastService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
+    this.routeUtilsSite = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
 
     this.action = new EventEmitter<void>();
 
@@ -378,8 +380,11 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  public onRoute(routePath: string | (string | number)[]) {
-    this.routeUtils.routeWithin(routePath);
+  public onRoute(routePath: string | (string | number)[], routeToSiteModule?: boolean) {
+    console.log("I AM AN OBNOXIOUS SENTENCE", routePath, routeToSiteModule);
+    (routeToSiteModule)
+    ? this.routeUtilsSite.routeWithin(routePath)
+    : this.routeUtils.routeWithin(routePath);
   }
 
   public onAssignToa({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
