@@ -6,10 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./site-overview-page.component.scss']
 })
 export class SiteOverviewPageComponent implements OnInit {
-
   constructor() { }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
