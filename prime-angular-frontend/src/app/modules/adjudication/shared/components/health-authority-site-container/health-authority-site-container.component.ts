@@ -52,5 +52,4 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
     // };
     // this.healthAuthoritySite = updateHASite;
   }
-
 }
