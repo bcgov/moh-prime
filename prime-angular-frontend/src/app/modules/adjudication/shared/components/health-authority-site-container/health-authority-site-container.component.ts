@@ -44,6 +44,7 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
       .getHealthAuthorityAdminSites(this.route.snapshot.params.haid, this.route.snapshot.params.sid)
       .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySite = sites[0]);
   }
+
   protected updateSite(siteId: number, updatedSiteFields: {}): void {
     // TODO: fix updated site shit
     // const updateHASite = {
