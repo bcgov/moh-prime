@@ -38,7 +38,7 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
 
   /**
    * @description
-   * Determine the route destination base on the organization state.
+   * Determine the route destination based on the organization state.
    */
   protected routeDestination(
     routePath: string,
