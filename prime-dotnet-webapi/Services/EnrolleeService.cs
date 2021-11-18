@@ -153,7 +153,6 @@ namespace Prime.Services
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();
-            // search-form.component.ts constructor() has other reference to this value.
         }
 
         public async Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId)
