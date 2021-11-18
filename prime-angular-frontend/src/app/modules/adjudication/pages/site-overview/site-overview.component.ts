@@ -35,17 +35,13 @@ export class SiteOverviewComponent implements OnInit {
   public hasActions: boolean;
   public organization: Organization;
   public site: Site;
-
   public refresh: BehaviorSubject<boolean>;
-
   public orgClaim: OrganizationClaim;
   public newSigningAuthority: Party;
   public businessLicences: BusinessLicence[];
   public form: FormGroup;
-
   public showSendNotification: boolean;
   public isNotificationSent: boolean;
-
   public AdjudicationRoutes = AdjudicationRoutes;
 
   private routeUtils: RouteUtils;
@@ -57,7 +53,6 @@ export class SiteOverviewComponent implements OnInit {
     protected siteResource: SiteResource,
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthSiteResource: HealthAuthoritySiteResource,
-
     private organizationResource: OrganizationResource,
     private formUtilsService: FormUtilsService,
     private fb: FormBuilder,
