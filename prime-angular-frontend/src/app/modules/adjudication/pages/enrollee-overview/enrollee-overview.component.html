@@ -14,9 +14,9 @@
                       (navigateEnrollee)="onNavigateEnrollee($event)"
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
-  <div class="d-flex justify-content-between align-items-center mt-4">
+  <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
     <span>
-      <app-alert *ngIf="enrollee?.possiblePaperEnrolmentMatch"
+      <app-alert *ngIf="!enrollee?.linkedEnrolleeId && enrollee?.possiblePaperEnrolmentMatch"
                  type="warning">
         <ng-container #alertTitle
                       class="alert-title">
