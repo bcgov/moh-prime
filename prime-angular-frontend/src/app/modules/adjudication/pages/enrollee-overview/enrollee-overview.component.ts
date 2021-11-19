@@ -22,6 +22,7 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -36,6 +37,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public showAdjudication: boolean;
   public documents: EnrolleeAdjudicationDocument[];
   public absence: EnrolleeAbsence;
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,
@@ -61,8 +63,13 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     this.hasActions = true;
   }
 
-  public onNavigateEnrollee(enrolleeId: number) {
+  public onNavigateEnrollee(enrolleeId: number): void {
     this.onRoute([enrolleeId, RouteUtils.currentRoutePath(this.router.url)]);
+  }
+
+  public onRedirectCommunitySite(routePath: string | (string | number)[]): void {
+    const path = `${AdjudicationRoutes.MODULE_PATH}/${AdjudicationRoutes.SITE_REGISTRATIONS}/${routePath[0]}/${routePath[1]}/${routePath[2]}`;
+    this.router.navigate([path]);
   }
 
   public ngOnInit(): void {
