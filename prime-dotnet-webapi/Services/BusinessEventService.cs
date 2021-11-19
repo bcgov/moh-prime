@@ -190,7 +190,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreatePaperEnrolmentLinkEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.PAPER_ENROLMENT_LINK_CODE, enrolleeId, description);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.PaperEnrolmentLink, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
