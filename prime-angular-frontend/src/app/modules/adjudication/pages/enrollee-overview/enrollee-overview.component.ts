@@ -37,7 +37,6 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public showAdjudication: boolean;
   public documents: EnrolleeAdjudicationDocument[];
   public absence: EnrolleeAbsence;
-  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,
