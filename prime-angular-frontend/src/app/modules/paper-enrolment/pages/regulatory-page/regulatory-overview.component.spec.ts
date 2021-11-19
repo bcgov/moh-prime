@@ -3,6 +3,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { RegulatoryOverviewComponent } from './regulatory-overview.component';
 
+import { DefaultPipe } from '@shared/pipes/default.pipe';
+
 describe('RegulatoryOverviewComponent', () => {
   let component: RegulatoryOverviewComponent;
   let fixture: ComponentFixture<RegulatoryOverviewComponent>;
@@ -13,10 +15,11 @@ describe('RegulatoryOverviewComponent', () => {
         RouterTestingModule
       ],
       declarations: [
-        RegulatoryOverviewComponent
+        RegulatoryOverviewComponent,
+        DefaultPipe
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

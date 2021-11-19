@@ -42,7 +42,7 @@ namespace Prime.Services
                 new AddressRule(),
                 new VerifiedAddressRule(),
                 new PharmanetValidationRule(_collegeLicenceClient, _businessEventService),
-                // new DeviceProviderRule(),
+                new DeviceProviderRule(),
                 new LicenceClassRule(),
                 new AlwaysManualRule(),
                 new IdentityAssuranceLevelRule(),

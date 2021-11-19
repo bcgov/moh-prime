@@ -66,9 +66,7 @@ namespace Prime.Models
 
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
-        public string DeviceProviderNumber { get; set; }
-
-        public bool? IsInsulinPumpProvider { get; set; }
+        public string DeviceProviderIdentifier { get; set; }
 
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 
