@@ -7,7 +7,7 @@ import { forkJoin, of } from 'rxjs';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -67,9 +67,8 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     this.onRoute([enrolleeId, RouteUtils.currentRoutePath(this.router.url)]);
   }
 
-  public onRedirectCommunitySite(routePath: string | (string | number)[]): void {
-    const path = `${AdjudicationRoutes.MODULE_PATH}/${AdjudicationRoutes.SITE_REGISTRATIONS}/${routePath[0]}/${routePath[1]}/${routePath[2]}`;
-    this.router.navigate([path]);
+  public onRedirectCommunitySite(routePath: RoutePath): void {
+    this.router.navigate([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.SITE_REGISTRATIONS, ...routePath]);
   }
 
   public ngOnInit(): void {
