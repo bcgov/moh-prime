@@ -19,8 +19,6 @@ namespace Prime.ViewModels
 
         public int CurrentStatusCode { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
-
         public DateTimeOffset? AppliedDate { get; set; }
 
         public DateTimeOffset? ApprovedDate { get; set; }

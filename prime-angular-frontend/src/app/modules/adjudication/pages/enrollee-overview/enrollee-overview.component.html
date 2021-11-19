@@ -34,7 +34,7 @@
       <div *ngIf="enrollee?.linkedEnrolleeId">
         <a [routerLink]=""
            (click)="onRoute([enrollee?.linkedEnrolleeId, AdjudicationRoutes.ENROLLEE_OVERVIEW])">
-          {{ (enrolment?.enrollee.gpid | contains: paperEnrolleeGpidFilter) ? 'Linked' : 'Paper' }} Enrolment
+          {{ (enrolment?.enrollee.gpid | contains: paperEnrolleeGpidFilter) ? 'Linked' : 'Paper' }} Enrolment link
         </a>
       </div>
       <div *ngIf="absence"
