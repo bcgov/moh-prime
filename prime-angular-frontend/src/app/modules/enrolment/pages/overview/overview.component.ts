@@ -17,6 +17,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
@@ -72,7 +73,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public onSubmit(): void {
-    if (!this.enrolmentFormStateService.isValid) {
+    if (!this.enrolmentFormStateService.isValidSubmission) {
       this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
       return;
@@ -127,6 +128,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
   public onCopy(): void {
     this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
+  }
+
+  public hasErrors() {
+    const { certificateOrOboSite, deviceProviderOrOboSite } = this.getEnrolmentErrors(this.enrolment);
+    return certificateOrOboSite || deviceProviderOrOboSite;
   }
 
   public ngOnInit(): void {
@@ -196,8 +202,15 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
    * enrolment for checking validation instead of form state.
    */
   private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
+    const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
+      careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+    const hasDeviceProviderIdentifier = this.enrolmentService.enrolment.deviceProviderIdentifier;
+
     return {
-      certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length
+      certificate: !enrolment.certifications?.length,
+      certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length,
+      deviceProvider: isDeviceProvider && !hasDeviceProviderIdentifier,
+      deviceProviderOrOboSite: (isDeviceProvider && !hasDeviceProviderIdentifier) && !enrolment.oboSites?.length
     };
   }
 }

@@ -3669,7 +3669,7 @@ namespace Prime.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("DeviceProviderNumber")
+                    b.Property<string>("DeviceProviderIdentifier")
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
@@ -3696,9 +3696,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("IdentityProvider")
                         .HasColumnType("text");
-
-                    b.Property<bool?>("IsInsulinPumpProvider")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -9801,7 +9798,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 4,
-                            Name = "College License or Practitioner ID not in PharmaNet table"
+                            Name = "College License, Practitioner ID, or Device Provider ID not in PharmaNet table"
                         },
                         new
                         {
@@ -9821,7 +9818,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 8,
-                            Name = "Insulin Pump Provider"
+                            Name = "Device Provider"
                         },
                         new
                         {
@@ -10518,7 +10515,8 @@ namespace Prime.Migrations
                 {
                     b.HasOne("Prime.Models.Admin", "Admin")
                         .WithMany()
-                        .HasForeignKey("AdminId");
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.BusinessEventType", "BusinessEventType")
                         .WithMany("BusinessEvents")
@@ -10528,19 +10526,23 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
-                        .HasForeignKey("EnrolleeId");
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Organization", "Organization")
                         .WithMany()
-                        .HasForeignKey("OrganizationId");
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Party", "Party")
                         .WithMany()
-                        .HasForeignKey("PartyId");
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany()
-                        .HasForeignKey("SiteId");
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Admin");
 
