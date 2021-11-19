@@ -6,8 +6,8 @@ import { debounceTime } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { LocalStorageService } from '@core/services/local-storage.service';
+import { PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
 
 @Component({
   selector: 'app-search-form',
@@ -18,7 +18,7 @@ export class SearchFormComponent implements OnInit {
   @Input() public hideStatus: boolean;
   @Input() public localStoragePrefix: string;
   @Output() public search: EventEmitter<string>;
-  @Output() public filter: EventEmitter<EnrolmentStatusEnum>;
+  @Output() public filter: EventEmitter<StatusFilterEnum>;
   @Output() public refresh: EventEmitter<void>;
 
   public form: FormGroup;
@@ -35,13 +35,13 @@ export class SearchFormComponent implements OnInit {
   ) {
     this.statuses = this.configService.statuses;
 
-    // MacGyver paper enrollee filter into the status filter. Arbitrarily chose 42/43.
-    const unlinkedPaperStatus = new Config<number>(42, 'Unclaimed Manual (Paper) Enrollees');
-    const linkedPaperStatus = new Config<number>(43, 'Claimed Manual (Paper) Enrollees');
-    this.statuses.push(unlinkedPaperStatus, linkedPaperStatus);
+    // MacGyver paper enrollee filter into the status filter
+    const linkedPaperStatus = new Config<number>(PaperStatusEnum.LINKED_PAPER_ENROLMENT, 'Claimed Manual (Paper) Enrollees');
+    const unlinkedPaperStatus = new Config<number>(PaperStatusEnum.UNLINKED_PAPER_ENROLMENT, 'Unclaimed Manual (Paper) Enrollees');
+    this.statuses.push(linkedPaperStatus, unlinkedPaperStatus);
 
     this.search = new EventEmitter<string>();
-    this.filter = new EventEmitter<EnrolmentStatusEnum>();
+    this.filter = new EventEmitter<StatusFilterEnum>();
     this.refresh = new EventEmitter<void>();
   }
 
@@ -90,7 +90,7 @@ export class SearchFormComponent implements OnInit {
     this.statusCode.valueChanges
       .pipe(debounceTime(500))
       // Passing `null` removes the query parameter from the URL
-      .subscribe((enrolmentStatus: EnrolmentStatusEnum) => {
+      .subscribe((enrolmentStatus: StatusFilterEnum) => {
         this.localStorage.set(this.statusCodeKey, enrolmentStatus?.toString());
         this.filter.emit(enrolmentStatus || null);
       });
