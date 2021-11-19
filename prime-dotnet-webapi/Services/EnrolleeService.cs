@@ -106,26 +106,17 @@ namespace Prime.Services
                     .Id
                 );
 
+            var unlinkedPaperEnrolments = _context.Enrollees
+                .Where(e => e.GPID.StartsWith(PaperGpidPrefix)
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id));
+
             var dto = await _context.Enrollees
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
-                .ProjectTo<EnrolleeDTO>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .ProjectTo<EnrolleeDTO>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
-
-            if (dto.GPID != null && dto.GPID.StartsWith(PaperGpidPrefix))
-            {
-                dto.PossiblePaperEnrolmentMatch = false;
-            }
-            else
-            {
-                dto.PossiblePaperEnrolmentMatch = await _context.Enrollees
-                    .AsNoTracking()
-                    .AnyAsync(e => e.GPID.StartsWith(PaperGpidPrefix)
-                        && e.DateOfBirth.Date == dto.DateOfBirth.Date
-                        && !_context.EnrolleeLinkedEnrolments
-                            .Any(link => link.PaperEnrolleeId == e.Id));
-            }
 
             return _mapper.Map<EnrolleeViewModel>(dto);
         }
@@ -143,14 +134,12 @@ namespace Prime.Services
                     .Id
                 );
 
-            var unlinkedPaperEnrolments = await _context.Enrollees
-                .AsNoTracking()
+            var unlinkedPaperEnrolments = _context.Enrollees
                 .Where(e => e.GPID.StartsWith(PaperGpidPrefix)
                     && !_context.EnrolleeLinkedEnrolments
-                        .Any(link => link.PaperEnrolleeId == e.Id))
-                .ToListAsync();
+                        .Any(link => link.PaperEnrolleeId == e.Id));
 
-            var result = await _context.Enrollees
+            return await _context.Enrollees
                 .AsNoTracking()
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(e => e.FirstName,
@@ -170,17 +159,10 @@ namespace Prime.Services
                 .If(searchOptions.StatusCode.HasValue && searchOptions.StatusCode == 42, q => q
                     .Where(e => e.GPID.StartsWith("NOBCSC"))
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();
-
-            foreach (var enrollee in result)
-            {
-                enrollee.PossiblePaperEnrolmentMatch = unlinkedPaperEnrolments.Any(e => e.DateOfBirth.Date == enrollee.DateOfBirth.Date);
-            }
-
-            return result;
         }
 
         public async Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId)
