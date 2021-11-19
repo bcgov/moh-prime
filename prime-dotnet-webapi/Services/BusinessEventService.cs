@@ -27,7 +27,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateStatusChangeEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.STATUS_CHANGE_CODE, enrolleeId, description);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.StatusChange, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -41,7 +41,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateEmailEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.EMAIL_CODE, enrolleeId, description);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.Email, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -55,7 +55,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateNoteEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.NOTE_CODE, enrolleeId, description);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.Note, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -69,7 +69,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateAdminActionEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.ADMIN_ACTION_CODE, enrolleeId, description);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.AdminAction, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -83,7 +83,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateAdminViewEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.ADMIN_VIEW_CODE, enrolleeId, description);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.AdminView, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -97,7 +97,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateEnrolleeEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.ENROLLEE_CODE, enrolleeId, description);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.Enrollee, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -111,7 +111,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, int partyId, string description)
         {
-            var businessEvent = await CreateSiteBusinessEvent(BusinessEventType.SITE_CODE, siteId, partyId, description);
+            var businessEvent = await CreateSiteBusinessEvent(BusinessEventType.Site, siteId, partyId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -157,7 +157,7 @@ namespace Prime.Services
                 PartyId = partyId,
                 OrganizationId = organizationId,
                 AdminId = adminId,
-                BusinessEventTypeCode = BusinessEventType.ORGANIZATION_CODE,
+                BusinessEventTypeCode = BusinessEventType.Organization,
                 Description = description,
                 EventDate = DateTimeOffset.Now
             };
@@ -175,7 +175,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreatePharmanetApiCallEventAsync(int enrolleeId, string licencePrefix, string licenceNumber, string description)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.PHARMANET_API_CALL_CODE, enrolleeId,
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.PharmanetApiCall, enrolleeId,
                 $"Called Pharmanet API with licence prefix {licencePrefix} and licence number {licenceNumber}:  {description}");
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
