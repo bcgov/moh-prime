@@ -6,11 +6,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, EMPTY, forkJoin, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { Party } from '@lib/models/party.model';
 import { asyncValidator } from '@lib/validators/form-async.validators';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
@@ -22,8 +24,6 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
-import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 
 @Component({
   selector: 'app-site-overview',
@@ -35,17 +35,13 @@ export class SiteOverviewComponent implements OnInit {
   public hasActions: boolean;
   public organization: Organization;
   public site: Site;
-
   public refresh: BehaviorSubject<boolean>;
-
   public orgClaim: OrganizationClaim;
   public newSigningAuthority: Party;
   public businessLicences: BusinessLicence[];
   public form: FormGroup;
-
   public showSendNotification: boolean;
   public isNotificationSent: boolean;
-
   public AdjudicationRoutes = AdjudicationRoutes;
 
   private routeUtils: RouteUtils;
@@ -57,7 +53,6 @@ export class SiteOverviewComponent implements OnInit {
     protected siteResource: SiteResource,
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthSiteResource: HealthAuthoritySiteResource,
-
     private organizationResource: OrganizationResource,
     private formUtilsService: FormUtilsService,
     private fb: FormBuilder,
@@ -72,7 +67,7 @@ export class SiteOverviewComponent implements OnInit {
     return this.form.get('pec') as FormControl;
   }
 
-  public onRoute(routePath: RoutePath) {
+  public onRoute(routePath: RoutePath): void {
     this.routeUtils.routeWithin(routePath);
   }
 
@@ -149,7 +144,7 @@ export class SiteOverviewComponent implements OnInit {
     this.pec.markAsTouched();
   }
 
-  private createFormInstance() {
+  private createFormInstance(): void {
     this.form = this.fb.group({
       pec: [
         '',
@@ -159,7 +154,7 @@ export class SiteOverviewComponent implements OnInit {
     });
   }
 
-  private initForm({ pec }: Site) {
+  private initForm({ pec }: Site): void {
     this.form.patchValue({ pec });
   }
 

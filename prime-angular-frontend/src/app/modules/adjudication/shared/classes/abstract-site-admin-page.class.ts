@@ -1,14 +1,15 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+
 import { concat, EMPTY, noop, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
-import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
-import { SiteResource } from '@core/resources/site-resource.service';
 import { EmailUtils } from '@lib/utils/email-utils.class';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
-
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { AssignAction, AssignActionEnum, ClaimNoteComponent, ClaimType } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
@@ -20,7 +21,6 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
-import { SiteStatusType } from '@lib/enums/site-status.enum';
 
 export abstract class AbstractSiteAdminPage {
   public busy: Subscription;
@@ -38,7 +38,7 @@ export abstract class AbstractSiteAdminPage {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
 
-  public onRoute(routePath: RoutePath) {
+  public onRoute(routePath: RoutePath): void {
     this.routeUtils.routeWithin(routePath);
   }
 
@@ -46,12 +46,12 @@ export abstract class AbstractSiteAdminPage {
     this.getDataset(this.route.snapshot.queryParams);
   }
 
-  public onToggleFlagSite({ siteId, flagged }: { siteId: number, flagged: boolean }) {
+  public onToggleFlagSite({ siteId, flagged }: { siteId: number, flagged: boolean }): void {
     this.busy = this.siteResource.flagSite(siteId, flagged)
       .subscribe(() => this.updateSite(siteId, { flagged }));
   }
 
-  public onAssign(siteId: number) {
+  public onAssign(siteId: number): void {
     const data: DialogOptions = {
       title: 'Assign Site',
       component: ManualFlagNoteComponent,
@@ -83,7 +83,7 @@ export abstract class AbstractSiteAdminPage {
       .subscribe(() => this.onRefresh());
   }
 
-  public onReassign(siteId: number) {
+  public onReassign(siteId: number): void {
     const data: DialogOptions = {
       title: 'Reassign Site',
       component: ManualFlagNoteComponent,
@@ -122,7 +122,7 @@ export abstract class AbstractSiteAdminPage {
       .subscribe(() => this.onRefresh());
   }
 
-  public onNotify({ siteId, healthAuthorityOrganizationId }: { siteId: number, healthAuthorityOrganizationId?: HealthAuthorityEnum }) {
+  public onNotify({ siteId, healthAuthorityOrganizationId }: { siteId: number, healthAuthorityOrganizationId?: HealthAuthorityEnum }): void {
     const request$ = (healthAuthorityOrganizationId)
       ? this.healthAuthSiteResource.getHealthAuthoritySiteContacts(healthAuthorityOrganizationId, siteId)
       : this.siteResource.getSiteContacts(siteId);
@@ -143,7 +143,7 @@ export abstract class AbstractSiteAdminPage {
       .subscribe((email: string) => EmailUtils.openEmailClient(email));
   }
 
-  public onEscalate(siteId: number) {
+  public onEscalate(siteId: number): void {
     const data: DialogOptions = {
       data: {
         id: siteId,
@@ -155,7 +155,7 @@ export abstract class AbstractSiteAdminPage {
       .subscribe((result: { reload: boolean }) => (result?.reload) ? this.getDataset(this.route.snapshot.queryParams) : noop);
   }
 
-  public onApprove(siteId: number) {
+  public onApprove(siteId: number): void {
     const data: DialogOptions = {
       title: 'Approve Site Registration',
       message: 'Are you sure you want to approve this Registration?',
@@ -187,7 +187,7 @@ export abstract class AbstractSiteAdminPage {
       .subscribe(() => this.onRefresh());
   }
 
-  public onDecline(siteId: number) {
+  public onDecline(siteId: number): void {
     const data: DialogOptions = {
       title: 'Decline Site Registration',
       message: 'Are you sure you want to Decline this Site Registration?',
@@ -220,12 +220,12 @@ export abstract class AbstractSiteAdminPage {
       .subscribe(() => this.onRefresh());
   }
 
-  public onEnableEditing(siteId: number) {
+  public onEnableEditing(siteId: number): void {
     this.busy = this.siteResource.enableEditingSite(siteId)
       .subscribe(() => this.onRefresh());
   }
 
-  public onUnreject(siteId: number) {
+  public onUnreject(siteId: number): void {
     this.busy = this.siteResource.unrejectSite(siteId)
       .subscribe(() => this.onRefresh());
   }

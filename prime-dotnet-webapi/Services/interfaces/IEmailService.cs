@@ -21,12 +21,12 @@ namespace Prime.Services
         Task SendSiteApprovedPharmaNetAdministratorAsync(string doingBusinessAs, string pec, string administratorPharmaNetEmail);
         Task SendSiteApprovedSigningAuthorityAsync(string doingBusinessAs, string pec, string provisionerEmail);
         Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode);
+        Task SendHealthAuthoritySiteRegistrationSubmissionAsync(int siteId);
         Task SendSiteReviewedNotificationAsync(int siteId, string note);
         Task SendSiteActiveBeforeRegistrationAsync(int siteId);
-
         Task SendEnrolleeRenewalEmails();
         Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim);
-
         Task<int> UpdateEmailLogStatuses(int limit);
+        Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId);
     }
 }

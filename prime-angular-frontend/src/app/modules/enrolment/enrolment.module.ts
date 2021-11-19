@@ -12,7 +12,6 @@ import { IdSubmissionComponent } from './pages/id-submission/id-submission.compo
 import { BceidDemographicComponent } from './pages/bceid-demographic/bceid-demographic.component';
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
-import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
@@ -49,7 +48,6 @@ import { AbsenceManagementPageComponent } from './pages/absence-management-page/
     BceidDemographicComponent,
     BcscDemographicComponent,
     RegulatoryComponent,
-    DeviceProviderComponent,
     OboSitesPageComponent,
     RemoteAccessComponent,
     SelfDeclarationComponent,

@@ -39,10 +39,19 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        private void UpdateDeviceProvider(Enrollee enrollee, bool provider = false, bool pumpProvider = false)
+        private void UpdateDeviceProvider(Enrollee enrollee, bool provider, bool isProviderInCareSetting)
         {
-            enrollee.DeviceProviderNumber = provider ? TestUtils.RandomDeviceProviderNumber() : null;
-            enrollee.IsInsulinPumpProvider = pumpProvider;
+            enrollee.DeviceProviderIdentifier = provider ? TestUtils.RandomDeviceProviderIdentifier() : null;
+            if (provider || isProviderInCareSetting) {
+                enrollee.EnrolleeCareSettings.Add(new EnrolleeCareSetting{
+                    CareSettingCode = (int)CareSettingType.DeviceProvider
+                });
+            } else {
+                var deviceProviderEntry = enrollee.EnrolleeCareSettings.SingleOrDefault(ecs => ecs.IsType(CareSettingType.DeviceProvider));
+                if (deviceProviderEntry != null) {
+                    enrollee.EnrolleeCareSettings.Remove(deviceProviderEntry);
+                }
+            }
         }
 
         [Flags]
@@ -290,13 +299,13 @@ namespace PrimeTests.UnitTests
         [InlineData(true, false, false)]
         [InlineData(false, true, false)]
         [InlineData(true, true, false)]
-        public async void TestPumpProviderRule(bool isProvider, bool isPumpProvider, bool expected)
+        public async void TestDeviceProviderRule(bool isProvider, bool isProviderInCareSetting, bool expected)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
-            UpdateDeviceProvider(enrollee, isProvider, isPumpProvider);
+
+            UpdateDeviceProvider(enrollee, isProvider, isProviderInCareSetting);
 
             var rule = new DeviceProviderRule();
-
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             if (expected)
             {
@@ -304,7 +313,7 @@ namespace PrimeTests.UnitTests
             }
             else
             {
-                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.PumpProvider);
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.DeviceProvider);
             }
         }
 
