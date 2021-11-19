@@ -15,6 +15,7 @@ import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.mo
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { RoutePath } from '@lib/utils/route-utils.class';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -128,7 +129,7 @@ export class EnrolleeReviewComponent {
     return ras.site.siteVendors?.length ? ras.site.siteVendors[0].vendorCode : null;
   }
 
-  public onRoute(routePath: string | (string | number)[], event?: Event): void {
+  public onRoute(routePath: RoutePath, event?: Event): void {
     event?.preventDefault();
     this.route.emit(routePath);
   }
