@@ -11,11 +11,9 @@ import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-enrollee-review',
