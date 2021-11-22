@@ -180,7 +180,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return RedirectToAction(nameof(GetEnrolleeById), new { enrolleeId = enrollee.Id });
+            return Redirect($"{PrimeConfiguration.Current.BackendUrl}/enrollees/{enrollee.Id}");
         }
 
         // PUT: api/enrollees/5
