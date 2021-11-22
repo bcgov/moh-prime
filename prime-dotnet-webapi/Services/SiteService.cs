@@ -37,15 +37,31 @@ namespace Prime.Services
                 .Where(site => site.Id == siteId)
                 .Select(site => new
                 {
-                    site.CareSettingCode,
-                    site.PEC
+                    site.PEC,
+                    healthAuthorityId = (int?)(site as HealthAuthoritySite).HealthAuthorityOrganizationId
                 })
                 .SingleAsync();
 
-            if (siteDto.CareSettingCode == (int)CareSettingType.HealthAuthority
-                || siteDto.PEC == pec)
+            if (siteDto.PEC == pec)
             {
                 return true;
+            }
+
+            if (siteDto.healthAuthorityId.HasValue)
+            {
+                var sites = await _context.Sites
+                    .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
+                    .AnyAsync();
+
+                var otherHealthAuthoritySites = await _context.HealthAuthoritySites
+                    .AsNoTracking()
+                    .Where(
+                        s => s.PEC == pec
+                        && s.HealthAuthorityOrganizationId != siteDto.healthAuthorityId
+                        )
+                    .AnyAsync();
+
+                return !sites && !otherHealthAuthoritySites;
             }
 
             return !await _context.Sites
@@ -307,6 +323,13 @@ namespace Prime.Services
             {
             }
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> SiteExists(int siteId)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .AnyAsync(s => s.Id == siteId);
         }
     }
 }
