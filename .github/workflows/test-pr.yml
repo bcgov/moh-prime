@@ -168,7 +168,8 @@ jobs:
 
     steps:
       - name: Clean-up
-        run: |          
+        run: |
+          ls -l          
           rm frontend.json 
           rm backend.json
           rm ./coverage/codeclimate.json
