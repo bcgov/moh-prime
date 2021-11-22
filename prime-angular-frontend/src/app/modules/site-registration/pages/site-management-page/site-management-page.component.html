@@ -44,20 +44,17 @@
     </app-page-subheader2>
   </section>
 
-  <ng-container *ngFor="let organization of organizations; let first = first">
+  <ng-container *ngIf="organization">
 
     <app-summary-card icon="business"
                       title="Organization Information"
                       [menu]="organizationMenu"
                       [menuOutletContext]="{ organization: organization }"
-                      [properties]="getOrganizationProperties(organization)">
-    </app-summary-card>
+                      [properties]="getOrganizationProperties(organization)"></app-summary-card>
 
-    <hr *ngIf="first"
-        class="divider">
+    <hr class="divider">
 
-    <div *ngIf="first"
-         class="add-site">
+    <div class="add-site">
       <button mat-button
               type="button"
               color="primary"

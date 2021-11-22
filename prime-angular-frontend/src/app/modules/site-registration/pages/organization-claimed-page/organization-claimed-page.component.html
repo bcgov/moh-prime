@@ -1,0 +1,26 @@
+<app-page>
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+
+  <div class="mb-4">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        You have already successfully claimed an Organization
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
+        <p>
+          It looks like you are looking to claim an organization, but you already have one.
+          Click <a href="#" (click)="onRoute($event)">here</a> to see your current sites.
+        </p>
+      </ng-container>
+    </app-page-subheader2>
+  </section>
+</app-page>
