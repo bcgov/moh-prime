@@ -280,14 +280,14 @@ namespace Prime.Services.Rules
                 if (paperEnrolleeMatchId == -1)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Possible match with paper enrolment: birthdate matches enrolment: {paperEnrolleeIdsAsString}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment: {paperEnrolleeIdsAsString}");
                     return false;
                 }
                 // if a match is found, link to paper enrolment and confirm the linkage here, if failed to link we add status reason.
                 if (!await _enrolleePaperSubmissionService.LinkEnrolleeToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId))
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.UnableToLinkToPaperEnrolment, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Possible match with paper enrolment: birthdate matches enrolment: {paperEnrolleeMatchId}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment: {paperEnrolleeMatchId}");
                     return false;
                 }
                 return true;
@@ -296,7 +296,7 @@ namespace Prime.Services.Rules
             else
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch);
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Possible match with paper enrolment: birthdate matches enrolment: {paperEnrolleeIdsAsString}");
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment: {paperEnrolleeIdsAsString}");
                 return false;
             }
         }
