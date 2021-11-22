@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
+using Npgsql;
 using Serilog;
 
 using Prime;
@@ -43,6 +45,17 @@ namespace create_mock_data
                     }
                     dbContext.SaveChanges();
                     Log.Information($"Completed generating enrollees at {DateTime.Now}");
+
+                    // Update database's Enrollee sequence so can create Enrollees through application as per normal usage 
+                    using (var conn = dbContext.Database.GetDbConnection()) 
+                    {                    
+                        conn.Open();
+                        using (var cmd = new NpgsqlCommand($"ALTER SEQUENCE public.\"Enrollee_Id_seq\" RESTART WITH {EnrolleeFactory.IdCounter};", conn as NpgsqlConnection))
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    Log.Information($"Updated Enrollee sequence to {EnrolleeFactory.IdCounter}");
                 }
                 catch (Exception e)
                 {

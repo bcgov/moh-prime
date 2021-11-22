@@ -180,7 +180,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return RedirectToAction(nameof(GetEnrolleeById), new { enrolleeId = enrollee.Id });
+            return Redirect(Flurl.Url.Combine(PrimeConfiguration.Current.BackendUrl, "enrollees", enrollee.Id.ToString()));
         }
 
         // PUT: api/enrollees/5

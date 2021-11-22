@@ -12,7 +12,6 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 
 @Component({
@@ -40,7 +39,7 @@ export class ElectronicOrganizationAgreementPageComponent implements OnInit {
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_MANAGEMENT);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATIONS);
   }
 
   public onSubmit(): void {
