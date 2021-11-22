@@ -159,3 +159,16 @@ jobs:
         with:
           name: summed
           path: ./coverage/codeclimate.json
+
+
+  cleanup-coverage-artifacts:
+    needs: codeclimate-sum-coverage
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clean-up
+        run: |          
+          rm frontend.json 
+          rm backend.json
+          rm ./coverage/codeclimate.json
