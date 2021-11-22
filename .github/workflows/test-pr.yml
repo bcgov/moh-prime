@@ -66,7 +66,7 @@ jobs:
         with:
           name: frontend
           path: ./prime-angular-frontend/coverage/frontend.json
-
+          retention-days: 1
 
   
   collect-backend-coverage:
@@ -125,6 +125,8 @@ jobs:
         with:
           name: backend
           path: ./prime-dotnet-webapi-tests/coverage/backend.json
+          retention-days: 1
+          
 
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
@@ -159,6 +161,7 @@ jobs:
         with:
           name: summed
           path: ./coverage/codeclimate.json
+          retention-days: 1
 
 
   cleanup-coverage-artifacts:
@@ -169,7 +172,7 @@ jobs:
     steps:
       - name: Clean-up
         run: |
-          ls -l          
-          rm frontend.json 
-          rm backend.json
-          rm ./coverage/codeclimate.json
+          # ls -l          
+          # rm frontend.json 
+          # rm backend.json
+          # rm ./coverage/codeclimate.json
