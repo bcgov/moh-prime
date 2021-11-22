@@ -2,6 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ActivatedRoute } from '@angular/router';
 
 import { KeycloakService } from 'keycloak-angular';
 
@@ -17,6 +18,16 @@ import { CollectionNoticePageComponent } from './collection-notice-page.componen
 describe('CollectionNoticePageComponent', () => {
   let component: CollectionNoticePageComponent;
   let fixture: ComponentFixture<CollectionNoticePageComponent>;
+  const mockActivatedRoute = {
+    snapshot: {
+      data: {
+        title: 'Collection Notice',
+        redirectRouteSegments: {
+          nextRoute: SiteRoutes.ORGANIZATIONS
+        }
+      }
+    }
+  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -25,7 +36,7 @@ describe('CollectionNoticePageComponent', () => {
         SiteRegistrationModule,
         RouterTestingModule.withRoutes([
           {
-            path: SiteRoutes.SITE_MANAGEMENT,
+            path: SiteRoutes.ORGANIZATIONS,
             children: [
               {
                 path: ':oid',
@@ -48,6 +59,10 @@ describe('CollectionNoticePageComponent', () => {
         {
           provide: OrganizationService,
           useClass: MockOrganizationService
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute
         },
         KeycloakService
       ],
