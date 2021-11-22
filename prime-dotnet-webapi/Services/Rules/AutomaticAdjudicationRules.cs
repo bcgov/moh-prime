@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Prime.Configuration.Auth;
 using Prime.Models;
@@ -254,6 +255,7 @@ namespace Prime.Services.Rules
             var paperEnrollees = await _enrolleePaperSubmissionService.GetPotentialPaperEnrolleeReturneesAsync(enrollee.DateOfBirth);
             var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
             var paperEnrolleeMatchId = -1;
+            var paperEnrolleeIdsAsString = CreateIdsString(paperEnrollees);
 
             // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
 
@@ -278,12 +280,14 @@ namespace Prime.Services.Rules
                 if (paperEnrolleeMatchId == -1)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Possible match with paper enrolment: birthdate matches enrolment: {paperEnrolleeIdsAsString}");
                     return false;
                 }
-                // if match link to paper enrolment and confirm the linkage here, if failed to link we add status reason.
+                // if a match is found, link to paper enrolment and confirm the linkage here, if failed to link we add status reason.
                 if (!await _enrolleePaperSubmissionService.LinkEnrolleeToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId))
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.UnableToLinkToPaperEnrolment, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Possible match with paper enrolment: birthdate matches enrolment: {paperEnrolleeMatchId}");
                     return false;
                 }
                 return true;
@@ -292,8 +296,31 @@ namespace Prime.Services.Rules
             else
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch);
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Possible match with paper enrolment: birthdate matches enrolment: {paperEnrolleeIdsAsString}");
                 return false;
             }
+        }
+
+        static private string CreateIdsString(IEnumerable<Enrollee> paperEnrollees)
+        {
+            var paperEnrolleeIdsAsString = "";
+
+            for (var i = 0; i < paperEnrollees.Count(); ++i)
+            {
+                if (i > 0)
+                {
+                    paperEnrolleeIdsAsString += ", ";
+                }
+
+                paperEnrolleeIdsAsString += paperEnrollees.ElementAt(i).Id;
+
+                if (i == (paperEnrollees.Count() - 1))
+                {
+                    paperEnrolleeIdsAsString += ".";
+                }
+            }
+
+            return paperEnrolleeIdsAsString;
         }
     }
 }
