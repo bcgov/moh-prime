@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Services;
 using Prime.Models.Api;
@@ -215,6 +215,20 @@ namespace Prime.Controllers
             return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.RerunRules);
         }
 
+        // POST: api/enrollees/rerun-rules
+        /// <summary>
+        /// Re-runs the automatic adjudication rules for all applicable Enrollees.
+        /// </summary>
+        [HttpPost("rerun-rules", Name = nameof(RerunAutomaticAdjudicationRules))]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> RerunAutomaticAdjudicationRules()
+        {
+            await _submissionService.BulkRerunRulesAsync();
+            return Ok();
+        }
+
         private async Task<ActionResult> EnrolleeStatusActionInternal(int enrolleeId, EnrolleeStatusAction action, object additionalParameters = null)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
@@ -237,7 +251,7 @@ namespace Prime.Controllers
             return Ok(enrollee);
         }
 
-        // PUT: api/Enrollees/5/submissions/latest/type
+        // PUT: api/enrollees/5/submissions/latest/type
         /// <summary>
         /// Assign a TOA agreement type to the latest submission.
         /// </summary>

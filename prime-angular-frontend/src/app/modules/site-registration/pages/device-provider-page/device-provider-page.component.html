@@ -1,0 +1,103 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+
+  <app-page-subheader2>
+    <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+    <ng-container appPageSubheader2Summary>
+      These are individuals who perform device fitting, construction, etc. and may submit calims to Pharmanet or
+      instruct clerical or administrative staff to submit claims on their behalf. Enter the names of the individuals
+      who perfom this work at your site, as they appear on their BC Services Cards.
+    </ng-container>
+  </app-page-subheader2>
+
+  <app-page-section>
+
+    <ng-container *ngIf="formState.json">
+      <ng-container *ngIf="isEditing || !formState.json?.length; else showList">
+
+        <form (ngSubmit)="onSubmit()"
+              [formGroup]="form">
+
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="First Name"
+                       formControlName="firstName">
+                <mat-error *ngIf="form.get('firstName').hasError('required')">Required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Middle Name (Optional)"
+                       formControlName="middleName">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Last Name"
+                       formControlName="lastName">
+                <mat-error *ngIf="form.get('lastName').hasError('required')">Required</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Date of Birth"
+                       [max]="maxDateOfBirth"
+                       [matDatepicker]="dobDatePicker"
+                       formControlName="dateOfBirth"
+                       (click)="dobDatePicker.open()"
+                       readonly>
+                <mat-datepicker-toggle matSuffix
+                                       [for]="dobDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #dobDatePicker
+                                startView="multi-year"
+                                disabled="false"></mat-datepicker>
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Email"
+                       formControlName="email">
+                <mat-error *ngIf="form.get('email').hasError('required')">Required</mat-error>
+                <mat-error *ngIf="form.get('email').hasError('email')">Must be a valid email address</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </form>
+
+      </ng-container>
+    </ng-container>
+
+    <ng-template #showList>
+
+      <app-page-section>
+        <app-card-list itemTypeLabel="Individual Device Provider"
+                       [items]="contactCardListItems"
+                       [allowRemove]="true"
+                       (add)="onAdd()"
+                       (edit)="onEdit($event)"
+                       (remove)="onRemove($event)"></app-card-list>
+      </app-page-section>
+
+    </ng-template>
+  </app-page-section>
+
+  <app-page-footer [hasSecondaryAction]="true"
+                   [primaryActionLabel]="(isEditing) ? 'Continue' : 'Save and Continue'"
+                   (save)="(isEditing) ? onContinue() : onSubmit()"
+                   (back)="(isEditing) ? onCancel() : onBack()"></app-page-footer>
+</app-page>

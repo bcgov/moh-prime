@@ -2,17 +2,18 @@ import * as faker from 'faker';
 
 import { BehaviorSubject } from 'rxjs';
 
+import { Address } from '@lib/models/address.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
-import { Address } from '@shared/models/address.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 export class MockEnrolmentService implements IEnrolmentService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _enrolment: BehaviorSubject<Enrolment>;
+  private _isPotentialPaperEnrollee: boolean;
 
   constructor() {
     // TODO default enrolment should be refactored into methods to provide enrolments with different statuses
@@ -117,7 +118,6 @@ export class MockEnrolmentService implements IEnrolmentService {
       },
       currentTOAStatus: null,
       assignedTOAType: null,
-      hasNewestAgreement: false,
       enrolleeClassification: EnrolleeClassification.OBO,
       enrolmentCertificateNote: null,
       accessAgreementNote: null,
@@ -129,7 +129,8 @@ export class MockEnrolmentService implements IEnrolmentService {
       base64QRCode: null,
       confirmed: false,
       requiresConfirmation: false,
-      jobs: [{ title: faker.name.jobTitle() }]
+      jobs: [{ title: faker.name.jobTitle() }],
+      adjudicatorIdir: null
     });
   }
 
@@ -151,5 +152,9 @@ export class MockEnrolmentService implements IEnrolmentService {
 
   public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
     return true;
+  }
+
+  public get isPotentialPaperEnrollee(): boolean {
+    return this._isPotentialPaperEnrollee;
   }
 }

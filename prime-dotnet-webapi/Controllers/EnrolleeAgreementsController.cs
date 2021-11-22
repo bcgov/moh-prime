@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Services;
 using Prime.Models.Api;
@@ -43,7 +43,7 @@ namespace Prime.Controllers
             _pdfService = pdfService;
         }
 
-        // GET: api/Enrollees/5/agreements
+        // GET: api/enrollees/5/agreements
         /// <summary>
         /// Get a list of the enrollee's agreements.
         /// </summary>
@@ -76,7 +76,7 @@ namespace Prime.Controllers
             return Ok(agreements);
         }
 
-        // GET: api/Enrollees/5/cards
+        // GET: api/enrollees/5/cards
         /// <summary>
         /// Get a list of the enrollee's enrolment card view models.
         /// </summary>
@@ -125,7 +125,7 @@ namespace Prime.Controllers
             return Ok(enrolmentCards);
         }
 
-        // GET: api/Enrollees/5/agreements/2
+        // GET: api/enrollees/5/agreements/2
         /// <summary>
         /// Get a specific agreement for an enrollee.
         /// </summary>
@@ -163,7 +163,7 @@ namespace Prime.Controllers
             return Ok(agreement);
         }
 
-        // GET: api/Enrollees/5/agreements/3/submission
+        // GET: api/enrollees/5/agreements/3/submission
         /// <summary>
         /// Get the submission for a given agreement.
         /// </summary>
@@ -207,7 +207,7 @@ namespace Prime.Controllers
             return Ok(enrolleeSubmission);
         }
 
-        // GET: api/Enrollees/5/agreements/2/signable
+        // GET: api/enrollees/5/agreements/2/signable
         /// <summary>
         /// Downloads a specific unsigned access term for an enrollee.
         /// </summary>

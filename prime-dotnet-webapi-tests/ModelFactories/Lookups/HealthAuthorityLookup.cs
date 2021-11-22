@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Prime.Configuration;
+using Prime.Configuration.Database;
 using Prime.Models;
 
 namespace PrimeTests.ModelFactories
@@ -8,6 +8,6 @@ namespace PrimeTests.ModelFactories
     {
         private static IEnumerable<HealthAuthority> _seedData = new HealthAuthorityConfiguration().SeedData;
 
-        public static IEnumerable<HealthAuthority> All  { get { return _seedData; }  }
+        public static IEnumerable<HealthAuthority> All { get { return _seedData; } }
     }
 }

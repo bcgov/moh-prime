@@ -1,16 +1,17 @@
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 
 import { Party } from '@lib/models/party.model';
 import { Contact } from '@lib/models/contact.model';
-import { Address } from '@shared/models/address.model';
+import { Address } from '@lib/models/address.model';
+import { RemoteUser } from '@lib/models/remote-user.model';
+import { BusinessDay } from '@lib/models/business-day.model';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { Admin } from '@auth/shared/models/admin.model';
-
 import { Vendor } from './vendor.model';
-import { RemoteUser } from './remote-user.model';
-import { BusinessDay } from './business-day.model';
 import { BusinessLicence } from './business-licence.model';
-import { SiteStatusType } from '../enum/site-status.enum';
+import { IndividualDeviceProvider } from './individual-device-provider.model';
 
+// TODO rename to CommunitySite and split out common properties to Site interface
 export class Site {
   id?: number;
   organizationId: number;
@@ -32,6 +33,7 @@ export class Site {
   privacyOfficer: Contact;
   technicalSupportId?: number;
   technicalSupport: Contact;
+  individualDeviceProviders: IndividualDeviceProvider[];
   // States -----
   // Indicates that a user has progressed through the entire enrolment, and
   // reached the overview page switching them from wizard to spoking navigation
@@ -44,6 +46,7 @@ export class Site {
   status: SiteStatusType;
   pec: string;
   flagged: boolean;
+  activeBeforeRegistration: boolean;
 
   public static getExpiryDate(site: Site | SiteListViewModel): string | null {
     if (!site) {

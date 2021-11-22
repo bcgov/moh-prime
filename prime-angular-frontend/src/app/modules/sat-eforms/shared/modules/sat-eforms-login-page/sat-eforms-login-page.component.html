@@ -1,0 +1,31 @@
+<app-dashboard-header></app-dashboard-header>
+
+<app-simple-access [title]="title"
+                   [loginLabel]="loginLabel"
+                   [disableLogin]="disableLogin"
+                   (login)="onLogin()">
+
+  <div class="row">
+    <div class="col col-lg-6 pb-3">
+      <p>
+        Healthcare professionals in BC can enrol with this application to get access to the PharmaCare Special
+        Authority eForms application. After you enrol here, you will be able to log into PharmaCare Special
+        Authority eForms with your <a [href]="bcscMobileSetupUrl"
+                                      target="_blank"
+                                      rel="noopener noreferrer">BC Services Card</a>.
+      </p>
+      <p>
+        If you do not have your mobile BC Services Card set up, please visit the BC Services Card website for
+        instructions.
+      </p>
+      <p>
+        If you are not eligible for a BC Services Card, you can access fill-print-fax versions of the PharmaCare
+        Special Authority forms on the
+        <a href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/prescribers/special-authority/special-authority-request-forms-drugs-medical-devices-and-supplies"
+           target="_blank"
+           rel="noopener noreferrer">PharmaCare website</a> for prescribers.
+      </p>
+    </div>
+  </div>
+
+</app-simple-access>

@@ -2,7 +2,7 @@ using System.Security.Claims;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Infrastructure;
 
@@ -40,7 +40,7 @@ namespace Prime.ViewModels
 
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
-        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
+        public ICollection<RemoteAccessSiteUpdateModel> RemoteAccessSites { get; set; }
 
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 

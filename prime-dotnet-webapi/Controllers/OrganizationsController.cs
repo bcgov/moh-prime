@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -20,38 +20,37 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class OrganizationsController : PrimeControllerBase
     {
-        private readonly IOrganizationService _organizationService;
-
-        private readonly IOrganizationAgreementService _organizationAgreementService;
-        private readonly IPartyService _partyService;
-        private readonly IDocumentService _documentService;
-        private readonly ISiteService _siteService;
-        private readonly IOrganizationClaimService _organizationClaimService;
-        private readonly IBusinessEventService _businessEventService;
         private readonly IAdminService _adminService;
+        private readonly IBusinessEventService _businessEventService;
+        private readonly ICommunitySiteService _communitySiteService;
+        private readonly IDocumentService _documentService;
         private readonly IEmailService _emailService;
+        private readonly IOrganizationAgreementService _organizationAgreementService;
+        private readonly IOrganizationClaimService _organizationClaimService;
+        private readonly IOrganizationService _organizationService;
+        private readonly IPartyService _partyService;
 
 
         public OrganizationsController(
-            IOrganizationService organizationService,
-            IOrganizationAgreementService organizationAgreementService,
-            IPartyService partyService,
-            IDocumentService documentService,
-            ISiteService siteService,
-            IOrganizationClaimService organizationClaimService,
-            IBusinessEventService businessEventService,
             IAdminService adminService,
-            IEmailService emailService)
+            IBusinessEventService businessEventService,
+            ICommunitySiteService communitySiteService,
+            IDocumentService documentService,
+            IEmailService emailService,
+            IOrganizationAgreementService organizationAgreementService,
+            IOrganizationClaimService organizationClaimService,
+            IOrganizationService organizationService,
+            IPartyService partyService)
         {
-            _organizationService = organizationService;
-            _organizationAgreementService = organizationAgreementService;
-            _partyService = partyService;
-            _documentService = documentService;
-            _siteService = siteService;
-            _organizationClaimService = organizationClaimService;
-            _businessEventService = businessEventService;
             _adminService = adminService;
+            _businessEventService = businessEventService;
+            _communitySiteService = communitySiteService;
+            _documentService = documentService;
             _emailService = emailService;
+            _organizationAgreementService = organizationAgreementService;
+            _organizationClaimService = organizationClaimService;
+            _organizationService = organizationService;
+            _partyService = partyService;
         }
 
         // GET: api/Organizations
@@ -67,7 +66,7 @@ namespace Prime.Controllers
         {
             var organizations = await _organizationService.GetOrganizationsAsync(search);
 
-            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
+            var notifiedIds = await _communitySiteService.GetNotifiedSiteIdsForAdminAsync(User);
             foreach (var site in organizations.Select(o => o.Organization).SelectMany(o => o.Sites))
             {
                 site.HasNotification = notifiedIds.Contains(site.Id);
@@ -218,6 +217,9 @@ namespace Prime.Controllers
             var notificationRequired = existingSigningAuthorityId != orgClaim.NewSigningAuthorityId;
 
             await _organizationService.SwitchSigningAuthorityAsync(organizationId, orgClaim.NewSigningAuthorityId);
+            await _organizationService.RemoveUnsignedOrganizationAgreementsAsync(organizationId);
+            await _organizationService.FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(organizationId);
+
             await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
 
             if (notificationRequired)
@@ -328,7 +330,7 @@ namespace Prime.Controllers
             return Ok(agreements);
         }
 
-        // POST: api/Organizations/5/agreements/update
+        // POST: api/Organizations/5/agreements/4
         /// <summary>
         /// Creates a new un-accepted Organization Agreement based on the Care Setting supplied, if a newer version exits
         /// or if the signing authority has changed.
@@ -400,34 +402,6 @@ namespace Prime.Controllers
             var careSettingCodes = await _organizationService.GetCareSettingCodesForPendingTransferAsync(organizationId, organization.SigningAuthorityId);
 
             return Ok(careSettingCodes);
-        }
-
-        // PUT: api/Organizations/5/finalize-transfer
-        /// <summary>
-        /// Clear Pending Transfer Flag on an organization.
-        /// </summary>
-        /// <param name="organizationId"></param>
-        [HttpPut("{organizationId}/finalize-transfer", Name = nameof(FinalizeTransfer))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> FinalizeTransfer(int organizationId)
-        {
-            var organization = await _organizationService.GetOrganizationAsync(organizationId);
-            if (organization == null)
-            {
-                return NotFound($"Organization not found with id {organizationId}");
-            }
-            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
-            {
-                return Forbid();
-            }
-
-            await _organizationService.FinalizeTransferAsync(organizationId);
-
-            return NoContent();
         }
 
         // GET: api/Organizations/5/agreements/7
@@ -525,6 +499,11 @@ namespace Prime.Controllers
             }
 
             await _organizationService.AcceptOrgAgreementAsync(organizationId, agreementId);
+
+            if (organization.PendingTransfer && await _organizationService.IsOrganizationTransferCompleteAsync(organizationId))
+            {
+                await _organizationService.FinalizeTransferAsync(organizationId);
+            }
 
             return NoContent();
         }

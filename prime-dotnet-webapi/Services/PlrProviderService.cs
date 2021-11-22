@@ -61,8 +61,13 @@ namespace Prime.Services
             return existingPlrProvider == null ? dataObject.Id : existingPlrProvider.Id;
         }
 
-        public async Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdsAsync(IEnumerable<string> collegeIds)
+        public async Task<IEnumerable<PlrViewModel>> GetMatchingPlrDataAsync(IEnumerable<string> collegeIds)
         {
+            if (collegeIds == null || !collegeIds.Any())
+            {
+                return Enumerable.Empty<PlrViewModel>();
+            }
+
             IQueryable<PlrRoleType> plrRoleTypes = _context.Set<PlrRoleType>();
             IQueryable<PlrStatusReason> plrStatusReasons = _context.Set<PlrStatusReason>();
 
@@ -72,12 +77,38 @@ namespace Prime.Services
                 .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
                 .ToListAsync();
 
+            // If a PlrViewModel has ExpertiseCodes, translate the codes to human-readable text
             // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manually before return
             return plr.Select(p =>
                 {
-                    p.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e => p.ExpertiseCode.Contains(e.Code)).Select(e => e.Name));
+                    p.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e =>
+                        (p.ExpertiseCode != null && p.ExpertiseCode.Contains(e.Code))).Select(e => e.Name));
                     return p;
                 });
+        }
+
+
+        public async Task<bool> PartyExistsInPlrWithCollegeIdAndNameAsync(int partyId)
+        {
+            var party = await _context.Parties
+                .Where(p => p.Id == partyId)
+                .Select(p => new
+                {
+                    p.FirstName,
+                    p.LastName,
+                    p.PreferredFirstName,
+                    p.PreferredLastName,
+                    Licenses = p.PartyCertifications.Select(cert => cert.LicenseNumber)
+                })
+                .SingleOrDefaultAsync();
+
+            return await _context.PlrProviders
+                .Where(
+                    p => party.Licenses.Contains(p.CollegeId)
+                    && ((p.FirstName == party.FirstName && p.LastName == party.LastName)
+                    || (party.PreferredFirstName != null && p.FirstName == party.PreferredFirstName && p.LastName == party.PreferredLastName))
+                )
+                .AnyAsync();
         }
 
         private async Task TranslateIdentifierTypeAsync(PlrProvider dataObject)

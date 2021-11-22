@@ -2,17 +2,19 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, pipe, from, EMPTY, of } from 'rxjs';
-import { catchError, exhaustMap, map } from 'rxjs/operators';
+import { Observable, pipe, from, of, UnaryFunction, OperatorFunction } from 'rxjs';
+import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { Address } from '@lib/models/address.model';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Address } from '@shared/models/address.model';
+import { Enrollee } from '@shared/models/enrollee.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -38,11 +40,13 @@ export interface IBaseEnrolmentProfilePage {
    * Local copy of the enrolment for use in views.
    */
   enrolment: Enrolment;
+
   /**
    * @description
    * Handle submission of forms.
    */
   onSubmit(): void;
+
   /**
    * @description
    * Handle redirection from the view when the form is
@@ -60,16 +64,18 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    */
   public formState: AbstractFormState<unknown>;
   /**
+   * @deprecated
+   *
    * @description
    * Instance of the form loaded from the form state.
    */
   public form: FormGroup;
-
   public enrolment: Enrolment;
+  public routeUtils: RouteUtils;
 
   protected allowRoutingWhenDirty: boolean;
 
-  constructor(
+  protected constructor(
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
@@ -85,6 +91,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     super(route, router);
 
     this.allowRoutingWhenDirty = false;
+    this.routeUtils = new RouteUtils(route, router, EnrolmentRoutes.MODULE_PATH);
   }
 
   public onSubmit(beenThroughTheWizard: boolean = false): void {
@@ -100,12 +107,38 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty && !this.allowRoutingWhenDirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      ? this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          map((result: boolean) => {
+            this.handleDeactivation(result);
+            return result;
+          })
+        )
       : true;
   }
 
+  public onBack(route: string) {
+    this.routeUtils.routeTo([EnrolmentRoutes.MODULE_PATH, this.isProfileComplete
+      ? EnrolmentRoutes.OVERVIEW
+      : route]);
+  }
+
   protected abstract createFormInstance(): void;
+
   protected abstract initForm(): void;
+
+  /**
+   * @description
+   * Deactivation guard hook to allow for specific actions
+   * to be performed based on user interaction.
+   *
+   * NOTE: Usage example would be replacing previous form
+   * values on deactivation so updates are discarded.
+   */
+  protected handleDeactivation(result: boolean): void {
+    // Optional can deactivate hook, otherwise NOOP
+  }
 
   /**
    * @description
@@ -216,7 +249,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * Generic handler for the HTTP response. By default this covers update, and can
    * also be used for create actions, or extended for any response.
    */
-  protected handleResponse() {
+  protected handleResponse(): UnaryFunction<Observable<unknown>, Observable<void>> {
     return pipe(
       map(() => {
         this.afterSubmitIsSuccessful();
@@ -243,5 +276,49 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    */
   protected nextRouteAfterSubmit(nextRoutePath: string = EnrolmentRoutes.OVERVIEW): void {
     this.routeTo(nextRoutePath);
+  }
+
+  /**
+   * @description
+   * Creating a new enrollee.
+   */
+  protected createEnrolment(enrolment: Enrolment): Observable<Enrolment> {
+    return this.getUser$()
+      .pipe(
+        map((enrollee: Enrollee) => {
+          const { firstName, lastName, givenNames, verifiedAddress, ...remainder } = enrollee;
+          const { userId, ...demographic } = enrolment.enrollee;
+          return { ...remainder, ...demographic, firstName, lastName, givenNames, verifiedAddress };
+        }),
+        exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
+        // Populate the new enrolment within the form state by force patching
+        tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true))
+      );
+  }
+
+  /**
+   * @description
+   * Get an enrollee from a BCSC user.
+   */
+  protected getUser$(): Observable<Enrollee> {
+    return this.authService.getUser$()
+      .pipe(
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
+          // Enforced the enrollee type instead of using Partial<Enrollee>
+          // to avoid creating constructors and partials for every model
+          return {
+            // Providing only the minimum required fields for creating an enrollee
+            userId,
+            hpdid,
+            firstName,
+            lastName,
+            givenNames,
+            dateOfBirth,
+            verifiedAddress,
+            phone: null,
+            email: null
+          } as Enrollee;
+        })
+      );
   }
 }

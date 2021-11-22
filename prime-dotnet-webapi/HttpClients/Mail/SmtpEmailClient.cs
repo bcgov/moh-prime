@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.IO;
@@ -13,7 +11,7 @@ namespace Prime.HttpClients.Mail
         {
             var mail = ConvertToMailMessage(email);
 
-            SmtpClient smtp = new SmtpClient(PrimeEnvironment.MailServer.Url, PrimeEnvironment.MailServer.Port);
+            SmtpClient smtp = new SmtpClient(PrimeConfiguration.Current.MailServer.Url, PrimeConfiguration.Current.MailServer.Port);
             try
             {
                 await smtp.SendMailAsync(mail);

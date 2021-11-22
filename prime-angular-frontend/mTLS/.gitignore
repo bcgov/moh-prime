@@ -1,0 +1,8 @@
+# ignore all generated files
+*.crt
+*.csr
+*.key
+*.pem
+*.pfx
+*.srl
+*.txt

@@ -13,11 +13,8 @@ RUN printenv && \
 WORKDIR /usr/src/app
 
 COPY . .
-ENV KEYCLOAK_URL $KEYCLOAK_URL
-ENV KEYCLOAK_REALM $KEYCLOAK_REALM
-ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
-ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 RUN apt-get update && \
+    apt-get install yarn && \
     apt-get install -y nginx gettext-base && \
     mkdir -p /var/cache/nginx && \
     mkdir -p /var/cache/nginx/client_temp && \
@@ -31,7 +28,7 @@ COPY entrypoint.sh /
 
 RUN cat /usr/src/app/src/environments/environment.prod.ts
 RUN npm install @angular/cli -g && \
-    npm install && \
+    yarn && \
     ng build --configuration=production && \
     echo "NPM packages installed..."
 

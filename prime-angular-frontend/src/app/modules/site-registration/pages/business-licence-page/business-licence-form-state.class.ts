@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 import { asyncValidator } from '@lib/validators/form-async.validators';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { SiteResource } from '@core/resources/site-resource.service';
 
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
@@ -48,7 +47,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       return;
     }
 
-    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec } = this.formInstance.getRawValue();
+    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration } = this.formInstance.getRawValue();
 
     return {
       businessLicence: {
@@ -57,7 +56,8 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
         deferredLicenceReason
       },
       doingBusinessAs,
-      pec
+      pec,
+      activeBeforeRegistration
     };
   }
 
@@ -106,6 +106,10 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
         null,
         [Validators.required],
         asyncValidator(this.checkPecIsAssignable(), 'assignable')
+      ],
+      activeBeforeRegistration: [
+        false,
+        []
       ]
     });
   }

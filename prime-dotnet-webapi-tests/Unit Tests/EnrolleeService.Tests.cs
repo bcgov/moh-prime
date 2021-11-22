@@ -18,6 +18,40 @@ namespace PrimeTests.UnitTests
     public class EnrolleeServiceTests : InMemoryDbTest
     {
         [Fact]
+        public async void TestGetActiveGpid_HappyPath()
+        {
+            // Arrange
+            var service = MockDependenciesFor<EnrolleeService>();
+            var enrollee = TestDb.HasAnEnrollee("default,status.editable");
+            enrollee.GPID = "expectedgpid";
+            TestDb.SaveChanges();
+
+            // Act
+            var response = await service.GetActiveGpidAsync(enrollee.UserId);
+
+            // Assert
+            Assert.Equal(enrollee.GPID, response);
+        }
+
+        [Fact]
+        public async void TestGetActiveGpid_Declined()
+        {
+            // Arrange
+            var service = MockDependenciesFor<EnrolleeService>();
+            var enrollee = TestDb.HasAnEnrollee("default,status.editable");
+            enrollee.GPID = "notexpectedgpid";
+            enrollee.AddEnrolmentStatus(StatusType.Declined);
+            TestDb.SaveChanges();
+
+            // Act
+            var response = await service.GetActiveGpidAsync(enrollee.UserId);
+
+            // Assert
+            Assert.Null(response);
+        }
+
+
+        [Fact]
         public async void TestGpidValidation_NoParams()
         {
             // Arrange

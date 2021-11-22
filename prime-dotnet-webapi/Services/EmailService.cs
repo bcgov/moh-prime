@@ -50,7 +50,7 @@ namespace Prime.Services
                 .Select(e => e.Email)
                 .SingleOrDefaultAsync();
 
-            var email = await _emailRenderingService.RenderReminderEmailAsync(enrolleeEmail, new LinkedEmailViewModel(PrimeEnvironment.FrontendUrl));
+            var email = await _emailRenderingService.RenderReminderEmailAsync(enrolleeEmail, new LinkedEmailViewModel(PrimeConfiguration.Current.FrontendUrl));
             await Send(email);
         }
 
@@ -105,7 +105,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendRemoteUsersUpdatedAsync(Site site)
+        public async Task SendRemoteUsersUpdatedAsync(CommunitySite site)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.Id);
             var viewModel = new RemoteUsersUpdatedEmailViewModel
@@ -122,7 +122,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
+        public async Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers)
         {
             if (!remoteUsers.Any())
             {
@@ -135,7 +135,7 @@ namespace Prime.Services
                 OrganizationName = site.Organization.Name,
                 SiteStreetAddress = site.PhysicalAddress.Street,
                 SiteCity = site.PhysicalAddress.City,
-                PrimeUrl = PrimeEnvironment.FrontendUrl
+                PrimeUrl = PrimeConfiguration.Current.FrontendUrl
             };
 
             var email = await _emailRenderingService.RenderRemoteUserNotificationEmailAsync(recipients.First(), viewModel);
@@ -148,7 +148,7 @@ namespace Prime.Services
             }
         }
 
-        public async Task SendBusinessLicenceUploadedAsync(Site site)
+        public async Task SendBusinessLicenceUploadedAsync(CommunitySite site)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.BusinessLicence.Id);
 
@@ -156,7 +156,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedPharmaNetAdministratorAsync(Site site)
+        public async Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
@@ -168,7 +168,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedSigningAuthorityAsync(Site site)
+        public async Task SendSiteApprovedSigningAuthorityAsync(CommunitySite site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
@@ -180,7 +180,20 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteApprovedHIBCAsync(Site site)
+        public async Task SendSiteActiveBeforeRegistrationAsync(int siteId, string signingAuthorityEmail)
+        {
+            var viewModel = await _context.Sites
+            .Where(s => s.Id == siteId)
+            .Select(s => new SiteActiveBeforeRegistrationEmailViewModel
+            {
+                Pec = s.PEC
+            })
+            .SingleAsync();
+            var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(signingAuthorityEmail, viewModel);
+            await Send(email);
+        }
+
+        public async Task SendSiteApprovedHIBCAsync(CommunitySite site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
@@ -278,12 +291,12 @@ namespace Prime.Services
 
         private async Task Send(Email email)
         {
-            if (!PrimeEnvironment.IsProduction)
+            if (!PrimeConfiguration.IsProduction())
             {
                 email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
             }
 
-            if (PrimeEnvironment.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
+            if (PrimeConfiguration.Current.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
             {
                 var msgId = await _chesClient.SendAsync(email);
                 await CreateEmailLog(email, SendType.Ches, msgId);

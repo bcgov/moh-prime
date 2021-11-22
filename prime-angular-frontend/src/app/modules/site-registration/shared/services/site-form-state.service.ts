@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, AbstractControl, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, AbstractControl, Validators } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
@@ -19,6 +19,7 @@ import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/
 import { CareSettingPageFormState } from '@registration/pages/care-setting-page/care-setting-page-form-state.class';
 import { BusinessLicenceFormState } from '@registration/pages/business-licence-page/business-licence-form-state.class';
 import { BusinessLicenceRenewalPageFormState } from '@registration/pages/business-licence-renewal-page/business-licence-renewal-form-state.class';
+import { DeviceProviderPageFormState } from '@registration/pages/device-provider-page/device-provider-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -26,13 +27,13 @@ import { BusinessLicenceRenewalPageFormState } from '@registration/pages/busines
 export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingPageFormState: CareSettingPageFormState;
   public businessLicenceFormState: BusinessLicenceFormState;
-  public businessLicenceRenewalFormState: BusinessLicenceRenewalPageFormState;
   public siteAddressPageFormState: SiteAddressPageFormState;
   public hoursOperationPageFormState: HoursOperationPageFormState;
   public remoteUsersPageFormState: RemoteUsersPageFormState;
   public administratorPharmaNetFormState: AdministratorPageFormState;
   public privacyOfficerFormState: PrivacyOfficerPageFormState;
   public technicalSupportFormState: TechnicalSupportPageFormState;
+  public deviceProviderFormState: DeviceProviderPageFormState;
 
   private siteId: number;
   private organizationId: number;
@@ -84,13 +85,14 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { businessLicence, doingBusinessAs, pec } = this.businessLicenceFormState.json;
+    const { businessLicence, doingBusinessAs, pec, activeBeforeRegistration } = this.businessLicenceFormState.json;
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
     const administratorPharmaNet = this.administratorPharmaNetFormState.json;
     const privacyOfficer = this.privacyOfficerFormState.json;
     const technicalSupport = this.technicalSupportFormState.json;
+    const individualDeviceProviders = this.deviceProviderFormState.json;
 
     // Includes site related keys to uphold relationships, and allow for updates
     // to a site. Keys not for update have been omitted and the type enforced
@@ -114,10 +116,12 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       privacyOfficer,
       technicalSupportId: technicalSupport?.id, // TODO can this be dropped?
       technicalSupport,
+      individualDeviceProviders,
       // completed (N/A)
       // approvedDate (N/A)
       // submittedDate (N/A)
-      pec
+      pec,
+      activeBeforeRegistration
     } as Site; // Enforced type due to N/A properties
   }
 
@@ -134,7 +138,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       this.remoteUsersPageFormState.form,
       this.administratorPharmaNetFormState.form,
       this.privacyOfficerFormState.form,
-      this.technicalSupportFormState.form
+      this.technicalSupportFormState.form,
+      this.deviceProviderFormState.form
     ];
   }
 
@@ -197,13 +202,13 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   protected buildForms(): void {
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
     this.businessLicenceFormState = new BusinessLicenceFormState(this.fb, this.siteResource);
-    this.businessLicenceRenewalFormState = new BusinessLicenceRenewalPageFormState(this.fb);
     this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersPageFormState = new RemoteUsersPageFormState(this.fb);
     this.administratorPharmaNetFormState = new AdministratorPageFormState(this.fb, this.formUtilsService);
     this.privacyOfficerFormState = new PrivacyOfficerPageFormState(this.fb, this.formUtilsService);
     this.technicalSupportFormState = new TechnicalSupportPageFormState(this.fb, this.formUtilsService);
+    this.deviceProviderFormState = new DeviceProviderPageFormState(this.fb);
   }
 
   /**
@@ -215,15 +220,16 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence } = site;
+    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence, activeBeforeRegistration } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence }, id);
+    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence, activeBeforeRegistration }, id);
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
     this.administratorPharmaNetFormState.patchValue(site?.administratorPharmaNet);
     this.privacyOfficerFormState.patchValue(site?.privacyOfficer);
     this.technicalSupportFormState.patchValue(site?.technicalSupport);
+    this.deviceProviderFormState.patchValue(site?.individualDeviceProviders);
   }
 }

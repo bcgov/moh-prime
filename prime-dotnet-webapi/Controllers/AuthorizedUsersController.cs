@@ -1,14 +1,15 @@
 using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Extensions;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.Services;
+using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Parties;
 
 namespace Prime.Controllers
@@ -20,14 +21,11 @@ namespace Prime.Controllers
     public class AuthorizedUsersController : PrimeControllerBase
     {
         private readonly IAuthorizedUserService _authorizedUserService;
-        private readonly IOrganizationService _organizationService;
 
         public AuthorizedUsersController(
-            IAuthorizedUserService authorizedUserService,
-            IOrganizationService organizationService)
+            IAuthorizedUserService authorizedUserService)
         {
             _authorizedUserService = authorizedUserService;
-            _organizationService = organizationService;
         }
 
         // GET: api/parties/authorized-users/5fdd17a6-1797-47a4-97b7-5b27949dd614
@@ -78,6 +76,33 @@ namespace Prime.Controllers
             }
 
             return Ok(authorizedUser);
+        }
+
+        // GET: api/parties/authorized-users/5/sites
+        /// <summary>
+        /// Gets a specific AuthorizedUser's sites.
+        /// </summary>
+        /// <param name="authorizedUserId"></param>
+        [HttpGet("{authorizedUserId:int}/sites", Name = nameof(GetAuthorizedUserSites))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteListViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAuthorizedUserSites(int authorizedUserId)
+        {
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
+            if (authorizedUser == null)
+            {
+                return NotFound($"Authorized user not found with id {authorizedUserId}");
+            }
+            if (!authorizedUser.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var healthAuthoritySites = await _authorizedUserService.GetAuthorizedUserSitesAsync(authorizedUser.Id);
+
+            return Ok(healthAuthoritySites);
         }
 
         // POST: api/parties/authorized-users

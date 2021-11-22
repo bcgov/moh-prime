@@ -1,4 +1,4 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -15,12 +15,34 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
     this.buildForm();
   }
 
+  public get preferredFirstName(): FormControl {
+    return this.formInstance.get('preferredFirstName') as FormControl;
+  }
+
+  public get preferredMiddleName(): FormControl {
+    return this.formInstance.get('preferredMiddleName') as FormControl;
+  }
+
+  public get preferredLastName(): FormControl {
+    return this.formInstance.get('preferredLastName') as FormControl;
+  }
+
+  public get verifiedAddress(): FormGroup {
+    return this.formInstance.get('verifiedAddress') as FormGroup;
+  }
+
+  public get physicalAddress(): FormGroup {
+    return this.formInstance.get('physicalAddress') as FormGroup;
+  }
+
+  public get mailingAddress(): FormGroup {
+    return this.formInstance.get('mailingAddress') as FormGroup;
+  }
+
   public get json(): Enrollee {
     if (!this.formInstance) {
       return;
     }
-
-    // TODO adapt the data after getting values, ie. address(es)
 
     return this.formInstance.getRawValue();
   }
@@ -29,8 +51,6 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
     if (!this.formInstance) {
       return;
     }
-
-    // TODO adapt the data before patching values, ie. address(es)
 
     this.formInstance.patchValue(enrollee);
   }

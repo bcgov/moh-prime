@@ -11,25 +11,25 @@ namespace Prime.Services
     public class DocumentService : BaseService, IDocumentService
     {
         private readonly IAgreementService _agreementService;
+        private readonly ICommunitySiteService _communitySiteService;
         private readonly IDocumentManagerClient _documentManagerClient;
-        private readonly ISiteService _siteService;
 
         public DocumentService(
             ApiDbContext context,
             ILogger<DocumentService> logger,
             IAgreementService agreementService,
-            IDocumentManagerClient documentManagerClient,
-            ISiteService siteService)
+            ICommunitySiteService communitySiteService,
+            IDocumentManagerClient documentManagerClient)
             : base(context, logger)
         {
             _agreementService = agreementService;
+            _communitySiteService = communitySiteService;
             _documentManagerClient = documentManagerClient;
-            _siteService = siteService;
         }
 
         public async Task<string> GetDownloadTokenForBusinessLicenceDocument(int siteId)
         {
-            var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
+            var licence = await _communitySiteService.GetLatestBusinessLicenceAsync(siteId);
             return await _documentManagerClient.CreateDownloadTokenAsync(licence.BusinessLicenceDocument.DocumentGuid);
         }
 

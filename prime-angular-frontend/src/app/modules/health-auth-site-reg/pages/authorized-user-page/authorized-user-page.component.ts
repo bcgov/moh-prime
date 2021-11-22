@@ -6,13 +6,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { Address, optionalAddressLineItems } from '@lib/models/address.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { AuthorizedUserResource } from '@core/resources/authorized-user-resource.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
-import { Address, optionalAddressLineItems } from '@shared/models/address.model';
+import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -45,7 +46,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private healthAuthorityResource: HealthAuthorityResource,
+    private authorizedUserResource: AuthorizedUserResource,
     private authService: AuthService,
     private configService: ConfigService,
     private authorizedUserService: AuthorizedUserService,
@@ -60,7 +61,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     this.healthAuthorities = configService.healthAuthorities;
   }
 
-  public onPreferredNameChange({ checked }: { checked: boolean }): void {
+  public onPreferredNameChange({ checked }: ToggleContentChange): void {
     if (!this.hasPreferredName) {
       this.formState.form.get('preferredMiddleName').reset();
     }
@@ -68,7 +69,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     this.togglePreferredNameValidators(checked, this.formState.preferredFirstName, this.formState.preferredLastName);
   }
 
-  public onPhysicalAddressChange({ checked }: { checked: boolean }): void {
+  public onPhysicalAddressChange({ checked }: ToggleContentChange): void {
     this.toggleAddressLineValidators(checked, this.formState.physicalAddress);
   }
 
@@ -78,6 +79,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
 
   public ngOnInit(): void {
     this.createFormInstance();
+
     // Ensure that the identity provider user information is loaded
     // prior to initialization of the form override form values, and
     // control the validation management
@@ -133,9 +135,9 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     const payload = this.formState.json;
 
     return (!authorizedUserId)
-      ? this.healthAuthorityResource.createAuthorizedUser({ ...this.bcscUser, ...payload })
+      ? this.authorizedUserResource.createAuthorizedUser({ ...this.bcscUser, ...payload })
         .pipe(NoContentResponse)
-      : this.healthAuthorityResource.updateAuthorizedUser({ ...payload, id: authorizedUserId });
+      : this.authorizedUserResource.updateAuthorizedUser({ ...payload, id: authorizedUserId });
   }
 
   protected afterSubmitIsSuccessful(): void {

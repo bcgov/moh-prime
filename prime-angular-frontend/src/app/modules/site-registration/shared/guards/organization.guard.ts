@@ -4,11 +4,11 @@ import { Router, Params } from '@angular/router';
 import { Observable, forkJoin } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import { Party } from '@lib/models/party.model';
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { Party } from '@lib/models/party.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';

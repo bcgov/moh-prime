@@ -7,7 +7,8 @@ namespace Prime.Services
 {
     public interface IPlrProviderService
     {
-        public Task<int> CreateOrUpdatePlrProviderAsync(PlrProvider dataObject, bool expectExists = false);
-        Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdsAsync(IEnumerable<string> collegeIds);
+        Task<int> CreateOrUpdatePlrProviderAsync(PlrProvider dataObject, bool expectExists = false);
+        Task<IEnumerable<PlrViewModel>> GetMatchingPlrDataAsync(IEnumerable<string> collegeIds);
+        Task<bool> PartyExistsInPlrWithCollegeIdAndNameAsync(int partyId);
     }
 }

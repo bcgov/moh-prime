@@ -12,14 +12,11 @@ on:
       - 'develop'
       - 'test'
       - 'master'
+
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
     environment: Development
-    env:
-      BUILD_LOGLEVEL: "2"
-      SERVICE_NAME: document-manager
-      CONTAINER_NAME: prime-document-manager
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -31,9 +28,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.docman-cache
-          key: ${{ runner.os }}-docman-${{ github.sha }}
+          key: prime-docman-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-docman-
+            prime-docman-
 
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
@@ -41,13 +38,6 @@ jobs:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
-
-      - name: "Login to RedHat container repository"
-        uses: docker/login-action@v1
-        with:
-          registry: ${{secrets.REDHAT_REGISTRY_URL}}
-          username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
-          password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
       - name: "Get current pull request"
         id: PR
@@ -78,9 +68,6 @@ jobs:
   build-backend:
     runs-on: ubuntu-20.04
     environment: Development
-    env:
-      SERVICE_NAME: dotnet-webapi
-      CONTAINER_NAME: prime-webapi-backend
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -92,9 +79,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.backend-cache
-          key: ${{ runner.os }}-backend-${{ github.sha }}
+          key: prime-backend-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-backend-
+            prime-backend-
 
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
@@ -145,16 +132,9 @@ jobs:
           rm -rf /tmp/.backend-cache
           mv /tmp/.backend-cache-new /tmp/.backend-cache
 
-  build-frontend:
+  build-pip:
     runs-on: ubuntu-20.04
     environment: Development
-    env:
-      SERVICE_NAME: nginx-angular
-      CONTAINER_NAME: prime-frontend
-      JWT_WELL_KNOWN_CONFIG: "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
-      KEYCLOAK_CLIENT_ID: "prime-application-dev"
-      KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
-      KEYCLOAK_REALM: "v4mbqqas"
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -165,10 +145,10 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
-          path: /tmp/.frontend-cache
-          key: ${{ runner.os }}-frontend-${{ github.sha }}
+          path: /tmp/.pip-cache
+          key: ${{ runner.os }}-pip-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-frontend-
+            ${{ runner.os }}-pip-
 
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
@@ -184,21 +164,165 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
 
+      - name: "Build, tag and push .NET web API image"
+        id: build-image
+        uses: docker/build-push-action@v2
+        with:
+          context: pip-dotnet-webapi
+          push: true
+          file: pip-dotnet-webapi/ci.dockerfile
+          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/pip-dotnet-webapi:pr-${{steps.PR.outputs.number}}
+          cache-from: type=local,src=/tmp/.pip-cache
+          cache-to: type=local,dest=/tmp/.pip-cache-new,mode=max
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.pip-cache
+          mv /tmp/.pip-cache-new /tmp/.pip-cache
+
+  build-pip-frontend:
+    runs-on: ubuntu-latest
+    environment: Development
+    defaults:
+      run:
+        working-directory: pip-angular-frontend
+    steps:
+      - name: "Checkout the repo"
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+          cache: 'yarn'
+          cache-dependency-path: pip-angular-frontend/yarn.lock
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.pip-frontend-cache
+          key: pip-frontend-${{ github.sha }}
+          restore-keys: |
+            pip-frontend-
+      - name: "Login to OpenShift repository"
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
+
+      - name: "Get current pull request"
+        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        id: PR
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          filterOutClosed: true
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: 'pip-angular-frontend/node_modules'
+          key: yarn-pip-frontend-${{ hashFiles('yarn.lock') }}
+          restore-keys: yarn-pip-frontend-
+
+      - name: install yarn
+        run: npm install -g yarn
+
+      - run: yarn global add @angular/compiler-cli
+      - run: yarn global add @angular/cli
+
+      - name: install dependencies
+        run: yarn
+
+      - name: build frontend
+        run: yarn run build
+
+      - name: "Build, tag & push Angular frontend image"
+        id: build-image
+        uses: docker/build-push-action@v2
+        with:
+          context: pip-angular-frontend
+          push: true
+          file: pip-angular-frontend/Dockerfile
+          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/pip-frontend:pr-${{steps.PR.outputs.number}}
+          cache-from: type=local,src=/tmp/.pip-frontend-cache
+          cache-to: type=local,dest=/tmp/.pip-frontend-cache-new,mode=max
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.pip-frontend-cache
+          mv /tmp/.pip-frontend-cache-new /tmp/.pip-frontend-cache
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    environment: Development
+    defaults:
+      run:
+        working-directory: prime-angular-frontend
+    steps:
+      - name: "Checkout the repo"
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+          cache: 'yarn'
+          cache-dependency-path: prime-angular-frontend/yarn.lock
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.frontend-cache
+          key: prime-frontend-${{ github.sha }}
+          restore-keys: |
+            prime-frontend-
+
+      - name: "Login to OpenShift repository"
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
+
+      - name: "Get current pull request"
+        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        id: PR
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          filterOutClosed: true
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: 'prime-angular-frontend/node_modules'
+          key: npm-frontend-${{ hashFiles('yarn.lock') }}
+          restore-keys: npm-frontend-
+
+      - name: install yarn
+        run: npm install -g yarn
+
+      - run: yarn global add @angular/compiler-cli
+      - run: yarn global add @angular/cli
+
+      - name: install dependencies
+        run: yarn
+
+      - name: build frontend
+        run: yarn run build
+
       - name: "Build, tag & push Angular frontend image"
         id: build-image
         uses: docker/build-push-action@v2
         with:
           context: prime-angular-frontend
           push: true
-          file: prime-angular-frontend/openshift.dockerfile
+          file: prime-angular-frontend/ci.dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
-          build-args:
-            JWT_WELL_KNOWN_CONFIG="https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
-            KEYCLOAK_URL="https://dev.oidc.gov.bc.ca/auth"
-            KEYCLOAK_REALM="v4mbqqas"
-            KEYCLOAK_CLIENT_ID="prime-application-dev"
-            SVC_NAME="pr-${{steps.PR.outputs.number}}"
-            REDIRECT_URL="https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca"
           cache-from: type=local,src=/tmp/.frontend-cache
           cache-to: type=local,dest=/tmp/.frontend-cache-new,mode=max
 
@@ -210,7 +334,7 @@ jobs:
   apply-oc-template:
     runs-on: ubuntu-20.04
     environment: Development
-    needs: [build-document-manager-backend,build-frontend,build-backend]
+    needs: [build-document-manager-backend,build-frontend,build-backend,build-pip-frontend,build-pip]
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2

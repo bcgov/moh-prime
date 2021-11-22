@@ -1,8 +1,8 @@
+using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
-using Newtonsoft.Json;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Models;
 
 namespace Prime.ViewModels.Parties
@@ -12,7 +12,6 @@ namespace Prime.ViewModels.Parties
         [JsonIgnore]
         public Party Party { get; set; }
         public Guid UserId { get; set; }
-        public string HPDID { get; set; }
         public string FirstName { get; set; }
         public string GivenNames { get; set; }
         public string LastName { get; set; }
@@ -41,7 +40,6 @@ namespace Prime.ViewModels.Parties
             party.Phone = Phone;
 
             party.UserId = UserId;
-            party.HPDID = HPDID;
             party.FirstName = FirstName;
             party.LastName = LastName;
             party.GivenNames = GivenNames;
@@ -54,7 +52,6 @@ namespace Prime.ViewModels.Parties
         public bool Validate(ClaimsPrincipal user)
         {
             return UserId == user.GetPrimeUserId()
-                && HPDID == user.FindFirstValue(Claims.PreferredUsername)
                 && FirstName == user.FindFirstValue(Claims.GivenName)
                 && LastName == user.FindFirstValue(Claims.FamilyName)
                 && GivenNames == user.FindFirstValue(Claims.GivenNames);

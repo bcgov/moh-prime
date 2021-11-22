@@ -1,6 +1,7 @@
 using Bogus;
 using Bogus.DataSets;
 using NUnit.Framework;
+using OpenQA.Selenium;
 
 namespace TestPrimeE2E.Admin
 {
@@ -43,6 +44,9 @@ namespace TestPrimeE2E.Admin
 
             LoginWithIdirAccount();
 
+            // TODO: Eliminate Sleep which sometimes seems needed before can move onto Site Registrations ... loading Enrollees?
+            System.Threading.Thread.Sleep(2000);
+
             // Click on left menu item "Site Registrations"
             _driver.FindPatiently("(//mat-list-item/div)[2]").Click();
 
@@ -59,6 +63,9 @@ namespace TestPrimeE2E.Admin
             _driver.Navigate().GoToUrl(TestParameters.AdminUrl);
 
             LoginWithIdirAccount();
+
+            // TODO: Eliminate Sleep which sometimes seems needed before can move onto Site Registrations ... loading Enrollees?
+            System.Threading.Thread.Sleep(2000);
 
             // Click on left menu item "Site Registrations"
             _driver.FindPatiently("(//mat-list-item/div)[2]").Click();
@@ -116,13 +123,15 @@ namespace TestPrimeE2E.Admin
                 Person techSupportPerson = new Person();
                 var techSupportNames = new Name();
                 var techSupportAddress = new Address();
-                expectedTitle = "Technical Support Contact";
+                expectedTitle = "Technical Support";
                 Assert.AreEqual(expectedTitle, _driver.FindPatiently("//h2[contains(@class, 'title')]").Text);
                 FillFormField("firstName", techSupportPerson.FirstName);
                 FillFormField("lastName", techSupportPerson.LastName);
                 FillFormField("jobRoleTitle", techSupportNames.JobTitle());
                 FillFormField("email", techSupportPerson.Email);
                 FillFormField("phone", GetVancouverPhoneNum(techSupportPerson));
+                // Expected to tab 3 times to interact with "Add address manually" button, but instead 4 times works
+                _driver.TabAndInteract(GetFormFieldXPath("phone"), 4, Keys.Enter);
                 EnterAddress(techSupportAddress);
                 CheckLogThenScreenshot(expectedTitle);
                 ClickButton("Save and Continue");
@@ -130,7 +139,7 @@ namespace TestPrimeE2E.Admin
 
             // On "Technical Support Contact(s)" screen
             // TODO: Why is button found but do not advance to next screen without Sleep?
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(2000);
             ClickButton("Continue");
 
             if (_driver.FindPatiently("//span[@class='mat-button-wrapper' and contains(text(), 'Add PharmaNet Administrator')]") == null)
@@ -146,6 +155,8 @@ namespace TestPrimeE2E.Admin
                 FillFormField("jobRoleTitle", pharmanetAdminNames.JobTitle());
                 FillFormField("email", pharmanetAdmin.Email);
                 FillFormField("phone", GetVancouverPhoneNum(pharmanetAdmin));
+                // Expected to tab 3 times to interact with "Add address manually" button, but instead 4 times works
+                _driver.TabAndInteract(GetFormFieldXPath("phone"), 4, Keys.Enter);
                 EnterAddress(pharmanetAdminAddress);
                 CheckLogThenScreenshot(expectedTitle);
                 ClickButton("Save and Continue");
@@ -153,7 +164,7 @@ namespace TestPrimeE2E.Admin
 
             // On "PharmaNet Administrator(s)" screen
             // TODO: Why is button found but do not advance to next screen without Sleep?
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(2000);
             ClickButton("Continue");
         }
     }

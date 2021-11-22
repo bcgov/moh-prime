@@ -5,7 +5,7 @@ import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { HealthAuthSiteRegRoutes } from './health-auth-site-reg.routes';
-import { HealthAuthSiteRegGuard } from './shared/guards/health-auth-site-reg.guard';
+import { HealthAuthoritySiteGuard } from './shared/guards/health-authority-site-guard.service';
 import { AuthorizedUserGuard } from './shared/guards/authorized-user.guard';
 import { HealthAuthSiteRegDashboardComponent } from './shared/components/health-auth-site-reg-dashboard/health-auth-site-reg-dashboard.component';
 
@@ -20,20 +20,17 @@ import { SiteInformationPageComponent } from '@health-auth/pages/site-informatio
 import { VendorPageComponent } from '@health-auth/pages/vendor-page/vendor-page.component';
 import { SiteAddressPageComponent } from '@health-auth/pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from '@health-auth/pages/hours-operation-page/hours-operation-page.component';
-import { RemoteUsersPageComponent } from '@health-auth/pages/remote-users-page/remote-users-page.component';
-import { RemoteUserPageComponent } from '@health-auth/pages/remote-user-page/remote-user-page.component';
 import { AdministratorPageComponent } from '@health-auth/pages/administrator-page/administrator-page.component';
 import { TechnicalSupportPageComponent } from '@health-auth/pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview-page.component';
+import { HealthAuthorityResolver } from '@health-auth/shared/resolvers/health-authority.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: HealthAuthSiteRegDashboardComponent,
-    // TODO add registration related guards
     canActivate: [AuthenticationGuard],
     canActivateChild: [AuthenticationGuard],
-    // TODO add proper default route when accessing module
     children: [
       {
         path: HealthAuthSiteRegRoutes.COLLECTION_NOTICE,
@@ -93,7 +90,11 @@ const routes: Routes = [
       // of health authority information
       {
         path: `${HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES}/:haid/${HealthAuthSiteRegRoutes.SITES}/:sid`,
-        canActivateChild: [AuthorizedUserGuard],
+        canActivate: [AuthorizedUserGuard],
+        canActivateChild: [HealthAuthoritySiteGuard],
+        resolve: {
+          healthAuthority: HealthAuthorityResolver
+        },
         children: [
           {
             path: HealthAuthSiteRegRoutes.VENDOR,
@@ -126,23 +127,6 @@ const routes: Routes = [
             data: { title: 'Hours of Operation' }
           },
           {
-            path: HealthAuthSiteRegRoutes.REMOTE_USERS,
-            children: [
-              {
-                path: '',
-                component: RemoteUsersPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Practitioners Requiring Remote Access' },
-              },
-              {
-                path: ':index',
-                component: RemoteUserPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Remote User' }
-              }
-            ]
-          },
-          {
             path: HealthAuthSiteRegRoutes.ADMINISTRATOR,
             component: AdministratorPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
@@ -161,7 +145,7 @@ const routes: Routes = [
           },
           {
             path: '', // Equivalent to `/` and alias for default view
-            redirectTo: HealthAuthSiteRegRoutes.VENDOR,
+            redirectTo: HealthAuthSiteRegRoutes.SITE_OVERVIEW,
             pathMatch: 'full'
           }
         ]

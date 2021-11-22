@@ -4,9 +4,9 @@ import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { EMPTY } from 'rxjs';
 import { debounceTime, exhaustMap, switchMap } from 'rxjs/operators';
 
+import { Address } from '@lib/models/address.model';
+import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } from '@lib/models/address-autocomplete.model';
 import { ToastService } from '@core/services/toast.service';
-import { Address } from '@shared/models/address.model';
-import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } from '@shared/models/address-autocomplete.model';
 import { AddressAutocompleteResource } from '@shared/services/address-autocomplete-resource.service';
 
 @Component({

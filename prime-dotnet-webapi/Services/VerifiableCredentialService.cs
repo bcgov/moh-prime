@@ -272,8 +272,8 @@ namespace Prime.Services
                 IssuerDid = issuerDid,
                 SchemaId = schemaId,
                 SchemaIssuerDid = issuerDid,
-                SchemaName = PrimeEnvironment.VerifiableCredentialApi.SchemaName,
-                SchemaVersion = PrimeEnvironment.VerifiableCredentialApi.SchemaVersion,
+                SchemaName = PrimeConfiguration.Current.VerifiableCredentialApi.SchemaName,
+                SchemaVersion = PrimeConfiguration.Current.VerifiableCredentialApi.SchemaVersion,
                 CredentialDefinitionId = credentialDefinitionId,
                 Comment = "PharmaNet GPID",
                 CredentialProposal = credentialProposal
@@ -290,18 +290,21 @@ namespace Prime.Services
             // TODO Update schema to rename organization_type to care_setting
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
-            foreach (var careSetting in enrollee.EnrolleeCareSettings)
-            {
-                await _context.Entry(careSetting).Reference(o => o.CareSetting).LoadAsync();
-            }
+            var careSettings = await _context.Set<EnrolleeCareSetting>()
+                .Where(ecs => ecs.EnrolleeId == enrolleeId)
+                .Select(ecs => ecs.CareSetting.Name)
+                .ToListAsync();
+
+            var hasRemoteUsers = await _context.EnrolleeRemoteUsers
+                .AnyAsync(eru => eru.EnrolleeId == enrolleeId);
 
             var attributes = new CredentialPayload
             {
                 GPID = enrollee.GPID,
                 RenewalDate = enrollee.ExpiryDate.Value.Date.ToShortDateString(),
                 TOAName = enrollee.AssignedTOAType.Value.ToString(),
-                CareTypeSetting = string.Join(',', enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting.Name)),
-                RemoteUser = enrollee.EnrolleeRemoteUsers.Count > 0 ? "true" : "false"
+                CareTypeSetting = string.Join(',', careSettings),
+                RemoteUser = hasRemoteUsers.ToString()
             };
 
             _logger.LogInformation("Credential offer attributes for {@JObject}", JsonConvert.SerializeObject(attributes));

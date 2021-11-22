@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { MockSiteService } from 'test/mocks/mock-site.service';
+import { MockCommunitySiteService } from 'test/mocks/mock-community-site.service';
 
 import { BusinessLicencePageComponent } from './business-licence-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -37,7 +37,7 @@ describe('BusinessLicencePageComponent', () => {
         },
         {
           provide: SiteService,
-          useClass: MockSiteService
+          useClass: MockCommunitySiteService
         },
         KeycloakService
       ],

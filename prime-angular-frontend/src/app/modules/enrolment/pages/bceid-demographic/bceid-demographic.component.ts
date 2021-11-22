@@ -9,13 +9,13 @@ import { map, tap } from 'rxjs/operators';
 import moment from 'moment';
 
 import { MINIMUM_AGE } from '@lib/constants';
+import { Address, AddressLine } from '@lib/models/address.model';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { Enrollee } from '@shared/models/enrollee.model';
-import { Address, AddressLine } from '@shared/models/address.model';
 
 import { BceidUser } from '@auth/shared/models/bceid-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -112,6 +112,15 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     }
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.formState.patchValue(this.enrolmentService.enrolment.enrollee);
+  }
+
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     const enrollee = this.form.getRawValue();
     // BCeID has to match BCSC for submission, which requires givenNames
@@ -148,7 +157,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private getUser$(): Observable<Enrollee> {
+  protected getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
         map(({ firstName, lastName, email = null }: BceidUser) => {

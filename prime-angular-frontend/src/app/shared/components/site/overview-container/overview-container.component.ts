@@ -1,19 +1,18 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
-import { Moment } from 'moment';
-
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
-import { AbstractComponent } from '@shared/classes/abstract-component';
 
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-overview-container',
@@ -26,11 +25,13 @@ export class OverviewContainerComponent implements OnInit {
   @Input() public site: Site;
   @Input() public admin: boolean;
   @Input() public businessLicences: BusinessLicence[];
+  @Input() public siteErrors: ValidationErrors;
 
   public withinRenewalPeriod: boolean;
   public routeUtils: RouteUtils;
   public SiteStatusType = SiteStatusType;
   public SiteRoutes = SiteRoutes;
+  public CareSettingEnum = CareSettingEnum;
 
   constructor(
     protected route: ActivatedRoute,

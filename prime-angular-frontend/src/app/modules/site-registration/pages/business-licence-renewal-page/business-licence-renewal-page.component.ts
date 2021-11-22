@@ -1,16 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
 
-import { Observable } from 'rxjs';
+import { noop, Observable, of } from 'rxjs';
 
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { UtilsService } from '@core/services/utils.service';
+import { NoContentResponse } from '@core/resources/abstract-resource';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { DocumentUploadComponent, BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
-import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
+import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { Site } from '@registration/shared/models/site.model';
@@ -24,7 +26,7 @@ import { BusinessLicenceRenewalPageFormState } from './business-licence-renewal-
   templateUrl: './business-licence-renewal-page.component.html',
   styleUrls: ['./business-licence-renewal-page.component.scss']
 })
-export class BusinessLicenceRenewalPageComponent extends AbstractSiteRegistrationPage implements OnInit {
+export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: BusinessLicenceRenewalPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -44,6 +46,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractSiteRegistratio
     protected siteService: SiteService,
     protected siteFormStateService: SiteFormStateService,
     protected siteResource: SiteResource,
+    private fb: FormBuilder,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     router: Router
@@ -86,7 +89,11 @@ export class BusinessLicenceRenewalPageComponent extends AbstractSiteRegistratio
   }
 
   protected createFormInstance(): void {
-    this.formState = this.siteFormStateService.businessLicenceRenewalFormState;
+    // TODO refactor business licence into a single page, or inverse these pages so 
+    //      the default is the renewal page, and the override is the initial submission
+    // Create out of band form state for renewals to be 
+    // transferred to the form state service on submit
+    this.formState = new BusinessLicenceRenewalPageFormState(this.fb);
   }
 
   protected patchForm(): void {
@@ -111,6 +118,18 @@ export class BusinessLicenceRenewalPageComponent extends AbstractSiteRegistratio
     if (!this.uploadedFile) {
       this.hasNoBusinessLicenceError = true;
     }
+  }
+
+  protected performSubmission(): Observable<void> {
+    // Transfer business licence renewal updates
+    // to the form state service for submission
+    const { businessLicenceGuid, businessLicenceExpiry } = this.siteFormStateService.businessLicenceFormState;
+    businessLicenceGuid.patchValue(this.formState.businessLicenceGuid.value);
+    businessLicenceExpiry.patchValue(this.formState.businessLicenceExpiry.value);
+
+    // Updates only occur on submission after an
+    // initial submission has been performed
+    return of(noop()).pipe(NoContentResponse);
   }
 
   protected afterSubmitIsSuccessful(): void {

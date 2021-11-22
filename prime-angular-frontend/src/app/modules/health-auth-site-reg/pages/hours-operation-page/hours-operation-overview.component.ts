@@ -6,7 +6,6 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 
 import { HoursOperationForm } from './hours-operation-form.model';
 
-// TODO add message when no business hours were entered
 @Component({
   selector: 'app-hours-operation-overview',
   template: `
@@ -14,7 +13,7 @@ import { HoursOperationForm } from './hours-operation-form.model';
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.HOURS_OPERATION"
                           (route)="onRoute($event)">
-      <ng-container *ngFor="let businessDay of demo?.businessHours">
+      <ng-container *ngFor="let businessDay of hoursOperation?.businessHours">
         <app-enrollee-property [title]="businessDay.day | weekday">
           <ng-container *ngIf="businessDay.startTime && businessDay.endTime">
             {{ businessDay.startTime }} to {{ businessDay.endTime }}
@@ -30,8 +29,6 @@ export class HoursOperationOverviewComponent extends AbstractOverview implements
   @Input() public hoursOperation: HoursOperationForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
-  public demo: HoursOperationForm;
-
   constructor(
     route: ActivatedRoute,
     router: Router
@@ -39,17 +36,5 @@ export class HoursOperationOverviewComponent extends AbstractOverview implements
     super(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
 
-  public ngOnInit(): void {
-    // TODO need to convert times when displayed using a pipe
-    // TODO split out and reuse the methods in form state
-    this.demo = {
-      businessHours: [
-        { startTime: '9:00 am', endTime: '5:00 pm', day: 1 },
-        { startTime: '9:00 am', endTime: '5:00 pm', day: 2 },
-        { startTime: '9:00 am', endTime: '5:00 pm', day: 3 },
-        { startTime: '9:00 am', endTime: '5:00 pm', day: 4 },
-        { startTime: '9:00 am', endTime: '5:00 pm', day: 5 }
-      ]
-    };
-  }
+  public ngOnInit(): void { }
 }

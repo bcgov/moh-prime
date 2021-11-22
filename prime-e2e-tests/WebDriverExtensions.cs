@@ -97,5 +97,17 @@ namespace TestPrimeE2E
             }
             currentElement.SendKeys(keyToInteractAtEnd);
         }
+
+
+        /// <summary>
+        /// In some cases this method may be a less cumbersome alternative to <c>TabAndInteract</c>.
+        /// TODO: More usage required.  
+        /// </summary>
+        public static void ClickWithJavaScript(this IWebDriver driver, string xPathToElement)
+        {
+            IWebElement elementToClick = driver.FindPatiently(xPathToElement);
+            IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
+            executor.ExecuteScript("arguments[0].click();", elementToClick);
+        }
     }
 }

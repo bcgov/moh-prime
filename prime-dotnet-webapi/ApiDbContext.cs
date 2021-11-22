@@ -1,13 +1,14 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
+using Prime.Configuration.Environment;
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
 using Prime.Models.VerifiableCredentials;
@@ -19,18 +20,14 @@ namespace Prime
     {
         public ApiDbContext CreateDbContext(string[] args)
         {
-            // Connect to database
-            var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-            if (connectionString == null)
-            {
-                // Build the configuration
-                IConfiguration config = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json")
-                    .Build();
+            IConfiguration config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Add(new PrimeEnvironmentVariablesConfigurationSource())
+                .Build();
 
-                connectionString = config.GetConnectionString("PrimeDatabase");
-            }
+            var connectionString = config.GetConnectionString("PrimeDatabase");
 
             var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
             optionsBuilder.UseNpgsql(connectionString);
@@ -75,11 +72,12 @@ namespace Prime
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
         public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
+        public DbSet<EnrolleeAbsence> EnrolleeAbsences { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
-        public DbSet<Party> Parties { get; set; }
         public DbSet<Site> Sites { get; set; }
+        public DbSet<CommunitySite> CommunitySites { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<RemoteUser> RemoteUsers { get; set; }
@@ -90,14 +88,15 @@ namespace Prime
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
         public DbSet<Credential> Credentials { get; set; }
         public DbSet<OrganizationClaim> OrganizationClaims { get; set; }
+        public DbSet<IndividualDeviceProvider> IndividualDeviceProviders { get; set; }
 
         // Health Authorities
+        public DbSet<HealthAuthoritySite> HealthAuthoritySites { get; set; }
         public DbSet<HealthAuthorityOrganization> HealthAuthorities { get; set; }
         public DbSet<HealthAuthorityCareType> HealthAuthorityCareTypes { get; set; }
         public DbSet<HealthAuthorityContact> HealthAuthorityContacts { get; set; }
         public DbSet<HealthAuthorityVendor> HealthAuthorityVendors { get; set; }
         public DbSet<PrivacyOffice> PrivacyOffices { get; set; }
-        public DbSet<HealthAuthoritySite> HealthAuthoritySites { get; set; }
 
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
@@ -114,6 +113,10 @@ namespace Prime
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<Banner> Banners { get; set; }
 
+        // Parties
+        public DbSet<Party> Parties { get; set; }
+        public DbSet<PartySubmission> PartySubmissions { get; set; }
+        public DbSet<PartyCertification> PartyCertifications { get; set; }
 
         // PLR Integration
         public DbSet<PlrProvider> PlrProviders { get; set; }
@@ -121,6 +124,7 @@ namespace Prime
 
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
+        public DbSet<EnrolleeLinkedEnrolment> EnrolleeLinkedEnrolments { get; set; }
 
         public override int SaveChanges()
         {
