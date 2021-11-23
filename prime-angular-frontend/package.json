@@ -45,7 +45,7 @@
     "ngx-mask": "^12.0.0",
     "ngx-progressbar": "^6.1.1",
     "popper.js": "^1.16.0",
-    "rxjs": "~6.5.4",
+    "rxjs": "~7.4.0",
     "smoothscroll-polyfill": "^0.4.4",
     "tinymce": "^5.4.0",
     "tslib": "^2.0.0",
