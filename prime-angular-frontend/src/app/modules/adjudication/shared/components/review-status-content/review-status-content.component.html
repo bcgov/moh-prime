@@ -29,6 +29,18 @@
           </span>
           <p class="pl-2">
             {{ reason.note }}
+            <ng-container *ngFor="let relatedId of reason.relatedIds; let index=index">
+              <a [routerLink]=""
+                 (click)="onRoute([relatedId, AdjudicationRoutes.ENROLLEE_OVERVIEW])">
+                {{ relatedId }}
+              </a>
+              <ng-container *ngIf="index < reason.relatedIds.length-1; else periodTemplate">
+                <span>,</span>
+              </ng-container>
+              <ng-template #periodTemplate>
+                <span>.</span>
+              </ng-template>
+            </ng-container>
           </p>
 
           <span *ngIf="reason.documents" class="mb-4 font-weight-bolder">Documents provided by Enrollee:</span>
@@ -103,7 +115,6 @@
                         {{ reason.note }}
                       </p>
                     </div>
-
                   </div>
                 </div>
               </div>

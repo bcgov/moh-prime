@@ -74,7 +74,8 @@
         <mat-card id="adjudicationCard">
           <mat-card-content>
             <app-review-status-content [enrollee]="enrollee"
-                                       [hideStatusHistory]="true">
+                                       [hideStatusHistory]="true"
+                                       (route)="onRoute($event)">
             </app-review-status-content>
             <app-document-attachments *ngIf="documents"
                                       [documents]="documents">

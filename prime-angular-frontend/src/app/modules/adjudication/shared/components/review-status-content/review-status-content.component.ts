@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 
 import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { UtilsService } from '@core/services/utils.service';
@@ -10,6 +10,7 @@ import { EnrolmentStatusEnum as EnrolmentStatusEnum } from '@shared/enums/enrolm
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
@@ -33,6 +34,7 @@ class Reason {
     public documents?: BaseDocument[],
     public isSelfDeclaration?: boolean,
     public question?: string,
+    public relatedIds?: number[],
   ) { }
 }
 
@@ -44,9 +46,12 @@ class Reason {
 export class ReviewStatusContentComponent implements OnInit, OnChanges {
   @Input() public enrollee: HttpEnrollee;
   @Input() public hideStatusHistory: boolean;
+  @Output() public route: EventEmitter<string | (string | number)[]>;
   public previousStatuses: Status[];
   public reasons: Reason[];
   private questions: { [key: number]: string } = selfDeclarationQuestions;
+
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     private utilsService: UtilsService,
@@ -54,6 +59,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     private configPipe: ConfigCodePipe
   ) {
     this.hideStatusHistory = false;
+    this.route = new EventEmitter<string | (string | number)[]>();
   }
 
   public downloadDocument(document: BaseDocument, isSelfDeclaration: boolean): void {
@@ -79,6 +85,10 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
       this.reasons = this.generateReasons(this.enrollee);
       this.previousStatuses = this.generatePreviousStatuses(this.enrollee);
     }
+  }
+
+  public onRoute(routePath: string | (string | number)[]): void {
+    this.route.emit(routePath);
   }
 
   public ngOnInit(): void { }
@@ -123,10 +133,12 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
         }
 
         if (esr.statusReasonCode === EnrolmentStatusReasonEnum.IDENTITY_PROVIDER) {
-          return reasons.concat(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statuses'), esr.reasonNote, this.enrollee.identificationDocuments));
+          return reasons.concat(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote, this.enrollee.identificationDocuments));
         }
 
-        reasons.push(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statuses'), esr.reasonNote));
+        reasons.push((esr.statusReasonCode === 20)
+          ? this.createLinksWithPaperEnrolments(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote))
+          : new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote));
         return reasons;
       }, []);
   }
@@ -147,5 +159,12 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
 
   private getDocumentsForSelfDeclaration(enrollee: HttpEnrollee, code: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
     return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
+  }
+
+  private createLinksWithPaperEnrolments(reason: Reason): Reason {
+    const lastColumn = reason.note.lastIndexOf(':');
+    reason.relatedIds = reason.note.substring(lastColumn).match(/\d+/g).map((id) => parseInt(id));
+    reason.note = reason.note.substring(0, lastColumn + 1);
+    return reason;
   }
 }
