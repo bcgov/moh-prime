@@ -16,7 +16,7 @@
       <li *ngFor="let reason of (status$ | async)?.enrolmentStatusReasons; let last = last"
           class="blue"
           [class.pb-2]="!last">
-        {{ reason.statusReason.name }}
+        {{ reason.statusReasonCode | configCode: 'statusReasons' | default }}
       </li>
     </ul>
   </ng-container>
@@ -26,7 +26,8 @@
           class="mb-2 d-block"
           [matMenuTriggerFor]="menu"
           (click)="$event.stopPropagation()">
-    Triage Actions <mat-icon>keyboard_arrow_down</mat-icon>
+    Triage Actions
+    <mat-icon>keyboard_arrow_down</mat-icon>
   </button>
 
   <mat-menu #menu>
