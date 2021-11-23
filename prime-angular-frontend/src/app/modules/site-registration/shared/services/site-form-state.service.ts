@@ -55,7 +55,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   ) {
     super(fb, routeStateService, logger);
 
-    this.initialize([SiteRoutes.SITE_MANAGEMENT]);
+    this.initialize([SiteRoutes.ORGANIZATIONS]);
   }
 
   /**

@@ -72,14 +72,14 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
     this.uploadedFile = false;
   }
 
-  public onBack(): void {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
-  }
-
   public downloadBusinessLicence(event: Event): void {
     event.preventDefault();
     this.siteResource.getBusinessLicenceDocumentToken(this.siteService.site.id, this.siteService.site.businessLicence.id)
       .subscribe((token: string) => this.utilsService.downloadToken(token));
+  }
+
+  public onBack(): void {
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }
 
   public ngOnInit(): void {
