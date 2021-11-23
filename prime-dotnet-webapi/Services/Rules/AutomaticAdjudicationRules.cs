@@ -253,11 +253,6 @@ namespace Prime.Services.Rules
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
             var paperEnrollees = await _enrolleePaperSubmissionService.GetPotentialPaperEnrolleeReturneesAsync(enrollee.DateOfBirth);
-            var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
-            var paperEnrolleeMatchId = -1;
-            var paperEnrolleeIdsAsString = CreateIdsString(paperEnrollees);
-
-            // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
 
             // If there is no match then we don't need to worry about this rule
             if (!paperEnrollees.Any())
@@ -265,7 +260,13 @@ namespace Prime.Services.Rules
                 return true;
             }
 
-            // if yes and GPID is provided
+            var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
+            var paperEnrolleeMatchId = -1;
+            var paperEnrolleeIdsAsString = CreateIdsString(paperEnrollees);
+
+            // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
+
+            // if there's a match and GPID is provided
             if (potentialPaperEnrolleeGpid != null)
             {
                 // Check if GPID match one of the paper enrolment
@@ -280,14 +281,14 @@ namespace Prime.Services.Rules
                 if (paperEnrolleeMatchId == -1)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment: {paperEnrolleeIdsAsString}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                     return false;
                 }
                 // if a match is found, link to paper enrolment and confirm the linkage here, if failed to link we add status reason.
                 if (!await _enrolleePaperSubmissionService.LinkEnrolleeToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId))
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.UnableToLinkToPaperEnrolment, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment: {paperEnrolleeMatchId}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                     return false;
                 }
                 return true;
@@ -295,32 +296,17 @@ namespace Prime.Services.Rules
             // if yes and GPID not provided - flag with "Possible match with paper enrolment"
             else
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch);
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment: {paperEnrolleeIdsAsString}");
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                 return false;
             }
         }
 
         static private string CreateIdsString(IEnumerable<Enrollee> paperEnrollees)
         {
-            var paperEnrolleeIdsAsString = "";
+            var paperEnrolleeIdsList = paperEnrollees
+                .Select(pe => pe.Id);
 
-            for (var i = 0; i < paperEnrollees.Count(); ++i)
-            {
-                if (i > 0)
-                {
-                    paperEnrolleeIdsAsString += ", ";
-                }
-
-                paperEnrolleeIdsAsString += paperEnrollees.ElementAt(i).Id;
-
-                if (i == (paperEnrollees.Count() - 1))
-                {
-                    paperEnrolleeIdsAsString += ".";
-                }
-            }
-
-            return paperEnrolleeIdsAsString;
+            return string.Concat(string.Join(", ", paperEnrolleeIdsList), ".");
         }
     }
 }
