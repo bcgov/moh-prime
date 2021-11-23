@@ -41,7 +41,10 @@
       } else if (userAgent.indexOf('Edg') > -1) {
         name = 'Microsoft Edge (Chromium)';
       } else if (userAgent.indexOf('Chrome') > -1) {
-        name = 'Google Chrome or Chromium';
+        // User agent name explicitly says "Pre-Chromium" to remove ambiguity around the
+        // browser based on users only being redirected when using unsupported browsers, but
+        // otherwise would indicate "Google Chrome or Chromium browsers"
+        name = 'Google Chrome Pre-Chromium';
       } else if (userAgent.indexOf('Safari') > -1) {
         name = 'Apple Safari';
       } else {
