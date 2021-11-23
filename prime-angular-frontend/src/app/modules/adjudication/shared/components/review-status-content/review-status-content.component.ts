@@ -140,7 +140,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
         }
 
         reasons.push((esr.statusReasonCode === 20)
-          ? this.createHyperLinksWithPaperEnrolments(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote))
+          ? this.parsePotentialMatchIds(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote))
           : new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote));
         return reasons;
       }, []);
@@ -164,12 +164,15 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
   }
 
-  private createHyperLinksWithPaperEnrolments(reason: Reason): Reason {
+  private parsePotentialMatchIds(reason: Reason): Reason {
     const lastColon = reason.note.lastIndexOf(':');
 
     // Get the ids and parse them to numbers since we want to show the display ID which is id + 1000
     reason.potentialMatches = reason.note.substring(lastColon).match(/\d+/g).map((id) => parseInt(id));
+
+    // Remove the ids from the status reason so we can add them back as clickable DisplayIds hyper links
     reason.note = reason.note.substring(0, lastColon + 1);
+
     return reason;
   }
 }
