@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { Sort, SortDirection } from '@angular/material/sort';
 
 import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription, forkJoin } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
@@ -48,6 +49,7 @@ export class AdjudicationContainerComponent implements OnInit {
   public busy: Subscription;
   public enrollees: EnrolleeListViewModel[];
   public enrolleeNavigation: EnrolleeNavigation;
+  public sort: Sort;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -80,6 +82,10 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onFilter(status: StatusFilterEnum | null): void {
     this.routeUtils.updateQueryParams({ status });
+  }
+
+  public onSort(sort: Sort): void {
+    this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
   }
 
   public onRefresh(): void {
@@ -425,12 +431,15 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number }) {
+  protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number, sortActive?: string, sortDirection?: SortDirection }) {
     if (enrolleeId) {
       this.getEnrolleeById(enrolleeId);
     } else {
       this.busy = this.getEnrollees(queryParams)
-        .subscribe((enrollees: EnrolleeListViewModel[]) => this.enrollees = enrollees);
+        .subscribe((enrollees: EnrolleeListViewModel[]) => {
+          this.enrollees = enrollees;
+          this.sort = { active: queryParams.sortActive, direction: queryParams.sortDirection };
+        });
     }
   }
 
