@@ -243,15 +243,15 @@ namespace Prime.Services.Rules
 
     public class IsPotentialPaperEnrolleeReturnee : AutomaticAdjudicationRule
     {
-        private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
 
         public IsPotentialPaperEnrolleeReturnee(
-            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
         {
-            _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
             _businessEventService = businessEventService;
+            _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
         }
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
