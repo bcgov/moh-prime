@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { DateUtils } from '@lib/utils/date-utils.class';
+import { RemoteUser } from '@lib/models/remote-user.model';
+import { BusinessDay } from '@lib/models/business-day.model';
+import { BusinessDayHours } from '@lib/models/business-day-hours.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -17,13 +21,11 @@ import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-searc
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 
-import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { IndividualDeviceProvider } from '@registration/shared/models/individual-device-provider.model';
 
 @Injectable({
   providedIn: 'root'
@@ -54,14 +56,17 @@ export class SiteResource {
 
   public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
     const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
-    return this.apiResource.get<Site>(`sites/${siteId}`, params)
+    return forkJoin({
+      site: this.apiResource.get<Site>(`sites/${siteId}`, params, null, true),
+      individualDeviceProviders: this.apiResource.get<IndividualDeviceProvider[]>(`sites/${siteId}/individual-device-providers`, null, null, true),
+    })
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
+        map(({ site, individualDeviceProviders }) => ({ ...site, individualDeviceProviders })),
         map((site: Site) => {
           site.businessHours = site.businessHours
             .map((businessDay: BusinessDay) => {
-              businessDay.startTime = BusinessDayHours.fromTimeSpan(businessDay.startTime);
-              businessDay.endTime = BusinessDayHours.fromTimeSpan(businessDay.endTime);
+              businessDay.startTime = DateUtils.fromTimespan(businessDay.startTime);
+              businessDay.endTime = DateUtils.fromTimespan(businessDay.endTime);
               return businessDay;
             });
           return site;
@@ -116,8 +121,8 @@ export class SiteResource {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
-          businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
+          businessDay.startTime = DateUtils.toTimespan(businessDay.startTime);
+          businessDay.endTime = DateUtils.toTimespan(businessDay.endTime);
           return businessDay;
         });
     } else {
@@ -169,18 +174,6 @@ export class SiteResource {
       );
   }
 
-  public sendRemoteUsersEmailUser(siteId: number, newRemoteUsers: RemoteUser[]): NoContent {
-    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-user`, newRemoteUsers)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Remote users email could not be sent');
-          this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmailUser error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
   public sendSiteReviewedEmailUser(siteId: number, note: string): NoContent {
     const payload = { data: note };
     return this.apiResource.post<NoContent>(`sites/${siteId}/site-reviewed-email`, payload)
@@ -194,17 +187,13 @@ export class SiteResource {
       );
   }
 
-  public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
+  public updatePecCode(siteId: number, pecCode: string): NoContent {
     const payload = { data: pecCode };
-    return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
+    return this.apiResource.put<NoContent>(`sites/${siteId}/pec`, payload)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap((site: Site) => {
-          this.toastService.openSuccessToast('Site has been updated');
-          this.logger.info('UPDATED_SITE', site);
-        }),
+        NoContentResponse,
         catchError((error: any) => {
-          this.toastService.openErrorToast('Site could not be updated');
+          this.toastService.openErrorToast('Site ID/PEC could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updatePecCode error has occurred: ', error);
           throw error;
         })
@@ -260,8 +249,8 @@ export class SiteResource {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
-          businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
+          businessDay.startTime = DateUtils.toTimespan(businessDay.startTime);
+          businessDay.endTime = DateUtils.toTimespan(businessDay.endTime);
           return businessDay;
         });
     } else {

@@ -38,6 +38,7 @@ export class OrganizationNamePageFormState extends AbstractFormState<Organizatio
     if (!this.formInstance) {
       return;
     }
+
     this.formInstance.patchValue(organization);
   }
 

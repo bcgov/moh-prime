@@ -22,7 +22,7 @@ export class DateUtils {
 
   /**
    * @description
-   * Check that a date is within the 90 day renewal period.
+   * Check that a date is within the renewal period.
    */
   public static withinRenewalPeriod(date: string | Moment | null): boolean {
     return DateUtils.withinDaysBeforeDate(date, RENEWAL_PERIOD);
@@ -52,5 +52,25 @@ export class DateUtils {
     endDate = endDate.clone().endOf('day').add(1, 'second');
 
     return date.isBetween(startDate, endDate);
+  }
+
+  /**
+   * @description
+   * Convert timespan to hours and minutes.
+   */
+  public static fromTimespan(time: string): string {
+    return (moment.duration(time).asHours() === 24)
+      ? '24:00' // Convert timespan of 1.00:00:00 (1 day) to hours and minutes
+      : time.slice(0, -3);
+  }
+
+  /**
+   * @description
+   * Convert hours and minutes to timespan.
+   */
+  public static toTimespan(time: string): string {
+    return (time === '24:00')
+      ? '1.00:00:00' // Convert from 24 hours to 1 day (1.00:00:00)
+      : `${time}:00`;
   }
 }

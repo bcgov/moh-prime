@@ -1,7 +1,8 @@
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input, Inject } from '@angular/core';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { SiteRegistrationTypeEnum } from '@health-auth/shared/enums/site-registration-type.enum';
@@ -29,8 +30,6 @@ export class SiteRegAccessComponent implements OnInit {
   /**
    * @description
    * Disable authentication.
-   *
-   * TODO remove when feature flag is removed on health authority site registration
    */
   @Input() public disableLogin: boolean;
   /**
@@ -40,14 +39,17 @@ export class SiteRegAccessComponent implements OnInit {
    */
   @Output() public login: EventEmitter<SiteRegistrationTypeEnum>;
   public locationCode: BannerLocationCode;
+  public bcscMobileSetupUrl: string;
   public SiteRegistrationTypeEnum = SiteRegistrationTypeEnum;
 
   constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private viewportService: ViewportService
   ) {
     this.mode = 'single';
     this.login = new EventEmitter<SiteRegistrationTypeEnum>();
     this.locationCode = BannerLocationCode.SITE_REGISTRATION_LANDING_PAGE;
+    this.bcscMobileSetupUrl = config.bcscMobileSetupUrl;
   }
 
   public get isMobile(): boolean {
@@ -55,6 +57,10 @@ export class SiteRegAccessComponent implements OnInit {
   }
 
   public onLogin(type: SiteRegistrationTypeEnum = SiteRegistrationTypeEnum.COMM_PHARMACY_PRACTICE) {
+    if (this.disableLogin) {
+      return;
+    }
+
     this.login.emit(type);
   }
 

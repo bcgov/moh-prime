@@ -44,20 +44,17 @@
     </app-page-subheader2>
   </section>
 
-  <ng-container *ngFor="let organization of organizations; let first = first">
+  <ng-container *ngIf="organization">
 
     <app-summary-card icon="business"
                       title="Organization Information"
                       [menu]="organizationMenu"
                       [menuOutletContext]="{ organization: organization }"
-                      [properties]="getOrganizationProperties(organization)">
-    </app-summary-card>
+                      [properties]="getOrganizationProperties(organization)"></app-summary-card>
 
-    <hr *ngIf="first"
-        class="divider">
+    <hr class="divider">
 
-    <div *ngIf="first"
-         class="add-site">
+    <div class="add-site">
       <button mat-button
               type="button"
               color="primary"
@@ -78,16 +75,20 @@
                         (action)="viewSiteRemoteUsers(organization.id, site)">
         <ng-container *ngIf="inComplete(site)"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props: getNotSubmittedSiteNotificationProperties(organization.id, site) }">
+                      [ngTemplateOutletContext]="{
+                        props: getNotSubmittedSiteNotificationProperties(organization.id, site)
+                      }">
         </ng-container>
         <ng-container *ngIf="isInReview(site)"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props: getInReviewSiteNotificationProperties(site) }">
+                      [ngTemplateOutletContext]="{
+                        props: getInReviewSiteNotificationProperties(site)
+                      }">
         </ng-container>
         <ng-container *ngIf="isLocked(site)"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props:
-                        {
+                      [ngTemplateOutletContext]="{
+                        props: {
                           icon: 'not_interested',
                           text: 'Declined'
                         }
@@ -95,11 +96,15 @@
         </ng-container>
         <ng-container *ngIf="isApproved(site) && !requiresRenewal(site)"
                       [ngTemplateOutlet]="success_notification"
-                      [ngTemplateOutletContext]="{ props: getApprovedSiteNotificationProperties(site) }">
+                      [ngTemplateOutletContext]="{
+                        props: getApprovedSiteNotificationProperties(site)
+                      }">
         </ng-container>
         <ng-container *ngIf="isApproved(site) && requiresRenewal(site)"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props: getRenewalRequiredSiteNotificationProperties(organization.id, site) }">
+                      [ngTemplateOutletContext]="{
+                        props: getRenewalRequiredSiteNotificationProperties(organization.id, site)
+                      }">
         </ng-container>
       </app-summary-card>
 

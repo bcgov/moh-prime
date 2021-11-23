@@ -14,7 +14,7 @@ namespace Prime.ViewModels.Profiles
                 .ForMember(dest => dest.HasAcceptedAgreement, opt => opt.MapFrom(src => src.Agreements.Any(a => a.AcceptedDate.HasValue)))
                 .ForMember(dest => dest.HasSubmittedSite, opt => opt.MapFrom(src => src.Sites.Any(s => s.SubmittedDate.HasValue)))
                 .ForMember(dest => dest.Sites, opt => opt.MapFrom(src => src.Sites.Where(s => careSettingCode == null || s.CareSettingCode == careSettingCode)));
-            CreateMap<Site, SiteListViewModel>()
+            CreateMap<CommunitySite, CommunitySiteListViewModel>()
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
                 .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count));
 
@@ -22,8 +22,11 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<SiteRegistrationNote, SiteRegistrationNoteViewModel>();
 
-            CreateMap<SiteSubmissionViewModel, SiteUpdateModel>();
+            CreateMap<SiteSubmissionViewModel, CommunitySiteUpdateModel>();
             CreateMap<SiteBusinessLicenceViewModel, BusinessLicence>();
+
+            CreateMap<IndividualDeviceProvider, IndividualDeviceProviderViewModel>();
+            CreateMap<IndividualDeviceProviderChangeModel, IndividualDeviceProvider>();
         }
     }
 }

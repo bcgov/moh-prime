@@ -9,6 +9,33 @@
         [formGroup]="formState.form"
         novalidate>
 
+    <section *ngIf="isDeviceProvider"
+             class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Provide your Device Provider ID if you have one.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   maxlength="5"
+                   placeholder="Device Provider ID"
+                   formControlName="deviceProviderIdentifier">
+            <mat-error
+                       *ngIf="formState.deviceProviderIdentifier.hasError('numeric') || formState.deviceProviderIdentifier.hasError('length')">
+              Must be 5 digits in length
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </section>
+
     <section class="mb-3">
 
       <app-page-subheader>
@@ -27,7 +54,7 @@
         <ng-container #alertContent
                       class="alert-content">
           Only physicians and nurse practitioners are permitted to access PharmaNet remotely,
-          and your remote use information will be deleted from your enrolment if you choose a different license type.
+          and your remote user information will be deleted from your enrolment if you choose a different license type.
         </ng-container>
       </app-alert>
 
@@ -35,12 +62,12 @@
         <div class="col col-sm-10 py-3"
              formArrayName="certifications">
 
-          <ng-container *ngFor="let certificate of certifications.controls; let i = index;"
+          <ng-container *ngFor="let certificate of this.formState.certifications.controls; let i = index;"
                         [formGroupName]="i">
 
             <app-college-certification-form [form]="certificate"
                                             [index]="i"
-                                            [total]="certifications.controls.length"
+                                            [total]="formState.certifications.controls.length"
                                             [selectedColleges]="selectedCollegeCodes"
                                             (remove)="removeCertification($event)">
             </app-college-certification-form>

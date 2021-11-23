@@ -1,10 +1,10 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Party } from '@lib/models/party.model';
+import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 
 export class OrganizationSigningAuthorityPageFormState extends AbstractFormState<Party> {
   public constructor(
@@ -142,7 +142,7 @@ export class OrganizationSigningAuthorityPageFormState extends AbstractFormState
         }
 
         // Add the address reference ID to the party
-        party[`${ addressType }Id`] = (!!party[addressType]?.id)
+        party[`${addressType}Id`] = (!!party[addressType]?.id)
           ? party[addressType].id
           : 0;
       });

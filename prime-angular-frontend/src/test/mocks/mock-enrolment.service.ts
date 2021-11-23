@@ -2,11 +2,11 @@ import * as faker from 'faker';
 
 import { BehaviorSubject } from 'rxjs';
 
+import { Address } from '@lib/models/address.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
-import { Address } from '@shared/models/address.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
@@ -47,7 +47,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       enrolleeRemoteUsers: [],
       remoteAccessSites: [],
       remoteAccessLocations: [],
-      deviceProviderNumber: null,
+      deviceProviderIdentifier: null,
       isInsulinPumpProvider: null,
       oboSites: [],
       enrolleeHealthAuthorities: [],
@@ -118,7 +118,6 @@ export class MockEnrolmentService implements IEnrolmentService {
       },
       currentTOAStatus: null,
       assignedTOAType: null,
-      hasNewestAgreement: false,
       enrolleeClassification: EnrolleeClassification.OBO,
       enrolmentCertificateNote: null,
       accessAgreementNote: null,
@@ -130,7 +129,8 @@ export class MockEnrolmentService implements IEnrolmentService {
       base64QRCode: null,
       confirmed: false,
       requiresConfirmation: false,
-      jobs: [{ title: faker.name.jobTitle() }]
+      jobs: [{ title: faker.name.jobTitle() }],
+      adjudicatorIdir: null
     });
   }
 

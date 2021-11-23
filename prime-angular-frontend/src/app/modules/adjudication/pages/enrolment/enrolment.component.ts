@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
-import { Address, AddressType, addressTypes } from '@shared/models/address.model';
+import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 

@@ -1,13 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
+import { catchError, exhaustMap, map } from 'rxjs/operators';
+import { forkJoin, of } from 'rxjs';
 
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -22,6 +22,7 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -47,7 +48,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService,
-    toastService: ToastService,
+    toastService: ToastService
   ) {
     super(defaultOptions,
       route,
@@ -61,8 +62,12 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     this.hasActions = true;
   }
 
-  public onNavigateEnrollee(enrolleeId: number) {
+  public onNavigateEnrollee(enrolleeId: number): void {
     this.onRoute([enrolleeId, RouteUtils.currentRoutePath(this.router.url)]);
+  }
+
+  public onRedirectCommunitySite(routePath: RoutePath): void {
+    this.router.navigate([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.SITE_REGISTRATIONS, ...routePath]);
   }
 
   public ngOnInit(): void {
@@ -71,18 +76,11 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
 
     this.action.subscribe(() => this.loadEnrollee(+this.route.snapshot.params.id));
 
-    this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.id)
-      .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
-
     this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id)
-      .subscribe(documents => {
-        this.documents = documents
-      });
+      .subscribe(documents => this.documents = documents);
 
     this.enrolmentResource.getCurrentEnrolleeAbsence(+this.route.snapshot.params.id)
-      .subscribe((absence: EnrolleeAbsence) => {
-        this.absence = absence
-      });
+      .subscribe((absence: EnrolleeAbsence) => this.absence = absence);
   }
 
   private loadEnrollee(enrolleeId: number): void {
@@ -97,18 +95,25 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
             }))
           ),
         enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId),
-        plrInfo: this.adjudicationResource.getPlrInfoByEnrolleeId(enrolleeId)
-      })
-        .subscribe(({ enrollee, enrolleeNavigation, plrInfo }) => {
-          this.enrollee = enrollee.enrollee;
-          this.enrollees = [enrollee.enrolleeView];
-          this.enrolment = enrollee.enrolment;
-          this.enrolleeNavigation = enrolleeNavigation;
-          this.plrInfo = plrInfo;
-          // hide the adjudication card if enrolment is editable and no 'reason for adjudication'
-          this.showAdjudication = !(enrollee.enrollee.currentStatus.statusCode === EnrolmentStatusEnum.EDITABLE
-            && !enrollee.enrollee.currentStatus.enrolmentStatusReasons?.length);
-        });
+      }).pipe(
+        map(
+          ({ enrollee, enrolleeNavigation }) => {
+            // Complete this first before attempting to get PLR info, so user can see information rendered sooner
+            this.enrollee = enrollee.enrollee;
+            this.enrollees = [enrollee.enrolleeView];
+            this.enrolment = enrollee.enrolment;
+            this.enrolleeNavigation = enrolleeNavigation;
+            // hide the adjudication card if enrolment is editable and no 'reason for adjudication'
+            this.showAdjudication = !(enrollee.enrollee.currentStatus.statusCode === EnrolmentStatusEnum.EDITABLE
+              && !enrollee.enrollee.currentStatus.enrolmentStatusReasons?.length);
+            return enrolleeId;
+          }
+        ),
+        exhaustMap((enrolleeId: number) => this.adjudicationResource.getPlrInfoByEnrolleeId(enrolleeId)
+          .pipe(
+            map((plrInfo: PlrInfo[]) => this.plrInfo = plrInfo),
+            catchError(_ => of([]))))
+      ).subscribe();
   }
 
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {

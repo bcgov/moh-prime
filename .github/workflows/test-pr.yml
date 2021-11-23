@@ -82,7 +82,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: Setup .NET Core 5.0
         uses: actions/setup-dotnet@v1
         with:

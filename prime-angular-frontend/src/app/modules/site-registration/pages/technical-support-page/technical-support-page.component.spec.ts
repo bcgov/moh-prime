@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { MockSiteService } from 'test/mocks/mock-site.service';
+import { MockCommunitySiteService } from 'test/mocks/mock-community-site.service';
 
 import { TechnicalSupportPageComponent } from './technical-support-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -35,7 +35,7 @@ describe('TechnicalSupportPageComponent', () => {
         },
         {
           provide: SiteService,
-          useClass: MockSiteService
+          useClass: MockCommunitySiteService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]

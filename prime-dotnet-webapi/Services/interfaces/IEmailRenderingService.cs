@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
@@ -23,5 +22,6 @@ namespace Prime.Services.EmailInternal
         Task<Email> RenderSiteReviewedNotificationEmailAsync(SiteReviewedEmailViewModel viewModel);
         Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel);
         Task<Email> RenderSiteActiveBeforeRegistrationEmailAsync(string newSigningAuthorityEmail, SiteActiveBeforeRegistrationEmailViewModel viewModel);
+        Task<Email> RenderPaperEnrolleeSubmissionEmail(string enrolleeEmail, PaperEnrolleeSubmissionEmailViewModel viewModel);
     }
 }

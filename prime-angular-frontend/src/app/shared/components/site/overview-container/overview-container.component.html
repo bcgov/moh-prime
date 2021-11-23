@@ -2,7 +2,7 @@
 
   <app-overview-section title="Signing Authority"
                         [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
+                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
                         (route)="onRoute($event)">
     <app-bcsc-profile [user]="organization?.signingAuthority"></app-bcsc-profile>
   </app-overview-section>
@@ -11,19 +11,19 @@
                     [address]="organization?.signingAuthority.physicalAddress"
                     [showRedirect]="showEditRedirect"
                     [showIfEmpty]="true"
-                    (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
+                    (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
   </app-address-view>
 
   <app-address-view title="Mailing Address"
                     [address]="organization?.signingAuthority.mailingAddress"
                     [showRedirect]="showEditRedirect"
                     [showIfEmpty]="true"
-                    (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
+                    (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
   </app-address-view>
 
   <app-overview-section title="Contact Information"
                         [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
+                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
                         (route)="onRoute($event)">
     <app-party-review [party]="organization?.signingAuthority"
                       [excludeList]="['name']"></app-party-review>
@@ -31,7 +31,7 @@
 
   <app-overview-section title="Organization Information"
                         [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_NAME]"
+                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_NAME]"
                         (route)="onRoute($event)">
     <app-enrollee-property title="Reference ID">
       {{ organization?.displayId | default }}
@@ -72,7 +72,7 @@
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
 
-    <button *ngIf="showEditRedirect && withinRenewalPeriod"
+    <button *ngIf="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && withinRenewalPeriod"
             mat-flat-button
             color="primary"
             class="mb-4"
@@ -94,7 +94,9 @@
     </app-enrollee-property>
 
     <ng-container *ngIf="site.businessLicence?.businessLicenceDocument && !admin; else businessLicenceListView">
-      <app-enrollee-property title="Expiry">
+      <app-enrollee-property title="Expiry"
+                             [hasError]="!site.businessLicence?.expiryDate"
+                             [errorMessage]="'Business licence expiry date is required'">
         {{ site.businessLicence?.expiryDate | formatDate | default }}
       </app-enrollee-property>
 
@@ -150,6 +152,7 @@
     <app-enrollee-property title="Country">
       {{ site?.physicalAddress?.countryCode | configCode: 'countries' | default }}
     </app-enrollee-property>
+
   </app-overview-section>
 
   <app-overview-section title="Hours of Operation"
@@ -163,6 +166,48 @@
         </ng-container>
       </app-enrollee-property>
     </ng-container>
+  </app-overview-section>
+
+  <app-overview-section *ngIf="site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER"
+                        title="Individual Device Providers"
+                        [showEditRedirect]="showEditRedirect && site.status === SiteStatusType.EDITABLE"
+                        [editRoute]="SiteRoutes.DEVICE_PROVIDER"
+                        (route)="onRouteRelative($event)">
+
+    <ng-container *ngIf="site.individualDeviceProviders?.length; else noDeviceProviders">
+      <ng-container *ngFor="let provider of site.individualDeviceProviders">
+
+        <app-enrollee-property title="First Name">
+          {{ provider.firstName | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property *ngIf="provider.middleName"
+                               title="Middle Name">
+          {{ provider.middleName | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Last Name">
+          {{ provider.lastName | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Date of Birth">
+          {{ provider.dateOfBirth | formatDate | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Email">
+          {{ provider.email | default }}
+        </app-enrollee-property>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #noDeviceProviders>
+      <app-enrollee-property title="Device Providers"
+                             [hasError]="siteErrors?.deviceProviderSite"
+                             errorMessage="Device provider sites must have at least one individual device provider">
+        None
+      </app-enrollee-property>
+    </ng-template>
+
   </app-overview-section>
 
   <app-remote-user-review [remoteUsers]="site.remoteUsers"

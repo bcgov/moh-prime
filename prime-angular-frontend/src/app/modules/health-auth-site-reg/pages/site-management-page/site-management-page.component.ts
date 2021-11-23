@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
+import { AuthorizedUserResource } from '@core/resources/authorized-user-resource.service';
+// TODO move to @lib when less PRs are open
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
-// TODO move to /lib
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+import { HealthAuthoritySiteList } from '@health-auth/shared/models/health-authority-site-list.model';
+import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 
 @Component({
   selector: 'app-site-management-page',
@@ -24,10 +24,9 @@ import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
-  public healthAuthority: HealthAuthority;
-  public healthAuthoritySites: HealthAuthoritySite[];
+  public healthAuthorityId: number;
+  public healthAuthoritySites$: Observable<HealthAuthoritySiteList[] | null>;
   public routeUtils: RouteUtils;
-  public SiteRoutes = HealthAuthSiteRegRoutes;
   public HealthAuthorityEnum = HealthAuthorityEnum;
   public SiteStatusType = SiteStatusType;
 
@@ -35,7 +34,7 @@ export class SiteManagementPageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authorizedUserService: AuthorizedUserService,
-    private healthAuthorityResource: HealthAuthorityResource
+    private authorizedUserResource: AuthorizedUserResource
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -59,43 +58,30 @@ export class SiteManagementPageComponent implements OnInit {
     this.redirectTo(healthAuthorityId, healthAuthoritySite.id, pagePath);
   }
 
-  public viewSiteRemoteUsers(healthAuthorityId: number, healthAuthoritySiteId: number): void {
-    this.redirectTo(healthAuthorityId, healthAuthoritySiteId, HealthAuthSiteRegRoutes.REMOTE_USERS);
+  public getApprovedSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
+    return {
+      icon: 'task_alt',
+      text: `Site Approved<br>Site ID: ${healthAuthoritySite.pec}`
+    };
   }
 
-  public isUnderReview(healthAuthoritySite: HealthAuthoritySite): boolean {
-    // TODO what are the status types?
-    // TODO move into template
-    // return healthAuthoritySite.submittedDate && healthAuthoritySite.status === SiteStatusType.IN_REVIEW;
-    return !!healthAuthoritySite.submittedDate;
+  public getWithinRenewalPeriodSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
+    return {
+      icon: 'notification_important',
+      text: 'This site requires renewal.',
+      label: 'Renew Site',
+      route: () => this.viewSite(this.healthAuthorityId, healthAuthoritySite)
+    };
   }
 
-  public isApproved(healthAuthoritySite: HealthAuthoritySite): boolean {
-    // TODO what are the status types?
-    // TODO move into template
-    // return healthAuthoritySite.status === SiteStatusType.APPROVED;
-    return false;
-  }
-
-  public isDeclined(healthAuthoritySite: HealthAuthoritySite): boolean {
-    // TODO what are the status types?
-    // TODO move into template
-    // return healthAuthoritySite.status === SiteStatusType.DECLINED;
-    return false;
+  public trackBySiteId(index: number, healthAuthoritySite: HealthAuthoritySite) {
+    return healthAuthoritySite.id;
   }
 
   public ngOnInit(): void {
-    this.getHealthAuthorities();
-  }
-
-  private getHealthAuthorities(): void {
-    const healthAuthorityId = this.authorizedUserService.authorizedUser.healthAuthorityCode;
-    this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthorityId)
-      .pipe(
-        map((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority),
-        exhaustMap((healthAuthority: HealthAuthority) => this.healthAuthorityResource.getHealthAuthoritySites(healthAuthority.id))
-      )
-      .subscribe((healthAuthoritySites: HealthAuthoritySite[]) => this.healthAuthoritySites = healthAuthoritySites);
+    const authorizedUser = this.authorizedUserService.authorizedUser;
+    this.healthAuthorityId = authorizedUser.healthAuthorityCode;
+    this.healthAuthoritySites$ = this.authorizedUserResource.getAuthorizedUserSites(authorizedUser.id);
   }
 
   private redirectTo(healthAuthorityId: number, healthAuthoritySiteId: number, pagePath: string): void {

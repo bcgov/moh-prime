@@ -15,6 +15,7 @@ import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -104,8 +105,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const profile = (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicFormState.json
       : this.bcscDemographicFormState.json;
-    const certifications = this.regulatoryFormState.json;
-    const deviceProvider = this.deviceProviderForm.getRawValue();
+    const regulatory = this.regulatoryFormState.json;
     const { oboSites } = this.oboSitesForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
@@ -121,8 +121,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         ...profile,
         ...paperProfile
       },
-      certifications,
-      ...deviceProvider,
+      ...regulatory,
       oboSites,
       ...careSettings,
       enrolleeRemoteUsers,
@@ -161,47 +160,14 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   }
 
   /**
-   * @description
-   * Check that all constituent forms are valid.
-   */
-  public get isValid(): boolean {
-    return super.isValid && this.hasCertificateOrOboSite();
+  * @description
+  * Check that all constituent forms are valid for submission.
+  */
+  public get isValidSubmission(): boolean {
+    return this.isValid && this.hasDeviceProviderOrOboSite() && this.hasCertificateOrOboSite();
   }
 
-  /**
-   * @description
-   * Check for the requirement of at least one certification, or one obo site/job.
-   */
-  // TODO refactor this method as it can't be scanned and understood
-  public hasCertificateOrOboSite(): boolean {
-    const oboSites = this.oboSitesForm.get('oboSites') as FormArray;
-    const certifications = this.regulatoryFormState.certifications;
-    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
-    let hasOboSiteForEveryHA = true;
-    // Using `for` loop rather than `every()` method for ease of debugging
-    for (let i = 0; i < enrolleeHealthAuthorities.controls.length; i++) {
-      const checkbox = enrolleeHealthAuthorities.controls[i];
-      // For every selected Health Authority ...
-      if (checkbox.value === true) {
-        let foundMatchingHAOboSite = false;
-        // ... there must be at least one Obo Site for that Health Authority
-        for (let j = 0; j < oboSites.controls.length; j++) {
-          const oboSiteForm = oboSites.controls[j] as FormGroup;
-          if (oboSiteForm.controls.healthAuthorityCode.value === this.configService.healthAuthorities[i].code) {
-            foundMatchingHAOboSite = true;
-            break;
-          }
-        }
-        if (!foundMatchingHAOboSite) {
-          hasOboSiteForEveryHA = false;
-          break;
-        }
-      }
-    }
-    // When you set certifications to 'None' there still exists an item in
-    // the FormArray, and this checks for its existence
-    return (oboSites.length && hasOboSiteForEveryHA) || (certifications.length && certifications.value[0].licenseNumber);
-  }
+
 
   /**
    * @description
@@ -218,7 +184,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.bceidDemographicFormState = new BceidDemographicFormState(this.fb, this.formUtilsService);
     this.bcscDemographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
     this.regulatoryFormState = new RegulatoryFormState(this.fb, this.configService);
-    this.deviceProviderForm = this.buildDeviceProviderForm();
     this.oboSitesForm = this.buildOboSitesForm();
     this.remoteAccessForm = this.buildRemoteAccessForm();
     this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
@@ -239,7 +204,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicFormState.patchValue(enrolment.enrollee)
       : this.bcscDemographicFormState.patchValue(enrolment.enrollee);
-    this.regulatoryFormState.patchValue(enrolment.certifications);
+    const { certifications, deviceProviderIdentifier } = enrolment;
+    this.regulatoryFormState.patchValue({ certifications, deviceProviderIdentifier });
 
     const {
       careSettings,
@@ -251,7 +217,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       selfDeclarations,
       profileCompleted
     } = enrolment;
-    this.patchDeviceProviderForm(enrolment);
     this.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
     this.patchOboSitesForm(oboSites);
     this.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
@@ -277,25 +242,25 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    */
 
   private convertSelfDeclarationsToJson(): SelfDeclaration[] {
-    const selfDeclarations = this.selfDeclarationForm.getRawValue();
+    const selfDeclarationsFormData = this.selfDeclarationForm.getRawValue();
     const selfDeclarationsTypes = {
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
       hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
       hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
     };
+
     return Object.keys(selfDeclarationsTypes)
       .reduce((sds: SelfDeclaration[], sd: string) => {
-        if (selfDeclarations[sd]) {
-          sds.push(
-            new SelfDeclaration(
-              selfDeclarationsTypes[sd],
-              selfDeclarations[`${sd}Details`],
-              selfDeclarations[`${sd}DocumentGuids`],
-              this.enrolleeId
-            )
-          );
-        }
+        sds.push(
+          new SelfDeclaration(
+            selfDeclarationsTypes[sd],
+            selfDeclarationsFormData[`${sd}Details`],
+            selfDeclarationsFormData[`${sd}DocumentGuids`],
+            this.enrolleeId,
+            selfDeclarationsFormData[sd]
+          )
+        );
         return sds;
       }, []);
   }
@@ -359,6 +324,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       oboSites: this.fb.array([]),
       communityHealthSites: this.fb.array([]),
       communityPharmacySites: this.fb.array([]),
+      deviceProviderSites: this.fb.array([]),
       healthAuthoritySites: this.fb.group({})
     });
   }
@@ -388,11 +354,13 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const oboSitesFormArray = this.oboSitesForm.get('oboSites') as FormArray;
     const communityHealthSites = this.oboSitesForm.get('communityHealthSites') as FormArray;
     const communityPharmacySites = this.oboSitesForm.get('communityPharmacySites') as FormArray;
+    const deviceProviderSites = this.oboSitesForm.get('deviceProviderSites') as FormArray;
     const healthAuthoritySites = this.oboSitesForm.get('healthAuthoritySites') as FormGroup;
 
     oboSitesFormArray.clear();
     communityHealthSites.clear();
     communityPharmacySites.clear();
+    deviceProviderSites.clear();
     Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
 
     oboSites.forEach((s: OboSite) => {
@@ -409,26 +377,16 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
           this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
           break;
         }
+        case CareSettingEnum.DEVICE_PROVIDER: {
+          this.addNonHealthAuthorityOboSite(site, deviceProviderSites);
+          break;
+        }
         case CareSettingEnum.HEALTH_AUTHORITY: {
           this.addHealthAuthorityOboSite(site, healthAuthoritySites, s.healthAuthorityCode);
           break;
         }
       }
     });
-  }
-
-  public buildDeviceProviderForm(): FormGroup {
-    return this.fb.group({
-      deviceProviderNumber: [null, [
-        FormControlValidators.numeric,
-        FormControlValidators.requiredLength(5)
-      ]],
-      isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
-    });
-  }
-
-  public patchDeviceProviderForm(enrolment) {
-    this.deviceProviderForm.patchValue(enrolment);
   }
 
   public buildRemoteAccessForm(): FormGroup {
@@ -698,5 +656,42 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     ]
       .map((formArrayName: string) => this.selfDeclarationForm.get(formArrayName) as FormArray)
       .forEach((formArray: FormArray) => formArray.clear());
+  }
+
+  /**
+   * @description
+   * Check that at least one certificate or OBO site exists, and that each
+   * chosen health authority has at least one site.
+   */
+  private hasCertificateOrOboSite(): boolean {
+    const { certifications, oboSites } = this.json;
+
+    // When you set certifications to 'None' there still exists an item in the
+    // list, and this checks for the existence of at least one valid certification
+    const hasCertification = certifications.some(c => c?.licenseNumber);
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities').value as boolean[];
+    const hasOboSiteForEveryChosenHealthAuth = enrolleeHealthAuthorities
+      .every((wasChosen: boolean, healthAuthorityCode: HealthAuthorityEnum) =>
+        (wasChosen)
+          ? oboSites.some(os => os.healthAuthorityCode === healthAuthorityCode)
+          : true
+      );
+
+    return hasCertification || (oboSites.length && hasOboSiteForEveryChosenHealthAuth);
+  }
+
+  /**
+   * @description
+   * Check if the user selected Device Provider as Care Setting
+   * then they shuold provide either Device Provider ID or Obo Site
+   */
+  private hasDeviceProviderOrOboSite(): boolean {
+    const { careSettings, certifications, deviceProviderIdentifier, oboSites } = this.json;
+    const careSettingPredicate = (cs) => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER;
+
+    return (careSettings.some(careSettingPredicate))
+      ? ((deviceProviderIdentifier && !!certifications.length)
+        || (!deviceProviderIdentifier && !!oboSites.filter(careSettingPredicate).length))
+      : true
   }
 }

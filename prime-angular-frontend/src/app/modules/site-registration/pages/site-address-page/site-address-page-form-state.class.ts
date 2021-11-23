@@ -1,8 +1,8 @@
 import { FormBuilder, FormGroup } from '@angular/forms';
 
+import { Address } from '@lib/models/address.model';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Address } from '@shared/models/address.model';
 
 export class SiteAddressPageFormState extends AbstractFormState<Address> {
   public constructor(

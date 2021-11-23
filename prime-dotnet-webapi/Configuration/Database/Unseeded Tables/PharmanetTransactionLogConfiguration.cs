@@ -11,6 +11,9 @@ namespace Prime.Configuration.Database
         {
             // Will frequently search by these fields
             builder
+                .HasIndex(e => e.TransactionId)
+                .IsUnique();
+            builder
                 .HasIndex(e => e.UserId);
             builder
                 .HasIndex(e => e.PharmacyId);

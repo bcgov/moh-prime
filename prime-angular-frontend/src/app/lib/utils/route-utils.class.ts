@@ -1,20 +1,28 @@
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+
+export type RoutePath = string | RouteSegments;
+export type RouteSegments = (string | number)[];
 
 export class RouteUtils {
   private route: ActivatedRoute;
   private router: Router;
   private readonly baseRoutePath: string;
+  private readonly location: Location;
 
   constructor(
     route: ActivatedRoute,
     router: Router,
-    baseRoutePath: string | (string | number)[]
+    baseRoutePath: RoutePath,
+    // TODO temporary default to reduce application wide refactor, and should be removed in separate PR
+    location: Location = null
   ) {
     this.route = route;
     this.router = router;
     this.baseRoutePath = (Array.isArray(baseRoutePath))
       ? baseRoutePath.join('/')
       : baseRoutePath;
+    this.location = location;
   }
 
   /**
@@ -53,7 +61,7 @@ export class RouteUtils {
    * @description
    * Route from a base route.
    */
-  public routeTo(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}): void {
+  public routeTo(routePath: RoutePath, navigationExtras: NavigationExtras = {}): void {
     const commands = (Array.isArray(routePath)) ? routePath : [routePath];
     this.router.navigate(commands, {
       ...navigationExtras
@@ -64,7 +72,7 @@ export class RouteUtils {
    * @description
    * Route relative to the active route.
    */
-  public routeRelativeTo(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}): void {
+  public routeRelativeTo(routePath: RoutePath, navigationExtras: NavigationExtras = {}): void {
     this.routeTo(routePath, {
       relativeTo: this.route.parent,
       ...navigationExtras
@@ -76,7 +84,7 @@ export class RouteUtils {
    * Route within a specified base path, for example within a
    * module, otherwise uses root.
    */
-  public routeWithin(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}): void {
+  public routeWithin(routePath: RoutePath, navigationExtras: NavigationExtras = {}): void {
     let commands = (Array.isArray(routePath)) ? routePath : [routePath];
     commands = (this.baseRoutePath) ? [this.baseRoutePath, ...commands] : commands;
     this.routeTo(commands, {
@@ -103,5 +111,35 @@ export class RouteUtils {
    */
   public removeQueryParams(queryParams: { [key: string]: any } = {}): void {
     this.router.navigate([], { queryParams });
+  }
+
+  /**
+   * @description
+   * Replace the current URL and prevent it from being pushed onto
+   * browser history, and then route accordingly.
+   *
+   * Chainable with other RouteUtil methods since routing
+   * would commonly occur after invocation.
+   *
+   * NOTE: Replaces the URL, but does not update route state, which
+   * may require the route-level to be moved up using '../' and then
+   * down to current route-level to have it be overridden.
+   *
+   * @example
+   * this.routeUtils
+   *   .replaceState(['module', 'resource', id, 'action'])
+   *   .routeRelativeTo(['../', id, 'path']);
+   */
+  public replaceState(replacementRoutePath: RoutePath): RouteUtils {
+    if (!this.location) {
+      throw Error('Location service was not provided to RouteUtils');
+    }
+
+    replacementRoutePath = (Array.isArray(replacementRoutePath))
+      ? replacementRoutePath.join('/')
+      : replacementRoutePath;
+    this.location.replaceState(replacementRoutePath);
+
+    return this;
   }
 }

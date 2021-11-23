@@ -1,14 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using DelegateDecompiler.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
 
 using Prime.HttpClients;
 using Prime.Models;
 using Prime.Models.Documents;
 using Prime.Services.Razor;
-using Prime.ViewModels.SiteRegistration;
+using Prime.ViewModels.HealthAuthoritySites;
+using Prime.ViewModels.SiteRegistration.ReviewDocument;
 
 namespace Prime.Services.EmailInternal
 {
@@ -20,12 +24,14 @@ namespace Prime.Services.EmailInternal
         private readonly IOrganizationService _organizationService;
         private readonly IPdfService _pdfService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IMapper _mapper;
 
         public EmailDocumentsService(
             ApiDbContext context,
             ILogger<EmailDocumentsService> logger,
             IDocumentAccessTokenService documentAccessTokenService,
             IDocumentManagerClient documentClient,
+            IMapper mapper,
             IOrganizationAgreementService organizationAgreementService,
             IOrganizationService organizationService,
             IPdfService pdfService,
@@ -38,6 +44,7 @@ namespace Prime.Services.EmailInternal
             _organizationService = organizationService;
             _pdfService = pdfService;
             _razorConverterService = razorConverterService;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Pdf>> GenerateSiteRegistrationSubmissionAttachmentsAsync(int siteId)
@@ -71,16 +78,29 @@ namespace Prime.Services.EmailInternal
             await _context.SaveChangesAsync();
         }
 
+        public async Task<Pdf> GenerateHealthAuthorityRegistrationReviewAttachmentAsync(int healthAuthoritySiteId)
+        {
+            var model = await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Where(has => has.Id == healthAuthoritySiteId)
+                .ProjectTo<HealthAuthoritySiteSubmissionViewModel>(_mapper.ConfigurationProvider)
+                .SingleAsync();
+
+            var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.HealthAuthoritySiteRegistrationReview, model);
+            return new Pdf("HealthAuthoritySiteRegistrationReview.pdf", _pdfService.Generate(html));
+        }
+
         private async Task<Pdf> GenerateRegistrationReviewAttachmentAsync(int siteId)
         {
             // TODO use Automapper
-            var model = await _context.Sites
+            var model = await _context.CommunitySites
                 .Where(s => s.Id == siteId)
                 .Select(s => new SiteRegistrationReviewViewModel
                 {
                     OrganizationName = s.Organization.Name,
                     OrganizationRegistrationId = s.Organization.RegistrationId,
                     OrganizationDoingBusinessAs = s.Organization.DoingBusinessAs,
+                    OrganizationReferenceId = s.Organization.DisplayId,
                     SiteName = s.DoingBusinessAs,
                     SiteAddress = s.PhysicalAddress,
                     PEC = s.PEC,
@@ -160,7 +180,7 @@ namespace Prime.Services.EmailInternal
             }
 
             var agreementType = _organizationService.OrgAgreementTypeForSiteSetting(careSetting.Value);
-            var agreementDto = await _context.Sites
+            var agreementDto = await _context.CommunitySites
                 .Where(s => s.Id == siteId)
                 .SelectMany(s => s.Organization.Agreements)
                 .Where(a => a.AgreementVersion.AgreementType == agreementType

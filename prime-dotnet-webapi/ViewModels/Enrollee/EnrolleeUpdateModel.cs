@@ -40,7 +40,7 @@ namespace Prime.ViewModels
 
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
-        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
+        public ICollection<RemoteAccessSiteUpdateModel> RemoteAccessSites { get; set; }
 
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
@@ -51,9 +51,7 @@ namespace Prime.ViewModels
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
-        public string DeviceProviderNumber { get; set; }
-
-        public bool? IsInsulinPumpProvider { get; set; }
+        public string DeviceProviderIdentifier { get; set; }
 
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 

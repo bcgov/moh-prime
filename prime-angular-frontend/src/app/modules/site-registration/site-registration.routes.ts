@@ -2,18 +2,18 @@ export class SiteRoutes {
   public static LOGIN_PAGE = 'site';
 
   public static MODULE_PATH = 'site-registration';
-  public static COLLECTION_NOTICE = 'collection-notice';
 
-  // Kept as organizations so route paths indicate hierarchy of resources
-  // TODO maybe don't make site management the root so paths make sense on site management
-  public static SITE_MANAGEMENT = 'organizations';
-  // TODO make this the route path for organizations and sites
-  // public static ORGANIZATIONS = 'organizations';
+  public static COMMUNITY_SITE_DEFAULT_WORKFLOW = '';
+  public static CHANGE_SIGNING_AUTHORITY_WORKFLOW = 'change-signing-authority';
+
+  public static COLLECTION_NOTICE = 'collection-notice';
+  public static ORGANIZATIONS = 'organizations';
 
   public static ORGANIZATION_SIGNING_AUTHORITY = 'organization-signing-authority';
-  public static ORGANIZATION_CLAIM = 'claim';
-  public static ORGANIZATION_NAME = 'organization-name';
+  public static ORGANIZATION_CLAIM = 'organization-claim';
   public static ORGANIZATION_CLAIM_CONFIRMATION = 'organization-claim-confirmation';
+  public static ORGANIZATION_CLAIMED = 'organization-claimed';
+  public static ORGANIZATION_NAME = 'organization-name';
   public static ORGANIZATION_REVIEW = 'organization-review';
   public static ORGANIZATION_AGREEMENT = 'organization-agreement';
 
@@ -24,6 +24,7 @@ export class SiteRoutes {
   public static BUSINESS_LICENCE = 'business-licence';
   public static SITE_ADDRESS = 'site-address';
   public static HOURS_OPERATION = 'hours-operation';
+  public static DEVICE_PROVIDER = 'device-provider';
   public static ADMINISTRATOR = 'site-administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
   public static TECHNICAL_SUPPORT = 'technical-support';
@@ -67,7 +68,6 @@ export class SiteRoutes {
     return [
       this.COLLECTION_NOTICE,
       this.ORGANIZATION_SIGNING_AUTHORITY,
-      this.ORGANIZATION_CLAIM,
       this.ORGANIZATION_NAME
     ];
   }
@@ -79,6 +79,7 @@ export class SiteRoutes {
       this.BUSINESS_LICENCE,
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
+      this.DEVICE_PROVIDER,
       this.REMOTE_USERS,
       this.ADMINISTRATOR,
       this.PRIVACY_OFFICER,
@@ -108,6 +109,15 @@ export class SiteRoutes {
     return [
       ...this.organizationRegistrationRouteOrder(),
       ...this.siteRegistrationRouteOrder()
+    ];
+  }
+
+  public static claimOrganizationRoutes(): string[] {
+    return [
+      this.COLLECTION_NOTICE,
+      this.ORGANIZATION_SIGNING_AUTHORITY,
+      this.ORGANIZATION_CLAIM,
+      this.ORGANIZATION_CLAIM_CONFIRMATION
     ];
   }
 }
