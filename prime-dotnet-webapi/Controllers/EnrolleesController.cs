@@ -167,7 +167,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status302Found)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrolleeByUserId(Guid userId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeStubAsync(userId);
@@ -180,7 +180,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Redirect(Flurl.Url.Combine(PrimeConfiguration.Current.BackendUrl, "enrollees", enrollee.Id.ToString()));
+            return Ok(await _enrolleeService.GetEnrolleeAsync(enrollee.Id));
         }
 
         // PUT: api/enrollees/5
