@@ -187,17 +187,13 @@ export class SiteResource {
       );
   }
 
-  public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
+  public updatePecCode(siteId: number, pecCode: string): NoContent {
     const payload = { data: pecCode };
-    return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
+    return this.apiResource.put<NoContent>(`sites/${siteId}/pec`, payload)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap((site: Site) => {
-          this.toastService.openSuccessToast('Site has been updated');
-          this.logger.info('UPDATED_SITE', site);
-        }),
+        NoContentResponse,
         catchError((error: any) => {
-          this.toastService.openErrorToast('Site could not be updated');
+          this.toastService.openErrorToast('Site ID/PEC could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updatePecCode error has occurred: ', error);
           throw error;
         })
