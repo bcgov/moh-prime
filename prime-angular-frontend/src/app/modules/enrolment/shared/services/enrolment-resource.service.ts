@@ -19,6 +19,9 @@ import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certif
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+import { EnrolmentStatusAdmin } from '@shared/models/enrolment-status-admin.model';
+import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
@@ -28,8 +31,6 @@ import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
-import { SelfDeclaration } from '@shared/models/self-declarations.model';
-import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 @Injectable({
   providedIn: 'root'
@@ -68,7 +69,7 @@ export class EnrolmentResource {
           })
             .pipe(
               map(({ enrolleeCareSettings, ...remainder }) => {
-                return { ...enrollee, ...enrolleeCareSettings, ...remainder }
+                return { ...enrollee, ...enrolleeCareSettings, ...remainder };
               }),
             ),
         ),
@@ -176,11 +177,11 @@ export class EnrolmentResource {
       );
   }
 
-  public getCurrentStatus(enrolleeId: number): Observable<EnrolmentStatus> {
-    return this.apiResource.get<EnrolmentStatus>(`enrollees/${enrolleeId}/current-status`)
+  public getCurrentStatus(enrolleeId: number): Observable<EnrolmentStatusAdmin> {
+    return this.apiResource.get<EnrolmentStatusAdmin>(`enrollees/${enrolleeId}/current-status`)
       .pipe(
-        map((response: ApiHttpResponse<EnrolmentStatus>) => response.result),
-        tap((accessTerms: EnrolmentStatus) => this.logger.info('ENROLLEE_AGREEMENTS', accessTerms)),
+        map((response: ApiHttpResponse<EnrolmentStatusAdmin>) => response.result),
+        tap((accessTerms: EnrolmentStatusAdmin) => this.logger.info('ENROLLEE_AGREEMENTS', accessTerms)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee current status could not be found.');
           this.logger.error('[Enrolment] EnrolmentResource::getCurrentStatus error has occurred: ', error);
