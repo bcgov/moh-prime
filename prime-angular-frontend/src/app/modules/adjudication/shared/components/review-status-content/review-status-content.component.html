@@ -29,12 +29,12 @@
           </span>
           <p class="pl-2">
             {{ reason.note }}
-            <ng-container *ngFor="let relatedId of reason.relatedIds; let index=index">
-              <a [routerLink]=""
-                 (click)="onRoute([relatedId, AdjudicationRoutes.ENROLLEE_OVERVIEW])">
-                {{ relatedId }}
+            <ng-container *ngFor="let match of reason.potentialMatches; let index=index">
+              <a href=#
+                 (click)="onRoute([match, AdjudicationRoutes.ENROLLEE_OVERVIEW], $event)">
+                {{ DISPLAY_ID_OFFSET + match }}
               </a>
-              <ng-container *ngIf="index < reason.relatedIds.length-1; else periodTemplate">
+              <ng-container *ngIf="index < reason.potentialMatches.length - 1; else periodTemplate">
                 <span>,</span>
               </ng-container>
               <ng-template #periodTemplate>

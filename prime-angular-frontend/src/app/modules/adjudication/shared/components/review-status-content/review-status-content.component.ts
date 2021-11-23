@@ -15,6 +15,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { ConfigCodePipe } from '@config/config-code.pipe';
+import { DISPLAY_ID_OFFSET } from '@lib/constants';
 
 class Status {
   constructor(
@@ -34,7 +35,7 @@ class Reason {
     public documents?: BaseDocument[],
     public isSelfDeclaration?: boolean,
     public question?: string,
-    public relatedIds?: number[],
+    public potentialMatches?: number[],
   ) { }
 }
 
@@ -52,6 +53,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   private questions: { [key: number]: string } = selfDeclarationQuestions;
 
   public AdjudicationRoutes = AdjudicationRoutes;
+  public DISPLAY_ID_OFFSET = DISPLAY_ID_OFFSET;
 
   constructor(
     private utilsService: UtilsService,
@@ -87,7 +89,8 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     }
   }
 
-  public onRoute(routePath: string | (string | number)[]): void {
+  public onRoute(routePath: string | (string | number)[], event: Event): void {
+    event?.preventDefault();
     this.route.emit(routePath);
   }
 
@@ -137,7 +140,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
         }
 
         reasons.push((esr.statusReasonCode === 20)
-          ? this.createLinksWithPaperEnrolments(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote))
+          ? this.createHyperLinksWithPaperEnrolments(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote))
           : new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote));
         return reasons;
       }, []);
@@ -161,10 +164,12 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
   }
 
-  private createLinksWithPaperEnrolments(reason: Reason): Reason {
-    const lastColumn = reason.note.lastIndexOf(':');
-    reason.relatedIds = reason.note.substring(lastColumn).match(/\d+/g).map((id) => parseInt(id));
-    reason.note = reason.note.substring(0, lastColumn + 1);
+  private createHyperLinksWithPaperEnrolments(reason: Reason): Reason {
+    const lastColon = reason.note.lastIndexOf(':');
+
+    // Get the ids and parse them to numbers since we want to show the display ID which is id + 1000
+    reason.potentialMatches = reason.note.substring(lastColon).match(/\d+/g).map((id) => parseInt(id));
+    reason.note = reason.note.substring(0, lastColon + 1);
     return reason;
   }
 }
