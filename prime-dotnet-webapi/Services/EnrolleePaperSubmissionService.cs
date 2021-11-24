@@ -285,6 +285,14 @@ namespace Prime.Services
                         .Any(link => link.PaperEnrolleeId == e.Id));
         }
 
+        public async Task<bool> GetEnrolleeApprovedDateExistsAsync(int? enrolleeId)
+        {
+            return await _context.Enrollees
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == enrolleeId
+                    && e.ApprovedDate != null);
+        }
+
         public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
         {
             // We want all paper enrollees with a matching DOB

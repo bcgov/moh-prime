@@ -296,20 +296,22 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // HEAD: api/enrollees/paper-submissions?dateOfBirth=1977-09-22
+        // HEAD: api/enrollees/paper-submissions?dateOfBirth=1977-09-22&enrolleId=1
         /// <summary>
         /// Checks if there are any unclaimed paper Enrollees submissions with the supplied date of birth.
         /// </summary>
         /// <param name="dateOfBirth"></param>
+        /// <param name="enrolleeId"></param>
         [HttpHead("paper-submissions", Name = nameof(CheckForMatchingPaperSubmission))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CheckForMatchingPaperSubmission([FromQuery] DateTime dateOfBirth)
+        public async Task<ActionResult> CheckForMatchingPaperSubmission([FromQuery] DateTime dateOfBirth, [FromQuery] int enrolleeId)
         {
-            if (await _enrolleePaperSubmissionService.MatchingSubmissionExistsAsync(dateOfBirth))
+            if (await _enrolleePaperSubmissionService.MatchingSubmissionExistsAsync(dateOfBirth)
+                || !await _enrolleePaperSubmissionService.GetEnrolleeApprovedDateExistsAsync(enrolleeId))
             {
                 return Ok();
             }
