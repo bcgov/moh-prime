@@ -252,7 +252,7 @@ namespace Prime.Services.Rules
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
             var paperEnrollees = await _enrolleePaperSubmissionService.GetPotentialPaperEnrolleeReturneesAsync(enrollee.DateOfBirth);
-            var isApproved = await _enrolleePaperSubmissionService.GetEnrolleeApprovedDateExistsAsync(enrollee.Id);
+            var isApproved = await _enrolleePaperSubmissionService.GetIsEnrolleeApprovedAsync(enrollee.Id);
             var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
             var paperEnrolleeMatchId = -1;
 

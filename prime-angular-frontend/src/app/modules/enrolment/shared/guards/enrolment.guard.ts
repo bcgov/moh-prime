@@ -303,7 +303,7 @@ export class EnrolmentGuard extends BaseGuard {
     return pipe(
       exhaustMap(([dateOfBirth, enrolment]: [string, Enrolment]) =>
         (this.enrolmentService.isInitialEnrolment && dateOfBirth && this.enrolmentService.isMatchingPaperEnrollee === null)
-          ? this.enrolmentResource.checkForMatchingPaperSubmission(dateOfBirth)
+          ? this.enrolmentResource.checkForMatchingPaperSubmission(dateOfBirth, enrolment?.id)
             .pipe(
               map((isMatchingPaperEnrollee: boolean) => {
                 this.enrolmentService.isMatchingPaperEnrollee = isMatchingPaperEnrollee;

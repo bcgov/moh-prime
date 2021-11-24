@@ -98,8 +98,8 @@ export class EnrolmentResource {
       );
   }
 
-  public checkForMatchingPaperSubmission(dateOfBirth: string): Observable<boolean> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ dateOfBirth });
+  public checkForMatchingPaperSubmission(dateOfBirth: string, enrolleeId: number): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ dateOfBirth, enrolleeId });
     return this.apiResource.head<boolean>('enrollees/paper-submissions', params)
       .pipe(
         map(() => true),
