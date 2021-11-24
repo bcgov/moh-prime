@@ -247,8 +247,8 @@ namespace Prime.Services.Rules
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
 
         public IsPotentialPaperEnrolleeReturnee(
-            IBusinessEventService businessEventService,
-            IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
+            IBusinessEventService businessEventService)
         {
             _businessEventService = businessEventService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
