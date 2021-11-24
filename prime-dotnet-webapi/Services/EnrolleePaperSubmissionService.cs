@@ -287,13 +287,14 @@ namespace Prime.Services
 
         public async Task<bool> GetIsEnrolleeApprovedAsync(int enrolleeId)
         {
-            if (enrolleeId <= 0)
-            {
-                return false;
-            }
+            // if (enrolleeId <= 0)
+            // {
+            //     return false;
+            // }
 
             return await _context.Enrollees
                     .AsNoTracking()
+                    .DecompileAsync()
                     .AnyAsync(e => e.Id == enrolleeId
                         && e.ApprovedDate.HasValue);
         }
