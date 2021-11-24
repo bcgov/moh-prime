@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0.100-rc.2-alpine3.14 as build
 
-# ENV ConnectionStrings__PipDatabase "host=localhost;port=5433;database=postgres;username=postgres;password=postgres"
+# ENV ConnectionStrings__PidpDatabase "host=localhost;port=5433;database=postgres;username=postgres;password=postgres"
 
 WORKDIR /app
 
@@ -15,8 +15,8 @@ COPY *.csproj /app
 RUN dotnet restore
 COPY . /app
 
-# RUN dotnet build "pip.csproj" -c Release -o /app/out
-RUN dotnet publish "pip.csproj" -c Release -o /app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+# RUN dotnet build "pidp.csproj" -c Release -o /app/out
+RUN dotnet publish "pidp.csproj" -c Release -o /app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 
 RUN dotnet ef migrations script --idempotent --output /app/out/databaseMigrations.sql
 

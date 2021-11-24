@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace pip_dotnet_webapi.Migrations
+namespace Pidp.Migrations
 {
     public partial class FirstMigration : Migration
     {

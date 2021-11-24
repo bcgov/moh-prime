@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 
-using Pip.Services;
+using Pidp.Services;
 
-namespace Pip.Controllers
+namespace Pidp.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class FirstController : PipControllerBase
+    public class FirstController : PidpControllerBase
     {
         public class ApiMessageResponse
         {

@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Pip</RootNamespace>
+    <RootNamespace>Pidp</RootNamespace>
     <UserSecretsId>5c2dc965-00b4-4531-9ff0-9b37193ead9b</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>

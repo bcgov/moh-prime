@@ -1,4 +1,4 @@
-namespace Pip.Services
+namespace Pidp.Services
 {
     public interface IFirstService
     {

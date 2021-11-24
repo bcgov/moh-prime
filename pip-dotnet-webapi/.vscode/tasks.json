@@ -7,7 +7,7 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/pip.csproj",
+        "${workspaceFolder}/pidp.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -19,7 +19,7 @@
       "type": "process",
       "args": [
         "publish",
-        "${workspaceFolder}/pip.csproj",
+        "${workspaceFolder}/pidp.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -32,7 +32,7 @@
       "args": [
         "watch",
         "run",
-        "${workspaceFolder}/pip.csproj",
+        "${workspaceFolder}/pidp.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -45,14 +45,14 @@
         "build"
       ],
       "dockerBuild": {
-        "tag": "pipdotnetwebapi:dev",
+        "tag": "pidpdotnetwebapi:dev",
         "target": "base",
         "dockerfile": "${workspaceFolder}/Dockerfile",
         "context": "${workspaceFolder}",
         "pull": true
       },
       "netCore": {
-        "appProject": "${workspaceFolder}/pip.csproj"
+        "appProject": "${workspaceFolder}/pidp.csproj"
       }
     },
     {
@@ -62,13 +62,13 @@
         "build"
       ],
       "dockerBuild": {
-        "tag": "pipdotnetwebapi:latest",
+        "tag": "pidpdotnetwebapi:latest",
         "dockerfile": "${workspaceFolder}/Dockerfile",
         "context": "${workspaceFolder}",
         "pull": true
       },
       "netCore": {
-        "appProject": "${workspaceFolder}/pip.csproj"
+        "appProject": "${workspaceFolder}/pidp.csproj"
       }
     },
     {
@@ -83,7 +83,7 @@
         }
       },
       "netCore": {
-        "appProject": "${workspaceFolder}/pip.csproj",
+        "appProject": "${workspaceFolder}/pidp.csproj",
         "enableDebugging": true,
       }
     },
@@ -95,7 +95,7 @@
       ],
       "dockerRun": {},
       "netCore": {
-        "appProject": "${workspaceFolder}/pip.csproj"
+        "appProject": "${workspaceFolder}/pidp.csproj"
       }
     }
   ]

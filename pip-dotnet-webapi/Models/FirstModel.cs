@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Pip.Models
+namespace Pidp.Models
 {
     [Table("FirstModel")]
     public class FirstModel

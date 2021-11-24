@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Pip;
+using Pidp;
 
-namespace pip_dotnet_webapi.Migrations
+namespace Pidp.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
     partial class ApiDbContextModelSnapshot : ModelSnapshot
@@ -18,7 +18,7 @@ namespace pip_dotnet_webapi.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("Pip.Models.FirstModel", b =>
+            modelBuilder.Entity("Pidp.Models.FirstModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,7 +33,7 @@ namespace pip_dotnet_webapi.Migrations
                     b.ToTable("FirstModel");
                 });
 
-            modelBuilder.Entity("Pip.Models.NewModel", b =>
+            modelBuilder.Entity("Pidp.Models.NewModel", b =>
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()

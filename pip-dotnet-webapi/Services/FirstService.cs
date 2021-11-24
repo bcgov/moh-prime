@@ -1,7 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Pip.Services
+namespace Pidp.Services
 {
     public class FirstService : IFirstService
     {

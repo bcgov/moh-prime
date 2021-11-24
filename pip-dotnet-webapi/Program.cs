@@ -4,7 +4,7 @@ using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
 using System.Reflection;
 
-namespace Pip
+namespace Pidp
 {
     public class Program
     {
@@ -36,11 +36,11 @@ namespace Pip
 
         private static void CreateLogger()
         {
-            var path = PipConfiguration.LogFilePath;
+            var path = PidpConfiguration.LogFilePath;
 
             try
             {
-                if (PipConfiguration.IsDevelopment())
+                if (PidpConfiguration.IsDevelopment())
                 {
                     Directory.CreateDirectory(path);
                 }
@@ -66,13 +66,13 @@ namespace Pip
                     outputTemplate: outputTemplate,
                     theme: AnsiConsoleTheme.Code)
                 .WriteTo.Async(a => a.File(
-                    $@"{path}/pip.log",
+                    $@"{path}/pidp.log",
                     outputTemplate: outputTemplate,
                     rollingInterval: RollingInterval.Day,
                     shared: true))
                 .WriteTo.Async(a => a.File(
                     new JsonFormatter(),
-                    $@"{path}/pip.json",
+                    $@"{path}/pidp.json",
                     rollingInterval: RollingInterval.Day))
                 .CreateLogger();
         }

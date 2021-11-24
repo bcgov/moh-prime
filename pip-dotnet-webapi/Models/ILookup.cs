@@ -1,4 +1,4 @@
-namespace Pip.Models
+namespace Pidp.Models
 {
     public interface ILookup<T>
     {

@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NodaTime;
 
-namespace Pip.Configuration.Database
+namespace Pidp.Configuration.Database
 {
     public abstract class SeededTable<T> : IEntityTypeConfiguration<T> where T : class
     {
-        public static readonly DateTimeOffset SEEDING_DATE = DateTimeOffset.Parse("2019-09-16 -7:00");
+        public static readonly LocalDate SeedingDate = new(2021, 12, 1);
 
         public abstract IEnumerable<T> SeedData { get; }
 

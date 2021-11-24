@@ -5,9 +5,9 @@ using Serilog;
 using System.Reflection;
 using System.Text.Json;
 
-using Pip.Services;
+using Pidp.Services;
 
-namespace Pip
+namespace Pidp
 {
     public class Startup
     {
@@ -33,7 +33,7 @@ namespace Pip
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pip Web API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" });
             });
 
             ConfigureDatabase(services);
@@ -41,19 +41,19 @@ namespace Pip
 
         private void InitializeConfiguration(IServiceCollection services)
         {
-            var config = new PipConfiguration();
+            var config = new PidpConfiguration();
             Configuration.Bind(config);
-            PipConfiguration.Current = config;
+            PidpConfiguration.Current = config;
 
             services.AddSingleton(config);
 
             Log.Logger.Information("###App Version:{0}###", Assembly.GetExecutingAssembly().GetName().Version);
-            Log.Logger.Information("###Pip Configuration:{0}###", JsonSerializer.Serialize(PipConfiguration.Current));
+            Log.Logger.Information("###PIdP Configuration:{0}###", JsonSerializer.Serialize(PidpConfiguration.Current));
         }
 
         protected virtual void ConfigureDatabase(IServiceCollection services)
         {
-            var connectionString = PipConfiguration.Current!.ConnectionStrings.PipDatabase;
+            var connectionString = PidpConfiguration.Current!.ConnectionStrings.PidpDatabase;
 
             services.AddDbContext<ApiDbContext>(options =>
             {
@@ -81,7 +81,7 @@ namespace Pip
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pip Pre-Test");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "PIdP Web API");
             });
 
             // Matches request to an endpoint

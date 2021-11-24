@@ -1,4 +1,4 @@
-namespace Pip
+namespace Pidp
 {
     public static class ObjectExtensions
     {

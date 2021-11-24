@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Pip.Models
+namespace Pidp.Models
 {
     [Table("NewModelLookup")]
     public class NewModel : ILookup<int>

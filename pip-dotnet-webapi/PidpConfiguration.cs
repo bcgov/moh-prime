@@ -1,10 +1,10 @@
-using Pip.Configuration.Internal;
+using Pidp.Configuration.Internal;
 
-namespace Pip
+namespace Pidp
 {
-    public class PipConfiguration
+    public class PidpConfiguration
     {
-        public static PipConfiguration? Current { get; set; }
+        public static PidpConfiguration? Current { get; set; }
 
         public static readonly string LogFilePath = Environment.GetEnvironmentVariable("LogFilePath") ?? "logs";
         public static bool IsDevelopment() => EnvironmentName == Environments.Development;

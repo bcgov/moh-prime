@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "pip_dotnet_webapi": {
+    "pidp_dotnet_webapi": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

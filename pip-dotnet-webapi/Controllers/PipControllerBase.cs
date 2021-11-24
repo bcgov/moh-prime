@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Pip.Controllers
+namespace Pidp.Controllers
 {
-    public class PipControllerBase : ControllerBase
+    public class PidpControllerBase : ControllerBase
     {
         /// <summary>
         /// Sends a StatusCodes.Status400BadRequest response with an ApiMessageResponse body.

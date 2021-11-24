@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-using Pip.Models;
+using Pidp.Models;
 
-namespace Pip
+namespace Pidp
 {
     // Allow for design time creation of the ApiDbContext
     public class ApiDbContextFactory : IDesignTimeDbContextFactory<ApiDbContext>
@@ -16,7 +16,7 @@ namespace Pip
                 .AddEnvironmentVariables()
                 .Build();
 
-            var connectionString = config.GetConnectionString("PipDatabase");
+            var connectionString = config.GetConnectionString("PidpDatabase");
 
             var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
             optionsBuilder.UseNpgsql(connectionString);

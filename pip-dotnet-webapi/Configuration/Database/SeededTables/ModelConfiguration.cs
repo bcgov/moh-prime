@@ -1,7 +1,7 @@
 
-using Pip.Models;
+using Pidp.Models;
 
-namespace Pip.Configuration.Database
+namespace Pidp.Configuration.Database
 {
     public class InitialModelConfiguration : SeededTable<NewModel>
     {
