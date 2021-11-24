@@ -285,13 +285,11 @@ namespace Prime.Services
                         .Any(link => link.PaperEnrolleeId == e.Id));
         }
 
-        public async Task<bool> GetIsEnrolleeApprovedAsync(int enrolleeId)
+        public async Task<bool> GetIsEnrolleeLinkedAsync(int enrolleeId)
         {
-            return await _context.Enrollees
-                    .AsNoTracking()
-                    .DecompileAsync()
-                    .AnyAsync(e => e.Id == enrolleeId
-                        && e.ApprovedDate.HasValue);
+            return await _context.EnrolleeLinkedEnrolments
+                .AnyAsync(ele => ele.EnrolleeId == enrolleeId
+                            && ele.PaperEnrolleeId.HasValue);
         }
 
         public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)

@@ -252,14 +252,14 @@ namespace Prime.Services.Rules
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
             var paperEnrollees = await _enrolleePaperSubmissionService.GetPotentialPaperEnrolleeReturneesAsync(enrollee.DateOfBirth);
-            var isApproved = await _enrolleePaperSubmissionService.GetIsEnrolleeApprovedAsync(enrollee.Id);
             var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
+            var isEnrolleeLinked = await _enrolleePaperSubmissionService.GetIsEnrolleeLinkedAsync(enrollee.Id);
             var paperEnrolleeMatchId = -1;
 
             // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
 
             // If there is no match or already linked or if the enrollee is already approved then we don't need to worry about this rule
-            if (isApproved || !paperEnrollees.Any())
+            if (enrollee.ApprovedDate.HasValue || !paperEnrollees.Any() || isEnrolleeLinked)
             {
                 return true;
             }

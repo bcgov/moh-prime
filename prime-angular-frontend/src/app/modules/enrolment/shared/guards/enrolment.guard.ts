@@ -302,7 +302,7 @@ export class EnrolmentGuard extends BaseGuard {
   private onInitialEnrolmentCheckForMatchingPaperEnrollee(): UnaryFunction<Observable<[string, Enrolment]>, Observable<Enrolment>> {
     return pipe(
       exhaustMap(([dateOfBirth, enrolment]: [string, Enrolment]) =>
-        (this.enrolmentService.isInitialEnrolment && dateOfBirth && this.enrolmentService.isMatchingPaperEnrollee === null)
+        (this.enrolmentService.isInitialEnrolment && dateOfBirth && this.enrolmentService.isMatchingPaperEnrollee === null && !enrolment.approvedDate)
           ? this.enrolmentResource.checkForMatchingPaperSubmission(dateOfBirth, enrolment?.id)
             .pipe(
               map((isMatchingPaperEnrollee: boolean) => {
