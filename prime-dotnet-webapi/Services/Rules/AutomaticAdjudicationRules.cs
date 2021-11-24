@@ -258,7 +258,7 @@ namespace Prime.Services.Rules
 
             // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
 
-            // If there is no match or if the enrollee is already approved then we don't need to worry about this rule
+            // If there is no match or already linked or if the enrollee is already approved then we don't need to worry about this rule
             if (isApproved || !paperEnrollees.Any())
             {
                 return true;

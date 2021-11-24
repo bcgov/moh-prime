@@ -311,7 +311,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> CheckForMatchingPaperSubmission([FromQuery] DateTime dateOfBirth, [FromQuery] int enrolleeId)
         {
             if (await _enrolleePaperSubmissionService.MatchingSubmissionExistsAsync(dateOfBirth)
-                || !await _enrolleePaperSubmissionService.GetIsEnrolleeApprovedAsync(enrolleeId))
+                && !await _enrolleePaperSubmissionService.GetIsEnrolleeApprovedAsync(enrolleeId))
             {
                 return Ok();
             }
