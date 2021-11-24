@@ -298,7 +298,8 @@ namespace Prime.Controllers
 
         // HEAD: api/enrollees/paper-submissions?dateOfBirth=1977-09-22&enrolleId=1
         /// <summary>
-        /// Checks if there are any unclaimed paper Enrollees submissions with the supplied date of birth.
+        /// Check if there are any unlinked paper enrolments with matching birthdate
+        /// Or if the enrollee was previously approved
         /// </summary>
         /// <param name="dateOfBirth"></param>
         /// <param name="enrolleeId"></param>
