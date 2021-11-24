@@ -29,16 +29,14 @@
           </span>
           <p class="pl-2">
             {{ reason.note }}
-            <ng-container *ngFor="let match of reason.potentialMatches; let index=index">
+            <ng-container *ngFor="let match of reason.potentialMatches; let isLast=last">
               <a href=#
                  (click)="onRoute([match, AdjudicationRoutes.ENROLLEE_OVERVIEW], $event)">
                 {{ DISPLAY_ID_OFFSET + match }}
               </a>
-              <ng-container *ngIf="index < reason.potentialMatches.length - 1">
-                <span>,</span>
-              </ng-container>
+              {{ isLast? '.' : ', ' }}
             </ng-container>
-            <span>.</span>
+
           </p>
 
           <span *ngIf="reason.documents" class="mb-4 font-weight-bolder">Documents provided by Enrollee:</span>

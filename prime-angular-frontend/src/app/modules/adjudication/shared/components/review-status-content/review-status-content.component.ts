@@ -139,7 +139,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
           return reasons.concat(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote, this.enrollee.identificationDocuments));
         }
 
-        reasons.push((esr.statusReasonCode === 20)
+        reasons.push((esr.statusReasonCode === EnrolmentStatusReasonEnum.POSSIBLE_PAPER_ENROLMENT_MATCH)
           ? this.parsePotentialMatchIds(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote))
           : new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote));
         return reasons;
