@@ -287,11 +287,6 @@ namespace Prime.Services
 
         public async Task<bool> GetIsEnrolleeApprovedAsync(int enrolleeId)
         {
-            // if (enrolleeId <= 0)
-            // {
-            //     return false;
-            // }
-
             return await _context.Enrollees
                     .AsNoTracking()
                     .DecompileAsync()
@@ -301,13 +296,15 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
         {
-            // We want all paper enrollees with a matching DOB
+            // We want all unlinked paper enrollees with a matching DOB
             // Handle the linkage in the LinkEnrolmentToPaperEnrolmentAsync
             return await _context.Enrollees
                 .AsNoTracking()
                 .Where(
                     e => e.GPID.StartsWith(PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id)
                 )
                 .ToListAsync();
         }
