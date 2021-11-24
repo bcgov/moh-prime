@@ -8,8 +8,8 @@ import { EmailUtils } from '@lib/utils/email-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
-import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolmentStatusAdmin } from '@shared/models/enrolment-status-admin.model';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -29,7 +29,7 @@ export class TriageComponent implements OnInit {
   @Output() public reload: EventEmitter<void>;
 
   public busy: Subscription;
-  public status$: Observable<EnrolmentStatus>;
+  public status$: Observable<EnrolmentStatusAdmin>;
   public Role = Role;
 
   constructor(
@@ -94,7 +94,7 @@ export class TriageComponent implements OnInit {
 
   public ngOnInit(): void { }
 
-  private getCurrentStatus() {
+  private getCurrentStatus(): void {
     this.status$ = this.enrolmentResource.getCurrentStatus(this.enrolleeId);
   }
 }
