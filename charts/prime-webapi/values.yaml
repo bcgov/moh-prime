@@ -2,21 +2,44 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  vanityURL: "pharmanetenrolment.gov.bc.ca"
+  image:
+    registry: image-registry.openshift-image-registry.svc:5000/9c33a9-tools
+    tag: latest
+
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: prime-webapi-backend
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: latest
 
 imagePullSecrets: []
-nameOverride: ""
+nameOverride: "webapi"
 fullnameOverride: ""
+
+cache:
+  redisUrl: 'redis://localhost:6379'
+  # If secret exists, it should contain key "redis_url". specify the name of the secret below.
+  # existingSecret: ''
+
+database:
+  autoCreate: true
+  autoCreatePip: true
+  # .NET Core database connection string
+  dbConnectionString: 'host=postgres;port=5432;database=postgres;username=postgres;password=postgres'
+  # If secret exists, it should contain key "database_url". specify the name of the secret below.
+  # existingSecret:
+
+# Run migrations pre-install and pre-upgrade
+migrations:
+  enabled: true
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
@@ -38,7 +61,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 ingress:
   enabled: false
@@ -56,17 +79,13 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  limits:
+    cpu: 100m
+    memory: 1Gi
+  requests:
+    cpu: 10m
+    memory: 500Mi
 
 autoscaling:
   enabled: false

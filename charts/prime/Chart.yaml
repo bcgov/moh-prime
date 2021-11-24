@@ -25,4 +25,13 @@ appVersion: "1.16.0"
 
 icon: https://svgshare.com/i/_6C.svg
 
-dependencies: {}
+dependencies:
+  - name: prime-docman
+    repository: "file://../prime-docman"
+    version: "0.1.0"
+  - name: prime-frontend
+    repository: "file://../prime-frontend"
+    version: "0.1.0"
+  - name: prime-webapi
+    repository: "file://../prime-webapi"
+    version: "0.1.0"

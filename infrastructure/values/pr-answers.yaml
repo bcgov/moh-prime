@@ -1,0 +1,6 @@
+# PR Helm values
+global:
+  vanityURL: "pr-9000.pharmanetenrolment.gov.bc.ca"
+  image:
+    tag: dev
+

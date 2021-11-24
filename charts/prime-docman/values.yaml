@@ -2,6 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  vanityURL: "pharmanetenrolment.gov.bc.ca"
+  image:
+    tag: latest
+
 replicaCount: 1
 
 image:
@@ -11,7 +16,9 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest
 
-prName: ''
+imagePullSecrets: []
+nameOverride: "docman"
+fullnameOverride: ""
 
 cache:
   redisUrl: 'redis://localhost:6379'
@@ -39,10 +46,6 @@ envVars:
   LANG: C.UTF-8
   LC_ALL: C.UTF-8
   DOCUMENT_MANAGER_CLIENT_ID: prime-document-manager
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
 
 persistence:
   enabled: false

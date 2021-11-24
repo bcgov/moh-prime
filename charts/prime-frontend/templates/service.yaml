@@ -7,9 +7,21 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - name: http
+      port: 8080
       targetPort: http
       protocol: TCP
-      name: http
+    - name: https
+      port: 8443
+      targetPort: https
+      protocol: TCP
+    - name: hpr
+      port: 8888
+      targetPort: hpr
+      protocol: TCP
+    - name: mtls
+      port: 8890
+      targetPort: mtls
+      protocol: TCP
   selector:
     {{- include "prime-frontend.selectorLabels" . | nindent 4 }}

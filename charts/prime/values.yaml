@@ -1,6 +1,10 @@
 # Default values for prime.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+global:
+  vanityURL: "pharmanetenrolment.gov.bc.ca"
+  image:
+    tag: latest
 
 replicaCount: 1
 

@@ -1,0 +1,12 @@
+dependencies:
+- name: prime-docman
+  repository: file://../prime-docman
+  version: 0.1.0
+- name: prime-frontend
+  repository: file://../prime-frontend
+  version: 0.1.0
+- name: prime-webapi
+  repository: file://../prime-webapi
+  version: 0.1.0
+digest: sha256:c5df7a7d3408859631b730ef1b5aed80096d289aea290cdc4d00684b658edb6d
+generated: "2021-11-15T09:40:26.4742965-08:00"

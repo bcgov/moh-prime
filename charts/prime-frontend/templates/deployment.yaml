@@ -1,3 +1,4 @@
+{{- $fullName := include "prime-frontend.fullname" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,11 +32,20 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
+              protocol: TCP
+            - name: https
+              containerPort: 8443
+              protocol: TCP
+            - name: hpr
+              containerPort: 8888
+              protocol: TCP
+            - name: mtls
+              containerPort: 8890
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -47,14 +57,55 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: tls-certs
+              readOnly: true
+              mountPath: /opt/bitnami/nginx/conf/certs
+            - name: plr-integration
+              readOnly: true
+              mountPath: /opt/bitnami/nginx/conf/certs/plr
+            - name: frontend-config
+              readOnly: true
+              mountPath: /opt/bitnami/nginx/conf/nginx.conf
+              subPath: nginx.conf
+            - name: frontend-config
+              readOnly: true
+              mountPath: /opt/app-root/src/assets/config-map.json
+              subPath: config-map.json
+      volumes:
+        - name: frontend-config
+          configMap:
+            name: {{ $fullName }}-config
+            defaultMode: 420
+        - name: tls-certs
+          secret:
+            secretName: {{ .Values.ingress.tls.secretName }}
+            defaultMode: 420
+        - name: plr-integration
+          secret:
+            secretName: plr-integration
+            defaultMode: 420
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - {{ include "prime-frontend.name" . }}
+                    - key: app.kubernetes.io/instance
+                      operator: In
+                      values:
+                      - {{ .Release.Name }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}

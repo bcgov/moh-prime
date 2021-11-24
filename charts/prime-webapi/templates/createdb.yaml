@@ -1,0 +1,47 @@
+{{- if .Values.database.autoCreate }}
+{{- $ocEnv := regexFind "([^-]*$)" .Release.Namespace -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "prime-webapi.fullname" . }}
+  annotations:
+    helm.sh/hook: pre-install, pre-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+  labels:
+    {{- include "prime-webapi.labels" . | nindent 4 }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: createdb
+        image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: IfNotPresent
+        command:
+          - /bin/bash
+          - -c
+          - >
+            createdb -O $(APPUSER) prime-{{ $ocEnv }} 2> /dev/null || echo "database already exists"
+        env:
+          - name: PGHOST
+            valueFrom:
+              configMapKeyRef:
+                name: database-cm
+                key: database-host
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
+                key: app-db-username
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
+                key: app-db-password
+          - name: PGDATABASE
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
+                key: app-db-name
+      restartPolicy: Never
+  backoffLimit: 3
+{{- end }}

@@ -1,5 +1,5 @@
 {{- if .Values.migrations.enabled }}
-apiVersion: v1
+apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "prime-docman.fullname" . }}-migrations
@@ -8,11 +8,13 @@ metadata:
   labels:
     {{- include "prime-docman.labels" . | nindent 4 }}
 spec:
-  containers:
-  - name: hook1-container
-    image: busybox
-    imagePullPolicy: IfNotPresent
-    command: ['sh', '-c', 'echo The pre-install hook Pod is running  - hook-preinstall && sleep 15']
-  restartPolicy: Never
-  terminationGracePeriodSeconds: 0
+  template:
+    spec:
+      containers:
+      - name: migrations
+        image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', 'echo The pre-install hook Pod is running  - hook-preinstall && sleep 15']
+      restartPolicy: Never
+  backoffLimit: 3
 {{- end }}

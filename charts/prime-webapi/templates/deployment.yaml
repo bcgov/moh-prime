@@ -1,3 +1,4 @@
+{{- $ocEnv := regexFind "([^-]*$)" .Release.Namespace -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,11 +32,74 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DOCUMENT_MANAGER_CLIENT_ID
+              value: prime-document-manager
+            - name: DOCUMENT_MANAGER_URL
+              value: http:/{{ .Release.Name }}-document-manager:6001
+            - name: PHARMANET_SSL_CERT_FILENAME
+              value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
+            - name: BACKEND_URL
+              value: https://{{ .Values.global.vanityURL }}/api/v1/
+            - name: FRONTEND_URL
+              value: https://{{ .Values.global.vanityURL }}
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $ocEnv }}-patroni-secret
+                  key: app-db-password
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $ocEnv }}-patroni-secret
+                  key: app-db-username
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $ocEnv }}-patroni-secret
+                  key: app-db-name
+            - name: DB_CONNECTION_STRING
+              value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
+          envFrom:
+            - configMapRef:
+                name: canada-post-addresscomplete
+            - configMapRef:
+                name: ches
+            - configMapRef:
+                name: dotnet-webapi-backend
+            - configMapRef:
+                name: keycloak
+            - configMapRef:
+                name: ldap
+            - configMapRef:
+                name: mail-settings
+            - configMapRef:
+                name: metabase-embedded
+            - configMapRef:
+                name: pharmanet-api
+            - configMapRef:
+                name: verifiable-credential
+            - secretRef:
+                name: canada-post-addresscomplete-secrets
+            - secretRef:
+                name: ches-secrets
+            - secretRef:
+                name: document-manager-secrets
+            - secretRef:
+                name: keycloak-secrets
+            - secretRef:
+                name: metabase-embedded-secrets
+            - secretRef:
+                name: pharmanet-api-secrets
+            - secretRef:
+                name: verifiable-credential-secrets
+            - secretRef:
+                name: plr-integration-thumbprint
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -47,14 +111,34 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: cert-volume
+              mountPath: /opt/app-root/etc/certs
+              readOnly: true
+      volumes:
+        - name: cert-volume
+          secret:
+            secretName: pharmanet-api-ssl-certs
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
       affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - {{ include "prime-webapi.name" . }}
+                    - key: app.kubernetes.io/instance
+                      operator: In
+                      values:
+                      - {{ .Release.Name }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}

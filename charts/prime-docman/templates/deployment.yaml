@@ -29,13 +29,13 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
         - name: run-migrations
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - flask
             - db 
             - upgrade
-            - `${FLASK_RUN_PARAMS}`
+            - '${FLASK_RUN_PARAMS}'
           env:
             - name: CACHE_REDIS_URL
             {{- if .Values.cache.existingSecret }}
@@ -65,7 +65,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -86,7 +86,6 @@ spec:
               port: 6001
             initialDelaySeconds: 5
             periodSeconds: 5
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:

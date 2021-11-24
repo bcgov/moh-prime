@@ -1,0 +1,39 @@
+{{- if .Values.migrations.enabled }}
+{{- $ocEnv := regexFind "([^-]*$)" .Release.Namespace -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "prime-webapi.fullname" . }}-migrations
+  annotations:
+    helm.sh/hook: pre-install, pre-upgrade
+  labels:
+    {{- include "prime-webapi.labels" . | nindent 4 }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrations
+        image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: IfNotPresent
+        command: ['psql', '-a', '-f', './databaseMigrations.sql']
+        env:
+          - name: PGHOST
+            valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
+                key: app-db-username
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
+                key: app-db-password
+          - name: PGDATABASE
+            value: prime-{{ $ocEnv }}
+      restartPolicy: Never
+  backoffLimit: 3
+{{- end }}
