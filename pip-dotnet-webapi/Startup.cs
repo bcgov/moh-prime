@@ -57,8 +57,8 @@ namespace Pip
 
             services.AddDbContext<ApiDbContext>(options =>
             {
-                options.UseNpgsql(connectionString);
-                options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
+                options.UseNpgsql(connectionString, npg => npg.UseNodaTime())
+                    .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
             });
 
             services
