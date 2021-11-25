@@ -30,14 +30,17 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="GPID"
-                 formControlName="paperEnrolleeGpid">
+                 formControlName="paperEnrolleeGpid"
+                 maxlength="20">
           <mat-error *ngIf="formState.paperEnrolleeGpid.hasError('required')">
             Required
           </mat-error>
-          <mat-error *ngIf="formState.paperEnrolleeGpid.hasError('startsWith') && !formState.paperEnrolleeGpid.hasError('required')">
+          <mat-error
+                     *ngIf="formState.paperEnrolleeGpid.hasError('startsWith') && !formState.paperEnrolleeGpid.hasError('required')">
             Must start with <strong>NOBCSC</strong>
           </mat-error>
-          <mat-error *ngIf="formState.paperEnrolleeGpid.hasError('length') && !formState.paperEnrolleeGpid.hasError('startsWith')">
+          <mat-error
+                     *ngIf="formState.paperEnrolleeGpid.hasError('length') && !formState.paperEnrolleeGpid.hasError('startsWith')">
             Must be 20 characters in length
           </mat-error>
         </mat-form-field>
