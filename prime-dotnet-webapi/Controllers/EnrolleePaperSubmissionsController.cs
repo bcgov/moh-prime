@@ -298,7 +298,7 @@ namespace Prime.Controllers
 
         // HEAD: api/enrollees/paper-submissions?dateOfBirth=1977-09-22
         /// <summary>
-        /// Check if there are any unlinked paper enrolments with matching birthdate
+        /// Checks if there are any unclaimed paper Enrollees submissions with the supplied date of birth.
         /// </summary>
         /// <param name="dateOfBirth"></param>
         [HttpHead("paper-submissions", Name = nameof(CheckForMatchingPaperSubmission))]
