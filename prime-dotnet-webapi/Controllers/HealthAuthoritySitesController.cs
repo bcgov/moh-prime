@@ -29,8 +29,7 @@ namespace Prime.Controllers
             IEmailService emailService,
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
-            ISiteService siteService
-            )
+            ISiteService siteService)
         {
             _emailService = emailService;
             _healthAuthorityService = healthAuthorityService;
@@ -266,6 +265,8 @@ namespace Prime.Controllers
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
+
+            // TODO send site registration submission notification
 
             return NoContent();
         }
