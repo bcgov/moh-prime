@@ -29,7 +29,8 @@ namespace Prime.Controllers
             IEmailService emailService,
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
-            ISiteService siteService)
+            ISiteService siteService
+        )
         {
             _emailService = emailService;
             _healthAuthorityService = healthAuthorityService;
