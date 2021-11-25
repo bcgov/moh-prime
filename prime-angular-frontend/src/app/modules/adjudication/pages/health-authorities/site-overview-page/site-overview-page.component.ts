@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 import { Subscription } from 'rxjs';
+
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+
+import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 
 @Component({
   selector: 'app-site-overview-page',

@@ -11,14 +11,11 @@ import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-dat
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
-import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Site } from '@registration/shared/models/site.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import {
   SiteRegistrationListViewModel,
-  SiteListViewModelPartial,
   OrganizationSearchListViewModel
 } from '@registration/shared/models/site-registration.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';

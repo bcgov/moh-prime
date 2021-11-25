@@ -1,5 +1,6 @@
-import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { Component, OnInit } from '@angular/core';
+
+import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 
 @Component({
   selector: 'app-site-notes-page',

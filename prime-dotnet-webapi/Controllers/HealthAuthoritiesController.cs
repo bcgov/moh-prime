@@ -11,6 +11,7 @@ using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
+using System.Linq;
 
 namespace Prime.Controllers
 {
@@ -21,11 +22,17 @@ namespace Prime.Controllers
     {
         private readonly IHealthAuthorityService _healthAuthorityService;
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
+        private readonly ISiteService _siteService;
 
-        public HealthAuthoritiesController(IHealthAuthorityService healthAuthorityService, IHealthAuthoritySiteService healthAuthoritySiteService)
+        public HealthAuthoritiesController(
+            IHealthAuthorityService healthAuthorityService,
+            IHealthAuthoritySiteService healthAuthoritySiteService,
+            ISiteService siteService
+        )
         {
             _healthAuthorityService = healthAuthorityService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
+            _siteService = siteService;
         }
 
         // GET: api/health-authorities
@@ -97,7 +104,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteAdminListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAllHealthAuthoritySites()
         {
-            return Ok(await _healthAuthoritySiteService.GetSitesAsync());
+            var sites = await _healthAuthoritySiteService.GetSitesAsync();
+
+            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
+            foreach (var site in sites)
+            {
+                site.HasNotification = notifiedIds.Contains(site.Id);
+            }
+
+            return Ok(sites);
         }
 
         // PUT: api/health-authorities/5/care-types

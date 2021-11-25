@@ -2,14 +2,14 @@ import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Subscription } from 'rxjs';
+
 import { SiteResource } from '@core/resources/site-resource.service';
 
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { Site } from '@registration/shared/models/site.model';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-health-authority-site-container',
@@ -48,11 +48,10 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
   }
 
   protected updateSite(siteId: number, updatedSiteFields: {}): void {
-    // TODO: fix updated site shit
-    // const updateHASite = {
-    //   ...this.healthAuthoritySite,
-    //   ...updatedSite
-    // };
-    // this.healthAuthoritySite = updateHASite;
+    const updateHASite = {
+      ...this.healthAuthoritySite,
+      ...updatedSiteFields
+    } as HealthAuthoritySiteAdminList;
+    this.healthAuthoritySite = updateHASite;
   }
 }

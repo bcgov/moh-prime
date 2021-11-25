@@ -19,5 +19,6 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public string AuthorizedUserName { get; set; }
         public string AuthorizedUserEmail { get; set; }
         public string AdjudicatorIdir { get; set; }
+        public bool HasNotification { get; set; }
     }
 }

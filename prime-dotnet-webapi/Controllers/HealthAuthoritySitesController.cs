@@ -10,6 +10,7 @@ using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Sites;
+using System.Linq;
 
 namespace Prime.Controllers
 {
@@ -85,7 +86,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteAdminListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthoritySites(int healthAuthorityId, [FromQuery] int healthAuthoritySiteId)
         {
-            return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId, healthAuthoritySiteId));
+            var sites = await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId, healthAuthoritySiteId);
+
+            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
+            foreach (var site in sites)
+            {
+                site.HasNotification = notifiedIds.Contains(site.Id);
+            }
+
+            return Ok(sites);
         }
 
         // GET: api/health-authorities/5/sites/5

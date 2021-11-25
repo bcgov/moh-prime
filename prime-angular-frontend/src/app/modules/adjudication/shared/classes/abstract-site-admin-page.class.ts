@@ -21,7 +21,6 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
-import { Input } from '@angular/core';
 
 export abstract class AbstractSiteAdminPage {
   public abstract busy: Subscription;
