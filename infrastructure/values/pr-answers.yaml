@@ -4,3 +4,5 @@ global:
   image:
     tag: dev
 
+redis:
+  enabled: true

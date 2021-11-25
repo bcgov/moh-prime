@@ -35,3 +35,7 @@ dependencies:
   - name: prime-webapi
     repository: "file://../prime-webapi"
     version: "0.1.0"
+  - name: redis
+    condition: redis.enabled
+    repository: https://charts.bitnami.com/bitnami
+    version: "15.6.0"

@@ -4,9 +4,40 @@
 global:
   vanityURL: "pharmanetenrolment.gov.bc.ca"
   image:
+    registry: image-registry.openshift-image-registry.svc:5000/9c33a9-tools
     tag: latest
 
 replicaCount: 1
+
+redis:
+  enabled: false
+  ## @param architecture Redis&trade; architecture. Allowed values: `standalone` or `replication`
+  architecture: standalone
+  auth:
+    enabled: true
+    sentinel: false
+  persistence:
+    enabled: false
+    size: 8Gi
+  master:
+    containerSecurityContext:
+      enabled: false
+    podSecurityContext:
+      enabled: false
+  replica:
+    replicaCount: 3
+    containerSecurityContext:
+      enabled: false
+    podSecurityContext:
+      enabled: false
+  serviceAccount:
+    create: false
+  image:
+    registry: public.ecr.aws
+  metrics:
+    enabled: false
+    image:
+      registry: public.ecr.aws
 
 image:
   repository: nginx

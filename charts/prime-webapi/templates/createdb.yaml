@@ -31,6 +31,11 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: {{ $ocEnv }}-patroni-secret
+                key: superuser-username
+          - name: APPUSER
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
                 key: app-db-username
           - name: PGPASSWORD
             valueFrom:
@@ -38,10 +43,14 @@ spec:
                 name: {{ $ocEnv }}-patroni-secret
                 key: app-db-password
           - name: PGDATABASE
+            {{- if hasPrefix "pr-" .Release.Name }}
+            value: {{ .Release.Name }}
+            {{ else }}
             valueFrom:
               secretKeyRef:
                 name: {{ $ocEnv }}-patroni-secret
                 key: app-db-name
+            {{- end }}
       restartPolicy: Never
   backoffLimit: 3
 {{- end }}

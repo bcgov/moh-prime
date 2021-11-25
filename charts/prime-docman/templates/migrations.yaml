@@ -1,4 +1,5 @@
 {{- if .Values.migrations.enabled }}
+{{- $ocEnv := regexFind "([^-]*$)" .Release.Namespace -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -14,7 +15,46 @@ spec:
       - name: migrations
         image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: IfNotPresent
-        command: ['sh', '-c', 'echo The pre-install hook Pod is running  - hook-preinstall && sleep 15']
+        command:
+          - flask
+          - db 
+          - upgrade
+          - '${FLASK_RUN_PARAMS}'
+        env:
+          - name: PGHOST
+            valueFrom:
+              configMapKeyRef:
+                name: database-cm
+                key: database-host
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
+                key: superuser-username
+          - name: APPUSER
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
+                key: app-db-username
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
+                key: app-db-password
+          - name: PGDATABASE
+            {{- if hasPrefix "pr-" .Release.Name }}
+            value: {{ .Release.Name }}
+            {{ else }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
+                key: app-db-name
+            {{- end }}
+          - name: SQLALCHEMY_DATABASE_URI
+            value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
+        envFrom:
+          - configMapRef:
+              name: document-manager
       restartPolicy: Never
   backoffLimit: 3
 {{- end }}

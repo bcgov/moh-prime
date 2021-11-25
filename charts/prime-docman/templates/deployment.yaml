@@ -1,3 +1,7 @@
+{{ $release := .Release.Name }}
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $pr := hasPrefix "pr-" .Release.Name }}
+{{ $dbName := printf "prime-%s" ( ternary $ocEnv $release $pr ) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,40 +31,6 @@ spec:
       serviceAccountName: {{ include "prime-docman.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      initContainers:
-        - name: run-migrations
-          image: "{{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command:
-            - flask
-            - db 
-            - upgrade
-            - '${FLASK_RUN_PARAMS}'
-          env:
-            - name: CACHE_REDIS_URL
-            {{- if .Values.cache.existingSecret }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.cache.existingSecret }}
-                  key: redis_url
-            {{- else }}
-              value: {{ .Values.cache.redisUrl }}
-            {{- end }}
-            - name: SQLALCHEMY_DATABASE_URI
-            {{- if .Values.database.existingSecret }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.database.existingSecret }}
-                  key: database_url
-            {{- else }}
-              value: {{ .Values.database.databaseUrl }}
-            {{- end }}
-          {{- range $name, $value := .Values.envVars }}
-          {{- if not (empty $value) }}
-            - name: {{ $name | quote }}
-              value: {{ $value | quote }}
-          {{- end }}
-          {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -89,15 +59,8 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
-            - name: CACHE_REDIS_URL
-            {{- if .Values.cache.existingSecret }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.cache.existingSecret }}
-                  key: redis_url
-            {{- else }}
-              value: {{ .Values.cache.redisUrl }}
-            {{- end }}
+            - name: CACHE_REDIS_HOST
+              value: "{{ ternary $release $ocEnv $pr }}-redis"
             - name: SQLALCHEMY_DATABASE_URI
             {{- if .Values.database.existingSecret }}
               valueFrom:
@@ -113,6 +76,9 @@ spec:
               value: {{ $value | quote }}
           {{- end }}
           {{- end }}
+          envFrom:
+            - configMapRef:
+                name: document-manager
           volumeMounts:
             - mountPath: /app/
               name: docman-files

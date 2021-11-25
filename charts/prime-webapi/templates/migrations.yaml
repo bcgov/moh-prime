@@ -19,9 +19,9 @@ spec:
         env:
           - name: PGHOST
             valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-host
+              configMapKeyRef:
+                name: database-cm
+                key: database-host
           - name: PGUSER
             valueFrom:
               secretKeyRef:
@@ -33,7 +33,14 @@ spec:
                 name: {{ $ocEnv }}-patroni-secret
                 key: app-db-password
           - name: PGDATABASE
-            value: prime-{{ $ocEnv }}
+            {{- if hasPrefix "pr-" .Release.Name }}
+            value: {{ .Release.Name }}
+            {{ else }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $ocEnv }}-patroni-secret
+                key: app-db-name
+            {{- end }}
       restartPolicy: Never
   backoffLimit: 3
 {{- end }}

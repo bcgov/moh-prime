@@ -34,6 +34,10 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - bash
+            - '-c'
+            - dotnet ./prime.dll -v 2>&1> /dev/stdout
           env:
             - name: DOCUMENT_MANAGER_CLIENT_ID
               value: prime-document-manager
@@ -56,10 +60,14 @@ spec:
                   name: {{ $ocEnv }}-patroni-secret
                   key: app-db-username
             - name: POSTGRESQL_DATABASE
+              {{- if hasPrefix "pr-" .Release.Name }}
+              value: {{ .Release.Name }}
+              {{ else }}
               valueFrom:
                 secretKeyRef:
                   name: {{ $ocEnv }}-patroni-secret
                   key: app-db-name
+              {{- end }}
             - name: DB_CONNECTION_STRING
               value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
           envFrom:

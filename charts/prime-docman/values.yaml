@@ -5,12 +5,11 @@
 global:
   vanityURL: "pharmanetenrolment.gov.bc.ca"
   image:
+    registry: image-registry.openshift-image-registry.svc:5000/9c33a9-tools
     tag: latest
-
 replicaCount: 1
 
 image:
-  registry: image-registry.openshift-image-registry.svc:5000/9c33a9-tools
   repository: prime-document-manager
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
