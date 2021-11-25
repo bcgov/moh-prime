@@ -14,7 +14,7 @@ import { TechnicalSupportForm } from '@health-auth/pages/technical-support-page/
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT"
                           (route)="onRoute($event)">
-      {{ technicalSupportContact | fullname }}
+      {{ technicalSupportName ? (technicalSupportName | default) : (technicalSupportContact | fullname) }}
     </app-overview-section>
   `,
   styles: [],
@@ -23,6 +23,8 @@ import { TechnicalSupportForm } from '@health-auth/pages/technical-support-page/
 export class TechnicalSupportOverviewComponent extends AbstractOverview implements OnInit {
   @Input() technicalSupport: TechnicalSupportForm;
   @Input() technicalSupports: Contact[];
+
+  @Input() technicalSupportName: string;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(
@@ -33,8 +35,7 @@ export class TechnicalSupportOverviewComponent extends AbstractOverview implemen
   }
 
   public get technicalSupportContact(): Contact {
-    return this.technicalSupports
-      ?.find(pa => pa.id === this.technicalSupport.healthAuthorityTechnicalSupportId) ?? null;
+    return this.technicalSupports?.find(pa => pa.id === this.technicalSupport.healthAuthorityTechnicalSupportId) ?? null;
   }
 
   public ngOnInit(): void { }

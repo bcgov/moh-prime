@@ -5,7 +5,7 @@ using Prime.ViewModels.Sites;
 
 namespace Prime.ViewModels.HealthAuthoritySites
 {
-    public class HealthAuthoritySiteViewModel
+    public class HealthAuthoritySiteAdminViewModel
     {
         public int Id { get; set; }
         public int HealthAuthorityOrganizationId { get; set; }
@@ -21,6 +21,8 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public DateTimeOffset? SubmittedDate { get; set; }
         public DateTimeOffset? ApprovedDate { get; set; }
         public SiteStatusType Status { get; set; }
+        public string PharmanetAdministratorName { get; set; }
+        public string TechnicalSupportName { get; set; }
         public IEnumerable<BusinessDayViewModel> BusinessHours { get; set; }
     }
 }

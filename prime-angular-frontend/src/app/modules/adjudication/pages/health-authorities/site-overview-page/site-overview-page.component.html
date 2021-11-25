@@ -1,8 +1,24 @@
-<app-health-authority-site-container [hasActions]="true"
+<app-health-authority-site-container [busy]="busy"
+                                     [hasActions]="true"
                                      [content]="content">
   <app-page-header>Overview</app-page-header>
 </app-health-authority-site-container>
 
 <ng-template #content>
-  <div>Hello</div>
+
+  <app-page-section>
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>
+        <mat-icon class="mr-2">store</mat-icon>
+        Site Information
+      </ng-container>
+    </app-page-subheader>
+
+    <mat-card>
+      <mat-card-content>
+        <app-health-auth-site-overview-container [healthAuthoritySite]="site"></app-health-auth-site-overview-container>
+      </mat-card-content>
+    </mat-card>
+  </app-page-section>
+
 </ng-template>

@@ -111,6 +111,30 @@ namespace Prime.Controllers
             return Ok(site);
         }
 
+        // GET: api/health-authorities/5/sites/5/admin-view
+        /// <summary>
+        /// Gets a specific health authority site for an admin.
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/admin-view", Name = nameof(GetHealthAuthorityAdminSite))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetHealthAuthorityAdminSite(int healthAuthorityId, int siteId)
+        {
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
+
+            var site = await _healthAuthoritySiteService.GetAdminSiteAsync(siteId);
+
+            return Ok(site);
+        }
+
         // GET: api/health-authorities/5/sites/5/hours-operation
         /// <summary>
         /// Gets a Site's hours of operations.
@@ -222,8 +246,8 @@ namespace Prime.Controllers
                 return Conflict("Cannot submit Site, one or more selections dependent on the Health Authority are invalid.");
             }
 
-            var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, site.Status))
+            var status = await _siteService.GetSiteStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, status))
             {
                 return BadRequest("Action could not be performed.");
             }

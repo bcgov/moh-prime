@@ -14,7 +14,7 @@ import { AdministratorForm } from './administrator-form.model';
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.ADMINISTRATOR"
                           (route)="onRoute($event)">
-      {{ pharmanetAdministrator | fullname }}
+      {{ administratorName ? (administratorName | default) : (pharmanetAdministrator | fullname) }}
     </app-overview-section>
   `,
   styles: [],
@@ -23,6 +23,7 @@ import { AdministratorForm } from './administrator-form.model';
 export class AdministratorOverviewComponent extends AbstractOverview implements OnInit {
   @Input() administrator: AdministratorForm;
   @Input() pharmanetAdministrators: Contact[];
+  @Input() administratorName: string;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(

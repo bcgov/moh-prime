@@ -23,37 +23,40 @@
   <ng-container *ngIf="content">
 
     <div class="row">
-      <div class="col py-5">
+      <div class="col py-5"
+           [class.col-6]="hasActions">
 
         <ng-container [ngTemplateOutlet]="content"
                       [ngTemplateOutletContext]="{ siteRegistration: dataSource?.data[0] }"></ng-container>
 
       </div>
       <div *ngIf="hasActions"
-           class="col-auto py-5">
+           class="col-6 py-5">
+        <div class="d-flex justify-content-end mb-4">
 
-        <ng-container *ngIf="actions; else defaultActions">
+          <ng-container *ngIf="actions; else defaultActions">
 
-          <ng-container [ngTemplateOutlet]="actions"
-                        [ngTemplateOutletContext]="{ siteRegistration: dataSource?.data[0] }"></ng-container>
+            <ng-container [ngTemplateOutlet]="actions"
+                          [ngTemplateOutletContext]="{ siteRegistration: dataSource?.data[0] }"></ng-container>
 
-        </ng-container>
+          </ng-container>
 
-        <ng-template #defaultActions>
+          <ng-template #defaultActions>
 
-          <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
-                                         (approve)="onApprove($event)"
-                                         (decline)="onDecline($event)"
-                                         (delete)="onDelete($event)"
-                                         (unreject)="onUnreject($event)"
-                                         (escalate)="onEscalate($event)"
-                                         (flag)="onToggleFlagSite($event)">
-          </app-site-registration-actions>
+            <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
+                                           (approve)="onApprove($event)"
+                                           (decline)="onDecline($event)"
+                                           (delete)="onDelete($event)"
+                                           (unreject)="onUnreject($event)"
+                                           (escalate)="onEscalate($event)"
+                                           (flag)="onToggleFlagSite($event)">
+            </app-site-registration-actions>
 
-          <ng-container [ngTemplateOutlet]="belowActions"
-                        [ngTemplateOutletContext]="{ siteRegistration: dataSource?.data[0] }"></ng-container>
+          </ng-template>
+        </div>
 
-        </ng-template>
+        <ng-container [ngTemplateOutlet]="belowActions"
+                      [ngTemplateOutletContext]="{ siteRegistration: dataSource?.data[0] }"></ng-container>
 
       </div>
     </div>

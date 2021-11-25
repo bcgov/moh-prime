@@ -1,0 +1,21 @@
+<ng-container *ngIf="healthAuthoritySite">
+  <app-vendor-overview [vendor]="healthAuthoritySite"
+                       [showEditRedirect]="isIncomplete"></app-vendor-overview>
+  <app-site-information-overview [siteInformation]="healthAuthoritySite"
+                                 [showEditRedirect]="isIncomplete"></app-site-information-overview>
+  <app-health-auth-care-type-overview [healthAuthCareType]="healthAuthoritySite"
+                                      [showEditRedirect]="isIncomplete"></app-health-auth-care-type-overview>
+  <app-site-address-overview [siteAddress]="healthAuthoritySite"
+                             [showEditRedirect]="isIncomplete"></app-site-address-overview>
+  <app-hours-operation-overview [hoursOperation]="healthAuthoritySite"
+                                [showEditRedirect]="isIncomplete"></app-hours-operation-overview>
+  <app-administrator-overview [administrator]="healthAuthoritySite"
+                              [administratorName]="pharmanetAdministratorName"
+                              [pharmanetAdministrators]="pharmanetAdministrators"
+                              [showEditRedirect]="isIncomplete || isApproved"></app-administrator-overview>
+  <app-technical-support-overview [technicalSupport]="healthAuthoritySite"
+                                  [technicalSupportName]="technicalSupportName"
+                                  [technicalSupports]="technicalSupports"
+                                  [showEditRedirect]="isIncomplete || isApproved">
+  </app-technical-support-overview>
+</ng-container>

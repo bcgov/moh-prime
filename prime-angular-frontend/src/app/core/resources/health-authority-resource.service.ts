@@ -18,6 +18,7 @@ import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
+import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +65,19 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority sites could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getAllHealthAuthoritySites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getHealthAuthorityAdminSite(healthAuthorityId: number, siteId: number): Observable<HealthAuthoritySiteAdmin> {
+    return this.apiResource.get<HealthAuthoritySiteAdmin>(`health-authorities/${healthAuthorityId}/sites/${siteId}/admin-view`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthoritySiteAdmin>) => response.result),
+        tap((healthAuthoritySite: HealthAuthoritySiteAdmin) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteAdmin error has occurred: ', error);
           throw error;
         })
       );

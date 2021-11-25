@@ -9,6 +9,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Site } from '@registration/shared/models/site.model';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-health-authority-site-container',
@@ -16,6 +17,7 @@ import { HealthAuthoritySiteResource } from '@core/resources/health-authority-si
   styleUrls: ['./health-authority-site-container.component.scss']
 })
 export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage implements OnInit {
+  @Input() public busy: Subscription;
   @Input() public content: TemplateRef<any>;
   @Input() public actions: TemplateRef<any>;
   @Input() public hasActions: boolean;

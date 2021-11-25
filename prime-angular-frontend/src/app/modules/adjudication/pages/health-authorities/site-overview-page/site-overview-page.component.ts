@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-site-overview-page',
@@ -6,7 +10,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./site-overview-page.component.scss']
 })
 export class SiteOverviewPageComponent implements OnInit {
-  constructor() { }
+  public busy: Subscription;
+  public site: HealthAuthoritySiteAdmin;
 
-  public ngOnInit(): void { }
+  constructor(
+    private healthAuthorityResource: HealthAuthorityResource,
+    private route: ActivatedRoute,
+  ) { }
+
+  public ngOnInit(): void {
+    this.busy = this.healthAuthorityResource
+      .getHealthAuthorityAdminSite(this.route.snapshot.params.haid, this.route.snapshot.params.sid)
+      .subscribe((site: HealthAuthoritySiteAdmin) => this.site = site);
+  }
 }

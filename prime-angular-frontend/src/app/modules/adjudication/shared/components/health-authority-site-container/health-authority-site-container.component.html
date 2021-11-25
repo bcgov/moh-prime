@@ -15,38 +15,40 @@
   <ng-container *ngIf="content">
 
     <div class="row">
-      <div class="col py-5">
+      <div class="col py-5"
+           [class.col-6]="hasActions">
 
         <ng-container [ngTemplateOutlet]="content"
                       [ngTemplateOutletContext]="{ siteRegistration: healthAuthoritySite }"></ng-container>
 
       </div>
       <div *ngIf="hasActions"
-           class="col-auto py-5">
+           class="col-6 py-5">
+        <div class="d-flex justify-content-end mb-4">
 
-        <ng-container *ngIf="actions; else defaultActions">
+          <ng-container *ngIf="actions; else defaultActions">
 
-          <ng-container [ngTemplateOutlet]="actions"
-                        [ngTemplateOutletContext]="{ siteRegistration: healthAuthoritySite }"></ng-container>
+            <ng-container [ngTemplateOutlet]="actions"
+                          [ngTemplateOutletContext]="{ siteRegistration: healthAuthoritySite }"></ng-container>
 
-        </ng-container>
+          </ng-container>
 
-        <ng-template #defaultActions>
+          <ng-template #defaultActions>
 
-          <app-site-registration-actions [siteRegistration]="healthAuthoritySite"
-                                         (approve)="onApprove($event)"
-                                         (decline)="onDecline($event)"
-                                         (unreject)="onUnreject($event)"
-                                         (escalate)="onEscalate($event)"
-                                         (enableEditing)="onEnableEditing($event)"
-                                         (flag)="onToggleFlagSite($event)">
-          </app-site-registration-actions>
+            <app-site-registration-actions [siteRegistration]="healthAuthoritySite"
+                                           (approve)="onApprove($event)"
+                                           (decline)="onDecline($event)"
+                                           (unreject)="onUnreject($event)"
+                                           (escalate)="onEscalate($event)"
+                                           (enableEditing)="onEnableEditing($event)"
+                                           (flag)="onToggleFlagSite($event)">
+            </app-site-registration-actions>
 
-        </ng-template>
+          </ng-template>
 
+        </div>
       </div>
     </div>
-
   </ng-container>
 
 </app-page>

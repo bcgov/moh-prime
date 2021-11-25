@@ -35,10 +35,7 @@ export class OverviewPageComponent implements OnInit {
   public pharmanetAdministrators: Contact[];
   public technicalSupports: Contact[];
   public healthAuthoritySite: HealthAuthoritySite;
-  public siteIsIncomplete: boolean;
   public siteIsInReview: boolean;
-  public siteIsLocked: boolean;
-  public siteIsApproved: boolean;
   public siteExpiryDate: string | Moment | null;
   public showEditRedirect: boolean;
   public showSubmissionAction: boolean;
@@ -111,10 +108,7 @@ export class OverviewPageComponent implements OnInit {
     // the source of truth should be used
     let healthAuthoritySite = this.healthAuthoritySiteService.site;
 
-    this.siteIsIncomplete = healthAuthoritySite.isIncomplete();
     this.siteIsInReview = healthAuthoritySite.isInReview();
-    this.siteIsLocked = healthAuthoritySite.isLocked();
-    this.siteIsApproved = healthAuthoritySite.isApproved();
 
     this.siteExpiryDate = (healthAuthoritySite.approvedDate)
       ? healthAuthoritySite.getExpiryDate()
