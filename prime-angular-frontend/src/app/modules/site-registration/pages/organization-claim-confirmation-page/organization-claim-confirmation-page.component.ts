@@ -11,8 +11,7 @@ export class OrganizationClaimConfirmationPageComponent implements OnInit {
   public isCompleted: boolean;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.title = this.route.snapshot.data.title;
   }

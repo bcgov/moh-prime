@@ -26,7 +26,7 @@ export class NextStepsPageComponent implements OnInit {
   }
 
   public onSubmit() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
   }
 
   public ngOnInit(): void {

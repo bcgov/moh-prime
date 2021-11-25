@@ -30,7 +30,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
   ) {
     super(fb, routeStateService, logger);
 
-    this.initialize([SiteRoutes.SITE_MANAGEMENT]);
+    this.initialize([SiteRoutes.ORGANIZATIONS]);
   }
 
   /**

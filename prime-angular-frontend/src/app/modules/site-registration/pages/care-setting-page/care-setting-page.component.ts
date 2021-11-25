@@ -77,7 +77,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
 
   public onBack() {
     (!this.isCompleted)
-      ? this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT])
+      ? this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS])
       : this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }
 

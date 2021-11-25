@@ -11,7 +11,7 @@ namespace Prime.Services
         Task<bool> PecAssignableAsync(int siteId, string pec);
         Task UpdateCompletedAsync(int siteId, bool completed);
         Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null);
-        Task<Site> UpdatePecCode(int siteId, string pecCode);
+        Task UpdatePecCode(int siteId, string pecCode);
         Task DeleteSiteAsync(int siteId);
         Task<Site> ApproveSite(int siteId);
         Task<Site> DeclineSite(int siteId);
