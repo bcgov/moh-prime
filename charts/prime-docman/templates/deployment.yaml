@@ -1,7 +1,9 @@
 {{ $release := .Release.Name }}
 {{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
-{{ $pr := hasPrefix "pr-" .Release.Name }}
-{{ $dbName := printf "prime-%s" ( ternary $ocEnv $release $pr ) }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
+## Derrived release name
+{{ $drn := ternary $release $ocEnv $isPR }}
+#
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -60,16 +62,47 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: CACHE_REDIS_HOST
-              value: "{{ ternary $release $ocEnv $pr }}-redis"
-            - name: SQLALCHEMY_DATABASE_URI
-            {{- if .Values.database.existingSecret }}
+              value: "{{ $drn }}-redis{{ ternary "-headless" "" $isPR}}"
+            - name: CACHE_REDIS_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.existingSecret }}
-                  key: database_url
-            {{- else }}
-              value: {{ .Values.database.databaseUrl }}
+                  name: redis
+                  key: database-password
+            - name: CACHE_REDIS_PORT
+              value: "6379"
+            - name: PGHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: database-cm
+                  key: database-host
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $ocEnv }}-patroni-secret
+                  key: app-db-username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $ocEnv }}-patroni-secret
+                  key: app-db-password
+            - name: PGDATABASE
+            {{- if $isPR }}
+              value: prime-{{ $drn }}
+            {{ else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $ocEnv }}-patroni-secret
+                  key: app-db-name
             {{- end }}
+            - name: DOCUMENT_MANAGER_URL
+              value: "https://{{ .Values.global.vanityURL }}/api/docman/"
+            - name: JWT_OIDC_WELL_KNOWN_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: keycloak
+                  key: JWT_WELL_KNOWN_CONFIG
+            - name: SQLALCHEMY_DATABASE_URI
+              value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
           {{- range $name, $value := .Values.envVars }}
           {{- if not (empty $value) }}
             - name: {{ $name | quote }}

@@ -1,5 +1,10 @@
 {{- if .Values.migrations.enabled }}
-{{- $ocEnv := regexFind "([^-]*$)" .Release.Namespace -}}
+{{ $release := .Release.Name }}
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
+## Derrived release name
+{{ $drn := ternary $release $ocEnv $isPR }}
+#
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -33,8 +38,8 @@ spec:
                 name: {{ $ocEnv }}-patroni-secret
                 key: app-db-password
           - name: PGDATABASE
-            {{- if hasPrefix "pr-" .Release.Name }}
-            value: {{ .Release.Name }}
+            {{- if $isPR }}
+            value: prime-{{ $drn }}
             {{ else }}
             valueFrom:
               secretKeyRef:

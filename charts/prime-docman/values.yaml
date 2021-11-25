@@ -19,11 +19,6 @@ imagePullSecrets: []
 nameOverride: "docman"
 fullnameOverride: ""
 
-cache:
-  redisUrl: 'redis://localhost:6379'
-  # If secret exists, it should contain key "redis_url". specify the name of the secret below.
-  # existingSecret: ''
-
 database:
   autoCreate: true
   autoCreatePip: true

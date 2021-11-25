@@ -1,5 +1,10 @@
 {{- if .Values.migrations.enabled }}
-{{- $ocEnv := regexFind "([^-]*$)" .Release.Namespace -}}
+{{ $release := .Release.Name }}
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
+## Derrived release name
+{{ $drn := ternary $release $ocEnv $isPR }}
+#
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -16,22 +21,27 @@ spec:
         image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: IfNotPresent
         command:
-          - flask
-          - db 
-          - upgrade
-          - '${FLASK_RUN_PARAMS}'
+            # Script force waits migration pod execution until PostgreSQL is verified to
+            # be open to query connections.
+          - /opt/app-root/src/app.sh
+        args:
+          - migrate
         env:
+          - name: CACHE_REDIS_HOST
+            value: "{{ $drn }}-redis{{ ternary "-headless" "" $isPR}}"
+          - name: CACHE_REDIS_PASS
+            valueFrom:
+              secretKeyRef:
+                name: redis
+                key: database-password
+          - name: CACHE_REDIS_PORT
+            value: "6379"
           - name: PGHOST
             valueFrom:
               configMapKeyRef:
                 name: database-cm
                 key: database-host
           - name: PGUSER
-            valueFrom:
-              secretKeyRef:
-                name: {{ $ocEnv }}-patroni-secret
-                key: superuser-username
-          - name: APPUSER
             valueFrom:
               secretKeyRef:
                 name: {{ $ocEnv }}-patroni-secret
@@ -42,8 +52,8 @@ spec:
                 name: {{ $ocEnv }}-patroni-secret
                 key: app-db-password
           - name: PGDATABASE
-            {{- if hasPrefix "pr-" .Release.Name }}
-            value: {{ .Release.Name }}
+            {{- if $isPR }}
+            value: prime-{{ $drn }}
             {{ else }}
             valueFrom:
               secretKeyRef:

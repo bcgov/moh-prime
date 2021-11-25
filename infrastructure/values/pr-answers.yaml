@@ -6,3 +6,6 @@ global:
 
 redis:
   enabled: true
+  auth:
+    existingSecret: redis
+    existingSecretPasswordKey: database-password

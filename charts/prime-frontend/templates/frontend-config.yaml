@@ -1,7 +1,13 @@
 {{- $separator :=  ternary "-" "." (regexMatch "(?:\\..*?){4}" .Values.global.vanityURL) -}}
 {{- $domain := .Values.global.vanityURL -}}
 {{- $fullName := include "prime-frontend.fullname" . -}}
-{{- $release_name := .Release.Name }}
+{{ $release := .Release.Name }}
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
+## Derrived release name
+{{ $drn := ternary $release $ocEnv $isPR }}
+{{ $isProd := contains "prod" $ocEnv }}
+#
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,20 +17,20 @@ metadata:
 data:
     config-map.json: |-
       {
-        "environmentName": "dev",
+        "environmentName": "{{ $ocEnv }}",
         "apiEndpoint": "https://{{ $domain }}/api/v1",
         "loginRedirectUrl": "https://{{ $domain }}",
         "documentManagerUrl": "https://{{ $domain }}/api/docman",
         "keycloakConfig": {
           "config": {
-            "url": "https://dev.oidc.gov.bc.ca/auth",
+            "url": "https://{{ if $isProd }}""{{else}}"{{ $ocEnv }}."{{end}}oidc.gov.bc.ca/auth",
             "realm": "v4mbqqas",
-            "clientId": "prime-application-dev"
+            "clientId": "prime-application-{{ $ocEnv }}",
           }
         },
         "mohKeycloakConfig": {
           "config": {
-            "url": "https://common-logon-dev.hlth.gov.bc.ca/auth",
+            "url": "https://common-logon{{ if $isProd }}""{{else}}"-{{ $ocEnv }}"{{end}}.hlth.gov.bc.ca/auth",
             "realm": "moh_applications",
             "clientId": "PRIME-WEBAPP-ENROLLMENT"
           }
@@ -96,13 +102,13 @@ data:
             try_files $uri $uri/ /index.html$args;
           }
           location /api/docman/ {
-            proxy_pass http://{{ $release_name }}-docman:6001/;
+            proxy_pass http://{{ $drn }}-docman:6001/;
           }
           location /api/v1/ {
-            proxy_pass http://{{ $release_name }}-webapi:8080/api/;
+            proxy_pass http://{{ $drn }}-webapi:8080/api/;
           }
           location /api/v1/PLRHL7 {
-            proxy_pass http://{{ $release_name }}-webapi:8080/api/PLRHL7;
+            proxy_pass http://{{ $drn }}-webapi:8080/api/PLRHL7;
             #        proxy_set_header  X-SSL-CERT $ssl_client_escaped_cert;
           }
           location /nginx_status {
@@ -143,13 +149,13 @@ data:
             try_files $uri $uri/ /index.html$args;
           }
           location /api/docman/ {
-            proxy_pass http://{{ $release_name }}-docman:6001/;
+            proxy_pass http://{{ $drn }}-docman:6001/;
           }
           location /api/v1/ {
-            proxy_pass http://{{ $release_name }}-webapi:8080/api/;
+            proxy_pass http://{{ $drn }}-webapi:8080/api/;
           }
           location /api/v1/PLRHL7 {
-            proxy_pass http://{{ $release_name }}-webapi:8080/api/PLRHL7;
+            proxy_pass http://{{ $drn }}-webapi:8080/api/PLRHL7;
             #        proxy_set_header  X-SSL-CERT $ssl_client_escaped_cert;
           }
           location /nginx_status {
@@ -189,10 +195,10 @@ data:
             try_files $uri $uri/ /index.html$args;
           }
           location /api/docman/ {
-            proxy_pass http://{{ $release_name }}-docman:6001;
+            proxy_pass http://{{ $drn }}-docman:6001;
           }
           location /api/v1/ {
-            proxy_pass http://{{ $release_name }}-webapi:8080/api/;
+            proxy_pass http://{{ $drn }}-webapi:8080/api/;
           }
           location /nginx_status {
             # Enable Nginx stats
@@ -229,7 +235,7 @@ data:
           gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
 
           location /api/v1/PLRHL7 {
-            proxy_pass http://{{ $release_name }}-webapi:8080/api/PLRHL7;
+            proxy_pass http://{{ $drn }}-webapi:8080/api/PLRHL7;
             proxy_set_header X-SSL-CERT $ssl_client_escaped_cert;
           }
         }

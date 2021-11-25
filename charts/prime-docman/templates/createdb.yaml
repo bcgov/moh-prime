@@ -1,11 +1,17 @@
 {{- if .Values.database.autoCreate }}
-{{- $ocEnv := regexFind "([^-]*$)" .Release.Namespace -}}
+{{ $release := .Release.Name }}
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
+## Derrived release name
+{{ $drn := ternary $release $ocEnv $isPR }}
+#
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "prime-docman.fullname" . }}-createdb
   annotations:
-    "helm.sh/hook": "pre-install"
+    helm.sh/hook: pre-install
+    helm.sh/hook-delete-policy: hook-succeeded
   labels:
     {{- include "prime-docman.labels" . | nindent 4 }}
 spec:
@@ -19,7 +25,7 @@ spec:
           - /bin/bash
           - -c
           - >
-            createdb -O $(APPUSER) prime-{{ $ocEnv }} 2> /dev/null || echo "database already exists"
+            createdb -O $(APPUSER) $(PGDATABASE) 2> /dev/null || echo "database already exists"
         env:
           - name: PGHOST
             valueFrom:
@@ -40,14 +46,14 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: {{ $ocEnv }}-patroni-secret
-                key: app-db-password
+                key: superuser-password
           - name: PGDATABASE
-            {{- if hasPrefix "pr-" .Release.Name }}
-            value: {{ .Release.Name }}
+            {{- if $isPR }}
+            value: "prime-{{ $drn }}"
             {{ else }}
             valueFrom:
               secretKeyRef:
-                name: {{ $ocEnv }}-patroni-secret
+                name: {{ $release }}-patroni-secret
                 key: app-db-name
             {{- end }}
         envFrom:

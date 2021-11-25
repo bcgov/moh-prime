@@ -2,6 +2,8 @@ FROM public.ecr.aws/bitnami/python:3.6-prod
 
 WORKDIR /opt/app-root/src
 
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 # Install dependencies
 RUN install_packages gcc libc6-dev libpq-dev libmagic-dev
