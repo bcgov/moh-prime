@@ -187,11 +187,11 @@ export abstract class AbstractSiteAdminPage {
       .subscribe(() => this.onRefresh());
   }
 
-  public onDecline(siteId: number): void {
+  public onReject(siteId: number): void {
     const data: DialogOptions = {
-      title: 'Decline Site Registration',
-      message: 'Are you sure you want to Decline this Site Registration?',
-      actionText: 'Decline Site Registration',
+      title: 'Reject Site Registration',
+      message: 'Are you sure you want to reject this Site Registration?',
+      actionText: 'Reject Site Registration',
       actionType: 'warn',
       component: NoteComponent
     };
@@ -205,7 +205,7 @@ export abstract class AbstractSiteAdminPage {
             : EMPTY
         ),
         exhaustMap((note: string) =>
-          this.siteResource.declineSite(siteId)
+          this.siteResource.rejectSite(siteId)
             .pipe(
               map(() => this.updateSite(siteId, { status: SiteStatusType.LOCKED })),
               map(() => note)

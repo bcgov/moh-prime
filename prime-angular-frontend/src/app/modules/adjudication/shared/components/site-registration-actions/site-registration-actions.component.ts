@@ -17,7 +17,7 @@ import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 export class SiteRegistrationActionsComponent implements OnInit {
   @Input() siteRegistration: SiteRegistrationListViewModel | HealthAuthoritySiteAdminList;
   @Output() public approve: EventEmitter<number>;
-  @Output() public decline: EventEmitter<number>;
+  @Output() public reject: EventEmitter<number>;
   @Output() public unreject: EventEmitter<number>;
   @Output() public escalate: EventEmitter<number>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
@@ -33,7 +33,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   ) {
     this.delete = new EventEmitter<{ [key: string]: number }>();
     this.approve = new EventEmitter<number>();
-    this.decline = new EventEmitter<number>();
+    this.reject = new EventEmitter<number>();
     this.unreject = new EventEmitter<number>();
     this.escalate = new EventEmitter<number>();
     this.enableEditing = new EventEmitter<number>();
@@ -60,7 +60,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public onReject(): void {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
-      this.decline.emit(this.siteRegistration.id);
+      this.reject.emit(this.siteRegistration.id);
     }
   }
 

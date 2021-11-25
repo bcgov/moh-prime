@@ -45,7 +45,7 @@
 
             <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
                                            (approve)="onApprove($event)"
-                                           (decline)="onDecline($event)"
+                                           (reject)="onReject($event)"
                                            (delete)="onDelete($event)"
                                            (unreject)="onUnreject($event)"
                                            (escalate)="onEscalate($event)"

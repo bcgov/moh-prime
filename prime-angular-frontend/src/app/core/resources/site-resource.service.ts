@@ -418,7 +418,7 @@ export class SiteResource {
       );
   }
 
-  public declineSite(siteId: number): NoContent {
+  public rejectSite(siteId: number): NoContent {
     return this.apiResource.put<NoContent>(`sites/${siteId}/decline`)
       .pipe(
         NoContentResponse,
