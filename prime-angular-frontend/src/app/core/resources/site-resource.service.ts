@@ -194,7 +194,7 @@ export class SiteResource {
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Site has been updated')),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Site could not be updated');
+          this.toastService.openErrorToast('Site ID/PEC could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updatePecCode error has occurred: ', error);
           throw error;
         })

@@ -729,7 +729,7 @@ namespace Prime.Controllers
 
             await _siteService.UpdatePecCode(siteId, pecCode);
 
-            return Ok();
+            return NoContent();
         }
 
         // Get: api/site/5/business-licences/5/document/token
