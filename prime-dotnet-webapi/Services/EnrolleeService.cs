@@ -833,11 +833,25 @@ namespace Prime.Services
 
         public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
         {
-            return await _context.BusinessEvents
-                .Include(e => e.Admin)
-                .Where(e => e.EnrolleeId == enrolleeId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
-                .OrderByDescending(e => e.EventDate)
-                .ToListAsync();
+            var linkedPaperEnrolleeId = await GetLinkedPaperEnrolleeId(enrolleeId);
+            if (linkedPaperEnrolleeId > 0)
+            {
+                return await _context.BusinessEvents
+                    .Include(e => e.Admin)
+                    .Where(e => e.EnrolleeId == enrolleeId || e.EnrolleeId == linkedPaperEnrolleeId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
+                    .OrderByDescending(e => e.EventDate)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _context.BusinessEvents
+                    .Include(e => e.Admin)
+                    .Where(e => e.EnrolleeId == enrolleeId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
+                    .OrderByDescending(e => e.EventDate)
+                    .ToListAsync();
+            }
+        }
+
         private async Task<int?> GetLinkedPaperEnrolleeId(int enrolleeId)
         {
             return await _context.EnrolleeLinkedEnrolments
