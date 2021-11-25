@@ -111,7 +111,16 @@ namespace Prime.Services
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
 
-            return _mapper.Map<EnrolleeViewModel>(dto);
+            var linkedGpid = await _context.EnrolleeLinkedEnrolments
+                .Where(ele => ele.EnrolleeId == enrolleeId)
+                .Select(ele => ele.UserProvidedGpid)
+                .SingleOrDefaultAsync();
+
+            dto.UserProvidedGpid = linkedGpid;
+
+            var vm = _mapper.Map<EnrolleeViewModel>(dto);
+            vm.UserProvidedGpid = linkedGpid;
+            return vm;
         }
 
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)

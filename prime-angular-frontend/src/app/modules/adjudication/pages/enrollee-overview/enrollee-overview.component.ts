@@ -135,6 +135,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       smsPhone,
       phone,
       phoneExtension,
+      userProvidedGpid,
       ...remainder
     } = enrollee;
 
@@ -156,7 +157,8 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
         email,
         smsPhone,
         phone,
-        phoneExtension
+        phoneExtension,
+        userProvidedGpid
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

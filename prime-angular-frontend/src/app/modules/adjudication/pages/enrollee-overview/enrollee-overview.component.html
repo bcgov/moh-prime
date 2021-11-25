@@ -20,6 +20,10 @@
             class="mb-4 align-self-center">
           <strong>GPID:</strong> {{ enrolment?.enrollee.gpid }}
       </div>
+      <div *ngIf="enrolment?.enrollee.userProvidedGpid"
+            class="mb-4 align-self-center">
+          <strong>PRIOR GPID:</strong> {{ enrolment?.enrollee.userProvidedGpid }}
+      </div>
 
       <div *ngIf="absence"
             class="mb-4 align-self-center">
