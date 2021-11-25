@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { TechnicalSupportOverviewComponent } from './technical-support-overview.component';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
 
 describe('TechnicalSupportOverviewComponent', () => {
   let component: TechnicalSupportOverviewComponent;
@@ -15,7 +16,8 @@ describe('TechnicalSupportOverviewComponent', () => {
       ],
       declarations: [
         TechnicalSupportOverviewComponent,
-        FullnamePipe
+        FullnamePipe,
+        DefaultPipe
       ]
     }).compileComponents();
   });
