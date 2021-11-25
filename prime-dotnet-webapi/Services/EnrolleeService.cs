@@ -838,6 +838,12 @@ namespace Prime.Services
                 .Where(e => e.EnrolleeId == enrolleeId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
+        private async Task<int?> GetLinkedPaperEnrolleeId(int enrolleeId)
+        {
+            return await _context.EnrolleeLinkedEnrolments
+                .Where(ele => ele.EnrolleeId == enrolleeId)
+                .Select(ele => ele.PaperEnrolleeId)
+                .SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids)
