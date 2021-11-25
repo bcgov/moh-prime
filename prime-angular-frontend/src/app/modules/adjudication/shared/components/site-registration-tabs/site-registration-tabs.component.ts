@@ -7,15 +7,13 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Subscription, Observable, EMPTY, of, noop, concat } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
-import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { EmailUtils } from '@lib/utils/email-utils.class';
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { UtilsService } from '@core/services/utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -43,7 +41,6 @@ import {
 } from '@registration/shared/models/site-registration.model';
 import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
 @Component({
   selector: 'app-site-registration-tabs',
@@ -74,10 +71,9 @@ export class SiteRegistrationTabsComponent implements OnInit {
     private router: Router,
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource,
-    private healthAuthResource: HealthAuthorityResource,
+    private healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private adjudicationResource: AdjudicationResource,
     private permissionService: PermissionService,
-    private utilResource: UtilsService,
     private dialog: MatDialog
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
@@ -202,7 +198,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
 
   public onNotify({ siteId, healthAuthorityOrganizationId }: { siteId: number, healthAuthorityOrganizationId?: HealthAuthorityEnum }) {
     const request$ = (healthAuthorityOrganizationId)
-      ? this.healthAuthResource.getHealthAuthoritySiteContacts(healthAuthorityOrganizationId, siteId)
+      ? this.healthAuthoritySiteResource.getHealthAuthoritySiteContacts(healthAuthorityOrganizationId, siteId)
       : this.siteResource.getSiteContacts(siteId);
 
     request$

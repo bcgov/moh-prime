@@ -68,7 +68,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
     this.siteId = siteId;
 
-    const { doingBusinessAs, pec, businessLicence, activeBeforeRegistration } = model;
+    const { doingBusinessAs, pec, businessLicence } = model;
     // Preserve the business licence for use when
     // creating JSON format from the form
     this.businessLicence = businessLicence;

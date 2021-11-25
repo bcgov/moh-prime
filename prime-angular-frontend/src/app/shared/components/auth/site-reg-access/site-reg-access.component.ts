@@ -30,8 +30,6 @@ export class SiteRegAccessComponent implements OnInit {
   /**
    * @description
    * Disable authentication.
-   *
-   * TODO remove when feature flag is removed on health authority site registration
    */
   @Input() public disableLogin: boolean;
   /**
@@ -59,6 +57,10 @@ export class SiteRegAccessComponent implements OnInit {
   }
 
   public onLogin(type: SiteRegistrationTypeEnum = SiteRegistrationTypeEnum.COMM_PHARMACY_PRACTICE) {
+    if (this.disableLogin) {
+      return;
+    }
+
     this.login.emit(type);
   }
 

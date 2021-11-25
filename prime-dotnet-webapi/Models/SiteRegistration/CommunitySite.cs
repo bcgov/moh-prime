@@ -54,8 +54,8 @@ namespace Prime.Models
         }
 
         /// <summary>
-        /// Site submissions are considered renewals starting 90 days before the expiry of its current Business Licence.
-        /// For sites without expiry dates on thier BL, expiry is considered to be one year after the Site's submitted date.
+        /// Site submissions are considered renewals starting 30 days before the expiry of its current Business Licence.
+        /// For sites without expiry dates on their BL, expiry is considered to be one year after the Site's submitted date.
         /// </summary>
         public bool IsWithinRenewalPeriod()
         {
@@ -66,7 +66,7 @@ namespace Prime.Models
 
             var expiryDate = BusinessLicence?.ExpiryDate ?? SubmittedDate.Value.AddYears(1);
 
-            return DateTimeOffset.Now >= expiryDate.AddDays(-90);
+            return DateTimeOffset.Now >= expiryDate.AddDays(-30);
         }
     }
 }

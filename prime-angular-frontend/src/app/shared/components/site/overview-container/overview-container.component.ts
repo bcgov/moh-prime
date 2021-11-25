@@ -11,6 +11,8 @@ import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-overview-container',
@@ -23,11 +25,13 @@ export class OverviewContainerComponent implements OnInit {
   @Input() public site: Site;
   @Input() public admin: boolean;
   @Input() public businessLicences: BusinessLicence[];
+  @Input() public siteErrors: ValidationErrors;
 
   public withinRenewalPeriod: boolean;
   public routeUtils: RouteUtils;
   public SiteStatusType = SiteStatusType;
   public SiteRoutes = SiteRoutes;
+  public CareSettingEnum = CareSettingEnum;
 
   constructor(
     protected route: ActivatedRoute,

@@ -17,6 +17,11 @@ export class SimpleAccessComponent implements OnInit {
   @Input() public title: string;
   @Input() public loginLabel: string;
   @Input() public showLogo: boolean;
+  /**
+   * @description
+   * Disable authentication.
+   */
+  @Input() public disableLogin: boolean;
   @Output() public login: EventEmitter<void>;
 
   constructor(
@@ -30,6 +35,10 @@ export class SimpleAccessComponent implements OnInit {
   }
 
   public onLogin() {
+    if (this.disableLogin) {
+      return;
+    }
+
     this.login.emit();
   }
 

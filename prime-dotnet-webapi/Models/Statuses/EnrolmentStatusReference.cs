@@ -19,18 +19,8 @@ namespace Prime.Models
 
         public EnrolleeNote AdjudicatorNote { get; set; }
 
-        public bool ShouldSerializeAdjudicatorNote()
-        {
-            return (AdjudicatorNoteId != null);
-        }
-
         public int? AdminId { get; set; }
 
         public Admin Adjudicator { get; set; }
-
-        public bool ShouldSerializeAdjudicator()
-        {
-            return (AdminId != null);
-        }
     }
 }

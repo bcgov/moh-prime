@@ -8,8 +8,9 @@ import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { MockConfigService } from 'test/mocks/mock-config.service';
-
 import { RegulatoryPageComponent } from './regulatory-page.component';
+
+import { DefaultPipe } from '@shared/pipes/default.pipe';
 
 describe('RegulatoryPageComponent', () => {
   let component: RegulatoryPageComponent;
@@ -20,7 +21,10 @@ describe('RegulatoryPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RegulatoryPageComponent],
+      declarations: [
+        RegulatoryPageComponent,
+        DefaultPipe
+      ],
       imports: [
         NgxMaterialModule,
         ReactiveFormsModule,

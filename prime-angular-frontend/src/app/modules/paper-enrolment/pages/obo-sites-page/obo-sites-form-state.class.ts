@@ -25,6 +25,10 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
     return this.form.get('communityPharmacySites') as FormArray;
   }
 
+  public get deviceProviderSites(): FormArray {
+    return this.form.get('deviceProviderSites') as FormArray;
+  }
+
   public get healthAuthoritySites(): FormGroup {
     return this.form.get('healthAuthoritySites') as FormGroup;
   }
@@ -49,6 +53,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
     const oboSites = [
       sites.communityHealthSites,
       sites.communityPharmacySites,
+      sites.deviceProviderSites,
       Object.keys(sites.healthAuthoritySites)
         .flatMap((healthAuthSiteCode: string) => sites.healthAuthoritySites[healthAuthSiteCode])
     ].flat();
@@ -81,6 +86,13 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
           site.patchValue(value);
           return this.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
         }
+        case CareSettingEnum.DEVICE_PROVIDER: {
+          const oboSite = oboSites.find(os => os.careSettingCode === csc);
+          const site = this.buildOboSiteForm();
+          const value = (oboSite) ? oboSite : { careSettingCode: csc };
+          site.patchValue(value);
+          return this.addNonHealthAuthorityOboSite(site, this.deviceProviderSites);
+        }
         case CareSettingEnum.HEALTH_AUTHORITY: {
           return healthAuthCodes.forEach(hac => {
             const oboSite = oboSites.find(os => os.careSettingCode === csc && os.healthAuthorityCode === hac);
@@ -99,6 +111,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
     this.formInstance = this.fb.group({
       communityHealthSites: this.fb.array([]),
       communityPharmacySites: this.fb.array([]),
+      deviceProviderSites: this.fb.array([]),
       // Keyed by health authority code
       healthAuthoritySites: this.fb.group({})
     });
@@ -116,6 +129,9 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
         return this.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
       }
+      case CareSettingEnum.DEVICE_PROVIDER: {
+        return this.addNonHealthAuthorityOboSite(site, this.deviceProviderSites);
+      }
       case CareSettingEnum.HEALTH_AUTHORITY: {
         return this.addHealthAuthorityOboSite(site, this.healthAuthoritySites, healthAuthorityCode);
       }
@@ -129,6 +145,9 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
         return this.communityPharmacySites.removeAt(index);
+      }
+      case CareSettingEnum.DEVICE_PROVIDER: {
+        return this.deviceProviderSites.removeAt(index);
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
         return this.healthAuthorityCodeSites(healthAuthCode).removeAt(index);

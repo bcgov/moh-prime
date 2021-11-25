@@ -3633,6 +3633,17 @@ namespace Prime.Migrations
                             Template = "Thank you for registering your site (SiteID: @Model.Pec) in PRIME. If you need to update any site information in PRIME, you may log in at any time using your mobile BC Services Card. If you have any questions, please phone 1 - 844 - 397 - 7463 or email PRIMESupport@@gov.bc.ca. Thank you.",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EmailType = 17,
+                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Template = "Your request for PharmaNet access has been approved and recorded in PRIME. When it is possible for you to do so, you must enrol in PRIME using your mobile BC Services Card. <br> <br> <strong> Your temporary GPID is @Model.GPID. </strong> <br> <br> The first time you log into PRIME you should be asked if you have previously received permission to access PharmaNet via an offline process. If you do not see this prompt, please stop your enrollment and contact <a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -3658,7 +3669,7 @@ namespace Prime.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("DeviceProviderNumber")
+                    b.Property<string>("DeviceProviderIdentifier")
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
@@ -3685,9 +3696,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("IdentityProvider")
                         .HasColumnType("text");
-
-                    b.Property<bool?>("IsInsulinPumpProvider")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -4834,6 +4842,53 @@ namespace Prime.Migrations
                             Code = "2.16.840.1.113883.4.530",
                             Name = "RDID"
                         });
+                });
+
+            modelBuilder.Entity("Prime.Models.IndividualDeviceProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("CommunitySiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunitySiteId");
+
+                    b.ToTable("IndividualDeviceProvider");
                 });
 
             modelBuilder.Entity("Prime.Models.Job", b =>
@@ -6114,7 +6169,8 @@ namespace Prime.Migrations
 
                     b.HasIndex("PharmacyId");
 
-                    b.HasIndex("TransactionId");
+                    b.HasIndex("TransactionId")
+                        .IsUnique();
 
                     b.HasIndex("TxDateTime");
 
@@ -9742,7 +9798,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 4,
-                            Name = "College License or Practitioner ID not in PharmaNet table"
+                            Name = "College License, Practitioner ID, or Device Provider ID not in PharmaNet table"
                         },
                         new
                         {
@@ -9762,7 +9818,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 8,
-                            Name = "Insulin Pump Provider"
+                            Name = "Device Provider"
                         },
                         new
                         {
@@ -10459,7 +10515,8 @@ namespace Prime.Migrations
                 {
                     b.HasOne("Prime.Models.Admin", "Admin")
                         .WithMany()
-                        .HasForeignKey("AdminId");
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.BusinessEventType", "BusinessEventType")
                         .WithMany("BusinessEvents")
@@ -10469,19 +10526,23 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
-                        .HasForeignKey("EnrolleeId");
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Organization", "Organization")
                         .WithMany()
-                        .HasForeignKey("OrganizationId");
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Party", "Party")
                         .WithMany()
-                        .HasForeignKey("PartyId");
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany()
-                        .HasForeignKey("SiteId");
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Admin");
 
@@ -10951,6 +11012,17 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.Navigation("Enrollee");
+                });
+
+            modelBuilder.Entity("Prime.Models.IndividualDeviceProvider", b =>
+                {
+                    b.HasOne("Prime.Models.CommunitySite", "CommunitySite")
+                        .WithMany()
+                        .HasForeignKey("CommunitySiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CommunitySite");
                 });
 
             modelBuilder.Entity("Prime.Models.Job", b =>

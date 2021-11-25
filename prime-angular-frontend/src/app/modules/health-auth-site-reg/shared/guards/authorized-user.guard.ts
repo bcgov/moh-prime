@@ -6,7 +6,7 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { AuthorizedUserResource } from '@core/resources/authorized-user-resource.service';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -31,7 +31,7 @@ export class AuthorizedUserGuard extends BaseGuard {
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private authorizedUserService: AuthorizedUserService,
-    private healthAuthorityResource: HealthAuthorityResource
+    private authorizedUserResource: AuthorizedUserResource
   ) {
     super(authService, logger);
   }
@@ -42,7 +42,7 @@ export class AuthorizedUserGuard extends BaseGuard {
         // Having no authorized user in the same redirection logic for the user as
         // an unapproved status, and therefore not handled individually
         exhaustMap((user: BcscUser) =>
-          this.healthAuthorityResource.getAuthorizedUserByUserId(user.userId)
+          this.authorizedUserResource.getAuthorizedUserByUserId(user.userId)
         ),
         map((authorizedUser: AuthorizedUser | null) =>
           (authorizedUser)

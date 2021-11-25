@@ -93,11 +93,11 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       const siteId = this.route.snapshot.params.sid;
-      this.busy = this.siteResource
-        .updatePecCode(siteId, this.form.value.pec)
-        .subscribe((site: Site) => {
+      const pec = this.form.value.pec;
+      this.busy = this.siteResource.updatePecCode(siteId, pec)
+        .subscribe(() => {
           this.refresh.next(true);
-          this.site = site;
+          this.site.pec = pec;
         });
     }
   }

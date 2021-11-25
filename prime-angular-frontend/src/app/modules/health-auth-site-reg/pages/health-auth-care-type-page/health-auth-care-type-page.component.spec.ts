@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute } from '@angular/router';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
@@ -16,6 +17,18 @@ import { HealthAuthCareTypePageComponent } from './health-auth-care-type-page.co
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
 describe('HealthAuthCareTypePageComponent', () => {
+  const mockActivatedRoute = {
+    snapshot: {
+      data: {
+        title: 'Health Authority Care Type',
+      },
+      params: {
+        haid: 1,
+        sid: 7
+      }
+    }
+  };
+
   let component: HealthAuthCareTypePageComponent;
   let fixture: ComponentFixture<HealthAuthCareTypePageComponent>;
   let spyOnRouteRelativeTo;
@@ -40,6 +53,10 @@ describe('HealthAuthCareTypePageComponent', () => {
         {
           provide: ConfigService,
           useClass: MockConfigService
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute
         },
         CapitalizePipe
       ],

@@ -79,7 +79,8 @@ export class MockCommunitySiteService {
       status: SiteStatusType.EDITABLE,
       pec: null,
       flagged: false,
-      activeBeforeRegistration: false
+      activeBeforeRegistration: false,
+      individualDeviceProviders: []
     });
   }
 

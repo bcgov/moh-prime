@@ -20,8 +20,6 @@ import { SiteInformationPageComponent } from '@health-auth/pages/site-informatio
 import { VendorPageComponent } from '@health-auth/pages/vendor-page/vendor-page.component';
 import { SiteAddressPageComponent } from '@health-auth/pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from '@health-auth/pages/hours-operation-page/hours-operation-page.component';
-import { RemoteUsersPageComponent } from '@health-auth/pages/remote-users-page/remote-users-page.component';
-import { RemoteUserPageComponent } from '@health-auth/pages/remote-user-page/remote-user-page.component';
 import { AdministratorPageComponent } from '@health-auth/pages/administrator-page/administrator-page.component';
 import { TechnicalSupportPageComponent } from '@health-auth/pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview-page.component';
@@ -127,23 +125,6 @@ const routes: Routes = [
             component: HoursOperationPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'Hours of Operation' }
-          },
-          {
-            path: HealthAuthSiteRegRoutes.REMOTE_USERS,
-            children: [
-              {
-                path: '',
-                component: RemoteUsersPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Practitioners Requiring Remote Access' },
-              },
-              {
-                path: ':index',
-                component: RemoteUserPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Remote User' }
-              }
-            ]
           },
           {
             path: HealthAuthSiteRegRoutes.ADMINISTRATOR,

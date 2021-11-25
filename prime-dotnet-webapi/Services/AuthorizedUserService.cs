@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 using Prime.Models;
+using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Parties;
 
 namespace Prime.Services
@@ -55,6 +56,14 @@ namespace Prime.Services
                 .Where(au => au.Party.UserId == userId)
                 .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<HealthAuthoritySiteListViewModel>> GetAuthorizedUserSitesAsync(int authorizedUserId)
+        {
+            return await _context.HealthAuthoritySites
+                .Where(has => has.AuthorizedUserId == authorizedUserId)
+                .ProjectTo<HealthAuthoritySiteListViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task<int> CreateOrUpdateAuthorizedUserAsync(AuthorizedUserChangeModel changeModel, ClaimsPrincipal user)

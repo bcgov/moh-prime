@@ -23,9 +23,6 @@ import { SiteAddressPageComponent } from './pages/site-address-page/site-address
 import { SiteAddressOverviewComponent } from './pages/site-address-page/site-address-overview.component';
 import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
 import { HoursOperationOverviewComponent } from './pages/hours-operation-page/hours-operation-overview.component';
-import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users-page.component';
-import { RemoteUsersOverviewComponent } from './pages/remote-users-page/remote-users-overview.component';
-import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
 import { AdministratorPageComponent } from './pages/administrator-page/administrator-page.component';
 import { AdministratorOverviewComponent } from './pages/administrator-page/administrator-overview.component';
 import { TechnicalSupportPageComponent } from './pages/technical-support-page/technical-support-page.component';
@@ -52,9 +49,6 @@ import { OverviewPageComponent } from './pages/overview-page/overview-page.compo
     SiteAddressOverviewComponent,
     HoursOperationPageComponent,
     HoursOperationOverviewComponent,
-    RemoteUsersPageComponent,
-    RemoteUsersOverviewComponent,
-    RemoteUserPageComponent,
     AdministratorPageComponent,
     AdministratorOverviewComponent,
     TechnicalSupportPageComponent,

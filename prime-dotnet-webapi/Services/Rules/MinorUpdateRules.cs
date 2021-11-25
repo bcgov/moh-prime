@@ -35,7 +35,7 @@ namespace Prime.Services.Rules
     }
 
     /// <summary>
-    /// Update must be more than 90 days away from renewal date
+    /// Update must be more than 30 days away from renewal date
     /// </summary>
     public class DateRule : MinorUpdateRule
     {
@@ -47,7 +47,7 @@ namespace Prime.Services.Rules
             }
 
             TimeSpan diff = enrollee.ExpiryDate.Value - DateTimeOffset.Now;
-            return Task.FromResult(diff > TimeSpan.FromDays(90));
+            return Task.FromResult(diff > TimeSpan.FromDays(30));
         }
     }
 
@@ -101,7 +101,12 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-            if (!CompareCollections(comparitor, enrollee.RemoteAccessSites, _updatedProfile.RemoteAccessSites))
+            // This is a bit of a hack, we had to change this to a VM because we can't mark RemoteAccessSite.Site as [JsonIgnore] since it needs to be serialized into the Submission JSON blob.
+            ICollection<RemoteAccessSite> remoteSites = _updatedProfile.RemoteAccessSites
+                .Select(site => new RemoteAccessSite { EnrolleeId = site.EnrolleeId, SiteId = site.SiteId })
+                .ToList();
+
+            if (!CompareCollections(comparitor, enrollee.RemoteAccessSites, remoteSites))
             {
                 return Task.FromResult(false);
             }

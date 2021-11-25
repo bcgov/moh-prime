@@ -8,8 +8,6 @@ namespace Prime.Configuration.Database
     {
         public void Configure(EntityTypeBuilder<EnrolleeNote> builder)
         {
-            builder.HasKey(an => new { an.Id });
-
             builder
                 .HasOne<Admin>(an => an.Adjudicator)
                 .WithMany(a => a.AdjudicatorNotes)

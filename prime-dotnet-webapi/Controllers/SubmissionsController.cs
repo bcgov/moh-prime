@@ -251,7 +251,7 @@ namespace Prime.Controllers
             return Ok(enrollee);
         }
 
-        // PUT: api/Enrollees/5/submissions/latest/type
+        // PUT: api/enrollees/5/submissions/latest/type
         /// <summary>
         /// Assign a TOA agreement type to the latest submission.
         /// </summary>

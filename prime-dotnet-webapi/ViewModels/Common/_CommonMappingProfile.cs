@@ -12,9 +12,14 @@ namespace Prime.ViewModels.Profiles
                 .ReverseMap();
 
             CreateMap<Address, AddressViewModel>();
+
             CreateMap<AddressViewModel, PhysicalAddress>();
             CreateMap<AddressViewModel, MailingAddress>();
             CreateMap<AddressViewModel, VerifiedAddress>();
+
+            CreateMap<PhysicalAddress, AddressViewModel>();
+            CreateMap<MailingAddress, AddressViewModel>();
+            CreateMap<VerifiedAddress, AddressViewModel>();
         }
     }
 }

@@ -20,7 +20,6 @@ export class HealthAuthSiteRegRoutes {
   public static HEALTH_AUTH_CARE_TYPE = 'health-auth-care-type';
   public static SITE_ADDRESS = 'site-address';
   public static HOURS_OPERATION = 'hours-operation';
-  public static REMOTE_USERS = 'remote-users';
   public static ADMINISTRATOR = 'administrator';
   public static TECHNICAL_SUPPORT = 'technical-support';
   public static SITE_OVERVIEW = 'site-overview';
@@ -40,7 +39,6 @@ export class HealthAuthSiteRegRoutes {
       this.HEALTH_AUTH_CARE_TYPE,
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
-      this.REMOTE_USERS,
       this.ADMINISTRATOR,
       this.TECHNICAL_SUPPORT,
       this.SITE_OVERVIEW
@@ -79,7 +77,6 @@ export class HealthAuthSiteRegRoutes {
    */
   public static siteIsApprovedRoutes(): string[] {
     return [
-      this.REMOTE_USERS,
       this.ADMINISTRATOR,
       this.TECHNICAL_SUPPORT,
       this.SITE_OVERVIEW
@@ -96,7 +93,6 @@ export class HealthAuthSiteRegRoutes {
       this.HEALTH_AUTH_CARE_TYPE,
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
-      this.REMOTE_USERS,
       this.ADMINISTRATOR,
       this.TECHNICAL_SUPPORT,
       this.SITE_OVERVIEW

@@ -18,19 +18,22 @@ namespace Prime.Controllers
     [ApiController]
     public class EnrolleePaperSubmissionsController : PrimeControllerBase
     {
+        private readonly IAdminService _adminService;
+        private readonly IEmailService _emailService;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAdminService _adminService;
 
         public EnrolleePaperSubmissionsController(
+            IAdminService adminService,
+            IEmailService emailService,
             IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
-            IEnrolleeService enrolleeService,
-            IAdminService adminService
+            IEnrolleeService enrolleeService
         )
         {
+            _adminService = adminService;
+            _emailService = emailService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
             _enrolleeService = enrolleeService;
-            _adminService = adminService;
         }
 
         // POST: api/enrollees/paper-submissions
@@ -115,6 +118,27 @@ namespace Prime.Controllers
             }
 
             await _enrolleePaperSubmissionService.UpdateCertificationsAsync(enrolleeId, payload);
+            return Ok();
+        }
+
+        // PUT: api/enrollees/5/paper-submissions/device-provider
+        /// <summary>
+        /// Updates a Paper Submission's Device Provider Informaion.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/device-provider", Name = nameof(UpdateEnrolleePaperSubmissionDeviceProvider))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionDeviceProvider(int enrolleeId, FromBodyText deviceProviderIdentifier)
+        {
+            if (!await _enrolleePaperSubmissionService.PaperSubmissionIsEditableAsync(enrolleeId))
+            {
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
+            }
+
+            await _enrolleePaperSubmissionService.UpdateDeviceProviderAsync(enrolleeId, deviceProviderIdentifier);
             return Ok();
         }
 
@@ -267,11 +291,12 @@ namespace Prime.Controllers
             }
 
             await _enrolleePaperSubmissionService.FinalizeSubmissionAsync(enrolleeId);
+            await _emailService.SendPaperEnrolmentSubmissionEmailAsync(enrolleeId);
 
             return Ok();
         }
 
-        // HEAD: api/Enrollees/paper-submissions?dateOfBirth=1977-09-22
+        // HEAD: api/enrollees/paper-submissions?dateOfBirth=1977-09-22
         /// <summary>
         /// Checks if there are any unclaimed paper Enrollees submissions with the supplied date of birth.
         /// </summary>
@@ -292,7 +317,7 @@ namespace Prime.Controllers
             return NotFound();
         }
 
-        // PUT: api/Enrollees/5/linked-gpid
+        // PUT: api/enrollees/5/linked-gpid
         /// <summary>
         /// User supplied GPID to match with a previously submitted Paper Enrolment.
         /// Cannot set a linked GPID on Paper Submissions or on Enrollees already linked to a Paper Submission.
@@ -324,7 +349,7 @@ namespace Prime.Controllers
             return Conflict($"Could not create/update linked GPID. Enrollee with id {enrolleeId} is either a Paper Submission or is already linked to a Paper Submission.");
         }
 
-        // GET: api/Enrollees/5/linked-gpid
+        // GET: api/enrollees/5/linked-gpid
         /// <summary>
         /// Gets the linked GPID
         /// </summary>

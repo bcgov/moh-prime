@@ -79,15 +79,22 @@ namespace Prime.Services.Rules
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.Certifications == null || !enrollee.Certifications.Any())
+            var certifications = enrollee.Certifications.Where(c => c.License.Validate);
+
+            // If enrollee choses device provider, add device provider as a licence and check it against PharmaNet
+            if (!string.IsNullOrWhiteSpace(enrollee.DeviceProviderIdentifier))
             {
-                // No certs to verify
-                return true;
+                certifications = certifications.Append(new Certification
+                {
+                    // ATTN: the prefix below is a placeholder
+                    License = new License { Prefix = "P1" },
+                    LicenseNumber = enrollee.DeviceProviderIdentifier
+                });
             }
 
             bool passed = true;
 
-            foreach (var cert in enrollee.Certifications.Where(c => c.License.Validate))
+            foreach (var cert in certifications)
             {
                 if (cert.License.PrescriberIdType == PrescriberIdType.Optional && cert.PractitionerId == null)
                 {
@@ -146,10 +153,9 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (!string.IsNullOrWhiteSpace(enrollee.DeviceProviderNumber)
-                || enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
+            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider) || enrollee.DeviceProviderIdentifier != null)
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.PumpProvider);
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProvider);
                 return Task.FromResult(false);
             }
 
@@ -288,7 +294,6 @@ namespace Prime.Services.Rules
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch);
                 return false;
             }
-
         }
     }
 }

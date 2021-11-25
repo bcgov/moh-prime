@@ -36,5 +36,6 @@ namespace Prime.Services
         Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user);
         Task<bool> SiteExists(int siteId);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId);
+        Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId);
     }
 }

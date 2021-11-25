@@ -1,73 +1,65 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router, Params } from '@angular/router';
 
-import { Observable, forkJoin } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
-
+import { Party } from '@lib/models/party.model';
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
-import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { Party } from '@lib/models/party.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { SigningAuthorityService } from '@registration/shared/services/signing-authority.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { AbstractRoutingWorkflowGuard } from '@registration/shared/classes/abstract-routing-workflow-guard.class';
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrganizationGuard extends BaseGuard {
+export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
   constructor(
+    protected signingAuthorityService: SigningAuthorityService,
+    protected organizationService: OrganizationService,
+    protected organizationResource: OrganizationResource,
     protected authService: AuthService,
     protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router,
-    private organizationService: OrganizationService,
-    private organizationResource: OrganizationResource
+    private router: Router
   ) {
-    super(authService, logger);
-  }
-
-  protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    return this.authService.getUser$()
-      .pipe(
-        // Having no signing authority or organizations results in the same
-        // redirection logic for the user, and therefore not handled individually
-        exhaustMap((user: BcscUser) =>
-          forkJoin([
-            this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
-              .pipe(
-                map((organizations: Organization[]) => (organizations?.length) ? organizations[0] : null)
-              ),
-            this.organizationResource.getSigningAuthorityByUserId(user.userId),
-            this.organizationResource.getOrganizationClaim({ userId: user.userId })
-          ])
-        ),
-        map(([organization, party, claimed]: [Organization | null, Party, boolean]) => {
-          // Store the organization for access throughout registration, which
-          // will allows be the most up-to-date organization
-          this.organizationService.organization = organization;
-
-          // Determine the next route based on whether this is the initial
-          // registration of an organization and site, or subsequent
-          // registration of sites under an existing organization
-          return this.routeDestination(routePath, params, organization, party, claimed);
-        })
-      );
+    super(
+      signingAuthorityService,
+      organizationService,
+      organizationResource,
+      authService,
+      logger
+    );
   }
 
   /**
    * @description
-   * Determine the route destination based on the organization status.
+   * Determine the route destination based on the organization state.
    */
-  private routeDestination(routePath: string, params: Params, organization: Organization | null, party: Party, hasOrgClaim: boolean) {
+  protected routeDestination(
+    routePath: string,
+    params: Params,
+    organization: Organization | null,
+    signingAuthority: Party | null,
+    hasClaim: boolean
+  ): boolean {
     // On login the user will always be redirected to the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
+    }
+
+    // When a claim exists for a signing authority access to the organization
+    // is not allowed, and they are redirected to the claim organization workflow
+    if (hasClaim) {
+      this.router.navigate([
+        SiteRoutes.MODULE_PATH,
+        ...this.getExistingClaimRouteRedirect()
+      ]);
+      return false;
     }
 
     // When the organization ID mismatches the organizations route ID
@@ -81,27 +73,26 @@ export class OrganizationGuard extends BaseGuard {
     if (organization) {
       return (organization.completed)
         ? this.manageCompleteOrganizationRouting(routePath, organization)
-        : this.manageIncompleteOrganizationRouting(routePath, organization, party);
+        : this.manageIncompleteOrganizationRouting(routePath, organization, signingAuthority);
     }
 
     // Otherwise, no organization exists
-    return this.manageNoOrganizationRouting(routePath, party, hasOrgClaim);
+    return this.manageNoOrganizationRouting(routePath, signingAuthority);
   }
 
   /**
    * @description
-   * Detect an organization ID mismatch to provide confidence in
-   * the organization ID URI param.
-   *
-   * NOTE: Dependent on the assumption that there is only a
-   * single organization per signing authority.
+   * Manage routing when an organization does not exist, or initial
+   * registration has not been completed.
    */
-  private detectRouteMismatch(routePath, params: Params, organizationId: number): string | null {
-    return (params.oid && (
-      (organizationId && organizationId !== +params.oid) || (!organizationId && +params.oid !== 0)
-    ))
-      ? routePath.replace(`${SiteRoutes.SITE_MANAGEMENT}/${params.oid}`, `${SiteRoutes.SITE_MANAGEMENT}/${organizationId}`)
-      : null;
+  private manageNoOrganizationRouting(routePath: string, signingAuthority: Party): boolean {
+    const destPath = (signingAuthority)
+      ? SiteRoutes.ORGANIZATION_NAME
+      : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
+
+    // During initial registration the ID will be set to zero indicating the
+    // organization does not exist
+    return this.navigate(routePath, SiteRoutes.ORGANIZATIONS, destPath, 0);
   }
 
   /**
@@ -111,7 +102,7 @@ export class OrganizationGuard extends BaseGuard {
   private manageCompleteOrganizationRouting(routePath: string, organization: Organization) {
     // Provides a default of the main management view unless current view
     // can be determined through state of the organization
-    return this.manageRouting(routePath, SiteRoutes.SITE_MANAGEMENT, organization);
+    return this.manageRouting(routePath, SiteRoutes.ORGANIZATIONS, organization);
   }
 
   /**
@@ -119,35 +110,13 @@ export class OrganizationGuard extends BaseGuard {
    * Manage routing when an organization initial registration has
    * not been completed.
    */
-  private manageIncompleteOrganizationRouting(routePath: string, organization: Organization, party: Party) {
+  private manageIncompleteOrganizationRouting(routePath: string, organization: Organization, signingAuthority: Party) {
     // Provides a default of the initial site registration view unless the current view
     // can be determined through state of the organization
-    const destPath = party ? SiteRoutes.ORGANIZATION_CLAIM : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
+    const destPath = (signingAuthority)
+      ? SiteRoutes.ORGANIZATION_NAME
+      : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
     return this.manageRouting(routePath, destPath, organization);
-  }
-
-  /**
-   * @description
-   * Manage routing when an organization does not exist, or initial
-   * registration has not been completed.
-   */
-  private manageNoOrganizationRouting(routePath: string, party: Party, hasOrgClaim: boolean) {
-    // allow navigation from the CLAIM page to SIGNING_AUTHORITY, ORGANIZATION_NAME, or CLAIM_CONFIRMATION page
-    if (this.router.url.includes(SiteRoutes.ORGANIZATION_CLAIM)
-      && (routePath.includes(SiteRoutes.ORGANIZATION_NAME)
-        || routePath.includes(SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION)
-        || routePath.includes(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY))) {
-      return true;
-    }
-    const destPath = hasOrgClaim
-      ? SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION
-      : party
-        ? SiteRoutes.ORGANIZATION_CLAIM
-        : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
-
-    // During initial registration the ID will be set to zero indicating the
-    // organization does not exist
-    return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, destPath, 0);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
@@ -158,33 +127,12 @@ export class OrganizationGuard extends BaseGuard {
     // route does not exist in the list of allowed routes
     if (!allowedRoutes.includes(currentRoute)) {
       return (organization.completed)
-        ? this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT)
-        : this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, defaultRoute, organization.id);
+        ? this.navigate(routePath, SiteRoutes.ORGANIZATIONS)
+        : this.navigate(routePath, SiteRoutes.ORGANIZATIONS, defaultRoute, organization.id);
     }
 
     // Otherwise, allow access to the route
     return true;
-  }
-
-  /**
-   * @description
-   * Get the route URI param that is the current route attempting
-   * to be resolved, or replace as required.
-   */
-  private getCurrentRoute(routePath: string) {
-    // Remote users has a child view that should not be a point of
-    // redirection so the parent is purposefully targeted, otherwise
-    // get the last URI param to determine the current route
-    let currentRoute = routePath.includes(SiteRoutes.REMOTE_USERS)
-      ? SiteRoutes.REMOTE_USERS
-      : routePath.split('/').pop();
-
-    // Strip off queries when they exist
-    if (currentRoute.includes('?')) {
-      currentRoute = currentRoute.split('?')[0];
-    }
-
-    return currentRoute;
   }
 
   /**
@@ -219,6 +167,22 @@ export class OrganizationGuard extends BaseGuard {
     }
 
     return allowedRoutes;
+  }
+
+  /**
+   * @description
+   * Detect an organization ID mismatch to provide confidence in
+   * the organization ID URI param.
+   *
+   * NOTE: Dependent on the assumption that there is only a
+   * single organization per signing authority.
+   */
+  private detectRouteMismatch(routePath, params: Params, organizationId: number): string | null {
+    return (params.oid && (
+      (organizationId && organizationId !== +params.oid) || (!organizationId && +params.oid !== 0)
+    ))
+      ? routePath.replace(`${SiteRoutes.ORGANIZATIONS}/${params.oid}`, `${SiteRoutes.ORGANIZATIONS}/${organizationId}`)
+      : null;
   }
 
   /**

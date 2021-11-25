@@ -33,23 +33,6 @@ export class MockHealthAuthoritySiteService {
       securityGroupCode: faker.random.number(),
       physicalAddress: address,
       businessHours: null,
-      remoteUsers: [
-        {
-          id: faker.random.number(),
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
-          email: faker.internet.email(),
-          remoteUserCertifications: [
-            {
-              id: faker.random.number(),
-              collegeCode: faker.random.number(),
-              licenseNumber: faker.random.words(1),
-              licenseCode: faker.random.number(),
-            }
-          ],
-          notified: faker.random.boolean()
-        }
-      ],
       healthAuthorityPharmanetAdministratorId: faker.random.number(),
       healthAuthorityTechnicalSupportId: faker.random.number(),
       completed: true,

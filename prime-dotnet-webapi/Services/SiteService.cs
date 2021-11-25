@@ -37,15 +37,31 @@ namespace Prime.Services
                 .Where(site => site.Id == siteId)
                 .Select(site => new
                 {
-                    site.CareSettingCode,
-                    site.PEC
+                    site.PEC,
+                    healthAuthorityId = (int?)(site as HealthAuthoritySite).HealthAuthorityOrganizationId
                 })
                 .SingleAsync();
 
-            if (siteDto.CareSettingCode == (int)CareSettingType.HealthAuthority
-                || siteDto.PEC == pec)
+            if (siteDto.PEC == pec)
             {
                 return true;
+            }
+
+            if (siteDto.healthAuthorityId.HasValue)
+            {
+                var sites = await _context.Sites
+                    .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
+                    .AnyAsync();
+
+                var otherHealthAuthoritySites = await _context.HealthAuthoritySites
+                    .AsNoTracking()
+                    .Where(
+                        s => s.PEC == pec
+                        && s.HealthAuthorityOrganizationId != siteDto.healthAuthorityId
+                        )
+                    .AnyAsync();
+
+                return !sites && !otherHealthAuthoritySites;
             }
 
             return !await _context.Sites
@@ -84,22 +100,15 @@ namespace Prime.Services
             return site;
         }
 
-        public async Task<Site> UpdatePecCode(int siteId, string pecCode)
+        public async Task UpdatePecCode(int siteId, string pecCode)
         {
             var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             site.PEC = pecCode;
 
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the site.");
-            }
-
+            await _context.SaveChangesAsync();
             await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
-
-            return site;
         }
 
         public async Task DeleteSiteAsync(int siteId)
@@ -307,6 +316,13 @@ namespace Prime.Services
             {
             }
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> SiteExists(int siteId)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .AnyAsync(s => s.Id == siteId);
         }
     }
 }

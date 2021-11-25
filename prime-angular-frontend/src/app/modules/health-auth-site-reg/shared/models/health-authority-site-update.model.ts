@@ -6,7 +6,6 @@ export interface HealthAuthoritySiteUpdate extends Pick<HealthAuthoritySite,
   'securityGroupCode' |
   'physicalAddress' |
   'businessHours' |
-  'remoteUsers' |
   'healthAuthorityPharmanetAdministratorId' |
   'healthAuthorityTechnicalSupportId'> {
   healthAuthorityVendorId: number;

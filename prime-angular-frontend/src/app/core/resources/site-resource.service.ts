@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
@@ -25,6 +25,7 @@ import { Site, SiteListViewModel } from '@registration/shared/models/site.model'
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { IndividualDeviceProvider } from '@registration/shared/models/individual-device-provider.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,9 +56,12 @@ export class SiteResource {
 
   public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
     const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
-    return this.apiResource.get<Site>(`sites/${siteId}`, params)
+    return forkJoin({
+      site: this.apiResource.get<Site>(`sites/${siteId}`, params, null, true),
+      individualDeviceProviders: this.apiResource.get<IndividualDeviceProvider[]>(`sites/${siteId}/individual-device-providers`, null, null, true),
+    })
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
+        map(({ site, individualDeviceProviders }) => ({ ...site, individualDeviceProviders })),
         map((site: Site) => {
           site.businessHours = site.businessHours
             .map((businessDay: BusinessDay) => {
@@ -183,17 +187,13 @@ export class SiteResource {
       );
   }
 
-  public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
+  public updatePecCode(siteId: number, pecCode: string): NoContent {
     const payload = { data: pecCode };
-    return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
+    return this.apiResource.put<NoContent>(`sites/${siteId}/pec`, payload)
       .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap((site: Site) => {
-          this.toastService.openSuccessToast('Site has been updated');
-          this.logger.info('UPDATED_SITE', site);
-        }),
+        NoContentResponse,
         catchError((error: any) => {
-          this.toastService.openErrorToast('Site could not be updated');
+          this.toastService.openErrorToast('Site ID/PEC could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updatePecCode error has occurred: ', error);
           throw error;
         })

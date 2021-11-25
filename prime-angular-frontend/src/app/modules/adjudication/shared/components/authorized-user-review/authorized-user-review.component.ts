@@ -7,7 +7,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { AuthorizedUserResource } from '@core/resources/authorized-user-resource.service';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -29,7 +29,7 @@ export class AuthorizedUserReviewComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private healthAuthorityResource: HealthAuthorityResource,
+    private authorizedUserResource: AuthorizedUserResource,
     private configService: ConfigService,
     private router: Router
   ) {
@@ -38,7 +38,7 @@ export class AuthorizedUserReviewComponent implements OnInit {
   }
 
   public onApprove() {
-    this.busy = this.healthAuthorityResource
+    this.busy = this.authorizedUserResource
       .approveAuthorizedUser(this.route.snapshot.params.auid)
       .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS]));
   }
@@ -52,7 +52,7 @@ export class AuthorizedUserReviewComponent implements OnInit {
   }
 
   protected getAuthorizedUser() {
-    this.busy = this.healthAuthorityResource
+    this.busy = this.authorizedUserResource
       .getAuthorizedUserById(this.route.snapshot.params.auid)
       .subscribe((user: AuthorizedUser) => this.user = user);
   }

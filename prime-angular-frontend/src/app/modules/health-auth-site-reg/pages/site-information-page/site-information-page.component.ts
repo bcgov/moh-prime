@@ -7,10 +7,9 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
@@ -34,12 +33,12 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
     protected route: ActivatedRoute,
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
     protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
-    protected healthAuthorityResource: HealthAuthorityResource,
+    protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private fb: FormBuilder,
     private configService: ConfigService,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthoritySiteResource);
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);

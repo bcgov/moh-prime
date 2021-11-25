@@ -52,7 +52,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   public onBack() {
     const backRoutePath = (this.enrollee.profileCompleted)
       ? PaperEnrolmentRoutes.OVERVIEW
-      : PaperEnrolmentRoutes.CARE_SETTING;
+      : PaperEnrolmentRoutes.REGULATORY;
     this.routeUtils.routeRelativeTo(backRoutePath);
   }
 

@@ -3,8 +3,10 @@ using FakeItEasy;
 using FakeItEasy.Sdk;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -35,6 +37,7 @@ namespace PrimeTests.Utils
             TestDb.Database.EnsureCreated();
 
             Seed();
+            InitPrimeConfiguration();
         }
 
         private void Seed()
@@ -67,6 +70,23 @@ namespace PrimeTests.Utils
             TestDb.AddRange(new AgreementVersionConfiguration().SeedData);
 
             TestDb.SaveChanges();
+        }
+
+        private void InitPrimeConfiguration()
+        {
+            if (PrimeConfiguration.Current != null)
+            {
+                return;
+            }
+
+            IConfiguration config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("testsettings.json")
+                .Build();
+
+            var instance = new PrimeConfiguration();
+            config.Bind(instance);
+            PrimeConfiguration.Current = instance;
         }
 
         public void Dispose()

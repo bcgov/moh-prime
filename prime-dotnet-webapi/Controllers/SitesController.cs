@@ -390,7 +390,9 @@ namespace Prime.Controllers
                     return true;
                 }
 
+                // Duplicating existing business licence for creation of a new business licence
                 var licenceDto = _mapper.Map<BusinessLicence>(existingLicence);
+                licenceDto.Id = 0;
                 licenceDto.ExpiryDate = newLicence.ExpiryDate;
 
                 var licence = await _communitySiteService.AddBusinessLicenceAsync(site.Id, licenceDto, newLicence.DocumentGuid.Value);
@@ -682,18 +684,13 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
         public async Task<ActionResult> PecAssignable(int siteId, string pec)
         {
-            var site = await _communitySiteService.GetSiteAsync(siteId);
-            if (site == null)
+            if (!await _siteService.SiteExists(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
             if (string.IsNullOrWhiteSpace(pec))
             {
                 return BadRequest("PEC cannot be empty.");
-            }
-            if (site.PEC == pec)
-            {
-                return Ok(true);
             }
 
             return Ok(await _siteService.PecAssignableAsync(siteId, pec));
@@ -733,9 +730,9 @@ namespace Prime.Controllers
                 return BadRequest("PEC already exists");
             }
 
-            var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
+            await _siteService.UpdatePecCode(siteId, pecCode);
 
-            return Ok(updatedSite);
+            return NoContent();
         }
 
         // Get: api/site/5/business-licences/5/document/token
@@ -1097,7 +1094,7 @@ namespace Prime.Controllers
             return Ok(notification);
         }
 
-        // DELETE: api/Enrollees/5/site-registration-notes/6/notification
+        // DELETE: api/sites/5/site-registration-notes/6/notification
         /// <summary>
         /// deletes the notification on an site registration note.
         /// </summary>
@@ -1197,6 +1194,31 @@ namespace Prime.Controllers
             }
             await _communitySiteService.UpdateSiteFlag(siteId, flagged);
             return Ok(site);
+        }
+
+        // GET: api/sites/5/individual-device-providers
+        /// <summary>
+        /// Gets the Individual Device Providers for a Device Provider Site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/individual-device-providers", Name = nameof(GetIndividualDeviceProviders))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<IndividualDeviceProviderViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetIndividualDeviceProviders(int siteId)
+        {
+            var record = await _communitySiteService.GetPermissionsRecordAsync(siteId);
+            if (record == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _communitySiteService.GetIndividualDeviceProvidersAsync(siteId));
         }
     }
 }

@@ -16,6 +16,7 @@ export class SatEformsLoginPageComponent implements OnInit {
   public title: string;
   public loginLabel: string;
   public bcscMobileSetupUrl: string;
+  public disableLogin: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,6 +29,10 @@ export class SatEformsLoginPageComponent implements OnInit {
   }
 
   public onLogin() {
+    if (this.disableLogin) {
+      return;
+    }
+
     // Route to COLLECTION_NOTICE which determines the direction of routing
     const redirectRoute = SatEformsRoutes.routePath(SatEformsRoutes.COLLECTION_NOTICE);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
@@ -38,5 +43,7 @@ export class SatEformsLoginPageComponent implements OnInit {
     });
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.disableLogin = this.config.environmentName === 'prod';
+  }
 }

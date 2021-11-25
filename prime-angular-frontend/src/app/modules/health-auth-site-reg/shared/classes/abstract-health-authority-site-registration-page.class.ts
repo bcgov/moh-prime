@@ -7,7 +7,7 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContentResponse } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 
@@ -20,7 +20,7 @@ export abstract class AbstractHealthAuthoritySiteRegistrationPage<T extends Abst
     protected route: ActivatedRoute,
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
     protected healthAuthorityFormStateService: HealthAuthoritySiteFormStateService,
-    protected healthAuthorityResource: HealthAuthorityResource
+    protected healthAuthoritySiteResource: HealthAuthoritySiteResource
   ) {
     super(dialog, formUtilsService);
   }
@@ -77,6 +77,6 @@ export abstract class AbstractHealthAuthoritySiteRegistrationPage<T extends Abst
     const { haid, sid } = this.route.snapshot.params;
     const payload = this.healthAuthorityFormStateService.json.forUpdate();
 
-    return this.healthAuthorityResource.updateHealthAuthoritySite(haid, sid, payload);
+    return this.healthAuthoritySiteResource.updateHealthAuthoritySite(haid, sid, payload);
   }
 }

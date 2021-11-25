@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
@@ -40,14 +40,14 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
     protected route: ActivatedRoute,
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
     protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
-    protected healthAuthorityResource: HealthAuthorityResource,
+    protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private fb: FormBuilder,
-    private location: Location,
+    private location: Location, // change access modifier to protected?
     private configService: ConfigService,
     private authorizedUserService: AuthorizedUserService,
     router: Router
   ) {
-    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthorityResource);
+    super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthoritySiteResource);
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH, location);
@@ -97,10 +97,10 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
     const healthAuthoritySite = this.healthAuthoritySiteFormStateService.json;
 
     return (+sid)
-      ? this.healthAuthorityResource
+      ? this.healthAuthoritySiteResource
         .updateHealthAuthoritySite(+haid, +sid, healthAuthoritySite.forUpdate())
         .pipe(map(() => +sid))
-      : this.healthAuthorityResource
+      : this.healthAuthoritySiteResource
         .createHealthAuthoritySite(+haid, healthAuthoritySite.forCreate(this.authorizedUserService.authorizedUser.id))
         .pipe(
           map((site: HealthAuthoritySite) => {

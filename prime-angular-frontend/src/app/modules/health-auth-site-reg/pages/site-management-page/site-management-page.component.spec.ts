@@ -10,6 +10,7 @@ import { MockAuthorizedUserService } from 'test/mocks/mock-authorized-user.servi
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { ConfigService } from '@config/config.service';
+import { CasePipe } from '@shared/pipes/case.pipe';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { SiteManagementPageComponent } from './site-management-page.component';
@@ -27,7 +28,9 @@ describe('SiteManagementPageComponent', () => {
           NgxMaterialModule
         ],
         declarations: [
-          SiteManagementPageComponent
+          SiteManagementPageComponent,
+          CapitalizePipe,
+          CasePipe
         ],
         providers: [
           {

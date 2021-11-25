@@ -29,8 +29,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Phone, f => f.Phone.PhoneNumber());
             RuleFor(x => x.PhoneExtension, f => f.Random.Replace("###").OrNull(f));
             RuleFor(x => x.SmsPhone, f => f.Phone.PhoneNumber().OrNull(f));
-            RuleFor(x => x.DeviceProviderNumber, f => null);
-            RuleFor(x => x.IsInsulinPumpProvider, f => null);
+            RuleFor(x => x.DeviceProviderIdentifier, f => null);
             RuleFor(x => x.GPID, f => null);
             RuleFor(x => x.HPDID, f => null);
             RuleFor(x => x.ProfileCompleted, f => false);
@@ -50,6 +49,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.OboSites, f => new List<OboSite>());
             RuleFor(x => x.EnrolleeAbsences, (f, x) => new EnrolleeAbsenceFactory(x).GenerateBetween(0, 1));
+            RuleFor(x => x.RemoteAccessSites, f => new List<RemoteAccessSite>());
             // TODO: create rule sets for these ignores?
             Ignore(x => x.Agreements);
             Ignore(x => x.Adjudicator);
@@ -57,7 +57,6 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.AlwaysManual);
             Ignore(x => x.IdentityProvider);
             Ignore(x => x.EnrolleeRemoteUsers);
-            Ignore(x => x.RemoteAccessSites);
             Ignore(x => x.RemoteAccessLocations);
             Ignore(x => x.EnrolleeAdjudicationDocuments);
             Ignore(x => x.Submissions);
@@ -77,8 +76,7 @@ namespace PrimeTests.ModelFactories
 
             RuleSet("deviceProvider", (set) =>
             {
-                set.RuleFor(x => x.DeviceProviderNumber, f => f.Random.Replace("#####"));
-                set.RuleFor(x => x.IsInsulinPumpProvider, f => f.Random.Bool());
+                set.RuleFor(x => x.DeviceProviderIdentifier, f => f.Random.Replace("#####"));
             });
 
             RuleSet("obo", (set) =>
@@ -94,17 +92,6 @@ namespace PrimeTests.ModelFactories
                 if (x.CurrentStatus.IsType(StatusType.Editable) && x.PreviousStatus?.IsType(StatusType.RequiresToa) == true)
                 {
                     x.GPID = f.Random.AlphaNumeric(20);
-
-                    if (x.Certifications != null)
-                    {
-                        var licenceCodes = x.Certifications.Select(cert => cert.LicenseCode);
-                        x.AssignedPrivileges = DefaultPrivilegeLookup.All
-                            .Where(def => licenceCodes.Contains(def.LicenseCode))
-                            .Select(def => def.PrivilegeId)
-                            .Distinct()
-                            .Select(privilegeId => new AssignedPrivilegeFactory(x, privilegeId).Generate())
-                            .ToList();
-                    }
                 }
 
                 // An enrollee with certifications shouldn't have OboSites
