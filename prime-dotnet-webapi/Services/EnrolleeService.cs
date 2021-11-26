@@ -118,9 +118,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             dto.UserProvidedGpid = linkedGpid;
-
-            var vm = _mapper.Map<EnrolleeViewModel>(dto);
-            return vm;
+            return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
