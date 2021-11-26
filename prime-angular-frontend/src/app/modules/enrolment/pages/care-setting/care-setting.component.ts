@@ -224,7 +224,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   private removeIncompleteCareSettings(allowEmptyCareSettings: boolean = false) {
     this.enrolmentFormStateService.json.careSettings.forEach((careSetting: CareSetting) => {
       const value = careSetting.careSettingCode;
-      const index = this.careSettings.value.findIndex((value) => value.careSettingCode === null);
+      const index = this.careSettings.value.findIndex((value) => !value.careSettingCode);
       const control = this.careSettings.controls[index];
 
       if (!value && control?.invalid) {
