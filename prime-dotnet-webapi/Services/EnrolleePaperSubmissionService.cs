@@ -383,5 +383,13 @@ namespace Prime.Services
 
             return linkedGpid;
         }
+
+        public async Task<bool> IsAlwaysManualPaperEnrolment(int paperEnrolmentId, string gpid)
+        {
+            return await _context.Enrollees
+            .AnyAsync(pe => pe.Id == paperEnrolmentId
+                    && pe.GPID == gpid
+                    && pe.AlwaysManual);
+        }
     }
 }

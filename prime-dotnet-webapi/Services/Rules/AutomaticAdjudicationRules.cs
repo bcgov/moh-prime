@@ -255,8 +255,13 @@ namespace Prime.Services.Rules
             var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
             var paperEnrolleeMatchId = -1;
 
-            // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
+            // Subsequent enrolments: check here if the enrollee is flagged for always manual
+            if (enrollee.AlwaysManual)
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
+            }
 
+            // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
             // If there is no match then we don't need to worry about this rule
             if (!paperEnrollees.Any())
             {
@@ -280,6 +285,14 @@ namespace Prime.Services.Rules
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
                     return false;
                 }
+
+                // First enrolment: check if paper enrolment is flagged for AlwaysManual
+                if (await _enrolleePaperSubmissionService.IsAlwaysManualPaperEnrolment(paperEnrolleeMatchId, potentialPaperEnrolleeGpid))
+                {
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
+                    return false;
+                }
+
                 // if match link to paper enrolment and confirm the linkage here, if failed to link we add status reason.
                 if (!await _enrolleePaperSubmissionService.LinkEnrolleeToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId))
                 {
