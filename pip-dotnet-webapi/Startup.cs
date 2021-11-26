@@ -5,7 +5,6 @@ using Serilog;
 using System.Reflection;
 using System.Text.Json;
 
-using Pidp.Services;
 
 namespace Pidp
 {
@@ -15,7 +14,7 @@ namespace Pidp
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
 
-        public Startup(IWebHostEnvironment env, IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             Environment = env;
@@ -25,15 +24,12 @@ namespace Pidp
         {
             InitializeConfiguration(services);
 
-            services.AddScoped<IFirstService, FirstService>();
-
             services.AddControllers()
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>());
 
-            // Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" });
             });
 
             ConfigureDatabase(services);
@@ -55,7 +51,7 @@ namespace Pidp
         {
             var connectionString = PidpConfiguration.Current!.ConnectionStrings.PidpDatabase;
 
-            services.AddDbContext<ApiDbContext>(options =>
+            services.AddDbContext<PidpDbContext>(options =>
             {
                 options.UseNpgsql(connectionString, npg => npg.UseNodaTime())
                     .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
@@ -63,7 +59,7 @@ namespace Pidp
 
             services
                 .AddHealthChecks()
-                .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
+                .AddDbContextCheck<PidpDbContext>("DbContextHealthCheck")
                 .AddNpgSql(connectionString);
         }
 
@@ -74,23 +70,16 @@ namespace Pidp
                 app.UseDeveloperExceptionPage();
             }
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(options =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "PIdP Web API");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "PIdP Web API");
             });
 
-            // Matches request to an endpoint
             app.UseRouting();
             app.UseCors(CorsPolicy);
-
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
