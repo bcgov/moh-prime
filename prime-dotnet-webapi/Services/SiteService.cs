@@ -100,22 +100,15 @@ namespace Prime.Services
             return site;
         }
 
-        public async Task<Site> UpdatePecCode(int siteId, string pecCode)
+        public async Task UpdatePecCode(int siteId, string pecCode)
         {
             var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             site.PEC = pecCode;
 
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the site.");
-            }
-
+            await _context.SaveChangesAsync();
             await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
-
-            return site;
         }
 
         public async Task DeleteSiteAsync(int siteId)

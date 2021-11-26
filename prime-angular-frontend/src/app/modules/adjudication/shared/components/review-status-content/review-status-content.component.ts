@@ -123,10 +123,10 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
         }
 
         if (esr.statusReasonCode === EnrolmentStatusReasonEnum.IDENTITY_PROVIDER) {
-          return reasons.concat(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statuses'), esr.reasonNote, this.enrollee.identificationDocuments));
+          return reasons.concat(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote, this.enrollee.identificationDocuments));
         }
 
-        reasons.push(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statuses'), esr.reasonNote));
+        reasons.push(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote));
         return reasons;
       }, []);
   }

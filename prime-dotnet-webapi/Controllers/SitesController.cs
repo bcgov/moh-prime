@@ -730,9 +730,9 @@ namespace Prime.Controllers
                 return BadRequest("PEC already exists");
             }
 
-            var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
+            await _siteService.UpdatePecCode(siteId, pecCode);
 
-            return Ok(updatedSite);
+            return NoContent();
         }
 
         // Get: api/site/5/business-licences/5/document/token
