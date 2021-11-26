@@ -223,13 +223,13 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   private removeIncompleteCareSettings(allowEmptyCareSettings: boolean = true) {
     this.careSettings.value
-      .reduce((indexes, careSetting, index) => {
-        return (!careSetting.careSettingCode)
+      .reduce((indexes, careSetting, index) =>
+        (!careSetting.careSettingCode)
           ? [...indexes, index]
-          : indexes;
-      }, [])
-      ?.reverse()
-      ?.forEach((index: number) => this.removeCareSetting(index));
+          : indexes
+        , [])
+      .reverse()
+      .forEach((index: number) => this.removeCareSetting(index));
 
     if (allowEmptyCareSettings) {
       return;
