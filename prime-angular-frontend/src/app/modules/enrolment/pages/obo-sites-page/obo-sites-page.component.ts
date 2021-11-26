@@ -272,22 +272,15 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
           form = this.enrolmentFormStateService.oboSitesForm.controls[key] as FormArray;
         }
 
-        let iterations = form.controls.length;
-        while (iterations > 0) {
-          const index = form.value.findIndex((formValue) => {
-            const physicalAddress = formValue.physicalAddress;
-            return !(physicalAddress.street
-              && physicalAddress.city
-              && physicalAddress.provinceCode
-              && physicalAddress.countryCode
-              && physicalAddress.postal)
-          });
+        let maxIterations = form.controls.length;
 
+        while (maxIterations > 0) {
+          const index = form.controls.findIndex((siteForm) => siteForm.invalid);
           const control = form.controls[index];
           const careSetting = control.get('careSettingCode').value;
 
           this.removeOboSite(index, careSetting, healthAuthorityCode);
-          iterations--;
+          maxIterations--;
         }
       }
     }
