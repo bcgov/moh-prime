@@ -36,7 +36,7 @@ namespace Pidp
 
         private static void CreateLogger()
         {
-            var path = PidpConfiguration.LogFilePath;
+            var path = Environment.GetEnvironmentVariable("LogFilePath") ?? "logs";
 
             try
             {
