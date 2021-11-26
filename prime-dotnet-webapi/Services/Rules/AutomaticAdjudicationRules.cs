@@ -262,7 +262,7 @@ namespace Prime.Services.Rules
 
             var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
             var paperEnrolleeMatchId = -1;
-            var paperEnrolleeIdsAsString = CreateIdsString(paperEnrollees);
+            var paperEnrolleeIdsAsString = string.Join(", ", paperEnrollees.Select(e => e.Id));
 
             // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
 
@@ -281,14 +281,14 @@ namespace Prime.Services.Rules
                 if (paperEnrolleeMatchId == -1)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment(s): {paperEnrolleeIdsAsString}.");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                     return false;
                 }
                 // if a match is found, link to paper enrolment and confirm the linkage here, if failed to link we add status reason.
                 if (!await _enrolleePaperSubmissionService.LinkEnrolleeToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId))
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.UnableToLinkToPaperEnrolment, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment(s): {paperEnrolleeIdsAsString}.");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                     return false;
                 }
                 return true;
@@ -296,17 +296,9 @@ namespace Prime.Services.Rules
             // if yes and GPID not provided - flag with "Possible match with paper enrolment"
             else
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"birthdate matches enrolment(s): {paperEnrolleeIdsAsString}.");
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                 return false;
             }
-        }
-
-        private static string CreateIdsString(IEnumerable<Enrollee> paperEnrollees)
-        {
-            var paperEnrolleeIdsList = paperEnrollees
-                .Select(pe => pe.Id);
-
-            return string.Join(", ", paperEnrolleeIdsList);
         }
     }
 }
