@@ -259,31 +259,16 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
    * allows for an empty list of oboSites if no jobs are solected.
    */
   private removeIncompleteOboSites(noEmptyOboSites: boolean = false) {
-    for (const [key, value] of Object.entries(this.enrolmentFormStateService.oboSitesForm.controls)) {
-      if (value.invalid) {
-        let form;
-        let healthAuthorityCode;
+    this.oboSites.controls
+      .forEach((control: FormGroup, index: number) => {
+        const value = control.get('physicalAddress').value.city;
+        const careSetting = control.get('careSettingCode').value;
 
-        if (key === 'healthAuthoritySites') {
-          const healthAuthorityFormGroup = this.enrolmentFormStateService.oboSitesForm.controls[key] as FormGroup;
-          healthAuthorityCode = Object.keys(healthAuthorityFormGroup.controls)[0];
-          form = healthAuthorityFormGroup.controls[healthAuthorityCode] as FormArray;
-        } else {
-          form = this.enrolmentFormStateService.oboSitesForm.controls[key] as FormArray;
+        // Remove when empty, default option, or group is invalid
+        if (!value || value === this.defaultOptionLabel || control.invalid) {
+          this.removeOboSite(index, careSetting);
         }
-
-        let maxIterations = form.controls.length;
-
-        while (maxIterations > 0) {
-          const index = form.controls.findIndex((siteForm) => siteForm.invalid);
-          const control = form.controls[index];
-          const careSetting = control.get('careSettingCode').value;
-
-          this.removeOboSite(index, careSetting, healthAuthorityCode);
-          maxIterations--;
-        }
-      }
-    }
+      });
 
     // Add at least one site for each careSetting selected by enrollee
     this.careSettings?.forEach((careSetting) => {
@@ -306,17 +291,21 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     // Clear out sites so validation doesn't interrupt submissions
     this.communityHealthSites.clearValidators();
     this.communityHealthSites.updateValueAndValidity();
+    this.communityHealthSites.clear();
 
     this.communityPharmacySites.clearValidators();
     this.communityPharmacySites.updateValueAndValidity();
+    this.communityPharmacySites.clear();
 
     this.deviceProviderSites.clearValidators();
     this.deviceProviderSites.updateValueAndValidity();
+    this.deviceProviderSites.clear();
 
     Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
       const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
       sitesOfHealthAuthority.clearValidators();
       sitesOfHealthAuthority.updateValueAndValidity();
+      sitesOfHealthAuthority.clear();
     });
   }
 }
