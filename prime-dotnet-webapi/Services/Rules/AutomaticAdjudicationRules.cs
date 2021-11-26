@@ -287,7 +287,7 @@ namespace Prime.Services.Rules
                 }
 
                 // First enrolment: check if paper enrolment is flagged for AlwaysManual
-                if (await _enrolleePaperSubmissionService.IsAlwaysManualPaperEnrolment(paperEnrolleeMatchId, potentialPaperEnrolleeGpid))
+                if (await _enrolleePaperSubmissionService.IsAlwaysManualPaperEnrolment(paperEnrolleeMatchId))
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
                     return false;
