@@ -10,7 +10,6 @@ import { EmailUtils } from '@lib/utils/email-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
-import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { EnrolleeListViewModel, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
@@ -34,6 +33,7 @@ import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -78,7 +78,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.routeUtils.updateQueryParams({ textSearch });
   }
 
-  public onFilter(status: EnrolmentStatusEnum | null): void {
+  public onFilter(status: StatusFilterEnum | null): void {
     this.routeUtils.updateQueryParams({ status });
   }
 
@@ -454,8 +454,19 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  private getEnrollees({ textSearch, status }: { textSearch?: string, status?: number }) {
-    return this.adjudicationResource.getEnrollees(textSearch, status)
+  private getEnrollees({ textSearch, status }: { textSearch?: string, status?: StatusFilterEnum }) {
+    // Transform the "statuses" for (un)linked paper enrollees into their own query string
+    var isLinkedPaperEnrolment = null;
+    if (+status === PaperStatusEnum.UNLINKED_PAPER_ENROLMENT) {
+      isLinkedPaperEnrolment = false;
+      status = null;
+    }
+    else if (+status === PaperStatusEnum.LINKED_PAPER_ENROLMENT) {
+      isLinkedPaperEnrolment = true;
+      status = null;
+    }
+
+    return this.adjudicationResource.getEnrollees({ textSearch, statusCode: status, isLinkedPaperEnrolment })
       .pipe(
         tap(() => this.showSearchFilter = true)
       );

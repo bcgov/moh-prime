@@ -1,13 +1,14 @@
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
-export type RoutePath = string | (string | number)[];
+export type RoutePath = string | RouteSegments;
+export type RouteSegments = (string | number)[];
 
 export class RouteUtils {
   private route: ActivatedRoute;
   private router: Router;
   private readonly baseRoutePath: string;
-  private location: Location;
+  private readonly location: Location;
 
   constructor(
     route: ActivatedRoute,

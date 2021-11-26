@@ -14,6 +14,7 @@ import { SiteManagementPageComponent } from './pages/site-management-page/site-m
 import { OrganizationSigningAuthorityPageComponent } from './pages/organization-signing-authority-page/organization-signing-authority-page.component';
 import { OrganizationNamePageComponent } from './pages/organization-name-page/organization-name-page.component';
 import { OrganizationClaimPageComponent } from './pages/organization-claim-page/organization-claim-page.component';
+import { OrganizationClaimedPageComponent } from './pages/organization-claimed-page/organization-claimed-page.component';
 import { OrganizationAgreementPageComponent } from './pages/organization-agreement-page/organization-agreement-page.component';
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
 import { BusinessLicencePageComponent } from './pages/business-licence-page/business-licence-page.component';
@@ -57,7 +58,8 @@ import { DeviceProviderPageComponent } from './pages/device-provider-page/device
     BusinessLicenceRenewalPageComponent,
     BusinessLicenceExpiryComponent,
     ElectronicOrganizationAgreementPageComponent,
-    DeviceProviderPageComponent
+    DeviceProviderPageComponent,
+    OrganizationClaimedPageComponent
   ],
   imports: [
     SiteRegistrationRoutingModule,

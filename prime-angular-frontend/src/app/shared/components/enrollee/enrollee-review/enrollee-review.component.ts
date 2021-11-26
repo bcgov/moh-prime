@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 
+import { RoutePath } from '@lib/utils/route-utils.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
@@ -10,11 +11,9 @@ import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -128,7 +127,7 @@ export class EnrolleeReviewComponent {
     return ras.site.siteVendors?.length ? ras.site.siteVendors[0].vendorCode : null;
   }
 
-  public onRoute(routePath: string | (string | number)[], event?: Event): void {
+  public onRoute(routePath: RoutePath, event?: Event): void {
     event?.preventDefault();
     this.route.emit(routePath);
   }
