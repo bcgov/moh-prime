@@ -120,7 +120,6 @@ namespace Prime.Services
             dto.UserProvidedGpid = linkedGpid;
 
             var vm = _mapper.Map<EnrolleeViewModel>(dto);
-            vm.UserProvidedGpid = linkedGpid;
             return vm;
         }
 
