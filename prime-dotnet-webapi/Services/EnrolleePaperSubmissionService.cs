@@ -387,9 +387,10 @@ namespace Prime.Services
         public async Task<bool> IsAlwaysManualPaperEnrolment(int paperEnrolmentId, string gpid)
         {
             return await _context.Enrollees
-            .AnyAsync(pe => pe.Id == paperEnrolmentId
-                    && pe.GPID == gpid
-                    && pe.AlwaysManual);
+                .AsNoTracking()
+                .AnyAsync(pe => pe.Id == paperEnrolmentId
+                        && pe.GPID == gpid
+                        && pe.AlwaysManual);
         }
     }
 }
