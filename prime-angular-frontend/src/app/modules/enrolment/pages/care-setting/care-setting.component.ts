@@ -120,7 +120,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     this.setHealthAuthorityValidator();
   }
 
-  public removeCareSetting(index: number, careSettingCode: number) {
+  public removeCareSetting(index: number) {
     this.careSettings.removeAt(index);
     this.setHealthAuthorityValidator();
   }
@@ -228,7 +228,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       const control = this.careSettings.controls[index];
 
       if (!value.careSettingCode && control?.invalid) {
-        this.removeCareSetting(index, value.careSettingCode);
+        this.removeCareSetting(index);
       }
     })
 
