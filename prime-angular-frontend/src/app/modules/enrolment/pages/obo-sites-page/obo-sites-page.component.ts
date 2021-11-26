@@ -259,16 +259,38 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
    * allows for an empty list of oboSites if no jobs are solected.
    */
   private removeIncompleteOboSites(noEmptyOboSites: boolean = false) {
-    this.oboSites.controls
-      .forEach((control: FormGroup, index: number) => {
-        const value = control.get('physicalAddress').value.city;
-        const careSetting = control.get('careSettingCode').value;
+    for (const [key, value] of Object.entries(this.enrolmentFormStateService.oboSitesForm.controls)) {
+      if (value.invalid) {
+        let form;
+        let healthAuthorityCode;
 
-        // Remove when empty, default option, or group is invalid
-        if (!value || value === this.defaultOptionLabel || control.invalid) {
-          this.removeOboSite(index, careSetting);
+        if (key === 'healthAuthoritySites') {
+          const healthAuthorityFormGroup = this.enrolmentFormStateService.oboSitesForm.controls[key] as FormGroup;
+          healthAuthorityCode = Object.keys(healthAuthorityFormGroup.controls)[0];
+          form = healthAuthorityFormGroup.controls[healthAuthorityCode] as FormArray;
+        } else {
+          form = this.enrolmentFormStateService.oboSitesForm.controls[key] as FormArray;
         }
-      });
+
+        let iterations = form.controls.length;
+        while (iterations > 0) {
+          const index = form.value.findIndex((formValue) => {
+            const physicalAddress = formValue.physicalAddress;
+            return !(physicalAddress.street
+              && physicalAddress.city
+              && physicalAddress.provinceCode
+              && physicalAddress.countryCode
+              && physicalAddress.postal)
+          });
+
+          const control = form.controls[index];
+          const careSetting = control.get('careSettingCode').value;
+
+          this.removeOboSite(index, careSetting, healthAuthorityCode);
+          iterations--;
+        }
+      }
+    }
 
     // Add at least one site for each careSetting selected by enrollee
     this.careSettings?.forEach((careSetting) => {
@@ -277,7 +299,6 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       }
     });
 
-    this.removeEmptyOboSiteForms();
   }
 
   /**
@@ -305,35 +326,5 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       sitesOfHealthAuthority.clearValidators();
       sitesOfHealthAuthority.updateValueAndValidity();
     });
-  }
-
-  /**
- * @description
- * Remove forms that were created when no certificate/device provider id were provided
- * but then page was left with empty forms.
- */
-  private removeEmptyOboSiteForms(): void {
-    for (const [key, value] of Object.entries(this.enrolmentFormStateService.oboSitesForm.controls)) {
-      if (value.invalid) {
-        let form;
-        let healthAuthorityCode;
-
-        if (key === 'healthAuthoritySites') {
-          const healthAuthorityFormGroup = this.enrolmentFormStateService.oboSitesForm.controls[key] as FormGroup;
-          healthAuthorityCode = Object.keys(healthAuthorityFormGroup.controls)[0];
-          form = healthAuthorityFormGroup.controls[healthAuthorityCode] as FormArray;
-        } else {
-          form = this.enrolmentFormStateService.oboSitesForm.controls[key] as FormArray;
-        }
-
-        form.controls.forEach((control: FormArray, index: number) => {
-          if (control.invalid) {
-            const careSetting = control.get('careSettingCode').value;
-
-            this.removeOboSite(index, careSetting, healthAuthorityCode);
-          }
-        })
-      }
-    }
   }
 }
