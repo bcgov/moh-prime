@@ -228,7 +228,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       const control = this.careSettings.controls[index];
 
       if (!value.careSettingCode && control?.invalid) {
-        const index = this.careSettings.value.findIndex((value) => value.careSettingCode === null);
         this.removeCareSetting(index, value.careSettingCode);
       }
     })
