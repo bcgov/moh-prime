@@ -10,7 +10,6 @@ namespace Pidp
 {
     public class Startup
     {
-        public const string CorsPolicy = "CorsPolicy";
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
 
@@ -32,7 +31,17 @@ namespace Pidp
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" });
             });
 
-            ConfigureDatabase(services);
+            var connectionString = PidpConfiguration.Current!.ConnectionStrings.PidpDatabase;
+            services.AddDbContext<PidpDbContext>(options =>
+            {
+                options.UseNpgsql(connectionString, npg => npg.UseNodaTime())
+                    .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
+            });
+
+            services
+                .AddHealthChecks()
+                .AddDbContextCheck<PidpDbContext>("DbContextHealthCheck")
+                .AddNpgSql(connectionString);
         }
 
         private void InitializeConfiguration(IServiceCollection services)
@@ -45,22 +54,6 @@ namespace Pidp
 
             Log.Logger.Information("###App Version:{0}###", Assembly.GetExecutingAssembly().GetName().Version);
             Log.Logger.Information("###PIdP Configuration:{0}###", JsonSerializer.Serialize(PidpConfiguration.Current));
-        }
-
-        protected virtual void ConfigureDatabase(IServiceCollection services)
-        {
-            var connectionString = PidpConfiguration.Current!.ConnectionStrings.PidpDatabase;
-
-            services.AddDbContext<PidpDbContext>(options =>
-            {
-                options.UseNpgsql(connectionString, npg => npg.UseNodaTime())
-                    .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
-            });
-
-            services
-                .AddHealthChecks()
-                .AddDbContextCheck<PidpDbContext>("DbContextHealthCheck")
-                .AddNpgSql(connectionString);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
@@ -77,7 +70,7 @@ namespace Pidp
             });
 
             app.UseRouting();
-            app.UseCors(CorsPolicy);
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
