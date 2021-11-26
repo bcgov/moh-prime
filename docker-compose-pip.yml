@@ -41,8 +41,6 @@ services:
       ConnectionStrings__PidpDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
     volumes:
       - ./pidp-dotnet-webapi/:/app
-      - pidp-dotnet-webapi-bin:/app/bin
-      - pidp-dotnet-webapi-obj:/app/obj
       - ${APPDATA}/Microsoft/UserSecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b:/root/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b
       # Use the following instead if developing on Mac/Linux:
       # - ${HOME}/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b:/root/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b
@@ -76,5 +74,3 @@ networks:
 ###############################################################################
 volumes:
   local_pidp_postgress_data: null
-  pidp-dotnet-webapi-bin: null
-  pidp-dotnet-webapi-obj: null
