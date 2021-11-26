@@ -241,13 +241,13 @@ namespace Prime.Services.Rules
         }
     }
 
-    public class IsPotentialPaperEnrolleeReturnee : AutomaticAdjudicationRule
+    public class PotentialPaperEnrolleeReturnee : AutomaticAdjudicationRule
     {
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
 
         private readonly ISubmissionService _submissionService;
 
-        public IsPotentialPaperEnrolleeReturnee(IEnrolleePaperSubmissionService enrolleePaperSubmissionService, ISubmissionService submissionService)
+        public PotentialPaperEnrolleeReturnee(IEnrolleePaperSubmissionService enrolleePaperSubmissionService, ISubmissionService submissionService)
         {
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
             _submissionService = submissionService;
@@ -283,7 +283,8 @@ namespace Prime.Services.Rules
                     return false;
                 }
 
-                // First enrolment: check if paper enrolment is flagged for AlwaysManual
+                // First enrolment: check if the related paper enrolment is flagged for AlwaysManual
+                // If so, mark BCSC enrolment as AlwaysManual too and send to manual enrolment
                 if (await _enrolleePaperSubmissionService.IsAlwaysManualPaperEnrolment(paperEnrolleeMatchId))
                 {
                     await _submissionService.UpdateAlwaysManualAsync(enrollee.Id, true);
