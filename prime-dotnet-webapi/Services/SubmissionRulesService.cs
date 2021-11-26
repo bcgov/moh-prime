@@ -14,18 +14,21 @@ namespace Prime.Services
         private readonly IBusinessEventService _businessEventService;
         private readonly ICollegeLicenceClient _collegeLicenceClient;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
+        private readonly ISubmissionService _submissionService;
 
         public SubmissionRulesService(
             ApiDbContext context,
             ILogger<SubmissionRulesService> logger,
             IBusinessEventService businessEventService,
             ICollegeLicenceClient collegeLicenceClient,
-            IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
+            ISubmissionService submissionService)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
             _collegeLicenceClient = collegeLicenceClient;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
+            _submissionService = submissionService;
 
             _logger.LogDebug($"Going to use {_collegeLicenceClient.GetType().Name} in PharmanetValidationRule");
         }
@@ -48,7 +51,7 @@ namespace Prime.Services
                 new IdentityAssuranceLevelRule(),
                 new IdentityProviderRule(),
                 new NoAssignedAgreementRule(),
-                new IsPotentialPaperEnrolleeReturnee(_enrolleePaperSubmissionService),
+                new IsPotentialPaperEnrolleeReturnee(_enrolleePaperSubmissionService, _submissionService),
             };
 
             return await ProcessRules(rules, enrollee);

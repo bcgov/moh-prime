@@ -245,21 +245,18 @@ namespace Prime.Services.Rules
     {
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
 
-        public IsPotentialPaperEnrolleeReturnee(IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
+        private readonly ISubmissionService _submissionService;
+
+        public IsPotentialPaperEnrolleeReturnee(IEnrolleePaperSubmissionService enrolleePaperSubmissionService, ISubmissionService submissionService)
         {
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
+            _submissionService = submissionService;
         }
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
             var paperEnrollees = await _enrolleePaperSubmissionService.GetPotentialPaperEnrolleeReturneesAsync(enrollee.DateOfBirth);
             var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
             var paperEnrolleeMatchId = -1;
-
-            // Subsequent enrolments: check here if the enrollee is flagged for always manual
-            if (enrollee.AlwaysManual)
-            {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
-            }
 
             // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
             // If there is no match then we don't need to worry about this rule
@@ -289,6 +286,7 @@ namespace Prime.Services.Rules
                 // First enrolment: check if paper enrolment is flagged for AlwaysManual
                 if (await _enrolleePaperSubmissionService.IsAlwaysManualPaperEnrolment(paperEnrolleeMatchId))
                 {
+                    await _submissionService.UpdateAlwaysManualAsync(enrollee.Id, true);
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
                     return false;
                 }
