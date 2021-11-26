@@ -291,7 +291,6 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         this.addOboSite(careSetting.careSettingCode);
       }
     });
-
   }
 
   /**
