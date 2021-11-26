@@ -834,7 +834,7 @@ namespace Prime.Services
         public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
         {
             var linkedPaperEnrolleeId = await GetLinkedPaperEnrolleeId(enrolleeId);
-            if (linkedPaperEnrolleeId > 0)
+            if (linkedPaperEnrolleeId != null)
             {
                 return await _context.BusinessEvents
                     .Include(e => e.Admin)
