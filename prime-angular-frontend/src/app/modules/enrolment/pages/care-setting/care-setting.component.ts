@@ -162,7 +162,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public ngOnDestroy() {
-    this.removeIncompleteCareSettings(true);
+    this.removeIncompleteCareSettings();
   }
 
   protected createFormInstance() {
@@ -221,16 +221,15 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private removeIncompleteCareSettings(allowEmptyCareSettings: boolean = false) {
-    this.enrolmentFormStateService.json.careSettings.forEach((careSetting: CareSetting) => {
-      const value = careSetting;
-      const index = this.careSettings.value.findIndex((value) => !value.careSettingCode);
-      const control = this.careSettings.controls[index];
-
-      if (!value.careSettingCode && control?.invalid) {
-        this.removeCareSetting(index);
-      }
-    })
+  private removeIncompleteCareSettings(allowEmptyCareSettings: boolean = true) {
+    this.careSettings.value
+      .reduce((indexes, careSetting, index) => {
+        return (!careSetting.careSettingCode)
+          ? [...indexes, index]
+          : indexes;
+      }, [])
+      ?.reverse()
+      ?.forEach((index: number) => this.removeCareSetting(index));
 
     if (allowEmptyCareSettings) {
       return;
