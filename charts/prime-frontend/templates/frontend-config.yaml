@@ -23,14 +23,14 @@ data:
         "documentManagerUrl": "https://{{ $domain }}/api/docman",
         "keycloakConfig": {
           "config": {
-            "url": "https://{{ if $isProd }}""{{else}}"{{ $ocEnv }}."{{end}}oidc.gov.bc.ca/auth",
+            "url": "https://{{ if $isProd }}{{else}}{{ $ocEnv }}.{{end}}oidc.gov.bc.ca/auth",
             "realm": "v4mbqqas",
-            "clientId": "prime-application-{{ $ocEnv }}",
+            "clientId": "prime-application-{{ $ocEnv }}"
           }
         },
         "mohKeycloakConfig": {
           "config": {
-            "url": "https://common-logon{{ if $isProd }}""{{else}}"-{{ $ocEnv }}"{{end}}.hlth.gov.bc.ca/auth",
+            "url": "https://common-logon{{ if $isProd }}{{else}}-{{ $ocEnv }}{{end}}.hlth.gov.bc.ca/auth",
             "realm": "moh_applications",
             "clientId": "PRIME-WEBAPP-ENROLLMENT"
           }
