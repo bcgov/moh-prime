@@ -112,7 +112,8 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             var linkedGpid = await _context.EnrolleeLinkedEnrolments
-                .Where(ele => ele.EnrolleeId == enrolleeId)
+                .Where(ele => ele.EnrolleeId == enrolleeId
+                    && ele.PaperEnrolleeId.HasValue)
                 .Select(ele => ele.UserProvidedGpid)
                 .SingleOrDefaultAsync();
 
