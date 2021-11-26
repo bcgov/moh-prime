@@ -72,7 +72,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return this.form.get('careSettings') as FormArray;
   }
 
-
   /**
    * @description
    *  Representing possible health authorities to select from and whether a given one was selected
