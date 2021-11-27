@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SiteStatusType } from '@lib/enums/site-status.enum';
-import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
+import { RoutePath, RouteSegments, RouteUtils } from '@lib/utils/route-utils.class';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
@@ -157,7 +157,7 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
    * Prevent infinite route loops by navigating to a route only
    * when the current route path is not the destination path.
    */
-  private navigate(routePath: string, destinationSegments: (string | number)[]): boolean {
+  private navigate(routePath: string, destinationSegments: RouteSegments): boolean {
     const destinationPath = HealthAuthSiteRegRoutes.routePath(destinationSegments.join('/'));
 
     // Route path may contain query parameters, which should be ignored

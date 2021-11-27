@@ -30,7 +30,7 @@ export class PendingTransferGuard implements CanActivate, CanActivateChild {
   private routeDestination(): boolean | Promise<boolean> {
     if (this.organizationService.organization.pendingTransfer) {
       const modulePath = this.config.routes.site;
-      return this.router.navigate([modulePath, SiteRoutes.SITE_MANAGEMENT]);
+      return this.router.navigate([modulePath, SiteRoutes.ORGANIZATIONS]);
     }
     return true;
   }

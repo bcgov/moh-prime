@@ -7,7 +7,7 @@ import { forkJoin, of } from 'rxjs';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { PAPER_ENROLLEE_GPID_FILTER } from '@lib/constants';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
@@ -23,6 +23,7 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -63,8 +64,12 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     this.hasActions = true;
   }
 
-  public onNavigateEnrollee(enrolleeId: number) {
+  public onNavigateEnrollee(enrolleeId: number): void {
     this.onRoute([enrolleeId, RouteUtils.currentRoutePath(this.router.url)]);
+  }
+
+  public onRedirectCommunitySite(routePath: RoutePath): void {
+    this.router.navigate([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.SITE_REGISTRATIONS, ...routePath]);
   }
 
   public ngOnInit(): void {

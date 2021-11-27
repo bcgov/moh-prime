@@ -60,7 +60,7 @@ export class SiteGuard extends BaseGuard {
   }
 
   private manageSubmittedSiteRouting(routePath: string, site: Site) {
-    return this.manageRouting(routePath, SiteRoutes.SITE_MANAGEMENT, site);
+    return this.manageRouting(routePath, SiteRoutes.ORGANIZATIONS, site);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, site: Site): boolean {
@@ -85,7 +85,7 @@ export class SiteGuard extends BaseGuard {
 
     // Redirect to an appropriate default route
     if (!allowlistRoutes.includes(childRoute)) {
-      return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT);
+      return this.navigate(routePath, SiteRoutes.ORGANIZATIONS);
     }
 
     // Otherwise, allow access to the route
