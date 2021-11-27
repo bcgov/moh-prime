@@ -8,6 +8,7 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { PAPER_ENROLLEE_GPID_FILTER } from '@lib/constants';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -36,7 +37,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public showAdjudication: boolean;
   public documents: EnrolleeAdjudicationDocument[];
   public absence: EnrolleeAbsence;
-  public readonly paperEnrolleeGpidFilter = 'NOBCSC';
+  public readonly PAPER_ENROLLEE_GPID_FILTER = PAPER_ENROLLEE_GPID_FILTER;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,

@@ -7,6 +7,7 @@ import { exhaustMap } from 'rxjs/operators';
 import { noop, Observable, of } from 'rxjs';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { PAPER_ENROLLEE_GPID_FILTER } from '@lib/constants';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
@@ -138,7 +139,7 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
     (isMatchingPaperEnrollee)
       ? this.formUtilsService.setValidators(paperEnrolmentGpid, [
         Validators.required,
-        FormControlValidators.startsWith('NOBCSC'),
+        FormControlValidators.startsWith(PAPER_ENROLLEE_GPID_FILTER),
         FormControlValidators.requiredLength(20)
       ])
       : this.formUtilsService.resetAndClearValidators(paperEnrolmentGpid);

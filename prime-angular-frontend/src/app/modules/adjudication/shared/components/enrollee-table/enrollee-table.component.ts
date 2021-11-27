@@ -10,6 +10,7 @@ import moment from 'moment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { DateUtils } from '@lib/utils/date-utils.class';
+import { PAPER_ENROLLEE_GPID_FILTER } from '@lib/constants';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
@@ -53,7 +54,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public Role = Role;
-  public readonly paperEnrolleeGpidFilter = 'NOBCSC';
+  public readonly PAPER_ENROLLEE_GPID_FILTER = PAPER_ENROLLEE_GPID_FILTER;
 
   constructor(
     private fb: FormBuilder,

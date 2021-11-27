@@ -22,8 +22,6 @@ namespace Prime.Services
 {
     public class EnrolleeService : BaseService, IEnrolleeService
     {
-        private const string PaperGpidPrefix = "NOBCSC";
-
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
@@ -107,7 +105,7 @@ namespace Prime.Services
                 );
 
             var unlinkedPaperEnrolments = _context.Enrollees
-                .Where(e => e.GPID.StartsWith(PaperGpidPrefix)
+                .Where(e => e.GPID.StartsWith(Constants.PaperGpidPrefix)
                     && !_context.EnrolleeLinkedEnrolments
                         .Any(link => link.PaperEnrolleeId == e.Id));
 
@@ -135,7 +133,7 @@ namespace Prime.Services
                 );
 
             var unlinkedPaperEnrolments = _context.Enrollees
-                .Where(e => e.GPID.StartsWith(PaperGpidPrefix)
+                .Where(e => e.GPID.StartsWith(Constants.PaperGpidPrefix)
                     && !_context.EnrolleeLinkedEnrolments
                         .Any(link => link.PaperEnrolleeId == e.Id));
 
@@ -158,7 +156,7 @@ namespace Prime.Services
                     .Where(e => _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
                 .If(searchOptions.IsLinkedPaperEnrolment == false, q => q
-                    .Where(e => e.GPID.StartsWith("NOBCSC")
+                    .Where(e => e.GPID.StartsWith(Constants.PaperGpidPrefix)
                         && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
