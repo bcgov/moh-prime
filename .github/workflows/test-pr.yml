@@ -162,17 +162,3 @@ jobs:
           name: summed
           path: ./coverage/codeclimate.json
           retention-days: 1
-
-
-  cleanup-coverage-artifacts:
-    needs: codeclimate-sum-coverage
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Clean-up
-        run: |
-          # ls -l          
-          # rm frontend.json 
-          # rm backend.json
-          # rm ./coverage/codeclimate.json
