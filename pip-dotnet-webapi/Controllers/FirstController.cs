@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Pidp.Data;
+using Pidp.Models.Lookups;
 
 namespace Pidp.Controllers
 {
@@ -7,6 +9,12 @@ namespace Pidp.Controllers
     [ApiController]
     public class FirstController : PidpControllerBase
     {
+        private readonly PidpDbContext _context;
+        public FirstController(PidpDbContext context)
+        {
+            _context = context;
+        }
+
         // GET: api/First
         /// <summary>
         /// Gets a non-usable result. Used to test connection to database
@@ -15,7 +23,7 @@ namespace Pidp.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSomething()
         {
-            return Ok("worked");
+            return Ok(_context.Set<Province>().Count());
         }
     }
 }

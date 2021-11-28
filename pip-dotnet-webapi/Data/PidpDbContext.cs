@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 using Pidp.Models;
 
-namespace Pidp
+namespace Pidp.Data
 {
     // public class PidpDbContextFactory : IDesignTimeDbContextFactory<PidpDbContext>
     // {

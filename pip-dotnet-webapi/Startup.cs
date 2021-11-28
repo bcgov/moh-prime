@@ -1,6 +1,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Pidp.Data;
 using Serilog;
 using System.Reflection;
 using System.Text.Json;
