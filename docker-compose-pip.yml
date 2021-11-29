@@ -22,12 +22,12 @@ services:
   ###############################################################################
   ###                     PIdP API Backend Definition                         ###
   ###############################################################################
-  pidp-dotnet-webapi:
-    container_name: pidp-webapi-backend
+  pidp-webapi:
+    container_name: pidp-webapi
     restart: always
     image: pidp
     build:
-      context: pidp-dotnet-webapi/
+      context: pidp-webapi/
       args:
         ASPNETCORE_HTTPS_PORT: "5001"
         ASPNETCORE_ENVIRONMENT: "Development"
@@ -40,7 +40,7 @@ services:
       DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
       ConnectionStrings__PidpDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
     volumes:
-      - ./pidp-dotnet-webapi/:/app
+      - ./pidp-webapi/:/app
       - ${APPDATA}/Microsoft/UserSecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b:/root/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b
       # Use the following instead if developing on Mac/Linux:
       # - ${HOME}/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b:/root/.microsoft/usersecrets/5c2dc965-00b4-4531-9ff0-9b37193ead9b
