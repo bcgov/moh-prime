@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -5,27 +6,11 @@ using Pidp.Models;
 
 namespace Pidp.Data
 {
-    // public class PidpDbContextFactory : IDesignTimeDbContextFactory<PidpDbContext>
-    // {
-    //     public PidpDbContext CreateDbContext(string[] args)
-    //     {
-    //         var connectionString = new ConfigurationBuilder()
-    //             .SetBasePath(Directory.GetCurrentDirectory())
-    //             .AddJsonFile("appsettings.json")
-    //             .Build()
-    //             .GetConnectionString("PidpDatabase");
-
-    //         var optionsBuilder = new DbContextOptionsBuilder<PidpDbContext>();
-    //         optionsBuilder.UseNpgsql(connectionString);
-    //         optionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: true);
-
-    //         return new PidpDbContext(optionsBuilder.Options);
-    //     }
-    // }
-
     public class PidpDbContext : DbContext
     {
         public PidpDbContext(DbContextOptions<PidpDbContext> options) : base(options) { }
+
+        public DbSet<Party> Parties => Set<Party>();
 
         public override int SaveChanges()
         {

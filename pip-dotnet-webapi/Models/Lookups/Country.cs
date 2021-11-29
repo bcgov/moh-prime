@@ -17,7 +17,7 @@ namespace Pidp.Models.Lookups
         [Key]
         public CountryCode Code { get; set; }
 
-        public string Name { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
     }
 
     public class CountryConfiguration : IEntityTypeConfiguration<Country>

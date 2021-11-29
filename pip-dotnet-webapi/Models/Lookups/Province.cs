@@ -87,7 +87,7 @@ namespace Pidp.Models.Lookups
 
         public CountryCode CountryCode { get; set; }
 
-        public string Name { get; set; } = "";
+        public string Name { get; set; } = string.Empty;
     }
 
     public class ProvinceConfiguration : IEntityTypeConfiguration<Province>
