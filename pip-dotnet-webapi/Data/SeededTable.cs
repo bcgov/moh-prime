@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NodaTime;
 
-namespace Pidp.Configuration.Database
+namespace Pidp.Data
 {
     public abstract class SeededTable<T> : IEntityTypeConfiguration<T> where T : class
     {

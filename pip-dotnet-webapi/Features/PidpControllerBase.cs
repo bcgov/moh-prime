@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Pidp.Controllers
+namespace Pidp.Features
 {
     public class PidpControllerBase : ControllerBase
     {
