@@ -174,7 +174,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
       this.dataSource.data = changes.enrollees.currentValue;
     }
 
-    if (!changes.sort.firstChange) {
+    if (changes.sort?.firstChange === false) {
       this.sortData(changes.sort.currentValue);
     }
   }
