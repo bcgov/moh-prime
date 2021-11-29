@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { ActivatedRoute } from '@angular/router';
 
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
@@ -11,6 +12,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { UtilsService } from '@core/services/utils.service';
+import { LocalStorageService } from '@core/services/local-storage.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -30,6 +32,8 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrollees: EnrolleeListViewModel[];
   @Input() public enrolleeNavigation: EnrolleeNavigation;
+  @Input() public sort: Sort;
+  @Input() public localStoragePrefix: string;
   @Output() public notify: EventEmitter<number>;
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
@@ -38,6 +42,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Output() public sendBulkEmail: EventEmitter<void>;
   @Output() public maintenance: EventEmitter<void>;
   @Output() public navigateEnrollee: EventEmitter<number>;
+  @Output() public sortEnrollee: EventEmitter<Sort>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
@@ -55,10 +60,15 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   public Role = Role;
   public readonly paperEnrolleeGpidFilter = 'NOBCSC';
 
+  private sortActiveKey: string;
+  private sortDirectionKey: string;
+
   constructor(
+    private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private authService: AuthService,
     private utilsService: UtilsService,
+    private localStorageService: LocalStorageService
   ) {
     this.notify = new EventEmitter<number>();
     this.assign = new EventEmitter<number>();
@@ -68,6 +78,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.sendBulkEmail = new EventEmitter<void>();
     this.maintenance = new EventEmitter<void>();
     this.navigateEnrollee = new EventEmitter<number>();
+    this.sortEnrollee = new EventEmitter<Sort>();
     this.columns = [
       'prefixes',
       'displayId',
@@ -118,6 +129,11 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   }
 
   public sortData(sort: Sort) {
+    this.localStorageService.set(this.sortActiveKey, sort.active);
+    this.localStorageService.set(this.sortDirectionKey, sort.direction);
+
+    this.sortEnrollee.emit(sort);
+
     if (!sort.active || !sort.direction) {
       return;
     }
@@ -156,6 +172,10 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     if (!changes.enrollees.firstChange) {
       this.dataSource.data = changes.enrollees.currentValue;
     }
+
+    if (!changes.sort.firstChange) {
+      this.sortData(changes.sort.currentValue);
+    }
   }
 
   public navigateToEnrollee(enrolleeId: number): void {
@@ -163,6 +183,8 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void {
+    this.sortActiveKey = `${this.localStoragePrefix}-sort-active-key`;
+    this.sortDirectionKey = `${this.localStoragePrefix}-sort-direction-key`;
     this.createFormInstance();
     this.initForm();
     this.dataSource.filterPredicate = this.getFilterPredicate();
@@ -171,6 +193,23 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     // have to be visible based on the size of the dataset
     this.hidePaginator = (this.paginator?.pageSize ?? 0) > this.enrollees.length;
     this.dataSource.data = this.enrollees;
+
+    const queryParams = this.activatedRoute.snapshot.queryParams;
+    const sort = <Sort>{
+      active: queryParams.sortActive,
+      direction: queryParams.sortDirection
+    };
+
+    if (!!sort.active && !!sort.direction) {
+      this.sortData(sort);
+    }
+
+    if (!sort.active || !sort.direction) {
+      this.sortData(<Sort>{
+        active: this.localStorageService.get(this.sortActiveKey),
+        direction: this.localStorageService.get(this.sortDirectionKey)
+      });
+    }
   }
 
   private createFormInstance(): void {
