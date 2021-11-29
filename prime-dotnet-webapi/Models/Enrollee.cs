@@ -120,9 +120,9 @@ namespace Prime.Models
         [JsonIgnore]
         public ICollection<EnrolleeAbsence> EnrolleeAbsences { get; set; }
 
-        public EnrolleeLinkedEnrolment PaperEnrolment { get; set; }
+        public EnrolleeLinkedEnrolment EnrolleeToPaperLink { get; set; }
 
-        public EnrolleeLinkedEnrolment LinkedEnrolment { get; set; }
+        public EnrolleeLinkedEnrolment PaperToEnrolleeLink { get; set; }
 
         [NotMapped]
         [Computed]
