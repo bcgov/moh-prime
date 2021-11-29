@@ -47,6 +47,7 @@ namespace Pidp.Models
     public class PartyAddress : Address
     {
         public int PartyId { get; set; }
+
         [Required]
         public Party? Party { get; set; }
     }
