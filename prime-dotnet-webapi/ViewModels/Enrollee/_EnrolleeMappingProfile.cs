@@ -31,7 +31,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<Enrollee, EnrolleeDTO>()
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true))
                 .ForMember(dest => dest.LinkedEnrolleeId, opt => opt.MapFrom(src => (src.PaperEnrolment == null) ? src.LinkedEnrolment.EnrolleeId : src.PaperEnrolment.PaperEnrolleeId))
-                .ForMember(dest => dest.PossiblePaperEnrolmentMatch, opt => opt.MapFrom(src => (src.GPID != null && src.GPID.Contains(Constants.PaperGpidPrefix)) ? false : unlinkedPaperEnrolments.Any(e => e.DateOfBirth.Date == src.DateOfBirth.Date)))
+                .ForMember(dest => dest.PossiblePaperEnrolmentMatch, opt => opt.MapFrom(src => (src.GPID != null && src.GPID.Contains(Enrollee.PaperGpidPrefix)) ? false : unlinkedPaperEnrolments.Any(e => e.DateOfBirth.Date == src.DateOfBirth.Date)))
                 .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(id => id == src.CurrentAgreementId)));
 
             CreateMap<EnrolleeDTO, EnrolleeViewModel>();

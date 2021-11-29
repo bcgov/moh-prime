@@ -105,7 +105,7 @@ namespace Prime.Services
                 );
 
             var unlinkedPaperEnrolments = _context.Enrollees
-                .Where(e => e.GPID.StartsWith(Constants.PaperGpidPrefix)
+                .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                     && !_context.EnrolleeLinkedEnrolments
                         .Any(link => link.PaperEnrolleeId == e.Id));
 
@@ -133,7 +133,7 @@ namespace Prime.Services
                 );
 
             var unlinkedPaperEnrolments = _context.Enrollees
-                .Where(e => e.GPID.StartsWith(Constants.PaperGpidPrefix)
+                .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                     && !_context.EnrolleeLinkedEnrolments
                         .Any(link => link.PaperEnrolleeId == e.Id));
 
@@ -156,7 +156,7 @@ namespace Prime.Services
                     .Where(e => _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
                 .If(searchOptions.IsLinkedPaperEnrolment == false, q => q
-                    .Where(e => e.GPID.StartsWith(Constants.PaperGpidPrefix)
+                    .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                         && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })

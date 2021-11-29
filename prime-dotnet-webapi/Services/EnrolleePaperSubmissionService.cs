@@ -62,7 +62,7 @@ namespace Prime.Services
                 return false;
             }
 
-            return dto.GPID.StartsWith(Constants.PaperGpidPrefix);
+            return dto.GPID.StartsWith(Enrollee.PaperGpidPrefix);
         }
 
         public async Task<Enrollee> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel viewModel)
@@ -72,7 +72,7 @@ namespace Prime.Services
             var enrollee = _mapper.Map<Enrollee>(viewModel);
 
             enrollee.UserId = Guid.NewGuid();
-            enrollee.GPID = Gpid.NewGpid(Constants.PaperGpidPrefix);
+            enrollee.GPID = Gpid.NewGpid(Enrollee.PaperGpidPrefix);
             enrollee.Addresses = new[]
             {
                 new EnrolleeAddress
@@ -278,7 +278,7 @@ namespace Prime.Services
         {
             return await _context.Enrollees
                 .AsNoTracking()
-                .AnyAsync(e => e.GPID.StartsWith(Constants.PaperGpidPrefix)
+                .AnyAsync(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
                     && !_context.EnrolleeLinkedEnrolments
                         .Any(link => link.PaperEnrolleeId == e.Id));
@@ -291,7 +291,7 @@ namespace Prime.Services
             return await _context.Enrollees
                 .AsNoTracking()
                 .Where(
-                    e => e.GPID.StartsWith(Constants.PaperGpidPrefix)
+                    e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
                 )
                 .ToListAsync();
@@ -311,12 +311,12 @@ namespace Prime.Services
             var enrolleeIsPaper = await _context.Enrollees
                 .AsNoTracking()
                 .AnyAsync(e => e.Id == enrolleeId
-                    && e.GPID.StartsWith(Constants.PaperGpidPrefix));
+                    && e.GPID.StartsWith(Enrollee.PaperGpidPrefix));
 
             var paperIsPaper = await _context.Enrollees
                 .AsNoTracking()
                 .AnyAsync(e => e.Id == paperEnrolleeId
-                    && e.GPID.StartsWith(Constants.PaperGpidPrefix));
+                    && e.GPID.StartsWith(Enrollee.PaperGpidPrefix));
 
             if (enrolleeIsPaper
                 || !paperIsPaper
@@ -349,7 +349,7 @@ namespace Prime.Services
             var enrolleeIsPaper = await _context.Enrollees
                 .AsNoTracking()
                 .AnyAsync(e => e.Id == enrolleeId
-                    && e.GPID.StartsWith(Constants.PaperGpidPrefix));
+                    && e.GPID.StartsWith(Enrollee.PaperGpidPrefix));
 
             if (enrolleeIsPaper || linkedEnrolment?.PaperEnrolleeId != null)
             {
