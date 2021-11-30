@@ -22,7 +22,7 @@ export class SiteOverviewPageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.busy = this.healthAuthorityResource
-      .getHealthAuthorityAdminSite(this.route.snapshot.params.haid, this.route.snapshot.params.sid)
+      .getHealthAuthorityAdminSite(+this.route.snapshot.params.haid, +this.route.snapshot.params.sid)
       .subscribe((site: HealthAuthoritySiteAdmin) => this.site = site);
   }
 }

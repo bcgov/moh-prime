@@ -23,7 +23,7 @@ export class SiteEventsPageComponent implements OnInit {
   ) { }
 
   public getBusinessEvents(businessEventTypes?: BusinessEventTypeEnum[]): void {
-    const siteId = this.route.snapshot.params.sid;
+    const siteId = +this.route.snapshot.params.sid;
     this.businessEvents$ = this.siteResource
       .getSiteBusinessEvents(siteId, businessEventTypes ?? [])
       .pipe(

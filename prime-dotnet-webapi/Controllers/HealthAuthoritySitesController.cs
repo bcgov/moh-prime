@@ -261,13 +261,9 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            // TODO duplicate PEC allowed but only in same Health Authority
-
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
-
-            // TODO send site registration submission notification
 
             return NoContent();
         }

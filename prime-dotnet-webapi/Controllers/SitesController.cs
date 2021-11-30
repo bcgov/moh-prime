@@ -705,7 +705,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="pecCode"></param>
         [HttpPut("{siteId}/pec", Name = nameof(UpdatePecCode))]
-        [Authorize(Roles = Roles.ViewSite)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -859,7 +859,7 @@ namespace Prime.Controllers
 
                 if (communitySite.ActiveBeforeRegistration)
                 {
-                    await _emailService.SendSiteActiveBeforeRegistrationAsync(siteId);
+                    await _emailService.SendSiteActiveBeforeRegistrationAsync(siteId, communitySite.Organization.SigningAuthority.Email);
                 }
                 else
                 {

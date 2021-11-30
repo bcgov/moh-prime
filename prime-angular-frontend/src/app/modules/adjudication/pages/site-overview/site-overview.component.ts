@@ -73,7 +73,7 @@ export class SiteOverviewComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const siteId = this.route.snapshot.params.sid;
+      const siteId = +this.route.snapshot.params.sid;
       const pec = this.form.value.pec;
       this.busy = this.siteResource.updatePecCode(siteId, pec)
         .subscribe(() => {

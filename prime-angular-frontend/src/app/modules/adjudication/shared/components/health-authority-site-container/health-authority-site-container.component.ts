@@ -43,7 +43,7 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
 
   protected getDataset(): void {
     this.busy = this.healthAuthSiteResource
-      .getHealthAuthorityAdminSites(this.route.snapshot.params.haid, this.route.snapshot.params.sid)
+      .getHealthAuthorityAdminSites(+this.route.snapshot.params.haid, +this.route.snapshot.params.sid)
       .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySite = sites[0]);
   }
 

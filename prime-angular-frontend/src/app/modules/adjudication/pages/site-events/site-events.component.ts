@@ -26,7 +26,7 @@ export class SiteEventsComponent implements OnInit {
   }
 
   public getBusinessEvents(businessEventTypes?: BusinessEventTypeEnum[]) {
-    const siteId = this.route.snapshot.params.sid;
+    const siteId = +this.route.snapshot.params.sid;
     this.businessEvents$ = this.siteResource
       .getSiteBusinessEvents(siteId, businessEventTypes ?? [])
       .pipe(
