@@ -1,9 +1,9 @@
 using System;
 
-using ExcelDataReader;
+using CsvHelper;
+using Serilog;
 
 using Prime.Models;
-using Serilog;
 
 namespace PlrIntakeUtility
 {
@@ -15,47 +15,47 @@ namespace PlrIntakeUtility
         /// <summary>
         /// Reads from a row in Excel file into a PlrProvider object.
         /// </summary>
-        public PlrProvider ReadRow(IExcelDataReader reader)
+        public PlrProvider ReadRow(CsvReader reader)
         {
             PlrProvider provider = new PlrProvider();
-            provider.Ipc = reader.GetString(GetIndex("A"));
-            provider.Cpn = reader.GetString(GetIndex("B"));
-            provider.IdentifierType = reader.GetString(GetIndex("C"));
-            provider.CollegeId = reader.GetString(GetIndex("D"));
-            provider.ProviderRoleType = reader.GetString(GetIndex("E"));
-            provider.MspId = reader.GetString(GetIndex("F"));
-            provider.NamePrefix = reader.GetString(GetIndex("G"));
-            provider.FirstName = reader.GetString(GetIndex("H"));
-            provider.SecondName = reader.GetString(GetIndex("I"));
-            provider.ThirdName = reader.GetString(GetIndex("J"));
-            provider.LastName = reader.GetString(GetIndex("K"));
-            provider.Suffix = reader.GetString(GetIndex("L"));
-            provider.Gender = reader.GetString(GetIndex("M"));
+            provider.Ipc = reader.GetField(GetIndex("A"));
+            provider.Cpn = reader.GetField(GetIndex("B"));
+            provider.IdentifierType = reader.GetField(GetIndex("C"));
+            provider.CollegeId = reader.GetField(GetIndex("D"));
+            provider.ProviderRoleType = reader.GetField(GetIndex("E"));
+            provider.MspId = reader.GetField(GetIndex("F"));
+            provider.NamePrefix = reader.GetField(GetIndex("G"));
+            provider.FirstName = reader.GetField(GetIndex("H"));
+            provider.SecondName = reader.GetField(GetIndex("I"));
+            provider.ThirdName = reader.GetField(GetIndex("J"));
+            provider.LastName = reader.GetField(GetIndex("K"));
+            provider.Suffix = reader.GetField(GetIndex("L"));
+            provider.Gender = reader.GetField(GetIndex("M"));
             provider.DateOfBirth = TryGetDateTime(reader, "N");
-            provider.StatusCode = reader.GetString(GetIndex("O"));
-            provider.StatusReasonCode = reader.GetString(GetIndex("P"));
+            provider.StatusCode = reader.GetField(GetIndex("O"));
+            provider.StatusReasonCode = reader.GetField(GetIndex("P"));
             provider.StatusStartDate = TryGetDateTime(reader, "Q");
             provider.StatusExpiryDate = TryGetDateTime(reader, "R");
-            provider.Expertise = GetMultipleElements(reader.GetString(GetIndex("S")));
+            provider.Expertise = GetMultipleElements(reader.GetField(GetIndex("S")));
             // PRIME not collecting Languages
-            // provider.Languages = reader.GetString(GetIndex("T"));
+            // provider.Languages = reader.GetField(GetIndex("T"));
 
-            provider.Address1Line1 = reader.GetString(GetIndex("U"));
-            provider.Address1Line2 = reader.GetString(GetIndex("V"));
-            provider.Address1Line3 = reader.GetString(GetIndex("W"));
-            provider.City1 = reader.GetString(GetIndex("X"));
-            provider.Province1 = reader.GetString(GetIndex("Y"));
-            provider.Country1 = reader.GetString(GetIndex("Z"));
-            provider.PostalCode1 = reader.GetString(GetIndex("AA"));
+            provider.Address1Line1 = reader.GetField(GetIndex("U"));
+            provider.Address1Line2 = reader.GetField(GetIndex("V"));
+            provider.Address1Line3 = reader.GetField(GetIndex("W"));
+            provider.City1 = reader.GetField(GetIndex("X"));
+            provider.Province1 = reader.GetField(GetIndex("Y"));
+            provider.Country1 = reader.GetField(GetIndex("Z"));
+            provider.PostalCode1 = reader.GetField(GetIndex("AA"));
             provider.Address1StartDate = TryGetDateTime(reader, "AB");
 
-            provider.Credentials = GetMultipleElements(reader.GetString(GetIndex("AC")));
-            provider.TelephoneAreaCode = reader.GetString(GetIndex("AD"));
-            provider.TelephoneNumber = reader.GetString(GetIndex("AE"));
-            provider.FaxAreaCode = reader.GetString(GetIndex("AF"));
-            provider.FaxNumber = reader.GetString(GetIndex("AG"));
-            provider.Email = reader.GetString(GetIndex("AH"));
-            provider.ConditionCode = reader.GetString(GetIndex("AI"));
+            provider.Credentials = GetMultipleElements(reader.GetField(GetIndex("AC")));
+            provider.TelephoneAreaCode = reader.GetField(GetIndex("AD"));
+            provider.TelephoneNumber = reader.GetField(GetIndex("AE"));
+            provider.FaxAreaCode = reader.GetField(GetIndex("AF"));
+            provider.FaxNumber = reader.GetField(GetIndex("AG"));
+            provider.Email = reader.GetField(GetIndex("AH"));
+            provider.ConditionCode = reader.GetField(GetIndex("AI"));
             provider.ConditionStartDate = TryGetDateTime(reader, "AJ");
             provider.ConditionEndDate = TryGetDateTime(reader, "AK");
 
@@ -65,25 +65,21 @@ namespace PlrIntakeUtility
         /// <summary>
         /// Returns DateTime representing cell value, or `null` if cell is empty
         /// </summary>
-        private DateTime? TryGetDateTime(IExcelDataReader reader, string columnId)
+        private DateTime? TryGetDateTime(CsvReader reader, string columnId)
         {
-            // If cell is empty, `reader.GetDateTime` will cause a `System.NullReferenceException: Object reference not set to an instance of an object.`
-            if (reader.IsDBNull(GetIndex(columnId)))
+            var dateTime = reader.GetField<DateTime?>(GetIndex(columnId));
+            if (dateTime == null)
+            {
+                return null;
+            }
+            // Treat value meant to represent NULL as `null`
+            else if (dateTime.Equals(PlrNullDateTime))
             {
                 return (DateTime?)null;
             }
             else
             {
-                var dateTime = reader.GetDateTime(GetIndex(columnId));
-                // Treat value meant to represent NULL as `null`
-                if (dateTime.Equals(PlrNullDateTime))
-                {
-                    return (DateTime?)null;
-                }
-                else
-                {
-                    return dateTime;
-                }
+                return dateTime;
             }
         }
 
