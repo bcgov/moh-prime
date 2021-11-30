@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20211118060758_AddEnrolmentLinkBusinessEvent")]
+    [Migration("20211130183518_AddEnrolmentLinkBusinessEvent")]
     partial class AddEnrolmentLinkBusinessEvent
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -10524,7 +10524,8 @@ namespace Prime.Migrations
                 {
                     b.HasOne("Prime.Models.Admin", "Admin")
                         .WithMany()
-                        .HasForeignKey("AdminId");
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.BusinessEventType", "BusinessEventType")
                         .WithMany("BusinessEvents")
@@ -10534,19 +10535,23 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
-                        .HasForeignKey("EnrolleeId");
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Organization", "Organization")
                         .WithMany()
-                        .HasForeignKey("OrganizationId");
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Party", "Party")
                         .WithMany()
-                        .HasForeignKey("PartyId");
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany()
-                        .HasForeignKey("SiteId");
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Admin");
 
@@ -10787,13 +10792,13 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolment", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithOne("PaperEnrolment")
+                        .WithOne("EnrolleeToPaperLink")
                         .HasForeignKey("Prime.Models.EnrolleeLinkedEnrolment", "EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Prime.Models.Enrollee", "PaperEnrollee")
-                        .WithOne("LinkedEnrolment")
+                        .WithOne("PaperToEnrolleeLink")
                         .HasForeignKey("Prime.Models.EnrolleeLinkedEnrolment", "PaperEnrolleeId");
 
                     b.Navigation("Enrollee");
@@ -11682,15 +11687,15 @@ namespace Prime.Migrations
 
                     b.Navigation("EnrolleeRemoteUsers");
 
+                    b.Navigation("EnrolleeToPaperLink");
+
                     b.Navigation("EnrolmentStatuses");
 
                     b.Navigation("IdentificationDocuments");
 
-                    b.Navigation("LinkedEnrolment");
-
                     b.Navigation("OboSites");
 
-                    b.Navigation("PaperEnrolment");
+                    b.Navigation("PaperToEnrolleeLink");
 
                     b.Navigation("RemoteAccessLocations");
 
