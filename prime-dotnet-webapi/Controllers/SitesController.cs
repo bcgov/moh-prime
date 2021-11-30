@@ -688,7 +688,7 @@ namespace Prime.Controllers
             {
                 return BadRequest("PEC cannot be empty.");
             }
-            
+
             var currentPec = await _siteService.GetSitePecAsync(siteId);
             if (currentPec == pec)
             {
@@ -842,19 +842,19 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            var pec = await _siteService.GetSitePecAsync(siteId);
-            if (pec == null)
-            {
-                return BadRequest("Site approval requires a site ID/PEC code.");
-            }
-
-            await _siteService.ApproveSite(siteId);
-
             // TODO: This is the only difference in path between Community Site and Health Authority Site
             // As well maybe we should try/catch email errors so failure on sending an email doesn't fail
             // the call
             if (await _communitySiteService.SiteExistsAsync(siteId))
             {
+                var pec = await _siteService.GetSitePecAsync(siteId);
+                if (pec == null)
+                {
+                    return BadRequest("Site approval requires a site ID/PEC code.");
+                }
+
+                await _siteService.ApproveSite(siteId);
+
                 var communitySite = await _communitySiteService.GetSiteAsync(siteId);
 
                 if (communitySite.ActiveBeforeRegistration)
@@ -871,6 +871,10 @@ namespace Prime.Controllers
                 var remoteUsersToNotify = communitySite.RemoteUsers.Where(ru => !ru.Notified);
                 await _emailService.SendRemoteUserNotificationsAsync(communitySite, remoteUsersToNotify);
                 await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
+            }
+            else
+            {
+                await _siteService.ApproveSite(siteId);
             }
 
             return Ok();

@@ -465,7 +465,7 @@ export class SiteResource {
     return request$
       .pipe(
         NoContentResponse,
-        tap(() => this.toastService.openSuccessToast('Site has been flagged')),
+        tap(() => this.toastService.openSuccessToast(`Site has been ${flagged ? 'flagged' : 'unflagged'}`)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site flag could not be updated');
           this.logger.error('[Site] SiteResource::flagSite error has occurred:'

@@ -40,7 +40,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.flag = new EventEmitter<{ siteId: number, flagged: boolean }>();
   }
 
-  public isCommunitySite(): boolean {
+  public get isCommunitySite(): boolean {
     return !!((this.siteRegistration as SiteRegistrationListViewModel).organizationId)
   }
 
