@@ -18,49 +18,60 @@ namespace PlrIntakeUtility
         public PlrProvider ReadRow(CsvReader reader)
         {
             PlrProvider provider = new PlrProvider();
-            provider.Ipc = reader.GetField(GetIndex("A"));
-            provider.Cpn = reader.GetField(GetIndex("B"));
-            provider.IdentifierType = reader.GetField(GetIndex("C"));
-            provider.CollegeId = reader.GetField(GetIndex("D"));
-            provider.ProviderRoleType = reader.GetField(GetIndex("E"));
-            provider.MspId = reader.GetField(GetIndex("F"));
-            provider.NamePrefix = reader.GetField(GetIndex("G"));
-            provider.FirstName = reader.GetField(GetIndex("H"));
-            provider.SecondName = reader.GetField(GetIndex("I"));
-            provider.ThirdName = reader.GetField(GetIndex("J"));
-            provider.LastName = reader.GetField(GetIndex("K"));
-            provider.Suffix = reader.GetField(GetIndex("L"));
-            provider.Gender = reader.GetField(GetIndex("M"));
+            provider.Ipc = GetString(reader, GetIndex("A"));
+            provider.Cpn = GetString(reader, GetIndex("B"));
+            provider.IdentifierType = GetString(reader, GetIndex("C"));
+            provider.CollegeId = GetString(reader, GetIndex("D"));
+            provider.ProviderRoleType = GetString(reader, GetIndex("E"));
+            provider.MspId = GetString(reader, GetIndex("F"));
+            provider.NamePrefix = GetString(reader, GetIndex("G"));
+            provider.FirstName = GetString(reader, GetIndex("H"));
+            provider.SecondName = GetString(reader, GetIndex("I"));
+            provider.ThirdName = GetString(reader, GetIndex("J"));
+            provider.LastName = GetString(reader, GetIndex("K"));
+            provider.Suffix = GetString(reader, GetIndex("L"));
+            provider.Gender = GetString(reader, GetIndex("M"));
             provider.DateOfBirth = TryGetDateTime(reader, "N");
-            provider.StatusCode = reader.GetField(GetIndex("O"));
-            provider.StatusReasonCode = reader.GetField(GetIndex("P"));
+            provider.StatusCode = GetString(reader, GetIndex("O"));
+            provider.StatusReasonCode = GetString(reader, GetIndex("P"));
             provider.StatusStartDate = TryGetDateTime(reader, "Q");
             provider.StatusExpiryDate = TryGetDateTime(reader, "R");
-            provider.Expertise = GetMultipleElements(reader.GetField(GetIndex("S")));
+            provider.Expertise = GetMultipleElements(GetString(reader, GetIndex("S")));
             // PRIME not collecting Languages
-            // provider.Languages = reader.GetField(GetIndex("T"));
+            // provider.Languages = GetString(reader, GetIndex("T"));
 
-            provider.Address1Line1 = reader.GetField(GetIndex("U"));
-            provider.Address1Line2 = reader.GetField(GetIndex("V"));
-            provider.Address1Line3 = reader.GetField(GetIndex("W"));
-            provider.City1 = reader.GetField(GetIndex("X"));
-            provider.Province1 = reader.GetField(GetIndex("Y"));
-            provider.Country1 = reader.GetField(GetIndex("Z"));
-            provider.PostalCode1 = reader.GetField(GetIndex("AA"));
+            provider.Address1Line1 = GetString(reader, GetIndex("U"));
+            provider.Address1Line2 = GetString(reader, GetIndex("V"));
+            provider.Address1Line3 = GetString(reader, GetIndex("W"));
+            provider.City1 = GetString(reader, GetIndex("X"));
+            provider.Province1 = GetString(reader, GetIndex("Y"));
+            provider.Country1 = GetString(reader, GetIndex("Z"));
+            provider.PostalCode1 = GetString(reader, GetIndex("AA"));
             provider.Address1StartDate = TryGetDateTime(reader, "AB");
 
-            provider.Credentials = GetMultipleElements(reader.GetField(GetIndex("AC")));
-            provider.TelephoneAreaCode = reader.GetField(GetIndex("AD"));
-            provider.TelephoneNumber = reader.GetField(GetIndex("AE"));
-            provider.FaxAreaCode = reader.GetField(GetIndex("AF"));
-            provider.FaxNumber = reader.GetField(GetIndex("AG"));
-            provider.Email = reader.GetField(GetIndex("AH"));
-            provider.ConditionCode = reader.GetField(GetIndex("AI"));
+            provider.Credentials = GetMultipleElements(GetString(reader, GetIndex("AC")));
+            provider.TelephoneAreaCode = GetString(reader, GetIndex("AD"));
+            provider.TelephoneNumber = GetString(reader, GetIndex("AE"));
+            provider.FaxAreaCode = GetString(reader, GetIndex("AF"));
+            provider.FaxNumber = GetString(reader, GetIndex("AG"));
+            provider.Email = GetString(reader, GetIndex("AH"));
+            provider.ConditionCode = GetString(reader, GetIndex("AI"));
             provider.ConditionStartDate = TryGetDateTime(reader, "AJ");
             provider.ConditionEndDate = TryGetDateTime(reader, "AK");
 
             return provider;
         }
+
+
+        /// <summary>
+        /// Returns `null` if cell is empty
+        /// </summary>
+        private string GetString(CsvReader reader, int colIndex)
+        {
+            string value = reader.GetField<string>(colIndex);
+            return (String.IsNullOrEmpty(value) ? null : value);
+        }
+
 
         /// <summary>
         /// Returns DateTime representing cell value, or `null` if cell is empty
