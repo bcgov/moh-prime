@@ -28,7 +28,7 @@
       <span>Unreject Site</span>
     </button>
 
-    <ng-container *ngIf="isCommunitySite()">
+    <ng-container *ngIf="isCommunitySite">
       <button mat-menu-item
               [disabled]="!(Role.VIEW_SITE | inRole)"
               (click)="onContactSigningAuthority()">
@@ -75,7 +75,7 @@
       <span>Delete Site</span>
     </button>
 
-    <ng-container *ngIf="isCommunitySite()">
+    <ng-container *ngIf="isCommunitySite">
       <button mat-menu-item
               [disabled]="!(Role.SUPER_ADMIN | inRole)"
               (click)="onDelete({ organizationId: getSiteOrganizationId() })">
