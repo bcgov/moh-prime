@@ -836,7 +836,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var status = await _siteService.GetSiteStatusAsync(siteId);
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
             if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, status))
             {
                 return BadRequest("Action could not be performed.");
@@ -898,7 +898,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var status = await _siteService.GetSiteStatusAsync(siteId);
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
             if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Reject, status))
             {
                 return BadRequest("Action could not be performed.");
@@ -926,7 +926,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var status = await _siteService.GetSiteStatusAsync(siteId);
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
             if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.RequestChange, status))
             {
                 return BadRequest("Action could not be performed.");
@@ -954,7 +954,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var status = await _siteService.GetSiteStatusAsync(siteId);
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
             if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Unreject, status))
             {
                 return BadRequest("Action could not be performed.");

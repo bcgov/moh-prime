@@ -13,6 +13,7 @@ using AutoMapper;
 using LinqKit;
 using System.Security.Claims;
 using Prime.HttpClients;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Prime.Services
 {
@@ -40,13 +41,12 @@ namespace Prime.Services
             return await _context.Sites.AnyAsync(s => s.Id == siteId);
         }
 
-        public async Task<SiteStatusType> GetSiteStatusAsync(int siteId)
+        public async Task<SiteStatusType> GetSiteCurrentStatusAsync(int siteId)
         {
-            // TODO: Remove include and use mapping?
             return await _context.Sites
-                .Include(s => s.SiteStatuses)
                 .Where(s => s.Id == siteId)
                 .Select(s => s.Status)
+                .DecompileAsync()
                 .SingleOrDefaultAsync();
         }
 

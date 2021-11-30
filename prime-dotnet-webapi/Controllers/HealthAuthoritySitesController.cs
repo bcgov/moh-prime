@@ -255,7 +255,7 @@ namespace Prime.Controllers
                 return Conflict("Cannot submit Site, one or more selections dependent on the Health Authority are invalid.");
             }
 
-            var status = await _siteService.GetSiteStatusAsync(siteId);
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
             if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, status))
             {
                 return BadRequest("Action could not be performed.");
