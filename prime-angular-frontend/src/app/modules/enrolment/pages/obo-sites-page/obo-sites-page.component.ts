@@ -291,17 +291,21 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     // Clear out sites so validation doesn't interrupt submissions
     this.communityHealthSites.clearValidators();
     this.communityHealthSites.updateValueAndValidity();
+    this.communityHealthSites.clear();
 
     this.communityPharmacySites.clearValidators();
     this.communityPharmacySites.updateValueAndValidity();
+    this.communityPharmacySites.clear();
 
     this.deviceProviderSites.clearValidators();
     this.deviceProviderSites.updateValueAndValidity();
+    this.deviceProviderSites.clear();
 
     Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
       const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
       sitesOfHealthAuthority.clearValidators();
       sitesOfHealthAuthority.updateValueAndValidity();
+      sitesOfHealthAuthority.clear();
     });
   }
 }
