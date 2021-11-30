@@ -112,6 +112,7 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
 import { DocumentAttachmentsComponent } from '@shared/components/document-attachments/document-attachments.component';
 import { DocumentAttachmentComponent } from '@shared/components/document-attachment/document-attachment.component';
 import { PartyTypePipe } from '@phsa/shared/pipes/party-type.pipe';
+import { DateOfBirthComponent } from './components/dialogs/content/date-of-birth/date-of-birth.component';
 
 @NgModule({
   declarations: [
@@ -206,7 +207,8 @@ import { PartyTypePipe } from '@phsa/shared/pipes/party-type.pipe';
     ErrorLoggerComponent,
     InfographicComponent,
     DocumentAttachmentsComponent,
-    DocumentAttachmentComponent
+    DocumentAttachmentComponent,
+    DateOfBirthComponent
   ],
   imports: [
     CommonModule,

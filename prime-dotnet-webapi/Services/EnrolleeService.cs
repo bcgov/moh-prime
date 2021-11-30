@@ -1071,5 +1071,12 @@ namespace Prime.Services
                 .Select(e => e.Adjudicator.IDIR)
                 .SingleOrDefaultAsync();
         }
+
+        public async Task UpdateDateOfBirthAsync(int enrolleeId, DateTime dateOfBirth)
+        {
+            var enrollee = await _context.Enrollees.SingleAsync(e => e.Id == enrolleeId);
+            enrollee.DateOfBirth = dateOfBirth;
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -622,5 +622,41 @@ namespace Prime.Controllers
 
             return NoContent();
         }
+
+        // PUT: api/Enrollees/5/date-of-birth
+        /// <summary>
+        /// Ends an current enrollee absence.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="dateOfBirth"></param>
+        [HttpPut("{enrolleeId}/date-of-birth", Name = nameof(UpdatePaperEnrolleeDateOfBirth))]
+        [Authorize(Roles = Roles.ManageEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdatePaperEnrolleeDateOfBirth(int enrolleeId, FromBodyData<DateTime> dateOfBirth)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            // TODO: Verify Unlinked Paper Enrolment
+            if (false)
+            {
+                return BadRequest($"Unable to update date of birth on enrollee with id {enrolleeId}");
+            }
+
+            await _enrolleeService.UpdateDateOfBirthAsync(enrolleeId, dateOfBirth);
+
+            return NoContent();
+        }
     }
 }

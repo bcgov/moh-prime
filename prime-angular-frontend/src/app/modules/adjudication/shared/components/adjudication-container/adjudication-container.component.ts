@@ -35,6 +35,8 @@ import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
+import { DateOfBirthComponent } from '@shared/components/dialogs/content/date-of-birth/date-of-birth.component';
+import moment from 'moment';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -415,6 +417,35 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onNavigateEnrollee(enrolleeId: number) {
     this.onRoute([enrolleeId, RouteUtils.currentRoutePath(this.router.url)]);
+  }
+
+  public onChangeDateOfBirth(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Change Date of Birth',
+      icon: 'edit_calendar',
+      actionHide: true,
+      cancelHide: true,
+      component: DateOfBirthComponent,
+      data: {
+        // TODO: add DOB
+      }
+    };
+
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: { output: moment.Moment }) => {
+            if (result) {
+              return (result.output)
+                ? this.adjudicationResource.updatePaperEnrolleeDateOfBirth(enrolleeId, result.output)
+                : of(noop);
+            }
+            return EMPTY;
+          })
+        )
+        .subscribe(() => this.action.emit());
+    }
   }
 
   public ngOnInit() {
