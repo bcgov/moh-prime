@@ -1,0 +1,11 @@
+<app-health-authority-site-container [content]="content">
+  <app-page-header>Document Upload</app-page-header>
+</app-health-authority-site-container>
+
+<ng-template #content>
+  <app-adjudicator-documents #adjudicationDocuments
+                             [documents$]="documents$"
+                             (saveDocuments)="onSaveDocuments($event)"
+                             (getDocumentByGuid)="onGetDocumentByGuid($event)"
+                             (deleteDocumentById)="onDeleteDocumentById($event)"></app-adjudicator-documents>
+</ng-template>

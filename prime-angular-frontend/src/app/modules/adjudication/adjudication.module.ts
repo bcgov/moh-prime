@@ -76,6 +76,11 @@ import { OrganizationToaMaintenanceListPageComponent } from './pages/organizatio
 import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 import { LicenseClassesMaintenancePageComponent } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
 import { PlrInfoComponent } from './shared/components/plr-info/plr-info.component';
+import { HealthAuthoritySiteContainerComponent } from './shared/components/health-authority-site-container/health-authority-site-container.component';
+import { SiteOverviewPageComponent } from './pages/health-authorities/site-overview-page/site-overview-page.component';
+import { SiteEventsPageComponent } from './pages/health-authorities/site-events-page/site-events-page.component';
+import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
+import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
 
 @NgModule({
   declarations: [
@@ -145,7 +150,12 @@ import { PlrInfoComponent } from './shared/components/plr-info/plr-info.componen
     OrganizationToaMaintenanceListPageComponent,
     OrganizationToaMaintenanceViewPageComponent,
     LicenseClassesMaintenancePageComponent,
-    PlrInfoComponent
+    PlrInfoComponent,
+    HealthAuthoritySiteContainerComponent,
+    SiteOverviewPageComponent,
+    SiteEventsPageComponent,
+    SiteNotesPageComponent,
+    SiteDocumentsPageComponent
   ],
   imports: [
     AdjudicationRoutingModule,
