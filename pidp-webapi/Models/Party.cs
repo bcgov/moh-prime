@@ -16,7 +16,7 @@ namespace Pidp.Models
 
         public LocalDate DateOfBirth { get; set; }
 
-        [Required]
+        // [Required]
         public PartyAddress? PhysicalAddress { get; set; }
     }
 }
