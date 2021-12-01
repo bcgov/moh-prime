@@ -15,7 +15,7 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { EnrolmentStatusReason } from '@shared/enums/enrolment-status-reason.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
-fdescribe('ReviewStatusContentComponent', () => {
+describe('ReviewStatusContentComponent', () => {
 
   const mockDocument = {
     id: 1
