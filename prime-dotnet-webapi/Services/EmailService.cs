@@ -198,6 +198,7 @@ namespace Prime.Services
                 Pec = s.PEC
             })
             .SingleAsync();
+
             var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(signingAuthorityEmail, viewModel);
             await Send(email);
         }
