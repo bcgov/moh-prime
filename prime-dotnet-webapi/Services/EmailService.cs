@@ -250,26 +250,21 @@ namespace Prime.Services
         public async Task SendEnrolleeUnsignedToaReminderEmails()
         {
             var enrollees = await _context.Enrollees
-                .Include(e => e.EnrolmentStatuses)
+                .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa)
                 .Select(e => new
                 {
                     e.FirstName,
                     e.LastName,
                     e.Email,
-                    e.ApprovedDate,
-                    e.CurrentStatus.StatusCode
+                    e.CurrentStatus.StatusDate
                 })
-                // were approved
-                .Where(e => e.ApprovedDate != null)
-                // enrolees that are in “Requires TOA” Status
-                .Where(e => e.StatusCode == (int)StatusType.RequiresToa)
                 .DecompileAsync()
                 .ToListAsync();
 
             foreach (var enrollee in enrollees)
             {
-                // were approved more than 5 days ago
-                if ((DateTime.Now - (enrollee.ApprovedDate ?? default)).TotalDays > 5)
+                // Approved/became RequiresToa more than 5 days ago
+                if ((DateTimeOffset.Now - enrollee.StatusDate).TotalDays > 5)
                 {
                     var email = await _emailRenderingService.RenderUnsignedToaEmailAsync(enrollee.Email, new EnrolleeUnsignedToaEmailViewModel(enrollee.FirstName, enrollee.LastName));
                     await Send(email);
