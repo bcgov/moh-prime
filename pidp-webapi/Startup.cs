@@ -45,12 +45,11 @@ namespace Pidp
         {
             var config = new PidpConfiguration();
             Configuration.Bind(config);
-            PidpConfiguration.Current = config;
 
             services.AddSingleton(config);
 
-            Log.Logger.Information("###App Version:{0}###", Assembly.GetExecutingAssembly().GetName().Version);
-            Log.Logger.Information("###PIdP Configuration:{0}###", JsonSerializer.Serialize(PidpConfiguration.Current));
+            Log.Logger.Information("### App Version:{0} ###", Assembly.GetExecutingAssembly().GetName().Version);
+            Log.Logger.Information("### PIdP Configuration:{0} ###", JsonSerializer.Serialize(config));
 
             return config;
         }
