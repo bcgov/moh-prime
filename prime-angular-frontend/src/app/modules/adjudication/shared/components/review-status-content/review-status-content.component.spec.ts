@@ -13,9 +13,7 @@ import { ConfigService } from 'app/config/config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { EnrolmentStatusReason } from '@shared/enums/enrolment-status-reason.enum';
 
-
-
-fdescribe('ReviewStatusContentComponent', () => {
+describe('ReviewStatusContentComponent', () => {
   const mockDocument = {
     id: 1
   } as BaseDocument;

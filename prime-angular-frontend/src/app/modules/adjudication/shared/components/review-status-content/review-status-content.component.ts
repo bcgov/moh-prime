@@ -36,7 +36,7 @@ class Reason {
     public documents?: BaseDocument[],
     public isSelfDeclaration?: boolean,
     public question?: string,
-    public potentialMatches?: number[],
+    public potentialMatchIds?: number[],
   ) { }
 }
 
@@ -136,14 +136,19 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
           return reasons.concat(this.parseSelfDeclarations(this.enrollee));
         }
 
+        const statusReason = this.configPipe.transform(esr.statusReasonCode, 'statusReasons');
+
         if (esr.statusReasonCode === EnrolmentStatusReasonEnum.IDENTITY_PROVIDER) {
-          return reasons.concat(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote, this.enrollee.identificationDocuments));
+          return reasons.concat(new Reason(statusReason, esr.reasonNote, this.enrollee.identificationDocuments));
         }
 
+        const reason = new Reason(statusReason, esr.reasonNote);
 
-        reasons.push((esr.statusReasonCode === EnrolmentStatusReasonEnum.POSSIBLE_PAPER_ENROLMENT_MATCH)
-          ? this.parsePotentialMatchIds(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote))
-          : new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote));
+        reasons.push(
+          (esr.statusReasonCode === EnrolmentStatusReasonEnum.POSSIBLE_PAPER_ENROLMENT_MATCH)
+            ? this.parsePotentialMatchIds(reason)
+            : reason
+        );
 
         return reasons;
       }, []);
@@ -171,7 +176,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     const lastColon = reason.note.lastIndexOf(':');
 
     // Get the ids and parse them to numbers since we want to show the display ID which is id + 1000
-    reason.potentialMatches = reason.note.substring(lastColon).match(/\d+/g).map((id) => parseInt(id));
+    reason.potentialMatchIds = reason.note.substring(lastColon).match(/\d+/g).map((id) => parseInt(id));
 
     // Remove the ids from the status reason so we can add them back as clickable DisplayIds hyper links
     reason.note = reason.note.substring(0, lastColon + 1);
