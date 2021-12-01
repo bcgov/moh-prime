@@ -22,22 +22,10 @@
     </app-page-subheader2>
   </div>
 
-  <app-vendor-overview [vendor]="healthAuthoritySite"
-                       [showEditRedirect]="siteIsIncomplete"></app-vendor-overview>
-  <app-site-information-overview [siteInformation]="healthAuthoritySite"
-                                 [showEditRedirect]="siteIsIncomplete"></app-site-information-overview>
-  <app-health-auth-care-type-overview [healthAuthCareType]="healthAuthoritySite"
-                                      [showEditRedirect]="siteIsIncomplete"></app-health-auth-care-type-overview>
-  <app-site-address-overview [siteAddress]="healthAuthoritySite"
-                             [showEditRedirect]="siteIsIncomplete"></app-site-address-overview>
-  <app-hours-operation-overview [hoursOperation]="healthAuthoritySite"
-                                [showEditRedirect]="siteIsIncomplete"></app-hours-operation-overview>
-  <app-administrator-overview [administrator]="healthAuthoritySite"
-                              [pharmanetAdministrators]="pharmanetAdministrators"
-                              [showEditRedirect]="siteIsIncomplete || siteIsApproved"></app-administrator-overview>
-  <app-technical-support-overview [technicalSupport]="healthAuthoritySite"
-                                  [technicalSupports]="technicalSupports"
-                                  [showEditRedirect]="siteIsIncomplete || siteIsApproved"></app-technical-support-overview>
+  <app-health-auth-site-overview-container [healthAuthoritySite]="healthAuthoritySite"
+                                           [pharmanetAdministrators]="pharmanetAdministrators"
+                                           [technicalSupports]="technicalSupports">
+  </app-health-auth-site-overview-container>
 
   <ng-container *ngIf="showSubmissionAction; else showBack">
     <div class="footer mb-4">
