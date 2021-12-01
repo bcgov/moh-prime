@@ -11,6 +11,8 @@ namespace Prime.ViewModels
 
         public string GPID { get; set; }
 
+        public string UserProvidedGpid { get; set; }
+
         public string HPDID { get; set; }
 
         public string FirstName { get; set; }

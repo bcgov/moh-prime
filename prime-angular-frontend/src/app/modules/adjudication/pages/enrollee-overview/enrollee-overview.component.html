@@ -28,12 +28,19 @@
            class="mb-4 align-self-center">
           <strong>GPID:</strong> {{ enrolment?.enrollee.gpid }}
       </div>
+
+      <div *ngIf="enrolment?.enrollee.userProvidedGpid"
+            class="mb-4 align-self-center">
+          <strong>PRIOR GPID:</strong> {{ enrolment?.enrollee.userProvidedGpid }}
+      </div>
+
       <div *ngIf="enrollee?.linkedEnrolleeId">
         <a [routerLink]=""
            (click)="onRoute([enrollee?.linkedEnrolleeId, AdjudicationRoutes.ENROLLEE_OVERVIEW])">
           {{ (enrolment?.enrollee.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX) ? 'Linked' : 'Paper' }} Enrolment
         </a>
       </div>
+
       <div *ngIf="absence"
             class="mb-4 align-self-center">
             <strong>Enrollee Absent:</strong> {{ absence.startTimestamp | formatDate }} - {{absence.endTimestamp | formatDate}}

@@ -116,6 +116,13 @@ namespace Prime.Services
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
 
+            var linkedGpid = await _context.EnrolleeLinkedEnrolments
+                .Where(ele => ele.EnrolleeId == enrolleeId
+                    && ele.PaperEnrolleeId.HasValue)
+                .Select(ele => ele.UserProvidedGpid)
+                .SingleOrDefaultAsync();
+
+            dto.UserProvidedGpid = linkedGpid;
             return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
@@ -834,11 +841,23 @@ namespace Prime.Services
 
         public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
         {
+            var linkedPaperEnrolleeId = await GetLinkedPaperEnrolleeId(enrolleeId);
+
             return await _context.BusinessEvents
                 .Include(e => e.Admin)
-                .Where(e => e.EnrolleeId == enrolleeId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
+                .Where(e => e.EnrolleeId == enrolleeId
+                    || linkedPaperEnrolleeId.HasValue && e.EnrolleeId == linkedPaperEnrolleeId)
+                .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
+        }
+
+        private async Task<int?> GetLinkedPaperEnrolleeId(int enrolleeId)
+        {
+            return await _context.EnrolleeLinkedEnrolments
+                .Where(ele => ele.EnrolleeId == enrolleeId)
+                .Select(ele => ele.PaperEnrolleeId)
+                .SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids)

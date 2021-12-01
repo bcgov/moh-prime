@@ -46,7 +46,6 @@ namespace Prime.ViewModels.Profiles
             CreateMap<AccessAgreementNote, AccessAgreementNoteViewModel>();
             CreateMap<Certification, CertificationDto>();
             CreateMap<Certification, CertificationViewModel>();
-            CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
             CreateMap<EnrolleeRemoteUser, EnrolleeRemoteUserViewModel>();
             CreateMap<OboSite, OboSiteViewModel>();
             CreateMap<RemoteAccessLocation, RemoteAccessLocationViewModel>();
