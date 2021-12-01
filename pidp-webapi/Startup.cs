@@ -1,11 +1,11 @@
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Pidp.Data;
 using Serilog;
 using System.Reflection;
 using System.Text.Json;
 
+using Pidp.Data;
 
 namespace Pidp
 {
@@ -27,10 +27,7 @@ namespace Pidp
             services.AddControllers()
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>());
 
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" });
-            });
+            services.AddSwaggerGen(options => options.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" }));
 
             var connectionString = PidpConfiguration.Current!.ConnectionStrings.PidpDatabase;
             services.AddDbContext<PidpDbContext>(options =>
@@ -39,10 +36,10 @@ namespace Pidp
                     .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
             });
 
-            services
-                .AddHealthChecks()
-                .AddDbContextCheck<PidpDbContext>("DbContextHealthCheck")
-                .AddNpgSql(connectionString);
+            // services
+            //     .AddHealthChecks()
+            //     .AddDbContextCheck<PidpDbContext>("DbContextHealthCheck")
+            //     .AddNpgSql(connectionString);
         }
 
         private void InitializeConfiguration(IServiceCollection services)
@@ -77,7 +74,7 @@ namespace Pidp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHealthChecks("/health");
+                // endpoints.MapHealthChecks("/health");
             });
         }
     }
