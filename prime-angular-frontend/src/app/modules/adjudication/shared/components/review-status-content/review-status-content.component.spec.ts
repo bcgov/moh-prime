@@ -48,9 +48,7 @@ describe('ReviewStatusContentComponent', () => {
   let spyOnDownloadSelfDeclarationDocument;
   let spyOnDownloadIdentificationDocument;
 
-
   let mockHttpEnrollee;
-
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
