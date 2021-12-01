@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0.100-rc.2
+FROM mcr.microsoft.com/dotnet/sdk:6.0
 
 WORKDIR /vsdbg
 
