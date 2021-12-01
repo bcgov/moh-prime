@@ -8,3 +8,8 @@ export const MINIMUM_AGE = 18;
  * Renewal period in days.
  */
 export const RENEWAL_PERIOD = 30;
+/**
+ * @description
+ * Paper enrollee GPID filter.
+ */
+export const PAPER_ENROLLEE_GPID_PREFIX = 'NOBCSC';

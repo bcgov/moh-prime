@@ -14,13 +14,26 @@
                       (navigateEnrollee)="onNavigateEnrollee($event)"
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
-  <div class="d-flex justify-content-between align-items-center mt-4">
+  <div class="d-flex justify-content-between align-items-center my-4">
     <span>
+      <app-alert *ngIf="!enrollee?.linkedEnrolleeId && enrollee?.possiblePaperEnrolmentMatch"
+                 type="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          <strong class="d-block">Possible paper enrolment matches found</strong>
+          <small>See the possible matches linked under the Adjudication section.</small>
+        </ng-container>
+      </app-alert>
       <div *ngIf="enrolment?.enrollee.gpid"
-            class="mb-4 align-self-center">
+           class="mb-4 align-self-center">
           <strong>GPID:</strong> {{ enrolment?.enrollee.gpid }}
       </div>
-
+      <div *ngIf="enrollee?.linkedEnrolleeId">
+        <a [routerLink]=""
+           (click)="onRoute([enrollee?.linkedEnrolleeId, AdjudicationRoutes.ENROLLEE_OVERVIEW])">
+          {{ (enrolment?.enrollee.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX) ? 'Linked' : 'Paper' }} Enrolment
+        </a>
+      </div>
       <div *ngIf="absence"
             class="mb-4 align-self-center">
             <strong>Enrollee Absent:</strong> {{ absence.startTimestamp | formatDate }} - {{absence.endTimestamp | formatDate}}
