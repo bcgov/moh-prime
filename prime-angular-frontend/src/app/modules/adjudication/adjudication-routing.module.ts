@@ -51,6 +51,10 @@ import { OrganizationToaMaintenanceViewPageComponent } from './pages/organizatio
 import {
   LicenseClassesMaintenancePageComponent
 } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
+import { SiteOverviewPageComponent } from './pages/health-authorities/site-overview-page/site-overview-page.component';
+import { SiteEventsPageComponent } from './pages/health-authorities/site-events-page/site-events-page.component';
+import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
+import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
 
 const routes: Routes = [
   {
@@ -372,21 +376,23 @@ const routes: Routes = [
                 children: [
                   {
                     path: '',
-                    // TODO replace with health authority site equivalent page component
-                    component: SiteOverviewComponent,
-                    data: { title: 'Site Overview' }
+                    component: SiteOverviewPageComponent,
+                    data: { title: 'Health Authority Site Overview' }
                   },
                   {
                     path: AdjudicationRoutes.EVENT_LOG,
-                    // TODO replace with health authority site equivalent page component
-                    component: SiteEventsComponent,
+                    component: SiteEventsPageComponent,
                     data: { title: 'Event Log' }
                   },
                   {
                     path: AdjudicationRoutes.ADJUDICATOR_NOTES,
-                    // TODO replace with health authority site equivalent page component
-                    component: SiteAdjudicatorNotesComponent,
+                    component: SiteNotesPageComponent,
                     data: { title: 'Adjudicator Notes' }
+                  },
+                  {
+                    path: AdjudicationRoutes.DOCUMENT_UPLOAD,
+                    component: SiteDocumentsPageComponent,
+                    data: { title: 'Adjudicator Documents' }
                   }
                 ]
               },
@@ -417,4 +423,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdjudicationRoutingModule {}
+export class AdjudicationRoutingModule { }

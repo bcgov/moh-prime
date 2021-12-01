@@ -74,12 +74,13 @@ namespace Prime.Services
             return _mapper.Map<HealthAuthoritySiteViewModel>(site);
         }
 
-        public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int? healthAuthorityId = null)
+        public async Task<IEnumerable<HealthAuthoritySiteAdminListViewModel>> GetSitesAsync(int? healthAuthorityId = null, int? healthAuthoritySiteId = null)
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .If(healthAuthorityId.HasValue, q => q.Where(site => site.HealthAuthorityOrganizationId == healthAuthorityId))
-                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+                .If(healthAuthoritySiteId.HasValue, q => q.Where(site => site.Id == healthAuthoritySiteId))
+                .ProjectTo<HealthAuthoritySiteAdminListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
         }
@@ -89,6 +90,15 @@ namespace Prime.Services
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+        }
+
+        public async Task<HealthAuthoritySiteAdminViewModel> GetAdminSiteAsync(int siteId)
+        {
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .ProjectTo<HealthAuthoritySiteAdminViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
