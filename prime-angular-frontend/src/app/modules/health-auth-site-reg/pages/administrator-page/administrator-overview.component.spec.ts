@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
 
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { AdministratorOverviewComponent } from './administrator-overview.component';
@@ -15,7 +16,8 @@ describe('AdministratorOverviewComponent', () => {
       ],
       declarations: [
         AdministratorOverviewComponent,
-        FullnamePipe
+        FullnamePipe,
+        DefaultPipe
       ]
     }).compileComponents();
   });
