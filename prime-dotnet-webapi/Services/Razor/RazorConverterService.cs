@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using RazorEngine;
 using RazorEngine.Templating;
 
@@ -44,7 +44,16 @@ namespace Prime.Services
 
         public async Task<string> RenderTemplateToStringAsync<TModel>(RazorTemplate<TModel> template, TModel viewModel)
         {
-            var actionContext = GetActionContext();
+            // Need to create a new service scope since httpContext is not avaialble in root DI scope
+            // when used outside of webapi, e.g. in a de-coupled system to render HTML
+            using var serviceScope = _serviceProvider.CreateScope();
+            var httpContext = new DefaultHttpContext
+            {
+                RequestServices = serviceScope.ServiceProvider
+            };
+            var routeData = new RouteData();
+            var actionContext = new ActionContext(httpContext, routeData, new ActionDescriptor());
+
             var view = GetView(actionContext, template.ViewPath);
 
             using var output = new StringWriter();
@@ -108,16 +117,6 @@ namespace Prime.Services
                 new[] { $"Unable to find view '{viewName}'. The following locations were searched:" }.Concat(searchedLocations));
 
             throw new InvalidOperationException(errorMessage);
-        }
-
-        private ActionContext GetActionContext()
-        {
-            var httpContext = new DefaultHttpContext
-            {
-                RequestServices = _serviceProvider
-            };
-
-            return new ActionContext(httpContext, _contextAccessor.HttpContext.GetRouteData(), new ActionDescriptor());
         }
     }
 }

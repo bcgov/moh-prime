@@ -1,4 +1,5 @@
 using AutoMapper;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Prime.Configuration.Auth;
+using Prime.Contracts;
 using Prime.Engines;
 using Prime.Models;
 using Prime.Models.Api;
@@ -30,6 +32,7 @@ namespace Prime.Controllers
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
+        private readonly ISendEndpointProvider _sendEndpointProvider;
 
         public SitesController(
             IAdminService adminService,
@@ -38,7 +41,8 @@ namespace Prime.Controllers
             IEmailService emailService,
             IMapper mapper,
             IOrganizationService organizationService,
-            ISiteService siteService)
+            ISiteService siteService,
+            ISendEndpointProvider sendEndpointProvider)
         {
             _adminService = adminService;
             _communitySiteService = communitySiteService;
@@ -47,6 +51,7 @@ namespace Prime.Controllers
             _mapper = mapper;
             _organizationService = organizationService;
             _siteService = siteService;
+            _sendEndpointProvider = sendEndpointProvider;
         }
 
         // GET: api/Sites
@@ -350,7 +355,13 @@ namespace Prime.Controllers
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
             await _siteService.SubmitRegistrationAsync(siteId);
 
-            await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
+            var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"{PrimeConfiguration.Current.ServiceBus.Url}{nameof(SendSiteSubmissionEmail)}"));
+            await endpoint.Send<SendSiteSubmissionEmail>(new
+            {
+                SiteId = site.Id,
+                BusinessLicenceId = site.BusinessLicence.Id,
+                site.CareSettingCode
+            });
 
             return Ok(site);
         }

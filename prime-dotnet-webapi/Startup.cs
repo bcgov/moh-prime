@@ -20,7 +20,7 @@ using Microsoft.OpenApi.Models;
 using Flurl;
 using Serilog;
 using SoapCore;
-using AutoMapper;
+using MassTransit;
 using Newtonsoft.Json;
 using Wkhtmltopdf.NetCore;
 using IdentityModel.Client;
@@ -33,6 +33,8 @@ using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
+using Prime.Contracts;
+using Prime.Consumer;
 
 namespace Prime
 {
@@ -137,6 +139,8 @@ namespace Prime
             ConfigureDatabase(services);
 
             AuthenticationSetup.Initialize(services);
+
+            ConfigureServiceBus(services);
         }
 
         private void InitializeConfiguration(IServiceCollection services)
@@ -371,6 +375,29 @@ namespace Prime
                 // Agent not setup
             }
             return null;
+        }
+
+        /// <summary>
+        /// Configure MassTransit Service Bus
+        /// </summary>
+        /// <param name="services"></param>
+        private void ConfigureServiceBus(IServiceCollection services)
+        {
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<SendSiteSubmissionEmailConsumer>();
+
+                x.UsingInMemory((context, cfg) =>
+                {
+                    //cfg.ConfigureEndpoints(context);
+                    cfg.ReceiveEndpoint($"{nameof(SendSiteSubmissionEmail)}", e =>
+                    {
+                        e.ConfigureConsumer<SendSiteSubmissionEmailConsumer>(context);
+                    });
+                });
+            });
+
+            services.AddMassTransitHostedService();
         }
     }
 }

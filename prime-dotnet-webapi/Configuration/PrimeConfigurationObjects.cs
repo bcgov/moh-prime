@@ -102,4 +102,9 @@ namespace Prime.Configuration.Internal
     {
         public string Url { get; set; }
     }
+
+    public class ServiceBusConfiguration
+    {
+        public string Url { get; set; }
+    }
 }
