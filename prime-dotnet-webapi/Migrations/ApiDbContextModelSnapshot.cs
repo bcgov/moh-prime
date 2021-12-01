@@ -10515,7 +10515,8 @@ namespace Prime.Migrations
                 {
                     b.HasOne("Prime.Models.Admin", "Admin")
                         .WithMany()
-                        .HasForeignKey("AdminId");
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.BusinessEventType", "BusinessEventType")
                         .WithMany("BusinessEvents")
@@ -10525,19 +10526,23 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
-                        .HasForeignKey("EnrolleeId");
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Organization", "Organization")
                         .WithMany()
-                        .HasForeignKey("OrganizationId");
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Party", "Party")
                         .WithMany()
-                        .HasForeignKey("PartyId");
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany()
-                        .HasForeignKey("SiteId");
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Admin");
 

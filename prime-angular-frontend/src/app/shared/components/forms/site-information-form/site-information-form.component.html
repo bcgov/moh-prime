@@ -1,5 +1,5 @@
 <ng-container [formGroup]="form">
-  <section class="mb-3">
+  <app-page-section>
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Site Name</ng-container>
       <ng-container appPageSubheader2Summary>
@@ -29,9 +29,9 @@
 
       </div>
     </div>
-  </section>
+  </app-page-section>
 
-  <section class="mb-4">
+  <app-page-section>
     <div *ngIf="!isCommunityPharmacy()"
          class="mb-3">
       <mat-slide-toggle [formControl]="isNewSite"
@@ -52,22 +52,21 @@
           ID{{ isCommunityPharmacy() ? '.' : ' or PEC Code. This is a 3-letter code. For example, JZY' }}
         </ng-container>
       </app-page-subheader2>
-      <ng-container>
-        <mat-form-field>
-          <mat-label>Site ID</mat-label>
-          <input matInput
-                 formControlName="pec">
-          <mat-error *ngIf="pec.hasError('required')">
-            Required
-          </mat-error>
-          <mat-error *ngIf="pec.hasError('length') || pec.hasError('alpha')">
-            Must be a 3-letter code
-          </mat-error>
-          <mat-error *ngIf="pec.hasError('assignable')">
-            Site ID has already been used by another site
-          </mat-error>
-        </mat-form-field>
-      </ng-container>
+
+      <mat-form-field>
+        <mat-label>Site ID</mat-label>
+        <input matInput
+               formControlName="pec">
+        <mat-error *ngIf="pec.hasError('required')">
+          Required
+        </mat-error>
+        <mat-error *ngIf="pec.hasError('length') || pec.hasError('alpha')">
+          Must be a 3-letter code
+        </mat-error>
+        <mat-error *ngIf="pec.hasError('assignable')">
+          Site ID has already been used by another site
+        </mat-error>
+      </mat-form-field>
 
       <mat-checkbox formControlName="activeBeforeRegistration">
         <div class="pl-3">
@@ -75,6 +74,6 @@
         </div>
       </mat-checkbox>
     </ng-template>
-  </section>
+  </app-page-section>
 
 </ng-container>

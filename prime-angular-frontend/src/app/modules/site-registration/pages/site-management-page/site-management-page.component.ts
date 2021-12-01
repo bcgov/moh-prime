@@ -35,8 +35,8 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
-  public organizations: Organization[];
-  public organizationSitesExpiryDates: (string | null)[];
+  public organization: Organization;
+  public organizationSitesExpiryDates: string[];
   public organizationAgreements: OrganizationAgreementViewModel[];
   public routeUtils: RouteUtils;
   public careSettingCodesPendingTransfer: CareSettingEnum[];
@@ -60,7 +60,6 @@ export class SiteManagementPageComponent implements OnInit {
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.organizations = [];
   }
 
   public viewOrganization(organization: Organization): void {
@@ -162,7 +161,7 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public isPendingTransfer(): boolean {
-    return this.organizations[0]?.pendingTransfer;
+    return this.organization?.pendingTransfer;
   }
 
   public isLocked(site: SiteListViewModel): boolean {
@@ -192,7 +191,7 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public routeToOrgAgreementByCareSettingCode(code: CareSettingEnum): void {
-    this.routeUtils.routeRelativeTo([this.organizations[0].id, SiteRoutes.CARE_SETTINGS, code, SiteRoutes.ORGANIZATION_AGREEMENT]);
+    this.routeUtils.routeRelativeTo([this.organization.id, SiteRoutes.CARE_SETTINGS, code, SiteRoutes.ORGANIZATION_AGREEMENT]);
   }
 
   public ngOnInit(): void {
@@ -203,25 +202,24 @@ export class SiteManagementPageComponent implements OnInit {
     this.busy = this.authService.getUser$()
       .pipe(
         exhaustMap((user: BcscUser) =>
-          this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
+          this.organizationResource.getSigningAuthorityOrganizationByUserId(user.userId)
         ),
-        map((organizations: Organization[]) => {
-          this.organizationSitesExpiryDates = organizations[0].sites
-            .map(s => {
-              // TODO this will produce a list of results mixed with undefined indices...
-              if (s.status === SiteStatusType.EDITABLE && !!s.approvedDate) {
-                return Site.getExpiryDate(s);
-              }
-            });
-          return this.organizations = organizations;
+        map((organization: Organization) => {
+          this.organizationSitesExpiryDates = organization.sites
+            .reduce((expiryDates: string[], site: Site) => {
+                if (site.status === SiteStatusType.EDITABLE && !!site.approvedDate) {
+                  return [...expiryDates, Site.getExpiryDate(site)];
+                }
+            }, []);
+          return this.organization = organization;
         }),
-        exhaustMap((organization: Organization[]) =>
-          this.organizationResource.getOrganizationAgreements(organization[0].id)
+        exhaustMap((organization: Organization) =>
+          this.organizationResource.getOrganizationAgreements(organization.id)
         ),
         exhaustMap((agreements: OrganizationAgreementViewModel[]) => {
           this.organizationAgreements = agreements;
-          return (this.organizations[0].pendingTransfer)
-            ? this.organizationResource.getCareSettingCodesForPendingTransfer(this.organizations[0].id)
+          return (this.organization.pendingTransfer)
+            ? this.organizationResource.getCareSettingCodesForPendingTransfer(this.organization.id)
             : of([]);
         }),
       )

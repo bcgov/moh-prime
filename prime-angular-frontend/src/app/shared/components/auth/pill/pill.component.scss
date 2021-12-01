@@ -21,7 +21,7 @@
     background-size: contain;
     // Remove from flexbox calculation
     position: absolute;
-    z-index: 0;
+    z-index: -1;
     // Stretch to fill parent
     top: 0;
     bottom: 0;

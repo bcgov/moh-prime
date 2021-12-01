@@ -127,7 +127,7 @@ export class OverviewPageComponent implements OnInit {
   public onBack(): void {
     this.routeUtils.routeTo([
       SiteRoutes.MODULE_PATH,
-      SiteRoutes.SITE_MANAGEMENT
+      SiteRoutes.ORGANIZATIONS
     ]);
   }
 
@@ -136,7 +136,7 @@ export class OverviewPageComponent implements OnInit {
       .subscribe((wasRequired: boolean) =>
         (wasRequired || this.site.approvedDate != null)
           ? this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS)
-          : this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT])
+          : this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS])
       );
   }
 
