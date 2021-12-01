@@ -29,10 +29,10 @@
           </span>
           <p class="pl-2">
             {{ reason.note }}
-            <ng-container *ngFor="let matchId of reason.potentialMatchIds; let last = last">
+            <ng-container *ngFor="let potentialMatchId of reason.potentialMatchIds; let last = last">
               <a href=#
-                 (click)="onRoute([matchId, AdjudicationRoutes.ENROLLEE_OVERVIEW], $event)">
-                {{ DISPLAY_ID_OFFSET + matchId }}
+                 (click)="onRoute([potentialMatchId, AdjudicationRoutes.ENROLLEE_OVERVIEW], $event)">
+                {{ DISPLAY_ID_OFFSET + potentialMatchId }}
               </a>
               {{ (last) ? '' : ', ' }}
             </ng-container>
