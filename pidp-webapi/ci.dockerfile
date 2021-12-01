@@ -1,7 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0.100-rc.2-alpine3.14 as build
 
-# ENV ConnectionStrings__PidpDatabase "host=localhost;port=5433;database=postgres;username=postgres;password=postgres"
-
 WORKDIR /app
 
 RUN apk add postgresql-client
@@ -15,16 +13,8 @@ COPY *.csproj /app
 RUN dotnet restore
 COPY . /app
 
-# RUN dotnet build "pidp.csproj" -c Release -o /app/out
 RUN dotnet publish "pidp.csproj" -c Release -o /app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 
 RUN dotnet ef migrations script --idempotent --output /app/out/databaseMigrations.sql
 
 EXPOSE 5000
-
-# FROM mcr.microsoft.com/dotnet/runtime:6.0
-# WORKDIR /app
-# # RUN apt-get install postgresql-client
-# COPY --from=build /root/.dotnet/ /root/.dotnet/.
-# COPY --from=build /app/Configuration/ /app/Configuration/
-# COPY --from=build /app/out /app/out
