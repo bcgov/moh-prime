@@ -16,7 +16,6 @@ import { EnrolmentStatusReason } from '@shared/enums/enrolment-status-reason.enu
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 describe('ReviewStatusContentComponent', () => {
-
   const mockDocument = {
     id: 1
   } as BaseDocument;
@@ -43,19 +42,14 @@ describe('ReviewStatusContentComponent', () => {
       enrolmentStatusReference: null
     }
   ];
-  const mockReasons = [
-    {
-      name: 'reason',
-      note: 'note',
-      documents: [],
-      isSelfDeclaration: false,
-      question: "question",
-      potentialMatchIds: [],
-    },
-    {
-
-    }
-  ]
+  const mockReason = {
+    name: 'reason',
+    note: 'reason: 1, 2',
+    documents: [],
+    isSelfDeclaration: false,
+    question: "question",
+    potentialMatchIds: [],
+  };
 
   let component: ReviewStatusContentComponent;
   let fixture: ComponentFixture<ReviewStatusContentComponent>;
@@ -164,6 +158,68 @@ describe('ReviewStatusContentComponent', () => {
         reasons.forEach((reason) => {
           expect(reason).toEqual(jasmine.any(Reason));
         });
+      });
+    });
+  });
+
+  describe('testing parseReasons', () => {
+    describe('with currentStatus set to null', () => {
+      it('should return an empty array', () => {
+        mockHttpEnrollee.currentStatus = null;
+        expect(component.parseReasons(mockHttpEnrollee.currentStatus)).toEqual([]);
+      });
+    });
+
+    describe('with statusReasaonCode set to SELF_DECLARATION', () => {
+      it('should call parseSelfDeclarations', () => {
+        mockHttpEnrollee.currentStatus.enrolmentStatusReasons[0].statusReasonCode = EnrolmentStatusReason.SELF_DECLARATION;
+        const spyOnParseSelfDeclarations = spyOn<any>(component, 'parseSelfDeclarations');
+
+        component.parseReasons(mockHttpEnrollee.currentStatus);
+
+        expect(spyOnParseSelfDeclarations).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('with statusReasaonCode set to POSSIBLE_PAPER_ENROLMENT_MATCH', () => {
+      it('should call parsePotentialMatchIds', () => {
+        mockHttpEnrollee.currentStatus.enrolmentStatusReasons[0].statusReasonCode = EnrolmentStatusReason.POSSIBLE_PAPER_ENROLMENT_MATCH;
+        const spyOnParsePotentialMatchIds = spyOn<any>(component, 'parsePotentialMatchIds');
+
+        component.parseReasons(mockHttpEnrollee.currentStatus);
+
+        expect(spyOnParsePotentialMatchIds).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
+
+  describe('testing parseSelfDeclarations', () => {
+    describe('with selfDeclarations', () => {
+      it('should return an array of reasons of same length as the selfDeclarations', () => {
+        const reasons = component.parseSelfDeclarations(mockHttpEnrollee);
+
+        expect(reasons.length).toEqual(mockHttpEnrollee.selfDeclarations.length);
+      });
+    });
+
+    describe('with no selfDeclarations', () => {
+      it('should return an empty array', () => {
+        mockHttpEnrollee.selfDeclarations = [];
+        const reasons = component.parseSelfDeclarations(mockHttpEnrollee);
+
+        expect(reasons).toEqual([]);
+      });
+    });
+  });
+
+  describe('testing parsePotentialMatchIds', () => {
+    describe('with selfDeclarations', () => {
+      it('short shorten the reasons.notes string and add elements to potentialMatchIds array', () => {
+        const noteLength = mockReason.note.length
+        const reason = component.parsePotentialMatchIds(mockReason);
+
+        expect(reason.note.length).toBeLessThan(noteLength);
+        expect(reason.potentialMatchIds.length).toEqual(2);
       });
     });
   });
