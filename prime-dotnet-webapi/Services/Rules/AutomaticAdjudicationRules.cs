@@ -285,7 +285,7 @@ namespace Prime.Services.Rules
 
                 // First enrolment: check if the related paper enrolment is flagged for AlwaysManual
                 // If so, mark BCSC enrolment as AlwaysManual too and send to manual enrolment
-                if (await _enrolleePaperSubmissionService.IsAlwaysManualPaperEnrolment(paperEnrolleeMatchId))
+                if (await _enrolleePaperSubmissionService.IsAlwaysManualEnrolment(paperEnrolleeMatchId))
                 {
                     await _submissionService.UpdateAlwaysManualAsync(enrollee.Id, true);
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);

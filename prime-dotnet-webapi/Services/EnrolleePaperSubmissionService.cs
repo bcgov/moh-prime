@@ -384,7 +384,7 @@ namespace Prime.Services
             return linkedGpid;
         }
 
-        public async Task<bool> IsAlwaysManualPaperEnrolment(int paperEnrolmentId)
+        public async Task<bool> IsAlwaysManualEnrolment(int paperEnrolmentId)
         {
             return await _context.Enrollees
                 .AsNoTracking()
