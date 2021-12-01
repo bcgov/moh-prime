@@ -29,7 +29,7 @@ export class Status {
   ) { }
 }
 
-class Reason {
+export class Reason {
   constructor(
     public name: string,
     public note: string,
