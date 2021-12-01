@@ -104,10 +104,15 @@ namespace Prime.Services
                     .Id
                 );
 
+            var unlinkedPaperEnrolments = _context.Enrollees
+                .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id));
+
             var dto = await _context.Enrollees
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
-                .ProjectTo<EnrolleeDTO>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .ProjectTo<EnrolleeDTO>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
 
@@ -134,6 +139,11 @@ namespace Prime.Services
                     .Id
                 );
 
+            var unlinkedPaperEnrolments = _context.Enrollees
+                .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id));
+
             return await _context.Enrollees
                 .AsNoTracking()
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
@@ -153,10 +163,10 @@ namespace Prime.Services
                     .Where(e => _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
                 .If(searchOptions.IsLinkedPaperEnrolment == false, q => q
-                    .Where(e => e.GPID.StartsWith("NOBCSC")
+                    .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                         && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();

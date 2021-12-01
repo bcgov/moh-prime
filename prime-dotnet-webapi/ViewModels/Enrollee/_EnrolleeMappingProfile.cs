@@ -13,6 +13,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<EnrolleeCreateModel, Enrollee>();
 
             IQueryable<int> newestAgreementIds = null;
+            IQueryable<Enrollee> unlinkedPaperEnrolments = null;
             CreateMap<Enrollee, EnrolleeListViewModel>()
                 .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
@@ -23,10 +24,14 @@ namespace Prime.ViewModels.Profiles
                     !src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed
                     && src.PreviousStatus.StatusCode == (int)StatusType.RequiresToa
                 ))
+                .ForMember(dest => dest.LinkedEnrolleeId, opt => opt.MapFrom(src => (src.EnrolleeToPaperLink == null) ? src.PaperToEnrolleeLink.EnrolleeId : src.EnrolleeToPaperLink.PaperEnrolleeId))
+                .ForMember(dest => dest.PossiblePaperEnrolmentMatch, opt => opt.MapFrom(src => unlinkedPaperEnrolments.Any(e => e.DateOfBirth.Date == src.DateOfBirth.Date)))
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true));
 
             CreateMap<Enrollee, EnrolleeDTO>()
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true))
+                .ForMember(dest => dest.LinkedEnrolleeId, opt => opt.MapFrom(src => (src.EnrolleeToPaperLink == null) ? src.PaperToEnrolleeLink.EnrolleeId : src.EnrolleeToPaperLink.PaperEnrolleeId))
+                .ForMember(dest => dest.PossiblePaperEnrolmentMatch, opt => opt.MapFrom(src => (src.GPID != null && src.GPID.Contains(Enrollee.PaperGpidPrefix)) ? false : unlinkedPaperEnrolments.Any(e => e.DateOfBirth.Date == src.DateOfBirth.Date)))
                 .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(id => id == src.CurrentAgreementId)));
 
             CreateMap<EnrolleeDTO, EnrolleeViewModel>();
