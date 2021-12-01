@@ -2,3 +2,10 @@
 @import 'mixins/statuses';
 
 @include statuses;
+
+.prefix-container {
+  height: 48px;
+  width: 24px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
