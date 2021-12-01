@@ -14,9 +14,9 @@ namespace PlrIntakeUtility
     class Program
     {
         /// <summary>
-        /// Can be used like this:  `dotnet run PRIME_Test_Data_PLR_IAT20210212.xls intake.log`
+        /// Can be used like this:  `dotnet run PRIME_Test_Data_PLR_IAT20210617_v2.1.csv intake.log`
         /// </summary>
-        /// <param name="args">Expecting path to .xls file and desired log file</param>
+        /// <param name="args">Expecting path to .csv file and desired log file</param>
         static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -64,7 +64,7 @@ namespace PlrIntakeUtility
                             }
                             catch (Exception e)
                             {
-                                Log.Error(e, $"Error ingesting row at row number {rowNum}.");
+                                Log.Error(e, $"Error ingesting row at row number {rowNum}, IPC: {reader.GetField<string>(0)}");
                             }
                         }
 
