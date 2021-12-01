@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Pidp.Features
 {
+    [Produces("application/json")]
+    [ApiController]
     public class PidpControllerBase : ControllerBase
     {
         /// <summary>
