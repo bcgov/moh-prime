@@ -72,16 +72,6 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     this.downloadIdentificationDocument(document.id);
   }
 
-  private downloadSelfDeclarationDocument(id: number): void {
-    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, id)
-      .subscribe((token: string) => this.utilsService.downloadToken(token));
-  }
-
-  private downloadIdentificationDocument(id: number): void {
-    this.enrolmentResource.getDownloadTokenIdentificationDocument(this.enrollee.id, id)
-      .subscribe((token: string) => this.utilsService.downloadToken(token));
-  }
-
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.enrollee) {
       this.enrollee = changes.enrollee.currentValue;
@@ -96,6 +86,16 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void { }
+
+  private downloadSelfDeclarationDocument(id: number): void {
+    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, id)
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
+  }
+
+  private downloadIdentificationDocument(id: number): void {
+    this.enrolmentResource.getDownloadTokenIdentificationDocument(this.enrollee.id, id)
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
+  }
 
   private generatePreviousStatuses(enrollee: HttpEnrollee): Status[] {
     if (!enrollee) {
