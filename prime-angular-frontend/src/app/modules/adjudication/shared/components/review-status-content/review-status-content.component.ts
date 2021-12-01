@@ -15,6 +15,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { ConfigCodePipe } from '@config/config-code.pipe';
+import { RoutePath } from '@lib/utils/route-utils.class';
 import { DISPLAY_ID_OFFSET } from '@lib/constants';
 
 class Status {
@@ -47,7 +48,7 @@ class Reason {
 export class ReviewStatusContentComponent implements OnInit, OnChanges {
   @Input() public enrollee: HttpEnrollee;
   @Input() public hideStatusHistory: boolean;
-  @Output() public route: EventEmitter<string | (string | number)[]>;
+  @Output() public route: EventEmitter<RoutePath>;
   public previousStatuses: Status[];
   public reasons: Reason[];
   private questions: { [key: number]: string } = selfDeclarationQuestions;
@@ -61,7 +62,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     private configPipe: ConfigCodePipe
   ) {
     this.hideStatusHistory = false;
-    this.route = new EventEmitter<string | (string | number)[]>();
+    this.route = new EventEmitter<RoutePath>();
   }
 
   public downloadDocument(document: BaseDocument, isSelfDeclaration: boolean): void {
@@ -89,7 +90,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     }
   }
 
-  public onRoute(routePath: string | (string | number)[], event: Event): void {
+  public onRoute(routePath: RoutePath, event: Event): void {
     event?.preventDefault();
     this.route.emit(routePath);
   }
