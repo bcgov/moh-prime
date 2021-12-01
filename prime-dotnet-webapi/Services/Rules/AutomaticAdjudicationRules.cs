@@ -253,7 +253,7 @@ namespace Prime.Services.Rules
         {
             var paperEnrollees = await _enrolleePaperSubmissionService.GetPotentialPaperEnrolleeReturneesAsync(enrollee.DateOfBirth);
             var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
-            var isEnrolleeLinked = await _enrolleePaperSubmissionService.GetIsEnrolleeLinkedAsync(enrollee.Id);
+            var isEnrolleeLinked = await _enrolleePaperSubmissionService.IsEnrolleeLinkedAsync(enrollee.Id);
             var paperEnrolleeMatchId = -1;
 
             // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match

@@ -285,7 +285,7 @@ namespace Prime.Services
                         .Any(link => link.PaperEnrolleeId == e.Id));
         }
 
-        public async Task<bool> GetIsEnrolleeLinkedAsync(int enrolleeId)
+        public async Task<bool> IsEnrolleeLinkedAsync(int enrolleeId)
         {
             return await _context.EnrolleeLinkedEnrolments
                 .AnyAsync(ele => ele.EnrolleeId == enrolleeId
