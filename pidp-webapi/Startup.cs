@@ -22,17 +22,16 @@ namespace Pidp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            InitializeConfiguration(services);
+            var config = InitializeConfiguration(services);
 
             services.AddControllers()
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddSwaggerGen(options => options.SwaggerDoc("v1", new OpenApiInfo { Title = "PIdP Web API", Version = "v1" }));
 
-            var connectionString = PidpConfiguration.Current!.ConnectionStrings.PidpDatabase;
             services.AddDbContext<PidpDbContext>(options =>
             {
-                options.UseNpgsql(connectionString, npg => npg.UseNodaTime())
+                options.UseNpgsql(config.ConnectionStrings.PidpDatabase, npg => npg.UseNodaTime())
                     .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
             });
 
@@ -42,7 +41,7 @@ namespace Pidp
             //     .AddNpgSql(connectionString);
         }
 
-        private void InitializeConfiguration(IServiceCollection services)
+        private PidpConfiguration InitializeConfiguration(IServiceCollection services)
         {
             var config = new PidpConfiguration();
             Configuration.Bind(config);
@@ -52,6 +51,8 @@ namespace Pidp
 
             Log.Logger.Information("###App Version:{0}###", Assembly.GetExecutingAssembly().GetName().Version);
             Log.Logger.Information("###PIdP Configuration:{0}###", JsonSerializer.Serialize(PidpConfiguration.Current));
+
+            return config;
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
