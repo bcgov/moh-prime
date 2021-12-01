@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { ReviewStatusContentComponent } from './review-status-content.component';
+import { ReviewStatusContentComponent, Status } from './review-status-content.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
@@ -13,7 +13,7 @@ import { ConfigService } from 'app/config/config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { EnrolmentStatusReason } from '@shared/enums/enrolment-status-reason.enum';
 
-describe('ReviewStatusContentComponent', () => {
+fdescribe('ReviewStatusContentComponent', () => {
   const mockDocument = {
     id: 1
   } as BaseDocument;
@@ -116,11 +116,16 @@ describe('ReviewStatusContentComponent', () => {
     });
 
     describe('with a defined enrollee with previousStatuses', () => {
-      it('with a defined enrollee and enrolmentStatuses', () => {
+      it('should return an array of lenght equal to that of enrolmentStatuses and of type Status[]', () => {
         mockHttpEnrollee = new MockEnrolmentService().enrolment;
         mockHttpEnrollee.enrolmentStatuses = mockEnrolmentStatuses
         // @ts-ignore
-        expect(component.generatePreviousStatuses(mockHttpEnrollee)).not.toEqual([]);
+        const statuses = component.generatePreviousStatuses(mockHttpEnrollee)
+
+        expect(statuses.length).toEqual(mockHttpEnrollee.enrolmentStatuses.length);
+        statuses.forEach((status) => {
+          expect(status).toEqual(jasmine.any(Status));
+        })
       });
     });
   });

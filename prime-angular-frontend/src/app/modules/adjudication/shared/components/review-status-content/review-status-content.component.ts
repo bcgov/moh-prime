@@ -18,7 +18,7 @@ import { ConfigCodePipe } from '@config/config-code.pipe';
 import { RoutePath } from '@lib/utils/route-utils.class';
 import { DISPLAY_ID_OFFSET } from '@lib/constants';
 
-class Status {
+export class Status {
   constructor(
     public date: string,
     public name: string,
