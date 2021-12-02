@@ -382,5 +382,14 @@ namespace Prime.Services
 
             return linkedGpid;
         }
+
+        public async Task UpdateAlwaysManualAsync(int enrolleeId, bool alwaysManual)
+        {
+            var enrollee = await _context.Enrollees
+                .SingleAsync(e => e.Id == enrolleeId);
+
+            enrollee.AlwaysManual = alwaysManual;
+            await _context.SaveChangesAsync();
+        }
     }
 }

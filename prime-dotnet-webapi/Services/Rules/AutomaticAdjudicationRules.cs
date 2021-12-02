@@ -245,16 +245,13 @@ namespace Prime.Services.Rules
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
-        private readonly ISubmissionService _submissionService;
 
         public IsPotentialPaperEnrolleeReturnee(
             IBusinessEventService businessEventService,
-            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
-            ISubmissionService submissionService)
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
         {
             _businessEventService = businessEventService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
-            _submissionService = submissionService;
         }
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
@@ -298,7 +295,7 @@ namespace Prime.Services.Rules
                 // If so, link enrolments and mark BCSC enrolment as AlwaysManual too and send to manual enrolment
                 if (paperEnrollees.Any(pe => pe.Id == paperEnrolleeMatchId && pe.AlwaysManual))
                 {
-                    await _submissionService.UpdateAlwaysManualAsync(enrollee.Id, true);
+                    await _enrolleePaperSubmissionService.UpdateAlwaysManualAsync(enrollee.Id, true);
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
                     return false;
                 }
