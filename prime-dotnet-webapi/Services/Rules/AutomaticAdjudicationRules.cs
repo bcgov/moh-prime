@@ -248,8 +248,8 @@ namespace Prime.Services.Rules
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
 
         public IsPotentialPaperEnrolleeReturnee(
-            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
         {
             _businessEventService = businessEventService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
@@ -269,8 +269,6 @@ namespace Prime.Services.Rules
             var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
             var paperEnrolleeMatchId = -1;
             var paperEnrolleeIdsAsString = string.Join(", ", paperEnrollees.Select(e => e.Id));
-
-            // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
 
             // if there's a match and GPID is provided
             if (potentialPaperEnrolleeGpid != null)
@@ -297,7 +295,18 @@ namespace Prime.Services.Rules
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                     return false;
                 }
+
+                // First enrolment: check if the related paper enrolment is flagged for AlwaysManual
+                // If so, link enrolments and mark BCSC enrolment as AlwaysManual too and send to manual enrolment
+                if (paperEnrollees.Any(pe => pe.Id == paperEnrolleeMatchId && pe.AlwaysManual))
+                {
+                    enrollee.AlwaysManual = true;
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
+                    return false;
+                }
+
                 await _businessEventService.CreatePaperEnrolmentLinkEventAsync(enrollee.Id, "Paper enrolment has been linked");
+
                 return true;
             }
             // if yes and GPID not provided - flag with "Possible match with paper enrolment"
