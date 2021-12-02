@@ -21,5 +21,6 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public DateTimeOffset? SubmittedDate { get; set; }
         public DateTimeOffset? ApprovedDate { get; set; }
         public SiteStatusType Status { get; set; }
+        public IEnumerable<BusinessDayViewModel> BusinessHours { get; set; }
     }
 }
