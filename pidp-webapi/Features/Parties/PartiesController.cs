@@ -2,22 +2,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Pidp.Features.Parties
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
-    public class PartiesController : PidpControllerBase
+    [ApiController]
+    public class PartiesController : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ApiResultResponse<IEnumerable<Index.Model>>>> GetParties([FromServices] IQueryHandler<Index.Query, List<Index.Model>> handler)
+        public async Task<ActionResult<Index.Response>> GetParties([FromServices] IQueryHandler<Index.Query, Index.Response> handler)
         {
-            return Ok(await handler.HandleAsync(new Index.Query()));
+            return await handler.HandleAsync(new Index.Query());
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> CreateParty([FromServices] ICommandHandler<Create.Command, int> handler,
-                                                    Create.Command command)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<int>> CreateParty([FromServices] ICommandHandler<Create.Command, int> handler,
+                                                         Create.Command command)
         {
-            return Ok(await handler.HandleAsync(command));
+            return await handler.HandleAsync(command);
         }
     }
 }

@@ -6,16 +6,21 @@ namespace Pidp.Features.Parties
 {
     public class Index
     {
-        public class Query : IQuery<List<Model>>
+        public class Query : IQuery<Response>
         {
         }
 
-        public class Model
+        public class Response
         {
-            public string FullName { get; set; } = string.Empty;
+            public List<Model> Results { get; set; } = new();
+
+            public class Model
+            {
+                public string FullName { get; set; } = string.Empty;
+            }
         }
 
-        public class IndexQueryHandler : IQueryHandler<Query, List<Model>>
+        public class IndexQueryHandler : IQueryHandler<Query, Response>
         {
             private readonly PidpDbContext _context;
 
@@ -24,14 +29,17 @@ namespace Pidp.Features.Parties
                 _context = context;
             }
 
-            public async Task<List<Model>> HandleAsync(Query command)
+            public async Task<Response> HandleAsync(Query command)
             {
-                return await _context.Parties
-                    .Select(party => new Model
-                    {
-                        FullName = $"{party.FirstName} {party.LastName}"
-                    })
-                    .ToListAsync();
+                return new Response
+                {
+                    Results = await _context.Parties
+                        .Select(party => new Response.Model
+                        {
+                            FullName = $"{party.FirstName} {party.LastName}"
+                        })
+                        .ToListAsync()
+                };
             }
         }
     }
