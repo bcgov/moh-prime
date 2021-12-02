@@ -11,7 +11,14 @@ export const RENEWAL_PERIOD = 30;
 
 /**
  * @description
- * DisplayId is a user facing id and it is 1000 added to their database id.
- * Try not to use it.
+ * Offset added to a model identifier for display to users.
+ *
+ * NOTE: Should not be used if possible
  */
 export const DISPLAY_ID_OFFSET = 1000;
+
+/**
+ * @description
+ * Paper enrollee GPID filter.
+ */
+export const PAPER_ENROLLEE_GPID_PREFIX = 'NOBCSC';

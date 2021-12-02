@@ -244,10 +244,14 @@ namespace Prime.Services.Rules
 
     public class IsPotentialPaperEnrolleeReturnee : AutomaticAdjudicationRule
     {
+        private readonly IBusinessEventService _businessEventService;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
 
-        public IsPotentialPaperEnrolleeReturnee(IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
+        public IsPotentialPaperEnrolleeReturnee(
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
+            IBusinessEventService businessEventService)
         {
+            _businessEventService = businessEventService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
         }
         public override async Task<bool> ProcessRule(Enrollee enrollee)
@@ -291,6 +295,7 @@ namespace Prime.Services.Rules
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                     return false;
                 }
+                await _businessEventService.CreatePaperEnrolmentLinkEventAsync(enrollee.Id, "Paper enrolment has been linked");
                 return true;
             }
             // if yes and GPID not provided - flag with "Possible match with paper enrolment"
