@@ -548,6 +548,8 @@ export class AdjudicationContainerComponent implements OnInit {
       enrolleeCareSettings,
       requiresConfirmation,
       confirmed,
+      linkedEnrolleeId,
+      possiblePaperEnrolmentMatch,
       gpid,
       adjudicatorIdir
     } = enrollee;
@@ -572,6 +574,8 @@ export class AdjudicationContainerComponent implements OnInit {
       hasNotification: false,
       requiresConfirmation,
       confirmed,
+      linkedEnrolleeId,
+      possiblePaperEnrolmentMatch,
       gpid,
     };
   }

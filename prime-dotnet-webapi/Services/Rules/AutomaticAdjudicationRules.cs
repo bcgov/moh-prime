@@ -241,14 +241,18 @@ namespace Prime.Services.Rules
         }
     }
 
-    public class PotentialPaperEnrolleeReturnee : AutomaticAdjudicationRule
+    public class IsPotentialPaperEnrolleeReturnee : AutomaticAdjudicationRule
     {
+        private readonly IBusinessEventService _businessEventService;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
-
         private readonly ISubmissionService _submissionService;
 
-        public PotentialPaperEnrolleeReturnee(IEnrolleePaperSubmissionService enrolleePaperSubmissionService, ISubmissionService submissionService)
+        public IsPotentialPaperEnrolleeReturnee(
+            IBusinessEventService businessEventService,
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
+            ISubmissionService submissionService)
         {
+            _businessEventService = businessEventService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
             _submissionService = submissionService;
         }
@@ -298,6 +302,9 @@ namespace Prime.Services.Rules
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
                     return false;
                 }
+
+                await _businessEventService.CreatePaperEnrolmentLinkEventAsync(enrollee.Id, "Paper enrolment has been linked");
+
                 return true;
             }
             // if yes and GPID not provided - flag with "Possible match with paper enrolment"

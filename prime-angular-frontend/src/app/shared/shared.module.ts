@@ -113,6 +113,16 @@ import { DocumentAttachmentsComponent } from '@shared/components/document-attach
 import { DocumentAttachmentComponent } from '@shared/components/document-attachment/document-attachment.component';
 import { PartyTypePipe } from '@phsa/shared/pipes/party-type.pipe';
 
+// Shared health authority components
+import { SiteInformationOverviewComponent } from '@health-auth/pages/site-information-page/site-information-overview.component';
+import { VendorOverviewComponent } from '@health-auth/pages/vendor-page/vendor-overview.component';
+import { SiteAddressOverviewComponent } from '@health-auth/pages/site-address-page/site-address-overview.component';
+import { HoursOperationOverviewComponent } from '@health-auth/pages/hours-operation-page/hours-operation-overview.component';
+import { AdministratorOverviewComponent } from '@health-auth/pages/administrator-page/administrator-overview.component';
+import { TechnicalSupportOverviewComponent } from '@health-auth/pages/technical-support-page/technical-support-overview.component';
+import { HealthAuthCareTypeOverviewComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-overview.component';
+import { HealthAuthSiteOverviewContainerComponent } from './components/health-auth-site-overview-container/health-auth-site-overview-container.component';
+
 @NgModule({
   declarations: [
     CapitalizePipe,
@@ -206,7 +216,15 @@ import { PartyTypePipe } from '@phsa/shared/pipes/party-type.pipe';
     ErrorLoggerComponent,
     InfographicComponent,
     DocumentAttachmentsComponent,
-    DocumentAttachmentComponent
+    DocumentAttachmentComponent,
+    HealthAuthCareTypeOverviewComponent,
+    TechnicalSupportOverviewComponent,
+    AdministratorOverviewComponent,
+    HoursOperationOverviewComponent,
+    SiteAddressOverviewComponent,
+    VendorOverviewComponent,
+    SiteInformationOverviewComponent,
+    HealthAuthSiteOverviewContainerComponent
   ],
   imports: [
     CommonModule,
@@ -306,7 +324,15 @@ import { PartyTypePipe } from '@phsa/shared/pipes/party-type.pipe';
     InfographicComponent,
     ExpiryAlertComponent,
     DocumentAttachmentsComponent,
-    DocumentAttachmentComponent
+    DocumentAttachmentComponent,
+    HealthAuthCareTypeOverviewComponent,
+    TechnicalSupportOverviewComponent,
+    AdministratorOverviewComponent,
+    HoursOperationOverviewComponent,
+    SiteAddressOverviewComponent,
+    VendorOverviewComponent,
+    SiteInformationOverviewComponent,
+    HealthAuthSiteOverviewContainerComponent
   ],
   providers: [
     FullnamePipe,

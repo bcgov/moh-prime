@@ -51,7 +51,7 @@ namespace Prime.Services
                 new IdentityAssuranceLevelRule(),
                 new IdentityProviderRule(),
                 new NoAssignedAgreementRule(),
-                new PotentialPaperEnrolleeReturnee(_enrolleePaperSubmissionService, _submissionService),
+                new IsPotentialPaperEnrolleeReturnee(_businessEventService, _enrolleePaperSubmissionService, _submissionService),
             };
 
             return await ProcessRules(rules, enrollee);
