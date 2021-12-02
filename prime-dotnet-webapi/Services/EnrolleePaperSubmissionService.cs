@@ -284,15 +284,24 @@ namespace Prime.Services
                         .Any(link => link.PaperEnrolleeId == e.Id));
         }
 
+        public async Task<bool> IsEnrolleeLinkedAsync(int enrolleeId)
+        {
+            return await _context.EnrolleeLinkedEnrolments
+                .AnyAsync(ele => ele.EnrolleeId == enrolleeId
+                            && ele.PaperEnrolleeId.HasValue);
+        }
+
         public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
         {
-            // We want all paper enrollees with a matching DOB
+            // We want all unlinked paper enrollees with a matching DOB
             // Handle the linkage in the LinkEnrolmentToPaperEnrolmentAsync
             return await _context.Enrollees
                 .AsNoTracking()
                 .Where(
                     e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id)
                 )
                 .ToListAsync();
         }
