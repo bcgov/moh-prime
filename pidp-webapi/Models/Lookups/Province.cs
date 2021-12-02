@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -90,11 +88,11 @@ namespace Pidp.Models.Lookups
         public string Name { get; set; } = string.Empty;
     }
 
-    public class ProvinceConfiguration : IEntityTypeConfiguration<Province>
+    public class ProvinceDataGenerator : ILookupDataGenerator<Province>
     {
-        public virtual void Configure(EntityTypeBuilder<Province> builder)
+        public IEnumerable<Province> Generate()
         {
-            builder.HasData(new[]
+            return new[]
             {
                 new Province { Code = ProvinceCode.Alberta,                CountryCode = CountryCode.Canada,       Name = "Alberta"                              },
                 new Province { Code = ProvinceCode.BritishColumbia,        CountryCode = CountryCode.Canada,       Name = "British Columbia"                     },
@@ -166,7 +164,7 @@ namespace Pidp.Models.Lookups
                 new Province { Code = ProvinceCode.WestVirginia,           CountryCode = CountryCode.UnitedStates, Name = "West Virginia"                        },
                 new Province { Code = ProvinceCode.Wisconsin,              CountryCode = CountryCode.UnitedStates, Name = "Wisconsin"                            },
                 new Province { Code = ProvinceCode.Wyoming,                CountryCode = CountryCode.UnitedStates, Name = "Wyoming"                              }
-            });
+            };
         }
     }
 }

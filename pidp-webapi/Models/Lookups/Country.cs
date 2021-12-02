@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,15 +18,15 @@ namespace Pidp.Models.Lookups
         public string Name { get; set; } = string.Empty;
     }
 
-    public class CountryConfiguration : IEntityTypeConfiguration<Country>
+    public class CountryDataGenerator : ILookupDataGenerator<Country>
     {
-        public virtual void Configure(EntityTypeBuilder<Country> builder)
+        public IEnumerable<Country> Generate()
         {
-            builder.HasData(new[]
+            return new[]
             {
                 new Country { Code = CountryCode.Canada,       Name = "Canada"        },
                 new Country { Code = CountryCode.UnitedStates, Name = "United States" }
-            });
+            };
         }
     }
 }

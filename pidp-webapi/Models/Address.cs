@@ -37,11 +37,6 @@ namespace Pidp.Models
         public string City { get; set; } = string.Empty;
 
         public string Postal { get; set; } = string.Empty;
-
-        public bool IsInBC()
-        {
-            return ProvinceCode == ProvinceCode.BritishColumbia;
-        }
     }
 
     public class PartyAddress : Address
