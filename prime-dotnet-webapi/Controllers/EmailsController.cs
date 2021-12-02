@@ -58,6 +58,23 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // POST: api/Emails/management/enrollees/unsigned-toa
+        /// <summary>
+        /// Send enrollee unsigned TOA reminder emails
+        /// </summary>
+        [HttpPost("management/enrollees/unsigned-toa", Name = nameof(SendEnrolleeUnsignedToaReminderEmails))]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> SendEnrolleeUnsignedToaReminderEmails()
+        {
+            await _emailService.SendEnrolleeUnsignedToaReminderEmails();
+
+            return NoContent();
+        }
+
+
         // Email Templates
 
         // GET: api/emails/management/templates
