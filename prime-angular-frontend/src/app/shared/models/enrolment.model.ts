@@ -115,8 +115,6 @@ export interface Enrolment {
   possiblePaperEnrolmentMatch: boolean;
   // This is needed for legacy enrolments
   jobs: Job[];
-  linkedEnrolleeId: number;
-  possiblePaperEnrolmentMatch: boolean;
 }
 
 export interface EnrolleeListViewModel {
