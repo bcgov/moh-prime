@@ -100,7 +100,7 @@
       <span>Enrolment Escalation</span>
     </button>
     <button mat-menu-item
-            *ngIf="enrollee.gpid | contains: paperEnrolleeGpidFilter"
+            *ngIf="(enrollee.gpid | contains: paperEnrolleeGpidFilter) && !enrollee.linkedEnrolleeId"
             [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
             (click)="onChangeDateOfBirth()">
       <mat-icon>edit_calendar</mat-icon>
