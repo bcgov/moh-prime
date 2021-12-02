@@ -270,13 +270,6 @@ namespace Prime.Services.Rules
             var paperEnrolleeMatchId = -1;
             var paperEnrolleeIdsAsString = string.Join(", ", paperEnrollees.Select(e => e.Id));
 
-            // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
-            // If there is no match then we don't need to worry about this rule
-            if (!paperEnrollees.Any())
-            {
-                return true;
-            }
-
             // if there's a match and GPID is provided
             if (potentialPaperEnrolleeGpid != null)
             {
@@ -307,7 +300,7 @@ namespace Prime.Services.Rules
                 // If so, link enrolments and mark BCSC enrolment as AlwaysManual too and send to manual enrolment
                 if (paperEnrollees.Any(pe => pe.Id == paperEnrolleeMatchId && pe.AlwaysManual))
                 {
-                    await _enrolleePaperSubmissionService.UpdateAlwaysManualAsync(enrollee.Id, true);
+                    enrollee.AlwaysManual = true;
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
                     return false;
                 }
