@@ -385,18 +385,14 @@ namespace Prime.Services
 
         public async Task<bool> IsLinkedPaperEnrolment(int paperEnrolleeId)
         {
-            return await _context.Enrollees
-                .AsNoTracking()
-                .Where(e => e.Id == paperEnrolleeId && e.PaperToEnrolleeLink != null)
-                .AnyAsync();
+            return await _context.EnrolleeLinkedEnrolments
+                .AnyAsync(link => link.PaperEnrolleeId == paperEnrolleeId);
         }
 
         public async Task<bool> IsPaperEnrolment(int paperEnrolleeId)
         {
             return await _context.Enrollees
-                .AsNoTracking()
-                .Where(e => e.Id == paperEnrolleeId && e.GPID.StartsWith(Enrollee.PaperGpidPrefix))
-                .AnyAsync();
+                .AnyAsync(e => e.Id == paperEnrolleeId && e.GPID.StartsWith(Enrollee.PaperGpidPrefix));
         }
     }
 }
