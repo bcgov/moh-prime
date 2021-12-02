@@ -283,19 +283,19 @@ namespace Prime.Services.Rules
                     return false;
                 }
 
-                // First enrolment: check if the related paper enrolment is flagged for AlwaysManual
-                // If so, mark BCSC enrolment as AlwaysManual too and send to manual enrolment
-                if (await _enrolleePaperSubmissionService.IsAlwaysManualEnrolment(paperEnrolleeMatchId))
-                {
-                    await _submissionService.UpdateAlwaysManualAsync(enrollee.Id, true);
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
-                    return false;
-                }
-
                 // if match link to paper enrolment and confirm the linkage here, if failed to link we add status reason.
                 if (!await _enrolleePaperSubmissionService.LinkEnrolleeToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId))
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.UnableToLinkToPaperEnrolment, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
+                    return false;
+                }
+
+                // First enrolment: check if the related paper enrolment is flagged for AlwaysManual
+                // If so, link enrolments and mark BCSC enrolment as AlwaysManual too and send to manual enrolment
+                if (paperEnrollees.Any(pe => pe.Id == paperEnrolleeMatchId && pe.AlwaysManual))
+                {
+                    await _submissionService.UpdateAlwaysManualAsync(enrollee.Id, true);
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
                     return false;
                 }
                 return true;
