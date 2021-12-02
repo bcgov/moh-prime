@@ -22,3 +22,13 @@ mat-date-range-input {
 .prefix-header {
   min-width: 6.5rem;
 }
+
+.paper-submission-icon {
+  &.linked {
+    color: theme-palette(green);
+  }
+
+  &.possible-match {
+    color: theme-palette(yellow);
+  }
+}
