@@ -389,7 +389,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdatePaperEnrolleeDateOfBirth(int enrolleeId, FromBodyData<DateTime> dateOfBirth)
         {
-            if (await _enrolleePaperSubmissionService.IsPaperEnrolment(enrolleeId))
+            if (!await _enrolleePaperSubmissionService.IsPaperEnrolment(enrolleeId))
             {
                 return NotFound($"Paper enrollee not found with id {enrolleeId}");
             }
