@@ -258,8 +258,10 @@ namespace Prime.Services.Rules
         {
             var paperEnrollees = await _enrolleePaperSubmissionService.GetPotentialPaperEnrolleeReturneesAsync(enrollee.DateOfBirth);
 
-            // If there is no match then we don't need to worry about this rule
-            if (!paperEnrollees.Any())
+            // If approved, linked, or there is no match then we don't need to worry about this rule
+            if (enrollee.ApprovedDate.HasValue
+                || !paperEnrollees.Any()
+                || await _enrolleePaperSubmissionService.IsEnrolleeLinkedAsync(enrollee.Id))
             {
                 return true;
             }
