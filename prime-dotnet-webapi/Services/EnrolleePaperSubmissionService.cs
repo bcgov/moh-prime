@@ -382,5 +382,21 @@ namespace Prime.Services
 
             return linkedGpid;
         }
+
+        public async Task<bool> IsLinkedPaperEnrolment(int paperEnrolleeId)
+        {
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.Id == paperEnrolleeId && e.PaperToEnrolleeLink != null)
+                .AnyAsync();
+        }
+
+        public async Task<bool> IsPaperEnrolment(int paperEnrolleeId)
+        {
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.Id == paperEnrolleeId && e.GPID.StartsWith(Enrollee.PaperGpidPrefix))
+                .AnyAsync();
+        }
     }
 }

@@ -225,7 +225,7 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     SiteAddressOverviewComponent,
     VendorOverviewComponent,
     SiteInformationOverviewComponent,
-    HealthAuthSiteOverviewContainerComponent
+    HealthAuthSiteOverviewContainerComponent,
     DateOfBirthComponent
   ],
   imports: [

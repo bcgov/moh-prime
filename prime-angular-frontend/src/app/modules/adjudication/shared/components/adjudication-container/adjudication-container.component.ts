@@ -427,7 +427,7 @@ export class AdjudicationContainerComponent implements OnInit {
       cancelHide: true,
       component: DateOfBirthComponent,
       data: {
-        // TODO: add DOB
+        enrollee: this.enrollees[0]
       }
     };
 
@@ -582,7 +582,8 @@ export class AdjudicationContainerComponent implements OnInit {
       linkedEnrolleeId,
       possiblePaperEnrolmentMatch,
       gpid,
-      adjudicatorIdir
+      adjudicatorIdir,
+      dateOfBirth
     } = enrollee;
 
     return {
@@ -608,6 +609,7 @@ export class AdjudicationContainerComponent implements OnInit {
       linkedEnrolleeId,
       possiblePaperEnrolmentMatch,
       gpid,
+      dateOfBirth
     };
   }
 }

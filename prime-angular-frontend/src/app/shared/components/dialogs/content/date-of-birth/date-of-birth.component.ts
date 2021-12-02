@@ -58,14 +58,11 @@ export class DateOfBirthComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      dateOfBirth: [
-        {
-          value: (this.enrollee?.dateOfBirth) ? this.enrollee.dateOfBirth : ''
-        },
-        [Validators.required]
-      ]
+      dateOfBirth: ['', [Validators.required]]
     });
   }
 
-  private initForm() { }
+  private initForm() {
+    this.dateOfBirth.patchValue(this.enrollee?.dateOfBirth);
+  }
 }

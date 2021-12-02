@@ -32,5 +32,8 @@ namespace Prime.Services
         Task<bool> LinkEnrolleeToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId);
         Task<bool> SetLinkedGpidAsync(int enrolleeId, string userProvidedGpid);
         Task<string> GetLinkedGpidAsync(int enrolleeId);
+        Task<bool> IsLinkedPaperEnrolment(int paperEnrolleeId);
+
+        Task<bool> IsPaperEnrolment(int paperEnrolleeId);
     }
 }
