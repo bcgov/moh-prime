@@ -352,11 +352,8 @@ namespace Prime.Controllers
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
             await _siteService.SubmitRegistrationAsync(siteId);
 
-            await _bus.Send<SendSiteEmail>(new
-            {
-                EmailType = SiteEmailType.SiteRegistrationSubmission,
-                Site = site
-            });
+            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(site, opt =>
+                opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteRegistrationSubmission)));
 
             return Ok(site);
         }
@@ -516,11 +513,8 @@ namespace Prime.Controllers
 
             if (site.SubmittedDate != null)
             {
-                await _bus.Send<SendSiteEmail>(new
-                {
-                    EmailType = SiteEmailType.SiteRegistrationSubmission,
-                    Site = site
-                });
+                await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(site, opt =>
+                    opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteRegistrationSubmission)));
             }
 
             // Send an notifying email to the adjudicator
@@ -530,11 +524,8 @@ namespace Prime.Controllers
                 && site.CareSetting.Code == (int)CareSettingType.CommunityPharmacy
                 && !string.IsNullOrEmpty(site.BusinessLicence.DeferredLicenceReason))
             {
-                await _bus.Send<SendSiteEmail>(new
-                {
-                    EmailType = SiteEmailType.BusinessLicenceUploaded,
-                    Site = site
-                });
+                await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
+                    site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.BusinessLicenceUploaded)));
             }
 
             return Ok(document);
@@ -807,11 +798,9 @@ namespace Prime.Controllers
             }
 
             var site = await _communitySiteService.GetSiteAsync(siteId);
-            await _bus.Send<SendSiteEmail>(new
-            {
-                EmailType = SiteEmailType.RemoteUsersUpdated,
-                Site = site
-            });
+            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
+                site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.RemoteUsersUpdated)));
+
             return NoContent();
         }
 
@@ -835,12 +824,13 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            await _bus.Send<SendSiteEmail>(new
+            await _bus.Send<SendSiteEmail>(new SendSiteEmailModel
             {
                 EmailType = SiteEmailType.SiteReviewedNotification,
-                Site = new CommunitySite { Id = siteId },
+                Id = siteId,
                 Note = note
             });
+
             return NoContent();
         }
 
@@ -870,36 +860,28 @@ namespace Prime.Controllers
             var updatedSite = await _siteService.ApproveSite(siteId);
             if (site.ActiveBeforeRegistration)
             {
-                await _bus.Send<SendSiteEmail>(new
-                {
-                    EmailType = SiteEmailType.SiteActiveBeforeRegistration,
-                    Site = site
-                });
+                await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
+                    site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteActiveBeforeRegistration)));
             }
             else
             {
-                await _bus.Send<SendSiteEmail>(new
-                {
-                    EmailType = SiteEmailType.SiteApprovedPharmaNetAdministrator,
-                    Site = site
-                });
-                await _bus.Send<SendSiteEmail>(new
-                {
-                    EmailType = SiteEmailType.SiteApprovedSigningAuthority,
-                    Site = site
-                });
+                await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
+                    site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedPharmaNetAdministrator)));
+
+                await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
+                    site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedSigningAuthority)));
             }
-            await _bus.Send<SendSiteEmail>(new
-            {
-                EmailType = SiteEmailType.SiteApprovedHIBC,
-                Site = site
-            });
+            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
+                site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedHIBC)));
+
             var remoteUsersToNotify = site.RemoteUsers.Where(ru => !ru.Notified);
-            await _bus.Send<SendSiteEmail>(new
-            {
-                EmailType = SiteEmailType.RemoteUserNotifications,
-                Site = site
-            });
+            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
+                site, opt => opt.AfterMap((src, dest) =>
+                {
+                    dest.EmailType = SiteEmailType.RemoteUserNotifications;
+                    dest.RemoteUserEmails = remoteUsersToNotify.Select(u => u.Email);
+                })));
+
             await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
 
             return Ok(updatedSite);

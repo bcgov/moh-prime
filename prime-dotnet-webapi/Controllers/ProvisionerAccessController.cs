@@ -118,7 +118,8 @@ namespace Prime.Controllers
             await _bus.Send<SendProvisionerLinkEmail>(new
             {
                 RecipientEmails = emails,
-                EnrolmentCertificateAccessToken = createdToken,
+                EnrolleeId = enrolleeId,
+                TokenUrl = createdToken.FrontendUrl,
                 CareSettingCode = careSettingCode
             });
             await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emails)}");

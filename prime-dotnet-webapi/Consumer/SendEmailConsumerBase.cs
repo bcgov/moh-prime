@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using Prime.Services;
 
 namespace Prime.Consumer
@@ -6,14 +5,10 @@ namespace Prime.Consumer
     public abstract class SendEmailConsumerBase
     {
         protected readonly IEmailService _emailService;
-        protected readonly ILogger _logger;
 
-        public SendEmailConsumerBase(
-            IEmailService emailService,
-            ILogger logger)
+        public SendEmailConsumerBase(IEmailService emailService)
         {
             _emailService = emailService;
-            _logger = logger;
         }
     }
 }

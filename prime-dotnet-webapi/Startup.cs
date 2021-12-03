@@ -403,6 +403,7 @@ namespace Prime
                 {
                     // Consumer endpoints are configured in their own definitions
                     cfg.ConfigureEndpoints(context);
+                    cfg.ConnectConsumeObserver(new ConsumeObserver(context.GetRequiredService<Microsoft.Extensions.Logging.ILogger<ConsumeObserver>>()));
                 });
             });
 

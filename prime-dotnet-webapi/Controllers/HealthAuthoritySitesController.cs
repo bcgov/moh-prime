@@ -1,10 +1,12 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
 using Prime.Configuration.Auth;
+using Prime.Contracts;
 using Prime.Engines;
 using Prime.Models.Api;
 using Prime.Services;
@@ -19,19 +21,19 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.PrimeEnrollee)]
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
-        private readonly IEmailService _emailService;
+        private readonly IBus _bus;
         private readonly IHealthAuthorityService _healthAuthorityService;
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly ISiteService _siteService;
 
         public HealthAuthoritySitesController(
-            IEmailService emailService,
+            IBus bus,
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
             ISiteService siteService
             )
         {
-            _emailService = emailService;
+            _bus = bus;
             _healthAuthorityService = healthAuthorityService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
             _siteService = siteService;
@@ -227,7 +229,7 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
-            await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
+            await _bus.Send<SendHealthAuthoritySiteEmail>(new { SiteId = siteId });
 
             return NoContent();
         }

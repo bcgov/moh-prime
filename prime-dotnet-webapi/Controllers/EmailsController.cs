@@ -1,9 +1,11 @@
 using System.Threading.Tasks;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Configuration.Auth;
+using Prime.Contracts;
 using Prime.Services;
 using Prime.ViewModels.Emails;
 using System.Collections.Generic;
@@ -18,11 +20,13 @@ namespace Prime.Controllers
     {
         private readonly IEmailService _emailService;
         private readonly IEmailTemplateService _emailTemplateService;
+        private readonly IBus _bus;
 
-        public EmailsController(IEmailService emailService, IEmailTemplateService emailTemplateService)
+        public EmailsController(IEmailService emailService, IEmailTemplateService emailTemplateService, IBus bus)
         {
             _emailService = emailService;
             _emailTemplateService = emailTemplateService;
+            _bus = bus;
         }
 
         // POST: api/Emails/management/statuses
@@ -53,7 +57,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendEnrolleeRenewalEmails()
         {
-            await _emailService.SendEnrolleeRenewalEmails();
+            await _bus.Send<SendEnrolleeEmail>(new { });
 
             return NoContent();
         }

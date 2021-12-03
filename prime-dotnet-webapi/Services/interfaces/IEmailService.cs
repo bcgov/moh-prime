@@ -1,25 +1,26 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
+using Prime.Contracts;
 
 namespace Prime.Services
 {
     public interface IEmailService
     {
-        Task SendBusinessLicenceUploadedAsync(CommunitySite site);
-        Task SendProvisionerLinkAsync(IEnumerable<string> emails, EnrolmentCertificateAccessToken token, int careSettingCode);
+        Task SendBusinessLicenceUploadedAsync(SendSiteEmail site);
+        Task SendProvisionerLinkAsync(SendProvisionerLinkEmail model);
         Task SendReminderEmailAsync(int enrolleeId);
-        Task SendRemoteUserNotificationsAsync(CommunitySite site);
-        Task SendRemoteUsersUpdatedAsync(CommunitySite site);
-        Task SendSiteApprovedHIBCAsync(CommunitySite site);
-        Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site);
-        Task SendSiteApprovedSigningAuthorityAsync(CommunitySite site);
-        Task SendSiteRegistrationSubmissionAsync(CommunitySite site);
+        Task SendRemoteUserNotificationsAsync(SendSiteEmail site);
+        Task SendRemoteUsersUpdatedAsync(SendSiteEmail site);
+        Task SendSiteApprovedHIBCAsync(SendSiteEmail site);
+        Task SendSiteApprovedPharmaNetAdministratorAsync(SendSiteEmail site);
+        Task SendSiteApprovedSigningAuthorityAsync(SendSiteEmail site);
+        Task SendSiteRegistrationSubmissionAsync(SendSiteEmail site);
         Task SendHealthAuthoritySiteRegistrationSubmissionAsync(int siteId);
-        Task SendSiteReviewedNotificationAsync(int siteId, string note);
-        Task SendSiteActiveBeforeRegistrationAsync(CommunitySite site);
+        Task SendSiteReviewedNotificationAsync(SendSiteEmail site);
+        Task SendSiteActiveBeforeRegistrationAsync(SendSiteEmail site);
         Task SendEnrolleeRenewalEmails();
-        Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim);
+        Task SendOrgClaimApprovalNotificationAsync(SendOrgClaimApprovalNotificationEmail orgClaim);
         Task<int> UpdateEmailLogStatuses(int limit);
         Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId);
     }

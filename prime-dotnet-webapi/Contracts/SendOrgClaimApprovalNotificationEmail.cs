@@ -4,6 +4,8 @@ namespace Prime.Contracts
 {
     public interface SendOrgClaimApprovalNotificationEmail
     {
-        OrganizationClaim OrganizationClaim { get; }
+        int OrganizationId { get; }
+        int NewSigningAuthorityId { get; }
+        string ProvidedSiteId { get; }
     }
 }

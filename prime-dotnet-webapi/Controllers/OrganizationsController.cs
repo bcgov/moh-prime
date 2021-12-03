@@ -229,7 +229,9 @@ namespace Prime.Controllers
                 await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
                 await _bus.Send<SendOrgClaimApprovalNotificationEmail>(new
                 {
-                    OrganizationClaim = orgClaim
+                    orgClaim.OrganizationId,
+                    orgClaim.NewSigningAuthorityId,
+                    orgClaim.ProvidedSiteId
                 });
             }
 

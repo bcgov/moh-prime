@@ -11,19 +11,12 @@ namespace Prime.Consumer
 {
     public class SendProvisionerLinkEmailConsumer : SendEmailConsumerBase, IConsumer<SendProvisionerLinkEmail>
     {
-        public SendProvisionerLinkEmailConsumer(
-            IEmailService emailService,
-            ILogger<SendProvisionerLinkEmailConsumer> logger) : base(emailService, logger)
+        public SendProvisionerLinkEmailConsumer(IEmailService emailService) : base(emailService)
         { }
 
         public async Task Consume(ConsumeContext<SendProvisionerLinkEmail> context)
         {
-            _logger.LogInformation("Sending ProvisionerLink email");
-
-            await _emailService.SendProvisionerLinkAsync(
-                context.Message.RecipientEmails,
-                context.Message.EnrolmentCertificateAccessToken,
-                context.Message.CareSettingCode);
+            await _emailService.SendProvisionerLinkAsync(context.Message);
         }
     }
 

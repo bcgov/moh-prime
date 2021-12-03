@@ -27,6 +27,12 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<IndividualDeviceProvider, IndividualDeviceProviderViewModel>();
             CreateMap<IndividualDeviceProviderChangeModel, IndividualDeviceProvider>();
+
+            CreateMap<CommunitySite, SendSiteEmailModel>()
+                .ForMember(dest => dest.RemoteUserNames, opt => opt.MapFrom(src => src.RemoteUsers.Select(u => $"{u.FirstName} {u.LastName}")))
+                .ForMember(dest => dest.RemoteUserEmails, opt => opt.MapFrom(src => src.RemoteUsers.Select(u => u.Email)))
+                .ForMember(dest => dest.EmailType, opt => opt.Ignore())
+                .ForMember(dest => dest.Note, opt => opt.Ignore());
         }
     }
 }
