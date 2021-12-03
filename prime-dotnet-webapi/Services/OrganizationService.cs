@@ -58,8 +58,7 @@ namespace Prime.Services
                     .Search(
                         o => o.Name,
                         o => o.DisplayId.ToString(),
-                        o => o.SigningAuthority.FirstName,
-                        o => o.SigningAuthority.LastName)
+                        o => o.SigningAuthority.FirstName + " " + o.SigningAuthority.LastName)
                     .SearchCollections(
                         o => o.Sites.Select(s => s.DoingBusinessAs),
                         o => o.Sites.Select(s => s.PEC))

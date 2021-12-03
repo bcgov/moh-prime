@@ -34,24 +34,11 @@ namespace Prime.Infrastructure
         public IQueryable<T> Containing(string term)
         {
             term = term.ToLower();
-            var searchWords = term.Split(' ');
             var predicate = PredicateBuilder.New<T>();
 
             foreach (var selector in _propertySelectors)
             {
-                // This block allows searching and matching for partial names for example Jo Do when searching for Jone Doe
-                if (selector.ToString().Contains("FirstName") || selector.ToString().Contains("LastName"))
-                {
-                    foreach (var searchWord in searchWords)
-                    {
-                        predicate.Or(x => searchWord.StartsWith(selector.Invoke(x).ToLower())
-                            || selector.Invoke(x).ToLower().StartsWith(searchWord));
-                    }
-                }
-                else
-                {
-                    predicate.Or(x => selector.Invoke(x).ToLower().Contains(term));
-                }
+                predicate.Or(x => selector.Invoke(x).ToLower().Contains(term));
             }
 
             foreach (var selector in _collectionSelectors)
