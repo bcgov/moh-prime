@@ -383,17 +383,26 @@ namespace Prime
         /// <param name="services"></param>
         private void ConfigureServiceBus(IServiceCollection services)
         {
+            // Map contract with endpoint for message producers
+            EndpointConvention.Map<SendSiteEmail>(
+                new Uri($"{PrimeConfiguration.Current.ServiceBus.Url}{nameof(SendSiteEmail)}"));
+            EndpointConvention.Map<SendEnrolleeEmail>(
+                new Uri($"{PrimeConfiguration.Current.ServiceBus.Url}{nameof(SendEnrolleeEmail)}"));
+            EndpointConvention.Map<SendProvisionerLinkEmail>(
+                new Uri($"{PrimeConfiguration.Current.ServiceBus.Url}{nameof(SendProvisionerLinkEmail)}"));
+            EndpointConvention.Map<SendHealthAuthoritySiteEmail>(
+                new Uri($"{PrimeConfiguration.Current.ServiceBus.Url}{nameof(SendHealthAuthoritySiteEmail)}"));
+            EndpointConvention.Map<SendOrgClaimApprovalNotificationEmail>(
+                new Uri($"{PrimeConfiguration.Current.ServiceBus.Url}{nameof(SendOrgClaimApprovalNotificationEmail)}"));
+
             services.AddMassTransit(x =>
             {
-                x.AddConsumer<SendSiteSubmissionEmailConsumer>();
+                x.AddConsumers(typeof(SendSiteEmailConsumer).Assembly);
 
                 x.UsingInMemory((context, cfg) =>
                 {
-                    //cfg.ConfigureEndpoints(context);
-                    cfg.ReceiveEndpoint($"{nameof(SendSiteSubmissionEmail)}", e =>
-                    {
-                        e.ConfigureConsumer<SendSiteSubmissionEmailConsumer>(context);
-                    });
+                    // Consumer endpoints are configured in their own definitions
+                    cfg.ConfigureEndpoints(context);
                 });
             });
 

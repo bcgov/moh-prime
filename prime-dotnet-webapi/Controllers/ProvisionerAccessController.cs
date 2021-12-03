@@ -2,11 +2,13 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Configuration.Auth;
+using Prime.Contracts;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -21,18 +23,18 @@ namespace Prime.Controllers
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentCertificateService _certificateService;
-        private readonly IEmailService _emailService;
+        private readonly IBus _bus;
         private readonly IBusinessEventService _businessEventService;
 
         public ProvisionerAccessController(
             IEnrolleeService enrolleeService,
             IEnrolmentCertificateService enrolmentCertificateService,
-            IEmailService emailService,
+            IBus bus,
             IBusinessEventService businessEventService)
         {
             _enrolleeService = enrolleeService;
             _certificateService = enrolmentCertificateService;
-            _emailService = emailService;
+            _bus = bus;
             _businessEventService = businessEventService;
         }
 
@@ -113,7 +115,12 @@ namespace Prime.Controllers
 
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
 
-            await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
+            await _bus.Send<SendProvisionerLinkEmail>(new
+            {
+                RecipientEmails = emails,
+                EnrolmentCertificateAccessToken = createdToken,
+                CareSettingCode = careSettingCode
+            });
             await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
 
             return CreatedAtAction(

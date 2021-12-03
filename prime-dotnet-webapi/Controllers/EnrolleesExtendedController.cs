@@ -2,16 +2,17 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Configuration.Auth;
+using Prime.Contracts;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
-using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.ViewModels.Plr;
 
 namespace Prime.Controllers
@@ -25,7 +26,7 @@ namespace Prime.Controllers
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
-        private readonly IEmailService _emailService;
+        private readonly IBus _bus;
         private readonly IDocumentService _documentService;
         private readonly IPlrProviderService _plrProviderService;
 
@@ -33,14 +34,14 @@ namespace Prime.Controllers
             IEnrolleeService enrolleeService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
-            IEmailService emailService,
+            IBus bus,
             IPlrProviderService plrProviderService,
             IDocumentService documentService)
         {
             _enrolleeService = enrolleeService;
             _adminService = adminService;
             _businessEventService = businessEventService;
-            _emailService = emailService;
+            _bus = bus;
             _documentService = documentService;
             _plrProviderService = plrProviderService;
         }
@@ -341,7 +342,12 @@ namespace Prime.Controllers
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var username = admin.IDIR.Replace("@idir", "");
-            await _emailService.SendReminderEmailAsync(enrolleeId);
+
+            await _bus.Send<SendEnrolleeEmail>(new
+            {
+                EmailType = EnrolleeEmailType.Reminder,
+                EnrolleeId = enrolleeId
+            });
             await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Email reminder sent to Enrollee by {username}");
 
             return NoContent();

@@ -77,16 +77,16 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode)
+        public async Task SendSiteRegistrationSubmissionAsync(CommunitySite site)
         {
-            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(businessLicenceId);
+            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.BusinessLicence.Id);
 
-            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode);
-            email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(siteId);
+            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), (CareSettingType)site.CareSettingCode);
+            email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(site.Id);
             await Send(email);
 
             var siteRegReviewPdf = email.Attachments.Single(a => a.Filename == "SiteRegistrationReview.pdf");
-            await _emailDocumentService.SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
+            await _emailDocumentService.SaveSiteRegistrationReview(site.Id, siteRegReviewPdf);
         }
 
         public async Task SendHealthAuthoritySiteRegistrationSubmissionAsync(int healthAuthoritySiteId)
@@ -131,8 +131,9 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers)
+        public async Task SendRemoteUserNotificationsAsync(CommunitySite site)
         {
+            var remoteUsers = site.RemoteUsers.Where(ru => !ru.Notified);
             if (!remoteUsers.Any())
             {
                 return;
@@ -189,16 +190,16 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteActiveBeforeRegistrationAsync(int siteId, string signingAuthorityEmail)
+        public async Task SendSiteActiveBeforeRegistrationAsync(CommunitySite site)
         {
             var viewModel = await _context.Sites
-            .Where(s => s.Id == siteId)
+            .Where(s => s.Id == site.Id)
             .Select(s => new SiteActiveBeforeRegistrationEmailViewModel
             {
                 Pec = s.PEC
             })
             .SingleAsync();
-            var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(signingAuthorityEmail, viewModel);
+            var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(site.Organization.SigningAuthority.Email, viewModel);
             await Send(email);
         }
 

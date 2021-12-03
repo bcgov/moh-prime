@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DelegateDecompiler.EntityFrameworkCore;
 
+using Prime.Contracts;
 using Prime.Engines;
 using Prime.Models;
 using Prime.Models.Api;
@@ -25,6 +27,7 @@ namespace Prime.Services
         private readonly IPrivilegeService _privilegeService;
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IVerifiableCredentialService _verifiableCredentialService;
+        private readonly IBus _bus;
 
         public SubmissionService(
             ApiDbContext context,
@@ -38,7 +41,8 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             IPrivilegeService privilegeService,
             ISubmissionRulesService submissionRulesService,
-            IVerifiableCredentialService verifiableCredentialService)
+            IVerifiableCredentialService verifiableCredentialService,
+            IBus bus)
             : base(context, logger)
         {
             _agreementService = agreementService;
@@ -51,6 +55,7 @@ namespace Prime.Services
             _privilegeService = privilegeService;
             _submissionRulesService = submissionRulesService;
             _verifiableCredentialService = verifiableCredentialService;
+            _bus = bus;
         }
 
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile)
@@ -238,7 +243,11 @@ namespace Prime.Services
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
             await _context.SaveChangesAsync();
-            await _emailService.SendReminderEmailAsync(enrollee.Id);
+            await _bus.Send<SendEnrolleeEmail>(new
+            {
+                EmailType = EnrolleeEmailType.Reminder,
+                EnrolleeId = enrollee.Id
+            });
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
             // Manually Approved submissions are automatically confirmed
             await ConfirmLatestSubmissionAsync(enrollee.Id);
@@ -294,7 +303,11 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled Editing");
             await _context.SaveChangesAsync();
-            await _emailService.SendReminderEmailAsync(enrollee.Id);
+            await _bus.Send<SendEnrolleeEmail>(new
+            {
+                EmailType = EnrolleeEmailType.Reminder,
+                EnrolleeId = enrollee.Id
+            });
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
@@ -303,7 +316,11 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Locked);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Locked");
             await _context.SaveChangesAsync();
-            await _emailService.SendReminderEmailAsync(enrollee.Id);
+            await _bus.Send<SendEnrolleeEmail>(new
+            {
+                EmailType = EnrolleeEmailType.Reminder,
+                EnrolleeId = enrollee.Id
+            });
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 

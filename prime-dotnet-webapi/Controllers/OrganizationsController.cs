@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Configuration.Auth;
+using Prime.Contracts;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -24,19 +26,18 @@ namespace Prime.Controllers
         private readonly IBusinessEventService _businessEventService;
         private readonly ICommunitySiteService _communitySiteService;
         private readonly IDocumentService _documentService;
-        private readonly IEmailService _emailService;
+        private readonly IBus _bus;
         private readonly IOrganizationAgreementService _organizationAgreementService;
         private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IOrganizationService _organizationService;
         private readonly IPartyService _partyService;
-
 
         public OrganizationsController(
             IAdminService adminService,
             IBusinessEventService businessEventService,
             ICommunitySiteService communitySiteService,
             IDocumentService documentService,
-            IEmailService emailService,
+            IBus bus,
             IOrganizationAgreementService organizationAgreementService,
             IOrganizationClaimService organizationClaimService,
             IOrganizationService organizationService,
@@ -46,7 +47,7 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
             _communitySiteService = communitySiteService;
             _documentService = documentService;
-            _emailService = emailService;
+            _bus = bus;
             _organizationAgreementService = organizationAgreementService;
             _organizationClaimService = organizationClaimService;
             _organizationService = organizationService;
@@ -226,7 +227,10 @@ namespace Prime.Controllers
             {
                 await _partyService.RemovePartyEnrolmentAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
                 await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
-                await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
+                await _bus.Send<SendOrgClaimApprovalNotificationEmail>(new
+                {
+                    OrganizationClaim = orgClaim
+                });
             }
 
             return NoContent();

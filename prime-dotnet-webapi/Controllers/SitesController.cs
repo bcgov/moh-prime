@@ -28,30 +28,27 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly ICommunitySiteService _communitySiteService;
         private readonly IDocumentService _documentService;
-        private readonly IEmailService _emailService;
+        private readonly IBus _bus;
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
-        private readonly ISendEndpointProvider _sendEndpointProvider;
 
         public SitesController(
             IAdminService adminService,
             ICommunitySiteService communitySiteService,
             IDocumentService documentService,
-            IEmailService emailService,
+            IBus bus,
             IMapper mapper,
             IOrganizationService organizationService,
-            ISiteService siteService,
-            ISendEndpointProvider sendEndpointProvider)
+            ISiteService siteService)
         {
             _adminService = adminService;
             _communitySiteService = communitySiteService;
             _documentService = documentService;
-            _emailService = emailService;
+            _bus = bus;
             _mapper = mapper;
             _organizationService = organizationService;
             _siteService = siteService;
-            _sendEndpointProvider = sendEndpointProvider;
         }
 
         // GET: api/Sites
@@ -355,12 +352,10 @@ namespace Prime.Controllers
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
             await _siteService.SubmitRegistrationAsync(siteId);
 
-            var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"{PrimeConfiguration.Current.ServiceBus.Url}{nameof(SendSiteSubmissionEmail)}"));
-            await endpoint.Send<SendSiteSubmissionEmail>(new
+            await _bus.Send<SendSiteEmail>(new
             {
-                SiteId = site.Id,
-                BusinessLicenceId = site.BusinessLicence.Id,
-                site.CareSettingCode
+                EmailType = SiteEmailType.SiteRegistrationSubmission,
+                Site = site
             });
 
             return Ok(site);
@@ -521,7 +516,11 @@ namespace Prime.Controllers
 
             if (site.SubmittedDate != null)
             {
-                await _emailService.SendSiteRegistrationSubmissionAsync(siteId, businessLicenceId, (CareSettingType)site.CareSettingCode);
+                await _bus.Send<SendSiteEmail>(new
+                {
+                    EmailType = SiteEmailType.SiteRegistrationSubmission,
+                    Site = site
+                });
             }
 
             // Send an notifying email to the adjudicator
@@ -531,7 +530,11 @@ namespace Prime.Controllers
                 && site.CareSetting.Code == (int)CareSettingType.CommunityPharmacy
                 && !string.IsNullOrEmpty(site.BusinessLicence.DeferredLicenceReason))
             {
-                await _emailService.SendBusinessLicenceUploadedAsync(site);
+                await _bus.Send<SendSiteEmail>(new
+                {
+                    EmailType = SiteEmailType.BusinessLicenceUploaded,
+                    Site = site
+                });
             }
 
             return Ok(document);
@@ -804,7 +807,11 @@ namespace Prime.Controllers
             }
 
             var site = await _communitySiteService.GetSiteAsync(siteId);
-            await _emailService.SendRemoteUsersUpdatedAsync(site);
+            await _bus.Send<SendSiteEmail>(new
+            {
+                EmailType = SiteEmailType.RemoteUsersUpdated,
+                Site = site
+            });
             return NoContent();
         }
 
@@ -828,7 +835,12 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            await _emailService.SendSiteReviewedNotificationAsync(siteId, note);
+            await _bus.Send<SendSiteEmail>(new
+            {
+                EmailType = SiteEmailType.SiteReviewedNotification,
+                Site = new CommunitySite { Id = siteId },
+                Note = note
+            });
             return NoContent();
         }
 
@@ -858,16 +870,36 @@ namespace Prime.Controllers
             var updatedSite = await _siteService.ApproveSite(siteId);
             if (site.ActiveBeforeRegistration)
             {
-                await _emailService.SendSiteActiveBeforeRegistrationAsync(site.Id, site.Organization.SigningAuthority.Email);
+                await _bus.Send<SendSiteEmail>(new
+                {
+                    EmailType = SiteEmailType.SiteActiveBeforeRegistration,
+                    Site = site
+                });
             }
             else
             {
-                await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(site);
-                await _emailService.SendSiteApprovedSigningAuthorityAsync(site);
+                await _bus.Send<SendSiteEmail>(new
+                {
+                    EmailType = SiteEmailType.SiteApprovedPharmaNetAdministrator,
+                    Site = site
+                });
+                await _bus.Send<SendSiteEmail>(new
+                {
+                    EmailType = SiteEmailType.SiteApprovedSigningAuthority,
+                    Site = site
+                });
             }
-            await _emailService.SendSiteApprovedHIBCAsync(site);
+            await _bus.Send<SendSiteEmail>(new
+            {
+                EmailType = SiteEmailType.SiteApprovedHIBC,
+                Site = site
+            });
             var remoteUsersToNotify = site.RemoteUsers.Where(ru => !ru.Notified);
-            await _emailService.SendRemoteUserNotificationsAsync(site, remoteUsersToNotify);
+            await _bus.Send<SendSiteEmail>(new
+            {
+                EmailType = SiteEmailType.RemoteUserNotifications,
+                Site = site
+            });
             await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
 
             return Ok(updatedSite);
