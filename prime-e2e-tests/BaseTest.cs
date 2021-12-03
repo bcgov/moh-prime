@@ -73,7 +73,12 @@ namespace TestPrimeE2E
 
         protected void ClickButton(string buttonLabel)
         {
-            _driver.FindPatiently($"//span[@class='mat-button-wrapper' and contains(text(), '{buttonLabel}')]").Click();
+            _driver.FindPatiently(GetButtonXPath(buttonLabel)).Click();
+        }
+
+        protected string GetButtonXPath(string buttonLabel)
+        {
+            return $"//span[@class='mat-button-wrapper' and contains(text(), '{buttonLabel}')]";
         }
 
 
@@ -126,6 +131,7 @@ namespace TestPrimeE2E
         {
             return $"//mat-radio-group[@formcontrolname='{formControlName}']//label[span[contains(text(), '{radioButtonLabel}')] or div[contains(text(), '{radioButtonLabel}')]]";
         }
+
 
         /// <summary>
         /// Specifying the <c>ancestorElement</c> can disambiguate the desired control (if necessary)

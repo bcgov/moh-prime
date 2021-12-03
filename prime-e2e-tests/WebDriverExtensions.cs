@@ -100,14 +100,40 @@ namespace TestPrimeE2E
 
 
         /// <summary>
-        /// In some cases this method may be a less cumbersome alternative to <c>TabAndInteract</c>.
-        /// TODO: More usage required.  
+        /// In some (most?) cases this method may be a less cumbersome alternative to <c>TabAndInteract</c>
+        /// to get around <c>OpenQA.Selenium.ElementClickInterceptedException</c>
         /// </summary>
         public static void ClickWithJavaScript(this IWebDriver driver, string xPathToElement)
         {
             IWebElement elementToClick = driver.FindPatiently(xPathToElement);
             IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
             executor.ExecuteScript("arguments[0].click();", elementToClick);
+        }
+
+
+        /// <summary>
+        /// Effectively works as well as <c>ClickWithJavaScript</c> to get around <c>OpenQA.Selenium.ElementClickInterceptedException</c>
+        /// but may be marginally slower and uses <c>Sleep</c> 
+        /// </summary>
+        public static void WaitUntilClickable(this IWebDriver driver, string xPathToElement, int timeoutMilliSecs = 5000)
+        {
+            const int pollingIntervalMs = 250;
+            do
+            {
+                try 
+                {
+                    FindPatiently(driver, xPathToElement).Click();
+                    // Clicked successfully!
+                    return;
+                }
+                catch (ElementClickInterceptedException)
+                {
+                    System.Threading.Thread.Sleep(pollingIntervalMs);
+                    timeoutMilliSecs -= pollingIntervalMs;
+                }
+            } 
+            while (timeoutMilliSecs > 0);
+            // Wasn't clickable within `timeoutMilliSecs`
         }
     }
 }

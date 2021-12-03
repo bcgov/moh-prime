@@ -153,15 +153,14 @@ namespace TestPrimeE2E.Enrollment
             string expectedTitle = "Self-declaration";
             _driver.FindPatiently("//mat-radio-group[@formcontrolname='hasRegistrationSuspended']");
             VerifyEnrollmentPageTitle(expectedTitle);
-            ClickRadioButton("hasRegistrationSuspended", "No");
-            // Need to Tab over to click 'No' radio button for Has Conviction?
-            _driver.TabAndInteract(GetRadioButtonXPath("hasRegistrationSuspended", "No"), 1, Keys.Space);
-            // Need to Tab over to click 'No' radio button for "hasPharmaNetSuspended"
-            _driver.TabAndInteract(GetRadioButtonXPath("hasRegistrationSuspended", "No"), 2, Keys.Space);
-            ClickRadioButton("hasDisciplinaryAction", "No");
+
+            _driver.ClickWithJavaScript(GetRadioButtonXPath("hasConviction", "No"));
+            _driver.ClickWithJavaScript(GetRadioButtonXPath("hasRegistrationSuspended", "No"));              
+            _driver.ClickWithJavaScript(GetRadioButtonXPath("hasDisciplinaryAction", "No"));
+            _driver.ClickWithJavaScript(GetRadioButtonXPath("hasPharmaNetSuspended", "No"));
+
             CheckLogThenScreenshot(expectedTitle);
-            // Need to Tab over to click 'Save and Continue' button
-            _driver.TabAndInteract(GetRadioButtonXPath("hasDisciplinaryAction", "No"), 2, Keys.Enter);
+            _driver.ClickWithJavaScript(GetButtonXPath("Save and Continue"));
         }
 
 
