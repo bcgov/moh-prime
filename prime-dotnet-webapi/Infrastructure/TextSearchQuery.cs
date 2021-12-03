@@ -39,6 +39,9 @@ namespace Prime.Infrastructure
             foreach (var selector in _propertySelectors)
             {
                 predicate.Or(x => selector.Invoke(x).ToLower().Contains(term));
+                // The line below is one way to make the search work when searching for names
+                // if we don't want to slice the term variable into an array of strings and loop over them
+                predicate.Or(x => term.Contains(selector.Invoke(x).ToLower()));
             }
 
             foreach (var selector in _collectionSelectors)

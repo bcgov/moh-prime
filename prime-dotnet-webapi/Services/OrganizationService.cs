@@ -57,7 +57,9 @@ namespace Prime.Services
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(
                         o => o.Name,
-                        o => o.DisplayId.ToString())
+                        o => o.DisplayId.ToString(),
+                        o => o.SigningAuthority.FirstName,
+                        o => o.SigningAuthority.LastName)
                     .SearchCollections(
                         o => o.Sites.Select(s => s.DoingBusinessAs),
                         o => o.Sites.Select(s => s.PEC))
