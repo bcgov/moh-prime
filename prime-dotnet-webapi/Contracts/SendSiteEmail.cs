@@ -4,7 +4,7 @@ namespace Prime.Contracts
 {
     public interface SendSiteEmail
     {
-        SiteEmailType EmailType { get; set; }
+        SiteEmailType EmailType { get; }
         int Id { get; }
         int BusinessLicenceId { get; }
         int CareSettingCode { get; }
