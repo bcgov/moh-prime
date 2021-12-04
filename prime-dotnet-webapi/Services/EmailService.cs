@@ -246,6 +246,34 @@ namespace Prime.Services
             }
         }
 
+
+        public async Task SendEnrolleeUnsignedToaReminderEmails()
+        {
+            var enrollees = await _context.Enrollees
+                .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa)
+                .Select(e => new
+                {
+                    e.FirstName,
+                    e.LastName,
+                    e.Email,
+                    e.CurrentStatus.StatusDate
+                })
+                .DecompileAsync()
+                .ToListAsync();
+
+            foreach (var enrollee in enrollees)
+            {
+                // Approved/became RequiresToa more than 5 days ago
+                if ((DateTimeOffset.Now - enrollee.StatusDate).TotalDays > 5)
+                {
+                    var email = await _emailRenderingService.RenderUnsignedToaEmailAsync(enrollee.Email, new EnrolleeUnsignedToaEmailViewModel(enrollee.FirstName, enrollee.LastName));
+                    await Send(email);
+                }
+            }
+        }
+
+
+
         public async Task SendOrgClaimApprovalNotificationAsync(SendOrgClaimApprovalNotificationEmail orgClaim)
         {
             var orgName = await _context.Organizations

@@ -23,5 +23,6 @@ namespace Prime.Services
         Task SendOrgClaimApprovalNotificationAsync(SendOrgClaimApprovalNotificationEmail orgClaim);
         Task<int> UpdateEmailLogStatuses(int limit);
         Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId);
+        Task SendEnrolleeUnsignedToaReminderEmails();
     }
 }

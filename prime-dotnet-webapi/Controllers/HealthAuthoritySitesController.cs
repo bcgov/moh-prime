@@ -12,13 +12,14 @@ using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Sites;
+using System.Linq;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
     [Route("api/health-authorities/{healthAuthorityId}/sites")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeEnrollee)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
         private readonly IBus _bus;
@@ -31,7 +32,7 @@ namespace Prime.Controllers
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
             ISiteService siteService
-            )
+        )
         {
             _bus = bus;
             _healthAuthorityService = healthAuthorityService;
@@ -46,6 +47,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="payload"></param>
         [HttpPost(Name = nameof(CreateHealthAuthoritySite))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -74,18 +76,27 @@ namespace Prime.Controllers
             );
         }
 
-        // GET: api/health-authorities/5/sites
+        // GET: api/health-authorities/5/sites?healthAuthoritySiteId=1
         /// <summary>
         /// Gets all of the sites for a health authority.
         /// </summary>
         /// <param name="healthAuthorityId"></param>
+        /// <param name="healthAuthoritySiteId"></param>
         [HttpGet(Name = nameof(GetHealthAuthoritySites))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetHealthAuthoritySites(int healthAuthorityId)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteAdminListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetHealthAuthoritySites(int healthAuthorityId, [FromQuery] int healthAuthoritySiteId)
         {
-            return Ok(await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId));
+            var sites = await _healthAuthoritySiteService.GetSitesAsync(healthAuthorityId, healthAuthoritySiteId);
+
+            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
+            foreach (var site in sites)
+            {
+                site.HasNotification = notifiedIds.Contains(site.Id);
+            }
+
+            return Ok(sites);
         }
 
         // GET: api/health-authorities/5/sites/5
@@ -107,6 +118,30 @@ namespace Prime.Controllers
             }
 
             var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
+
+            return Ok(site);
+        }
+
+        // GET: api/health-authorities/5/sites/5/admin-view
+        /// <summary>
+        /// Gets a specific health authority site for an admin.
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/admin-view", Name = nameof(GetHealthAuthorityAdminSite))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetHealthAuthorityAdminSite(int healthAuthorityId, int siteId)
+        {
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
+
+            var site = await _healthAuthoritySiteService.GetAdminSiteAsync(siteId);
 
             return Ok(site);
         }
@@ -142,6 +177,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="updateModel"></param>
         [HttpPut("{siteId}", Name = nameof(UpdateHealthAuthoritySite))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -170,6 +206,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/site-completed", Name = nameof(SetHealthAuthoritySiteCompleted))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -198,6 +235,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="updateModel"></param>
         [HttpPost("{siteId}/submissions", Name = nameof(HealthAuthoritySiteSubmission))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -219,13 +257,11 @@ namespace Prime.Controllers
                 return Conflict("Cannot submit Site, one or more selections dependent on the Health Authority are invalid.");
             }
 
-            var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, site.Status))
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, status))
             {
                 return BadRequest("Action could not be performed.");
             }
-
-            // TODO duplicate PEC allowed but only in same Health Authority
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
