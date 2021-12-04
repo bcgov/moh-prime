@@ -873,18 +873,19 @@ namespace Prime.Controllers
                 if (communitySite.ActiveBeforeRegistration)
                 {
                     await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                        site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteActiveBeforeRegistration)));                }
+                        communitySite, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteActiveBeforeRegistration)));
+                }
                 else
                 {
                     await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                        site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedPharmaNetAdministrator)));
+                        communitySite, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedPharmaNetAdministrator)));
 
                     await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                        site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedSigningAuthority)));
+                        communitySite, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedSigningAuthority)));
                 }
-                var remoteUsersToNotify = site.RemoteUsers.Where(ru => !ru.Notified);
+                var remoteUsersToNotify = communitySite.RemoteUsers.Where(ru => !ru.Notified);
                 await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                    site, opt => opt.AfterMap((src, dest) =>
+                    communitySite, opt => opt.AfterMap((src, dest) =>
                     {
                         dest.EmailType = SiteEmailType.RemoteUserNotifications;
                         dest.RemoteUserEmails = remoteUsersToNotify.Select(u => u.Email);
