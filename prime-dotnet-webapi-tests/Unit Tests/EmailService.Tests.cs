@@ -88,11 +88,12 @@ namespace PrimeTests.UnitTests
         [Fact]
         public async void TestSendRemoteUserNotificationsAsync_NoRemoteUsersDoesNotThrow()
         {
-            var site = new CommunitySiteFactory().Generate();
-            var remoteUsers = Enumerable.Empty<RemoteUser>();
+            var site = new SendSiteEmailModelFactory().Generate();
+            site.EmailType = Prime.Contracts.SiteEmailType.RemoteUserNotifications;
+            site.RemoteUserEmails = Enumerable.Empty<string>();
             var service = MockDependenciesFor<EmailService>();
 
-            var exceptions = await Record.ExceptionAsync(() => service.SendRemoteUserNotificationsAsync(site, remoteUsers));
+            var exceptions = await Record.ExceptionAsync(() => service.SendRemoteUserNotificationsAsync(site));
 
             Assert.Null(exceptions);
         }
