@@ -7,4 +7,5 @@ export interface BusinessEvent {
   businessEventTypeCode: BusinessEventTypeEnum;
   description: string;
   eventDate: string;
+  partyName: string;
 }

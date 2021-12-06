@@ -16,6 +16,10 @@
             <mat-chip selected
                       color="primary"
                       [disableRipple]="true">{{ item.name | replace: '@idir': '' }}</mat-chip>
+            <mat-chip *ngIf="item.partyName"
+                      selected
+                      color="secondary"
+                      [disableRipple]="true">{{ item.partyName | capitalize: true }}</mat-chip>
           </mat-chip-list>
         </th>
         <td>{{ item.content }}</td>

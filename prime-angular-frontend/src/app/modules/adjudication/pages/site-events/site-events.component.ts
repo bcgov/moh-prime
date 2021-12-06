@@ -35,7 +35,8 @@ export class SiteEventsComponent implements OnInit {
             return {
               date: businessEvent.eventDate,
               content: businessEvent.description,
-              name: businessEvent.adminIDIR
+              name: businessEvent.adminIDIR,
+              partyName: businessEvent.partyName
             };
           })
         )
