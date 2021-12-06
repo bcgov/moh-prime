@@ -30,19 +30,19 @@ namespace Prime.Consumer
             }
 
             _logger.LogInformation($"Consuming message {typeof(T).Name} {context.MessageId} {emailType}");
-            await Task.FromResult(0);
+            await Task.CompletedTask;
         }
 
         public async Task PostConsume<T>(ConsumeContext<T> context) where T : class
         {
             _logger.LogInformation($"Successfully consumed message {typeof(T).Name} {context.MessageId}");
-            await Task.FromResult(0);
+            await Task.CompletedTask;
         }
 
         public async Task ConsumeFault<T>(ConsumeContext<T> context, Exception exception) where T : class
         {
             _logger.LogError($"Consumer fault consuming message {typeof(T).Name} {context.MessageId}: {exception.Message}");
-            await Task.FromResult(0);
+            await Task.CompletedTask;
         }
     }
 }
