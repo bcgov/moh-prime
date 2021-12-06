@@ -11,9 +11,9 @@
                  class="d-block text-mute font-weight-normal mb-2">
             {{ item.date | formatDate: 'h:mm a' }}
           </small>
-          <mat-chip-list *ngIf="item?.name"
-                         [selectable]="false">
-            <mat-chip selected
+          <mat-chip-list [selectable]="false">
+            <mat-chip *ngIf="item?.name"
+                      selected
                       color="primary"
                       [disableRipple]="true">{{ item.name | replace: '@idir': '' }}</mat-chip>
             <mat-chip *ngIf="item.partyName"
