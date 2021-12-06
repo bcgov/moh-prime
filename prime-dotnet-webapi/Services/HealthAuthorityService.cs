@@ -78,17 +78,23 @@ namespace Prime.Services
 
         public async Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes)
         {
-            var oldCareTypes = await _context.HealthAuthorityCareTypes
+            var existingCareTypes = await _context.HealthAuthorityCareTypes
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
                 .ToListAsync();
 
-            _context.HealthAuthorityCareTypes.RemoveRange(oldCareTypes);
+            var deletedCareTypes = existingCareTypes
+                .Except(existingCareTypes
+                    .Where(ect => careTypes.Contains(ect.CareType)));
 
-            var newCareTypes = careTypes.Select(careType => new HealthAuthorityCareType
-            {
-                HealthAuthorityOrganizationId = healthAuthorityId,
-                CareType = careType
-            });
+            _context.HealthAuthorityCareTypes.RemoveRange(deletedCareTypes);
+
+            var newCareTypes = careTypes
+                .Except(existingCareTypes.Select(ect => ect.CareType))
+                .Select(careType => new HealthAuthorityCareType
+                {
+                    HealthAuthorityOrganizationId = healthAuthorityId,
+                    CareType = careType
+                });
 
             _context.HealthAuthorityCareTypes.AddRange(newCareTypes);
 
@@ -148,17 +154,23 @@ namespace Prime.Services
 
         public async Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)
         {
-            var oldVendors = await _context.HealthAuthorityVendors
+            var existingVendors = await _context.HealthAuthorityVendors
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
                 .ToListAsync();
 
-            _context.HealthAuthorityVendors.RemoveRange(oldVendors);
+            var deletedVendors = existingVendors
+                .Except(existingVendors
+                    .Where(ev => vendorCodes.Contains(ev.VendorCode)));
 
-            var newVendors = vendorCodes.Select(code => new HealthAuthorityVendor
-            {
-                HealthAuthorityOrganizationId = healthAuthorityId,
-                VendorCode = code
-            });
+            _context.HealthAuthorityVendors.RemoveRange(deletedVendors);
+
+            var newVendors = vendorCodes
+                .Except(existingVendors.Select(ev => ev.VendorCode))
+                .Select(code => new HealthAuthorityVendor
+                {
+                    HealthAuthorityOrganizationId = healthAuthorityId,
+                    VendorCode = code
+                });
 
             _context.HealthAuthorityVendors.AddRange(newVendors);
 
@@ -213,6 +225,36 @@ namespace Prime.Services
                 .AsNoTracking()
                 .AnyAsync(vendor => vendor.Id == healthAuthorityVendorId
                     && vendor.HealthAuthorityOrganizationId == healthAuthorityId);
+        }
+
+        public async Task<bool> IsVendorInUseAsync(int healthAuthorityId, int healthAuthorityVendorCode)
+        {
+            var vednorId = await _context.HealthAuthorityVendors
+                .AsNoTracking()
+                .Where(vendor => vendor.HealthAuthorityOrganizationId == healthAuthorityId && vendor.VendorCode == healthAuthorityVendorCode)
+                .Select(vendor => vendor.Id)
+                .SingleAsync();
+
+
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .AnyAsync(has => has.HealthAuthorityOrganizationId == healthAuthorityId
+                    && has.HealthAuthorityVendorId == vednorId);
+        }
+
+        public async Task<bool> IsCareTypeInUse(int healthAuthorityId, string healthAuthorityCareType)
+        {
+            var careTypeId = await _context.HealthAuthorityCareTypes
+                .AsNoTracking()
+                .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId && ct.CareType == healthAuthorityCareType)
+                .Select(vendor => vendor.Id)
+                .SingleAsync();
+
+
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .AnyAsync(has => has.HealthAuthorityOrganizationId == healthAuthorityId
+                    && has.HealthAuthorityCareTypeId == careTypeId);
         }
     }
 }

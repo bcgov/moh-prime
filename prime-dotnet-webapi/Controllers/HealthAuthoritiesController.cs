@@ -240,5 +240,62 @@ namespace Prime.Controllers
             await _healthAuthorityService.UpdateContactsAsync<HealthAuthorityPharmanetAdministrator>(healthAuthorityId, contacts);
             return NoContent();
         }
+
+        // HEAD: api/health-authorities/5/vendor/5
+        /// <summary>
+        /// Checks if the specified vendor is in use by a Health Authority site
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="vendorCode"></param>
+        [HttpHead("{healthAuthorityId}/vendor/{vendorCode}", Name = nameof(IsVendorInUse))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> IsVendorInUse(int healthAuthorityId, int vendorCode)
+        {
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+            }
+
+            if (!await _healthAuthorityService.IsVendorInUseAsync(healthAuthorityId, vendorCode))
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
+
+        // HEAD: api/health-authorities/5/care-type/5
+        /// <summary>
+        /// Checks if the specified care type is in use by a Health Authority site
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="careType"></param>
+        [HttpHead("{healthAuthorityId}/care-type/{careType}", Name = nameof(IsCareTypeInUse))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> IsCareTypeInUse(int healthAuthorityId, string careType)
+        {
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+            }
+
+            if (!await _healthAuthorityService.IsCareTypeInUse(healthAuthorityId, careType))
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
     }
 }
