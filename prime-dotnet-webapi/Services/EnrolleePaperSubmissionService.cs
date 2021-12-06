@@ -43,7 +43,7 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
-        public async Task<bool> PaperSubmissionIsEditableAsync(int enrolleeId)
+        public async Task<bool> PaperSubmissionIsUpdateableAsync(int enrolleeId)
         {
             var dto = await _context.Enrollees
                 .AsNoTracking()
