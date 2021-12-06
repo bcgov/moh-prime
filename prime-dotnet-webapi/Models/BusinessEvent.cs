@@ -50,5 +50,7 @@ namespace Prime.Models
         public string Description { get; set; }
 
         public DateTimeOffset? EventDate { get; set; }
+
+        public string PartyName { get; set; }
     }
 }

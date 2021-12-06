@@ -225,6 +225,15 @@ namespace Prime.Services
             var userId = _httpContext.HttpContext.User.GetPrimeUserId();
             Admin admin = await _adminService.GetAdminAsync(userId);
             int? adminId = admin?.Id;
+            var firstName = await _context.Parties
+                .Where(p => p.Id == partyId)
+                .Select(p => p.FirstName)
+                .SingleOrDefaultAsync();
+            var lastName = await _context.Parties
+                .Where(p => p.Id == partyId)
+                .Select(p => p.LastName)
+                .SingleOrDefaultAsync();
+            var partyName = String.Format("{0} {1}", firstName, lastName);
 
             var businessEvent = new BusinessEvent
             {
@@ -233,7 +242,8 @@ namespace Prime.Services
                 AdminId = adminId,
                 BusinessEventTypeCode = BusinessEventTypeCode,
                 Description = description,
-                EventDate = DateTimeOffset.Now
+                EventDate = DateTimeOffset.Now,
+                PartyName = partyName
             };
 
             return businessEvent;
