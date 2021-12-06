@@ -235,7 +235,6 @@ namespace Prime.Services
                 .Select(vendor => vendor.Id)
                 .SingleAsync();
 
-
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .AnyAsync(has => has.HealthAuthorityOrganizationId == healthAuthorityId
@@ -247,9 +246,8 @@ namespace Prime.Services
             var careTypeId = await _context.HealthAuthorityCareTypes
                 .AsNoTracking()
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId && ct.CareType == healthAuthorityCareType)
-                .Select(vendor => vendor.Id)
+                .Select(ct => ct.Id)
                 .SingleAsync();
-
 
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
