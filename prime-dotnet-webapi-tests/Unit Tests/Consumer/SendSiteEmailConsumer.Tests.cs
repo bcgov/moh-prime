@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
 
 using FakeItEasy;
 using MassTransit;
@@ -8,10 +8,9 @@ using MassTransit.Testing;
 using Xunit;
 
 using Prime.Consumer;
-using Prime.Services;
 using Prime.Contracts;
+using Prime.Services;
 using PrimeTests.ModelFactories;
-using System.Collections.Generic;
 
 namespace PrimeTests.UnitTests.Consumer
 {
@@ -89,6 +88,7 @@ namespace PrimeTests.UnitTests.Consumer
                     A.CallTo(() => _emailServiceMock.SendSiteReviewedNotificationAsync(sendSiteEmail)).MustHaveHappened();
                     break;
                 default:
+                    A.CallTo(_emailServiceMock).MustNotHaveHappened();
                     break;
             }
         }
