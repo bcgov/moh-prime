@@ -107,10 +107,10 @@ export class HealthAuthorityResource {
       );
   }
 
-  public isHealthAuthorityVendorInUse(healthAuthorityId: number, vendorCode: number): Observable<boolean> {
-    return this.apiResource.head<boolean>(`health-authorities/${healthAuthorityId}/vendor/${vendorCode}`)
+  public isHealthAuthorityVendorInUse(healthAuthorityId: number, vendorCode: number): NoContent {
+    return this.apiResource.head<NoContent>(`health-authorities/${healthAuthorityId}/vendor/${vendorCode}`)
       .pipe(
-        map((_) => true),
+        NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority vendor could not be deleted');
           this.logger.error('[Core] HealthAuthorityResource::isHealthAuthorityVendorInUse error has occurred: ', error);
@@ -119,10 +119,10 @@ export class HealthAuthorityResource {
       );
   }
 
-  public isHealthAuthorityCareTypeInUse(healthAuthorityId: number, careType: string): Observable<boolean> {
-    return this.apiResource.head<boolean>(`health-authorities/${healthAuthorityId}/care-type/${careType}`)
+  public isHealthAuthorityCareTypeInUse(healthAuthorityId: number, careType: string): NoContent {
+    return this.apiResource.head<NoContent>(`health-authorities/${healthAuthorityId}/care-type/${careType}`)
       .pipe(
-        map((_) => true),
+        NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority care type could not be deleted');
           this.logger.error('[Core] HealthAuthorityResource::isHealthAuthorityCareTypeInUse error has occurred: ', error);
