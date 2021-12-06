@@ -8,6 +8,7 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
+import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -38,6 +39,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public showAdjudication: boolean;
   public documents: EnrolleeAdjudicationDocument[];
   public absence: EnrolleeAbsence;
+  public readonly PAPER_ENROLLEE_GPID_PREFIX = PAPER_ENROLLEE_GPID_PREFIX;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,
@@ -140,6 +142,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       smsPhone,
       phone,
       phoneExtension,
+      userProvidedGpid,
       ...remainder
     } = enrollee;
 
@@ -161,7 +164,8 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
         email,
         smsPhone,
         phone,
-        phoneExtension
+        phoneExtension,
+        userProvidedGpid
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

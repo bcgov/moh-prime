@@ -22,6 +22,7 @@ namespace Prime.Models
         }
 
         public const int DISPLAY_OFFSET = 1000;
+        public const string PaperGpidPrefix = "NOBCSC";
 
         [Key]
         public int Id { get; set; }
@@ -118,6 +119,10 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<EnrolleeAbsence> EnrolleeAbsences { get; set; }
+
+        public EnrolleeLinkedEnrolment EnrolleeToPaperLink { get; set; }
+
+        public EnrolleeLinkedEnrolment PaperToEnrolleeLink { get; set; }
 
         [NotMapped]
         [Computed]
