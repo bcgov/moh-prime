@@ -41,10 +41,10 @@ namespace Prime.ViewModels
                 matchedOn.Add(nameof(Name));
             }
 
-            if (SigningAuthority != null && (SigningAuthority.FirstName + " " + SigningAuthority.LastName).Contains(textSearch))
+            if (SigningAuthority != null
+                && (SigningAuthority.FirstName + " " + SigningAuthority.LastName).ToLower().Contains(textSearch))
             {
-                matchedOn.Add(SigningAuthority.FirstName);
-                matchedOn.Add(SigningAuthority.LastName);
+                matchedOn.Add(nameof(SigningAuthority));
             }
 
             if (Sites.Any(s => s.DoingBusinessAs != null && s.DoingBusinessAs.ToLower().Contains(textSearch)))
