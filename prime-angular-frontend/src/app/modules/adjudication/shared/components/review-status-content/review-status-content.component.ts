@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 
+import { ConfigCodePipe } from '@config/config-code.pipe';
 import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
+import { RoutePath } from '@lib/utils/route-utils.class';
+import { DISPLAY_ID_OFFSET } from '@lib/constants';
 import { UtilsService } from '@core/services/utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
@@ -10,13 +13,10 @@ import { EnrolmentStatusEnum as EnrolmentStatusEnum } from '@shared/enums/enrolm
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
-import { ConfigCodePipe } from '@config/config-code.pipe';
-import { RoutePath } from '@lib/utils/route-utils.class';
-import { DISPLAY_ID_OFFSET } from '@lib/constants';
+
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 export class Status {
   constructor(
