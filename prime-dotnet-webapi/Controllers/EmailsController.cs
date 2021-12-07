@@ -57,7 +57,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendEnrolleeRenewalEmails()
         {
-            await _bus.Send<SendEnrolleeEmail>(new { });
+            await _bus.Send<SendEnrolleeEmail>(new { EmailType = EnrolleeEmailType.EnrolleeRenewal });
 
             return NoContent();
         }
