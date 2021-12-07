@@ -175,6 +175,6 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   }
 
   private isPaperEnrollee(enrollee: Enrollee): boolean {
-    return (enrollee?.gpid && enrollee.gpid.startsWith('NOBCSC'));
+    return (enrollee?.gpid && enrollee.gpid.startsWith(PAPER_ENROLLEE_GPID_PREFIX));
   }
 }
