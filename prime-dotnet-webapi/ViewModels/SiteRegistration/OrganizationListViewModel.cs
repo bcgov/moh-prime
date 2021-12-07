@@ -44,7 +44,7 @@ namespace Prime.ViewModels
             if (SigningAuthority != null
                 && (SigningAuthority.FirstName + " " + SigningAuthority.LastName).ToLower().Contains(textSearch))
             {
-                matchedOn.Add(nameof(SigningAuthority));
+                matchedOn.Add("SigningAuthorityName");
             }
 
             if (Sites.Any(s => s.DoingBusinessAs != null && s.DoingBusinessAs.ToLower().Contains(textSearch)))
