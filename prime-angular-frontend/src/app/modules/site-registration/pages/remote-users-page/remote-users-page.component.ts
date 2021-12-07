@@ -36,6 +36,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public hasNoRemoteUserError: boolean;
   public hasNoEmailError: boolean;
   public SiteRoutes = SiteRoutes;
+  public addedFirstRemoteUser: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -104,8 +105,10 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     // to the remote users that need to be persisted
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
 
+    this.addedFirstRemoteUser = this.route.snapshot.queryParams.addedFirstRemoteUser === 'true';
+
     // Remove query param from URL without refreshing
-    this.routeUtils.removeQueryParams({ fromRemoteUser: null });
+    this.routeUtils.removeQueryParams({ fromRemoteUser: null, addedFirstRemoteUser: null });
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
     // TODO is this needed?
     this.formState.form.markAsPristine();

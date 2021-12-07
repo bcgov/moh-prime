@@ -54,6 +54,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   public licenses: LicenseConfig[];
   public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
+  public isAddingFirstRemoteUser: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -144,6 +145,8 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
       this.routeUtils.routeRelativeTo(['new']);
     }
 
+    this.isAddingFirstRemoteUser = this.formState.getRemoteUsers().length == 0;
+
     // Create a local form group for creating or updating remote users
     this.form = this.formState.createEmptyRemoteUserFormAndPatch(remoteUser);
 
@@ -197,7 +200,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
   protected afterSubmitIsSuccessful(): void {
     // Inform the remote users view not to patch the form, otherwise updates will be lost
-    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
+    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true, addedFirstRemoteUser: this.isAddingFirstRemoteUser } });
   }
 
   /**
