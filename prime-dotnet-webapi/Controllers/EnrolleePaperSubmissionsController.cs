@@ -368,5 +368,35 @@ namespace Prime.Controllers
 
             return Ok(await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrolleeId));
         }
+
+        // PUT: api/Enrollees/5/date-of-birth
+        /// <summary>
+        ///  Updates the date of birth on an unlinked paper enrolment
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="dateOfBirth"></param>
+        [HttpPut("{enrolleeId}/date-of-birth", Name = nameof(UpdatePaperEnrolleeDateOfBirth))]
+        [Authorize(Roles = Roles.ManageEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdatePaperEnrolleeDateOfBirth(int enrolleeId, FromBodyData<DateTime> dateOfBirth)
+        {
+            if (!await _enrolleePaperSubmissionService.IsPaperEnrolment(enrolleeId))
+            {
+                return NotFound($"Paper enrollee not found with id {enrolleeId}");
+            }
+
+            if (await _enrolleePaperSubmissionService.IsLinkedPaperEnrolment(enrolleeId))
+            {
+                return BadRequest($"Unable to update date of birth on linked paper enrollee with id {enrolleeId}");
+            }
+
+            await _enrolleeService.UpdateDateOfBirthAsync(enrolleeId, dateOfBirth);
+
+            return NoContent();
+        }
     }
 }
