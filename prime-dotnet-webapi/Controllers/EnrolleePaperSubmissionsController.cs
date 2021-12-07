@@ -263,6 +263,11 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAdjudicationDocuments(int enrolleeId)
         {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee Id {enrolleeId}");
+            }
+
             var documents = await _enrolleePaperSubmissionService.GetEnrolleeAdjudicationDocumentsAsync(enrolleeId);
 
             return Ok(documents);
