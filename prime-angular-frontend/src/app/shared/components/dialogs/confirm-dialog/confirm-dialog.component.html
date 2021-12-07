@@ -13,7 +13,7 @@
   <p *ngIf="options.message">{{ options.message }}</p>
   <ng-template appDialogContent></ng-template>
 </mat-dialog-content>
-<mat-dialog-actions>
+<mat-dialog-actions *ngIf="!(options.cancelHide && options.actionHide)">
   <button *ngIf="!options.cancelHide"
           mat-stroked-button
           [mat-dialog-close]="false"

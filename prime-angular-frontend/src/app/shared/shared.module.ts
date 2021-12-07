@@ -112,6 +112,7 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
 import { DocumentAttachmentsComponent } from '@shared/components/document-attachments/document-attachments.component';
 import { DocumentAttachmentComponent } from '@shared/components/document-attachment/document-attachment.component';
 import { PartyTypePipe } from '@phsa/shared/pipes/party-type.pipe';
+import { DateOfBirthComponent } from './components/dialogs/content/date-of-birth/date-of-birth.component';
 
 // Shared health authority components
 import { SiteInformationOverviewComponent } from '@health-auth/pages/site-information-page/site-information-overview.component';
@@ -224,7 +225,8 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     SiteAddressOverviewComponent,
     VendorOverviewComponent,
     SiteInformationOverviewComponent,
-    HealthAuthSiteOverviewContainerComponent
+    HealthAuthSiteOverviewContainerComponent,
+    DateOfBirthComponent
   ],
   imports: [
     CommonModule,
