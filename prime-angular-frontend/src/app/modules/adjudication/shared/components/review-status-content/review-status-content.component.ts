@@ -133,7 +133,10 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     return enrolmentStatus.enrolmentStatusReasons
       .reduce((reasons: Reason[], esr: EnrolmentStatusReason) => {
         if (esr.statusReasonCode === EnrolmentStatusReasonEnum.SELF_DECLARATION) {
-          return reasons.concat(this.parseSelfDeclarations(this.enrollee));
+          const selfDeclReasons = this.parseSelfDeclarations(this.enrollee);
+          if (selfDeclReasons.length > 0) {
+            return reasons.concat(selfDeclReasons);
+          }
         }
 
         const statusReason = this.configPipe.transform(esr.statusReasonCode, 'statusReasons');
@@ -157,6 +160,9 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   private parseSelfDeclarations(enrollee: HttpEnrollee): Reason[] {
     return enrollee.selfDeclarations
       .reduce((selfDeclarations, selfDeclaration: SelfDeclaration) => {
+        if (!selfDeclaration.answered) {
+          return selfDeclarations;
+        }
         selfDeclarations.push(new Reason(
           'User answered yes to a self-declaration question:',
           selfDeclaration.selfDeclarationDetails,
