@@ -74,5 +74,7 @@ namespace Prime.ViewModels
         public int LinkedEnrolleeId { get; set; }
 
         public bool PossiblePaperEnrolmentMatch { get; set; }
+
+        public DateTime DateOfBirth { get; set; }
     }
 }

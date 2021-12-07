@@ -1,0 +1,32 @@
+<mat-dialog-content>
+
+  <form [formGroup]="form">
+    <mat-form-field class="w-100">
+      <input matInput
+             placeholder="Date of Birth"
+             [max]="maxDateOfBirth"
+             [matDatepicker]="dobDatePicker"
+             formControlName="dateOfBirth"
+             (click)="dobDatePicker.open()"
+             readonly>
+      <mat-datepicker-toggle matSuffix
+                             [for]="dobDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #dobDatePicker
+                      startView="multi-year"
+                      disabled="false"></mat-datepicker>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+  </form>
+
+  <div class="mt-4">
+    <button mat-stroked-button
+            [mat-dialog-close]="false"
+            cdkFocusInitial
+            class="my-2 mr-2">Cancel</button>
+    <button mat-flat-button
+            color="primary"
+            (click)="onSave()"
+            class="my-2 mr-1">Save</button>
+  </div>
+
+</mat-dialog-content>

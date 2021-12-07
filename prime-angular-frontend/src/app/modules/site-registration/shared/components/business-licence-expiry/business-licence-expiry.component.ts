@@ -17,5 +17,5 @@ export class BusinessLicenceExpiryComponent implements OnInit {
     this.minExpiryDate = moment();
   }
 
-  ngOnInit(): void { }
+  public ngOnInit(): void { }
 }
