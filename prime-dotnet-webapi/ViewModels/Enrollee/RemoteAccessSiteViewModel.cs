@@ -6,6 +6,7 @@ namespace Prime.ViewModels
     {
         public int Id { get; set; }
         public int EnrolleeId { get; set; }
+        public int SiteId { get; set; }
         public SiteViewModel Site { get; set; }
 
         public class SiteViewModel
