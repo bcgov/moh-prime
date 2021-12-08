@@ -66,7 +66,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public removeCareType(index: number) {
     const careType = this.careTypes.value[index].careType;
-    this.healthAuthResource.isHealthAuthorityCareTypeInUse(this.route.snapshot.params.haid, careType)
+    this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careType)
       .subscribe(() => {
         this.careTypes.removeAt(index);
       });

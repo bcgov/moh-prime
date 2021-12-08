@@ -23,7 +23,7 @@ namespace Prime.Services
         Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel);
         Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, int healthAuthoritySiteId);
         Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId);
-        Task<bool> IsVendorInUseAsync(int healthAuthorityId, int healthAuthorityVendorId);
-        Task<bool> IsCareTypeInUse(int healthAuthorityId, string healthAuthorityCareType);
+        Task<IEnumerable<int>> IsVendorInUseAsync(int healthAuthorityId, int healthAuthorityVendorId);
+        Task<IEnumerable<int>> IsCareTypeInUse(int healthAuthorityId, string healthAuthorityCareType);
     }
 }

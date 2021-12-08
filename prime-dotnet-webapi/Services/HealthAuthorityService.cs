@@ -244,9 +244,9 @@ namespace Prime.Services
                     && vendor.HealthAuthorityOrganizationId == healthAuthorityId);
         }
 
-        public async Task<bool> IsVendorInUseAsync(int healthAuthorityId, int healthAuthorityVendorCode)
+        public async Task<IEnumerable<int>> IsVendorInUseAsync(int healthAuthorityId, int healthAuthorityVendorCode)
         {
-            var vednorId = await _context.HealthAuthorityVendors
+            var healthAuthorityVendorId = await _context.HealthAuthorityVendors
                 .AsNoTracking()
                 .Where(vendor => vendor.HealthAuthorityOrganizationId == healthAuthorityId && vendor.VendorCode == healthAuthorityVendorCode)
                 .Select(vendor => vendor.Id)
@@ -254,13 +254,15 @@ namespace Prime.Services
 
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
-                .AnyAsync(has => has.HealthAuthorityOrganizationId == healthAuthorityId
-                    && has.HealthAuthorityVendorId == vednorId);
+                .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId
+                    && has.HealthAuthorityVendorId == healthAuthorityVendorId)
+                .Select(has => has.Id)
+                .ToListAsync();
         }
 
-        public async Task<bool> IsCareTypeInUse(int healthAuthorityId, string healthAuthorityCareType)
+        public async Task<IEnumerable<int>> IsCareTypeInUse(int healthAuthorityId, string healthAuthorityCareType)
         {
-            var careTypeId = await _context.HealthAuthorityCareTypes
+            var healthAuthorityCareTypeId = await _context.HealthAuthorityCareTypes
                 .AsNoTracking()
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId && ct.CareType == healthAuthorityCareType)
                 .Select(ct => ct.Id)
@@ -268,8 +270,10 @@ namespace Prime.Services
 
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
-                .AnyAsync(has => has.HealthAuthorityOrganizationId == healthAuthorityId
-                    && has.HealthAuthorityCareTypeId == careTypeId);
+                .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId
+                    && has.HealthAuthorityCareTypeId == healthAuthorityCareTypeId)
+                .Select(has => has.Id)
+                .ToListAsync();
         }
     }
 }

@@ -247,13 +247,14 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // HEAD: api/health-authorities/5/vendor/5
+        // GET: api/health-authorities/5/vendors/5/sites
         /// <summary>
         /// Checks if the specified vendor is in use by a Health Authority site
+        /// and return the sites that are using the provided vendor
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="vendorCode"></param>
-        [HttpHead("{healthAuthorityId}/vendor/{vendorCode}", Name = nameof(IsVendorInUse))]
+        [HttpGet("{healthAuthorityId}/vendors/{vendorCode}/sites", Name = nameof(IsVendorInUse))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -266,22 +267,22 @@ namespace Prime.Controllers
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
-            if (!await _healthAuthorityService.IsVendorInUseAsync(healthAuthorityId, vendorCode))
-            {
-                return Ok();
-            }
+            var siteIds = await _healthAuthorityService.IsVendorInUseAsync(healthAuthorityId, vendorCode);
 
-            return NotFound();
+            return siteIds.Any()
+            ? Ok(siteIds)
+            : NotFound();
         }
 
 
-        // HEAD: api/health-authorities/5/care-type/5
+        // GET: api/health-authorities/5/care-types/5/sites
         /// <summary>
         /// Checks if the specified care type is in use by a Health Authority site
+        /// and return the sites that are using the provided care type
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="careType"></param>
-        [HttpHead("{healthAuthorityId}/care-type/{careType}", Name = nameof(IsCareTypeInUse))]
+        [HttpGet("{healthAuthorityId}/care-types/{careType}/sites", Name = nameof(IsCareTypeInUse))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -294,12 +295,11 @@ namespace Prime.Controllers
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
-            if (!await _healthAuthorityService.IsCareTypeInUse(healthAuthorityId, careType))
-            {
-                return Ok();
-            }
+            var siteIds = await _healthAuthorityService.IsCareTypeInUse(healthAuthorityId, careType);
 
-            return NotFound();
+            return siteIds.Any()
+                ? Ok(siteIds)
+                : NotFound();
         }
     }
 }
