@@ -242,8 +242,7 @@ namespace Prime.Services
                 AdminId = adminId,
                 BusinessEventTypeCode = BusinessEventTypeCode,
                 Description = description,
-                EventDate = DateTimeOffset.Now,
-                PartyName = partyName
+                EventDate = DateTimeOffset.Now
             };
 
             return businessEvent;
