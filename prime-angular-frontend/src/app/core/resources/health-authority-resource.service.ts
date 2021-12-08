@@ -16,7 +16,6 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 
@@ -110,12 +109,7 @@ export class HealthAuthorityResource {
   public getHealthAuthorityVendorSiteIds(healthAuthorityId: number, vendorCode: number): Observable<number[]> {
     return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/vendors/${vendorCode}/sites`)
       .pipe(
-        map((response: ApiHttpResponse<number[]>) => {
-          if (response.result.length) {
-            this.toastService.openErrorToast('Health authority vendor could not be deleted. One or more sites are using it');
-          }
-          return response.result
-        }),
+        map((response: ApiHttpResponse<number[]>) => response.result),
         tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),
         catchError((error: any) => {
           this.logger.error('[Core] HealthAuthorityResource::isHealthAuthorityVendorInUse error has occurred: ', error);
@@ -127,12 +121,7 @@ export class HealthAuthorityResource {
   public getHealthAuthorityCareTypeSiteIds(healthAuthorityId: number, careType: string): Observable<number[]> {
     return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/care-types/${careType}/sites`)
       .pipe(
-        map((response: ApiHttpResponse<number[]>) => {
-          if (response.result.length) {
-            this.toastService.openErrorToast('Health authority vendor could not be deleted. One or more sites are using it');
-          }
-          return response.result
-        }),
+        map((response: ApiHttpResponse<number[]>) => response.result),
         tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),
         catchError((error: any) => {
           this.logger.error('[Core] HealthAuthorityResource::isHealthAuthorityCareTypeInUse error has occurred: ', error);

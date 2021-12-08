@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
+import { ToastService } from '@core/services/toast.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { VendorConfig } from '@config/config.model';
@@ -36,6 +37,7 @@ export class VendorsPageComponent implements OnInit {
     private formUtilsService: FormUtilsService,
     private configService: ConfigService,
     private route: ActivatedRoute,
+    protected toastService: ToastService,
     router: Router
   ) {
     this.title = route.snapshot.data.title;
@@ -75,9 +77,9 @@ export class VendorsPageComponent implements OnInit {
     const vendorCode = this.vendors.value[index].vendor.code;
     this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorCode)
       .subscribe((healthAuthoritySites) => {
-        if (!healthAuthoritySites.length) {
-          this.vendors.removeAt(index);
-        }
+        (!healthAuthoritySites.length)
+          ? this.vendors.removeAt(index)
+          : this.toastService.openErrorToast('Health authority vendor could not be deleted. One or more sites are using it');
       });
   }
 

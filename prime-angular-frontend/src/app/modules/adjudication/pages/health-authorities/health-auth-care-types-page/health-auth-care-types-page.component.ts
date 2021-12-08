@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
+import { ToastService } from '@core/services/toast.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
@@ -33,6 +34,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     private formUtilsService: FormUtilsService,
     private configService: ConfigService,
     private route: ActivatedRoute,
+    protected toastService: ToastService,
     router: Router
   ) {
     this.title = route.snapshot.data.title;
@@ -68,9 +70,9 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     const careType = this.careTypes.value[index].careType;
     this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careType)
       .subscribe((healthAuthoritySites) => {
-        if (!healthAuthoritySites.length) {
-          this.careTypes.removeAt(index);
-        }
+        (!healthAuthoritySites.length)
+          ? this.careTypes.removeAt(index)
+          : this.toastService.openErrorToast('Health authority care type could not be deleted. One or more sites are using it');
       });
   }
 
