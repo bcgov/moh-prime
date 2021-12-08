@@ -139,7 +139,10 @@ namespace Prime.Controllers
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
-            await _healthAuthorityService.UpdateCareTypesAsync(healthAuthorityId, careTypes);
+            if (!await _healthAuthorityService.UpdateCareTypesAsync(healthAuthorityId, careTypes))
+            {
+                return BadRequest("Unable to update care types. One or more health authority care types may be in use");
+            }
 
             return NoContent();
         }
@@ -168,7 +171,10 @@ namespace Prime.Controllers
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
-            await _healthAuthorityService.UpdateVendorsAsync(healthAuthorityId, vendors);
+            if (!await _healthAuthorityService.UpdateVendorsAsync(healthAuthorityId, vendors))
+            {
+                return BadRequest("Unable to update care types. One or more health authority vendors are in use");
+            }
 
             return NoContent();
         }
@@ -248,11 +254,10 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="vendorCode"></param>
         [HttpHead("{healthAuthorityId}/vendor/{vendorCode}", Name = nameof(IsVendorInUse))]
-        [Authorize(Roles = Roles.EditSite)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> IsVendorInUse(int healthAuthorityId, int vendorCode)
         {
@@ -277,11 +282,10 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="careType"></param>
         [HttpHead("{healthAuthorityId}/care-type/{careType}", Name = nameof(IsCareTypeInUse))]
-        [Authorize(Roles = Roles.EditSite)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> IsCareTypeInUse(int healthAuthorityId, string careType)
         {

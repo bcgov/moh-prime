@@ -13,6 +13,7 @@ using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.HealthAuthoritySites.Internal;
+using Prime.Engines;
 
 namespace Prime.Services
 {
@@ -76,29 +77,37 @@ namespace Prime.Services
                 .AnyAsync();
         }
 
-        public async Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes)
+        public async Task<bool> UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes)
         {
             var existingCareTypes = await _context.HealthAuthorityCareTypes
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
                 .ToListAsync();
 
-            var deletedCareTypes = existingCareTypes
-                .Except(existingCareTypes
-                    .Where(ect => careTypes.Contains(ect.CareType)));
-
-            _context.HealthAuthorityCareTypes.RemoveRange(deletedCareTypes);
-
-            var newCareTypes = careTypes
-                .Except(existingCareTypes.Select(ect => ect.CareType))
+            var incomingCareTypes = careTypes
                 .Select(careType => new HealthAuthorityCareType
                 {
                     HealthAuthorityOrganizationId = healthAuthorityId,
                     CareType = careType
                 });
 
-            _context.HealthAuthorityCareTypes.AddRange(newCareTypes);
+            var results = EntityMatcher
+                .MatchUsing((HealthAuthorityCareType ct) => ct.CareType.ToLower())
+                .Match(existingCareTypes, incomingCareTypes);
+
+            if (await _context.HealthAuthoritySites
+                    .AnyAsync(has => has.HealthAuthorityOrganizationId == healthAuthorityId
+                    && results.Dropped.Select(d => d.Id).Contains(has.HealthAuthorityCareTypeId.Value)))
+            {
+                return false;
+            }
+
+            _context.HealthAuthorityCareTypes.RemoveRange(results.Dropped);
+
+            _context.HealthAuthorityCareTypes.AddRange(results.Added);
 
             await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<ContactViewModel> contacts) where T : HealthAuthorityContact, new()
@@ -152,29 +161,37 @@ namespace Prime.Services
             await UpdateContactsAsync<HealthAuthorityPrivacyOfficer>(healthAuthorityId, new ContactViewModel[] { privacyOffice.PrivacyOfficer });
         }
 
-        public async Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)
+        public async Task<bool> UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)
         {
             var existingVendors = await _context.HealthAuthorityVendors
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
                 .ToListAsync();
 
-            var deletedVendors = existingVendors
-                .Except(existingVendors
-                    .Where(ev => vendorCodes.Contains(ev.VendorCode)));
-
-            _context.HealthAuthorityVendors.RemoveRange(deletedVendors);
-
-            var newVendors = vendorCodes
-                .Except(existingVendors.Select(ev => ev.VendorCode))
+            var incomingVendors = vendorCodes
                 .Select(code => new HealthAuthorityVendor
                 {
                     HealthAuthorityOrganizationId = healthAuthorityId,
                     VendorCode = code
                 });
 
-            _context.HealthAuthorityVendors.AddRange(newVendors);
+            var results = EntityMatcher
+                .MatchUsing((HealthAuthorityVendor v) => v.VendorCode)
+                .Match(existingVendors, incomingVendors);
+
+            if (await _context.HealthAuthoritySites
+                    .AnyAsync(has => has.HealthAuthorityOrganizationId == healthAuthorityId
+                    && results.Dropped.Select(d => d.Id).Contains(has.HealthAuthorityVendorId)))
+            {
+                return false;
+            }
+
+            _context.HealthAuthorityVendors.RemoveRange(results.Dropped);
+
+            _context.HealthAuthorityVendors.AddRange(results.Added);
 
             await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
