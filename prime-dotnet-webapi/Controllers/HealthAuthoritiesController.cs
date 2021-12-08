@@ -269,9 +269,7 @@ namespace Prime.Controllers
 
             var siteIds = await _healthAuthorityService.IsVendorInUseAsync(healthAuthorityId, vendorCode);
 
-            return siteIds.Any()
-            ? Ok(siteIds)
-            : NotFound();
+            return Ok(siteIds);
         }
 
 
@@ -297,9 +295,7 @@ namespace Prime.Controllers
 
             var siteIds = await _healthAuthorityService.IsCareTypeInUse(healthAuthorityId, careType);
 
-            return siteIds.Any()
-                ? Ok(siteIds)
-                : NotFound();
+            return Ok(siteIds);
         }
     }
 }

@@ -110,10 +110,14 @@ export class HealthAuthorityResource {
   public getHealthAuthorityVendorSiteIds(healthAuthorityId: number, vendorCode: number): Observable<number[]> {
     return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/vendors/${vendorCode}/sites`)
       .pipe(
-        map((response: ApiHttpResponse<number[]>) => response.result),
+        map((response: ApiHttpResponse<number[]>) => {
+          if (response.result.length) {
+            this.toastService.openErrorToast('Health authority vendor could not be deleted. One or more sites are using it');
+          }
+          return response.result
+        }),
         tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority vendor could not be deleted');
           this.logger.error('[Core] HealthAuthorityResource::isHealthAuthorityVendorInUse error has occurred: ', error);
           throw error;
         })
@@ -123,10 +127,14 @@ export class HealthAuthorityResource {
   public getHealthAuthorityCareTypeSiteIds(healthAuthorityId: number, careType: string): Observable<number[]> {
     return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/care-types/${careType}/sites`)
       .pipe(
-        map((response: ApiHttpResponse<number[]>) => response.result),
+        map((response: ApiHttpResponse<number[]>) => {
+          if (response.result.length) {
+            this.toastService.openErrorToast('Health authority vendor could not be deleted. One or more sites are using it');
+          }
+          return response.result
+        }),
         tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority care type could not be deleted');
           this.logger.error('[Core] HealthAuthorityResource::isHealthAuthorityCareTypeInUse error has occurred: ', error);
           throw error;
         })
