@@ -28,6 +28,12 @@
         <app-overview-section title="New Signing Authority"
                               (route)="onRoute($event)">
           <app-bcsc-profile [user]="newSigningAuthority"></app-bcsc-profile>
+          <app-enrollee-property title="Email">
+            {{ newSigningAuthority?.email | default }}
+          </app-enrollee-property>
+          <app-enrollee-property title="Phone Number">
+            {{ newSigningAuthority?.phone | phone | default }}
+          </app-enrollee-property>
         </app-overview-section>
 
         <button mat-flat-button
