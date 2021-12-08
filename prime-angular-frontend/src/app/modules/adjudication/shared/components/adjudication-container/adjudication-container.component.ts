@@ -96,7 +96,6 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onNotify(enrollee: EnrolleeListViewModel) {
     this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
-      .pipe(map(() => EMPTY))
       .subscribe(() => EmailUtils.openEmailClient(enrollee.email));
   }
 
