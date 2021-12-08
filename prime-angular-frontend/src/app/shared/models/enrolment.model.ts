@@ -139,4 +139,5 @@ export interface EnrolleeListViewModel {
   linkedEnrolleeId: number;
   possiblePaperEnrolmentMatch: boolean;
   dateOfBirth: string;
+  email: string;
 }

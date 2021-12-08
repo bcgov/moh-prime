@@ -94,22 +94,10 @@ export class AdjudicationContainerComponent implements OnInit {
     this.getDataset(this.route.snapshot.params.id, this.route.snapshot.queryParams);
   }
 
-  public onNotify(enrolleeId: number) {
-    this.adjudicationResource.getEnrolleeById(enrolleeId)
-      .pipe(
-        exhaustMap((enrollee: HttpEnrollee) => {
-          if (enrollee.email) {
-            return of(enrollee);
-          }
-          this.toastService.openErrorToast('Enrollee does not have a contact email.');
-          return EMPTY;
-        }),
-        exhaustMap((enrollee: HttpEnrollee) =>
-          this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
-            .pipe(map(() => enrollee))
-        )
-      )
-      .subscribe((enrollee: HttpEnrollee) => EmailUtils.openEmailClient(enrollee.email));
+  public onNotify(enrollee: EnrolleeListViewModel) {
+    this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
+      .pipe(map(() => EMPTY))
+      .subscribe(() => EmailUtils.openEmailClient(enrollee.email));
   }
 
   public onAssign(enrolleeId: number) {
@@ -583,7 +571,8 @@ export class AdjudicationContainerComponent implements OnInit {
       possiblePaperEnrolmentMatch,
       gpid,
       adjudicatorIdir,
-      dateOfBirth
+      dateOfBirth,
+      email
     } = enrollee;
 
     return {
@@ -609,7 +598,8 @@ export class AdjudicationContainerComponent implements OnInit {
       linkedEnrolleeId,
       possiblePaperEnrolmentMatch,
       gpid,
-      dateOfBirth
+      dateOfBirth,
+      email
     };
   }
 }
