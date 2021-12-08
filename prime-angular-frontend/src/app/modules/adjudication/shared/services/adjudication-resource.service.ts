@@ -72,8 +72,6 @@ export class AdjudicationResource {
     return forkJoin({
       enrollee: this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
         .pipe(map((response: ApiHttpResponse<HttpEnrollee>) => response.result)),
-      accessAgreementNote: this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`)
-        .pipe(map((response: ApiHttpResponse<EnrolleeNote>) => response.result)),
       enrolleeCareSettings: this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`)
         .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
       certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
@@ -311,6 +309,18 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Limits and conditions clause could not be updated');
           this.logger.error('[Adjudication] AdjudicationResource::updateAccessAgreementNote error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAccessAgreementNote(enrolleeId: number): Observable<EnrolleeNote> {
+    return this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
+        tap((adjudicatorNotes: EnrolleeNote) => this.logger.info('LIMITS_AND_CONDITIONS_CLAUSE', adjudicatorNotes)),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::getAccessAgreementNote error has occurred: ', error);
           throw error;
         })
       );

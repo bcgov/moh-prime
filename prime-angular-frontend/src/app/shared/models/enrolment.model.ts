@@ -42,7 +42,6 @@ export interface HttpEnrollee extends Enrollee {
   assignedTOAType: number;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
-  accessAgreementNote: EnrolleeNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice
@@ -98,7 +97,6 @@ export interface Enrolment {
   assignedTOAType: number;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
-  accessAgreementNote: EnrolleeNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice
