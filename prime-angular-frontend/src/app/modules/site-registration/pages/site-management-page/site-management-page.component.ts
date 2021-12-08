@@ -207,9 +207,10 @@ export class SiteManagementPageComponent implements OnInit {
         map((organization: Organization) => {
           this.organizationSitesExpiryDates = organization.sites
             .reduce((expiryDates: string[], site: Site) => {
-                if (site.status === SiteStatusType.EDITABLE && !!site.approvedDate) {
-                  return [...expiryDates, Site.getExpiryDate(site)];
-                }
+              if (site.status === SiteStatusType.EDITABLE && !!site.approvedDate) {
+                return [...expiryDates, Site.getExpiryDate(site)];
+              }
+              return expiryDates;
             }, []);
           return this.organization = organization;
         }),
