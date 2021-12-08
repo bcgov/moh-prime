@@ -362,13 +362,10 @@ export class AdjudicationContainerComponent implements OnInit {
             ? of(noop)
             : EMPTY
         ),
-        exhaustMap(() =>
-          this.adjudicationResource.updateEnrolleeAlwaysManual(enrolleeId, alwaysManual)
-        ),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
+        exhaustMap(() => this.adjudicationResource.updateEnrolleeAlwaysManual(enrolleeId, alwaysManual))
       )
-      .subscribe((flaggedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(flaggedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
