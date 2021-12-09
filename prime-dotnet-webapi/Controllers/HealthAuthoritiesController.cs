@@ -249,25 +249,24 @@ namespace Prime.Controllers
 
         // GET: api/health-authorities/5/vendors/5/sites
         /// <summary>
-        /// Checks if the specified vendor is in use by a Health Authority site
-        /// and return the sites that are using the provided vendor
+        /// returns a list of site ids for a given vendor and health authority
         /// </summary>
         /// <param name="healthAuthorityId"></param>
-        /// <param name="vendorId"></param>
+        /// <param name="healthAuthorityVendorId"></param>
         [HttpGet("{healthAuthorityId}/vendors/{healthAuthorityVendorId}/sites", Name = nameof(GetSitesByVendor))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> GetSitesByVendor(int healthAuthorityId, int vendorId)
+        public async Task<ActionResult> GetSitesByVendor(int healthAuthorityId, int healthAuthorityVendorId)
         {
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
-            var siteIds = await _healthAuthorityService.GetSitesByVendorAsync(healthAuthorityId, vendorId);
+            var siteIds = await _healthAuthorityService.GetSitesByVendorAsync(healthAuthorityId, healthAuthorityVendorId);
 
             return Ok(siteIds);
         }
@@ -275,25 +274,24 @@ namespace Prime.Controllers
 
         // GET: api/health-authorities/5/care-types/5/sites
         /// <summary>
-        /// Checks if the specified care type is in use by a Health Authority site
-        /// and return the sites that are using the provided care type
+        /// returns a list of site ids for a given care type and health authority
         /// </summary>
         /// <param name="healthAuthorityId"></param>
-        /// <param name="careTypeId"></param>
+        /// <param name="healthAuthorityCareTypeId"></param>
         [HttpGet("{healthAuthorityId}/care-types/{healthAuthorityCareTypeId}/sites", Name = nameof(GetSitesByCareType))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> GetSitesByCareType(int healthAuthorityId, int careTypeId)
+        public async Task<ActionResult> GetSitesByCareType(int healthAuthorityId, int healthAuthorityCareTypeId)
         {
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
-            var siteIds = await _healthAuthorityService.GetSitesByCareTypeAsync(healthAuthorityId, careTypeId);
+            var siteIds = await _healthAuthorityService.GetSitesByCareTypeAsync(healthAuthorityId, healthAuthorityCareTypeId);
 
             return Ok(siteIds);
         }

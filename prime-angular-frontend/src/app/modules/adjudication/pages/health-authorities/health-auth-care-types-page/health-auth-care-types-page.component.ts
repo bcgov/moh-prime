@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,7 +14,6 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { HealthAuthorityCareTypeConfig } from '@config/config.model';
 
 @Component({
   selector: 'app-health-auth-care-types-page',
@@ -35,7 +35,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     private formUtilsService: FormUtilsService,
     private configService: ConfigService,
     private route: ActivatedRoute,
-    protected toastService: ToastService,
+    private toastService: ToastService,
     router: Router
   ) {
     this.title = route.snapshot.data.title;
@@ -61,7 +61,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     }
   }
 
-  public addCareType(careType: HealthAuthorityCareTypeConfig = null) {
+  public addCareType(careType: string = '') {
     this.careTypes.push(this.fb.group({
       careType: [careType ?? null, Validators.required]
     }));
@@ -73,7 +73,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
       .subscribe((healthAuthoritySites) => {
         (!healthAuthoritySites.length)
           ? this.careTypes.removeAt(index)
-          : this.toastService.openErrorToast('Health authority care type could not be deleted. One or more sites are using it');
+          : this.toastService.openErrorToast('Care type could not be removed, one or more sites are using it');
       });
   }
 
@@ -94,8 +94,8 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   private initForm() {
     this.form.valueChanges
-      .subscribe(({ careTypes }: { careTypes: { careType: HealthAuthorityCareTypeConfig }[] }) => {
-        const selectedCareTypes = careTypes.map(ct => ct.careType?.careTypeName);
+      .subscribe(({ careTypes }: { careTypes: { careType: string }[] }) => {
+        const selectedCareTypes = careTypes.map(ct => ct.careType);
         const filteredCareTypes = this.configService.careTypes
           .filter(ct => !selectedCareTypes.includes(ct.name)).map(ct => ct.name);
         this.filteredCareTypes.next(filteredCareTypes);
@@ -104,11 +104,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ careTypes }: HealthAuthority) =>
         (careTypes?.length)
-          ? careTypes.map(ct => {
-            const id = ct.id;
-            const careTypeName = ct.careType;
-            this.addCareType({ id, careTypeName });
-          })
+          ? careTypes.map(ct => this.addCareType(ct.careType))
           : this.addCareType()
       );
   }
