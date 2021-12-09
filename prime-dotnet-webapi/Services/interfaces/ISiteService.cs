@@ -36,7 +36,7 @@ namespace Prime.Services
         /// <summary>
         /// Returns business events related to a site or to the organization that site belongs to.
         /// </summary>
-        Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes);
+        Task<IEnumerable<SiteBusinessEventViewModel>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes);
         Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId);
         Task DeleteSiteAdjudicationDocumentAsync(int documentId);
         Task<SiteNotification> CreateSiteNotificationAsync(int siteRegistrationNoteId, int adminId, int assineeId);
