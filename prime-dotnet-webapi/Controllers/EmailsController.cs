@@ -18,15 +18,15 @@ namespace Prime.Controllers
     [ApiController]
     public class EmailsController : PrimeControllerBase
     {
+        private readonly IEmailDispatchService _emailDispatchService;
         private readonly IEmailService _emailService;
         private readonly IEmailTemplateService _emailTemplateService;
-        private readonly IBus _bus;
 
-        public EmailsController(IEmailService emailService, IEmailTemplateService emailTemplateService, IBus bus)
+        public EmailsController(IEmailDispatchService emailDispatchService, IEmailService emailService, IEmailTemplateService emailTemplateService)
         {
+            _emailDispatchService = emailDispatchService;
             _emailService = emailService;
             _emailTemplateService = emailTemplateService;
-            _bus = bus;
         }
 
         // POST: api/Emails/management/statuses
@@ -57,7 +57,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendEnrolleeRenewalEmails()
         {
-            await _bus.Send<SendEnrolleeEmail>(new { EmailType = EnrolleeEmailType.EnrolleeRenewal });
+            await _emailDispatchService.SendEnrolleeRenewalEmails();
 
             return NoContent();
         }
@@ -73,7 +73,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendEnrolleeUnsignedToaReminderEmails()
         {
-            await _emailService.SendEnrolleeUnsignedToaReminderEmails();
+            await _emailDispatchService.SendEnrolleeUnsignedToaReminderEmails();
 
             return NoContent();
         }

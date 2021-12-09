@@ -26,19 +26,20 @@ namespace Prime.Controllers
         private readonly IBusinessEventService _businessEventService;
         private readonly ICommunitySiteService _communitySiteService;
         private readonly IDocumentService _documentService;
-        private readonly IBus _bus;
+        private readonly IEmailDispatchService _emailDispatchService;
         private readonly IOrganizationAgreementService _organizationAgreementService;
         private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
         private readonly IPartyService _partyService;
 
+
         public OrganizationsController(
             IAdminService adminService,
             IBusinessEventService businessEventService,
             ICommunitySiteService communitySiteService,
             IDocumentService documentService,
-            IBus bus,
+            IEmailDispatchService emailDispatchService,
             IOrganizationAgreementService organizationAgreementService,
             IOrganizationClaimService organizationClaimService,
             IOrganizationService organizationService,
@@ -49,7 +50,7 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
             _communitySiteService = communitySiteService;
             _documentService = documentService;
-            _bus = bus;
+            _emailDispatchService = emailDispatchService;
             _organizationAgreementService = organizationAgreementService;
             _organizationClaimService = organizationClaimService;
             _organizationService = organizationService;
@@ -230,12 +231,7 @@ namespace Prime.Controllers
             {
                 await _partyService.RemovePartyEnrolmentAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
                 await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
-                await _bus.Send<SendOrgClaimApprovalNotificationEmail>(new
-                {
-                    orgClaim.OrganizationId,
-                    orgClaim.NewSigningAuthorityId,
-                    orgClaim.ProvidedSiteId
-                });
+                await _emailDispatchService.SendOrgClaimApprovalNotificationAsync(orgClaim);
             }
 
             return NoContent();

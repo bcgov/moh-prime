@@ -26,6 +26,9 @@ namespace Prime.Consumer
                 case EnrolleeEmailType.PaperEnrolmentSubmission:
                     await _emailService.SendPaperEnrolmentSubmissionEmailAsync(context.Message.EnrolleeId);
                     break;
+                case EnrolleeEmailType.UnsignedToaReminder:
+                    await _emailService.SendEnrolleeUnsignedToaReminderEmails();
+                    break;
                 default:
                     break;
             }

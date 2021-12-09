@@ -19,7 +19,7 @@ namespace Prime.Services
     {
         private readonly IAgreementService _agreementService;
         private readonly IBusinessEventService _businessEventService;
-        private readonly IEmailService _emailService;
+        private readonly IEmailDispatchService _emailDispatchService;
         private readonly IEnrolleeAgreementService _enrolleeAgreementService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
@@ -27,27 +27,25 @@ namespace Prime.Services
         private readonly IPrivilegeService _privilegeService;
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IVerifiableCredentialService _verifiableCredentialService;
-        private readonly IBus _bus;
 
         public SubmissionService(
             ApiDbContext context,
             ILogger<SubmissionService> logger,
             IAgreementService agreementService,
             IBusinessEventService businessEventService,
-            IEmailService emailService,
+            IEmailDispatchService emailDispatchService,
             IEnrolleeAgreementService enrolleeAgreementService,
             IEnrolleeService enrolleeService,
             IEnrolleeSubmissionService enrolleeSubmissionService,
             IHttpContextAccessor httpContext,
             IPrivilegeService privilegeService,
             ISubmissionRulesService submissionRulesService,
-            IVerifiableCredentialService verifiableCredentialService,
-            IBus bus)
+            IVerifiableCredentialService verifiableCredentialService)
             : base(context, logger)
         {
             _agreementService = agreementService;
             _businessEventService = businessEventService;
-            _emailService = emailService;
+            _emailDispatchService = emailDispatchService;
             _enrolleeAgreementService = enrolleeAgreementService;
             _enrolleeService = enrolleeService;
             _enrolleeSubmissionService = enrolleeSubmissionService;
@@ -55,7 +53,6 @@ namespace Prime.Services
             _privilegeService = privilegeService;
             _submissionRulesService = submissionRulesService;
             _verifiableCredentialService = verifiableCredentialService;
-            _bus = bus;
         }
 
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile)
@@ -243,11 +240,7 @@ namespace Prime.Services
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
             await _context.SaveChangesAsync();
-            await _bus.Send<SendEnrolleeEmail>(new
-            {
-                EmailType = EnrolleeEmailType.Reminder,
-                EnrolleeId = enrollee.Id
-            });
+            await _emailDispatchService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
             // Manually Approved submissions are automatically confirmed
             await ConfirmLatestSubmissionAsync(enrollee.Id);
@@ -303,11 +296,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled Editing");
             await _context.SaveChangesAsync();
-            await _bus.Send<SendEnrolleeEmail>(new
-            {
-                EmailType = EnrolleeEmailType.Reminder,
-                EnrolleeId = enrollee.Id
-            });
+            await _emailDispatchService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
@@ -316,11 +305,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Locked);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Locked");
             await _context.SaveChangesAsync();
-            await _bus.Send<SendEnrolleeEmail>(new
-            {
-                EmailType = EnrolleeEmailType.Reminder,
-                EnrolleeId = enrollee.Id
-            });
+            await _emailDispatchService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 

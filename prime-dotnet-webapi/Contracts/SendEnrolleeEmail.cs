@@ -12,6 +12,7 @@ namespace Prime.Contracts
     {
         Reminder,
         PaperEnrolmentSubmission,
-        EnrolleeRenewal
+        EnrolleeRenewal,
+        UnsignedToaReminder
     }
 }

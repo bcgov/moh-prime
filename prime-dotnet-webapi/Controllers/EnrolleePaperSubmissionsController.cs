@@ -21,19 +21,19 @@ namespace Prime.Controllers
     public class EnrolleePaperSubmissionsController : PrimeControllerBase
     {
         private readonly IAdminService _adminService;
-        private readonly IBus _bus;
+        private readonly IEmailDispatchService _emailDispatchService;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
         private readonly IEnrolleeService _enrolleeService;
 
         public EnrolleePaperSubmissionsController(
             IAdminService adminService,
-            IBus bus,
+            IEmailDispatchService emailDispatchService,
             IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
             IEnrolleeService enrolleeService
         )
         {
             _adminService = adminService;
-            _bus = bus;
+            _emailDispatchService = emailDispatchService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
             _enrolleeService = enrolleeService;
         }
@@ -293,11 +293,7 @@ namespace Prime.Controllers
             }
 
             await _enrolleePaperSubmissionService.FinalizeSubmissionAsync(enrolleeId);
-            await _bus.Send<SendEnrolleeEmail>(new
-            {
-                EmailType = EnrolleeEmailType.PaperEnrolmentSubmission,
-                EnrolleeId = enrolleeId
-            });
+            await _emailDispatchService.SendPaperEnrolmentSubmissionEmailAsync(enrolleeId);
 
             return Ok();
         }

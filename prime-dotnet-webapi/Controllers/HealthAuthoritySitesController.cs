@@ -22,19 +22,19 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
-        private readonly IBus _bus;
+        private readonly IEmailDispatchService _emailDispatchService;
         private readonly IHealthAuthorityService _healthAuthorityService;
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly ISiteService _siteService;
 
         public HealthAuthoritySitesController(
-            IBus bus,
+            IEmailDispatchService emailDispatchService,
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
             ISiteService siteService
         )
         {
-            _bus = bus;
+            _emailDispatchService = emailDispatchService;
             _healthAuthorityService = healthAuthorityService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
             _siteService = siteService;
@@ -265,7 +265,7 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
-            await _bus.Send<SendHealthAuthoritySiteEmail>(new { SiteId = siteId });
+            await _emailDispatchService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
 
             return NoContent();
         }

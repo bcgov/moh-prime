@@ -29,7 +29,7 @@ namespace Prime.Controllers
         private readonly IBusinessEventService _businessEventService;
         private readonly ICommunitySiteService _communitySiteService;
         private readonly IDocumentService _documentService;
-        private readonly IBus _bus;
+        private readonly IEmailDispatchService _emailDispatchService;
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
@@ -39,7 +39,7 @@ namespace Prime.Controllers
             IBusinessEventService businessEventService,
             ICommunitySiteService communitySiteService,
             IDocumentService documentService,
-            IBus bus,
+            IEmailDispatchService emailDispatchService,
             IMapper mapper,
             IOrganizationService organizationService,
             ISiteService siteService)
@@ -48,7 +48,7 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
             _communitySiteService = communitySiteService;
             _documentService = documentService;
-            _bus = bus;
+            _emailDispatchService = emailDispatchService;
             _mapper = mapper;
             _organizationService = organizationService;
             _siteService = siteService;
@@ -347,8 +347,7 @@ namespace Prime.Controllers
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
             await _siteService.SubmitRegistrationAsync(siteId);
 
-            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(site, opt =>
-                opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteRegistrationSubmission)));
+            await _emailDispatchService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
 
             return Ok();
         }
@@ -508,8 +507,7 @@ namespace Prime.Controllers
 
             if (site.SubmittedDate != null)
             {
-                await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(site, opt =>
-                    opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteRegistrationSubmission)));
+                await _emailDispatchService.SendSiteRegistrationSubmissionAsync(siteId, businessLicenceId, (CareSettingType)site.CareSettingCode);
             }
 
             // Send an notifying email to the adjudicator
@@ -519,8 +517,7 @@ namespace Prime.Controllers
                 && site.CareSetting.Code == (int)CareSettingType.CommunityPharmacy
                 && !string.IsNullOrEmpty(site.BusinessLicence.DeferredLicenceReason))
             {
-                await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                    site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.BusinessLicenceUploaded)));
+                await _emailDispatchService.SendBusinessLicenceUploadedAsync(site);
             }
 
             return Ok(document);
@@ -795,9 +792,7 @@ namespace Prime.Controllers
             }
 
             var site = await _communitySiteService.GetSiteAsync(siteId);
-            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.RemoteUsersUpdated)));
-
+            await _emailDispatchService.SendRemoteUsersUpdatedAsync(site);
             return NoContent();
         }
 
@@ -821,13 +816,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            await _bus.Send<SendSiteEmail>(new SendSiteEmailModel
-            {
-                EmailType = SiteEmailType.SiteReviewedNotification,
-                Id = siteId,
-                Note = note
-            });
-
+            await _emailDispatchService.SendSiteReviewedNotificationAsync(siteId, note);
             return NoContent();
         }
 
@@ -872,25 +861,17 @@ namespace Prime.Controllers
 
                 if (communitySite.ActiveBeforeRegistration)
                 {
-                    await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                        communitySite, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteActiveBeforeRegistration)));
+                    await _emailDispatchService.SendSiteActiveBeforeRegistrationAsync(siteId, communitySite.Organization.SigningAuthority.Email);
                 }
                 else
                 {
-                    await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                        communitySite, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedPharmaNetAdministrator)));
-
-                    await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                        communitySite, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedSigningAuthority)));
+                    await _emailDispatchService.SendSiteApprovedPharmaNetAdministratorAsync(communitySite);
+                    await _emailDispatchService.SendSiteApprovedSigningAuthorityAsync(communitySite);
                 }
-                var remoteUsersToNotify = communitySite.RemoteUsers.Where(ru => !ru.Notified);
-                await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                    communitySite, opt => opt.AfterMap((src, dest) =>
-                    {
-                        dest.EmailType = SiteEmailType.RemoteUserNotifications;
-                        dest.RemoteUserEmails = remoteUsersToNotify.Select(u => u.Email);
-                    })));
+                await _emailDispatchService.SendSiteApprovedHIBCAsync(communitySite);
 
+                var remoteUsersToNotify = communitySite.RemoteUsers.Where(ru => !ru.Notified);
+                await _emailDispatchService.SendRemoteUserNotificationsAsync(communitySite, remoteUsersToNotify);
                 await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
             }
             else

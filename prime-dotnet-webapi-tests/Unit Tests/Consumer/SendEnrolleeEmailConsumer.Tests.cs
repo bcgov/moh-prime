@@ -77,6 +77,9 @@ namespace PrimeTests.UnitTests.Consumer
                 case EnrolleeEmailType.Reminder:
                     A.CallTo(() => _emailServiceMock.SendReminderEmailAsync(sendEnrolleeEmail.EnrolleeId)).MustHaveHappened();
                     break;
+                case EnrolleeEmailType.UnsignedToaReminder:
+                    A.CallTo(() => _emailServiceMock.SendEnrolleeUnsignedToaReminderEmails()).MustHaveHappened();
+                    break;
                 default:
                     A.CallTo(_emailServiceMock).MustNotHaveHappened();
                     break;

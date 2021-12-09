@@ -23,18 +23,18 @@ namespace Prime.Controllers
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentCertificateService _certificateService;
-        private readonly IBus _bus;
+        private readonly IEmailDispatchService _emailDispatchService;
         private readonly IBusinessEventService _businessEventService;
 
         public ProvisionerAccessController(
             IEnrolleeService enrolleeService,
             IEnrolmentCertificateService enrolmentCertificateService,
-            IBus bus,
+            IEmailDispatchService emailDispatchService,
             IBusinessEventService businessEventService)
         {
             _enrolleeService = enrolleeService;
             _certificateService = enrolmentCertificateService;
-            _bus = bus;
+            _emailDispatchService = emailDispatchService;
             _businessEventService = businessEventService;
         }
 
@@ -115,13 +115,7 @@ namespace Prime.Controllers
 
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
 
-            await _bus.Send<SendProvisionerLinkEmail>(new
-            {
-                RecipientEmails = emails,
-                EnrolleeId = enrolleeId,
-                TokenUrl = createdToken.FrontendUrl,
-                CareSettingCode = careSettingCode
-            });
+            await _emailDispatchService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
             await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
 
             return CreatedAtAction(
