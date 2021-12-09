@@ -1,4 +1,3 @@
-using MassTransit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -7,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using DelegateDecompiler.EntityFrameworkCore;
 
-using Prime.Contracts;
 using Prime.Engines;
 using Prime.Models;
 using Prime.Models.Api;

@@ -1,12 +1,10 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
 using Prime.Configuration.Auth;
-using Prime.Contracts;
 using Prime.Engines;
 using Prime.Models.Api;
 using Prime.Services;

@@ -1,5 +1,4 @@
 using AutoMapper;
-using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Prime.Configuration.Auth;
-using Prime.Contracts;
 using Prime.Engines;
 using Prime.Models;
 using Prime.Models.Api;

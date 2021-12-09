@@ -1,11 +1,9 @@
 using System.Threading.Tasks;
-using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Configuration.Auth;
-using Prime.Contracts;
 using Prime.Services;
 using Prime.ViewModels.Emails;
 using System.Collections.Generic;
