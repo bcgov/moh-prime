@@ -74,13 +74,19 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public removeCareType(index: number) {
     const careTypeId = this.careTypeIdNameMap
-      .find((ct) => (ct.name === this.careTypes.value[index].careType)).id;
-    this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careTypeId)
-      .subscribe((healthAuthoritySites) => {
-        (!healthAuthoritySites.length)
-          ? this.careTypes.removeAt(index)
-          : this.toastService.openErrorToast('Care type could not be removed, one or more sites are using it');
-      });
+      .find((ct) => (ct.name === this.careTypes.value[index].careType))?.id;
+    if (careTypeId) {
+      this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careTypeId)
+        .subscribe((healthAuthoritySites) => {
+          (!healthAuthoritySites.length)
+            ? this.careTypes.removeAt(index)
+            : this.toastService.openErrorToast('Care type could not be removed, one or more sites are using it');
+        });
+    } else {
+      // when careTypeId is undefined that means we're deleting a care type after adding it and before hitting Save and Continue
+      // i.e. before it was given an Id
+      this.careTypes.removeAt(index);
+    }
   }
 
   public onBack() {

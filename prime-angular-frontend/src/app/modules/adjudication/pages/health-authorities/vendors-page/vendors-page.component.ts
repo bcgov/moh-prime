@@ -80,13 +80,19 @@ export class VendorsPageComponent implements OnInit {
 
   public removeVendor(index: number) {
     const vendorId = this.vendorIdCodeMap
-      .find((v) => (v.vendorCode === this.vendors.value[index].vendor.code)).id;
-    this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorId)
-      .subscribe((healthAuthoritySites) => {
-        (!healthAuthoritySites.length)
-          ? this.vendors.removeAt(index)
-          : this.toastService.openErrorToast('Vendor could not be removed, one or more sites are using it');
-      });
+      .find((v) => (v.vendorCode === this.vendors.value[index].vendor.code))?.id;
+    if (vendorId) {
+      this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorId)
+        .subscribe((healthAuthoritySites) => {
+          (!healthAuthoritySites.length)
+            ? this.vendors.removeAt(index)
+            : this.toastService.openErrorToast('Vendor could not be removed, one or more sites are using it');
+        });
+    } else {
+      // when vendorId is undefined that means we're deleting a vendor after adding it and before hitting Save and Continue
+      // i.e. before it was given an Id
+      this.vendors.removeAt(index);
+    }
   }
 
   public onBack() {
