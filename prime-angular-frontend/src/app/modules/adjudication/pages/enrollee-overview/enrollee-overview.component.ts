@@ -120,7 +120,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       ).subscribe(
         // Note that these documents are currently not displayed for a Completed Paper Submission
         // due to how `showAdjudication` is set and causing DocumentAttachmentsComponent to be hidden
-        documents => this.documents = documents);
+        (documents: EnrolleeAdjudicationDocument[]) => this.documents = documents);
   }
 
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
@@ -175,6 +175,6 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   }
 
   private isPaperEnrollee(enrollee: Enrollee): boolean {
-    return (enrollee?.gpid && enrollee.gpid.startsWith(PAPER_ENROLLEE_GPID_PREFIX));
+    return (enrollee?.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX));
   }
 }
