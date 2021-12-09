@@ -1,3 +1,5 @@
+@import 'palette';
+
 th {
   width: 1%;
 }
@@ -7,5 +9,5 @@ th {
 }
 
 .mat-chip.mat-standard-chip {
-  color: #003366;
+  color: theme-palette(blue, base);
 }
