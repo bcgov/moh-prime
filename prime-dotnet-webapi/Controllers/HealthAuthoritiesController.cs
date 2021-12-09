@@ -253,21 +253,21 @@ namespace Prime.Controllers
         /// and return the sites that are using the provided vendor
         /// </summary>
         /// <param name="healthAuthorityId"></param>
-        /// <param name="vendorCode"></param>
-        [HttpGet("{healthAuthorityId}/vendors/{vendorCode}/sites", Name = nameof(IsVendorInUse))]
+        /// <param name="vendorId"></param>
+        [HttpGet("{healthAuthorityId}/vendors/{vendorId}/sites", Name = nameof(IsVendorInUse))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> IsVendorInUse(int healthAuthorityId, int vendorCode)
+        public async Task<ActionResult> IsVendorInUse(int healthAuthorityId, int vendorId)
         {
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
-            var siteIds = await _healthAuthorityService.IsVendorInUseAsync(healthAuthorityId, vendorCode);
+            var siteIds = await _healthAuthorityService.IsVendorInUseAsync(healthAuthorityId, vendorId);
 
             return Ok(siteIds);
         }

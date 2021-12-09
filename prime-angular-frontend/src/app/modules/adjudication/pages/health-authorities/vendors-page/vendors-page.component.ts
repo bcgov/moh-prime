@@ -74,8 +74,8 @@ export class VendorsPageComponent implements OnInit {
   }
 
   public removeVendor(index: number) {
-    const vendorCode = this.vendors.value[index].vendor.code;
-    this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorCode)
+    const vendorId = this.vendors.value[index].vendor.id;
+    this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorId)
       .subscribe((healthAuthoritySites) => {
         (!healthAuthoritySites.length)
           ? this.vendors.removeAt(index)

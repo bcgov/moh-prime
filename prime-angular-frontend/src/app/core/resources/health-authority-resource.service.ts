@@ -106,8 +106,8 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthorityVendorSiteIds(healthAuthorityId: number, vendorCode: number): Observable<number[]> {
-    return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/vendors/${vendorCode}/sites`)
+  public getHealthAuthorityVendorSiteIds(healthAuthorityId: number, vendorId: number): Observable<number[]> {
+    return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/vendors/${vendorId}/sites`)
       .pipe(
         map((response: ApiHttpResponse<number[]>) => response.result),
         tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),

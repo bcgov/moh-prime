@@ -244,14 +244,8 @@ namespace Prime.Services
                     && vendor.HealthAuthorityOrganizationId == healthAuthorityId);
         }
 
-        public async Task<IEnumerable<int>> IsVendorInUseAsync(int healthAuthorityId, int healthAuthorityVendorCode)
+        public async Task<IEnumerable<int>> IsVendorInUseAsync(int healthAuthorityId, int healthAuthorityVendorId)
         {
-            var healthAuthorityVendorId = await _context.HealthAuthorityVendors
-                .AsNoTracking()
-                .Where(vendor => vendor.HealthAuthorityOrganizationId == healthAuthorityId && vendor.VendorCode == healthAuthorityVendorCode)
-                .Select(vendor => vendor.Id)
-                .SingleAsync();
-
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId
