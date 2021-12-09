@@ -27,65 +27,30 @@ namespace Prime.Services
 
         public async Task SendBusinessLicenceUploadedAsync(CommunitySite site)
         {
-            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.BusinessLicenceUploaded)));
+            await SendSiteEmailByType(site, SiteEmailType.BusinessLicenceUploaded);
         }
 
-        public async Task SendEnrolleeRenewalEmails()
+        public async Task SendRemoteUsersUpdatedAsync(CommunitySite site)
         {
-            await _bus.Send<SendEnrolleeEmail>(new { EmailType = EnrolleeEmailType.EnrolleeRenewal });
+            await SendSiteEmailByType(site, SiteEmailType.RemoteUsersUpdated);
         }
 
-        public async Task SendEnrolleeUnsignedToaReminderEmails()
+        public async Task SendSiteApprovedHIBCAsync(CommunitySite site)
         {
-            await _bus.Send<SendEnrolleeEmail>(new { EmailType = EnrolleeEmailType.UnsignedToaReminder });
+            await SendSiteEmailByType(site, SiteEmailType.SiteApprovedHIBC);
         }
 
-        public async Task SendHealthAuthoritySiteRegistrationSubmissionAsync(int siteId)
+        public async Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site)
         {
-            await _bus.Send<SendHealthAuthoritySiteEmail>(new { SiteId = siteId });
+            await SendSiteEmailByType(site, SiteEmailType.SiteApprovedPharmaNetAdministrator);
         }
 
-        public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
+        public async Task SendSiteApprovedSigningAuthorityAsync(CommunitySite site)
         {
-            await _bus.Send<SendOrgClaimApprovalNotificationEmail>(new
-            {
-                organizationClaim.OrganizationId,
-                organizationClaim.NewSigningAuthorityId,
-                organizationClaim.ProvidedSiteId
-            });
+            await SendSiteEmailByType(site, SiteEmailType.SiteApprovedSigningAuthority);
         }
 
-        public async Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId)
-        {
-            await _bus.Send<SendEnrolleeEmail>(new
-            {
-                EmailType = EnrolleeEmailType.PaperEnrolmentSubmission,
-                EnrolleeId = enrolleeId
-            });
-        }
-
-        public async Task SendProvisionerLinkAsync(IEnumerable<string> recipientEmails, EnrolmentCertificateAccessToken token, int careSettingCode)
-        {
-            await _bus.Send<SendProvisionerLinkEmail>(new
-            {
-                RecipientEmails = recipientEmails,
-                token.EnrolleeId,
-                TokenUrl = token.FrontendUrl,
-                CareSettingCode = careSettingCode
-            });
-        }
-
-        public async Task SendReminderEmailAsync(int enrolleeId)
-        {
-            await _bus.Send<SendEnrolleeEmail>(new
-            {
-                EmailType = EnrolleeEmailType.Reminder,
-                EnrolleeId = enrolleeId
-            });
-        }
-
-        public async Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers)
+       public async Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers)
         {
             await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
                 site, opt => opt.AfterMap((src, dest) =>
@@ -93,12 +58,6 @@ namespace Prime.Services
                     dest.EmailType = SiteEmailType.RemoteUserNotifications;
                     dest.RemoteUserEmails = remoteUsers.Select(u => u.Email);
                 })));
-        }
-
-        public async Task SendRemoteUsersUpdatedAsync(CommunitySite site)
-        {
-            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.RemoteUsersUpdated)));
         }
 
         public async Task SendSiteActiveBeforeRegistrationAsync(int siteId, string signingAuthorityEmail)
@@ -109,24 +68,6 @@ namespace Prime.Services
                 OrganizationSigningAuthorityEmail = signingAuthorityEmail,
                 EmailType = SiteEmailType.SiteActiveBeforeRegistration
             });
-        }
-
-        public async Task SendSiteApprovedHIBCAsync(CommunitySite site)
-        {
-            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedHIBC)));
-        }
-
-        public async Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site)
-        {
-            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedPharmaNetAdministrator)));
-        }
-
-        public async Task SendSiteApprovedSigningAuthorityAsync(CommunitySite site)
-        {
-            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
-                site, opt => opt.AfterMap((src, dest) => dest.EmailType = SiteEmailType.SiteApprovedSigningAuthority)));
         }
 
         public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode)
@@ -148,6 +89,66 @@ namespace Prime.Services
                 Id = siteId,
                 Note = note
             });
+        }
+
+        public async Task SendHealthAuthoritySiteRegistrationSubmissionAsync(int siteId)
+        {
+            await _bus.Send<SendHealthAuthoritySiteEmail>(new { SiteId = siteId });
+        }
+
+        public async Task SendEnrolleeRenewalEmails()
+        {
+            await _bus.Send<SendEnrolleeEmail>(new { EmailType = EnrolleeEmailType.EnrolleeRenewal });
+        }
+
+        public async Task SendEnrolleeUnsignedToaReminderEmails()
+        {
+            await _bus.Send<SendEnrolleeEmail>(new { EmailType = EnrolleeEmailType.UnsignedToaReminder });
+        }
+
+        public async Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId)
+        {
+            await _bus.Send<SendEnrolleeEmail>(new
+            {
+                EmailType = EnrolleeEmailType.PaperEnrolmentSubmission,
+                EnrolleeId = enrolleeId
+            });
+        }
+
+        public async Task SendReminderEmailAsync(int enrolleeId)
+        {
+            await _bus.Send<SendEnrolleeEmail>(new
+            {
+                EmailType = EnrolleeEmailType.Reminder,
+                EnrolleeId = enrolleeId
+            });
+        }
+
+        public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
+        {
+            await _bus.Send<SendOrgClaimApprovalNotificationEmail>(new
+            {
+                organizationClaim.OrganizationId,
+                organizationClaim.NewSigningAuthorityId,
+                organizationClaim.ProvidedSiteId
+            });
+        }
+
+        public async Task SendProvisionerLinkAsync(IEnumerable<string> recipientEmails, EnrolmentCertificateAccessToken token, int careSettingCode)
+        {
+            await _bus.Send<SendProvisionerLinkEmail>(new
+            {
+                RecipientEmails = recipientEmails,
+                token.EnrolleeId,
+                TokenUrl = token.FrontendUrl,
+                CareSettingCode = careSettingCode
+            });
+        }
+
+        private async Task SendSiteEmailByType(CommunitySite site, SiteEmailType emailType)
+        {
+            await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
+                site, opt => opt.AfterMap((src, dest) => dest.EmailType = emailType)));
         }
     }
 }
