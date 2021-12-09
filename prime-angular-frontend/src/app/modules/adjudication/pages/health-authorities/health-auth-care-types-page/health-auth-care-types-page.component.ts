@@ -15,6 +15,10 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
+interface CareTypeIdNameMap {
+  id: number;
+  name: string;
+}
 @Component({
   selector: 'app-health-auth-care-types-page',
   templateUrl: './health-auth-care-types-page.component.html',
@@ -28,6 +32,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
   public filteredCareTypes: BehaviorSubject<string[]>;
 
   private routeUtils: RouteUtils;
+  private careTypeIdNameMap: CareTypeIdNameMap[];
 
   constructor(
     private fb: FormBuilder,
@@ -68,7 +73,8 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
   }
 
   public removeCareType(index: number) {
-    const careTypeId = this.careTypes.value[index].careType.id;
+    const careTypeId = this.careTypeIdNameMap
+      .find((ct) => (ct.name === this.careTypes.value[index].careType)).id;
     this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careTypeId)
       .subscribe((healthAuthoritySites) => {
         (!healthAuthoritySites.length)
@@ -102,11 +108,15 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
       });
 
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
-      .subscribe(({ careTypes }: HealthAuthority) =>
-        (careTypes?.length)
-          ? careTypes.map(ct => this.addCareType(ct.careType))
-          : this.addCareType()
-      );
+      .subscribe(({ careTypes }: HealthAuthority) => {
+        if (careTypes?.length) {
+          this.careTypeIdNameMap = careTypes
+            .map((ct) => { return { id: ct.id, name: ct.careType } });
+          careTypes.map((ct) => this.addCareType(ct.careType));
+        } else {
+          this.addCareType()
+        }
+      });
   }
 
   private nextRouteAfterSubmit() {

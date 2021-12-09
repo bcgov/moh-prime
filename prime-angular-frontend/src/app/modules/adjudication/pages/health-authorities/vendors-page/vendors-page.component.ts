@@ -58,7 +58,6 @@ export class VendorsPageComponent implements OnInit {
       .filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
 
     this.filteredVendors = new BehaviorSubject<VendorConfig[]>(this.healthAuthorityVendors);
-    this.vendorIdCodeMap = [];
   }
 
   public get vendors(): FormArray {
