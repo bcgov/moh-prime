@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
 
 using MassTransit;
-using Microsoft.Extensions.Logging;
-
-using Prime.Services;
-using Prime.Contracts;
 using MassTransit.Definition;
+
+using Prime.Contracts;
+using Prime.Services;
 
 namespace Prime.Consumer
 {
