@@ -151,6 +151,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * will allow submission for an unapproved site that does not have a PEC.
    */
   public get isValidSubmission(): boolean {
+    const isCommunityPharmacy = this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
     const pecControl = this.businessLicenceFormState.pec;
     // Managed to make it through the registration without a PEC and is
     // Community Pharmacy then assumed to indicate deferment, which is
@@ -158,7 +159,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     const pecDeferred = this.site.completed &&
       !this.site.approvedDate &&
       !pecControl.value &&
-      this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+      isCommunityPharmacy;
 
     // Loosen validation on submission only when the PEC is deferred, which
     // allows for submissions regardless of toggle state that is not
@@ -166,6 +167,23 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     if (pecDeferred) {
       pecControl.clearValidators();
       pecControl.updateValueAndValidity();
+    }
+
+    const businessLicenceExpiryControl = this.businessLicenceFormState.businessLicenceExpiry;
+    const businessLicenceExpiryDeferred = !businessLicenceExpiryControl.value;
+    const doingBusinessAsControl = this.businessLicenceFormState.doingBusinessAs;
+    const doingBusinessAsDeferred = !doingBusinessAsControl.value;
+
+    // Expiry date is required, but sites exist that pre-date it's addition
+    // to the application which need to have validation loosened
+    if (businessLicenceExpiryDeferred) {
+      businessLicenceExpiryControl.clearValidators();
+      businessLicenceExpiryControl.updateValueAndValidity();
+
+      if(isCommunityPharmacy && doingBusinessAsDeferred) {
+        doingBusinessAsControl.clearValidators();
+        doingBusinessAsControl.updateValueAndValidity();
+      }
     }
 
     // Hours of operation disables fields when marked as 24 hours, which
@@ -178,7 +196,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     // Assumption that PEC is required except for private community
     // health practice, and at this point can be considered deferred
     // when found to be empty
-    if (!this.businessLicenceFormState.pec.value && this.site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
+    if (
+      !this.businessLicenceFormState.pec.value &&
+      this.site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
+    ) {
       this.businessLicenceFormState.pec.disable();
     }
 
@@ -189,6 +210,15 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     if (pecDeferred) {
       pecControl.setValidators([Validators.required]);
       pecControl.updateValueAndValidity();
+    }
+    if (businessLicenceExpiryDeferred) {
+      businessLicenceExpiryControl.setValidators([Validators.required]);
+      businessLicenceExpiryControl.updateValueAndValidity();
+
+      if(isCommunityPharmacy && doingBusinessAsDeferred) {
+        doingBusinessAsControl.setValidators([Validators.required]);
+        doingBusinessAsControl.updateValueAndValidity();
+      }
     }
 
     return isSubmissionValid;
