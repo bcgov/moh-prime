@@ -118,8 +118,8 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthorityCareTypeSiteIds(healthAuthorityId: number, careType: string): Observable<number[]> {
-    return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/care-types/${careType}/sites`)
+  public getHealthAuthorityCareTypeSiteIds(healthAuthorityId: number, careTypeId: number): Observable<number[]> {
+    return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/care-types/${careTypeId}/sites`)
       .pipe(
         map((response: ApiHttpResponse<number[]>) => response.result),
         tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),

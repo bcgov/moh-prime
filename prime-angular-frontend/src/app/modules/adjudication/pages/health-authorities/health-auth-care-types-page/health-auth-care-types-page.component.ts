@@ -13,6 +13,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
+import { HealthAuthorityCareTypeConfig } from '@config/config.model';
 
 @Component({
   selector: 'app-health-auth-care-types-page',
@@ -60,15 +61,15 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     }
   }
 
-  public addCareType(careType: string = '') {
+  public addCareType(careType: HealthAuthorityCareTypeConfig = null) {
     this.careTypes.push(this.fb.group({
-      careType: [careType ?? '', Validators.required]
+      careType: [careType ?? null, Validators.required]
     }));
   }
 
   public removeCareType(index: number) {
-    const careType = this.careTypes.value[index].careType;
-    this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careType)
+    const careTypeId = this.careTypes.value[index].careType.id;
+    this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careTypeId)
       .subscribe((healthAuthoritySites) => {
         (!healthAuthoritySites.length)
           ? this.careTypes.removeAt(index)
@@ -93,8 +94,8 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   private initForm() {
     this.form.valueChanges
-      .subscribe(({ careTypes }: { careTypes: { careType: string }[] }) => {
-        const selectedCareTypes = careTypes.map(ct => ct.careType);
+      .subscribe(({ careTypes }: { careTypes: { careType: HealthAuthorityCareTypeConfig }[] }) => {
+        const selectedCareTypes = careTypes.map(ct => ct.careType?.careTypeName);
         const filteredCareTypes = this.configService.careTypes
           .filter(ct => !selectedCareTypes.includes(ct.name)).map(ct => ct.name);
         this.filteredCareTypes.next(filteredCareTypes);
@@ -103,7 +104,11 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ careTypes }: HealthAuthority) =>
         (careTypes?.length)
-          ? careTypes.map(ct => this.addCareType(ct.careType))
+          ? careTypes.map(ct => {
+            const id = ct.id;
+            const careTypeName = ct.careType;
+            this.addCareType({ id, careTypeName });
+          })
           : this.addCareType()
       );
   }

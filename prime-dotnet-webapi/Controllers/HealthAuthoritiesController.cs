@@ -254,13 +254,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="vendorId"></param>
-        [HttpGet("{healthAuthorityId}/vendors/{vendorId}/sites", Name = nameof(IsVendorInUse))]
+        [HttpGet("{healthAuthorityId}/vendors/{healthAuthorityVendorId}/sites", Name = nameof(GetSitesByVendor))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> IsVendorInUse(int healthAuthorityId, int vendorId)
+        public async Task<ActionResult> GetSitesByVendor(int healthAuthorityId, int vendorId)
         {
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
@@ -279,21 +279,21 @@ namespace Prime.Controllers
         /// and return the sites that are using the provided care type
         /// </summary>
         /// <param name="healthAuthorityId"></param>
-        /// <param name="careType"></param>
-        [HttpGet("{healthAuthorityId}/care-types/{careType}/sites", Name = nameof(IsCareTypeInUse))]
+        /// <param name="careTypeId"></param>
+        [HttpGet("{healthAuthorityId}/care-types/{healthAuthorityCareTypeId}/sites", Name = nameof(GetSitesByCareType))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> IsCareTypeInUse(int healthAuthorityId, string careType)
+        public async Task<ActionResult> GetSitesByCareType(int healthAuthorityId, int careTypeId)
         {
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
-            var siteIds = await _healthAuthorityService.IsCareTypeInUse(healthAuthorityId, careType);
+            var siteIds = await _healthAuthorityService.GetSitesByCareTypeAsync(healthAuthorityId, careTypeId);
 
             return Ok(siteIds);
         }

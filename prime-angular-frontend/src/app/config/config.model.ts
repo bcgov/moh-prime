@@ -76,3 +76,8 @@ export interface ProvinceConfig extends Config<string> {
 export interface IWeightedConfig {
   weight: number;
 }
+
+export interface HealthAuthorityCareTypeConfig {
+  id: number;
+  careTypeName: string;
+}

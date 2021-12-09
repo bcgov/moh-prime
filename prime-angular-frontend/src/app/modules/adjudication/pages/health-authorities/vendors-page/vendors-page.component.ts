@@ -101,7 +101,7 @@ export class VendorsPageComponent implements OnInit {
   private initForm() {
     this.form.valueChanges
       .subscribe(({ vendors }: { vendors: { vendor: VendorConfig }[] }) => {
-        const selectedVendorCodes = vendors.map(ct => ct.vendor?.code);
+        const selectedVendorCodes = vendors.map(v => v.vendor?.code);
         // Filter out the selected vendors to avoid visual duplicates
         const filteredVendors = this.healthAuthorityVendors.filter(v => !selectedVendorCodes.includes(v.code));
         this.filteredVendors.next(filteredVendors);

@@ -254,14 +254,8 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<int>> IsCareTypeInUse(int healthAuthorityId, string healthAuthorityCareType)
+        public async Task<IEnumerable<int>> GetSitesByCareTypeAsync(int healthAuthorityId, int healthAuthorityCareTypeId)
         {
-            var healthAuthorityCareTypeId = await _context.HealthAuthorityCareTypes
-                .AsNoTracking()
-                .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId && ct.CareType == healthAuthorityCareType)
-                .Select(ct => ct.Id)
-                .SingleAsync();
-
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId
