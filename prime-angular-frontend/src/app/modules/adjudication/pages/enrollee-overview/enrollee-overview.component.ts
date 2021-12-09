@@ -117,10 +117,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
           this.isPaperEnrollee(this.enrollee) ?
             this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id) :
             of(null))
-      ).subscribe(
-        // Note that these documents are currently not displayed for a Completed Paper Submission
-        // due to how `showAdjudication` is set and causing DocumentAttachmentsComponent to be hidden
-        (documents: EnrolleeAdjudicationDocument[]) => this.documents = documents);
+      ).subscribe((documents: EnrolleeAdjudicationDocument[]) => this.documents = documents);
   }
 
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
