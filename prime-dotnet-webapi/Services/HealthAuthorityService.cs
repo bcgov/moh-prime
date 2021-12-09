@@ -244,7 +244,7 @@ namespace Prime.Services
                     && vendor.HealthAuthorityOrganizationId == healthAuthorityId);
         }
 
-        public async Task<IEnumerable<int>> IsVendorInUseAsync(int healthAuthorityId, int healthAuthorityVendorId)
+        public async Task<IEnumerable<int>> GetSitesByVendorAsync(int healthAuthorityId, int healthAuthorityVendorId)
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()

@@ -267,7 +267,7 @@ namespace Prime.Controllers
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
-            var siteIds = await _healthAuthorityService.IsVendorInUseAsync(healthAuthorityId, vendorId);
+            var siteIds = await _healthAuthorityService.GetSitesByVendorAsync(healthAuthorityId, vendorId);
 
             return Ok(siteIds);
         }
