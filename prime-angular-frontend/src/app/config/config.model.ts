@@ -65,7 +65,6 @@ export interface CollegePracticeConfig {
 }
 
 export interface VendorConfig extends Config<number> {
-  id: number;
   careSettingCode: number;
 }
 
@@ -75,9 +74,4 @@ export interface ProvinceConfig extends Config<string> {
 
 export interface IWeightedConfig {
   weight: number;
-}
-
-export interface HealthAuthorityCareTypeConfig {
-  id: number;
-  careTypeName: string;
 }
