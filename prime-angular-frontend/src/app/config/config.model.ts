@@ -65,6 +65,7 @@ export interface CollegePracticeConfig {
 }
 
 export interface VendorConfig extends Config<number> {
+  id: number;
   careSettingCode: number;
 }
 

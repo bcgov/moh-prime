@@ -111,7 +111,14 @@ export class VendorsPageComponent implements OnInit {
       .subscribe(({ vendors }: HealthAuthority) =>
         (vendors?.length)
           ? this.configService.vendors
-            .filter(v => vendors.some(({ vendorCode }) => v.code === vendorCode))
+            .reduce((vendorConfigs: VendorConfig[], v: VendorConfig) => {
+              const vendor = vendors.find(vendor => vendor.vendorCode === v.code)
+              if (vendor) {
+                const id = vendor.id
+                vendorConfigs = [...vendorConfigs, { id, ...v }];
+              }
+              return vendorConfigs;
+            }, [])
             .map(v => this.addVendor(v))
           : this.addVendor()
       );
