@@ -21,7 +21,6 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
   public enrolmentSubmission: EnrolmentSubmission;
-  public enrolment: Enrolment;
 
   private routeUtils: RouteUtils;
 
@@ -41,20 +40,10 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
   public ngOnInit() {
     const enrolleeId = this.route.snapshot.params.id;
     const accessTermId = this.route.snapshot.params.aid;
-    this.busy = forkJoin([
-      this.adjudicationResource.getSubmissionForAgreement(enrolleeId, accessTermId),
-      this.adjudicationResource.getEnrolleeById(enrolleeId)
-    ]).pipe(
-      map(([enrolleeSubmission, enrolment]: [HttpEnrolleeSubmission, HttpEnrollee]) =>
-        [
-            this.enrolleeSubmissionAdapterResponse(enrolleeSubmission),
-            this.enrolleeAdapterResponse(enrolment)
-        ]
-      )
-    ).subscribe(([enrolmentSubmission, enrolment]: [EnrolmentSubmission, Enrolment]) => {
-      this.enrolmentSubmission = enrolmentSubmission;
-      this.enrolment = enrolment;
-    });
+    this.busy = this.adjudicationResource.getSubmissionForAgreement(enrolleeId, accessTermId)
+      .subscribe((enrolmentSubmission) =>
+        this.enrolmentSubmission = this.enrolleeSubmissionAdapterResponse(enrolmentSubmission)
+      );
   }
 
   private enrolleeSubmissionAdapterResponse(
