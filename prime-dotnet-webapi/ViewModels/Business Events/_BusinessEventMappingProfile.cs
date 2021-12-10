@@ -8,7 +8,8 @@ namespace Prime.ViewModels.Profiles
         public BusinessEventMappingProfile()
         {
             CreateMap<BusinessEvent, SiteBusinessEventViewModel>()
-                .ForMember(dest => dest.PartyName, opt => opt.MapFrom(src => src.Party.FirstName + ' ' + src.Party.LastName));
+                .ForMember(dest => dest.PartyName, opt => opt.MapFrom(src => src.Party.FirstName + ' ' + src.Party.LastName))
+                .ForMember(dest => dest.AdminIDIR, opt => opt.MapFrom(src => src.AdminIDIR));
         }
     }
 }

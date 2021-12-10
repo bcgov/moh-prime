@@ -7,12 +7,7 @@ namespace Prime.ViewModels
     {
         public int Id { get; set; }
 
-        public string AdminIDIR
-        {
-            get => Admin?.IDIR;
-        }
-
-        public Admin Admin { get; set; }
+        public string AdminIDIR { get; set; }
 
         public string PartyName { get; set; }
 
