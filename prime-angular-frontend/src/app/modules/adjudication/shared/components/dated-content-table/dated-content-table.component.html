@@ -11,18 +11,15 @@
                  class="d-block text-mute font-weight-normal mb-2">
             {{ item.date | formatDate: 'h:mm a' }}
           </small>
-          <mat-chip-list [selectable]="false">
-            <mat-chip *ngIf="item?.name"
-                      selected
+          <mat-chip-list *ngIf="item?.name"
+                         [selectable]="false">
+            <mat-chip selected
                       color="primary"
                       [disableRipple]="true">{{ item.name | replace: '@idir': '' }}</mat-chip>
-            <mat-chip *ngIf="item?.partyName"
-                      selected
-                      color="secondary"
-                      [disableRipple]="true">{{ item.partyName | capitalize: true }}</mat-chip>
           </mat-chip-list>
         </th>
         <td>{{ item.content }}</td>
+        <div class="margin-right mt-5">{{ item?.marginRight | capitalize: true }}</div>
       </tr>
     </tbody>
   </table>
