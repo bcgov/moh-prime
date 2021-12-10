@@ -2279,6 +2279,18 @@ export class MockConfig {
         {
           'code': 18,
           'name': 'Manually entered paper enrolment'
+        },
+        {
+          'code': 19,
+          'name': 'PRIME enrolment does not match paper enrollee record'
+        },
+        {
+          'code': 20,
+          'name': 'Possible match with paper enrolment(s)'
+        },
+        {
+          'code': 21,
+          'name': 'Unable to link enrollee to paper enrolment'
         }
       ],
       'vendors': [

@@ -11,7 +11,6 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { Role } from '@auth/shared/enum/role.enum';
 
@@ -121,7 +120,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     this.setHealthAuthorityValidator();
   }
 
-  public removeCareSetting(index: number, careSettingCode: number) {
+  public removeCareSetting(index: number) {
     this.careSettings.removeAt(index);
     this.setHealthAuthorityValidator();
   }
@@ -155,17 +154,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public hasSelectedHACareSetting(): boolean {
     return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
-  }
-
-  public routeBackTo() {
-    this.authService.identityProvider$()
-      .subscribe((identityProvider: IdentityProviderEnum) => {
-        const routePath = (identityProvider === IdentityProviderEnum.BCSC)
-          ? EnrolmentRoutes.BCSC_DEMOGRAPHIC
-          : EnrolmentRoutes.BCEID_DEMOGRAPHIC;
-
-        this.routeTo(routePath);
-      });
   }
 
   public ngOnInit() {
@@ -233,16 +221,19 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private removeIncompleteCareSettings() {
-    this.careSettings.controls
-      .forEach((control: FormGroup, index: number) => {
-        const value = control.get('careSettingCode').value;
+  private removeIncompleteCareSettings(allowEmptyCareSettings: boolean = true) {
+    this.careSettings.value
+      .reduce((indexes, careSetting, index) =>
+        (!careSetting.careSettingCode)
+          ? [...indexes, index]
+          : indexes
+        , [])
+      .reverse()
+      .forEach((index: number) => this.removeCareSetting(index));
 
-        // Remove if care setting is empty or the group is invalid
-        if (!value || control.invalid) {
-          this.removeCareSetting(index, value);
-        }
-      });
+    if (allowEmptyCareSettings) {
+      return;
+    }
 
     // Always have a single care setting available, and it prevents
     // the page from jumping too much when routing

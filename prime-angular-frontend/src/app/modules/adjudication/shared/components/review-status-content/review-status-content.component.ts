@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 
 import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { UtilsService } from '@core/services/utils.service';
@@ -10,12 +10,15 @@ import { EnrolmentStatusEnum as EnrolmentStatusEnum } from '@shared/enums/enrolm
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { ConfigCodePipe } from '@config/config-code.pipe';
+import { RoutePath } from '@lib/utils/route-utils.class';
+import { DISPLAY_ID_OFFSET } from '@lib/constants';
 
-class Status {
+export class Status {
   constructor(
     public date: string,
     public name: string,
@@ -26,13 +29,14 @@ class Status {
   ) { }
 }
 
-class Reason {
+export class Reason {
   constructor(
     public name: string,
     public note: string,
     public documents?: BaseDocument[],
     public isSelfDeclaration?: boolean,
     public question?: string,
+    public potentialMatchIds?: number[],
   ) { }
 }
 
@@ -44,9 +48,13 @@ class Reason {
 export class ReviewStatusContentComponent implements OnInit, OnChanges {
   @Input() public enrollee: HttpEnrollee;
   @Input() public hideStatusHistory: boolean;
+  @Output() public route: EventEmitter<RoutePath>;
   public previousStatuses: Status[];
   public reasons: Reason[];
   private questions: { [key: number]: string } = selfDeclarationQuestions;
+
+  public AdjudicationRoutes = AdjudicationRoutes;
+  public DISPLAY_ID_OFFSET = DISPLAY_ID_OFFSET;
 
   constructor(
     private utilsService: UtilsService,
@@ -54,6 +62,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     private configPipe: ConfigCodePipe
   ) {
     this.hideStatusHistory = false;
+    this.route = new EventEmitter<RoutePath>();
   }
 
   public downloadDocument(document: BaseDocument, isSelfDeclaration: boolean): void {
@@ -61,16 +70,6 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
       return this.downloadSelfDeclarationDocument(document.id);
     }
     this.downloadIdentificationDocument(document.id);
-  }
-
-  private downloadSelfDeclarationDocument(id: number): void {
-    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, id)
-      .subscribe((token: string) => this.utilsService.downloadToken(token));
-  }
-
-  private downloadIdentificationDocument(id: number): void {
-    this.enrolmentResource.getDownloadTokenIdentificationDocument(this.enrollee.id, id)
-      .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -81,7 +80,22 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     }
   }
 
+  public onRoute(routePath: RoutePath, event: Event): void {
+    event?.preventDefault();
+    this.route.emit(routePath);
+  }
+
   public ngOnInit(): void { }
+
+  private downloadSelfDeclarationDocument(id: number): void {
+    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, id)
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
+  }
+
+  private downloadIdentificationDocument(id: number): void {
+    this.enrolmentResource.getDownloadTokenIdentificationDocument(this.enrollee.id, id)
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
+  }
 
   private generatePreviousStatuses(enrollee: HttpEnrollee): Status[] {
     if (!enrollee) {
@@ -122,11 +136,20 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
           return reasons.concat(this.parseSelfDeclarations(this.enrollee));
         }
 
+        const statusReason = this.configPipe.transform(esr.statusReasonCode, 'statusReasons');
+
         if (esr.statusReasonCode === EnrolmentStatusReasonEnum.IDENTITY_PROVIDER) {
-          return reasons.concat(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote, this.enrollee.identificationDocuments));
+          return reasons.concat(new Reason(statusReason, esr.reasonNote, this.enrollee.identificationDocuments));
         }
 
-        reasons.push(new Reason(this.configPipe.transform(esr.statusReasonCode, 'statusReasons'), esr.reasonNote));
+        const reason = new Reason(statusReason, esr.reasonNote);
+
+        reasons.push(
+          (esr.statusReasonCode === EnrolmentStatusReasonEnum.POSSIBLE_PAPER_ENROLMENT_MATCH)
+            ? this.parsePotentialMatchIds(reason)
+            : reason
+        );
+
         return reasons;
       }, []);
   }
@@ -147,5 +170,17 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
 
   private getDocumentsForSelfDeclaration(enrollee: HttpEnrollee, code: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
     return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
+  }
+
+  private parsePotentialMatchIds(reason: Reason): Reason {
+    const lastColon = reason.note.lastIndexOf(':');
+
+    // Get the ids and parse them to numbers since we want to show the display ID which is id + 1000
+    reason.potentialMatchIds = reason.note.substring(lastColon).match(/\d+/g).map((id) => parseInt(id));
+
+    // Remove the ids from the status reason so we can add them back as clickable DisplayIds hyper links
+    reason.note = reason.note.substring(0, lastColon + 1);
+
+    return reason;
   }
 }
