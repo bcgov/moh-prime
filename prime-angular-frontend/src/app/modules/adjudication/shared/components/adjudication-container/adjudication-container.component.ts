@@ -448,7 +448,12 @@ export class AdjudicationContainerComponent implements OnInit {
     // Use existing query params for initial search, and
     // update results on query param change
     this.route.queryParams
-      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(this.route.snapshot.params.id, queryParams));
+      .subscribe((queryParams: { [key: string]: any }) => {
+        // Search is not applicable to single-row enrollee
+        if (!this.route.snapshot.params.id) {
+          this.getDataset(this.route.snapshot.params.id, queryParams);
+        }
+      });
     // url params could change due to jump action, subscribe to changes
     this.route.params
       .subscribe((params) => {
