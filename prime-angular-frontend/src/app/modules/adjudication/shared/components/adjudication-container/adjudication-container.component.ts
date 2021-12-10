@@ -50,6 +50,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public busy: Subscription;
   public enrollees: EnrolleeListViewModel[];
+  public enrollee: HttpEnrollee;
   public enrolleeNavigation: EnrolleeNavigation;
   public sort: Sort;
 
@@ -178,6 +179,7 @@ export class AdjudicationContainerComponent implements OnInit {
       )
       .subscribe((approvedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(approvedEnrollee.id);
+        this.enrollee = approvedEnrollee;
         this.action.emit();
       });
   }
@@ -198,6 +200,7 @@ export class AdjudicationContainerComponent implements OnInit {
       )
       .subscribe((declinedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(declinedEnrollee.id);
+        this.enrollee = declinedEnrollee;
         this.action.emit();
       });
   }
@@ -218,6 +221,7 @@ export class AdjudicationContainerComponent implements OnInit {
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(lockedEnrollee.id);
+        this.enrollee = lockedEnrollee;
         this.action.emit();
       });
   }
@@ -238,6 +242,7 @@ export class AdjudicationContainerComponent implements OnInit {
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(lockedEnrollee.id);
+        this.enrollee = lockedEnrollee;
         this.action.emit();
       });
   }
@@ -258,6 +263,7 @@ export class AdjudicationContainerComponent implements OnInit {
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
         this.updateEnrollee(enableEnrollee.id);
+        this.enrollee = enableEnrollee;
         this.action.emit();
       });
   }
@@ -278,6 +284,7 @@ export class AdjudicationContainerComponent implements OnInit {
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
         this.updateEnrollee(enableEnrollee.id);
+        this.enrollee = enableEnrollee;
         this.action.emit();
       });
   }
@@ -298,6 +305,7 @@ export class AdjudicationContainerComponent implements OnInit {
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
         this.updateEnrollee(enableEnrollee.id);
+        this.enrollee = enableEnrollee;
         this.action.emit();
       });
   }
@@ -318,6 +326,7 @@ export class AdjudicationContainerComponent implements OnInit {
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
         this.updateEnrollee(enableEnrollee.id);
+        this.enrollee = enableEnrollee;
         this.action.emit();
       });
   }
@@ -463,6 +472,7 @@ export class AdjudicationContainerComponent implements OnInit {
       forkJoin({
         enrollee: this.adjudicationResource.getEnrolleeById(enrolleeId)
           .pipe(
+            tap((enrollee) => this.enrollee = enrollee),
             map(this.toEnrolleeListViewModel),
             tap(() => this.showSearchFilter = false)
           ),

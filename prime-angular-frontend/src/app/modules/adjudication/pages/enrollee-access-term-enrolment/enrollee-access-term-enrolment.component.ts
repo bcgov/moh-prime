@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';

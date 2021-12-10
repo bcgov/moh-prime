@@ -1,11 +1,11 @@
 <app-adjudication-container [content]="content"
-                            [hasActions]="hasActions"
-                            (action)="onAction()">
+                            [hasActions]="hasActions">
 
   <app-page-header>Adjudication</app-page-header>
 
 </app-adjudication-container>
 
-<ng-template #content>
+<ng-template #content
+             let-enrollee="enrollee">
   <app-review-status-content [enrollee]="enrollee"></app-review-status-content>
 </ng-template>
