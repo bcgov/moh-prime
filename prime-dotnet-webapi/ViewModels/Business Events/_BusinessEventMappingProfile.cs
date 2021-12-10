@@ -9,7 +9,7 @@ namespace Prime.ViewModels.Profiles
         {
             CreateMap<BusinessEvent, SiteBusinessEventViewModel>()
                 .ForMember(dest => dest.PartyName, opt => opt.MapFrom(src => src.Party.FirstName + ' ' + src.Party.LastName))
-                .ForMember(dest => dest.AdminIDIR, opt => opt.MapFrom(src => src.AdminIDIR));
+                .ForMember(dest => dest.AdminIDIR, opt => opt.MapFrom(src => src.Admin.IDIR));
         }
     }
 }
