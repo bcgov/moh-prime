@@ -36,7 +36,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public hasNoRemoteUserError: boolean;
   public hasNoEmailError: boolean;
   public SiteRoutes = SiteRoutes;
-  public addedFirstRemoteUser: boolean;
+  public addedUpdatedRemoteUser: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -74,6 +74,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
 
   public onRemove(index: number) {
     this.formState.remoteUsers.removeAt(index);
+    this.addedUpdatedRemoteUser = false;
   }
 
   public onEdit(index: number) {
@@ -104,11 +105,10 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     // Inform the parent not to patch the form as there are outstanding changes
     // to the remote users that need to be persisted
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
-
-    this.addedFirstRemoteUser = this.route.snapshot.queryParams.addedFirstRemoteUser === 'true';
+    this.addedUpdatedRemoteUser = fromRemoteUser;
 
     // Remove query param from URL without refreshing
-    this.routeUtils.removeQueryParams({ fromRemoteUser: null, addedFirstRemoteUser: null });
+    this.routeUtils.removeQueryParams({ fromRemoteUser: null });
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
     // TODO is this needed?
     this.formState.form.markAsPristine();
@@ -132,6 +132,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
 
         this.hasNoRemoteUserError = false;
         this.formState.remoteUsers.updateValueAndValidity({ emitEvent: false });
+        this.addedUpdatedRemoteUser = false;
       });
 
     this.patchForm();
