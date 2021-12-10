@@ -1,0 +1,11 @@
+# PR Helm values
+global:
+  vanityURL: "pharmanetenrolment.gov.bc.ca"
+  image:
+    tag: dev
+
+redis:
+  enabled: false
+  auth:
+    existingSecret: redis
+    existingSecretPasswordKey: database-password
