@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { KeycloakService } from 'keycloak-angular';
@@ -19,6 +19,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 describe('CareSettingComponent', () => {
   let component: CareSettingComponent;
@@ -69,5 +70,73 @@ describe('CareSettingComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('testing addCareSetting()', () => {
+    it('should add one careSetting', () => {
+      expect(component.careSettings.length).toEqual(0);
+      component.addCareSetting();
+      expect(component.careSettings.length).toEqual(1);
+    });
+  });
+
+  describe('testing removeCareSetting()', () => {
+    it('should remove one careSetting', () => {
+      component.addCareSetting();
+      expect(component.careSettings.length).toEqual(1);
+      component.removeCareSetting(0);
+      expect(component.careSettings.length).toEqual(0);
+    });
+  });
+
+  describe('testing filterCareSettingTypes()', () => {
+    describe('without adding a care setting', () => {
+      it('should return a list of all care setting types', () => {
+        const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm();
+
+        expect(component.filterCareSettingTypes(mockCareTypeFormGroup).length).toEqual(component.careSettingTypes.length);
+      });
+    });
+
+    describe('with adding a care setting but without making a selection', () => {
+      it('should return a list shorter than the list of all care setting types', () => {
+        const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm() as FormGroup;
+        component.addCareSetting();
+        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+
+        expect(component.filterCareSettingTypes(mockCareTypeFormGroup).length).toBeLessThan(component.careSettingTypes.length);
+      });
+    });
+
+    describe('with adding one care setting and making one selection', () => {
+      it('should return a list shorter than the list of all care setting types', () => {
+        const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm() as FormGroup;
+        mockCareTypeFormGroup.setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+        component.addCareSetting();
+        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+
+        expect(component.filterCareSettingTypes(mockCareTypeFormGroup).length).toEqual(component.careSettingTypes.length);
+      });
+    });
+  });
+
+  describe('testing hasSelectedHACareSetting', () => {
+    describe('with Health Authority selected', () => {
+      it('hasSelectedHACareSetting should return true', () => {
+        component.addCareSetting();
+        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.HEALTH_AUTHORITY });
+
+        expect(component.hasSelectedHACareSetting()).toBeTrue();
+      });
+    });
+
+    describe('with care setting other than Health Authority selected', () => {
+      it('hasSelectedHACareSetting should return false', () => {
+        component.addCareSetting();
+        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+
+        expect(component.hasSelectedHACareSetting()).toBeFalse();
+      });
+    });
   });
 });

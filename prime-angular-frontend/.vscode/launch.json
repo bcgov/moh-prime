@@ -7,9 +7,16 @@
     {
       "type": "chrome",
       "request": "launch",
+      "name": "Unit Test",
+      "url": "http://localhost:9876",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:4200",
       "webRoot": "${workspaceFolder}"
-    }
+    },
   ]
 }
