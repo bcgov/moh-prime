@@ -12,7 +12,7 @@
 
   <span *ngIf="username && !isMobile"
         class="username">
-    {{ username }}
+    {{ logoutMsg ? logoutMsg : username }}
   </span>
   <span *ngIf="username"
         class="logout">
