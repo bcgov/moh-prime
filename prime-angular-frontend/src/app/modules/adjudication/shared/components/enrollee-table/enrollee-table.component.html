@@ -35,7 +35,7 @@
 
               <app-triage *ngIf="row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
                           class="align-self-start"
-                          [enrolleeId]="row.id"
+                          [enrollee]="row"
                           [assigned]="(row.adjudicatorIdir)"
                           (reload)="onReload()"></app-triage>
 
