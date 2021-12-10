@@ -60,7 +60,8 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const careTypes = [...new Set(this.careTypes.value.map(({ careType }) => careType.trim()) as string[])];
+      const careTypes = [...new Set(this.careTypes.getRawValue()
+        .map(({ careType }) => careType.name.trim()) as string[])];
       this.healthAuthResource.updateHealthAuthorityCareTypes(this.route.snapshot.params.haid, careTypes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
@@ -68,7 +69,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public addCareType(careType: HealthAuthorityCareTypeMap = null) {
     this.careTypes.push(this.fb.group({
-      careType: [{ value: careType ?? null, disabled: careType?.id }, Validators.required]
+      careType: [{ value: careType, disabled: careType?.id }, Validators.required]
     }));
   }
 
@@ -105,10 +106,10 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   private initForm() {
     this.form.valueChanges
-      .subscribe(({ careTypes }: { careTypes: { careType: string }[] }) => {
-        const selectedCareTypes = careTypes.map(ct => ct.careType);
+      .subscribe(() => {
+        const selectedCareTypes = this.careTypes.getRawValue().map(ct => ct.careType?.name);
         const filteredCareTypes = this.configService.careTypes
-          .filter(ct => !selectedCareTypes.includes(ct.name))
+          .filter(ct => !selectedCareTypes.includes(ct.name));
         this.filteredCareTypes.next(filteredCareTypes);
       });
 

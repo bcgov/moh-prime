@@ -68,7 +68,7 @@ export class VendorsPageComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const vendorCodes = [...new Set(this.vendors.value.map(({ vendor }) => vendor.code) as number[])];
+      const vendorCodes = [...new Set(this.vendors.getRawValue().map(({ vendor }) => vendor.code) as number[])];
       this.healthAuthResource.updateHealthAuthorityVendors(this.route.snapshot.params.haid, vendorCodes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
@@ -113,8 +113,8 @@ export class VendorsPageComponent implements OnInit {
 
   private initForm() {
     this.form.valueChanges
-      .subscribe(({ vendors }: { vendors: { vendor: VendorConfig }[] }) => {
-        const selectedVendorCodes = vendors.map(v => v.vendor?.code);
+      .subscribe(() => {
+        const selectedVendorCodes = this.vendors.getRawValue().map(v => v.vendor?.code);
         // Filter out the selected vendors to avoid visual duplicates
         const filteredVendors = this.healthAuthorityVendors.filter(v => !selectedVendorCodes.includes(v.code));
         this.filteredVendors.next(filteredVendors);
