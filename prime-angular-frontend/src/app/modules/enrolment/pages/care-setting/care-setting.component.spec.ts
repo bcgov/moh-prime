@@ -139,4 +139,13 @@ describe('CareSettingComponent', () => {
       });
     });
   });
+
+  describe('testing nextRouteAfterSubmit()', () => { });
+
+  describe('testing removeIncompleteCareSettings()', () => { });
+
+  describe('testing removeIncompleteCareSettings()', () => { });
+
+  describe('testing removeOboSites()', () => { });
+
 });
