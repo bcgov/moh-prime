@@ -4,7 +4,12 @@ th {
   width: 1%;
 }
 
-div.margin-right.mt-5 {
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.margin-right {
   font-size: 13px;
   color: theme-palette(grey, light);
 }
