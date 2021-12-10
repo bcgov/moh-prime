@@ -88,7 +88,10 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onSort(sort: Sort): void {
-    this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
+    // Do not use sorting queryParams for single row mode
+    if (!this.route.snapshot.params.id) {
+      this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
+    }
   }
 
   public onRefresh(): void {
