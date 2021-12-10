@@ -76,12 +76,12 @@ export class VendorsPageComponent implements OnInit {
 
   public addVendor(vendor: HealthAuthorityVendorMap = null) {
     this.vendors.push(this.fb.group({
-      vendor: [{ value: vendor ?? null, disabled: vendor.id }, Validators.required]
+      vendor: [{ value: vendor ?? null, disabled: vendor?.id }, Validators.required]
     }));
   }
 
   public removeVendor(index: number) {
-    const vendorId = this.vendors.value[index].vendor?.id;
+    const vendorId = this.vendors.value[index]?.vendor?.id;
     if (vendorId) {
       this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorId)
         .subscribe((healthAuthoritySites) => {

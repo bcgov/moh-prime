@@ -68,12 +68,12 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public addCareType(careType: HealthAuthorityCareTypeMap = null) {
     this.careTypes.push(this.fb.group({
-      careType: [{ value: careType ?? null, disabled: careType.id }, Validators.required]
+      careType: [{ value: careType ?? null, disabled: careType?.id }, Validators.required]
     }));
   }
 
   public removeCareType(index: number) {
-    const careTypeId = this.careTypes.value[index].careType?.id;
+    const careTypeId = this.careTypes.value[index]?.careType?.id;
     if (careTypeId) {
       this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careTypeId)
         .subscribe((healthAuthoritySites) => {
