@@ -4,7 +4,7 @@
 {{ $release := .Release.Name }}
 {{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
 {{ $isPR := hasPrefix "pr-" .Release.Name }}
-## Derrived release name
+## Derived release name
 {{ $drn := ternary $release $ocEnv $isPR }}
 {{ $isProd := contains "prod" $ocEnv }}
 {{- $svcPort := .Values.service.port -}}

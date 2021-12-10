@@ -1,7 +1,7 @@
 {{ $release := .Release.Name }}
 {{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
 {{ $isPR := hasPrefix "pr-" .Release.Name }}
-## Derrived release name
+## Derived release name
 {{ $drn := ternary $release $ocEnv $isPR }}
 #
 apiVersion: apps/v1
@@ -78,12 +78,12 @@ spec:
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
-                  name: {{ $ocEnv }}-patroni-secret
+                  name: {{ $drn }}-patroni-secret
                   key: app-db-username
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ $ocEnv }}-patroni-secret
+                  name: {{ $drn }}-patroni-secret
                   key: app-db-password
             - name: PGDATABASE
             {{- if $isPR }}
@@ -91,7 +91,7 @@ spec:
             {{ else }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ $ocEnv }}-patroni-secret
+                  name: {{ $drn }}-patroni-secret
                   key: app-db-name
             {{- end }}
             - name: DOCUMENT_MANAGER_URL

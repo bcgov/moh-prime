@@ -2,7 +2,7 @@
 {{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
 {{ $domain := .Values.global.vanityURL }}
 {{ $isPR := hasPrefix "pr-" .Release.Name }}
-## Derrived release name
+## Derived release name
 {{ $drn := ternary $release $ocEnv $isPR }}
 {{ $isProd := contains "prod" $ocEnv }}
 #
