@@ -331,18 +331,19 @@ jobs:
           rm -rf /tmp/.frontend-cache
           mv /tmp/.frontend-cache-new /tmp/.frontend-cache
 
-  apply-oc-template:
+  deploy:
     runs-on: ubuntu-20.04
     environment: Development
     needs: [build-document-manager-backend,build-frontend,build-backend,build-pip-frontend,build-pip]
     steps:
-      - name: "Use the OpenShift template"
+      - name: "Checkout the repo"
         uses: actions/checkout@v2
 
       - name: Install OC
         uses: redhat-actions/openshift-tools-installer@v1
         with:
           oc: "4.6"
+          helm: "latest"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1.1
@@ -358,20 +359,10 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
 
-      - name: "Process template"
-        id: oc
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
-          PR_NUMBER: ${{steps.PR.outputs.number}}
+      - name: "Deploy"
         run: |
-          echo PR_NUMBER=$PR_NUMBER
-          oc process -f infrastructure/prime-app-ephemeral-template.yml \
-            -p ASP_ENV=Development \
-            -p FRONTEND_URL=pr-$PR_NUMBER \
-            -p IMAGE_TAG=pr-$PR_NUMBER \
-            -p SVC_NAME=pr-$PR_NUMBER \
-            -p OC_LICENSE_PLATE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
-            -p URL_STUB=.pharmanetenrolment.gov.bc.ca \
-            -p WEB_PORT=8080 \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} -f -
+          helm upgrade --install \
+            pr-${{steps.PR.outputs.number}} \
+            charts/prime \
+            -f infrastructure/values/pr-answers.yaml \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}}

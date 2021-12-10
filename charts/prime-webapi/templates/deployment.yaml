@@ -1,8 +1,10 @@
 {{ $release := .Release.Name }}
 {{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $domain := .Values.global.vanityURL }}
 {{ $isPR := hasPrefix "pr-" .Release.Name }}
 ## Derrived release name
 {{ $drn := ternary $release $ocEnv $isPR }}
+{{ $isProd := contains "prod" $ocEnv }}
 #
 apiVersion: apps/v1
 kind: Deployment
@@ -51,9 +53,9 @@ spec:
             - name: PHARMANET_SSL_CERT_FILENAME
               value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
             - name: BACKEND_URL
-              value: https://{{ .Values.global.vanityURL }}/api/v1/
+              value: https://{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ $domain }}/api/v1/
             - name: FRONTEND_URL
-              value: https://{{ .Values.global.vanityURL }}
+              value: https://{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ $domain }}
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
@@ -75,7 +77,7 @@ spec:
               {{ else }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ $ocEnv }}-patroni-secret
+                  name: {{ $drn }}-patroni-secret
                   key: app-db-name
               {{- end }}
             - name: DB_CONNECTION_STRING
