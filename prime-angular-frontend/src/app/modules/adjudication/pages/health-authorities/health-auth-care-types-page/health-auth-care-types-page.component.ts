@@ -15,9 +15,10 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
-interface CareTypeIdNameMap {
-  id: number;
+interface HealthAuthorityCareTypeMap {
+  id?: number;
   name: string;
+  code: number;
 }
 @Component({
   selector: 'app-health-auth-care-types-page',
@@ -29,10 +30,9 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
   public title: string;
   public form: FormGroup;
   public isInitialEntry: boolean;
-  public filteredCareTypes: BehaviorSubject<string[]>;
+  public filteredCareTypes: BehaviorSubject<HealthAuthorityCareTypeMap[]>;
 
   private routeUtils: RouteUtils;
-  private careTypeIdNameMap: CareTypeIdNameMap[];
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +51,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
       AdjudicationRoutes.HEALTH_AUTHORITIES,
       this.route.snapshot.params.haid
     ]);
-    this.filteredCareTypes = new BehaviorSubject<string[]>(this.configService.careTypes.map(ct => ct.name));
+    this.filteredCareTypes = new BehaviorSubject<HealthAuthorityCareTypeMap[]>(this.configService.careTypes.map(ct => { return { name: ct.name, code: ct.code } }));
   }
 
   public get careTypes(): FormArray {
@@ -66,15 +66,14 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     }
   }
 
-  public addCareType(careType: string = '') {
+  public addCareType(careType: HealthAuthorityCareTypeMap = null) {
     this.careTypes.push(this.fb.group({
-      careType: [careType ?? null, Validators.required]
+      careType: [{ value: careType ?? null, disabled: careType.id }, Validators.required]
     }));
   }
 
   public removeCareType(index: number) {
-    const careTypeId = this.careTypeIdNameMap
-      .find((ct) => (ct.name === this.careTypes.value[index].careType))?.id;
+    const careTypeId = this.careTypes.value[index].careType?.id;
     if (careTypeId) {
       this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careTypeId)
         .subscribe((healthAuthoritySites) => {
@@ -109,18 +108,19 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
       .subscribe(({ careTypes }: { careTypes: { careType: string }[] }) => {
         const selectedCareTypes = careTypes.map(ct => ct.careType);
         const filteredCareTypes = this.configService.careTypes
-          .filter(ct => !selectedCareTypes.includes(ct.name)).map(ct => ct.name);
+          .filter(ct => !selectedCareTypes.includes(ct.name))
         this.filteredCareTypes.next(filteredCareTypes);
       });
 
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ careTypes }: HealthAuthority) => {
         if (careTypes?.length) {
-          this.careTypeIdNameMap = careTypes
-            .map((ct) => { return { id: ct.id, name: ct.careType } });
-          careTypes.map((ct) => this.addCareType(ct.careType));
+          careTypes.map((careType) => this.addCareType({
+            ...this.configService.careTypes.find((ct) => ct.name === careType.careType),
+            id: careType.id
+          }));
         } else {
-          this.addCareType()
+          this.addCareType();
         }
       });
   }

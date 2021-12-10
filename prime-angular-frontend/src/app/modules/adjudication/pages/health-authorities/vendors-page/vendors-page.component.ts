@@ -12,13 +12,16 @@ import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
+import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
-interface VendorIdCodeMap {
-  id: number;
-  vendorCode: number;
+interface HealthAuthorityVendorMap {
+  id?: number;
+  code: number;
+  careSettingCode: number;
+  name: string;
 }
 @Component({
   selector: 'app-vendors-page',
@@ -30,11 +33,10 @@ export class VendorsPageComponent implements OnInit {
   public title: string;
   public form: FormGroup;
   public isInitialEntry: boolean;
-  public filteredVendors: BehaviorSubject<VendorConfig[]>;
-  public healthAuthorityVendors: VendorConfig[];
+  public filteredVendors: BehaviorSubject<HealthAuthorityVendorMap[]>;
+  public healthAuthorityVendors: HealthAuthorityVendorMap[];
 
   private routeUtils: RouteUtils;
-  private vendorIdCodeMap: VendorIdCodeMap[];
 
   constructor(
     private fb: FormBuilder,
@@ -55,9 +57,9 @@ export class VendorsPageComponent implements OnInit {
     ]);
 
     this.healthAuthorityVendors = this.configService.vendors
-      .filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
+      .filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) as HealthAuthorityVendorMap[];
 
-    this.filteredVendors = new BehaviorSubject<VendorConfig[]>(this.healthAuthorityVendors);
+    this.filteredVendors = new BehaviorSubject<HealthAuthorityVendorMap[]>(this.healthAuthorityVendors);
   }
 
   public get vendors(): FormArray {
@@ -72,15 +74,14 @@ export class VendorsPageComponent implements OnInit {
     }
   }
 
-  public addVendor(vendor: VendorConfig = null) {
+  public addVendor(vendor: HealthAuthorityVendorMap = null) {
     this.vendors.push(this.fb.group({
-      vendor: [vendor ?? null, Validators.required]
+      vendor: [{ value: vendor ?? null, disabled: vendor.id }, Validators.required]
     }));
   }
 
   public removeVendor(index: number) {
-    const vendorId = this.vendorIdCodeMap
-      .find((v) => (v.vendorCode === this.vendors.value[index].vendor.code))?.id;
+    const vendorId = this.vendors.value[index].vendor?.id;
     if (vendorId) {
       this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorId)
         .subscribe((healthAuthoritySites) => {
@@ -113,7 +114,7 @@ export class VendorsPageComponent implements OnInit {
   private initForm() {
     this.form.valueChanges
       .subscribe(({ vendors }: { vendors: { vendor: VendorConfig }[] }) => {
-        const selectedVendorCodes = vendors.map(ct => ct.vendor?.code);
+        const selectedVendorCodes = vendors.map(v => v.vendor?.code);
         // Filter out the selected vendors to avoid visual duplicates
         const filteredVendors = this.healthAuthorityVendors.filter(v => !selectedVendorCodes.includes(v.code));
         this.filteredVendors.next(filteredVendors);
@@ -121,16 +122,13 @@ export class VendorsPageComponent implements OnInit {
 
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ vendors }: HealthAuthority) => {
-        if (vendors?.length) {
-          this.vendorIdCodeMap = vendors
-            .map((v) => { return { id: v.id, vendorCode: v.vendorCode } });
-
-          this.configService.vendors
-            .filter(v => vendors.some(({ vendorCode }) => v.code === vendorCode))
-            .map(v => this.addVendor(v))
-        } else {
-          this.addVendor()
-        }
+        vendors
+          .map((vendor: HealthAuthorityVendor) =>
+            this.addVendor({
+              ...this.healthAuthorityVendors.find((v) => v.code === vendor.vendorCode),
+              id: vendor.id
+            })
+          );
       });
   }
 
