@@ -17,11 +17,8 @@ import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authori
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
-interface HealthAuthorityVendorMap {
+interface HealthAuthorityVendorMap extends VendorConfig {
   id?: number;
-  code: number;
-  careSettingCode: number;
-  name: string;
 }
 @Component({
   selector: 'app-vendors-page',
@@ -81,19 +78,21 @@ export class VendorsPageComponent implements OnInit {
   }
 
   public removeVendor(index: number) {
-    const vendorId = this.vendors.value[index]?.vendor?.id;
-    if (vendorId) {
-      this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorId)
-        .subscribe((healthAuthoritySites) => {
-          (!healthAuthoritySites.length)
-            ? this.vendors.removeAt(index)
-            : this.toastService.openErrorToast('Vendor could not be removed, one or more sites are using it');
-        });
-    } else {
+    const vendorId = this.vendors.getRawValue()[index]?.vendor?.id;
+
+    if (!vendorId) {
       // when vendorId is undefined that means we're deleting a vendor after adding it and before hitting Save and Continue
       // i.e. before it was given an Id
       this.vendors.removeAt(index);
+      return;
     }
+
+    this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorId)
+      .subscribe((healthAuthoritySites) => {
+        (!healthAuthoritySites.length)
+          ? this.vendors.removeAt(index)
+          : this.toastService.openErrorToast('Vendor could not be removed, one or more sites are using it');
+      });
   }
 
   public onBack() {
@@ -121,15 +120,16 @@ export class VendorsPageComponent implements OnInit {
       });
 
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
-      .subscribe(({ vendors }: HealthAuthority) => {
-        vendors
-          .map((vendor: HealthAuthorityVendor) =>
-            this.addVendor({
-              ...this.healthAuthorityVendors.find((v) => v.code === vendor.vendorCode),
-              id: vendor.id
-            })
-          );
-      });
+      .subscribe(({ vendors }: HealthAuthority) =>
+        (vendors?.length)
+          ? vendors.map((vendor: HealthAuthorityVendor) =>
+                this.addVendor({
+                ...this.healthAuthorityVendors.find((v) => v.code === vendor.vendorCode),
+                id: vendor.id
+                })
+          )
+          : this.addVendor()
+      );
   }
 
   private nextRouteAfterSubmit() {

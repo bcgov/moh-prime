@@ -112,7 +112,7 @@ export class HealthAuthorityResource {
         map((response: ApiHttpResponse<number[]>) => response.result),
         tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),
         catchError((error: any) => {
-          this.logger.error('[Core] HealthAuthorityResource::isHealthAuthorityVendorInUse error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityVendorSiteIds error has occurred: ', error);
           throw error;
         })
       );
@@ -124,7 +124,7 @@ export class HealthAuthorityResource {
         map((response: ApiHttpResponse<number[]>) => response.result),
         tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),
         catchError((error: any) => {
-          this.logger.error('[Core] HealthAuthorityResource::isHealthAuthorityCareTypeInUse error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityCareTypeSiteIds error has occurred: ', error);
           throw error;
         })
       );

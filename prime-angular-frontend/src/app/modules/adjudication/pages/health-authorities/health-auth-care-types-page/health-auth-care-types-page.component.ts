@@ -18,7 +18,6 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
 interface HealthAuthorityCareTypeMap {
   id?: number;
   name: string;
-  code: number;
 }
 @Component({
   selector: 'app-health-auth-care-types-page',
@@ -51,7 +50,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
       AdjudicationRoutes.HEALTH_AUTHORITIES,
       this.route.snapshot.params.haid
     ]);
-    this.filteredCareTypes = new BehaviorSubject<HealthAuthorityCareTypeMap[]>(this.configService.careTypes.map(ct => { return { name: ct.name, code: ct.code } }));
+    this.filteredCareTypes = new BehaviorSubject<HealthAuthorityCareTypeMap[]>(this.configService.careTypes as HealthAuthorityCareTypeMap[]);
   }
 
   public get careTypes(): FormArray {
@@ -61,7 +60,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const careTypes = [...new Set(this.careTypes.getRawValue()
-        .map(({ careType }) => careType.name.trim()) as string[])];
+        .map(({ careType }) => careType.name ? careType.name.trim() : careType.trim()) as string[])];
       this.healthAuthResource.updateHealthAuthorityCareTypes(this.route.snapshot.params.haid, careTypes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
@@ -74,19 +73,21 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
   }
 
   public removeCareType(index: number) {
-    const careTypeId = this.careTypes.value[index]?.careType?.id;
-    if (careTypeId) {
-      this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careTypeId)
-        .subscribe((healthAuthoritySites) => {
-          (!healthAuthoritySites.length)
-            ? this.careTypes.removeAt(index)
-            : this.toastService.openErrorToast('Care type could not be removed, one or more sites are using it');
-        });
-    } else {
+    const careTypeId = this.careTypes.getRawValue()[index]?.careType?.id;
+
+    if (!careTypeId) {
       // when careTypeId is undefined that means we're deleting a care type after adding it and before hitting Save and Continue
       // i.e. before it was given an Id
       this.careTypes.removeAt(index);
+      return;
     }
+
+    this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careTypeId)
+      .subscribe((healthAuthoritySites) => {
+        (!healthAuthoritySites.length)
+          ? this.careTypes.removeAt(index)
+          : this.toastService.openErrorToast('Care type could not be removed, one or more sites are using it');
+      });
   }
 
   public onBack() {
@@ -114,16 +115,14 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
       });
 
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
-      .subscribe(({ careTypes }: HealthAuthority) => {
-        if (careTypes?.length) {
-          careTypes.map((careType) => this.addCareType({
-            ...this.configService.careTypes.find((ct) => ct.name === careType.careType),
+      .subscribe(({ careTypes }: HealthAuthority) =>
+        (careTypes?.length)
+          ? careTypes.map((careType) => this.addCareType({
+            name: careType.careType,
             id: careType.id
-          }));
-        } else {
-          this.addCareType();
-        }
-      });
+          }))
+          : this.addCareType()
+      );
   }
 
   private nextRouteAfterSubmit() {
