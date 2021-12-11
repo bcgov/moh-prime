@@ -118,9 +118,9 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
       .subscribe(({ careTypes }: HealthAuthority) =>
         (careTypes?.length)
           ? careTypes.map((careType) => this.addCareType({
-            name: careType.careType,
-            id: careType.id
-          }))
+              name: careType.careType,
+              id: careType.id
+            }))
           : this.addCareType()
       );
   }
