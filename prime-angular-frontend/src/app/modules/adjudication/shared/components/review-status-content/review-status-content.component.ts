@@ -2,12 +2,13 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitte
 
 import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { UtilsService } from '@core/services/utils.service';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { EnrolmentStatusEnum as EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -47,6 +48,7 @@ export class Reason {
 })
 export class ReviewStatusContentComponent implements OnInit, OnChanges {
   @Input() public enrollee: HttpEnrollee;
+  @Input() public enrolleeReviewStatus: EnrolleeReviewStatus;
   @Input() public hideStatusHistory: boolean;
   @Output() public route: EventEmitter<RoutePath>;
   public previousStatuses: Status[];
@@ -76,7 +78,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     if (changes.enrollee) {
       this.enrollee = changes.enrollee.currentValue;
       this.reasons = this.generateReasons(this.enrollee);
-      this.previousStatuses = this.generatePreviousStatuses(this.enrollee);
+      this.previousStatuses = this.generatePreviousStatuses(this.enrolleeReviewStatus);
     }
   }
 
@@ -97,11 +99,11 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
       .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
-  private generatePreviousStatuses(enrollee: HttpEnrollee): Status[] {
-    if (!enrollee) {
+  private generatePreviousStatuses(reviewStatus: EnrolleeReviewStatus): Status[] {
+    if (!reviewStatus) {
       return [];
     }
-    return enrollee.enrolmentStatuses
+    return reviewStatus.enrolmentStatuses
       .reduce((statuses: Status[], enrolmentStatus: EnrolmentStatus) => {
         const status = new Status(
           enrolmentStatus.statusDate,
@@ -133,13 +135,13 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     return enrolmentStatus.enrolmentStatusReasons
       .reduce((reasons: Reason[], esr: EnrolmentStatusReason) => {
         if (esr.statusReasonCode === EnrolmentStatusReasonEnum.SELF_DECLARATION) {
-          return reasons.concat(this.parseSelfDeclarations(this.enrollee));
+          return reasons.concat(this.parseSelfDeclarations(this.enrolleeReviewStatus));
         }
 
         const statusReason = this.configPipe.transform(esr.statusReasonCode, 'statusReasons');
 
         if (esr.statusReasonCode === EnrolmentStatusReasonEnum.IDENTITY_PROVIDER) {
-          return reasons.concat(new Reason(statusReason, esr.reasonNote, this.enrollee.identificationDocuments));
+          return reasons.concat(new Reason(statusReason, esr.reasonNote, this.enrolleeReviewStatus.identificationDocuments));
         }
 
         const reason = new Reason(statusReason, esr.reasonNote);
@@ -154,13 +156,13 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
       }, []);
   }
 
-  private parseSelfDeclarations(enrollee: HttpEnrollee): Reason[] {
-    return enrollee.selfDeclarations
+  private parseSelfDeclarations(reviewStatus: EnrolleeReviewStatus): Reason[] {
+    return this.enrollee.selfDeclarations
       .reduce((selfDeclarations, selfDeclaration: SelfDeclaration) => {
         selfDeclarations.push(new Reason(
           'User answered yes to a self-declaration question:',
           selfDeclaration.selfDeclarationDetails,
-          this.getDocumentsForSelfDeclaration(enrollee, selfDeclaration.selfDeclarationTypeCode),
+          this.getDocumentsForSelfDeclaration(reviewStatus, selfDeclaration.selfDeclarationTypeCode),
           true,
           this.questions[selfDeclaration.selfDeclarationTypeCode]
         ));
@@ -168,8 +170,8 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
       }, []);
   }
 
-  private getDocumentsForSelfDeclaration(enrollee: HttpEnrollee, code: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
-    return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
+  private getDocumentsForSelfDeclaration(reviewStatus: EnrolleeReviewStatus, code: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
+    return reviewStatus.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
   }
 
   private parsePotentialMatchIds(reason: Reason): Reason {

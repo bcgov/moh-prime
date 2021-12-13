@@ -16,6 +16,7 @@ import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-proper
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
 import { AdjudicationContainerComponent } from '@adjudication/shared/components/adjudication-container/adjudication-container.component';
 import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 
@@ -32,6 +33,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class EnrolleeOverviewComponent extends AdjudicationContainerComponent implements OnInit {
   public enrollee: HttpEnrollee;
+  public reviewStatus: EnrolleeReviewStatus;
   public enrolment: Enrolment;
   public enrolleeNavigation: EnrolleeNavigation;
   public plrInfo: PlrInfo[];
@@ -97,14 +99,16 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
             }))
           ),
         enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId),
+        reviewStatus: this.adjudicationResource.getEnrolleeReviewStatus(enrolleeId)
       }).pipe(
         map(
-          ({ enrollee, enrolleeNavigation }) => {
+          ({ enrollee, enrolleeNavigation, reviewStatus }) => {
             // Complete this first before attempting to get PLR info, so user can see information rendered sooner
             this.enrollee = enrollee.enrollee;
             this.enrollees = [enrollee.enrolleeView];
             this.enrolment = enrollee.enrolment;
             this.enrolleeNavigation = enrolleeNavigation;
+            this.reviewStatus = reviewStatus;
             // hide the adjudication card if enrolment is editable and no 'reason for adjudication'
             this.showAdjudication = !(enrollee.enrollee.currentStatus.statusCode === EnrolmentStatusEnum.EDITABLE
               && !enrollee.enrollee.currentStatus.enrolmentStatusReasons?.length);

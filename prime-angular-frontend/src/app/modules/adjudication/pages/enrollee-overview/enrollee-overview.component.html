@@ -95,6 +95,7 @@
         <mat-card id="adjudicationCard">
           <mat-card-content>
             <app-review-status-content [enrollee]="enrollee"
+                                       [enrolleeReviewStatus]="reviewStatus"
                                        [hideStatusHistory]="true"
                                        (route)="onRoute($event)">
             </app-review-status-content>

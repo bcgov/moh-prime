@@ -1,5 +1,6 @@
 <app-adjudication-container [content]="content"
-                            [hasActions]="hasActions">
+                            [hasActions]="hasActions"
+                            (action)="onAction()">
 
   <app-page-header>Adjudication</app-page-header>
 
@@ -7,5 +8,6 @@
 
 <ng-template #content
              let-enrollee="enrollee">
-  <app-review-status-content [enrollee]="enrollee"></app-review-status-content>
+  <app-review-status-content [enrollee]="enrollee"
+                             [enrolleeReviewStatus]="enrolleeReviewStatus"></app-review-status-content>
 </ng-template>
