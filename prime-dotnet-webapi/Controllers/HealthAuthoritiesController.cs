@@ -142,7 +142,7 @@ namespace Prime.Controllers
 
             if (careTypes.Count() != careTypes.Distinct().Count())
             {
-                return BadRequest("Unable to update care types. One or more health authority care types already exist");
+                return BadRequest("Unable to update care types. Duplicate care types provided");
             }
 
             if (!await _healthAuthorityService.UpdateCareTypesAsync(healthAuthorityId, careTypes))
@@ -180,7 +180,7 @@ namespace Prime.Controllers
 
             if (vendors.Count() != vendors.Distinct().Count())
             {
-                return BadRequest("Unable to update care types. One or more health authority vendors already exist");
+                return BadRequest("Unable to update care types. Duplicate vendors provided");
             }
 
             if (!await _healthAuthorityService.UpdateVendorsAsync(healthAuthorityId, vendors))
