@@ -73,7 +73,7 @@ export class VendorsPageComponent implements OnInit {
 
   public addVendor(vendor: HealthAuthorityVendorMap = null) {
     this.vendors.push(this.fb.group({
-      vendor: [{ value: vendor ?? null, disabled: vendor?.id }, Validators.required]
+      vendor: [vendor, Validators.required]
     }));
   }
 
@@ -106,7 +106,7 @@ export class VendorsPageComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      vendors: this.fb.array([], FormArrayValidators.atLeast(1))
+      vendors: this.fb.array([])
     });
   }
 
@@ -123,10 +123,10 @@ export class VendorsPageComponent implements OnInit {
       .subscribe(({ vendors }: HealthAuthority) =>
         (vendors?.length)
           ? vendors.map((vendor: HealthAuthorityVendor) =>
-                this.addVendor({
-                  ...this.healthAuthorityVendors.find((v) => v.code === vendor.vendorCode),
-                  id: vendor.id
-                })
+            this.addVendor({
+              ...this.healthAuthorityVendors.find((v) => v.code === vendor.vendorCode),
+              id: vendor.id
+            })
           )
           : this.addVendor()
       );

@@ -29,6 +29,7 @@
                                     fieldLabel="Vendor"
                                     controlName="vendor"
                                     optionLabel="name"
+                                    [readonly]="!!vendor.value.careType.id"
                                     [availableOptions]="filteredVendors"></app-options-form>
                 </app-form-icon-group>
 

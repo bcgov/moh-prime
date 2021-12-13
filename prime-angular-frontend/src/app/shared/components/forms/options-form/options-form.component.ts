@@ -53,6 +53,12 @@ export class OptionsFormComponent implements OnInit {
    * Whether to use select (default) or autocomplete.
    */
   @Input() public selectOrAutocomplete: 'select' | 'autocomplete';
+
+  /**
+   * @description
+   * Whether the input is readonly
+   */
+  @Input() public readonly: boolean;
   /**
    * @description
    * List of options that includes the selected option.

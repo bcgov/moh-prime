@@ -68,7 +68,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public addCareType(careType: HealthAuthorityCareTypeMap = null) {
     this.careTypes.push(this.fb.group({
-      careType: [{ value: careType, disabled: careType?.id }, Validators.required]
+      careType: [careType, Validators.required]
     }));
   }
 
@@ -101,7 +101,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      careTypes: this.fb.array([], FormArrayValidators.atLeast(1))
+      careTypes: this.fb.array([])
     });
   }
 
@@ -118,9 +118,9 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
       .subscribe(({ careTypes }: HealthAuthority) =>
         (careTypes?.length)
           ? careTypes.map((careType) => this.addCareType({
-              name: careType.careType,
-              id: careType.id
-            }))
+            name: careType.careType,
+            id: careType.id
+          }))
           : this.addCareType()
       );
   }
