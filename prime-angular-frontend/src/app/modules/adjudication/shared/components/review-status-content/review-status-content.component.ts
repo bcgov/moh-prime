@@ -2,16 +2,16 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitte
 
 import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { UtilsService } from '@core/services/utils.service';
-import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { EnrolmentStatusEnum as EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
@@ -135,7 +135,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     return enrolmentStatus.enrolmentStatusReasons
       .reduce((reasons: Reason[], esr: EnrolmentStatusReason) => {
         if (esr.statusReasonCode === EnrolmentStatusReasonEnum.SELF_DECLARATION) {
-          return reasons.concat(this.parseSelfDeclarations(this.enrolleeReviewStatus));
+          return reasons.concat(this.parseSelfDeclarations(this.enrollee, this.enrolleeReviewStatus));
         }
 
         const statusReason = this.configPipe.transform(esr.statusReasonCode, 'statusReasons');
@@ -156,8 +156,8 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
       }, []);
   }
 
-  private parseSelfDeclarations(reviewStatus: EnrolleeReviewStatus): Reason[] {
-    return this.enrollee.selfDeclarations
+  private parseSelfDeclarations(enrollee: HttpEnrollee, reviewStatus: EnrolleeReviewStatus): Reason[] {
+    return enrollee.selfDeclarations
       .reduce((selfDeclarations, selfDeclaration: SelfDeclaration) => {
         selfDeclarations.push(new Reason(
           'User answered yes to a self-declaration question:',
