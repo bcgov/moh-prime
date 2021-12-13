@@ -41,6 +41,7 @@ import { AgreementVersion } from '@shared/models/agreement-version.model';
 
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -53,9 +54,9 @@ export class AdjudicationResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public getEnrollees(textSearch?: string, statusCode?: number): Observable<EnrolleeListViewModel[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode });
-    return this.apiResource.get<EnrolleeListViewModel[]>('enrollees', params)
+  public getEnrollees(params: { textSearch?: string, statusCode?: number, isLinkedPaperEnrolment?: boolean }): Observable<EnrolleeListViewModel[]> {
+    const httpParams = this.apiResourceUtilsService.makeHttpParams(params);
+    return this.apiResource.get<EnrolleeListViewModel[]>('enrollees', httpParams)
       .pipe(
         map((response: ApiHttpResponse<EnrolleeListViewModel[]>) => response.result),
         tap((enrollees: EnrolleeListViewModel[]) => this.logger.info('ENROLLEES', enrollees)),
@@ -587,6 +588,19 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollees bulk emails could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeEmails error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updatePaperEnrolleeDateOfBirth(enrolleeId: number, dateOfBirth: moment.Moment): NoContent {
+    const payload = { data: dateOfBirth };
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/date-of-birth`, payload)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollees date of birth could not be updated');
+          this.logger.error('[Adjudication] AdjudicationResource::updatePaperEnrolleeDateOfBirth error has occurred: ', error);
           throw error;
         })
       );

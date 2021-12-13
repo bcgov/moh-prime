@@ -95,22 +95,23 @@ export class OrganizationResource {
 
   /**
    * @description
-   * Get the organizations for a signing authority by user ID, and provide null when
+   * Get the organization for a signing authority by user ID, and provide null when
    * a signing authority could not be found.
    */
-  public getSigningAuthorityOrganizationsByUserId(userId: string): Observable<Organization[] | null> {
+  public getSigningAuthorityOrganizationByUserId(userId: string): Observable<Organization | null> {
     return this.apiResource.get<Organization[]>(`parties/signing-authorities/${userId}/organizations`)
       .pipe(
         map((response: ApiHttpResponse<Organization[]>) => response.result),
-        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        map((organizations: Organization[]) => (organizations?.length) ? organizations[0] : null),
+        tap((organization: Organization) => this.logger.info('ORGANIZATION', organization)),
         catchError((error: any) => {
           if (error.status === 404) {
-            // No signing authority exists for the provided user ID
+            // No organization exists for the provided user ID
             return of(null);
           }
 
           this.toastService.openErrorToast('Organizations could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getOrganizationsByUserId error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getOrganizationByUserId error has occurred: ', error);
           throw error;
         })
       );
@@ -241,14 +242,11 @@ export class OrganizationResource {
       );
   }
 
-  public deleteOrganization(organizationId: number): Observable<Organization> {
-    return this.apiResource.delete<Organization>(`organizations/${organizationId}`)
+  public deleteOrganization(organizationId: number): NoContent {
+    return this.apiResource.delete<NoContent>(`organizations/${organizationId}`)
       .pipe(
-        map((response: ApiHttpResponse<Organization>) => response.result),
-        tap((organization: Organization) => {
-          this.toastService.openSuccessToast('Organization has been deleted');
-          this.logger.info('DELETED_ORGANIZATION', organization);
-        }),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization has been deleted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be deleted');
           this.logger.error('[Core] OrganizationResource::deleteOrganization error has occurred: ', error);
@@ -276,10 +274,10 @@ export class OrganizationResource {
   }
 
   /**
-     * @description
-     * Get care setting codes that still require a signature on an oganization that is
-     * pending a transfer
-     */
+   * @description
+   * Get care setting codes that still require a signature on an oganization that is
+   * pending a transfer
+   */
   public getCareSettingCodesForPendingTransfer(organizationId: number): Observable<CareSettingEnum[]> {
     return this.apiResource.get<CareSettingEnum[]>(`organizations/${organizationId}/care-settings/pending-transfer`)
       .pipe(

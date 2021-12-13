@@ -24,7 +24,7 @@ export interface HttpEnrollee extends Enrollee {
   approvedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
-  deviceProviderNumber: string;
+  deviceProviderIdentifier: string;
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
@@ -56,6 +56,8 @@ export interface HttpEnrollee extends Enrollee {
   gpid: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
+  linkedEnrolleeId: number;
+  possiblePaperEnrolmentMatch: boolean;
   // This is needed for legacy enrolments
   jobs: Job[];
 }
@@ -78,7 +80,7 @@ export interface Enrolment {
   approvedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
-  deviceProviderNumber: string;
+  deviceProviderIdentifier: string;
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
@@ -109,6 +111,8 @@ export interface Enrolment {
   base64QRCode: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
+  linkedEnrolleeId: number;
+  possiblePaperEnrolmentMatch: boolean;
   // This is needed for legacy enrolments
   jobs: Job[];
 }
@@ -134,4 +138,7 @@ export interface EnrolleeListViewModel {
   requiresConfirmation: boolean;
   confirmed: boolean;
   gpid: string;
+  linkedEnrolleeId: number;
+  possiblePaperEnrolmentMatch: boolean;
+  dateOfBirth: string;
 }

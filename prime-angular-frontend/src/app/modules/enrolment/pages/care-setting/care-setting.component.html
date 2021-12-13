@@ -26,14 +26,14 @@
                         [formGroupName]="i">
 
             <app-form-icon-group [show]="careSettings.length > 1"
-                                 (event)="removeCareSetting(i, careSetting.value.careSettingCode)">
+                                 (event)="removeCareSetting(i)">
               <app-form-icon-group>
                 <mat-form-field class="w-100">
                   <mat-label>Care Setting</mat-label>
                   <mat-select formControlName="careSettingCode">
                     <mat-option *ngFor="let careSettingType of filterCareSettingTypes(careSetting)"
-                                [value]="careSettingType.code"
-                                [disabled]="disableCareSetting(careSettingType.code)">
+                                [disabled]="disableCareSetting(careSettingType.code)"
+                                [value]="careSettingType.code">
                       {{ careSettingType.name }}
                     </mat-option>
                   </mat-select>

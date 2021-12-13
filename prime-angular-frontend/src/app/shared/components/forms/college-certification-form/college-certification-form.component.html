@@ -163,7 +163,8 @@
               <mat-form-field class="w-100">
                 <input matInput
                        placeholder="Prescriber ID"
-                       formControlName="practitionerId">
+                       formControlName="practitionerId"
+                       maxlength="5">
                 <mat-error *ngIf="practitionerId.hasError('required')">Required</mat-error>
                 <mat-error *ngIf="practitionerId.hasError('numeric') || practitionerId.hasError('length')">
                   Must contain only 5 numeric characters

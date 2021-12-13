@@ -5,6 +5,7 @@ import { AbstractFormStateService } from '@lib/classes/abstract-form-state-servi
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
@@ -58,7 +59,8 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     // Must apply HealthAuthorityResolver to routable views that
     // consume the FormStateService, otherwise this will be null
     private healthAuthorityService: HealthAuthorityService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private siteResource: SiteResource
   ) {
     super(fb, routeStateService, logger);
 
@@ -128,7 +130,7 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
    */
   protected buildForms(): void {
     this.vendorFormState = new VendorFormState(this.fb, this.healthAuthorityService);
-    this.siteInformationFormState = new SiteInformationFormState(this.fb);
+    this.siteInformationFormState = new SiteInformationFormState(this.fb, this.siteResource);
     this.healthAuthCareTypeFormState = new HealthAuthCareTypeFormState(this.fb, this.healthAuthorityService);
     this.siteAddressFormState = new SiteAddressFormState(this.fb, this.formUtilsService);
     this.hoursOperationFormState = new HoursOperationFormState(this.fb);
@@ -146,7 +148,7 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     }
 
     this.vendorFormState.patchValue(healthAuthoritySite);
-    this.siteInformationFormState.patchValue(healthAuthoritySite);
+    this.siteInformationFormState.patchValue(healthAuthoritySite, healthAuthoritySite.id);
     this.healthAuthCareTypeFormState.patchValue(healthAuthoritySite);
     this.siteAddressFormState.patchValue(healthAuthoritySite);
     this.hoursOperationFormState.patchValue(healthAuthoritySite);

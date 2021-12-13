@@ -149,14 +149,22 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode)
         {
-            var recipientEmails = careSettingCode == CareSettingType.CommunityPharmacy
-                ? new[] { PrimeSupportEmail }
-                : new[] { MohEmail, PrimeSupportEmail };
+            if (careSettingCode == CareSettingType.CommunityPharmacy)
+            {
+                return new Email
+                (
+                    from: PrimeEmail,
+                    to: PrimeSupportEmail,
+                    subject: "PRIME Site Registration Submission",
+                    body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
+                );
+            }
 
             return new Email
             (
                 from: PrimeEmail,
-                to: recipientEmails,
+                to: MohEmail,
+                cc: PrimeSupportEmail,
                 subject: "PRIME Site Registration Submission",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
             );
@@ -192,6 +200,30 @@ namespace Prime.Services.EmailInternal
                 to: signingAuthorityEmail,
                 subject: "PRIME Site Registration Submission",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteActiveBeforeRegistrationSubmission, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderPaperEnrolleeSubmissionEmail(string enrolleeEmail, PaperEnrolleeSubmissionEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: enrolleeEmail,
+                subject: "Paper Enrolment Submission",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.PaperEnrolleeSubmission, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderUnsignedToaEmailAsync(string recipientEmail, EnrolleeUnsignedToaEmailViewModel viewModel)
+        {
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "PharmaNet Terms of Access requires signing",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeUnsignedToa, viewModel)
             );
         }
     }

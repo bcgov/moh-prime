@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Prime.Configuration.Auth;
 using Prime.Models;
@@ -79,15 +80,22 @@ namespace Prime.Services.Rules
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.Certifications == null || !enrollee.Certifications.Any())
+            var certifications = enrollee.Certifications.Where(c => c.License.Validate);
+
+            // If enrollee choses device provider, add device provider as a licence and check it against PharmaNet
+            if (!string.IsNullOrWhiteSpace(enrollee.DeviceProviderIdentifier))
             {
-                // No certs to verify
-                return true;
+                certifications = certifications.Append(new Certification
+                {
+                    // ATTN: the prefix below is a placeholder
+                    License = new License { Prefix = "P1" },
+                    LicenseNumber = enrollee.DeviceProviderIdentifier
+                });
             }
 
             bool passed = true;
 
-            foreach (var cert in enrollee.Certifications.Where(c => c.License.Validate))
+            foreach (var cert in certifications)
             {
                 if (cert.License.PrescriberIdType == PrescriberIdType.Optional && cert.PractitionerId == null)
                 {
@@ -146,10 +154,9 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (!string.IsNullOrWhiteSpace(enrollee.DeviceProviderNumber)
-                || enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
+            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider) || enrollee.DeviceProviderIdentifier != null)
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.PumpProvider);
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProvider);
                 return Task.FromResult(false);
             }
 
@@ -237,27 +244,33 @@ namespace Prime.Services.Rules
 
     public class IsPotentialPaperEnrolleeReturnee : AutomaticAdjudicationRule
     {
+        private readonly IBusinessEventService _businessEventService;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
 
-        public IsPotentialPaperEnrolleeReturnee(IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
+        public IsPotentialPaperEnrolleeReturnee(
+            IBusinessEventService businessEventService,
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
         {
+            _businessEventService = businessEventService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
         }
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
             var paperEnrollees = await _enrolleePaperSubmissionService.GetPotentialPaperEnrolleeReturneesAsync(enrollee.DateOfBirth);
-            var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
-            var paperEnrolleeMatchId = -1;
 
-            // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
-
-            // If there is no match then we don't need to worry about this rule
-            if (!paperEnrollees.Any())
+            // If approved, linked, or there is no match then we don't need to worry about this rule
+            if (enrollee.ApprovedDate.HasValue
+                || !paperEnrollees.Any()
+                || await _enrolleePaperSubmissionService.IsEnrolleeLinkedAsync(enrollee.Id))
             {
                 return true;
             }
 
-            // if yes and GPID is provided
+            var potentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpidAsync(enrollee.Id);
+            var paperEnrolleeMatchId = -1;
+            var paperEnrolleeIdsAsString = string.Join(", ", paperEnrollees.Select(e => e.Id));
+
+            // if there's a match and GPID is provided
             if (potentialPaperEnrolleeGpid != null)
             {
                 // Check if GPID match one of the paper enrolment
@@ -272,23 +285,36 @@ namespace Prime.Services.Rules
                 if (paperEnrolleeMatchId == -1)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                     return false;
                 }
-                // if match link to paper enrolment and confirm the linkage here, if failed to link we add status reason.
+                // if a match is found, link to paper enrolment and confirm the linkage here, if failed to link we add status reason.
                 if (!await _enrolleePaperSubmissionService.LinkEnrolleeToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId))
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.UnableToLinkToPaperEnrolment, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                     return false;
                 }
+
+                // First enrolment: check if the related paper enrolment is flagged for AlwaysManual
+                // If so, link enrolments and mark BCSC enrolment as AlwaysManual too and send to manual enrolment
+                if (paperEnrollees.Any(pe => pe.Id == paperEnrolleeMatchId && pe.AlwaysManual))
+                {
+                    enrollee.AlwaysManual = true;
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.AlwaysManual);
+                    return false;
+                }
+
+                await _businessEventService.CreatePaperEnrolmentLinkEventAsync(enrollee.Id, "Paper enrolment has been linked");
+
                 return true;
             }
             // if yes and GPID not provided - flag with "Possible match with paper enrolment"
             else
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch);
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Birthdate matches enrolment(s): {paperEnrolleeIdsAsString}");
                 return false;
             }
-
         }
     }
 }

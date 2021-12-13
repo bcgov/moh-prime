@@ -19,7 +19,6 @@ export class EnrolmentRoutes {
   public static HEALTH_AUTHORITY = 'health-authority';
   public static REGULATORY = 'regulatory';
   public static OBO_SITES = 'obo-sites';
-  public static DEVICE_PROVIDER = 'device-provider';
   public static REMOTE_ACCESS = 'remote-access';
   public static REMOTE_ACCESS_ADDRESSES = 'remote-access-addresses';
   public static SELF_DECLARATION = 'self-declaration';
@@ -67,7 +66,6 @@ export class EnrolmentRoutes {
       // EnrolmentRoutes.HEALTH_AUTHORITY,
       EnrolmentRoutes.REGULATORY,
       EnrolmentRoutes.OBO_SITES,
-      // EnrolmentRoutes.DEVICE_PROVIDER,
       EnrolmentRoutes.REMOTE_ACCESS,
       EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES,
       EnrolmentRoutes.SELF_DECLARATION,

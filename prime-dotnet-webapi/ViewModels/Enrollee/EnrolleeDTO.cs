@@ -11,6 +11,8 @@ namespace Prime.ViewModels
 
         public string GPID { get; set; }
 
+        public string UserProvidedGpid { get; set; }
+
         public string HPDID { get; set; }
 
         public string FirstName { get; set; }
@@ -41,9 +43,7 @@ namespace Prime.ViewModels
 
         public string PhoneExtension { get; set; }
 
-        public string DeviceProviderNumber { get; set; }
-
-        public bool? IsInsulinPumpProvider { get; set; }
+        public string DeviceProviderIdentifier { get; set; }
 
         public bool ProfileCompleted { get; set; }
 
@@ -66,5 +66,9 @@ namespace Prime.ViewModels
         public AgreementType? AssignedTOAType { get; set; }
 
         public bool Confirmed { get; set; }
+
+        public int LinkedEnrolleeId { get; set; }
+
+        public bool PossiblePaperEnrolmentMatch { get; set; }
     }
 }

@@ -11,7 +11,8 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { Role } from '@auth/shared/enum/role.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
@@ -45,7 +46,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    protected authService: AuthService
+    protected authService: AuthService,
+    private permissionService: PermissionService
   ) {
     super(
       route,
@@ -94,11 +96,22 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       this.setHealthAuthorityValidator();
     }
 
+    // Remove device provider identifier if Device Provider is no longer selected
+    if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
+      this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.reset();
+    }
+
     // If an individual health authority was deselected, its Obo Sites
     // should be removed as well
     this.enrolmentFormStateService.removeUnselectedHAOboSites();
 
     super.onSubmit();
+  }
+
+  public disableCareSetting(careSettingCode: number): boolean {
+    return (careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
+      ? !this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER)
+      : false;
   }
 
   public addCareSetting() {
@@ -107,15 +120,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     this.setHealthAuthorityValidator();
   }
 
-  public disableCareSetting(careSettingCode: number): boolean {
-    return ![
-      CareSettingEnum.COMMUNITY_PHARMACIST,
-      CareSettingEnum.HEALTH_AUTHORITY,
-      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
-    ].includes(careSettingCode);
-  }
-
-  public removeCareSetting(index: number, careSettingCode: number) {
+  public removeCareSetting(index: number) {
     this.careSettings.removeAt(index);
     this.setHealthAuthorityValidator();
   }
@@ -149,17 +154,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public hasSelectedHACareSetting(): boolean {
     return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
-  }
-
-  public routeBackTo() {
-    this.authService.identityProvider$()
-      .subscribe((identityProvider: IdentityProviderEnum) => {
-        const routePath = (identityProvider === IdentityProviderEnum.BCSC)
-          ? EnrolmentRoutes.BCSC_DEMOGRAPHIC
-          : EnrolmentRoutes.BCEID_DEMOGRAPHIC;
-
-        this.routeTo(routePath);
-      });
   }
 
   public ngOnInit() {
@@ -214,6 +208,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
+    } else if (this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.OVERVIEW;
     } else if (oboSites?.length) {
       // Should edit existing Job/OboSites next
       nextRoutePath = EnrolmentRoutes.OBO_SITES;
@@ -225,16 +221,19 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private removeIncompleteCareSettings() {
-    this.careSettings.controls
-      .forEach((control: FormGroup, index: number) => {
-        const value = control.get('careSettingCode').value;
+  private removeIncompleteCareSettings(allowEmptyCareSettings: boolean = true) {
+    this.careSettings.value
+      .reduce((indexes, careSetting, index) =>
+        (!careSetting.careSettingCode)
+          ? [...indexes, index]
+          : indexes
+        , [])
+      .reverse()
+      .forEach((index: number) => this.removeCareSetting(index));
 
-        // Remove if care setting is empty or the group is invalid
-        if (!value || control.invalid) {
-          this.removeCareSetting(index, value);
-        }
-      });
+    if (allowEmptyCareSettings) {
+      return;
+    }
 
     // Always have a single care setting available, and it prevents
     // the page from jumping too much when routing

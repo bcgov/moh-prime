@@ -9,7 +9,7 @@ namespace Prime.Models
         NameDiscrepancy = 5,
         BirthdateDiscrepancy = 6,
         Practicing = 7,
-        PumpProvider = 8,
+        DeviceProvider = 8,
         LicenceClass = 9,
         SelfDeclaration = 10,
         Address = 11,

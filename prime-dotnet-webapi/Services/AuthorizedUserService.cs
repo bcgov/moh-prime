@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Parties;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Prime.Services
 {
@@ -63,6 +64,7 @@ namespace Prime.Services
             return await _context.HealthAuthoritySites
                 .Where(has => has.AuthorizedUserId == authorizedUserId)
                 .ProjectTo<HealthAuthoritySiteListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
                 .ToListAsync();
         }
 

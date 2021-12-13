@@ -68,6 +68,7 @@ export class ClaimNoteComponent implements OnInit {
         const output = new AssignAction();
         output.action = AssignActionEnum.Assign;
         output.adjudicatorId = this.adjudicators$.value.find(a => a.userId === admin.userId).id;
+        output.note = this.note.value;
         this.dialogRef.close({ output });
       });
   }

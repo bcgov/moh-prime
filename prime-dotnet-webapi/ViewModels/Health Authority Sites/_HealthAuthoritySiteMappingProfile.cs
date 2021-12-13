@@ -12,7 +12,16 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public HealthAuthoritySiteMappingProfile()
         {
             CreateMap<HealthAuthoritySite, HealthAuthoritySiteViewModel>();
+            CreateMap<HealthAuthoritySite, HealthAuthoritySiteAdminViewModel>()
+                .ForMember(dest => dest.TechnicalSupportName, opt => opt.MapFrom(src => $"{src.HealthAuthorityTechnicalSupport.Contact.FirstName} {src.HealthAuthorityTechnicalSupport.Contact.LastName}"))
+                .ForMember(dest => dest.PharmanetAdministratorName, opt => opt.MapFrom(src => $"{src.HealthAuthorityPharmanetAdministrator.Contact.FirstName} {src.HealthAuthorityPharmanetAdministrator.Contact.LastName}"));
+            CreateMap<HealthAuthoritySite, HealthAuthoritySiteAdminListViewModel>()
+                .ForMember(dest => dest.AuthorizedUserName, opt => opt.MapFrom(src => $"{src.AuthorizedUser.Party.FirstName} {src.AuthorizedUser.Party.LastName}"))
+                .ForMember(dest => dest.AuthorizedUserEmail, opt => opt.MapFrom(src => src.AuthorizedUser.Party.Email))
+                .ForMember(dest => dest.HealthAuthorityName, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.Name))
+                .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.AdjudicatorId != null ? src.Adjudicator.IDIR : null));
             CreateMap<HealthAuthoritySite, HealthAuthoritySiteListViewModel>();
+
             CreateMap<HealthAuthorityPharmanetAdministrator, HealthAuthoritySite>();
 
             CreateMap<HealthAuthoritySite, SiteSelectionDto>();
@@ -22,6 +31,14 @@ namespace Prime.ViewModels.HealthAuthoritySites
                 .ForMember(dest => dest.CareTypeIds, opt => opt.MapFrom(src => src.CareTypes.Select(x => x.Id)))
                 .ForMember(dest => dest.PharmanetAdministratorIds, opt => opt.MapFrom(src => src.PharmanetAdministrators.Select(x => x.Id)))
                 .ForMember(dest => dest.TechnicalSupportIds, opt => opt.MapFrom(src => src.TechnicalSupports.Select(x => x.Id)));
+            CreateMap<HealthAuthoritySite, HealthAuthoritySiteSubmissionViewModel>()
+                .ForMember(dest => dest.VendorName, opt => opt.MapFrom(src => src.HealthAuthorityVendor.Vendor.Name))
+                .ForMember(dest => dest.CareType, opt => opt.MapFrom(src => src.HealthAuthorityCareType.CareType))
+                .ForMember(dest => dest.HealthAuthorityName, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.Name))
+                .ForMember(dest => dest.AuthorizedUserFullName, opt => opt.MapFrom(src =>
+                    $"{src.AuthorizedUser.Party.FirstName} {src.AuthorizedUser.Party.LastName}"))
+                .ForMember(dest => dest.SiteAddress, opt => opt.MapFrom(src => src.PhysicalAddress))
+                .ForMember(dest => dest.PharmaNetAdministrator, opt => opt.MapFrom(src => src.HealthAuthorityPharmanetAdministrator.Contact)); ;
         }
     }
 }

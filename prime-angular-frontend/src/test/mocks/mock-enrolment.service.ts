@@ -47,7 +47,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       enrolleeRemoteUsers: [],
       remoteAccessSites: [],
       remoteAccessLocations: [],
-      deviceProviderNumber: null,
+      deviceProviderIdentifier: null,
       isInsulinPumpProvider: null,
       oboSites: [],
       enrolleeHealthAuthorities: [],
@@ -130,7 +130,9 @@ export class MockEnrolmentService implements IEnrolmentService {
       confirmed: false,
       requiresConfirmation: false,
       jobs: [{ title: faker.name.jobTitle() }],
-      adjudicatorIdir: null
+      adjudicatorIdir: null,
+      linkedEnrolleeId: faker.random.number(),
+      possiblePaperEnrolmentMatch: faker.random.boolean()
     });
   }
 

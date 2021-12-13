@@ -89,9 +89,18 @@ namespace Prime.Services
             await _emailDocumentService.SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
         }
 
+        public async Task SendHealthAuthoritySiteRegistrationSubmissionAsync(int healthAuthoritySiteId)
+        {
+            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(null), CareSettingType.HealthAuthority);
+            var attachment = await _emailDocumentService.GenerateHealthAuthorityRegistrationReviewAttachmentAsync(healthAuthoritySiteId);
+            email.Attachments = new[] { attachment };
+            await Send(email);
+
+            await _emailDocumentService.SaveSiteRegistrationReview(healthAuthoritySiteId, attachment);
+        }
+
         public async Task SendSiteReviewedNotificationAsync(int siteId, string note)
         {
-
             var viewModel = await _context.Sites
                 .Where(s => s.Id == siteId)
                 .Select(s => new SiteReviewedEmailViewModel
@@ -189,6 +198,7 @@ namespace Prime.Services
                 Pec = s.PEC
             })
             .SingleAsync();
+
             var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(signingAuthorityEmail, viewModel);
             await Send(email);
         }
@@ -236,6 +246,34 @@ namespace Prime.Services
                 }
             }
         }
+
+
+        public async Task SendEnrolleeUnsignedToaReminderEmails()
+        {
+            var enrollees = await _context.Enrollees
+                .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa)
+                .Select(e => new
+                {
+                    e.FirstName,
+                    e.LastName,
+                    e.Email,
+                    e.CurrentStatus.StatusDate
+                })
+                .DecompileAsync()
+                .ToListAsync();
+
+            foreach (var enrollee in enrollees)
+            {
+                // Approved/became RequiresToa more than 5 days ago
+                if ((DateTimeOffset.Now - enrollee.StatusDate).TotalDays > 5)
+                {
+                    var email = await _emailRenderingService.RenderUnsignedToaEmailAsync(enrollee.Email, new EnrolleeUnsignedToaEmailViewModel(enrollee.FirstName, enrollee.LastName));
+                    await Send(email);
+                }
+            }
+        }
+
+
 
         public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
         {
@@ -287,6 +325,21 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return totalCount;
+        }
+
+        public async Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId)
+        {
+            var enrolleeDto = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => new
+                {
+                    e.Email,
+                    e.GPID
+                })
+                .SingleOrDefaultAsync();
+
+            var email = await _emailRenderingService.RenderPaperEnrolleeSubmissionEmail(enrolleeDto.Email, new PaperEnrolleeSubmissionEmailViewModel(enrolleeDto.GPID));
+            await Send(email);
         }
 
         private async Task Send(Email email)

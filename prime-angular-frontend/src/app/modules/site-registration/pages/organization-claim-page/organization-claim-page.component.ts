@@ -68,8 +68,7 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
     this.formState = this.organizationFormStateService.organizationClaimPageFormState;
   }
 
-  protected patchForm(): void {
-  }
+  protected patchForm(): void { }
 
   protected performSubmission(): NoContent {
     return (this.isClaimExistingOrg)
@@ -90,10 +89,7 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   }
 
   protected afterSubmitIsSuccessful(): void {
-    const routePath = this.isClaimExistingOrg
-      ? SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION
-      : SiteRoutes.ORGANIZATION_NAME;
-    this.routeUtils.routeRelativeTo(['../', 0, routePath]);
+    this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION]);
   }
 
   private toggleClaimFormValidators(isOrgClaim: boolean): void {

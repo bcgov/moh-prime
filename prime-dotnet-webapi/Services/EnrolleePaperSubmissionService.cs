@@ -12,14 +12,13 @@ using Prime.Engines;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
+using Prime.ViewModels;
 using Prime.ViewModels.PaperEnrollees;
 
 namespace Prime.Services
 {
     public class EnrolleePaperSubmissionService : BaseService, IEnrolleePaperSubmissionService
     {
-        private const string PaperGpidPrefix = "NOBCSC";
-
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IEnrolleeAgreementService _enrolleeAgreementService;
@@ -43,7 +42,7 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
-        public async Task<bool> PaperSubmissionIsEditableAsync(int enrolleeId)
+        public async Task<bool> PaperSubmissionIsUpdateableAsync(int enrolleeId)
         {
             var dto = await _context.Enrollees
                 .AsNoTracking()
@@ -63,7 +62,7 @@ namespace Prime.Services
                 return false;
             }
 
-            return dto.GPID.StartsWith(PaperGpidPrefix);
+            return dto.GPID.StartsWith(Enrollee.PaperGpidPrefix);
         }
 
         public async Task<Enrollee> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel viewModel)
@@ -73,7 +72,7 @@ namespace Prime.Services
             var enrollee = _mapper.Map<Enrollee>(viewModel);
 
             enrollee.UserId = Guid.NewGuid();
-            enrollee.GPID = Gpid.NewGpid(PaperGpidPrefix);
+            enrollee.GPID = Gpid.NewGpid(Enrollee.PaperGpidPrefix);
             enrollee.Addresses = new[]
             {
                 new EnrolleeAddress
@@ -147,6 +146,16 @@ namespace Prime.Services
             var newCerts = _mapper.Map<IEnumerable<Certification>>(viewModels);
 
             await ReplaceCollection(enrolleeId, newCerts);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateDeviceProviderAsync(int enrolleeId, string deviceProviderIdentifier)
+        {
+            var enrollee = await _context.Enrollees
+                .SingleAsync(e => e.Id == enrolleeId);
+
+            enrollee.DeviceProviderIdentifier = deviceProviderIdentifier;
 
             await _context.SaveChangesAsync();
         }
@@ -269,21 +278,30 @@ namespace Prime.Services
         {
             return await _context.Enrollees
                 .AsNoTracking()
-                .AnyAsync(e => e.GPID.StartsWith(PaperGpidPrefix)
+                .AnyAsync(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
                     && !_context.EnrolleeLinkedEnrolments
                         .Any(link => link.PaperEnrolleeId == e.Id));
         }
 
+        public async Task<bool> IsEnrolleeLinkedAsync(int enrolleeId)
+        {
+            return await _context.EnrolleeLinkedEnrolments
+                .AnyAsync(ele => ele.EnrolleeId == enrolleeId
+                            && ele.PaperEnrolleeId.HasValue);
+        }
+
         public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
         {
-            // We want all paper enrollees with a matching DOB
+            // We want all unlinked paper enrollees with a matching DOB
             // Handle the linkage in the LinkEnrolmentToPaperEnrolmentAsync
             return await _context.Enrollees
                 .AsNoTracking()
                 .Where(
-                    e => e.GPID.StartsWith(PaperGpidPrefix)
+                    e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id)
                 )
                 .ToListAsync();
         }
@@ -302,12 +320,12 @@ namespace Prime.Services
             var enrolleeIsPaper = await _context.Enrollees
                 .AsNoTracking()
                 .AnyAsync(e => e.Id == enrolleeId
-                    && e.GPID.StartsWith(PaperGpidPrefix));
+                    && e.GPID.StartsWith(Enrollee.PaperGpidPrefix));
 
             var paperIsPaper = await _context.Enrollees
                 .AsNoTracking()
                 .AnyAsync(e => e.Id == paperEnrolleeId
-                    && e.GPID.StartsWith(PaperGpidPrefix));
+                    && e.GPID.StartsWith(Enrollee.PaperGpidPrefix));
 
             if (enrolleeIsPaper
                 || !paperIsPaper
@@ -340,7 +358,7 @@ namespace Prime.Services
             var enrolleeIsPaper = await _context.Enrollees
                 .AsNoTracking()
                 .AnyAsync(e => e.Id == enrolleeId
-                    && e.GPID.StartsWith(PaperGpidPrefix));
+                    && e.GPID.StartsWith(Enrollee.PaperGpidPrefix));
 
             if (enrolleeIsPaper || linkedEnrolment?.PaperEnrolleeId != null)
             {
@@ -372,6 +390,18 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             return linkedGpid;
+        }
+
+        public async Task<bool> IsLinkedPaperEnrolment(int paperEnrolleeId)
+        {
+            return await _context.EnrolleeLinkedEnrolments
+                .AnyAsync(link => link.PaperEnrolleeId == paperEnrolleeId);
+        }
+
+        public async Task<bool> IsPaperEnrolment(int paperEnrolleeId)
+        {
+            return await _context.Enrollees
+                .AnyAsync(e => e.Id == paperEnrolleeId && e.GPID.StartsWith(Enrollee.PaperGpidPrefix));
         }
     }
 }
