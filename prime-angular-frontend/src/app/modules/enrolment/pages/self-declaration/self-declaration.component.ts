@@ -32,6 +32,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = selfDeclarationQuestions;
 
+  private clickedDownloadDoc: boolean;
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -100,9 +102,15 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onSubmit() {
-    const hasBeenThroughTheWizard = true;
-    this.hasAttemptedFormSubmission = true;
-    super.onSubmit(hasBeenThroughTheWizard);
+    if (!this.clickedDownloadDoc) {
+      const hasBeenThroughTheWizard = true;
+      this.hasAttemptedFormSubmission = true;
+      super.onSubmit(hasBeenThroughTheWizard);
+    } else {
+      // If downloading previously uploaded doc, remain on page.
+      // Reset flag.
+      this.clickedDownloadDoc = false;
+    }
   }
 
   public onUpload(controlName: string, sdd: SelfDeclarationDocument) {
@@ -111,6 +119,16 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   public onRemove(controlName: string, documentGuid: string) {
     this.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
+  }
+
+  public getSelfDeclarationDocuments(selfDeclarationType: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
+    return this.enrolment?.selfDeclarationDocuments.filter((sdd: SelfDeclarationDocument) => sdd.selfDeclarationTypeCode === selfDeclarationType);
+  }
+
+  public downloadSelfDeclarationDocument({ documentId }: { documentId: number }): void {
+    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrolment.id, documentId)
+      .subscribe((token: string) => this.utilService.downloadToken(token));
+    this.clickedDownloadDoc = true;
   }
 
   public onBack() {
