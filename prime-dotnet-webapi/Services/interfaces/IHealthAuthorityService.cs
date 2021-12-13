@@ -25,5 +25,6 @@ namespace Prime.Services
         Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId);
         Task<IEnumerable<int>> GetSitesByVendorAsync(int healthAuthorityId, int healthAuthorityVendorId);
         Task<IEnumerable<int>> GetSitesByCareTypeAsync(int healthAuthorityId, int healthAuthorityCareTypeId);
+        Task<bool> AnyCareTypeExistsOnHealthAuthorityAsync(int healthAuthorityId, IEnumerable<string> healthAuthorityCareType);
     }
 }

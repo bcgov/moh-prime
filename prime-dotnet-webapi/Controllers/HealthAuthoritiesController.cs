@@ -134,14 +134,20 @@ namespace Prime.Controllers
             {
                 return BadRequest("Health authority care types cannot be null.");
             }
+
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
+            if (!await _healthAuthorityService.AnyCareTypeExistsOnHealthAuthorityAsync(healthAuthorityId, careTypes))
+            {
+                return BadRequest("Unable to update care types. One or more health authority care types already exist");
+            }
+
             if (!await _healthAuthorityService.UpdateCareTypesAsync(healthAuthorityId, careTypes))
             {
-                return BadRequest("Unable to update care types. One or more health authority care types may be in use");
+                return BadRequest("Unable to update care types. One or more health authority care types are in use");
             }
 
             return NoContent();
