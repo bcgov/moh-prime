@@ -6,6 +6,8 @@ plugins:
     enabled: false
   eslint:
     enabled: false
+  similar-code:
+    enabled: false
 
 
 exclude_patterns:
