@@ -140,7 +140,7 @@ namespace Prime.Controllers
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
-            if (!await _healthAuthorityService.AnyCareTypeExistsOnHealthAuthorityAsync(healthAuthorityId, careTypes))
+            if (careTypes.Count() != careTypes.Distinct().Count())
             {
                 return BadRequest("Unable to update care types. One or more health authority care types already exist");
             }
@@ -172,9 +172,15 @@ namespace Prime.Controllers
             {
                 return BadRequest("Health authority vendors cannot be null.");
             }
+
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
                 return NotFound($"Health Authority not found with id {healthAuthorityId}");
+            }
+
+            if (vendors.Count() != vendors.Distinct().Count())
+            {
+                return BadRequest("Unable to update care types. One or more health authority vendors already exist");
             }
 
             if (!await _healthAuthorityService.UpdateVendorsAsync(healthAuthorityId, vendors))

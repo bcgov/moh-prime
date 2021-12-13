@@ -243,15 +243,6 @@ namespace Prime.Services
                 .AnyAsync(vendor => vendor.Id == healthAuthorityVendorId
                     && vendor.HealthAuthorityOrganizationId == healthAuthorityId);
         }
-
-        public async Task<bool> CareTypeExistsOnHealthAuthorityAsync(int healthAuthorityId, IEnumerable<string> healthAuthorityCareType)
-        {
-            return await _context.HealthAuthorityCareTypes
-                .AsNoTracking()
-                .AnyAsync(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId
-                    && healthAuthorityCareType.Contains(ct.CareType));
-        }
-
         public async Task<IEnumerable<int>> GetSitesByVendorAsync(int healthAuthorityId, int healthAuthorityVendorId)
         {
             return await _context.HealthAuthoritySites
