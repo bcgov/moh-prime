@@ -6,6 +6,7 @@ export interface DateContent {
   date: string;
   name?: string;
   content: string;
+  marginRight?: string;
 }
 
 @Component({
