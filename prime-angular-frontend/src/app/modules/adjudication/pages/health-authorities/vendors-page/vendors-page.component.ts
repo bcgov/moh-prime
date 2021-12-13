@@ -124,8 +124,8 @@ export class VendorsPageComponent implements OnInit {
         (vendors?.length)
           ? vendors.map((vendor: HealthAuthorityVendor) =>
                 this.addVendor({
-                ...this.healthAuthorityVendors.find((v) => v.code === vendor.vendorCode),
-                id: vendor.id
+                  ...this.healthAuthorityVendors.find((v) => v.code === vendor.vendorCode),
+                  id: vendor.id
                 })
           )
           : this.addVendor()
