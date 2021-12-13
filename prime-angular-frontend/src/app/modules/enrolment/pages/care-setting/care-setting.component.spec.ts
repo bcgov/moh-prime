@@ -20,10 +20,12 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
-describe('CareSettingComponent', () => {
+fdescribe('CareSettingComponent', () => {
   let component: CareSettingComponent;
   let fixture: ComponentFixture<CareSettingComponent>;
+  let spyOnRouteTo;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
@@ -140,7 +142,38 @@ describe('CareSettingComponent', () => {
     });
   });
 
-  describe('testing nextRouteAfterSubmit()', () => { });
+  fdescribe('testing nextRouteAfterSubmit()', () => {
+    beforeEach(() => {
+      spyOnRouteTo = spyOn<any>(component, 'routeTo');
+    });
+
+    describe('with profile complete', () => {
+      it('should call super.nextRouteAfterSubmit with the path EnrolmentRoutes.OVERVIEW', () => {
+        (component as any).nextRouteAfterSubmit();
+
+        expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OVERVIEW);
+      });
+    });
+
+    describe('with profile incomplete, no Obo Sites and no Cetifications', () => {
+      it('should call super.nextRouteAfterSubmit with the path EnrolmentRoutes.OBO_SITES', () => {
+        component.isProfileComplete = false;
+        (component as any).nextRouteAfterSubmit();
+
+        expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OBO_SITES);
+      });
+    });
+
+    describe('with profile incomplete and Obo Sites', () => {
+      it('should call super.nextRouteAfterSubmit with the path EnrolmentRoutes.OBO_SITES', () => {
+        // (component as any).enrolmentFormStateService.oboSiteForm.push
+        // component.isProfileComplete = false;
+        // (component as any).nextRouteAfterSubmit();
+
+        // expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OBO_SITES);
+      });
+    });
+  });
 
   describe('testing removeIncompleteCareSettings()', () => { });
 
