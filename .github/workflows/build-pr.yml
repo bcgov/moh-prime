@@ -49,11 +49,13 @@ jobs:
       - name: "Build, tag and push Document Manager image"
         uses: docker/build-push-action@v2
         id: build-image
+        env:
+          GITHUB_SHA: ${GITHUB_SHA::7}
         with: 
           context:  document-manager/backend
           push: true
           file: document-manager/backend/openshift.dockerfile
-          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:${GITHUB_SHA:7}
+          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:${{ env.GITHUB_SHA }}
           build-args: |
             BUILD_LOGLEVEL=2
             SVC_NAME=pr-${{steps.PR.outputs.number}}
@@ -107,11 +109,13 @@ jobs:
       - name: "Build, tag and push .NET web API image"
         id: build-image
         uses: docker/build-push-action@v2
+        env:
+          GITHUB_SHA: ${GITHUB_SHA::7}
         with:
           context: prime-dotnet-webapi
           push: true
           file: prime-dotnet-webapi/openshift.dockerfile
-          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:${GITHUB_SHA:7}
+          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:${GITHUB_SHA}
           build-args:
             ASPNETCORE_ENVIRONMENT="Development"
             ASPNETCORE_HTTPS_PORT=5001
@@ -195,11 +199,13 @@ jobs:
       - name: "Build, tag & push Angular frontend image"
         id: build-image
         uses: docker/build-push-action@v2
+        env:
+          GITHUB_SHA: ${GITHUB_SHA::7}
         with:
           context: prime-angular-frontend
           push: true
           file: prime-angular-frontend/ci.dockerfile
-          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:${GITHUB_SHA:7}
+          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:${GITHUB_SHA}
           cache-from: type=local,src=/tmp/.frontend-cache
           cache-to: type=local,dest=/tmp/.frontend-cache-new,mode=max
 
@@ -241,6 +247,6 @@ jobs:
           helm upgrade --install \
             pr-${{steps.PR.outputs.number}} \
             charts/prime \
-            --set global.image.tag=${GITHUB_SHA:7} \
+            --set global.image.tag=${GITHUB_SHA} \
             -f infrastructure/values/pr-answers.yaml \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}}
