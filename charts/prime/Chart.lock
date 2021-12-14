@@ -1,15 +1,15 @@
 dependencies:
 - name: prime-docman
   repository: file://../prime-docman
-  version: 0.1.0
+  version: 0.1.1
 - name: prime-frontend
   repository: file://../prime-frontend
-  version: 0.1.0
+  version: 0.1.1
 - name: prime-webapi
   repository: file://../prime-webapi
-  version: 0.1.0
+  version: 0.1.1
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 15.6.0
-digest: sha256:874d5e96ce55cbc20651fbd9c2e27a9d2e1eaf2de4b1f80d9836a453f9c1e755
-generated: "2021-11-24T11:21:05.963341-08:00"
+digest: sha256:31188cab4e62cf28754955bbfe73eadd94d10e1c25d3bcbb6ba32cad86863a12
+generated: "2021-12-13T17:25:51.148557-08:00"
