@@ -12,4 +12,5 @@ export interface Enrollee extends Omit<BcscUser, 'username'> {
   phoneExtension?: string;
   smsPhone?: string;
   gpid: string;
+  userProvidedGpid?: string;
 }

@@ -17,6 +17,12 @@ namespace Prime.Configuration.Database
             builder
                 .HasIndex(e => e.HPDID)
                 .IsUnique();
+            builder
+                .HasOne(e => e.EnrolleeToPaperLink)
+                .WithOne(l => l.Enrollee);
+            builder
+                .HasOne(e => e.PaperToEnrolleeLink)
+                .WithOne(l => l.PaperEnrollee);
         }
     }
 }

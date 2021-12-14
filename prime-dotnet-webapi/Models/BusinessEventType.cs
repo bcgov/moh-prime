@@ -18,6 +18,7 @@ namespace Prime.Models
         public const int AdminView = 7;
         public const int Organization = 8;
         public const int PharmanetApiCall = 9;
+        public const int PaperEnrolmentLink = 10;
 
         [Key]
         public int Code { get; set; }

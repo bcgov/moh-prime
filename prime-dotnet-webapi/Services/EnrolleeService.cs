@@ -104,13 +104,25 @@ namespace Prime.Services
                     .Id
                 );
 
+            var unlinkedPaperEnrolments = _context.Enrollees
+                .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id));
+
             var dto = await _context.Enrollees
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
-                .ProjectTo<EnrolleeDTO>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .ProjectTo<EnrolleeDTO>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
 
+            var linkedGpid = await _context.EnrolleeLinkedEnrolments
+                .Where(ele => ele.EnrolleeId == enrolleeId
+                    && ele.PaperEnrolleeId.HasValue)
+                .Select(ele => ele.UserProvidedGpid)
+                .SingleOrDefaultAsync();
+
+            dto.UserProvidedGpid = linkedGpid;
             return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
@@ -126,6 +138,11 @@ namespace Prime.Services
                     .First(a => a.AgreementType == type)
                     .Id
                 );
+
+            var unlinkedPaperEnrolments = _context.Enrollees
+                .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
+                    && !_context.EnrolleeLinkedEnrolments
+                        .Any(link => link.PaperEnrolleeId == e.Id));
 
             return await _context.Enrollees
                 .AsNoTracking()
@@ -146,10 +163,10 @@ namespace Prime.Services
                     .Where(e => _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
                 .If(searchOptions.IsLinkedPaperEnrolment == false, q => q
-                    .Where(e => e.GPID.StartsWith("NOBCSC")
+                    .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                         && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();
@@ -824,11 +841,23 @@ namespace Prime.Services
 
         public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
         {
+            var linkedPaperEnrolleeId = await GetLinkedPaperEnrolleeId(enrolleeId);
+
             return await _context.BusinessEvents
                 .Include(e => e.Admin)
-                .Where(e => e.EnrolleeId == enrolleeId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
+                .Where(e => e.EnrolleeId == enrolleeId
+                    || linkedPaperEnrolleeId.HasValue && e.EnrolleeId == linkedPaperEnrolleeId)
+                .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
+        }
+
+        private async Task<int?> GetLinkedPaperEnrolleeId(int enrolleeId)
+        {
+            return await _context.EnrolleeLinkedEnrolments
+                .Where(ele => ele.EnrolleeId == enrolleeId)
+                .Select(ele => ele.PaperEnrolleeId)
+                .SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids)
@@ -1070,6 +1099,13 @@ namespace Prime.Services
                 .Where(e => e.Id == enrolleeId)
                 .Select(e => e.Adjudicator.IDIR)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task UpdateDateOfBirthAsync(int enrolleeId, DateTime dateOfBirth)
+        {
+            var enrollee = await _context.Enrollees.SingleAsync(e => e.Id == enrolleeId);
+            enrollee.DateOfBirth = dateOfBirth;
+            await _context.SaveChangesAsync();
         }
     }
 }

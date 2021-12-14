@@ -213,5 +213,18 @@ namespace Prime.Services.EmailInternal
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.PaperEnrolleeSubmission, viewModel)
             );
         }
+
+        public async Task<Email> RenderUnsignedToaEmailAsync(string recipientEmail, EnrolleeUnsignedToaEmailViewModel viewModel)
+        {
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "PharmaNet Terms of Access requires signing",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeUnsignedToa, viewModel)
+            );
+        }
     }
 }
