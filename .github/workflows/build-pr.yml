@@ -241,5 +241,6 @@ jobs:
           helm upgrade --install \
             pr-${{steps.PR.outputs.number}} \
             charts/prime \
+            --set global.image.tag=pr-${{steps.PR.outputs.number}} \
             -f infrastructure/values/pr-answers.yaml \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}}
