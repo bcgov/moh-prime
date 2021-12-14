@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { noop } from 'rxjs';
 
+import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { EnumUtils } from '@lib/utils/enum-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -38,6 +39,7 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public assignToa: EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>;
   @Output() public reload: EventEmitter<boolean>;
+  @Output() public changeDateOfBirth: EventEmitter<number>;
 
   public form: FormGroup;
   public termsOfAccessAgreements: { type: AgreementType, name: string }[];
@@ -45,6 +47,7 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   public EnrolmentStatus = EnrolmentStatusEnum;
   public AdjudicationRoutes = AdjudicationRoutes;
   public Role = Role;
+  public readonly paperEnrolleeGpidFilter = PAPER_ENROLLEE_GPID_PREFIX;
 
   constructor(
     private permissionService: PermissionService,
@@ -65,6 +68,7 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
     this.toggleManualAdj = new EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.reload = new EventEmitter<boolean>();
+    this.changeDateOfBirth = new EventEmitter<number>();
     this.mode = 'column';
 
 
@@ -149,6 +153,12 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
         enrolleeId: this.enrollee.id,
         alwaysManual: !this.enrollee.alwaysManual
       });
+    }
+  }
+
+  public onChangeDateOfBirth() {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
+      this.changeDateOfBirth.emit(this.enrollee.id);
     }
   }
 

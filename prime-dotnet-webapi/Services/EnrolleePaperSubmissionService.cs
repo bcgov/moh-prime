@@ -42,7 +42,7 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
-        public async Task<bool> PaperSubmissionIsEditableAsync(int enrolleeId)
+        public async Task<bool> PaperSubmissionIsUpdateableAsync(int enrolleeId)
         {
             var dto = await _context.Enrollees
                 .AsNoTracking()
@@ -390,6 +390,18 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             return linkedGpid;
+        }
+
+        public async Task<bool> IsLinkedPaperEnrolment(int paperEnrolleeId)
+        {
+            return await _context.EnrolleeLinkedEnrolments
+                .AnyAsync(link => link.PaperEnrolleeId == paperEnrolleeId);
+        }
+
+        public async Task<bool> IsPaperEnrolment(int paperEnrolleeId)
+        {
+            return await _context.Enrollees
+                .AnyAsync(e => e.Id == paperEnrolleeId && e.GPID.StartsWith(Enrollee.PaperGpidPrefix));
         }
     }
 }

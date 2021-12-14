@@ -140,4 +140,5 @@ export interface EnrolleeListViewModel {
   gpid: string;
   linkedEnrolleeId: number;
   possiblePaperEnrolmentMatch: boolean;
+  dateOfBirth: string;
 }
