@@ -22,7 +22,7 @@ import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
-fdescribe('CareSettingComponent', () => {
+describe('CareSettingComponent', () => {
   let component: CareSettingComponent;
   let fixture: ComponentFixture<CareSettingComponent>;
   let spyOnRouteTo;
@@ -142,7 +142,7 @@ fdescribe('CareSettingComponent', () => {
     });
   });
 
-  fdescribe('testing nextRouteAfterSubmit()', () => {
+  describe('testing nextRouteAfterSubmit()', () => {
     beforeEach(() => {
       spyOnRouteTo = spyOn<any>(component, 'routeTo');
     });
@@ -166,16 +166,14 @@ fdescribe('CareSettingComponent', () => {
 
     describe('with profile incomplete and Obo Sites', () => {
       it('should call super.nextRouteAfterSubmit with the path EnrolmentRoutes.OBO_SITES', () => {
-        // (component as any).enrolmentFormStateService.oboSiteForm.push
-        // component.isProfileComplete = false;
-        // (component as any).nextRouteAfterSubmit();
+        (component as any).enrolmentFormStateService.oboSiteForm.push
+        component.isProfileComplete = false;
+        (component as any).nextRouteAfterSubmit();
 
-        // expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OBO_SITES);
+        expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OBO_SITES);
       });
     });
   });
-
-  describe('testing removeIncompleteCareSettings()', () => { });
 
   describe('testing removeIncompleteCareSettings()', () => { });
 
