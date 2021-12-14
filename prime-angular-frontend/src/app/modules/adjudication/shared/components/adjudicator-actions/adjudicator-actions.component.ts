@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { noop } from 'rxjs';
 
+import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { EnumUtils } from '@lib/utils/enum-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -46,7 +47,7 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   public EnrolmentStatus = EnrolmentStatusEnum;
   public AdjudicationRoutes = AdjudicationRoutes;
   public Role = Role;
-  public readonly paperEnrolleeGpidFilter = 'NOBCSC';
+  public readonly paperEnrolleeGpidFilter = PAPER_ENROLLEE_GPID_PREFIX;
 
   constructor(
     private permissionService: PermissionService,
