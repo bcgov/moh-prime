@@ -46,8 +46,11 @@
             </app-site-registration-actions>
 
           </ng-template>
-
         </div>
+
+        <ng-container [ngTemplateOutlet]="belowActions"
+                      [ngTemplateOutletContext]="{ siteRegistration: healthAuthoritySite }"></ng-container>
+
       </div>
     </div>
   </ng-container>

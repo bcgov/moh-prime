@@ -20,6 +20,7 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
   @Input() public busy: Subscription;
   @Input() public content: TemplateRef<any>;
   @Input() public actions: TemplateRef<any>;
+  @Input() public belowActions: TemplateRef<any>;
   @Input() public hasActions: boolean;
 
   public healthAuthoritySite: HealthAuthoritySiteAdminList;
