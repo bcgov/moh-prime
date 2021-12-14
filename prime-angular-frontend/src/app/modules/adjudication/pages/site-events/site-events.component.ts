@@ -35,7 +35,8 @@ export class SiteEventsComponent implements OnInit {
             return {
               date: businessEvent.eventDate,
               content: businessEvent.description,
-              name: businessEvent.adminIDIR
+              name: businessEvent.adminIDIR,
+              marginRight: businessEvent.partyName // Site Signing Authority
             };
           })
         )
