@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -41,6 +41,12 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
   public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
+  }
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.code === 'Enter') {
+      this.onSubmit();
+    }
   }
 
   protected createFormInstance(): void {
