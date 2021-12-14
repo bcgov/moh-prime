@@ -12,7 +12,6 @@ import { LdapInformationPageComponent } from './pages/ldap-information-page/ldap
 import { EnrolleeInformationPageComponent } from './pages/enrollee-information-page/enrollee-information-page.component';
 import { SubmissionConfirmationPageComponent } from './pages/submission-confirmation-page/submission-confirmation-page.component';
 import { GisEnrolmentProgressIndicatorComponent } from './shared/components/gis-enrolment-progress-indicator/gis-enrolment-progress-indicator.component';
-// import { SubmitOnKeyboardEventDirective } from './shared/directives/submit-on-keyboard-event.directive';
 
 @NgModule({
   declarations: [
@@ -22,8 +21,7 @@ import { GisEnrolmentProgressIndicatorComponent } from './shared/components/gis-
     LdapInformationPageComponent,
     EnrolleeInformationPageComponent,
     SubmissionConfirmationPageComponent,
-    GisEnrolmentProgressIndicatorComponent,
-    // SubmitOnKeyboardEventDirective
+    GisEnrolmentProgressIndicatorComponent
   ],
   imports: [
     SharedModule,
