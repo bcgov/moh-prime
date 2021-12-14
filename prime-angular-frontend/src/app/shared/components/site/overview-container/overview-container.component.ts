@@ -26,6 +26,7 @@ export class OverviewContainerComponent implements OnInit {
   @Input() public admin: boolean;
   @Input() public businessLicences: BusinessLicence[];
   @Input() public siteErrors: ValidationErrors;
+  @Input() public businessLicenceUpdated: boolean;
 
   public withinRenewalPeriod: boolean;
   public routeUtils: RouteUtils;
@@ -41,6 +42,7 @@ export class OverviewContainerComponent implements OnInit {
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.businessLicences = [];
+    this.businessLicenceUpdated = false;
   }
 
   public onRoute(routePath: string | (string | number)[]) {
