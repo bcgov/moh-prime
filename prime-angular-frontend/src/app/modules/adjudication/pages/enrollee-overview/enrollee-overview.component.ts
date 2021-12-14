@@ -13,6 +13,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
+import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -78,9 +79,6 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
 
     this.action.subscribe(() => this.loadEnrollee(+this.route.snapshot.params.id));
 
-    this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id)
-      .subscribe(documents => this.documents = documents);
-
     this.enrolmentResource.getCurrentEnrolleeAbsence(+this.route.snapshot.params.id)
       .subscribe((absence: EnrolleeAbsence) => this.absence = absence);
   }
@@ -114,8 +112,12 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
         exhaustMap((enrolleeId: number) => this.adjudicationResource.getPlrInfoByEnrolleeId(enrolleeId)
           .pipe(
             map((plrInfo: PlrInfo[]) => this.plrInfo = plrInfo),
-            catchError(_ => of([]))))
-      ).subscribe();
+            catchError(_ => of([])))),
+        exhaustMap(() =>
+          this.isPaperEnrollee(this.enrollee) ?
+            this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id) :
+            of(null))
+      ).subscribe((documents: EnrolleeAdjudicationDocument[]) => this.documents = documents);
   }
 
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
@@ -167,5 +169,9 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       careSettings: enrollee.enrolleeCareSettings,
       ...remainder
     };
+  }
+
+  private isPaperEnrollee(enrollee: Enrollee): boolean {
+    return (enrollee?.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX));
   }
 }
