@@ -15,7 +15,8 @@
     {{ username }}
   </span>
   <span *ngIf="username"
-        class="logout">
+        class="logout"
+        title="Logout">
     <mat-icon (click)="onLogout()">logout</mat-icon>
   </span>
 </mat-toolbar>
