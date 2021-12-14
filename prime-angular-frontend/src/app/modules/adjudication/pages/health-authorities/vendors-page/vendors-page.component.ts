@@ -64,7 +64,8 @@ export class VendorsPageComponent implements OnInit {
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
+    // A disabled form signifies no changes
+    if (this.formUtilsService.checkValidity(this.form) || this.form.disabled) {
       const vendorCodes = [...new Set(this.vendors.getRawValue().map(({ vendor }) => vendor.code) as number[])];
       this.healthAuthResource.updateHealthAuthorityVendors(this.route.snapshot.params.haid, vendorCodes)
         .subscribe(() => this.nextRouteAfterSubmit());
@@ -73,7 +74,7 @@ export class VendorsPageComponent implements OnInit {
 
   public addVendor(vendor: HealthAuthorityVendorMap = null) {
     this.vendors.push(this.fb.group({
-      vendor: [vendor, Validators.required]
+      vendor: [{ value: vendor, disabled: vendor?.id }, Validators.required]
     }));
   }
 

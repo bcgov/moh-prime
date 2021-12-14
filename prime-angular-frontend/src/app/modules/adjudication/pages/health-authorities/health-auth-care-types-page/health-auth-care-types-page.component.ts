@@ -58,7 +58,8 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
+    // A disabled form signifies no change
+    if (this.formUtilsService.checkValidity(this.form) || this.form.disabled) {
       const careTypes = [...new Set(this.careTypes.getRawValue()
         .map(({ careType }) => careType.name ? careType.name.trim() : careType.trim()) as string[])];
       this.healthAuthResource.updateHealthAuthorityCareTypes(this.route.snapshot.params.haid, careTypes)
@@ -68,7 +69,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public addCareType(careType: HealthAuthorityCareTypeMap = null) {
     this.careTypes.push(this.fb.group({
-      careType: [careType, Validators.required]
+      careType: [{ value: careType, disabled: careType?.id }, Validators.required]
     }));
   }
 
