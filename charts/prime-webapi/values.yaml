@@ -21,8 +21,6 @@ nameOverride: "webapi"
 fullnameOverride: ""
 
 database:
-  autoCreate: true
-  autoCreatePip: true
   # .NET Core database connection string
   dbConnectionString: 'host=postgres;port=5432;database=postgres;username=postgres;password=postgres'
   # If secret exists, it should contain key "database_url". specify the name of the secret below.

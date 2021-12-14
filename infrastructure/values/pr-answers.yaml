@@ -9,3 +9,9 @@ redis:
   auth:
     existingSecret: redis
     existingSecretPasswordKey: database-password
+
+database:
+  autoCreate: true
+
+ingress:
+  enabled: false

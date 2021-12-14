@@ -28,13 +28,13 @@ icon: https://svgshare.com/i/_6C.svg
 dependencies:
   - name: prime-docman
     repository: "file://../prime-docman"
-    version: "0.1.0"
+    version: "0.1.1"
   - name: prime-frontend
     repository: "file://../prime-frontend"
-    version: "0.1.0"
+    version: "0.1.1"
   - name: prime-webapi
     repository: "file://../prime-webapi"
-    version: "0.1.0"
+    version: "0.1.1"
   - name: redis
     condition: redis.enabled
     repository: https://charts.bitnami.com/bitnami

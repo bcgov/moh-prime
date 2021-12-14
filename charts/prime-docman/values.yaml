@@ -20,8 +20,6 @@ nameOverride: "docman"
 fullnameOverride: ""
 
 database:
-  autoCreate: true
-  autoCreatePip: true
   databaseUrl: 'postgres://postgres:postgres@localhost:5432/postgres'
   # If secret exists, it should contain key "database_url". specify the name of the secret below.
   # existingSecret:

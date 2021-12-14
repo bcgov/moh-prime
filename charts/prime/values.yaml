@@ -9,6 +9,9 @@ global:
 
 replicaCount: 1
 
+database:
+  autoCreate: false
+
 redis:
   enabled: false
   ## @param architecture Redis&trade; architecture. Allowed values: `standalone` or `replication`
@@ -40,10 +43,10 @@ redis:
       registry: public.ecr.aws
 
 image:
-  repository: nginx
+  repository: postgresql-10
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: latest
 
 imagePullSecrets: []
 nameOverride: ""
@@ -51,7 +54,7 @@ fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
