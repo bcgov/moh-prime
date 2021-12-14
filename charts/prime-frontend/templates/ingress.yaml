@@ -36,10 +36,11 @@ spec:
   tls:
     - hosts:
         - '{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
-        - 'hpr{{ $separator }}{{ .Values.global.vanityURL }}'
+        - 'hpr{{ $separator }}{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
+        - 'mauth{{ $separator }}{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
       secretName: {{ .Values.ingress.tls.secretName }}
   rules:
-    - host: {{ .Values.global.vanityURL }}
+    - host: {{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}
       http:
         paths:
           - path: /
@@ -56,7 +57,7 @@ spec:
               serviceName: {{ $fullName }}
               servicePort: 8080
               {{- end }}
-    - host: 'hpr{{ $separator }}{{ .Values.global.vanityURL }}'
+    - host: 'hpr{{ $separator }}{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
       http:
         paths:
           - path: /
@@ -73,7 +74,7 @@ spec:
               serviceName: {{ $fullName }}
               servicePort: 8888
               {{- end }}
-    - host: 'mauth{{ $separator }}{{ .Values.global.vanityURL }}'
+    - host: 'mauth{{ $separator }}{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
       http:
         paths:
           - path: /
