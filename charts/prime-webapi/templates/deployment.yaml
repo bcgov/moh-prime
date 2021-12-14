@@ -64,12 +64,12 @@ spec:
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ $ocEnv }}-patroni-secret
+                  name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
                   key: app-db-password
             - name: POSTGRESQL_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ $ocEnv }}-patroni-secret
+                  name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
                   key: app-db-username
             - name: POSTGRESQL_DATABASE
               {{- if $isPR }}
@@ -77,7 +77,7 @@ spec:
               {{ else }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ $drn }}-patroni-secret
+                  name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
                   key: app-db-name
               {{- end }}
             - name: DB_CONNECTION_STRING

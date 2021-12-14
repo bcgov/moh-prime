@@ -31,12 +31,12 @@ spec:
           - name: PGUSER
             valueFrom:
               secretKeyRef:
-                name: {{ $ocEnv }}-patroni-secret
+                name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
                 key: app-db-username
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ $ocEnv }}-patroni-secret
+                name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
                 key: app-db-password
           - name: PGDATABASE
             {{- if $isPR }}
@@ -44,7 +44,7 @@ spec:
             {{ else }}
             valueFrom:
               secretKeyRef:
-                name: {{ $ocEnv }}-patroni-secret
+                name: {{ ternary $ocEnv $release $isPR }}-patroni-secret
                 key: app-db-name
             {{- end }}
       restartPolicy: Never
