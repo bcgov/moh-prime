@@ -18,7 +18,10 @@
                       [disableRipple]="true">{{ item.name | replace: '@idir': '' }}</mat-chip>
           </mat-chip-list>
         </th>
-        <td>{{ item.content }}</td>
+        <td class="d-flex justify-content-between">
+          <div>{{ item.content }}</div>
+          <div class="margin-right">{{ item?.marginRight | capitalize: true }}</div>
+        </td>
       </tr>
     </tbody>
   </table>
