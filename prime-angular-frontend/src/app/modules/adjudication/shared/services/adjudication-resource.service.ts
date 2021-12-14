@@ -1,7 +1,7 @@
 import { EnrolleeNavigation } from './../../../../shared/models/enrollee-navigation-model';
 import { Injectable } from '@angular/core';
 
-import { EMPTY, forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
@@ -43,7 +43,6 @@ import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.mode
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import moment from 'moment';
-
 
 @Injectable({
   providedIn: 'root'

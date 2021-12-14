@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { noop, Observable, of, Subscription } from 'rxjs';
+import { noop, Observable, Subscription } from 'rxjs';
 
 import { EmailUtils } from '@lib/utils/email-utils.class';
 import { ToastService } from '@core/services/toast.service';
