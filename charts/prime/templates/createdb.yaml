@@ -8,18 +8,19 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "prime-docman.fullname" . }}-createdb
+  name: {{ include "prime.fullname" . }}-createdb
   annotations:
     helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: hook-succeeded
   labels:
-    {{- include "prime-docman.labels" . | nindent 4 }}
+    {{- include "prime.labels" . | nindent 4 }}
 spec:
   template:
     spec:
       containers:
       - name: createdb
-        image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: IfNotPresent
         command:
           - /bin/bash
@@ -56,9 +57,6 @@ spec:
                 name: {{ $release }}-patroni-secret
                 key: app-db-name
             {{- end }}
-        envFrom:
-          - configMapRef:
-              name: document-manager
       restartPolicy: Never
   backoffLimit: 3
 {{- end }}

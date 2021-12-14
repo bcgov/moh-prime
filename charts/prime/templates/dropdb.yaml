@@ -1,4 +1,4 @@
-{{- if .Values.database.autoCreate }}
+{{- if hasPrefix "pr-" .Release.Name }}
 {{ $release := .Release.Name }}
 {{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
 {{ $isPR := hasPrefix "pr-" .Release.Name }}
@@ -8,24 +8,24 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "prime-webapi.fullname" . }}
+  name: {{ include "prime.fullname" . }}-dropdb
   annotations:
-    helm.sh/hook: pre-install
+    helm.sh/hook: post-delete
     helm.sh/hook-delete-policy: hook-succeeded
   labels:
-    {{- include "prime-webapi.labels" . | nindent 4 }}
+    {{- include "prime.labels" . | nindent 4 }}
 spec:
   template:
     spec:
       containers:
-      - name: createdb
-        image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}
-        imagePullPolicy: Always
+      - name: dropdb
+        image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: IfNotPresent
         command:
           - /bin/bash
           - -c
           - >
-            createdb -O $(APPUSER) $(PGDATABASE) 2> /dev/null || echo "database already exists"
+            dropdb $(PGDATABASE)
         env:
           - name: PGHOST
             valueFrom:
@@ -48,14 +48,7 @@ spec:
                 name: {{ $ocEnv }}-patroni-secret
                 key: superuser-password
           - name: PGDATABASE
-            {{- if $isPR }}
             value: "prime-{{ $drn }}"
-            {{ else }}
-            valueFrom:
-              secretKeyRef:
-                name: {{ $ocEnv }}-patroni-secret
-                key: app-db-name
-            {{- end }}
       restartPolicy: Never
   backoffLimit: 3
 {{- end }}
