@@ -32,7 +32,6 @@ export class DashboardHeaderComponent implements OnInit {
    * the mobile device viewport dimension are provided.
    */
   @Input() public isMobile: boolean;
-  @Input() public logoutMsg: '' | 'Logout';
   /**
    * @description
    * Event emission of toggling the dashboard sidenav
@@ -50,11 +49,10 @@ export class DashboardHeaderComponent implements OnInit {
   constructor() {
     this.headerConfig = {
       theme: 'blue',
-      showMobileToggle: true,
+      showMobileToggle: true
     };
     this.toggle = new EventEmitter<void>();
     this.logout = new EventEmitter<void>();
-    this.logoutMsg = '';
   }
 
   public toggleSidenav(): void {
