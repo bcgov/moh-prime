@@ -154,7 +154,7 @@ describe('CareSettingComponent', () => {
       });
     });
 
-    describe('with profile incomplete, no Obo Sites and no Cetifications', () => {
+    describe('with profile incomplete, no Obo Sites and no Certifications', () => {
       it('should call routeTo with the path EnrolmentRoutes.OBO_SITES', () => {
         component.isProfileComplete = false;
         (component as any).nextRouteAfterSubmit();

@@ -207,15 +207,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.REGULATORY;
+      nextRoutePath = ((oboSites?.length || !certifications.length))
+        ? EnrolmentRoutes.OBO_SITES
+        : EnrolmentRoutes.REGULATORY;
     } else if (this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.OVERVIEW;
-    } else if (oboSites?.length) {
-      // Should edit existing Job/OboSites next
-      nextRoutePath = EnrolmentRoutes.OBO_SITES;
-    } else if (!certifications.length && !oboSites?.length) {
-      // No College Licence and need to enter Job information
-      nextRoutePath = EnrolmentRoutes.OBO_SITES;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
