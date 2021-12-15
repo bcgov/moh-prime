@@ -10,6 +10,8 @@ import { KeycloakService } from 'keycloak-angular';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { EnrolmentRegulatoryForm } from './enrolment-regulatory-form.model';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 import { RegulatoryComponent } from './regulatory.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -24,10 +26,13 @@ import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { RegulatoryFormState } from './regulatory-form-state';
 
-describe('RegulatoryComponent', () => {
+fdescribe('RegulatoryComponent', () => {
   let component: RegulatoryComponent;
   let fixture: ComponentFixture<RegulatoryComponent>;
+
+  let spyOnRouteTo;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
@@ -98,9 +103,110 @@ describe('RegulatoryComponent', () => {
     });
   });
 
-  describe('testing addEmptyCollegeCertification()', () => { });
-  describe('testing removeCertification()', () => { });
-  describe('testing nextRouteAfterSubmit()', () => { });
+  describe('testing addEmptyCollegeCertification()', () => {
+    it('should add 1 empty college license', () => {
+      expect(component.selectedCollegeCodes.length).toEqual(0);
+
+      component.addEmptyCollegeCertification();
+
+      expect(component.selectedCollegeCodes.length).toEqual(1);
+    });
+  });
+
+  describe('testing removeCertification()', () => {
+    it('should remove 1 college license', () => {
+      component.addEmptyCollegeCertification();
+
+      const certificationsLength = component.selectedCollegeCodes.length;
+
+      expect(component.selectedCollegeCodes.length).toEqual(certificationsLength);
+
+      component.removeCertification(0);
+
+      expect(component.selectedCollegeCodes.length).toBeLessThan(certificationsLength);
+    });
+  });
+
+  describe('testing nextRouteAfterSubmit()', () => {
+    beforeEach(() => spyOnRouteTo = spyOn(component, 'routeTo'));
+
+    describe('with profileComplete set to true', () => {
+      it('routeTo should be called with EnrolmentRoutes.OVERVIEW', () => {
+        (component as any).nextRouteAfterSubmit();
+        expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OVERVIEW);
+      });
+    });
+
+    describe('with profileComplete set to false, and no certifications', () => {
+      it('routeTo should be called with EnrolmentRoutes.OBO_SITES', () => {
+        component.isProfileComplete = false;
+
+        (component as any).nextRouteAfterSubmit();
+        expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OBO_SITES);
+      });
+    });
+
+    describe('with profileComplete set to false, with certifications', () => {
+      describe('with isDeviceProvider set to true but no deviceProviderIdentifier', () => {
+        it('routeTo should be called with EnrolmentRoutes.OBO_SITES', () => {
+          component.isProfileComplete = false;
+          component.isDeviceProvider = true;
+          component.addEmptyCollegeCertification();
+
+          (component as any).nextRouteAfterSubmit();
+          expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OBO_SITES);
+        });
+      });
+
+      describe('with isDeviceProvider set to false and with deviceProviderIdentifier, and canRequestRemoteAccess', () => {
+        it('routeTo should be called with EnrolmentRoutes.REMOTE_ACCESS', () => {
+          const mockRegulatoryForm = {
+            certifications: [],
+            deviceProviderIdentifier: '12345'
+          } as EnrolmentRegulatoryForm;
+
+          component.formState.patchValue(mockRegulatoryForm);
+          component.isProfileComplete = false;
+          component.isDeviceProvider = true;
+          component.addEmptyCollegeCertification();
+
+          (component as any).nextRouteAfterSubmit();
+          expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.REMOTE_ACCESS);
+        });
+      });
+
+      describe('with isDeviceProvider set to false and with deviceProviderIdentifier, and canRequestRemoteAccess returning false', () => {
+        it('routeTo should be called with EnrolmentRoutes.SELF_DECLARATION', () => {
+          const mockRegulatoryForm = {
+            certifications: [],
+            deviceProviderIdentifier: '12345'
+          } as EnrolmentRegulatoryForm;
+
+          spyOn<any>((component as any).enrolmentService, 'canRequestRemoteAccess')
+            .and.callFake(() => false);
+
+          component.formState.patchValue(mockRegulatoryForm);
+          component.isProfileComplete = false;
+          component.isDeviceProvider = true;
+          component.addEmptyCollegeCertification();
+
+
+          (component as any).nextRouteAfterSubmit();
+          expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.SELF_DECLARATION);
+        });
+      });
+    });
+
+    describe('', () => { });
+    describe('', () => { });
+    describe('', () => { });
+    describe('', () => { });
+    describe('', () => { });
+    describe('', () => { });
+    describe('', () => { });
+    describe('', () => { });
+  });
+
   describe('testing removeIncompleteCertifications()', () => { });
   describe('testing removeOboSites()', () => { });
   describe('testing canRequestRemoteAccess()', () => { });
