@@ -28,7 +28,7 @@ import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { RegulatoryFormState } from './regulatory-form-state';
 
-fdescribe('RegulatoryComponent', () => {
+describe('RegulatoryComponent', () => {
   let component: RegulatoryComponent;
   let fixture: ComponentFixture<RegulatoryComponent>;
 
@@ -117,13 +117,11 @@ fdescribe('RegulatoryComponent', () => {
     it('should remove 1 college license', () => {
       component.addEmptyCollegeCertification();
 
-      const certificationsLength = component.selectedCollegeCodes.length;
-
-      expect(component.selectedCollegeCodes.length).toEqual(certificationsLength);
+      expect(component.selectedCollegeCodes.length).toEqual(1);
 
       component.removeCertification(0);
 
-      expect(component.selectedCollegeCodes.length).toBeLessThan(certificationsLength);
+      expect(component.selectedCollegeCodes.length).toEqual(0);
     });
   });
 
@@ -199,7 +197,33 @@ fdescribe('RegulatoryComponent', () => {
     });
   });
 
-  describe('testing removeIncompleteCertifications()', () => { });
+  describe('testing removeIncompleteCertifications()', () => {
+    describe('with noEmptyCert set to default value (false)', () => {
+      it('should have one certificate', () => {
+        component.addEmptyCollegeCertification();
+
+        expect(component.selectedCollegeCodes.length).toEqual(1);
+
+        (component as any).removeIncompleteCertifications();
+
+        expect(component.selectedCollegeCodes.length).toEqual(1);
+      });
+
+    });
+
+    describe('with noEmptyCert set to true', () => {
+      it('should have no certificates', () => {
+        component.addEmptyCollegeCertification();
+
+        expect(component.selectedCollegeCodes.length).toEqual(1);
+
+        (component as any).removeIncompleteCertifications(true);
+
+        expect(component.selectedCollegeCodes.length).toEqual(0);
+      });
+    });
+  });
+
   describe('testing removeOboSites()', () => { });
   describe('testing canRequestRemoteAccess()', () => { });
   describe('testing removeRemoteAccessData()', () => { });
