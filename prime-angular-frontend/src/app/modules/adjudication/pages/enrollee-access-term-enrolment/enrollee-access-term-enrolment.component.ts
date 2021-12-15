@@ -40,7 +40,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
     const enrolleeId = this.route.snapshot.params.id;
     const accessTermId = this.route.snapshot.params.aid;
     this.busy = this.adjudicationResource.getSubmissionForAgreement(enrolleeId, accessTermId)
-      .subscribe((enrolmentSubmission) =>
+      .subscribe((enrolmentSubmission: HttpEnrolleeSubmission) =>
         this.enrolmentSubmission = this.enrolleeSubmissionAdapterResponse(enrolmentSubmission)
       );
   }

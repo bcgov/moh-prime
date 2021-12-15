@@ -34,8 +34,6 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
     this.routeUtils.routeWithin(routePath);
   }
 
-  public ngOnInit() { }
-
   public enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
     addressTypes.forEach((addressType: AddressType) => {
       if (!enrollee[addressType]) {
@@ -53,6 +51,8 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
 
     return this.enrolmentAdapter(enrollee);
   }
+
+  public ngOnInit() { }
 
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
     const {
