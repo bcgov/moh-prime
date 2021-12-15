@@ -207,7 +207,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = ((oboSites?.length || (!certifications.length && !oboSites?.length)))
+      nextRoutePath = ((oboSites?.length || !certifications.length))
         ? EnrolmentRoutes.OBO_SITES
         : EnrolmentRoutes.REGULATORY;
     } else if (this.isProfileComplete) {
