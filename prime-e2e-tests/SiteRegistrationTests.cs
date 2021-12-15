@@ -59,11 +59,6 @@ namespace TestPrimeE2E.SiteRegistration
                 _driver.TakeScreenshot("Signing_Authority_Information");
                 ClickButton("Save and Continue");
 
-                _driver.FindTextPatiently("or claim an existing Organization");
-                Assert.AreEqual("Claim Organization", _driver.FindPatiently("//h2[@class='title']").Text);
-                // Choosing to create organization
-                ClickButton("Continue");
-
                 //Organization Information
                 TypeIntoField("Organization Name (Legal Entity Operating Site)", "ROGERS");
                 TypeIntoField("Doing Business As (Optional)", _company.CompanyName());
@@ -153,10 +148,12 @@ namespace TestPrimeE2E.SiteRegistration
             }
             //information review
             // tick checkbox
-            _driver.TabAndInteract($"(//button)[{lastButtonIndex}]", 1, Keys.Space);
+            _driver.ClickWithJavaScript("//*[@id='mat-checkbox-9-input']");
             _driver.TakeScreenshot("Information_Review");
             // click accept button
-            _driver.TabAndInteract($"(//button)[{lastButtonIndex}]", 2, Keys.Enter);
+            _driver.ClickWithJavaScript(GetButtonXPath("Submit"));
+            // TODO: Seem to need to pause or else end up remaining on page 
+            System.Threading.Thread.Sleep(1000);
             // confirm
             _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Save Site')]]").Click();
 
