@@ -2,13 +2,14 @@ import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/t
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { NgxMaskModule } from 'ngx-mask';
 import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 import { RegulatoryComponent } from './regulatory.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -80,4 +81,29 @@ describe('RegulatoryComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('testing selectedCollegeCodes()', () => {
+    describe('with empty certifications array', () => {
+      it('should return an empty array', () => {
+        expect(component.selectedCollegeCodes.length).toEqual(0);
+      });
+    });
+
+    describe('with certifications added', () => {
+      it('should return a non-empty array', () => {
+        component.addEmptyCollegeCertification();
+
+        expect(component.selectedCollegeCodes.length).toBeGreaterThan(0);
+      });
+    });
+  });
+
+  describe('testing addEmptyCollegeCertification()', () => { });
+  describe('testing removeCertification()', () => { });
+  describe('testing nextRouteAfterSubmit()', () => { });
+  describe('testing removeIncompleteCertifications()', () => { });
+  describe('testing removeOboSites()', () => { });
+  describe('testing canRequestRemoteAccess()', () => { });
+  describe('testing removeRemoteAccessData()', () => { });
+  describe('testing toggleDeviceProviderValidator()', () => { });
 });
