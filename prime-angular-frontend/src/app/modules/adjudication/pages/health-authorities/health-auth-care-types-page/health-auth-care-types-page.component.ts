@@ -13,7 +13,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 interface HealthAuthorityCareTypeMap {
   id?: number;
@@ -62,7 +61,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     if (this.formUtilsService.checkValidity(this.form) || this.form.disabled) {
       const careTypes = [...new Set(this.careTypes.getRawValue()
         .map(({ careType }) => careType.name ? careType.name.trim() : careType.trim()) as string[])];
-      this.healthAuthResource.updateHealthAuthorityCareTypes(this.route.snapshot.params.haid, careTypes)
+      this.busy = this.healthAuthResource.updateHealthAuthorityCareTypes(this.route.snapshot.params.haid, careTypes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
   }
@@ -83,7 +82,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
       return;
     }
 
-    this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careTypeId)
+    this.busy = this.healthAuthResource.getHealthAuthorityCareTypeSiteIds(this.route.snapshot.params.haid, careTypeId)
       .subscribe((healthAuthoritySites) => {
         (!healthAuthoritySites.length)
           ? this.careTypes.removeAt(index)
@@ -115,7 +114,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
         this.filteredCareTypes.next(filteredCareTypes);
       });
 
-    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+    this.busy = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ careTypes }: HealthAuthority) =>
         (careTypes?.length)
           ? careTypes.map((careType) => this.addCareType({

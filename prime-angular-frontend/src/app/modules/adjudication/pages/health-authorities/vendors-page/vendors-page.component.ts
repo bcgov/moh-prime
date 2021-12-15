@@ -6,7 +6,6 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
@@ -67,7 +66,7 @@ export class VendorsPageComponent implements OnInit {
     // A disabled form signifies no changes
     if (this.formUtilsService.checkValidity(this.form) || this.form.disabled) {
       const vendorCodes = [...new Set(this.vendors.getRawValue().map(({ vendor }) => vendor.code) as number[])];
-      this.healthAuthResource.updateHealthAuthorityVendors(this.route.snapshot.params.haid, vendorCodes)
+      this.busy = this.healthAuthResource.updateHealthAuthorityVendors(this.route.snapshot.params.haid, vendorCodes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
   }
@@ -88,7 +87,7 @@ export class VendorsPageComponent implements OnInit {
       return;
     }
 
-    this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorId)
+    this.busy = this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorId)
       .subscribe((healthAuthoritySites) => {
         (!healthAuthoritySites.length)
           ? this.vendors.removeAt(index)
@@ -120,7 +119,7 @@ export class VendorsPageComponent implements OnInit {
         this.filteredVendors.next(filteredVendors);
       });
 
-    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+    this.busy = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ vendors }: HealthAuthority) =>
         (vendors?.length)
           ? vendors.map((vendor: HealthAuthorityVendor) =>
