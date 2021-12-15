@@ -163,19 +163,20 @@ describe('CareSettingComponent', () => {
       });
     });
 
-    describe('with profile incomplete and Obo Sites has at least one entry', () => {
-      it('should call routeTo with the path EnrolmentRoutes.OBO_SITES', () => {
-        // TODO: implement this test
-        // const site = (component as any).enrolmentFormStateService.buildOboSiteForm() as FormGroup;
-        // site.patchValue({ careSettingCode: 2 });
-        // (component as any).enrolmentFormStateService.addNonHealthAuthorityOboSite(site, jasmine.any(FormArray));
+    // TODO: implement this test
+    // describe('with profile incomplete and Obo Sites has at least one entry', () => {
+    //   it('should call routeTo with the path EnrolmentRoutes.OBO_SITES', () => {
 
-        // component.isProfileComplete = false;
-        // (component as any).nextRouteAfterSubmit();
+    //     const site = (component as any).enrolmentFormStateService.buildOboSiteForm() as FormGroup;
+    //     site.patchValue({ careSettingCode: 2 });
+    //     (component as any).enrolmentFormStateService.addNonHealthAuthorityOboSite(site, jasmine.any(FormArray));
 
-        // expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OBO_SITES);
-      });
-    });
+    //     component.isProfileComplete = false;
+    //     (component as any).nextRouteAfterSubmit();
+
+    //     expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OBO_SITES);
+    //   });
+    // });
   });
 
   describe('testing removeIncompleteCareSettings()', () => { });
