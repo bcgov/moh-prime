@@ -51,6 +51,34 @@ describe('ReviewStatusContentComponent', () => {
     potentialMatchIds: [],
   };
 
+  const mockSelfDeclarations =
+    [
+      {
+        selfDeclarationTypeCode: 0,
+        selfDeclarationDetails: faker.random.words(),
+        documentGuids: [faker.random.word()],
+        answered: true,
+      },
+      {
+        selfDeclarationTypeCode: 1,
+        selfDeclarationDetails: faker.random.words(),
+        documentGuids: [faker.random.word()],
+        answered: false,
+      },
+      {
+        selfDeclarationTypeCode: 2,
+        selfDeclarationDetails: faker.random.words(),
+        documentGuids: [faker.random.word()],
+        answered: false,
+      },
+      {
+        selfDeclarationTypeCode: 3,
+        selfDeclarationDetails: faker.random.words(),
+        documentGuids: [faker.random.word()],
+        answered: false,
+      }
+    ];
+
   let component: ReviewStatusContentComponent;
   let fixture: ComponentFixture<ReviewStatusContentComponent>;
   let isSelfDeclaration;
@@ -173,7 +201,7 @@ describe('ReviewStatusContentComponent', () => {
     describe('with statusReasaonCode set to SELF_DECLARATION', () => {
       it('should call parseSelfDeclarations', () => {
         mockHttpEnrollee.currentStatus.enrolmentStatusReasons[0].statusReasonCode = EnrolmentStatusReason.SELF_DECLARATION;
-        const spyOnParseSelfDeclarations = spyOn<any>(component, 'parseSelfDeclarations');
+        const spyOnParseSelfDeclarations = spyOn<any>(component, 'parseSelfDeclarations').and.returnValue([]);
 
         component.parseReasons(mockHttpEnrollee.currentStatus);
 
@@ -196,9 +224,11 @@ describe('ReviewStatusContentComponent', () => {
   describe('testing parseSelfDeclarations', () => {
     describe('with selfDeclarations', () => {
       it('should return an array of reasons of same length as the selfDeclarations', () => {
+
+        mockHttpEnrollee.selfDeclarations = mockSelfDeclarations;
         const reasons = component.parseSelfDeclarations(mockHttpEnrollee);
 
-        expect(reasons.length).toEqual(mockHttpEnrollee.selfDeclarations.length);
+        expect(reasons.length).toEqual(1);
       });
     });
 
