@@ -455,7 +455,7 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes)
+        public async Task<IEnumerable<SiteBusinessEventViewModel>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes)
         {
             return await _context.BusinessEvents
                 .Include(e => e.Admin)
@@ -463,6 +463,7 @@ namespace Prime.Services
                 .Where(e => e.SiteId == siteId
                         || e.Organization.Sites.Any(s => s.Id == siteId))
                 .OrderByDescending(e => e.EventDate)
+                .ProjectTo<SiteBusinessEventViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
