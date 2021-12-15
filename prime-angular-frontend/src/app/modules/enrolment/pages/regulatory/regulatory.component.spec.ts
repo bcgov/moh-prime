@@ -171,6 +171,7 @@ fdescribe('RegulatoryComponent', () => {
           component.addEmptyCollegeCertification();
 
           (component as any).nextRouteAfterSubmit();
+
           expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.REMOTE_ACCESS);
         });
       });
@@ -190,21 +191,12 @@ fdescribe('RegulatoryComponent', () => {
           component.isDeviceProvider = true;
           component.addEmptyCollegeCertification();
 
-
           (component as any).nextRouteAfterSubmit();
+
           expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.SELF_DECLARATION);
         });
       });
     });
-
-    describe('', () => { });
-    describe('', () => { });
-    describe('', () => { });
-    describe('', () => { });
-    describe('', () => { });
-    describe('', () => { });
-    describe('', () => { });
-    describe('', () => { });
   });
 
   describe('testing removeIncompleteCertifications()', () => { });
