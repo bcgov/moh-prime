@@ -4,12 +4,15 @@ dependencies:
   version: 0.1.1
 - name: prime-frontend
   repository: file://../prime-frontend
-  version: 0.1.1
+  version: 0.1.2
 - name: prime-webapi
   repository: file://../prime-webapi
   version: 0.1.1
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 15.6.0
-digest: sha256:31188cab4e62cf28754955bbfe73eadd94d10e1c25d3bcbb6ba32cad86863a12
-generated: "2021-12-13T17:25:51.148557-08:00"
+- name: nginx
+  repository: https://charts.bitnami.com/bitnami
+  version: 9.5.16
+digest: sha256:bf4edcefb7b2e589afaad3473382914aba1d5e8e77d890f116a4358f1dc9e6f2
+generated: "2021-12-16T10:45:31.15921-08:00"
