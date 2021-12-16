@@ -30,6 +30,6 @@ export class EnrolleeReviewStatusComponent implements OnInit {
 
   private getEnrolleeReviewStatusByEnrolleeId(enrolleeId: number): void {
     this.adjudicationResource.getEnrolleeReviewStatus(enrolleeId)
-      .subscribe((reviewStatus) => this.enrolleeReviewStatus = reviewStatus);
+      .subscribe((reviewStatus: EnrolleeReviewStatus) => this.enrolleeReviewStatus = reviewStatus);
   }
 }

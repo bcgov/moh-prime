@@ -75,8 +75,9 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.enrollee) {
-      this.enrollee = changes.enrollee.currentValue;
+    if (changes.enrollee || changes.enrolleeReviewStatus) {
+      this.enrollee = changes.enrollee?.currentValue ?? this.enrollee;
+      this.enrolleeReviewStatus = changes.enrolleeReviewStatus?.currentValue ?? this.enrolleeReviewStatus;
       this.reasons = this.generateReasons(this.enrollee);
       this.previousStatuses = this.generatePreviousStatuses(this.enrolleeReviewStatus);
     }
