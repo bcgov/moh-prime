@@ -20,8 +20,5 @@ namespace Prime.Models
         SiteActiveBeforeRegistrationSubmission = 16,
         PaperEnrolleeSubmission = 17,
         EnrolleeUnsignedToa = 18,
-
-        // Remember to update corresponding front-end file if making changes here.  Front-end file:
-        // prime-angular-frontend/src/app/modules/adjudication/shared/models/email-template-type.model.ts
     }
 }
