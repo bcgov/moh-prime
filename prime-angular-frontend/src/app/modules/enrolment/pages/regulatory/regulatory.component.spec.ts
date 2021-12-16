@@ -223,9 +223,4 @@ describe('RegulatoryComponent', () => {
       });
     });
   });
-
-  describe('testing removeOboSites()', () => { });
-  describe('testing canRequestRemoteAccess()', () => { });
-  describe('testing removeRemoteAccessData()', () => { });
-  describe('testing toggleDeviceProviderValidator()', () => { });
 });
