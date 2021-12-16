@@ -24,7 +24,7 @@ export class SatEformsLoginPageComponent implements OnInit {
     private authService: AuthService,
   ) {
     this.title = 'Enrol for access to Special Authority eForms';
-    this.loginLabel = 'Enrol using your BCSC';
+    this.loginLabel = 'Enrol using your BC Service Card';
     this.bcscMobileSetupUrl = config.bcscMobileSetupUrl;
   }
 
