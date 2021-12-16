@@ -112,15 +112,17 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
     // TODO is this needed?
     this.formState.form.markAsPristine();
+
+    // Needed if returning from Add/Update Remote User
+    this.setHasRemoteUsersToggleState();
   }
 
   protected initForm() {
     this.formState.remoteUsers.valueChanges
       .pipe(untilDestroyed(this))
       .subscribe((remoteUsers: RemoteUser[]) => {
-        (remoteUsers.length)
-          ? this.formState.hasRemoteUsers.disable({ emitEvent: false })
-          : this.formState.hasRemoteUsers.enable({ emitEvent: false });
+        // Executed when removing Remote Users
+        this.setHasRemoteUsersToggleState();
       });
 
     this.formState.hasRemoteUsers.valueChanges
@@ -136,6 +138,12 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
       });
 
     this.patchForm();
+  }
+
+  private setHasRemoteUsersToggleState(): void {
+    this.formState.remoteUsers.length ?
+      this.formState.hasRemoteUsers.disable({ emitEvent: false })
+      : this.formState.hasRemoteUsers.enable({ emitEvent: false });
   }
 
   protected onSubmitFormIsValid(): void {
