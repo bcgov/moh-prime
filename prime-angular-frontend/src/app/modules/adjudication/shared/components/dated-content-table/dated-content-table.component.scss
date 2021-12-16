@@ -1,3 +1,10 @@
+@import 'palette';
+
 th {
   width: 1%;
+}
+
+div.margin-right {
+  font-size: smaller;
+  color: theme-palette(grey, light);
 }
