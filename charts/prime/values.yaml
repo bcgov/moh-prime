@@ -12,6 +12,125 @@ replicaCount: 1
 database:
   autoCreate: false
 
+# Used as our custom ingress 
+nginx:
+  nameOverride: ingress
+  image:
+    registry: public.ecr.aws
+
+  containerPorts:
+    http: 8080
+    https: 8443
+
+  metrics:
+    enabled: true
+    image:
+      registry: public.ecr.aws
+  
+  service:
+    type: ClusterIP
+    port: 8080
+    httpsPort: 8443
+
+  # mounting certificates
+  extraVolumes:
+    - name: tls-certs
+      secret:
+        secretName: pharmanetenrolment-tls
+    - name: plr-integration
+      secret:
+        secretName: plr-integration
+  
+  extraVolumeMounts:
+    - name: tls-certs
+      readOnly: true
+      mountPath: /opt/bitnami/nginx/conf/certs
+    - name: plr-integration
+      readOnly: true
+      mountPath: /opt/bitnami/nginx/conf/certs/plr
+
+  serverBlock: |-
+    server {
+      listen 8080;
+      server_name localhost *.gov.bc.ca;
+
+      location / {
+        proxy_pass http://{{ .Release.Name }}-frontend:8080/;
+      }
+
+      location /api/docman/ {
+        proxy_pass http://{{ .Release.Name }}-docman:6001/;
+      }
+
+      location /api/v1/ {
+        proxy_pass http://{{ .Release.Name }}-webapi:8080/api/;
+      }
+
+      location ^~ /api/v1/PLRHL7 {
+        proxy_pass http://{{ .Release.Name }}-webapi:8080/api/PLRHL7;
+        proxy_set_header  X-SSL-CERT $ssl_client_escaped_cert;
+      }
+
+      # Deny all attempts to access hidden files such as .htaccess or .htpasswd
+      location ~ /\. {
+        deny all;
+      }
+
+      # required for metrics exporter
+      location /status {
+        stub_status on;
+        access_log   off;
+        allow 127.0.0.1;
+        deny all;
+      }
+    }
+
+    server {
+      listen 8443 ssl;
+      server_name localhost *.gov.bc.ca;
+      ssl_certificate certs/tls.crt;
+      ssl_certificate_key certs/tls.key;
+      ssl_verify_client optional_no_ca;
+      ssl_client_certificate certs/plr/trusted-ca-certs.pem;
+
+      add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
+      add_header X-XSS-Protection "1; mode=block" always;
+      add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
+      add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header Referrer-Policy "no-referrer-when-downgrade";
+
+      location / {
+        proxy_pass http://{{ .Release.Name }}-frontend:8080/;
+      }
+
+      location /api/docman/ {
+        proxy_pass http://{{ .Release.Name }}-docman:6001/;
+      }
+
+      location /api/v1/ {
+        proxy_pass http://{{ .Release.Name }}-webapi:8080/api/;
+      }
+
+      location ^~ /api/v1/PLRHL7 {
+        proxy_pass http://{{ .Release.Name }}-webapi:8080/api/PLRHL7;
+        proxy_set_header  X-SSL-CERT $ssl_client_escaped_cert;
+      }
+
+      # Deny all attempts to access hidden files such as .htaccess or .htpasswd
+      location ~ /\. {
+        deny all;
+      }
+
+      # required for metrics exporter
+      location /status {
+        stub_status on;
+        access_log   off;
+        allow 127.0.0.1;
+        deny all;
+      }
+    }
+
 redis:
   enabled: false
   ## @param architecture Redis&trade; architecture. Allowed values: `standalone` or `replication`
@@ -79,20 +198,11 @@ service:
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
   className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  annotations:
+    route.openshift.io/termination: "passthrough" 
+  tls: {}
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
