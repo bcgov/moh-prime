@@ -17,7 +17,6 @@ import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
-import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
 import { AdjudicationContainerComponent } from '@adjudication/shared/components/adjudication-container/adjudication-container.component';
 import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 
@@ -34,7 +33,6 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class EnrolleeOverviewComponent extends AdjudicationContainerComponent implements OnInit {
   public enrollee: HttpEnrollee;
-  public reviewStatus: EnrolleeReviewStatus;
   public enrolment: Enrolment;
   public enrolleeNavigation: EnrolleeNavigation;
   public plrInfo: PlrInfo[];
@@ -96,17 +94,15 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
               enrolment: this.enrolmentAdapter(enrollee)
             }))
           ),
-        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId),
-        reviewStatus: this.adjudicationResource.getEnrolleeReviewStatus(enrolleeId)
+        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId)
       }).pipe(
         map(
-          ({ enrollee, enrolleeNavigation, reviewStatus }) => {
+          ({ enrollee, enrolleeNavigation }) => {
             // Complete this first before attempting to get PLR info, so user can see information rendered sooner
             this.enrollee = enrollee.enrollee;
             this.enrollees = [enrollee.enrolleeView];
             this.enrolment = enrollee.enrolment;
             this.enrolleeNavigation = enrolleeNavigation;
-            this.reviewStatus = reviewStatus;
             // hide the adjudication card if enrolment is editable and no 'reason for adjudication'
             this.showAdjudication = !(enrollee.enrollee.currentStatus.statusCode === EnrolmentStatusEnum.EDITABLE
               && !enrollee.enrollee.currentStatus.enrolmentStatusReasons?.length);

@@ -14,6 +14,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { RoutePath } from '@lib/utils/route-utils.class';
@@ -48,12 +49,12 @@ export class Reason {
 })
 export class ReviewStatusContentComponent implements OnInit, OnChanges {
   @Input() public enrollee: HttpEnrollee;
-  @Input() public enrolleeReviewStatus: EnrolleeReviewStatus;
   @Input() public hideStatusHistory: boolean;
   @Output() public route: EventEmitter<RoutePath>;
   public previousStatuses: Status[];
   public reasons: Reason[];
   private questions: { [key: number]: string } = selfDeclarationQuestions;
+  private enrolleeReviewStatus: EnrolleeReviewStatus;
 
   public AdjudicationRoutes = AdjudicationRoutes;
   public DISPLAY_ID_OFFSET = DISPLAY_ID_OFFSET;
@@ -61,6 +62,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   constructor(
     private utilsService: UtilsService,
     private enrolmentResource: EnrolmentResource,
+    private adjudicationResource: AdjudicationResource,
     private configPipe: ConfigCodePipe
   ) {
     this.hideStatusHistory = false;
@@ -75,11 +77,9 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.enrollee || changes.enrolleeReviewStatus) {
-      this.enrollee = changes.enrollee?.currentValue ?? this.enrollee;
-      this.enrolleeReviewStatus = changes.enrolleeReviewStatus?.currentValue ?? this.enrolleeReviewStatus;
-      this.reasons = this.generateReasons(this.enrollee);
-      this.previousStatuses = this.generatePreviousStatuses(this.enrolleeReviewStatus);
+    if (changes.enrollee) {
+      this.enrollee = changes.enrollee.currentValue;
+      this.getEnrolleeReviewStatus(this.enrollee);
     }
   }
 
@@ -89,6 +89,18 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void { }
+
+  private getEnrolleeReviewStatus(enrollee: HttpEnrollee): void {
+    if (!enrollee?.id) {
+      return;
+    }
+    this.adjudicationResource.getEnrolleeReviewStatus(enrollee.id)
+      .subscribe((reviewStatus: EnrolleeReviewStatus) => {
+        this.enrolleeReviewStatus = reviewStatus;
+        this.reasons = this.generateReasons(this.enrollee);
+        this.previousStatuses = this.generatePreviousStatuses(this.enrolleeReviewStatus);
+      });
+  }
 
   private downloadSelfDeclarationDocument(id: number): void {
     this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, id)
