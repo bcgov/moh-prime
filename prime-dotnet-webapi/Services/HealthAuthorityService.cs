@@ -13,6 +13,7 @@ using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.HealthAuthoritySites.Internal;
+using Prime.Engines;
 
 namespace Prime.Services
 {
@@ -76,23 +77,37 @@ namespace Prime.Services
                 .AnyAsync();
         }
 
-        public async Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes)
+        public async Task<bool> UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes)
         {
-            var oldCareTypes = await _context.HealthAuthorityCareTypes
+            var existingCareTypes = await _context.HealthAuthorityCareTypes
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
                 .ToListAsync();
 
-            _context.HealthAuthorityCareTypes.RemoveRange(oldCareTypes);
+            var incomingCareTypes = careTypes
+                .Select(careType => new HealthAuthorityCareType
+                {
+                    HealthAuthorityOrganizationId = healthAuthorityId,
+                    CareType = careType
+                });
 
-            var newCareTypes = careTypes.Select(careType => new HealthAuthorityCareType
+            var results = EntityMatcher
+                .MatchUsing((HealthAuthorityCareType ct) => ct.CareType.ToLower())
+                .Match(existingCareTypes, incomingCareTypes);
+
+            if (await _context.HealthAuthoritySites
+                    .AnyAsync(has => has.HealthAuthorityOrganizationId == healthAuthorityId
+                    && results.Dropped.Select(d => d.Id).Contains(has.HealthAuthorityCareTypeId.Value)))
             {
-                HealthAuthorityOrganizationId = healthAuthorityId,
-                CareType = careType
-            });
+                return false;
+            }
 
-            _context.HealthAuthorityCareTypes.AddRange(newCareTypes);
+            _context.HealthAuthorityCareTypes.RemoveRange(results.Dropped);
+
+            _context.HealthAuthorityCareTypes.AddRange(results.Added);
 
             await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<ContactViewModel> contacts) where T : HealthAuthorityContact, new()
@@ -146,23 +161,37 @@ namespace Prime.Services
             await UpdateContactsAsync<HealthAuthorityPrivacyOfficer>(healthAuthorityId, new ContactViewModel[] { privacyOffice.PrivacyOfficer });
         }
 
-        public async Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)
+        public async Task<bool> UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)
         {
-            var oldVendors = await _context.HealthAuthorityVendors
+            var existingVendors = await _context.HealthAuthorityVendors
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
                 .ToListAsync();
 
-            _context.HealthAuthorityVendors.RemoveRange(oldVendors);
+            var incomingVendors = vendorCodes
+                .Select(code => new HealthAuthorityVendor
+                {
+                    HealthAuthorityOrganizationId = healthAuthorityId,
+                    VendorCode = code
+                });
 
-            var newVendors = vendorCodes.Select(code => new HealthAuthorityVendor
+            var results = EntityMatcher
+                .MatchUsing((HealthAuthorityVendor v) => v.VendorCode)
+                .Match(existingVendors, incomingVendors);
+
+            if (await _context.HealthAuthoritySites
+                    .AnyAsync(has => has.HealthAuthorityOrganizationId == healthAuthorityId
+                    && results.Dropped.Select(d => d.Id).Contains(has.HealthAuthorityVendorId)))
             {
-                HealthAuthorityOrganizationId = healthAuthorityId,
-                VendorCode = code
-            });
+                return false;
+            }
 
-            _context.HealthAuthorityVendors.AddRange(newVendors);
+            _context.HealthAuthorityVendors.RemoveRange(results.Dropped);
+
+            _context.HealthAuthorityVendors.AddRange(results.Added);
 
             await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
@@ -213,6 +242,25 @@ namespace Prime.Services
                 .AsNoTracking()
                 .AnyAsync(vendor => vendor.Id == healthAuthorityVendorId
                     && vendor.HealthAuthorityOrganizationId == healthAuthorityId);
+        }
+        public async Task<IEnumerable<int>> GetSitesByVendorAsync(int healthAuthorityId, int healthAuthorityVendorId)
+        {
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId
+                    && has.HealthAuthorityVendorId == healthAuthorityVendorId)
+                .Select(has => has.Id)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<int>> GetSitesByCareTypeAsync(int healthAuthorityId, int healthAuthorityCareTypeId)
+        {
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId
+                    && has.HealthAuthorityCareTypeId == healthAuthorityCareTypeId)
+                .Select(has => has.Id)
+                .ToListAsync();
         }
     }
 }
