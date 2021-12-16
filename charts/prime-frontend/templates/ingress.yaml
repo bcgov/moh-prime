@@ -1,12 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $separator :=  ternary "-" "." (regexMatch "(?:\\..*?){4}" .Values.global.vanityURL) -}}
 {{- $fullName := include "prime-frontend.fullname" . -}}
-{{ $release := .Release.Name }}
-{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
-{{ $isPR := hasPrefix "pr-" .Release.Name }}
-## Derived release name
-{{ $drn := ternary $release $ocEnv $isPR }}
-{{ $isProd := contains "prod" $ocEnv }}
 {{- $svcPort := .Values.service.port -}}
 {{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
@@ -33,62 +26,36 @@ spec:
   {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
   ingressClassName: {{ .Values.ingress.className }}
   {{- end }}
+  {{- if .Values.ingress.tls }}
   tls:
+    {{- range .Values.ingress.tls }}
     - hosts:
-        - '{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
-        - 'hpr{{ $separator }}{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
-        - 'mauth{{ $separator }}{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
-      secretName: {{ .Values.ingress.tls.secretName }}
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
   rules:
-    - host: {{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
       http:
         paths:
-          - path: /
-            {{- if (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
-            pathType: Prefix
+          {{- range .paths }}
+          - path: {{ .path }}
+            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: {{ .pathType }}
             {{- end }}
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
                 name: {{ $fullName }}
                 port:
-                  number: 8080
+                  number: {{ $svcPort }}
               {{- else }}
               serviceName: {{ $fullName }}
-              servicePort: 8080
+              servicePort: {{ $svcPort }}
               {{- end }}
-    - host: 'hpr{{ $separator }}{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
-      http:
-        paths:
-          - path: /
-            {{- if (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
-            pathType: Prefix
-            {{- end }}
-            backend:
-              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
-              service:
-                name: {{ $fullName }}
-                port:
-                  number: 8888
-              {{- else }}
-              serviceName: {{ $fullName }}
-              servicePort: 8888
-              {{- end }}
-    - host: 'mauth{{ $separator }}{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
-      http:
-        paths:
-          - path: /
-            {{- if (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
-            pathType: Prefix
-            {{- end }}
-            backend:
-              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
-              service:
-                name: {{ $fullName }}
-                port:
-                  number: 8890
-              {{- else }}
-              serviceName: {{ $fullName }}
-              servicePort: 8890
-              {{- end }}
+          {{- end }}
+    {{- end }}
 {{- end }}
