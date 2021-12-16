@@ -1,5 +1,12 @@
 {{- if .Values.ingress.enabled -}}
+{{- $separator :=  ternary "-" "." (regexMatch "(?:\\..*?){4}" .Values.global.vanityURL) -}}
 {{- $fullName := include "prime.fullname" . -}}
+{{ $release := .Release.Name }}
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $isPR := hasPrefix "pr-" .Release.Name }}
+## Derived release name
+{{ $drn := ternary $release $ocEnv $isPR }}
+{{ $isProd := contains "prod" $ocEnv }}
 {{- $svcPort := .Values.service.port -}}
 {{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
@@ -26,36 +33,56 @@ spec:
   {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
   ingressClassName: {{ .Values.ingress.className }}
   {{- end }}
-  {{- if .Values.ingress.tls }}
-  tls:
-    {{- range .Values.ingress.tls }}
-    - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
-  {{- end }}
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host: {{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
-            pathType: {{ .pathType }}
+          - path: ''
+            {{- if (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: ImplementationSpecific
             {{- end }}
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
-                name: {{ $fullName }}
+                name: {{ $release }}-ingress
                 port:
-                  number: {{ $svcPort }}
+                  number: 8443
               {{- else }}
-              serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
+              serviceName: {{ $release }}-ingress
+              servicePort: 8443
               {{- end }}
-          {{- end }}
-    {{- end }}
+    - host: 'hpr{{ if $isProd }}{{else}}-{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
+      http:
+        paths:
+          - path: ''
+            {{- if (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: ImplementationSpecific
+            {{- end }}
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $release }}-ingress
+                port:
+                  number: 8443
+              {{- else }}
+              serviceName: {{ $release }}-ingress
+              servicePort: 8443
+              {{- end }}
+    - host: 'mauth{{ if $isProd }}{{else}}-{{ $drn }}.{{end}}{{ .Values.global.vanityURL }}'
+      http:
+        paths:
+          - path: ''
+            {{- if (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: ImplementationSpecific
+            {{- end }}
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $release }}-ingress
+                port:
+                  number: 8443
+              {{- else }}
+              serviceName: {{ $release }}-ingress
+              servicePort: 8443
+              {{- end }}
 {{- end }}
