@@ -34,7 +34,8 @@
   <app-overview-container [showEditRedirect]="showEditRedirect"
                           [organization]="organization"
                           [site]="site"
-                          [siteErrors]="siteErrors"></app-overview-container>
+                          [siteErrors]="siteErrors"
+                          [businessLicenceUpdated]="isBusinessLicenceUpdated"></app-overview-container>
 
   <ng-container *ngIf="showSubmissionAction; else showBack">
     <div class="footer mb-4">
