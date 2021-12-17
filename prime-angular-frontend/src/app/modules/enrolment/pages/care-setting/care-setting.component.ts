@@ -156,12 +156,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.removeIncompleteCareSettings();
   }
 
@@ -207,7 +207,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = ((oboSites?.length || !certifications.length))
+      nextRoutePath = (oboSites?.length || !certifications.length)
         ? EnrolmentRoutes.OBO_SITES
         : EnrolmentRoutes.REGULATORY;
     } else {
