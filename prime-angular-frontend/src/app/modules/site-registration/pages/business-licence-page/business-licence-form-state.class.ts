@@ -12,13 +12,14 @@ import { BusinessLicenceForm } from './business-licence-form.model';
 export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceForm> {
   private siteId: number;
   private businessLicence: BusinessLicence;
+  private businessLicenceUpdated: boolean;
 
   public constructor(
     private fb: FormBuilder,
     private siteResource: SiteResource
   ) {
     super();
-
+    this.businessLicenceUpdated = false;
     this.buildForm();
   }
 
@@ -59,6 +60,14 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       pec,
       activeBeforeRegistration
     };
+  }
+
+  public get isBusinessLicenceUpdated() {
+    return this.businessLicenceUpdated;
+  }
+
+  public flagBusinessLicenceUpdated(flag: boolean = true) {
+    this.businessLicenceUpdated = flag;
   }
 
   public patchValue(model: BusinessLicenceForm, siteId: number): void {
