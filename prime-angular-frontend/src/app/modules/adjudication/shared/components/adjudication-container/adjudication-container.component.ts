@@ -180,9 +180,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.APPROVE)
       )
-      .subscribe((approvedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(approvedEnrollee);
-        this.enrollee = approvedEnrollee;
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -201,9 +200,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.DECLINE_PROFILE)
       )
-      .subscribe((declinedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(declinedEnrollee);
-        this.enrollee = declinedEnrollee;
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -222,9 +220,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.LOCK_PROFILE)
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(lockedEnrollee);
-        this.enrollee = lockedEnrollee;
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -243,9 +240,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(lockedEnrollee);
-        this.enrollee = lockedEnrollee;
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -264,9 +260,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee);
-        this.enrollee = enableEnrollee;
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -285,9 +280,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee);
-        this.enrollee = enableEnrollee;
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -306,9 +300,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.CANCEL_TOA)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee);
-        this.enrollee = enableEnrollee;
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -327,9 +320,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.RERUN_RULES)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee);
-        this.enrollee = enableEnrollee;
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -375,10 +367,9 @@ export class AdjudicationContainerComponent implements OnInit {
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.updateEnrolleeAlwaysManual(enrolleeId, alwaysManual)),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
-      .subscribe((enrollee: HttpEnrollee) => {
-        this.updateEnrollee(enrollee);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -389,10 +380,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onAssignToa({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
     this.busy = this.adjudicationResource.assignToaAgreementType(enrolleeId, agreementType)
-      .pipe(
-        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
-      )
-      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
+      .subscribe(() => this.updateEnrollee(enrolleeId));
   }
 
   public onSendBulkEmail() {
@@ -518,10 +506,14 @@ export class AdjudicationContainerComponent implements OnInit {
       );
   }
 
-  private updateEnrollee(enrollee: HttpEnrollee) {
-    const index = this.enrollees.findIndex(e => e.id === enrollee.id);
-    this.enrollees.splice(index, 1, this.toEnrolleeListViewModel(enrollee));
-    this.enrollees = [...this.enrollees];
+  private updateEnrollee(enrolleeId: number) {
+    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
+      .subscribe((enrollee: HttpEnrollee) => {
+        const index = this.enrollees.findIndex(e => e.id === enrollee.id);
+        this.enrollees.splice(index, 1, this.toEnrolleeListViewModel(enrollee));
+        this.enrollees = [...this.enrollees];
+        this.enrollee = enrollee;
+      })
   }
 
   private adjudicationActionPipe(enrolleeId: number, action: EnrolleeStatusAction) {
@@ -533,8 +525,7 @@ export class AdjudicationContainerComponent implements OnInit {
         (note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, note, true)
           : of(noop)
-      ),
-      exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
+      )
     );
   }
 
