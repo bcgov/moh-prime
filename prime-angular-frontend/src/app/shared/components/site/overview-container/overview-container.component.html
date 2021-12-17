@@ -117,7 +117,7 @@
     </ng-container>
 
     <ng-template #businessLicenceListView>
-      <ng-container *ngFor="let businessLicence of businessLicences">
+      <ng-container *ngFor="let businessLicence of site.businessLicences">
         <app-enrollee-property title="Expiry">
           {{ businessLicence?.expiryDate | formatDate | default }}
         </app-enrollee-property>
