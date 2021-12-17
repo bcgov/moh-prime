@@ -56,18 +56,11 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   }
 
   public getRemoteUserProperties(remoteUser: FormGroup): KeyValue<string, string>[] {
-    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
-
-    const collegeLicence = (remoteUserCertifications.length > 1)
-      ? 'More than one College licence'
-      : (remoteUserCertifications.length === 0)
-        ? 'No College licence'
-        : remoteUserCertifications.value[0].licenseNumber;
-
+    const remoteUserCertification = remoteUser.controls?.remoteUserCertification as FormGroup;
     return [
       {
         key: 'College Licence',
-        value: collegeLicence
+        value: remoteUserCertification.value.licenseNumber
       }
     ];
   }
