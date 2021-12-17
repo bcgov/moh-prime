@@ -1,5 +1,4 @@
 using System;
-using Prime.Models;
 
 namespace Prime.ViewModels.Emails
 {
