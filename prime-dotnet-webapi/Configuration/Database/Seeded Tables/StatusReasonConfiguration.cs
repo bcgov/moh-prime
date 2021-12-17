@@ -26,7 +26,7 @@ namespace Prime.Configuration.Database
                     new StatusReason { Code = (int)StatusReasonType.IdentityProvider,             Name = "User authenticated with a method other than BC Services Card"                   },
                     new StatusReason { Code = (int)StatusReasonType.RequestingRemoteAccess,       Name = "User has Requested Remote Access"                                               },
                     new StatusReason { Code = (int)StatusReasonType.NoAssignedAgreement,          Name = "Terms of Access to be determined by an Adjudicator"                             },
-                    new StatusReason { Code = (int)StatusReasonType.NoVerifiedAddress,            Name = "No address from BC Service Card. Enrollee entered address."                     },
+                    new StatusReason { Code = (int)StatusReasonType.NoVerifiedAddress,            Name = "No address from BC Services Card. Enrollee entered address."                     },
                     new StatusReason { Code = (int)StatusReasonType.PaperEnrollee,                Name = "Manually entered paper enrolment"                                               },
                     new StatusReason { Code = (int)StatusReasonType.PaperEnrolmentMismatch,       Name = "PRIME enrolment does not match paper enrollee record"                           },
                     new StatusReason { Code = (int)StatusReasonType.PossiblePaperEnrolmentMatch,  Name = "Possible match with paper enrolment(s)"                                         },

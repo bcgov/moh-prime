@@ -9881,7 +9881,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 17,
-                            Name = "No address from BC Service Card. Enrollee entered address."
+                            Name = "No address from BC Services Card. Enrollee entered address."
                         },
                         new
                         {

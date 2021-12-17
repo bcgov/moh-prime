@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20211216235057_ChangedBCSCReference")]
+    [Migration("20211217163513_ChangedBCSCReference")]
     partial class ChangedBCSCReference
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -9883,7 +9883,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 17,
-                            Name = "No address from BC Service Card. Enrollee entered address."
+                            Name = "No address from BC Services Card. Enrollee entered address."
                         },
                         new
                         {
