@@ -179,14 +179,14 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     }
 
     // Replace previous values on deactivation so updates are discarded
-    const { enrolleeRemoteUsers, remoteAccessSites} = this.enrolmentService.enrolment;
+    const { enrolleeRemoteUsers, remoteAccessSites } = this.enrolmentService.enrolment;
     this.enrolmentFormStateService.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
   }
 
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = this.enrolleeRemoteUsers.length
+      nextRoutePath = (this.enrolleeRemoteUsers.length)
         ? EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES
         : EnrolmentRoutes.SELF_DECLARATION;
     } else if (this.enrolleeRemoteUsers.length) {
