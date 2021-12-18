@@ -23,7 +23,6 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
-import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Component({
   selector: 'app-site-overview',
@@ -38,7 +37,6 @@ export class SiteOverviewComponent implements OnInit {
   public refresh: BehaviorSubject<boolean>;
   public orgClaim: OrganizationClaim;
   public newSigningAuthority: Party;
-  public businessLicences: BusinessLicence[];
   public form: FormGroup;
   public showSendNotification: boolean;
   public isNotificationSent: boolean;
@@ -119,14 +117,12 @@ export class SiteOverviewComponent implements OnInit {
     this.busy = forkJoin([
       this.organizationResource.getOrganizationById(oid),
       this.siteResource.getSiteById(sid),
-      this.siteResource.getBusinessLicences(sid),
       this.organizationResource.getOrganizationClaimByOrgId(oid)
     ]).pipe(
-      exhaustMap(([org, site, businessLicences, orgClaim]: [Organization, Site, BusinessLicence[], OrganizationClaim]) => {
+      exhaustMap(([org, site, orgClaim]: [Organization, Site, OrganizationClaim]) => {
         // Full objects are needed to display overview components
         this.organization = org;
         this.site = site;
-        this.businessLicences = businessLicences;
         this.orgClaim = orgClaim;
         this.initForm(site);
         this.showSendNotification = [
