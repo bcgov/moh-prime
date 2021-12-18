@@ -22,7 +22,7 @@ import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
-fdescribe('CareSettingComponent', () => {
+describe('CareSettingComponent', () => {
   let component: CareSettingComponent;
   let fixture: ComponentFixture<CareSettingComponent>;
   let spyOnRouteTo;
