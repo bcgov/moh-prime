@@ -22,6 +22,7 @@ import { EnrolleeInformationPageFormState } from './enrollee-information-page-fo
 export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;
   public formState: EnrolleeInformationPageFormState;
+  public buttonType: string = 'submit';
 
   private routeUtils: RouteUtils;
 
