@@ -45,6 +45,11 @@ namespace Prime.Services
 
         public async Task SendReminderEmailAsync(int enrolleeId)
         {
+            if (await IsEnrolleeAbsentAsync(enrolleeId))
+            {
+                return;
+            }
+
             var enrolleeEmail = await _context.Enrollees
                 .Where(e => e.Id == enrolleeId)
                 .Select(e => e.Email)
@@ -370,6 +375,17 @@ namespace Prime.Services
             _context.EmailLogs.Add(EmailLog.FromEmail(email, sendType, msgId));
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task<bool> IsEnrolleeAbsentAsync(int enrolleeId)
+        {
+            var now = DateTime.Now;
+
+            return await _context.EnrolleeAbsences
+                .Where(ea => ea.EnrolleeId == enrolleeId
+                    && ea.StartTimestamp < now
+                    && (ea.EndTimestamp > now || ea.EndTimestamp == null))
+                    .AnyAsync();
         }
     }
 }
