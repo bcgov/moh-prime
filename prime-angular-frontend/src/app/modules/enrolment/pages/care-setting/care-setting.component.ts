@@ -202,19 +202,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected nextRouteAfterSubmit() {
-    const oboSites = this.enrolmentFormStateService.oboSitesForm.get('oboSites').value as OboSite[];
-    const certifications = this.enrolmentFormStateService.regulatoryFormState.certifications;
-
-    let nextRoutePath: string;
-    if (!this.isProfileComplete) {
-      nextRoutePath = (oboSites?.length || !certifications.length)
-        ? EnrolmentRoutes.OBO_SITES
-        : EnrolmentRoutes.REGULATORY;
-    } else {
-      nextRoutePath = EnrolmentRoutes.OVERVIEW;
-    }
-
-    super.nextRouteAfterSubmit(nextRoutePath);
+    super.nextRouteAfterSubmit((!this.isProfileComplete) ? EnrolmentRoutes.REGULATORY : null);
   }
 
   private removeIncompleteCareSettings(allowEmptyCareSettings: boolean = true) {
