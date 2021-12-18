@@ -202,7 +202,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected nextRouteAfterSubmit() {
-    super.nextRouteAfterSubmit((!this.isProfileComplete) ? EnrolmentRoutes.REGULATORY : null);
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.REGULATORY;
+    }
+
+    super.nextRouteAfterSubmit(nextRoutePath);
   }
 
   private removeIncompleteCareSettings(allowEmptyCareSettings: boolean = true) {
