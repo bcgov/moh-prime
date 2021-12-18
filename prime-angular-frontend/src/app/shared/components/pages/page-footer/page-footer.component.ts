@@ -11,6 +11,7 @@ export class PageFooterComponent implements OnInit, OnChanges {
   @Input() public isInitialEnrolment: boolean;
   @Input() public hasSecondaryAction: boolean;
   @Input() public disableSave: boolean;
+  @Input() public buttonType: string;
   // TODO when refactored keep these in the generic page footer, and
   // drop saveButtonLabel and secondaryActionButtonLabel. Wrap to
   // enforce label defaults in specific modules
