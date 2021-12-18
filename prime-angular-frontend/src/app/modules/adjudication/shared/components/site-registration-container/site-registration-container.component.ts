@@ -86,14 +86,11 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
     this.route.queryParams
       .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
 
-    // Listen for requests to refresh the data layer
-    if (this.refresh instanceof Observable) {
-      this.refresh.subscribe((shouldRefresh: boolean) => {
-        if (shouldRefresh) {
-          this.onRefresh();
-        }
-      });
-    }
+    this.refresh?.subscribe((shouldRefresh: boolean) => {
+      if (shouldRefresh) {
+        this.onRefresh();
+      }
+    });
   }
 
   protected getDataset(queryParams: { textSearch?: string }): void {
