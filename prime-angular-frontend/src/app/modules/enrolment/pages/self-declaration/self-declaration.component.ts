@@ -113,6 +113,15 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     this.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
   }
 
+  public getSelfDeclarationDocuments(selfDeclarationType: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
+    return this.enrolment?.selfDeclarationDocuments.filter((sdd: SelfDeclarationDocument) => sdd.selfDeclarationTypeCode === selfDeclarationType);
+  }
+
+  public downloadSelfDeclarationDocument({ documentId }: { documentId: number }): void {
+    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrolment.id, documentId)
+      .subscribe((token: string) => this.utilService.downloadToken(token));
+  }
+
   public onBack() {
     const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm
