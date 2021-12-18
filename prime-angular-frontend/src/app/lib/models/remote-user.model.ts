@@ -5,6 +5,8 @@ export interface RemoteUser {
   firstName: string;
   lastName: string;
   email: string;
-  remoteUserCertifications: RemoteUserCertification[];
+  remoteUserCertification: RemoteUserCertification;
   notified: boolean;
+  // TODO: community site view model needed
+  remoteUserCertifications?: RemoteUserCertification[];
 }
