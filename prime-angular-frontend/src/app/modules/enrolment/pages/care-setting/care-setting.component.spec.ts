@@ -155,7 +155,7 @@ fdescribe('CareSettingComponent', () => {
     });
 
     describe('with profile not complete', () => {
-      it('should call routeTo with the path EnrolmentRoutes.OVERVIEW', () => {
+      it('should call routeTo with the path EnrolmentRoutes.REGULATORY', () => {
         component.isProfileComplete = false;
         (component as any).nextRouteAfterSubmit();
 
