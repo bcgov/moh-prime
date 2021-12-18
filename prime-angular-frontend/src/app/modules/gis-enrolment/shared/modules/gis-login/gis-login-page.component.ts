@@ -38,6 +38,7 @@ export class GisLoginPageComponent implements OnInit {
   }
 
   public ngOnInit(): void { }
+
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.code === 'Enter') {

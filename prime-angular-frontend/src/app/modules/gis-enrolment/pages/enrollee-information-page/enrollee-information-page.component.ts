@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -46,12 +46,6 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
 
   public ngOnInit(): void {
     this.createFormInstance();
-  }
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (event.code === 'Enter') {
-      this.onSubmit();
-    }
   }
 
   protected createFormInstance(): void {
