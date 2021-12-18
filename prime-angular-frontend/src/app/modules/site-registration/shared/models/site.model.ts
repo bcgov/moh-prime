@@ -22,6 +22,7 @@ export class Site {
   careSettingCode: number;
   siteVendors: Vendor[];
   businessLicence: BusinessLicence;
+  businessLicences: BusinessLicence[];
   doingBusinessAs: string;
   physicalAddressId?: number;
   physicalAddress: Address;
