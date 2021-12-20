@@ -15,6 +15,6 @@ namespace Prime.Models
         public Enrollee Enrollee { get; set; }
         public DateTime StartTimestamp { get; set; }
 
-        public DateTime EndTimestamp { get; set; }
+        public DateTime? EndTimestamp { get; set; }
     }
 }
