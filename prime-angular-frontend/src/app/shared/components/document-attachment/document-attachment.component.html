@@ -3,7 +3,8 @@
        class="mb-2">
     <button mat-stroked-button
             color="primary"
-            (click)="onDownload(document.id)">
+            (click)="onDownload(document.id)"
+            type="button">
       <mat-icon class="mr-2">attachment</mat-icon>
       {{ document.filename | default }}
     </button>
