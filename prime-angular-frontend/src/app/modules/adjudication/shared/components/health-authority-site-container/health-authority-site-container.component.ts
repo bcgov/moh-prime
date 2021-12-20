@@ -2,7 +2,7 @@ import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { SiteResource } from '@core/resources/site-resource.service';
 
@@ -20,7 +20,9 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
   @Input() public busy: Subscription;
   @Input() public content: TemplateRef<any>;
   @Input() public actions: TemplateRef<any>;
+  @Input() public belowActions: TemplateRef<any>;
   @Input() public hasActions: boolean;
+  @Input() public refresh: Observable<boolean>;
 
   public healthAuthoritySite: HealthAuthoritySiteAdminList;
 
@@ -39,6 +41,12 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
 
   public ngOnInit(): void {
     this.getDataset();
+
+    this.refresh?.subscribe((shouldRefresh: boolean) => {
+      if (shouldRefresh) {
+        this.onRefresh();
+      }
+    });
   }
 
   protected getDataset(): void {
