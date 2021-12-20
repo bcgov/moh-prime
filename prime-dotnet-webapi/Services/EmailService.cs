@@ -27,7 +27,6 @@ namespace Prime.Services
         private readonly IEmailDocumentsService _emailDocumentService;
         private readonly IEmailRenderingService _emailRenderingService;
         private readonly ISmtpEmailClient _smtpEmailClient;
-
         private readonly IEnrolleeService _enrolleeService;
 
         public EmailService(
@@ -242,7 +241,9 @@ namespace Prime.Services
                 {
                     continue;
                 }
+
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
+
                 if (reminderEmailsIntervals.Contains(expiryDays))
                 {
                     var email = await _emailRenderingService.RenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
