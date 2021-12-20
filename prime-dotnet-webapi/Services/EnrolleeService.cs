@@ -1046,7 +1046,7 @@ namespace Prime.Services
             return await _context.EnrolleeAbsences
                 .Where(ea => ea.EnrolleeId == enrolleeId)
                 .If(!includesPast,
-                    absences => absences.Where(ea => rightNow <= ea.EndTimestamp || ea.EndTimestamp == null)
+                    absences => absences.Where(ea => rightNow <= ea.EndTimestamp || !ea.EndTimestamp.HasValue)
                 )
                 .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -1058,7 +1058,7 @@ namespace Prime.Services
             return await _context.EnrolleeAbsences
                 .Where(ea => ea.EnrolleeId == enrolleeId
                     && ea.StartTimestamp <= rightNow
-                    && (rightNow <= ea.EndTimestamp || ea.EndTimestamp == null))
+                    && (rightNow <= ea.EndTimestamp || !ea.EndTimestamp.HasValue))
                 .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
@@ -1069,7 +1069,7 @@ namespace Prime.Services
             var absence = await _context.EnrolleeAbsences
                 .SingleOrDefaultAsync(ea => ea.EnrolleeId == enrolleeId
                     && ea.StartTimestamp <= rightNow
-                    && (rightNow <= ea.EndTimestamp || ea.EndTimestamp == null));
+                    && (rightNow <= ea.EndTimestamp || !ea.EndTimestamp.HasValue));
 
             if (absence != null)
             {
