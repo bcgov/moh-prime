@@ -1115,7 +1115,7 @@ namespace Prime.Services
             return await _context.EnrolleeAbsences
                 .AnyAsync(ea => ea.EnrolleeId == enrolleeId
                     && ea.StartTimestamp <= now
-                    && (ea.EndTimestamp >= now || ea.EndTimestamp == null));
+                    && (ea.EndTimestamp >= now || !ea.EndTimestamp.HasValue));
         }
     }
 }
