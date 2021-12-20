@@ -1107,5 +1107,15 @@ namespace Prime.Services
             enrollee.DateOfBirth = dateOfBirth;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> IsEnrolleeAbsentAsync(int enrolleeId)
+        {
+            var now = DateTime.Now;
+
+            return await _context.EnrolleeAbsences
+                .AnyAsync(ea => ea.EnrolleeId == enrolleeId
+                    && ea.StartTimestamp <= now
+                    && (ea.EndTimestamp >= now || ea.EndTimestamp == null));
+        }
     }
 }

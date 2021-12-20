@@ -28,28 +28,27 @@ namespace Prime.Services
         private readonly IEmailRenderingService _emailRenderingService;
         private readonly ISmtpEmailClient _smtpEmailClient;
 
+        private readonly IEnrolleeService _enrolleeService;
+
         public EmailService(
             ApiDbContext context,
             ILogger<EmailService> logger,
             IChesClient chesClient,
             IEmailDocumentsService emailDocumentService,
             IEmailRenderingService emailRenderingService,
+            IEnrolleeService enrolleeService,
             ISmtpEmailClient smtpEmailClient)
             : base(context, logger)
         {
             _chesClient = chesClient;
             _emailDocumentService = emailDocumentService;
             _emailRenderingService = emailRenderingService;
+            _enrolleeService = enrolleeService;
             _smtpEmailClient = smtpEmailClient;
         }
 
         public async Task SendReminderEmailAsync(int enrolleeId)
         {
-            if (await IsEnrolleeAbsentAsync(enrolleeId))
-            {
-                return;
-            }
-
             var enrolleeEmail = await _context.Enrollees
                 .Where(e => e.Id == enrolleeId)
                 .Select(e => e.Email)
@@ -227,6 +226,7 @@ namespace Prime.Services
             var enrollees = await _context.Enrollees
                 .Select(e => new
                 {
+                    e.Id,
                     e.FirstName,
                     e.LastName,
                     e.Email,
@@ -238,6 +238,10 @@ namespace Prime.Services
 
             foreach (var enrollee in enrollees)
             {
+                if (await _enrolleeService.IsEnrolleeAbsentAsync(enrollee.Id))
+                {
+                    continue;
+                }
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
                 if (reminderEmailsIntervals.Contains(expiryDays))
                 {
@@ -277,8 +281,6 @@ namespace Prime.Services
                 }
             }
         }
-
-
 
         public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
         {
@@ -375,17 +377,6 @@ namespace Prime.Services
             _context.EmailLogs.Add(EmailLog.FromEmail(email, sendType, msgId));
 
             await _context.SaveChangesAsync();
-        }
-
-        private async Task<bool> IsEnrolleeAbsentAsync(int enrolleeId)
-        {
-            var now = DateTime.Now;
-
-            return await _context.EnrolleeAbsences
-                .Where(ea => ea.EnrolleeId == enrolleeId
-                    && ea.StartTimestamp < now
-                    && (ea.EndTimestamp > now || ea.EndTimestamp == null))
-                    .AnyAsync();
         }
     }
 }
