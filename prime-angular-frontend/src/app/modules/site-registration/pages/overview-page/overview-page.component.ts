@@ -40,6 +40,7 @@ export class OverviewPageComponent implements OnInit {
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
   public siteErrors: ValidationErrors;
+  public isBusinessLicenceUpdated: boolean;
 
   public SiteRoutes = SiteRoutes;
   public SiteStatusType = SiteStatusType;
@@ -191,6 +192,8 @@ export class OverviewPageComponent implements OnInit {
     // NOTE: Initializes the form state service for workflow
     // updates when not already patched and contains changes
     this.siteFormStateService.setForm(site);
+
+    this.isBusinessLicenceUpdated = this.siteFormStateService.businessLicenceFormState.isBusinessLicenceUpdated;
   }
 
   /**
