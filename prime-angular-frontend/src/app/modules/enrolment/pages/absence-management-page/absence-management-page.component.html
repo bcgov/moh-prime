@@ -24,7 +24,7 @@
         <ng-container #alertContent
                       class="alert-content">
           You are currently reported absent from
-          <strong>{{absence.startTimestamp | formatDate}} - {{absence.endTimestamp | formatDate}}</strong>,
+          <strong>{{absence.startTimestamp | formatDate}}{{absence.endTimestamp ? ' - ' + (absence.endTimestamp | formatDate) : ''}}</strong>,
           would you like to end your absence?
         </ng-container>
       </app-alert>
@@ -56,6 +56,39 @@
         </button>
       </div>
     </ng-template>
+
+    <app-page-subheader2 [showUnderline]="false">
+      <ng-container appPageSubheader2Title>Notify Absence</ng-container>
+      <ng-container appPageSubheader2Summary>
+        <p>
+          Notify your provisioner or PharmaNet administrator of this absence.
+        </p>
+      </ng-container>
+    </app-page-subheader2>
+
+    <div class="row">
+      <mat-form-field class="w-100 mb-3 col-6">
+        <input matInput
+               placeholder="Email"
+               type="email"
+               [formControl]="formState.email">
+        <mat-error *ngIf="formState.email.hasError('required')">Required</mat-error>
+        <mat-error *ngIf="formState.email.hasError('email')">Must be a valid email address</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <div class="d-flex justify-content-end mb-4 col-6">
+        <button mat-flat-button
+                type="button"
+                (click)="sendEmail()"
+                color="primary">Send
+        </button>
+      </div>
+    </div>
+
+
+
   </ng-container>
 
   <ng-template #noAbsence>

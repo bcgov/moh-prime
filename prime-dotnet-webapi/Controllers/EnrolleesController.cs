@@ -13,6 +13,7 @@ using Prime.Services;
 using Prime.ViewModels;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.ViewModels.Plr;
+using Prime.HttpClients.Mail;
 
 namespace Prime.Controllers
 {
@@ -619,6 +620,47 @@ namespace Prime.Controllers
             }
 
             await _enrolleeService.DeleteFutureEnrolleeAbsenceAsync(enrolleeId, absenceId);
+
+            return NoContent();
+        }
+
+        // POST: api/enrollees/1/absences/email
+        /// <summary>
+        ///    Sends Enrollee Absence Notification Email
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="email"></param>
+        [HttpPost("/api/enrollees/{enrolleeId}/absences/email", Name = nameof(SendEnrolleeAbsenceEmail))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> SendEnrolleeAbsenceEmail(int enrolleeId, FromBodyText email)
+        {
+            if (!Email.IsValidEmail(email))
+            {
+                return BadRequest("The email provided is not valid.");
+            }
+
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound($"No enrollee exists with id: {enrolleeId}");
+            }
+            if (!enrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var absences = await _enrolleeService.GetEnrolleeAbsencesAsync(enrolleeId, false);
+            if (!absences.Any())
+            {
+                return NotFound($"No open absences found for enrollee with id: {enrolleeId}");
+            }
+
+            await _emailService.SendEnrolleeAbsenceNotificationEmailAsync(enrolleeId, absences.First(), email);
+            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Absence notification email sent to: {email}");
 
             return NoContent();
         }
