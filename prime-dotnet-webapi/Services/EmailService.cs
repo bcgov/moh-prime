@@ -302,8 +302,7 @@ namespace Prime.Services
             Expression<Func<EmailLog, bool>> predicate = log =>
                 log.SendType == SendType.Ches
                 && log.MsgId != null
-                && log.LatestStatus != ChesStatus.Completed
-                && log.LatestStatus != ChesStatus.Pending;
+                && log.LatestStatus != ChesStatus.Completed;
 
             var totalCount = await _context.EmailLogs
                 .Where(predicate)
@@ -311,6 +310,7 @@ namespace Prime.Services
 
             var emailLogs = await _context.EmailLogs
                 .Where(predicate)
+                .Where(e => e.LatestStatus != ChesStatus.Pending)
                 .OrderBy(e => e.UpdatedTimeStamp)
                 .Take(limit)
                 .ToListAsync();
@@ -321,9 +321,8 @@ namespace Prime.Services
             if (!updated)
             {
                 var pendingEmailLogs = await _context.EmailLogs
-                    .Where(l => l.SendType == SendType.Ches
-                        && l.MsgId != null
-                        && l.LatestStatus == ChesStatus.Pending)
+                    .Where(predicate)
+                    .Where(e => e.LatestStatus == ChesStatus.Pending)
                     .ToListAsync();
 
                 await UpdateEmailStatusByChes(pendingEmailLogs);

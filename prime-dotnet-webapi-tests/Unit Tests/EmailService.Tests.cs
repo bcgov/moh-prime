@@ -121,9 +121,10 @@ namespace PrimeTests.UnitTests
             A.CallTo(() => chesClient.GetStatusAsync(emailLog.MsgId.Value)).Returns(Task.FromResult(ChesStatus.Completed));
 
             // Act
-            await service.UpdateEmailLogStatuses(10);
+            var count = await service.UpdateEmailLogStatuses(10);
 
             // Assert
+            Assert.Equal(1, count);
             var log = TestDb.EmailLogs.Single(x => x.MsgId == emailLog.MsgId.Value);
             Assert.NotNull(log);
             Assert.Equal(ChesStatus.Completed, log.LatestStatus);
@@ -157,9 +158,10 @@ namespace PrimeTests.UnitTests
             A.CallTo(() => chesClient.GetStatusAsync(pendingEmailLog.MsgId.Value)).Returns(Task.FromResult(ChesStatus.Failed));
 
             // Act
-            await service.UpdateEmailLogStatuses(10);
+            var count = await service.UpdateEmailLogStatuses(10);
 
             // Assert
+            Assert.Equal(2, count);
             var log = TestDb.EmailLogs.Single(x => x.MsgId == failedEmailLog.MsgId.Value);
             Assert.NotNull(log);
             Assert.Equal(ChesStatus.Completed, log.LatestStatus);
