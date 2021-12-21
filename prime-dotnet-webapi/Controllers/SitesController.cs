@@ -1036,7 +1036,7 @@ namespace Prime.Controllers
 
         // GET: api/Sites/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
         /// <summary>
-        /// Gets all of the site registration notes for a specific site.
+        /// Gets all of the business events for a specific site's event log.
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="businessEventTypeCodes"></param>
