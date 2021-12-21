@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20211217163513_ChangedBCSCReference")]
+    [Migration("20211221013035_ChangedBCSCReference")]
     partial class ChangedBCSCReference
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
