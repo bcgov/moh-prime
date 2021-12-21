@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 using FakeItEasy;
 
@@ -9,6 +10,7 @@ using Prime.Services;
 using Prime.Services.EmailInternal;
 using PrimeTests.Utils;
 using Prime.HttpClients.Mail;
+using Prime.HttpClients.Mail.ChesApiDefinitions;
 using Prime.ViewModels.Emails;
 using PrimeTests.ModelFactories;
 
@@ -16,6 +18,8 @@ namespace PrimeTests.UnitTests
 {
     public class EmailServiceTests : InMemoryDbTest
     {
+        public const string Ches = "CHES";
+
         [Theory]
         [MemberData(nameof(RenewalScheduleTestCases))]
         public async void TestSendEnrolleeRenewalEmails(int daysUntilExpiry, ExpectedEmail expected)
@@ -95,6 +99,74 @@ namespace PrimeTests.UnitTests
             var exceptions = await Record.ExceptionAsync(() => service.SendRemoteUserNotificationsAsync(site, remoteUsers));
 
             Assert.Null(exceptions);
+        }
+
+        [Fact]
+        public async void UpdateEmailLogStatuses_ShouldUpdateStuckPendingEmails()
+        {
+            // Arrange
+            var chesClient = A.Fake<IChesClient>();
+            var service = MockDependenciesFor<EmailService>(chesClient);
+
+            var emailLog = new EmailLog
+            {
+                SendType = Ches,
+                MsgId = Guid.NewGuid(),
+                LatestStatus = ChesStatus.Pending
+            };
+
+            await TestDb.EmailLogs.AddAsync(emailLog);
+            await TestDb.SaveChangesAsync();
+
+            A.CallTo(() => chesClient.GetStatusAsync(emailLog.MsgId.Value)).Returns(Task.FromResult(ChesStatus.Completed));
+
+            // Act
+            await service.UpdateEmailLogStatuses(10);
+
+            // Assert
+            var log = TestDb.EmailLogs.Single(x => x.MsgId == emailLog.MsgId.Value);
+            Assert.NotNull(log);
+            Assert.Equal(ChesStatus.Completed, log.LatestStatus);
+        }
+
+        [Fact]
+        public async void UpdateEmailLogStatuses_ShouldUpdateEmailStatuses_WithoutUpdatePendingEmails()
+        {
+            // Arrange
+            var chesClient = A.Fake<IChesClient>();
+            var service = MockDependenciesFor<EmailService>(chesClient);
+
+            var failedEmailLog = new EmailLog
+            {
+                SendType = Ches,
+                MsgId = Guid.NewGuid(),
+                LatestStatus = ChesStatus.Failed
+            };
+
+            var pendingEmailLog = new EmailLog
+            {
+                SendType = Ches,
+                MsgId = Guid.NewGuid(),
+                LatestStatus = ChesStatus.Pending
+            };
+
+            await TestDb.EmailLogs.AddRangeAsync(new [] {failedEmailLog, pendingEmailLog});
+            await TestDb.SaveChangesAsync();
+
+            A.CallTo(() => chesClient.GetStatusAsync(failedEmailLog.MsgId.Value)).Returns(Task.FromResult(ChesStatus.Completed));
+            A.CallTo(() => chesClient.GetStatusAsync(pendingEmailLog.MsgId.Value)).Returns(Task.FromResult(ChesStatus.Failed));
+
+            // Act
+            await service.UpdateEmailLogStatuses(10);
+
+            // Assert
+            var log = TestDb.EmailLogs.Single(x => x.MsgId == failedEmailLog.MsgId.Value);
+            Assert.NotNull(log);
+            Assert.Equal(ChesStatus.Completed, log.LatestStatus);
+
+            log = TestDb.EmailLogs.Single(x => x.MsgId == pendingEmailLog.MsgId.Value);
+            Assert.NotNull(log);
+            Assert.Equal(ChesStatus.Pending, log.LatestStatus);
         }
     }
 }

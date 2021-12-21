@@ -302,7 +302,8 @@ namespace Prime.Services
             Expression<Func<EmailLog, bool>> predicate = log =>
                 log.SendType == SendType.Ches
                 && log.MsgId != null
-                && log.LatestStatus != ChesStatus.Completed;
+                && log.LatestStatus != ChesStatus.Completed
+                && log.LatestStatus != ChesStatus.Pending;
 
             var totalCount = await _context.EmailLogs
                 .Where(predicate)
@@ -314,14 +315,20 @@ namespace Prime.Services
                 .Take(limit)
                 .ToListAsync();
 
-            foreach (var email in emailLogs)
+            var updated = await UpdateEmailStatusByChes(emailLogs);
+
+            // Only try to update pending email if there is no updates above
+            if (!updated)
             {
-                var status = await _chesClient.GetStatusAsync(email.MsgId.Value);
-                if (status != null && email.LatestStatus != status)
-                {
-                    email.LatestStatus = status;
-                }
+                var pendingEmailLogs = await _context.EmailLogs
+                    .Where(l => l.SendType == SendType.Ches
+                        && l.MsgId != null
+                        && l.LatestStatus == ChesStatus.Pending)
+                    .ToListAsync();
+
+                await UpdateEmailStatusByChes(pendingEmailLogs);
             }
+
             await _context.SaveChangesAsync();
 
             return totalCount;
@@ -370,6 +377,22 @@ namespace Prime.Services
             _context.EmailLogs.Add(EmailLog.FromEmail(email, sendType, msgId));
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task<bool> UpdateEmailStatusByChes(IEnumerable<EmailLog> emailLogs)
+        {
+            var updated = false;
+            foreach (var email in emailLogs)
+            {
+                var status = await _chesClient.GetStatusAsync(email.MsgId.Value);
+                if (status != null && email.LatestStatus != status)
+                {
+                    email.LatestStatus = status;
+                    updated = true;
+                }
+            }
+
+            return await Task.FromResult(updated);
         }
     }
 }
