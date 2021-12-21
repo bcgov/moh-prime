@@ -1,8 +1,10 @@
 {{ $release := .Release.Name }}
 {{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $domain := .Values.global.vanityURL }}
 {{ $isPR := hasPrefix "pr-" .Release.Name }}
 ## Derived release name
 {{ $drn := ternary $release $ocEnv $isPR }}
+{{ $isProd := contains "prod" $ocEnv }}
 #
 apiVersion: apps/v1
 kind: Deployment
@@ -95,7 +97,7 @@ spec:
                   key: app-db-name
             {{- end }}
             - name: DOCUMENT_MANAGER_URL
-              value: "https://{{ .Values.global.vanityURL }}/api/docman/"
+              value: "https://{{ if $isProd }}{{else}}{{ $drn }}.{{end}}{{ $domain }}/api/docman/"
             - name: JWT_OIDC_WELL_KNOWN_CONFIG
               valueFrom:
                 configMapKeyRef:

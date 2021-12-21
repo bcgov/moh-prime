@@ -1,7 +1,7 @@
 dependencies:
 - name: prime-docman
   repository: file://../prime-docman
-  version: 0.1.1
+  version: 0.1.2
 - name: prime-frontend
   repository: file://../prime-frontend
   version: 0.1.2
@@ -14,5 +14,5 @@ dependencies:
 - name: nginx
   repository: https://charts.bitnami.com/bitnami
   version: 9.5.16
-digest: sha256:bf4edcefb7b2e589afaad3473382914aba1d5e8e77d890f116a4358f1dc9e6f2
-generated: "2021-12-16T10:45:31.15921-08:00"
+digest: sha256:54e5b0a07f6d09d33c989aa0c1c5f64024deedf2de7fcfbf9d255d02197c03aa
+generated: "2021-12-21T09:10:50.2122238-08:00"
