@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 using Prime.Configuration.Auth;
+using Prime.HttpClients;
 using Prime.Models;
 using Prime.Services;
 using Prime.ViewModels.Parties;
@@ -26,13 +27,16 @@ namespace Prime.Controllers
         private readonly IMapper _mapper;
         private readonly IPartyService _partyService;
         private readonly IPlrProviderService _plrProviderService;
+        private readonly IPrimeKeycloakAdministrationClient _keycloakClient;
 
         public SatEnrolmentController(
             IMapper mapper,
             IPartyService partyService,
-            IPlrProviderService plrProviderService
+            IPlrProviderService plrProviderService,
+            IPrimeKeycloakAdministrationClient keycloakClient
         )
         {
+            _keycloakClient = keycloakClient;
             _mapper = mapper;
             _partyService = partyService;
             _plrProviderService = plrProviderService;
@@ -195,6 +199,7 @@ namespace Prime.Controllers
 
             var existsInPlr = await _plrProviderService.PartyExistsInPlrWithCollegeIdAndNameAsync(satId);
             var submission = await _partyService.CreateSubmissionAsync(satId, SubmissionType.SatEnrollee, existsInPlr);
+            await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaEformsSat);
 
             return Ok(submission);
         }
