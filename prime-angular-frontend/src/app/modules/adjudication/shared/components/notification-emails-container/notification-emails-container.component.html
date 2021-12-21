@@ -4,7 +4,7 @@
       <div class="col-md-6 col-sm-12">
         <app-summary-card class=""
                           icon="email"
-                          [title]="EmailTemplateTypeEnum[template.emailType] | replace: '_':' ' | capitalize: true"
+                          [title]="template.templateName"
                           [properties]="getTemplateProperties(template)"
                           actionButtonTitle="View"
                           [actionDisabled]="false"

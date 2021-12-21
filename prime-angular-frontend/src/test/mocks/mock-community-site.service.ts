@@ -44,6 +44,7 @@ export class MockCommunitySiteService {
       careSettingCode: faker.random.number(),
       siteVendors: [],
       businessLicence: null,
+      businessLicences: [],
       doingBusinessAs: faker.company.companyName(),
       physicalAddressId: faker.random.number(),
       physicalAddress: address,

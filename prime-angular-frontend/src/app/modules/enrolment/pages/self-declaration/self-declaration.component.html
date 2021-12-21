@@ -86,6 +86,12 @@
                                  (remove)="onRemove('hasConvictionDocumentGuids', $event)">
             </app-document-upload>
 
+            <app-enrollee-property>
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_CONVICTION)
+                                       (download)="downloadSelfDeclarationDocument($event)">
+              </app-document-attachment>
+            </app-enrollee-property>
+
           </ol>
 
         </div>
@@ -148,6 +154,13 @@
                                  (completed)="onUpload('hasRegistrationSuspendedDocumentGuids', $event)"
                                  (remove)="onRemove('hasRegistrationSuspendedDocumentGuids', $event)">
             </app-document-upload>
+
+            <app-enrollee-property>
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED)
+                                       (download)="downloadSelfDeclarationDocument($event)">
+              </app-document-attachment>
+            </app-enrollee-property>
+
           </ol>
         </div>
       </div>
@@ -206,6 +219,13 @@
                                  (completed)="onUpload('hasDisciplinaryActionDocumentGuids', $event)"
                                  (remove)="onRemove('hasDisciplinaryActionDocumentGuids', $event)">
             </app-document-upload>
+
+            <app-enrollee-property>
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION)
+                                       (download)="downloadSelfDeclarationDocument($event)">
+              </app-document-attachment>
+            </app-enrollee-property>
+
           </ol>
         </div>
       </div>
@@ -263,6 +283,13 @@
                                  (completed)="onUpload('hasPharmaNetSuspendedDocumentGuids', $event)"
                                  (remove)="onRemove('hasPharmaNetSuspendedDocumentGuids', $event)">
             </app-document-upload>
+
+            <app-enrollee-property>
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED)
+                                       (download)="downloadSelfDeclarationDocument($event)">
+              </app-document-attachment>
+            </app-enrollee-property>
+
           </ol>
         </div>
       </div>
