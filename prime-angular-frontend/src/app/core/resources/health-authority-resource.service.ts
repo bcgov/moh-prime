@@ -16,7 +16,6 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 
@@ -102,6 +101,30 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority vendors could not be updated');
           this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthorityVendors error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getHealthAuthorityVendorSiteIds(healthAuthorityId: number, vendorId: number): Observable<number[]> {
+    return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/vendors/${vendorId}/sites`)
+      .pipe(
+        map((response: ApiHttpResponse<number[]>) => response.result),
+        tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),
+        catchError((error: any) => {
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityVendorSiteIds error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getHealthAuthorityCareTypeSiteIds(healthAuthorityId: number, careTypeId: number): Observable<number[]> {
+    return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/care-types/${careTypeId}/sites`)
+      .pipe(
+        map((response: ApiHttpResponse<number[]>) => response.result),
+        tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),
+        catchError((error: any) => {
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityCareTypeSiteIds error has occurred: ', error);
           throw error;
         })
       );

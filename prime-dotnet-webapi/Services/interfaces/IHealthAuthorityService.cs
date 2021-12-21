@@ -16,12 +16,14 @@ namespace Prime.Services
         Task<HealthAuthorityViewModel> GetHealthAuthorityAsync(int healthAuthorityId);
         Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersAsync(int healthAuthorityId);
         Task<bool> AuthorizedUserExistsOnHealthAuthorityAsync(int healthAuthorityId, int authorizedUserId);
-        Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes);
+        Task<bool> UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes);
         Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<ContactViewModel> contacts) where T : HealthAuthorityContact, new();
         Task UpdatePrivacyOfficeAsync(int healthAuthorityId, PrivacyOfficeViewModel privacyOffice);
-        Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes);
+        Task<bool> UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes);
         Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel);
         Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, int healthAuthoritySiteId);
         Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId);
+        Task<IEnumerable<int>> GetSitesByVendorAsync(int healthAuthorityId, int healthAuthorityVendorId);
+        Task<IEnumerable<int>> GetSitesByCareTypeAsync(int healthAuthorityId, int healthAuthorityCareTypeId);
     }
 }
