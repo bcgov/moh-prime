@@ -660,7 +660,7 @@ namespace Prime.Controllers
             }
 
             await _emailService.SendEnrolleeAbsenceNotificationEmailAsync(enrolleeId, absences.First(), email);
-            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Absence notification email sent to: {email}");
+            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Absence notification email sent to: {email.Data}");
 
             return NoContent();
         }
