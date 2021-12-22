@@ -107,7 +107,7 @@ namespace PrimeTests.UnitTests
             };
 
             // Act
-            await MockDependenciesFor<CommunitySiteService>().UpdateSiteAsync(site.Id, update);
+            await MockDependenciesFor<CommunitySiteService>(DefaultMapper()).UpdateSiteAsync(site.Id, update);
 
             // Assert
             // Drops
