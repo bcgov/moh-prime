@@ -1110,7 +1110,7 @@ namespace Prime.Services
 
         public async Task<bool> IsEnrolleeAbsentAsync(int enrolleeId)
         {
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
 
             return await _context.EnrolleeAbsences
                 .AnyAsync(ea => ea.EnrolleeId == enrolleeId
