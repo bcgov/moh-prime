@@ -16,8 +16,6 @@ namespace PrimeTests.UnitTests
 {
     public class EmailServiceTests : InMemoryDbTest
     {
-        public const string Ches = "CHES";
-
         [Theory]
         [MemberData(nameof(RenewalScheduleTestCases))]
         public async void TestSendEnrolleeRenewalEmails(int daysUntilExpiry, ExpectedEmail expected)
