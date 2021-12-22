@@ -29,6 +29,8 @@ namespace Prime.Models
 
         public string StatusMessage { get; set; }
 
+        public int? UpdateCount { get; set; }
+
         public static EmailLog FromEmail(Email email, string sendType, Guid? msgId)
         {
             return new EmailLog
