@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { KeycloakService } from 'keycloak-angular';
@@ -154,29 +154,14 @@ describe('CareSettingComponent', () => {
       });
     });
 
-    describe('with profile incomplete, no Obo Sites and no Certifications', () => {
-      it('should call routeTo with the path EnrolmentRoutes.OBO_SITES', () => {
+    describe('with profile not complete', () => {
+      it('should call routeTo with the path EnrolmentRoutes.REGULATORY', () => {
         component.isProfileComplete = false;
         (component as any).nextRouteAfterSubmit();
 
-        expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OBO_SITES);
+        expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.REGULATORY);
       });
     });
-
-    // TODO: implement this test
-    // describe('with profile incomplete and Obo Sites has at least one entry', () => {
-    //   it('should call routeTo with the path EnrolmentRoutes.OBO_SITES', () => {
-
-    //     const site = (component as any).enrolmentFormStateService.buildOboSiteForm() as FormGroup;
-    //     site.patchValue({ careSettingCode: 2 });
-    //     (component as any).enrolmentFormStateService.addNonHealthAuthorityOboSite(site, jasmine.any(FormArray));
-
-    //     component.isProfileComplete = false;
-    //     (component as any).nextRouteAfterSubmit();
-
-    //     expect(spyOnRouteTo).toHaveBeenCalledWith(EnrolmentRoutes.OBO_SITES);
-    //   });
-    // });
   });
 
   describe('testing removeIncompleteCareSettings()', () => { });
