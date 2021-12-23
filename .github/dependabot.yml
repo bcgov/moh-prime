@@ -7,6 +7,10 @@ updates:
       interval: "weekly"
       day: "tuesday"
       time: "18:00"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "SoapCore"
   # npm dependencies - frontend
   - package-ecosystem: "npm"
     directory: "/prime-angular-frontend"

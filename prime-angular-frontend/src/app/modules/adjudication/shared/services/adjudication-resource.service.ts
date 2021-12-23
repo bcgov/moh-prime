@@ -1,7 +1,7 @@
 import { EnrolleeNavigation } from './../../../../shared/models/enrollee-navigation-model';
 import { Injectable } from '@angular/core';
 
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
@@ -38,6 +38,7 @@ import { SiteNotification } from '../models/site-notification.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
+import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
 
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
@@ -72,8 +73,6 @@ export class AdjudicationResource {
     return forkJoin({
       enrollee: this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
         .pipe(map((response: ApiHttpResponse<HttpEnrollee>) => response.result)),
-      accessAgreementNote: this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`)
-        .pipe(map((response: ApiHttpResponse<EnrolleeNote>) => response.result)),
       enrolleeCareSettings: this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`)
         .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
       certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
@@ -88,10 +87,6 @@ export class AdjudicationResource {
         .pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
       selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`)
         .pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
-      selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`)
-        .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result)),
-      enrolmentStatuses: this.apiResource.get<EnrolmentStatus[]>(`enrollees/${enrolleeId}/statuses`)
-        .pipe(map((response: ApiHttpResponse<EnrolmentStatus[]>) => response.result)),
       adjudicatorIdir: this.apiResource.get<string>(`enrollees/${enrolleeId}/adjudicator-idir`)
         .pipe(map((response: ApiHttpResponse<string>) => response.result))
     })
@@ -311,6 +306,37 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Limits and conditions clause could not be updated');
           this.logger.error('[Adjudication] AdjudicationResource::updateAccessAgreementNote error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAccessAgreementNote(enrolleeId: number): Observable<EnrolleeNote> {
+    return this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
+        tap((adjudicatorNotes: EnrolleeNote) => this.logger.info('LIMITS_AND_CONDITIONS_CLAUSE', adjudicatorNotes)),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::getAccessAgreementNote error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolleeReviewStatus(enrolleeId: number): Observable<EnrolleeReviewStatus> {
+    return forkJoin({
+      selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`)
+        .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result)),
+      enrolmentStatuses: this.apiResource.get<EnrolmentStatus[]>(`enrollees/${enrolleeId}/statuses`)
+        .pipe(map((response: ApiHttpResponse<EnrolmentStatus[]>) => response.result)),
+      // IdentificationDocument is not currently pupulated in backend
+      identificationDocuments: of([])
+    })
+      .pipe(
+        tap((reviewStatus: EnrolleeReviewStatus) => this.logger.info('ENROLLEE_REVIEW_STATUS', reviewStatus)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee review status could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeReviewStatus error has occurred: ', error);
           throw error;
         })
       );
