@@ -6,6 +6,7 @@
 
 </app-adjudication-container>
 
-<ng-template #content>
+<ng-template #content
+             let-enrollee="enrollee">
   <app-review-status-content [enrollee]="enrollee"></app-review-status-content>
 </ng-template>

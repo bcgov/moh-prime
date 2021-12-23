@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { HttpEnrollee } from '@shared/models/enrolment.model';
-
+import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
@@ -11,26 +10,15 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
   styleUrls: ['./enrollee-review-status.component.scss']
 })
 export class EnrolleeReviewStatusComponent implements OnInit {
-  public enrollee: HttpEnrollee;
   public hasActions: boolean;
 
   constructor(
-    private route: ActivatedRoute,
-    private adjudicationResource: AdjudicationResource
+    protected route: ActivatedRoute,
   ) {
     this.hasActions = true;
   }
 
-  public onAction() {
-    this.getEnrolleeById(this.route.snapshot.params.id);
-  }
+  public onAction(): void { }
 
-  public ngOnInit(): void {
-    this.route.params.subscribe((params) => this.getEnrolleeById(params.id));
-  }
-
-  private getEnrolleeById(enrolleeId: number) {
-    this.adjudicationResource.getEnrolleeById(enrolleeId)
-      .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
-  }
+  public ngOnInit(): void { }
 }
