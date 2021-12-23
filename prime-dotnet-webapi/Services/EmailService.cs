@@ -227,7 +227,7 @@ namespace Prime.Services
             var absentEnrolleesIds = await _context.EnrolleeAbsences
                 .Where(ea => ea.StartTimestamp <= now
                     && (ea.EndTimestamp >= now || !ea.EndTimestamp.HasValue))
-                .Select(ea => ea.Id)
+                .Select(ea => ea.EnrolleeId)
                 .ToListAsync();
 
             var enrollees = await _context.Enrollees
