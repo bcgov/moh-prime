@@ -310,24 +310,20 @@ namespace Prime.Services
 
             var emailLogs = await _context.EmailLogs
                 .Where(predicate)
-                .Where(e => e.LatestStatus != ChesStatus.Pending)
-                .OrderBy(e => e.UpdatedTimeStamp)
+                .OrderBy(e => e.UpdateCount)
+                    .ThenBy(e => e.UpdatedTimeStamp)
                 .Take(limit)
                 .ToListAsync();
 
-            var updated = await UpdateEmailStatusByChes(emailLogs);
-
-            // Only try to update pending email if there is no updates above
-            if (!updated)
+            foreach (var email in emailLogs)
             {
-                var pendingEmailLogs = await _context.EmailLogs
-                    .Where(predicate)
-                    .Where(e => e.LatestStatus == ChesStatus.Pending)
-                    .ToListAsync();
-
-                await UpdateEmailStatusByChes(pendingEmailLogs);
+                var status = await _chesClient.GetStatusAsync(email.MsgId.Value);
+                if (status != null && email.LatestStatus != status)
+                {
+                    email.LatestStatus = status;
+                }
+                email.UpdateCount++;
             }
-
             await _context.SaveChangesAsync();
 
             return totalCount;
@@ -376,22 +372,6 @@ namespace Prime.Services
             _context.EmailLogs.Add(EmailLog.FromEmail(email, sendType, msgId));
 
             await _context.SaveChangesAsync();
-        }
-
-        private async Task<bool> UpdateEmailStatusByChes(IEnumerable<EmailLog> emailLogs)
-        {
-            var updated = false;
-            foreach (var email in emailLogs)
-            {
-                var status = await _chesClient.GetStatusAsync(email.MsgId.Value);
-                if (status != null && email.LatestStatus != status)
-                {
-                    email.LatestStatus = status;
-                    updated = true;
-                }
-            }
-
-            return await Task.FromResult(updated);
         }
     }
 }
