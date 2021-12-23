@@ -120,7 +120,6 @@ export class MockEnrolmentService implements IEnrolmentService {
       assignedTOAType: null,
       enrolleeClassification: EnrolleeClassification.OBO,
       enrolmentCertificateNote: null,
-      accessAgreementNote: null,
       profileCompleted: true,
       collectionNoticeAccepted: false,
       alwaysManual: false,
