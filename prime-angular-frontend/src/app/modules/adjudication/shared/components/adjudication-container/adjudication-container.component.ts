@@ -50,6 +50,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public busy: Subscription;
   public enrollees: EnrolleeListViewModel[];
+  public enrollee: HttpEnrollee;
   public enrolleeNavigation: EnrolleeNavigation;
   public sort: Sort;
 
@@ -87,29 +88,19 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onSort(sort: Sort): void {
-    this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
+    // Do not use sorting queryParams for single row mode
+    if (!this.route.snapshot.params.id) {
+      this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
+    }
   }
 
   public onRefresh(): void {
     this.getDataset(this.route.snapshot.params.id, this.route.snapshot.queryParams);
   }
 
-  public onNotify(enrolleeId: number) {
-    this.adjudicationResource.getEnrolleeById(enrolleeId)
-      .pipe(
-        exhaustMap((enrollee: HttpEnrollee) => {
-          if (enrollee.email) {
-            return of(enrollee);
-          }
-          this.toastService.openErrorToast('Enrollee does not have a contact email.');
-          return EMPTY;
-        }),
-        exhaustMap((enrollee: HttpEnrollee) =>
-          this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
-            .pipe(map(() => enrollee))
-        )
-      )
-      .subscribe((enrollee: HttpEnrollee) => EmailUtils.openEmailClient(enrollee.email));
+  public onNotify(enrollee: EnrolleeListViewModel) {
+    this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
+      .subscribe(() => EmailUtils.openEmailClient(enrollee.email));
   }
 
   public onAssign(enrolleeId: number) {
@@ -189,8 +180,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.APPROVE)
       )
-      .subscribe((approvedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(approvedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -209,8 +200,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.DECLINE_PROFILE)
       )
-      .subscribe((declinedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(declinedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -229,8 +220,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.LOCK_PROFILE)
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(lockedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -249,8 +240,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(lockedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -269,8 +260,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -289,8 +280,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -309,8 +300,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.CANCEL_TOA)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -329,8 +320,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.RERUN_RULES)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -375,13 +366,10 @@ export class AdjudicationContainerComponent implements OnInit {
             ? of(noop)
             : EMPTY
         ),
-        exhaustMap(() =>
-          this.adjudicationResource.updateEnrolleeAlwaysManual(enrolleeId, alwaysManual)
-        ),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
+        exhaustMap(() => this.adjudicationResource.updateEnrolleeAlwaysManual(enrolleeId, alwaysManual)),
       )
-      .subscribe((flaggedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(flaggedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -392,7 +380,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onAssignToa({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
     this.busy = this.adjudicationResource.assignToaAgreementType(enrolleeId, agreementType)
-      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee.id));
+      .subscribe(() => this.updateEnrollee(enrolleeId));
   }
 
   public onSendBulkEmail() {
@@ -452,7 +440,12 @@ export class AdjudicationContainerComponent implements OnInit {
     // Use existing query params for initial search, and
     // update results on query param change
     this.route.queryParams
-      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(this.route.snapshot.params.id, queryParams));
+      .subscribe((queryParams: { [key: string]: any }) => {
+        // Search is not applicable to single-row enrollee
+        if (!this.route.snapshot.params.id) {
+          this.getDataset(this.route.snapshot.params.id, queryParams);
+        }
+      });
     // url params could change due to jump action, subscribe to changes
     this.route.params
       .subscribe((params) => {
@@ -479,6 +472,7 @@ export class AdjudicationContainerComponent implements OnInit {
       forkJoin({
         enrollee: this.adjudicationResource.getEnrolleeById(enrolleeId)
           .pipe(
+            tap((enrollee) => this.enrollee = enrollee),
             map(this.toEnrolleeListViewModel),
             tap(() => this.showSearchFilter = false)
           ),
@@ -518,6 +512,7 @@ export class AdjudicationContainerComponent implements OnInit {
         const index = this.enrollees.findIndex(e => e.id === enrollee.id);
         this.enrollees.splice(index, 1, this.toEnrolleeListViewModel(enrollee));
         this.enrollees = [...this.enrollees];
+        this.enrollee = enrollee;
       })
   }
 
@@ -530,8 +525,7 @@ export class AdjudicationContainerComponent implements OnInit {
         (note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, note, true)
           : of(noop)
-      ),
-      exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
+      )
     );
   }
 
@@ -583,7 +577,8 @@ export class AdjudicationContainerComponent implements OnInit {
       possiblePaperEnrolmentMatch,
       gpid,
       adjudicatorIdir,
-      dateOfBirth
+      dateOfBirth,
+      email
     } = enrollee;
 
     return {
@@ -609,7 +604,8 @@ export class AdjudicationContainerComponent implements OnInit {
       linkedEnrolleeId,
       possiblePaperEnrolmentMatch,
       gpid,
-      dateOfBirth
+      dateOfBirth,
+      email
     };
   }
 }

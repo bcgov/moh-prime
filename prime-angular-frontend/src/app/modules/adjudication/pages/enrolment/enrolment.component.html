@@ -4,7 +4,8 @@
 
 </app-adjudication-container>
 
-<ng-template #content>
+<ng-template #content
+             let-enrollee="enrollee">
 
   <div class="row">
     <div class="col-sm-12 col-md-9 col-lg-8 col-xl-7">
@@ -16,7 +17,7 @@
       </app-page-subheader>
 
       <app-enrollee-review *ngIf="enrollee"
-                           [enrolment]="enrollee"
+                           [enrolment]="enrolleeAdapterResponse(enrollee)"
                            [admin]="true"
                            (route)="onRoute($event)"></app-enrollee-review>
 
