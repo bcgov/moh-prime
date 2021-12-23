@@ -94,7 +94,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
               enrolment: this.enrolmentAdapter(enrollee)
             }))
           ),
-        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId),
+        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId)
       }).pipe(
         map(
           ({ enrollee, enrolleeNavigation }) => {
