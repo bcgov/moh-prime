@@ -199,7 +199,7 @@ namespace Prime.Controllers
 
             var existsInPlr = await _plrProviderService.PartyExistsInPlrWithCollegeIdAndNameAsync(satId);
             var submission = await _partyService.CreateSubmissionAsync(satId, SubmissionType.SatEnrollee, existsInPlr);
-            await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaEformsSat);
+            await _keycloakClient.AssignRealmRole(satEnrollee.UserId, Roles.PhsaEformsSat);
 
             return Ok(submission);
         }
