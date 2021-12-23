@@ -20,7 +20,6 @@ import { LdapUserPageFormState } from './ldap-user-page-form-state.class';
 export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;
   public formState: LdapUserPageFormState;
-  public buttonType: string = 'submit';
 
   private routeUtils: RouteUtils;
 

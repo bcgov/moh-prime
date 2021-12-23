@@ -27,7 +27,6 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   public unauthorized: boolean | null;
   public locked: boolean | null;
   public remainingAttempts: number;
-  public buttonType: string = 'submit';
 
   private routeUtils: RouteUtils;
 
