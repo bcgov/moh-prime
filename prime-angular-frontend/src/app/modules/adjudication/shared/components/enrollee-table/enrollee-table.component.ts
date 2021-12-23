@@ -35,7 +35,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrolleeNavigation: EnrolleeNavigation;
   @Input() public sort: Sort;
   @Input() public localStoragePrefix: string;
-  @Output() public notify: EventEmitter<number>;
+  @Output() public notify: EventEmitter<EnrolleeListViewModel>;
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
@@ -71,7 +71,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     private utilsService: UtilsService,
     private localStorageService: LocalStorageService
   ) {
-    this.notify = new EventEmitter<number>();
+    this.notify = new EventEmitter<EnrolleeListViewModel>();
     this.assign = new EventEmitter<number>();
     this.reassign = new EventEmitter<number>();
     this.refresh = new EventEmitter<number>();
@@ -105,8 +105,8 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     );
   }
 
-  public onNotify(enrolleeId: number): void {
-    this.notify.emit(enrolleeId);
+  public onNotify(enrollee: EnrolleeListViewModel): void {
+    this.notify.emit(enrollee);
   }
 
   public onAssign(enrolleeId: number): void {

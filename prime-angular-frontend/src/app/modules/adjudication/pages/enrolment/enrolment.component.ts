@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
@@ -10,7 +9,6 @@ import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
@@ -20,7 +18,6 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class EnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
-  public enrollee: Enrolment;
   public AdjudicationRoutes = AdjudicationRoutes;
 
   private routeUtils: RouteUtils;
@@ -28,7 +25,6 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
-    private adjudicationResource: AdjudicationResource
   ) {
     super(route, router);
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
@@ -38,19 +34,7 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
     this.routeUtils.routeWithin(routePath);
   }
 
-  public ngOnInit() {
-    this.getEnrollee(this.route.snapshot.params.id);
-  }
-
-  private getEnrollee(enrolleeId: number) {
-    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
-      .pipe(
-        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
-      )
-      .subscribe((enrollee: Enrolment) => this.enrollee = enrollee);
-  }
-
-  private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
+  public enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
     addressTypes.forEach((addressType: AddressType) => {
       if (!enrollee[addressType]) {
         enrollee[addressType] = new Address();
@@ -67,6 +51,8 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
 
     return this.enrolmentAdapter(enrollee);
   }
+
+  public ngOnInit() { }
 
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
     const {
