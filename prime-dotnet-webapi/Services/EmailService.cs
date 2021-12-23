@@ -222,26 +222,28 @@ namespace Prime.Services
         {
             var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
 
+            var now = DateTime.UtcNow;
+
+            var absentEnrolleesIds = await _context.EnrolleeAbsences
+                .Where(ea => ea.StartTimestamp <= now
+                    && (ea.EndTimestamp >= now || !ea.EndTimestamp.HasValue))
+                .Select(ea => ea.Id)
+                .ToListAsync();
+
             var enrollees = await _context.Enrollees
+                .Where(e => e.ExpiryDate != null && !absentEnrolleesIds.Contains(e.Id))
                 .Select(e => new
                 {
-                    e.Id,
                     e.FirstName,
                     e.LastName,
                     e.Email,
                     e.ExpiryDate
                 })
-                .Where(e => e.ExpiryDate != null)
                 .DecompileAsync()
                 .ToListAsync();
 
             foreach (var enrollee in enrollees)
             {
-                if (await _enrolleeService.IsEnrolleeAbsentAsync(enrollee.Id))
-                {
-                    continue;
-                }
-
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
 
                 if (reminderEmailsIntervals.Contains(expiryDays))
