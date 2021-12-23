@@ -231,7 +231,7 @@ describe('ReviewStatusContentComponent', () => {
       it('should return an array of reasons of same length as the selfDeclarations', () => {
 
         mockHttpEnrollee.selfDeclarations = mockSelfDeclarations;
-        const reasons = component.parseSelfDeclarations(mockHttpEnrollee);
+        const reasons = component.parseSelfDeclarations(mockHttpEnrollee, mockEnrolleeReviewStatus);
 
         expect(reasons.length).toEqual(1);
       });
