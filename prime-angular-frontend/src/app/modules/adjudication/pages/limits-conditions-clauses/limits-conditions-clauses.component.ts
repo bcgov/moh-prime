@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 import { Role } from '@auth/shared/enum/role.enum';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
@@ -18,7 +18,6 @@ export class LimitsConditionsClausesComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public columns: string[];
-  public enrollee: HttpEnrollee;
   public preview: string;
   public hasActions: boolean;
   public editorConfig: Record<string, string>;
@@ -46,7 +45,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      this.busy = this.adjudicationResource.updateAccessAgreementNote(this.enrollee.id, this.note.value)
+      this.busy = this.adjudicationResource.updateAccessAgreementNote(this.route.snapshot.params.id, this.note.value)
         .subscribe();
     }
   }
@@ -59,7 +58,10 @@ export class LimitsConditionsClausesComponent implements OnInit {
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
-    this.getEnrollee(this.route.snapshot.params.id);
+    this.busy = this.adjudicationResource.getAccessAgreementNote(this.route.snapshot.params.id)
+      .subscribe((accessAgreementNote: EnrolleeNote) => {
+        this.note.patchValue(accessAgreementNote?.note);
+      });
   }
 
   private initForm() {
@@ -76,15 +78,5 @@ export class LimitsConditionsClausesComponent implements OnInit {
         []
       ]
     });
-  }
-
-  private getEnrollee(enrolleeId: number) {
-    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
-      .subscribe((enrollee: HttpEnrollee) => {
-        this.enrollee = enrollee;
-        if (enrollee.accessAgreementNote) {
-          this.note.patchValue(this.enrollee.accessAgreementNote.note);
-        }
-      });
   }
 }

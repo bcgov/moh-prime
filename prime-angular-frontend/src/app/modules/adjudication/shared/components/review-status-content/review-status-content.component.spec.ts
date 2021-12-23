@@ -50,6 +50,11 @@ describe('ReviewStatusContentComponent', () => {
     question: "question",
     potentialMatchIds: [],
   };
+  const mockEnrolleeReviewStatus = {
+    enrolmentStatuses: mockEnrolmentStatuses,
+    selfDeclarationDocuments: [],
+    identificationDocuments: []
+  };
 
   const mockSelfDeclarations =
     [
@@ -226,7 +231,7 @@ describe('ReviewStatusContentComponent', () => {
       it('should return an array of reasons of same length as the selfDeclarations', () => {
 
         mockHttpEnrollee.selfDeclarations = mockSelfDeclarations;
-        const reasons = component.parseSelfDeclarations(mockHttpEnrollee);
+        const reasons = component.parseSelfDeclarations(mockHttpEnrollee, mockEnrolleeReviewStatus);
 
         expect(reasons.length).toEqual(1);
       });
@@ -235,7 +240,7 @@ describe('ReviewStatusContentComponent', () => {
     describe('with no selfDeclarations', () => {
       it('should return an empty array', () => {
         mockHttpEnrollee.selfDeclarations = [];
-        const reasons = component.parseSelfDeclarations(mockHttpEnrollee);
+        const reasons = component.parseSelfDeclarations(mockHttpEnrollee, mockEnrolleeReviewStatus);
 
         expect(reasons).toEqual([]);
       });
