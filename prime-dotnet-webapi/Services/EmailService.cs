@@ -27,7 +27,6 @@ namespace Prime.Services
         private readonly IEmailDocumentsService _emailDocumentService;
         private readonly IEmailRenderingService _emailRenderingService;
         private readonly ISmtpEmailClient _smtpEmailClient;
-        private readonly IEnrolleeService _enrolleeService;
 
         public EmailService(
             ApiDbContext context,
@@ -35,14 +34,12 @@ namespace Prime.Services
             IChesClient chesClient,
             IEmailDocumentsService emailDocumentService,
             IEmailRenderingService emailRenderingService,
-            IEnrolleeService enrolleeService,
             ISmtpEmailClient smtpEmailClient)
             : base(context, logger)
         {
             _chesClient = chesClient;
             _emailDocumentService = emailDocumentService;
             _emailRenderingService = emailRenderingService;
-            _enrolleeService = enrolleeService;
             _smtpEmailClient = smtpEmailClient;
         }
 
