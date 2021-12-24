@@ -87,13 +87,14 @@ export class AbsenceManagementPageComponent extends AbstractEnrolmentPage implem
 
   protected performSubmission(): Observable<NoContent> {
     this.formState.form.markAsPristine();
-    const payload = this.formState.json;
+    const { end, start } = this.formState.json;
+    const endOfDay = moment(end).endOf('day').toISOString();
 
-    if (moment().isAfter(payload.end)) {
+    if (moment().isAfter(endOfDay, 'date')) {
       const data: DialogOptions = {
         title: 'Publish Past Absence',
-        message: `Are you sure you want to publish an absence from ${this.formatDatePipe.transform(payload.start)}
-          - ${this.formatDatePipe.transform(payload.end)}. Once a past absence is created, it cannot be changed or removed.`,
+        message: `Are you sure you want to publish an absence from ${this.formatDatePipe.transform(start)}
+          - ${this.formatDatePipe.transform(endOfDay)}. Once a past absence is created, it cannot be changed or removed.`,
         actionText: 'Publish'
       };
 
@@ -103,7 +104,7 @@ export class AbsenceManagementPageComponent extends AbstractEnrolmentPage implem
           exhaustMap((result: any) => {
             if (result) {
               return this.enrolmentResource
-                .createEnrolleeAbsence(this.enrolmentService.enrolment.id, payload.start, payload.end);
+                .createEnrolleeAbsence(this.enrolmentService.enrolment.id, start, endOfDay);
             }
             return EMPTY;
           }),
@@ -111,7 +112,7 @@ export class AbsenceManagementPageComponent extends AbstractEnrolmentPage implem
     }
 
     return this.enrolmentResource
-      .createEnrolleeAbsence(this.enrolmentService.enrolment.id, payload.start, payload.end);
+      .createEnrolleeAbsence(this.enrolmentService.enrolment.id, start, endOfDay);
 
   }
 
