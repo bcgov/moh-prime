@@ -11,7 +11,7 @@ on:
       - 'develop'
       - 'test'
       - 'master'
-# test
+# test branch
 jobs:
   collect-frontend-coverage:
     defaults:
