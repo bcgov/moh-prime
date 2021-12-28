@@ -7,7 +7,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EmailNotificationListPageComponent } from './email-notification-list-page.component';
 
-fdescribe('EmailNotificationListPageComponent', () => {
+describe('EmailNotificationListPageComponent', () => {
   let component: EmailNotificationListPageComponent;
   let fixture: ComponentFixture<EmailNotificationListPageComponent>;
 
