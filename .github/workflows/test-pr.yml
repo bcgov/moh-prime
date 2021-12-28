@@ -3,8 +3,11 @@ on:
   push:
     branches: 
       - 'develop'
+      - 'fix-codeclimate'
+      - 'fix/fix-codeclimate'
   workflow_dispatch:
   pull_request:
+
 
 jobs:
   collect-frontend-coverage:
@@ -112,7 +115,7 @@ jobs:
       - name: Collect Backend Report
         run: |
           cd ../prime-dotnet-webapi
-          cc-test-reporter format-coverage -t lcov -o ../prime-dotnet-webapi-tests/coverage/backend.json ../prime-dotnet-webapi-tests/coverage/lcov.info -p /home/runner/work/moh-prime/moh-prime/prime-dotnet-webapi
+          cc-test-reporter format-coverage --debug -t lcov -o ../prime-dotnet-webapi-tests/coverage/backend.json ../prime-dotnet-webapi-tests/coverage/lcov.info -p /home/runner/work/moh-prime/moh-prime/prime-dotnet-webapi
 
       - name: Create backend coverage file artifact
         uses: actions/upload-artifact@v2
