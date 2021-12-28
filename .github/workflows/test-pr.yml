@@ -1,18 +1,10 @@
 name: CodeClimate-Checks
 on:
   push:
-    # branches: 
-    #   - 'develop'
-    #   - 'test'
-    #   - 'master'
-    #   - 'fix-codeclimate'
+    branches: 
+      - 'develop'
   workflow_dispatch:
   pull_request:
-    branches:
-      - 'develop'
-      - 'test'
-      - 'master'
-      - 'fix-codeclimate'
 
 jobs:
   collect-frontend-coverage:
@@ -61,7 +53,7 @@ jobs:
 
       - name: Collect Frontend Report
         run: |
-          cc-test-reporter format-coverage -t lcov -o coverage/frontend.json coverage/lcov.info
+          cc-test-reporter format-coverage --debug -t lcov -o coverage/frontend.json coverage/lcov.info
       
       - name: Create frontend coverage file artifact
         uses: actions/upload-artifact@v2
@@ -156,7 +148,7 @@ jobs:
       - name: Sum files
         run: |          
           cc-test-reporter sum-coverage -p 2 frontend.json backend.json
-          cc-test-reporter upload-coverage -i ./coverage/codeclimate.json
+          cc-test-reporter upload-coverage --debug -i ./coverage/codeclimate.json
       
       - name: Create summed report
         uses: actions/upload-artifact@v2
