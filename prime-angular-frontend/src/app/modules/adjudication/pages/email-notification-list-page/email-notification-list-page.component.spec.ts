@@ -7,7 +7,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EmailNotificationListPageComponent } from './email-notification-list-page.component';
 
-describe('EmailNotificationListPageComponent', () => {
+fdescribe('EmailNotificationListPageComponent', () => {
   let component: EmailNotificationListPageComponent;
   let fixture: ComponentFixture<EmailNotificationListPageComponent>;
 
@@ -37,7 +37,7 @@ describe('EmailNotificationListPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create test', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
