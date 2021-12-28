@@ -1,11 +1,11 @@
 name: CodeClimate-Checks
 on:
   push:
-    branches: 
-      - 'develop'
-      - 'test'
-      - 'master'
-      - 'fix-codeclimate'
+    # branches: 
+    #   - 'develop'
+    #   - 'test'
+    #   - 'master'
+    #   - 'fix-codeclimate'
   workflow_dispatch:
   pull_request:
     branches:
