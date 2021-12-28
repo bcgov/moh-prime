@@ -1,13 +1,13 @@
 name: CodeClimate-Checks
 on:
   push:
-    branches: 
+    branches-ignore: 
       - 'develop'
       - 'test'
       - 'master'
   workflow_dispatch:
   pull_request:
-    branches:
+    branches-ignore:
       - 'develop'
       - 'test'
       - 'master'
