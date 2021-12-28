@@ -5,13 +5,15 @@ on:
       - 'develop'
       - 'test'
       - 'master'
+      - 'fix-codeclimate'
   workflow_dispatch:
   pull_request:
     branches-ignore:
       - 'develop'
       - 'test'
       - 'master'
-# test
+      - 'fix-codeclimate'
+
 jobs:
   collect-frontend-coverage:
     defaults:
