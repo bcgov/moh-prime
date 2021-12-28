@@ -1,10 +1,12 @@
 name: CodeClimate-Checks
 on:
-  # push:
-  #   branches: 
-  #     - 'develop'
-  #     - 'test'
-  #     - 'master'
+
+  push:
+    # branches: 
+    #   - 'develop'
+    #   - 'test'
+    #   - 'master'
+    #   - 'fix-codeclimate'
   workflow_dispatch:
   pull_request:
     branches:
@@ -12,7 +14,7 @@ on:
       - 'test'
       - 'master'
       - 'fix-codeclimate'
-# test branch
+      
 jobs:
   collect-frontend-coverage:
     defaults:
