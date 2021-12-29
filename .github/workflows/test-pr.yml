@@ -2,7 +2,6 @@ name: CodeClimate-Checks
 on:
   push:
     branches:
-      - 'develop'
       - '!test'
       - '!master'
   workflow_dispatch:
