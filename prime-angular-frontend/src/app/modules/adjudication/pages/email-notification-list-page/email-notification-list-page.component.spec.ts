@@ -37,7 +37,7 @@ fdescribe('EmailNotificationListPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create test', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
