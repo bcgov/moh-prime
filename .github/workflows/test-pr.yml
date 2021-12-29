@@ -3,7 +3,7 @@ on:
   push:
   workflow_dispatch:
   pull_request:
-    branches-ignore:    
+    branches-ignore:
       - 'develop'
       - 'test'
       - 'master'
