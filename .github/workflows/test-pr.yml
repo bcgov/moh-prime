@@ -1,8 +1,14 @@
 name: CodeClimate-Checks
 on:
   push:
+    branches-ignore:
+      - 'test'
+      - 'master'
   workflow_dispatch:
   pull_request:
+      branches-ignore:
+      - 'test'
+      - 'master'
 
 jobs:
   collect-frontend-coverage:
