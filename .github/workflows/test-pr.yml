@@ -1,7 +1,7 @@
 name: CodeClimate-Checks
 on:
   push:
-    branches-ignore: 
+    branches: 
       - 'fix/fix-codeclimate3'
   workflow_dispatch:
   pull_request:
