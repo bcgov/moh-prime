@@ -7,6 +7,9 @@ output = csv.writer(sys.stdout);
 # Note that the columns in the CSV output need to match the invocation of the Postgres COPY command
 # Ultimately the `pnetTransactions` JSON fields need to be in the expected order 
 for row in json_as_dict['pnetTransactions']:
+    # Remove any leading and trailing whitespace
+    row['providerSoftwareId'] = row['providerSoftwareId'].strip()
+    row['providerSoftwareVer'] = row['providerSoftwareVer'].strip()
     output.writerow(row.values());
 
 # Let external process know whether there are more results according to JSON response
