@@ -472,7 +472,6 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-
             return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId));
         }
 
