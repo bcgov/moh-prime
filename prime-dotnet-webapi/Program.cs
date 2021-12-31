@@ -10,8 +10,6 @@ using System.IO;
 using System.Reflection;
 
 using Prime.Configuration.Environment;
-using Sentry.AspNetCore;
-using Sentry.Serilog;
 
 namespace Prime
 {
