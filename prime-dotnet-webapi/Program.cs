@@ -10,6 +10,8 @@ using System.IO;
 using System.Reflection;
 
 using Prime.Configuration.Environment;
+using Sentry.AspNetCore;
+using Sentry.Serilog;
 
 namespace Prime
 {
@@ -55,6 +57,7 @@ namespace Prime
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseSentry();
                     webBuilder.UseStartup<Startup>();
                 })
                 .UseSerilog();
@@ -99,6 +102,7 @@ namespace Prime
                     new JsonFormatter(),
                     $@"{path}/prime.json",
                     rollingInterval: RollingInterval.Day))
+                .WriteTo.Sentry()
                 .CreateLogger();
         }
     }
