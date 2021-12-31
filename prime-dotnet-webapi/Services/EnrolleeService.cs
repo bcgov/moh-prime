@@ -475,6 +475,8 @@ namespace Prime.Services
                 return;
             }
 
+            var currentSelfDeclarationDocuments = await GetSelfDeclarationDocumentsAsync(enrolleeId);
+
             foreach (var declaration in newDeclarations.Where(d => d.DocumentGuids != null))
             {
                 foreach (var documentGuid in declaration.DocumentGuids)
@@ -493,6 +495,19 @@ namespace Prime.Services
                         Filename = filename,
                         UploadedDate = DateTimeOffset.Now
                     });
+                }
+            }
+
+            foreach (var document in currentSelfDeclarationDocuments)
+            {
+                if (!newDeclarations.Select(nd => nd.SelfDeclarationTypeCode).Contains(document.SelfDeclarationTypeCode))
+                {
+                    var documentToUpdate = await _context.SelfDeclarationDocuments
+                        .Where(sdd => sdd.EnrolleeId == enrolleeId && sdd.DocumentGuid == document.DocumentGuid)
+                        .SingleOrDefaultAsync();
+
+                    documentToUpdate.IsHidden = true;
+                    await _context.SaveChangesAsync();
                 }
             }
         }
@@ -600,7 +615,7 @@ namespace Prime.Services
         public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId)
         {
             return await _context.SelfDeclarationDocuments
-                .Where(sdd => sdd.EnrolleeId == enrolleeId)
+                .Where(sdd => sdd.EnrolleeId == enrolleeId && !sdd.IsHidden)
                 .ProjectTo<SelfDeclarationDocumentViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
