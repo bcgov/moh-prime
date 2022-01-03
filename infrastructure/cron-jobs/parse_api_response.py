@@ -19,8 +19,10 @@ print('Converting JSON to CSV ...', file=sys.stderr)
 # Ultimately the `pnetTransactions` JSON fields need to be in the expected order 
 for row in json_as_dict['pnetTransactions']:
     # Remove any leading and trailing whitespace
-    row['providerSoftwareId'] = row['providerSoftwareId'].strip()
-    row['providerSoftwareVer'] = row['providerSoftwareVer'].strip()
+    if row['providerSoftwareId'] is not None:
+        row['providerSoftwareId'] = row['providerSoftwareId'].strip()
+    if row['providerSoftwareVer'] is not None:
+        row['providerSoftwareVer'] = row['providerSoftwareVer'].strip()
     output.writerow(row.values());
 
 isThereMoreData = json_as_dict['isThereMoreData']
