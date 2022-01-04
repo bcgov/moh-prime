@@ -345,16 +345,10 @@ namespace Prime.Services
 
         public async Task SendEnrolleeAbsenceNotificationEmailAsync(int enrolleeId, EnrolleeAbsenceViewModel absence, string email)
         {
-            var enrolleeDto = await _context.Enrollees
+            var viewModel = await _context.Enrollees
                 .Where(e => e.Id == enrolleeId)
-                .Select(e => new
-                {
-                    e.FirstName,
-                    e.LastName
-                })
-                .SingleOrDefaultAsync();
-
-            var viewModel = new EnrolleeAbsenceNotificationEmailViewModel(enrolleeDto.FirstName, enrolleeDto.LastName, absence.StartTimestamp, absence.EndTimestamp);
+                .Select(e => new EnrolleeAbsenceNotificationEmailViewModel(e.FirstName, e.LastName, absence.StartTimestamp, absence.EndTimestamp))
+                .SingleAsync();
 
             var renderedEmail = await _emailRenderingService.RenderEnrolleeAbsenceNotificationEmailAsync(email, viewModel);
             await Send(renderedEmail);
