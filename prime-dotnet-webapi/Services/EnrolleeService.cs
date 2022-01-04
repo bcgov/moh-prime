@@ -506,7 +506,7 @@ namespace Prime.Services
                         .Where(sdd => sdd.EnrolleeId == enrolleeId && sdd.DocumentGuid == document.DocumentGuid)
                         .SingleOrDefaultAsync();
 
-                    documentToUpdate.IsHidden = true;
+                    documentToUpdate.Hidden = true;
                     await _context.SaveChangesAsync();
                 }
             }
@@ -615,7 +615,7 @@ namespace Prime.Services
         public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId)
         {
             return await _context.SelfDeclarationDocuments
-                .Where(sdd => sdd.EnrolleeId == enrolleeId && !sdd.IsHidden)
+                .Where(sdd => sdd.EnrolleeId == enrolleeId && !sdd.Hidden)
                 .ProjectTo<SelfDeclarationDocumentViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }

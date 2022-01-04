@@ -9352,9 +9352,6 @@ namespace Prime.Migrations
                     b.Property<string>("Filename")
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsHidden")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("SelfDeclarationTypeCode")
                         .HasColumnType("integer");
 
@@ -10281,8 +10278,6 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
-
-                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
@@ -10290,8 +10285,6 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
-
-                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("Prime.Models.VerifiedAddress", b =>

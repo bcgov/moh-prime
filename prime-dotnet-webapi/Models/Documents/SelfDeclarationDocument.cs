@@ -15,6 +15,7 @@ namespace Prime.Models
 
         [JsonIgnore]
         public SelfDeclarationType SelfDeclarationType { get; set; }
-        public bool IsHidden { get; set; }
+
+        public bool Hidden { get; set; }
     }
 }
