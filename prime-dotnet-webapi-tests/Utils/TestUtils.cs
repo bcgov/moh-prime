@@ -55,9 +55,6 @@ namespace PrimeTests.Utils
             .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
             .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4));
 
-        public static Faker<Job> JobFaker = new Faker<Job>()
-            .RuleFor(j => j.Title, f => f.Random.Word());
-
         public static Faker<EnrolleeCareSetting> EnrolleeCareSettingFaker = new Faker<EnrolleeCareSetting>()
             .RuleFor(o => o.CareSettingCode, f => f.Random.Int(1, 2));
 
