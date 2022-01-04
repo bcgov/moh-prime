@@ -1,4 +1,8 @@
 <app-page>
+  <form [formGroup]="formState.form"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        autocomplete="off">
   <app-page-header>{{ title }}</app-page-header>
 
   <app-gis-enrolment-progress-indicator [inProgress]="true"></app-gis-enrolment-progress-indicator>
@@ -13,10 +17,6 @@
       </ng-container>
     </app-page-subheader2>
 
-    <form [formGroup]="formState.form"
-          (ngSubmit)="onSubmit()"
-          novalidate
-          autocomplete="off">
       <div class="row">
         <div class="col-12">
 
@@ -55,7 +55,7 @@
                   Your account is now locked due to too many failed login attempts. If you think this is a mistake
                   <ng-container *ngTemplateOutlet="contact"></ng-container>
                 </ng-container>
-                
+
                 <ng-template #oneMoreAttempt>
                   You have had multiple failed login attempts the next failed attempt will lock your account. If you need
                   assistance <ng-container *ngTemplateOutlet="contact"></ng-container>
@@ -65,16 +65,17 @@
           </app-alert>
 
           <ng-template #contact>
-            please contact Reg Admin at <a href="tel:12509529137">(250) 952-9137</a> or
-            <a href="mailto:HLTH.REGISTRIESADMIN@gov.bc.ca">HLTH.REGISTRIESADMIN@gov.bc.ca</a>.
+            please contact the HelpDesk at <a href="tel:12509521234">(250) 952-1234</a> or
+            <a href="mailto:HLTH.HELPDESK@gov.bc.ca">HLTH.HELPDESK@gov.bc.ca</a>.
           </ng-template>
         </ng-container>
       </div>
-    </form>
-  </app-page-section>
+    </app-page-section>
 
-  <app-page-footer [isInitialEnrolment]="true"
-                   [hasSecondaryAction]="true"
-                   (back)="onBack()"
-                   (save)="onSubmit()"></app-page-footer>
+    <app-page-footer [isInitialEnrolment]="true"
+                     [hasSecondaryAction]="true"
+                     buttonType="submit"
+                     (back)="onBack()"
+                     (save)="onSubmit()"></app-page-footer>
+  </form>
 </app-page>
