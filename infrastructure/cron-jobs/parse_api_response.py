@@ -15,6 +15,7 @@ except JSONDecodeError:
 output = csv.writer(sys.stdout);
 # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process 
 print('Converting JSON to CSV ...', file=sys.stderr)
+num_pnet_logs = 0
 # Note that the columns in the CSV output need to match the invocation of the Postgres COPY command
 # Ultimately the `pnetTransactions` JSON fields need to be in the expected order 
 for row in json_as_dict['pnetTransactions']:
@@ -24,6 +25,9 @@ for row in json_as_dict['pnetTransactions']:
     if row['providerSoftwareVer'] is not None:
         row['providerSoftwareVer'] = row['providerSoftwareVer'].strip()
     output.writerow(row.values());
+    num_pnet_logs += 1
+# Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process 
+print(f'{num_pnet_logs} PharmanetTransactionLog(s) in JSON', file=sys.stderr)
 
 isThereMoreData = json_as_dict['isThereMoreData']
 # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process 
