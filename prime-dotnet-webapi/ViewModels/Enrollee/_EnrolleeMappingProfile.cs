@@ -41,7 +41,11 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<EnrolleeAbsence, EnrolleeAbsenceViewModel>()
                 .ForMember(dest => dest.StartTimestamp, opt => opt.MapFrom(src => src.StartTimestamp.ToLocalTime()))
-                .ForMember(dest => dest.EndTimestamp, opt => opt.MapFrom(src => src.EndTimestamp.HasValue ? (DateTime?)src.EndTimestamp.Value.ToLocalTime() : null));
+                .ForMember(dest => dest.EndTimestamp, opt =>
+                {
+                    opt.PreCondition(src => src.EndTimestamp != null);
+                    opt.MapFrom(src => src.EndTimestamp.Value.ToLocalTime());
+                });
 
             CreateMap<Enrollee, AgreementEngineDto>()
                 .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
