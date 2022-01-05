@@ -498,16 +498,15 @@ namespace Prime.Services
                 }
             }
 
-            foreach (var document in currentSelfDeclarationDocuments)
+            foreach (var currentDocument in currentSelfDeclarationDocuments)
             {
-                if (!newDeclarations.Select(nd => nd.SelfDeclarationTypeCode).Contains(document.SelfDeclarationTypeCode))
+                if (!newDeclarations.Any(newDocument => newDocument.SelfDeclarationTypeCode == currentDocument.SelfDeclarationTypeCode))
                 {
                     var documentToUpdate = await _context.SelfDeclarationDocuments
-                        .Where(sdd => sdd.EnrolleeId == enrolleeId && sdd.DocumentGuid == document.DocumentGuid)
+                        .Where(sdd => sdd.EnrolleeId == enrolleeId && sdd.DocumentGuid == currentDocument.DocumentGuid)
                         .SingleOrDefaultAsync();
 
                     documentToUpdate.Hidden = true;
-                    await _context.SaveChangesAsync();
                 }
             }
         }

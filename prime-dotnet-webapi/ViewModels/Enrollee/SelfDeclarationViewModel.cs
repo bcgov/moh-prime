@@ -11,6 +11,5 @@ namespace Prime.ViewModels
         public int SelfDeclarationTypeCode { get; set; }
         public string SelfDeclarationDetails { get; set; }
         public IEnumerable<Guid> DocumentGuids { get; set; }
-        public bool IsHidden { get; set; }
     }
 }
