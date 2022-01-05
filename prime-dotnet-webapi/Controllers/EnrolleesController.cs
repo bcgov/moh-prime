@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 using Prime.Configuration.Auth;
 using Prime.Models;
@@ -28,20 +29,23 @@ namespace Prime.Controllers
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
         private readonly IPlrProviderService _plrProviderService;
+        private readonly IMapper _mapper;
 
         public EnrolleesController(
-            IEnrolleeService enrolleeService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
+            IEnrolleeService enrolleeService,
+            IMapper mapper,
             IPlrProviderService plrProviderService,
             IDocumentService documentService)
         {
-            _enrolleeService = enrolleeService;
             _adminService = adminService;
             _businessEventService = businessEventService;
-            _emailService = emailService;
             _documentService = documentService;
+            _emailService = emailService;
+            _enrolleeService = enrolleeService;
+            _mapper = mapper;
             _plrProviderService = plrProviderService;
         }
 
@@ -473,7 +477,9 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId, getAll));
+            var selfDeclarationDocuments = await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId, getAll);
+
+            return Ok(_mapper.Map<IEnumerable<SelfDeclarationDocumentViewModel>>(selfDeclarationDocuments));
         }
 
         // POST: api/Enrollees/5/absences
