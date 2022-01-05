@@ -221,14 +221,10 @@ namespace Prime.Services
 
             var now = DateTime.UtcNow;
 
-            var absentEnrolleesIds = await _context.EnrolleeAbsences
-                .Where(ea => ea.StartTimestamp <= now
-                    && (ea.EndTimestamp >= now || !ea.EndTimestamp.HasValue))
-                .Select(ea => ea.EnrolleeId)
-                .ToListAsync();
-
             var enrollees = await _context.Enrollees
-                .Where(e => e.ExpiryDate != null && !absentEnrolleesIds.Contains(e.Id))
+                .Where(e => e.ExpiryDate.HasValue
+                    && !e.EnrolleeAbsences.Any(ea => ea.StartTimestamp <= now
+                        && (ea.EndTimestamp >= now || ea.EndTimestamp == null)))
                 .Select(e => new
                 {
                     e.FirstName,
