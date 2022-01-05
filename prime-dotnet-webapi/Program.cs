@@ -55,6 +55,7 @@ namespace Prime
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    // This uses the SENTRY_DSN environment variable without injection
                     webBuilder.UseSentry();
                     webBuilder.UseStartup<Startup>();
                 })
