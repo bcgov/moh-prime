@@ -612,10 +612,11 @@ namespace Prime.Services
             return answered.Concat(unAnswered);
         }
 
-        public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId)
+        public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId, bool getAll = true)
         {
             return await _context.SelfDeclarationDocuments
-                .Where(sdd => sdd.EnrolleeId == enrolleeId && !sdd.Hidden)
+                .Where(sdd => sdd.EnrolleeId == enrolleeId)
+                .If(!getAll, q => q.Where(sdd => !sdd.Hidden))
                 .ProjectTo<SelfDeclarationDocumentViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }

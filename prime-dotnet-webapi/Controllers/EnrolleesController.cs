@@ -455,12 +455,13 @@ namespace Prime.Controllers
         /// Gets an Enrollee's Self Declaration Documents.
         /// </summary>
         /// <param name="enrolleeId"></param>
+        /// <param name="getAll"></param>
         [HttpGet("{enrolleeId}/self-declarations/documents", Name = nameof(GetSelfDeclarationDocuments))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<SelfDeclarationDocumentViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetSelfDeclarationDocuments(int enrolleeId)
+        public async Task<ActionResult> GetSelfDeclarationDocuments(int enrolleeId, bool getAll = true)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -472,7 +473,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId));
+            return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId, getAll));
         }
 
         // POST: api/Enrollees/5/absences

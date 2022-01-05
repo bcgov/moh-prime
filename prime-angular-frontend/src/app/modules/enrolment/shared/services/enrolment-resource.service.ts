@@ -17,7 +17,6 @@ import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
-import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { EnrolmentStatusAdmin } from '@shared/models/enrolment-status-admin.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
@@ -44,6 +43,7 @@ export class EnrolmentResource {
   ) { }
 
   public enrollee(userId: string): Observable<Enrolment> {
+    const selfDeclarationDocumentsParams = this.apiResourceUtilsService.makeHttpParams({ getAll: false });
     return this.apiResource.get<HttpEnrollee>(`enrollees/${userId}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
@@ -64,7 +64,7 @@ export class EnrolmentResource {
               .pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
             selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrollee.id}/self-declarations`)
               .pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
-            selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrollee.id}/self-declarations/documents`)
+            selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrollee.id}/self-declarations/documents`, selfDeclarationDocumentsParams)
               .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result))
           })
             .pipe(
