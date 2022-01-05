@@ -58,7 +58,7 @@ export interface HttpEnrollee extends Enrollee {
   confirmed: boolean;
   linkedEnrolleeId: number;
   possiblePaperEnrolmentMatch: boolean;
-  // This is needed for legacy enrolments
+  // This is needed for profile snapshot in some older enrolments
   jobs: Job[];
 }
 
@@ -113,7 +113,7 @@ export interface Enrolment {
   confirmed: boolean;
   linkedEnrolleeId: number;
   possiblePaperEnrolmentMatch: boolean;
-  // This is needed for legacy enrolments
+  // This is needed for profile snapshot in some older enrolments
   jobs: Job[];
 }
 
