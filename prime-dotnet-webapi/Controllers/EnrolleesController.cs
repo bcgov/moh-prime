@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
 
 using Prime.Configuration.Auth;
 using Prime.Models;
@@ -29,14 +28,12 @@ namespace Prime.Controllers
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
         private readonly IPlrProviderService _plrProviderService;
-        private readonly IMapper _mapper;
 
         public EnrolleesController(
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
             IEnrolleeService enrolleeService,
-            IMapper mapper,
             IPlrProviderService plrProviderService,
             IDocumentService documentService)
         {
@@ -45,7 +42,6 @@ namespace Prime.Controllers
             _documentService = documentService;
             _emailService = emailService;
             _enrolleeService = enrolleeService;
-            _mapper = mapper;
             _plrProviderService = plrProviderService;
         }
 
