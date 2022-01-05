@@ -229,6 +229,7 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress)
+                .Include(e => e.SelfDeclarationDocuments)
                 .SingleAsync(e => e.Id == enrolleeId);
 
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
@@ -264,7 +265,7 @@ namespace Prime.Services
             }
 
             // This is the temporary way we are adding self declaration documents until this gets refactored.
-            await CreateSelfDeclarationDocuments(enrolleeId, updateModel.SelfDeclarations);
+            await CreateSelfDeclarationDocuments(enrolleeId, updateModel.SelfDeclarations, enrollee.SelfDeclarationDocuments);
 
             try
             {
@@ -468,16 +469,12 @@ namespace Prime.Services
             }
         }
 
-        private async Task CreateSelfDeclarationDocuments(int enrolleeId, ICollection<SelfDeclaration> newDeclarations)
+        private async Task CreateSelfDeclarationDocuments(int enrolleeId, ICollection<SelfDeclaration> newDeclarations, IEnumerable<SelfDeclarationDocument> currentSelfDeclarationDocuments)
         {
             if (newDeclarations == null)
             {
                 return;
             }
-
-            var currentSelfDeclarationDocuments = await _context.SelfDeclarationDocuments
-                .Where(document => document.EnrolleeId == enrolleeId)
-                .ToListAsync();
 
             foreach (var declaration in newDeclarations.Where(d => d.DocumentGuids != null))
             {
