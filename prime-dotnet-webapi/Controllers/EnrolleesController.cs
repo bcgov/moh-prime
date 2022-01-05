@@ -643,12 +643,12 @@ namespace Prime.Controllers
                 return BadRequest("The email provided is not valid.");
             }
 
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            if (enrollee == null)
+            var permissionsRecord = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (permissionsRecord == null)
             {
                 return NotFound($"No enrollee exists with id: {enrolleeId}");
             }
-            if (!enrollee.PermissionsRecord().AccessableBy(User))
+            if (!permissionsRecord.AccessableBy(User))
             {
                 return Forbid();
             }
