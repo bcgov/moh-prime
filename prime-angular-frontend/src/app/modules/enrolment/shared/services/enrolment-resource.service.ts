@@ -43,7 +43,7 @@ export class EnrolmentResource {
   ) { }
 
   public enrollee(userId: string): Observable<Enrolment> {
-    const selfDeclarationDocumentsParams = this.apiResourceUtilsService.makeHttpParams({ getAll: false });
+    const selfDeclarationDocumentsParams = this.apiResourceUtilsService.makeHttpParams({ includeHidden: false });
     return this.apiResource.get<HttpEnrollee>(`enrollees/${userId}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
