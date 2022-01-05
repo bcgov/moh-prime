@@ -317,7 +317,8 @@ namespace Prime.Services
 
             var emailLogs = await _context.EmailLogs
                 .Where(predicate)
-                .OrderBy(e => e.UpdatedTimeStamp)
+                .OrderBy(e => e.UpdateCount)
+                    .ThenBy(e => e.UpdatedTimeStamp)
                 .Take(limit)
                 .ToListAsync();
 
@@ -328,6 +329,7 @@ namespace Prime.Services
                 {
                     email.LatestStatus = status;
                 }
+                email.UpdateCount++;
             }
             await _context.SaveChangesAsync();
 
