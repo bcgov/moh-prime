@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { from, forkJoin, Observable, of } from 'rxjs';
-import { catchError, map, tap, exhaustMap, mergeMap } from 'rxjs/operators';
+import { forkJoin, Observable, of } from 'rxjs';
+import { catchError, map, tap, exhaustMap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { Address, AddressType, addressTypes } from '@lib/models/address.model';
