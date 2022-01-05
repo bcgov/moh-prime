@@ -477,9 +477,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var selfDeclarationDocuments = await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId, getAll);
-
-            return Ok(_mapper.Map<IEnumerable<SelfDeclarationDocumentViewModel>>(selfDeclarationDocuments));
+            return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId, getAll));
         }
 
         // POST: api/Enrollees/5/absences
