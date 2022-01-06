@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.Models.Plr;
 using Prime.ViewModels.Plr;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -61,9 +62,9 @@ namespace Prime.Services
             return existingPlrProvider == null ? dataObject.Id : existingPlrProvider.Id;
         }
 
-        public async Task<IEnumerable<PlrViewModel>> GetMatchingPlrDataAsync(IEnumerable<string> collegeIds)
+        public async Task<IEnumerable<PlrViewModel>> GetMatchingPlrDataAsync(IEnumerable<CertificationViewModel> certifications)
         {
-            if (collegeIds == null || !collegeIds.Any())
+            if (certifications == null || !certifications.Any())
             {
                 return Enumerable.Empty<PlrViewModel>();
             }
@@ -71,15 +72,24 @@ namespace Prime.Services
             IQueryable<PlrRoleType> plrRoleTypes = _context.Set<PlrRoleType>();
             IQueryable<PlrStatusReason> plrStatusReasons = _context.Set<PlrStatusReason>();
 
-            var plr = await _context.PlrProviders
-                .AsNoTracking()
-                .Where(p => collegeIds.Contains(p.CollegeId))
-                .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
-                .ToListAsync();
+            var plrProviders = new List<PlrViewModel>();
+            foreach (var cert in certifications)
+            {
+                var provider = await _context.PlrProviders
+                    .AsNoTracking()
+                    .Where(p => _context.CollegeForPlrRoleTypes.Where(rt2c => rt2c.RoleTypeCode == p.ProviderRoleType).Select(rt2c => rt2c.CollegeId).Contains(cert.CollegeCode)
+                        && p.CollegeId == cert.LicenseNumber)
+                    .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
+                    .SingleOrDefaultAsync();
+                if (provider != null)
+                {
+                    plrProviders.Add(provider);
+                }
+            }
 
             // If a PlrViewModel has ExpertiseCodes, translate the codes to human-readable text
             // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manually before return
-            return plr.Select(p =>
+            return plrProviders.Select(p =>
                 {
                     p.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e =>
                         (p.ExpertiseCode != null && p.ExpertiseCode.Contains(e.Code))).Select(e => e.Name));
