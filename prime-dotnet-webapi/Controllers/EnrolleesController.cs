@@ -31,18 +31,18 @@ namespace Prime.Controllers
         private readonly IPlrProviderService _plrProviderService;
 
         public EnrolleesController(
-            IEnrolleeService enrolleeService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
+            IEnrolleeService enrolleeService,
             IPlrProviderService plrProviderService,
             IDocumentService documentService)
         {
-            _enrolleeService = enrolleeService;
             _adminService = adminService;
             _businessEventService = businessEventService;
-            _emailService = emailService;
             _documentService = documentService;
+            _emailService = emailService;
+            _enrolleeService = enrolleeService;
             _plrProviderService = plrProviderService;
         }
 
@@ -456,12 +456,13 @@ namespace Prime.Controllers
         /// Gets an Enrollee's Self Declaration Documents.
         /// </summary>
         /// <param name="enrolleeId"></param>
+        /// <param name="includeHidden"></param>
         [HttpGet("{enrolleeId}/self-declarations/documents", Name = nameof(GetSelfDeclarationDocuments))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<SelfDeclarationDocumentViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetSelfDeclarationDocuments(int enrolleeId)
+        public async Task<ActionResult> GetSelfDeclarationDocuments(int enrolleeId, bool includeHidden = true)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -473,7 +474,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId));
+            return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId, includeHidden));
         }
 
         // POST: api/Enrollees/5/absences

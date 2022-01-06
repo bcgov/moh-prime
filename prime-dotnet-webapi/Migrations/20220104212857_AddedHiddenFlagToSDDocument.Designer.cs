@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220104212857_AddedHiddenFlagToSDDocument")]
+    partial class AddedHiddenFlagToSDDocument
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3416,9 +3418,6 @@ namespace Prime.Migrations
                     b.Property<string>("Subject")
                         .HasColumnType("text");
 
-                    b.Property<int>("UpdateCount")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -3663,17 +3662,6 @@ namespace Prime.Migrations
                             Template = "Dear @Model.EnrolleeName, <br> <br> Your PharmaNet Terms of Access must be accepted in PRIME before your PRIME enrolment is complete. Please log in to PRIME and accept your Terms of Access now. You can access PRIME here <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>. <br> <br> Thank you.",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EmailType = 19,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "To Whom it may concern, <br> <br> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ratione placeat necessitatibus adipisci dicta doloribus. Ratione inventore aperiam nobis consequuntur ab, cum, numquam praesentium magnam commodi quasi in voluptates enim repellat!",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -3790,7 +3778,7 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("EndTimestamp")
+                    b.Property<DateTime>("EndTimestamp")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("EnrolleeId")

@@ -29,7 +29,7 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges {
   constructor(
     private enrolmentResource: EnrolmentResource,
     private utilsService: UtilsService
-  ) {}
+  ) { }
 
   public downloadSelfDeclarationDocument(documentId: number): void {
     this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrolment.id, documentId)
@@ -44,8 +44,6 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges {
   }
 
   private createSelfDeclarationComposites() {
-
-
     return this.enrolment.selfDeclarations
       .map((selfDeclaration: SelfDeclaration) => {
         const selfDeclarationTypeCode = selfDeclaration.selfDeclarationTypeCode;
