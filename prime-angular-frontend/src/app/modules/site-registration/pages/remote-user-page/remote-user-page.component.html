@@ -55,31 +55,14 @@
       </div>
 
       <div class="row">
-        <div class="col col-sm-10 py-3"
-             formArrayName="remoteUserCertifications">
-
-          <ng-container *ngFor="let certificate of remoteUserCertifications.controls; let i = index;"
-                        [formGroupName]="i">
-
-            <app-college-certification-form [condensed]="true"
-                                            [form]="certificate"
-                                            [index]="i"
-                                            [total]="remoteUserCertifications.controls.length"
-                                            [selectedColleges]="selectedCollegeCodes"
-                                            [collegeFilterPredicate]="collegeFilterPredicate()"
-                                            [licenceFilterPredicate]="licenceFilterPredicate()"
-                                            (remove)="removeCertification($event)"></app-college-certification-form>
-
-          </ng-container>
-
-          <button mat-button
-                  type="button"
-                  color="primary"
-                  (click)="addCertification()">
-            <mat-icon>add</mat-icon>
-            Add Additional Licences
-          </button>
-
+        <div class="col col-sm-10 py-3">
+          <app-college-certification-form [condensed]="true"
+                                          [form]="remoteUserCertification"
+                                          [index]="0"
+                                          [total]="1"
+                                          [collegeFilterPredicate]="collegeFilterPredicate()"
+                                          [licenceFilterPredicate]="licenceFilterPredicate()">
+          </app-college-certification-form>
         </div>
       </div>
 

@@ -36,6 +36,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public hasNoRemoteUserError: boolean;
   public hasNoEmailError: boolean;
   public SiteRoutes = SiteRoutes;
+  public addedUpdatedRemoteUser: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -55,24 +56,18 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   }
 
   public getRemoteUserProperties(remoteUser: FormGroup): KeyValue<string, string>[] {
-    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
-
-    const collegeLicence = (remoteUserCertifications.length > 1)
-      ? 'More than one College licence'
-      : (remoteUserCertifications.length === 0)
-        ? 'No College licence'
-        : remoteUserCertifications.value[0].licenseNumber;
-
+    const remoteUserCertification = remoteUser.controls?.remoteUserCertification as FormGroup;
     return [
       {
         key: 'College Licence',
-        value: collegeLicence
+        value: remoteUserCertification.value.licenseNumber
       }
     ];
   }
 
   public onRemove(index: number) {
     this.formState.remoteUsers.removeAt(index);
+    this.addedUpdatedRemoteUser = false;
   }
 
   public onEdit(index: number) {
@@ -103,21 +98,24 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     // Inform the parent not to patch the form as there are outstanding changes
     // to the remote users that need to be persisted
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
+    this.addedUpdatedRemoteUser = fromRemoteUser;
 
     // Remove query param from URL without refreshing
     this.routeUtils.removeQueryParams({ fromRemoteUser: null });
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
     // TODO is this needed?
     this.formState.form.markAsPristine();
+
+    // Needed if returning from Add/Update Remote User
+    this.setHasRemoteUsersToggleState();
   }
 
   protected initForm() {
     this.formState.remoteUsers.valueChanges
       .pipe(untilDestroyed(this))
       .subscribe((remoteUsers: RemoteUser[]) => {
-        (remoteUsers.length)
-          ? this.formState.hasRemoteUsers.disable({ emitEvent: false })
-          : this.formState.hasRemoteUsers.enable({ emitEvent: false });
+        // Executed when removing Remote Users
+        this.setHasRemoteUsersToggleState();
       });
 
     this.formState.hasRemoteUsers.valueChanges
@@ -129,9 +127,16 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
 
         this.hasNoRemoteUserError = false;
         this.formState.remoteUsers.updateValueAndValidity({ emitEvent: false });
+        this.addedUpdatedRemoteUser = false;
       });
 
     this.patchForm();
+  }
+
+  private setHasRemoteUsersToggleState(): void {
+    this.formState.remoteUsers.length ?
+      this.formState.hasRemoteUsers.disable({ emitEvent: false })
+      : this.formState.hasRemoteUsers.enable({ emitEvent: false });
   }
 
   protected onSubmitFormIsValid(): void {
