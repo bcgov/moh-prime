@@ -220,7 +220,12 @@ namespace Prime.Services
         {
             var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
 
+            var now = DateTime.UtcNow;
+
             var enrollees = await _context.Enrollees
+                .Where(e => e.ExpiryDate.HasValue
+                    && !e.EnrolleeAbsences.Any(ea => ea.StartTimestamp <= now
+                        && (ea.EndTimestamp >= now || ea.EndTimestamp == null)))
                 .Select(e => new
                 {
                     e.FirstName,
@@ -228,13 +233,13 @@ namespace Prime.Services
                     e.Email,
                     e.ExpiryDate
                 })
-                .Where(e => e.ExpiryDate != null)
                 .DecompileAsync()
                 .ToListAsync();
 
             foreach (var enrollee in enrollees)
             {
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
+
                 if (reminderEmailsIntervals.Contains(expiryDays))
                 {
                     var email = await _emailRenderingService.RenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
@@ -273,8 +278,6 @@ namespace Prime.Services
                 }
             }
         }
-
-
 
         public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
         {
