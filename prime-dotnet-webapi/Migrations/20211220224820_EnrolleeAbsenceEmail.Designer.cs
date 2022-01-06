@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211220224820_EnrolleeAbsenceEmail")]
+    partial class EnrolleeAbsenceEmail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3415,9 +3417,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("Subject")
                         .HasColumnType("text");
-
-                    b.Property<int>("UpdateCount")
-                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -9366,9 +9365,6 @@ namespace Prime.Migrations
                     b.Property<string>("Filename")
                         .HasColumnType("text");
 
-                    b.Property<bool>("Hidden")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("SelfDeclarationTypeCode")
                         .HasColumnType("integer");
 
@@ -9898,7 +9894,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 17,
-                            Name = "No address from BC Services Card. Enrollee entered address."
+                            Name = "No address from BCSC. Enrollee entered address."
                         },
                         new
                         {
