@@ -1041,7 +1041,7 @@ namespace Prime.Services
             {
                 EnrolleeId = enrolleeId,
                 StartTimestamp = createModel.StartTimestamp.ToUniversalTime(),
-                EndTimestamp = createModel.EndTimestamp.ToUniversalTime()
+                EndTimestamp = createModel.EndTimestamp?.ToUniversalTime()
             };
 
             _context.EnrolleeAbsences.Add(absence);
@@ -1056,7 +1056,7 @@ namespace Prime.Services
             return await _context.EnrolleeAbsences
                 .Where(ea => ea.EnrolleeId == enrolleeId)
                 .If(!includesPast,
-                    absences => absences.Where(ea => rightNow <= ea.EndTimestamp)
+                    absences => absences.Where(ea => rightNow <= ea.EndTimestamp || ea.EndTimestamp == null)
                 )
                 .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -1068,7 +1068,7 @@ namespace Prime.Services
             return await _context.EnrolleeAbsences
                 .Where(ea => ea.EnrolleeId == enrolleeId
                     && ea.StartTimestamp <= rightNow
-                    && rightNow <= ea.EndTimestamp)
+                    && (rightNow <= ea.EndTimestamp || ea.EndTimestamp == null))
                 .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
@@ -1079,7 +1079,7 @@ namespace Prime.Services
             var absence = await _context.EnrolleeAbsences
                 .SingleOrDefaultAsync(ea => ea.EnrolleeId == enrolleeId
                     && ea.StartTimestamp <= rightNow
-                    && rightNow <= ea.EndTimestamp);
+                    && (rightNow <= ea.EndTimestamp || ea.EndTimestamp == null));
 
             if (absence != null)
             {

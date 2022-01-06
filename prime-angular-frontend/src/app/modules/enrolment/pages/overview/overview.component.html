@@ -27,7 +27,7 @@
       <ng-container #alertContent
                     class="alert-content">
         You are currently reported absent from
-        <strong>{{enrolleeAbsence.startTimestamp | formatDate}} - {{enrolleeAbsence.endTimestamp | formatDate}}</strong>,
+        <strong>{{enrolleeAbsence.startTimestamp | formatDate}}{{enrolleeAbsence.endTimestamp ? ' - ' + (enrolleeAbsence.endTimestamp | formatDate) : ''}}</strong>,
         click the link below if you would like to end your absence.
         <br/>
         <a [routerLink]="" (click)="routeTo(EnrolmentRoutes.ABSENCE_MANAGEMENT)">Absence Management</a>
