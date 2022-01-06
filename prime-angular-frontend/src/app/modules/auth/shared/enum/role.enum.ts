@@ -6,6 +6,7 @@ export enum Role {
 
   PHSA_LABTECH = 'phsa_eforms_labtech',
   PHSA_IMMUNIZER = 'phsa_eforms_immunizer_covid19',
+  PHSA_EFORMS_SAT = 'phsa_eforms_sat',
 
   // Feature Flags
   FEATURE_VC_ISSUANCE = 'feature_vc_issuance',
