@@ -12,6 +12,7 @@ using Prime.HttpClients.Mail.ChesApiDefinitions;
 using Prime.Models;
 using Prime.Services.EmailInternal;
 using Prime.ViewModels.Emails;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -345,6 +346,17 @@ namespace Prime.Services
 
             var email = await _emailRenderingService.RenderPaperEnrolleeSubmissionEmail(enrolleeDto.Email, new PaperEnrolleeSubmissionEmailViewModel(enrolleeDto.GPID));
             await Send(email);
+        }
+
+        public async Task SendEnrolleeAbsenceNotificationEmailAsync(int enrolleeId, EnrolleeAbsenceViewModel absence, string email)
+        {
+            var viewModel = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => new EnrolleeAbsenceNotificationEmailViewModel(e.FirstName, e.LastName, absence.StartTimestamp, absence.EndTimestamp))
+                .SingleAsync();
+
+            var renderedEmail = await _emailRenderingService.RenderEnrolleeAbsenceNotificationEmailAsync(email, viewModel);
+            await Send(renderedEmail);
         }
 
         private async Task Send(Email email)

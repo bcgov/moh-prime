@@ -43,7 +43,7 @@
 
       <div *ngIf="absence"
             class="mb-4 align-self-center">
-            <strong>Enrollee Absent:</strong> {{ absence.startTimestamp | formatDate }} - {{absence.endTimestamp | formatDate}}
+            <strong>Enrollee Absent:</strong> {{ absence.startTimestamp | formatDate }}{{absence.endTimestamp ? ' - ' + (absence.endTimestamp | formatDate) : ''}}
       </div>
     </span>
     <span>

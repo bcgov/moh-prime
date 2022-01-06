@@ -418,6 +418,21 @@ export class EnrolmentResource {
       );
   }
 
+  public sendEnrolleeAbsenceEmail(enrolleeId: number, email: string): Observable<NoContent> {
+    const payload = { data: email };
+    return this.apiResource
+      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/absences/email`, payload)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openErrorToast('Email has been sent')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Email could not be sent');
+          this.logger.error('[Enrolment] EnrolmentResource::sendEnrolleeAbsenceEmail error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getEnrolleeAbsences(enrolleeId: number): Observable<EnrolleeAbsence[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ includesPast: false });
     return this.apiResource
