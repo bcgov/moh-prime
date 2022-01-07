@@ -50,9 +50,6 @@ namespace Prime
         }
 
         public DbSet<ClientLog> ClientLogs { get; set; }
-
-        // Enrollee Jobs have been migrated onto OboSites, but we are not dropping the old table for the time being
-        public DbSet<Job> Jobs { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Address> Addresses { get; set; }

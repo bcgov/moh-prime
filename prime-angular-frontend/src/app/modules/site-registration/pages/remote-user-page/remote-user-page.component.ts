@@ -76,30 +76,8 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * @description
    * Remote user certifications specific to the local form.
    */
-  public get remoteUserCertifications(): FormArray {
-    return this.form.get('remoteUserCertifications') as FormArray;
-  }
-
-  public get selectedCollegeCodes(): number[] {
-    return this.remoteUserCertifications.value
-      .map((certification: RemoteUserCertification) => +certification.collegeCode);
-  }
-
-  public addCertification() {
-    const newRemoteUserCertification = this.formState.remoteUserCertificationFormGroup();
-    this.remoteUserCertifications.push(newRemoteUserCertification);
-  }
-
-  /**
-   * @description
-   * Removes a certification from the list in response to an
-   * emitted event from college certifications. Does not allow
-   * the list of certifications to empty.
-   *
-   * @param index to be removed
-   */
-  public removeCertification(index: number) {
-    this.remoteUserCertifications.removeAt(index);
+  public get remoteUserCertification(): FormGroup {
+    return this.form.get('remoteUserCertification') as FormGroup;
   }
 
   public onBack() {
@@ -146,21 +124,12 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
     // Create a local form group for creating or updating remote users
     this.form = this.formState.createEmptyRemoteUserFormAndPatch(remoteUser);
-
-    // Must always have at least one certification
-    if (!this.remoteUserCertifications.length) {
-      this.addCertification();
-    }
   }
 
   protected checkValidity(): boolean {
     // Pass the local form for validation and submission instead
     // of using the default form from the form state
     return super.checkValidity(this.form);
-  }
-
-  protected onSubmitFormIsValid(): void {
-    this.removeIncompleteCertifications(true);
   }
 
   protected performSubmission(): NoContent {
@@ -171,17 +140,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
     if (this.remoteUserIndex !== 'new') {
       const remoteUserFormGroup = remoteUsersFormArray.at(+this.remoteUserIndex);
-      const certificationFormArray = remoteUserFormGroup.get('remoteUserCertifications') as FormArray;
-
-      // Changes in the amount of certificates requires adjusting the number of
-      // certificates in the parent, which is not handled automatically
-      if (this.remoteUserCertifications.length !== certificationFormArray.length) {
-        certificationFormArray.clear();
-
-        Object.keys(this.remoteUserCertifications.controls)
-          .map((_) => this.formState.remoteUserCertificationFormGroup())
-          .forEach((certification: FormGroup) => certificationFormArray.push(certification));
-      }
 
       // Replace the updated remote user in the parent form for submission
       remoteUserFormGroup.reset(this.form.getRawValue());
@@ -198,26 +156,5 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected afterSubmitIsSuccessful(): void {
     // Inform the remote users view not to patch the form, otherwise updates will be lost
     this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
-  }
-
-  /**
-   * @description
-   * Removes incomplete certifications from the list in preparation
-   * for submission, and allows for an empty list of certifications.
-   */
-  private removeIncompleteCertifications(noEmptyCert: boolean = false) {
-    this.remoteUserCertifications.controls
-      .forEach((control: FormGroup, index: number) => {
-        // Remove if college code is "None" or the group is invalid
-        if (!control.get('collegeCode').value || control.invalid) {
-          this.removeCertification(index);
-        }
-      });
-
-    // Always have a single certification available, and it prevents
-    // the page from jumping too much when routing
-    if (!noEmptyCert && !this.remoteUserCertifications.controls.length) {
-      this.addCertification();
-    }
   }
 }

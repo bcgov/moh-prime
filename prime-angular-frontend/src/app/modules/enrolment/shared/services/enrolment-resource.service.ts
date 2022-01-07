@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { from, forkJoin, Observable, of } from 'rxjs';
-import { catchError, map, tap, exhaustMap, mergeMap } from 'rxjs/operators';
+import { forkJoin, Observable, of } from 'rxjs';
+import { catchError, map, tap, exhaustMap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { Address, AddressType, addressTypes } from '@lib/models/address.model';
@@ -413,6 +413,21 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee Absence could not be removed.');
           this.logger.error('[Enrolment] EnrolmentResource::deleteFutureEnrolleeAbsence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public sendEnrolleeAbsenceEmail(enrolleeId: number, email: string): Observable<NoContent> {
+    const payload = { data: email };
+    return this.apiResource
+      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/absences/email`, payload)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openErrorToast('Email has been sent')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Email could not be sent');
+          this.logger.error('[Enrolment] EnrolmentResource::sendEnrolleeAbsenceEmail error has occurred: ', error);
           throw error;
         })
       );
