@@ -81,7 +81,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['./']);
+    this.routeUtils.routeRelativeTo(['./'], { queryParams: { isFormDirty: this.form.dirty } });
   }
 
   public collegeFilterPredicate() {
@@ -148,13 +148,11 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
       remoteUsersFormArray.push(this.form);
     }
 
-    parent.markAsPristine();
-
     return of(noop());
   }
 
   protected afterSubmitIsSuccessful(): void {
     // Inform the remote users view not to patch the form, otherwise updates will be lost
-    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
+    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true, isFormDirty: this.form.dirty } });
   }
 }

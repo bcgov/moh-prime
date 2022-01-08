@@ -68,6 +68,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public onRemove(index: number) {
     this.formState.remoteUsers.removeAt(index);
     this.addedUpdatedRemoteUser = false;
+    this.formState.form.markAsDirty();
   }
 
   public onEdit(index: number) {
@@ -75,6 +76,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   }
 
   public onBack() {
+    this.canDeactivateAllowlist = [];
     const nextRoute = (!this.isCompleted)
       ? SiteRoutes.HOURS_OPERATION
       : SiteRoutes.SITE_REVIEW;
@@ -98,13 +100,16 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     // Inform the parent not to patch the form as there are outstanding changes
     // to the remote users that need to be persisted
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
+    const isFormDirty = this.route.snapshot.queryParams.isFormDirty === 'true';
     this.addedUpdatedRemoteUser = fromRemoteUser;
 
     // Remove query param from URL without refreshing
     this.routeUtils.removeQueryParams({ fromRemoteUser: null });
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
-    // TODO is this needed?
-    this.formState.form.markAsPristine();
+
+    if (isFormDirty) {
+      this.formState.form.markAsDirty();
+    }
 
     // Needed if returning from Add/Update Remote User
     this.setHasRemoteUsersToggleState();
