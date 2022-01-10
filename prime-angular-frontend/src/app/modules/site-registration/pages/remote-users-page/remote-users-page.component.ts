@@ -68,6 +68,8 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public onRemove(index: number) {
     this.formState.remoteUsers.removeAt(index);
     this.addedUpdatedRemoteUser = false;
+
+    // After removing a remote user, always mark form as dirty
     this.formState.form.markAsDirty();
   }
 
@@ -76,6 +78,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   }
 
   public onBack() {
+    // This will allow the warning dialogue to be displayed when going back with a dirty form
     this.canDeactivateAllowlist = [];
     const nextRoute = (!this.isCompleted)
       ? SiteRoutes.HOURS_OPERATION
