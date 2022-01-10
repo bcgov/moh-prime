@@ -80,9 +80,13 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
   public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
     const group = this.remoteUserFormGroup();
 
+    if (remoteUser.remoteUserCertifications) {
+      remoteUser.remoteUserCertification = remoteUser.remoteUserCertifications?.[0];
+    }
+
     if (remoteUser) {
-      const { id, firstName, lastName, email, remoteUserCertifications, notified } = remoteUser;
-      group.patchValue({ id, firstName, lastName, email, notified, remoteUserCertification: remoteUserCertifications?.[0] });
+      const { id, firstName, lastName, email, remoteUserCertification, notified } = remoteUser;
+      group.patchValue({ id, firstName, lastName, email, notified, remoteUserCertification });
     }
 
     return group;
