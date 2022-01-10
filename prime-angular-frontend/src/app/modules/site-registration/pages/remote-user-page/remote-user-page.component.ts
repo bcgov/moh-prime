@@ -81,6 +81,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public onBack() {
+    // If this form is dirty, propagate that to the parent
     if (this.form.dirty) {
       this.formState.form.markAsDirty();
     }
@@ -140,7 +141,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     // local form group for all changes prior to submission
     const parent = this.formState.form;
     const remoteUsersFormArray = parent.get('remoteUsers') as FormArray;
-    this.allowRoutingWhenDirty = true;
 
     if (this.remoteUserIndex !== 'new') {
       const remoteUserFormGroup = remoteUsersFormArray.at(+this.remoteUserIndex);
@@ -157,7 +157,9 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
   protected afterSubmitIsSuccessful(): void {
     // After adding a new remote user or updating an existing one, always mark parent form as dirty
+    // and allow routing while dirty
     this.formState.form.markAsDirty();
+    this.allowRoutingWhenDirty = true;
 
     // Inform the remote users view not to patch the form, otherwise updates will be lost
     this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
