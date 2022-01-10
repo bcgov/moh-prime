@@ -117,7 +117,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     const remoteUser = this.formState.getRemoteUsers()[+this.remoteUserIndex] ?? null;
 
     // Remote user at index does not exist likely due to a browser
-    // refresh on this page, and the URL param should be update
+    // refresh on this page, and the URL param should be updated
     if (this.remoteUserIndex !== 'new' && !remoteUser) {
       this.routeUtils.routeRelativeTo(['new']);
     }
