@@ -81,7 +81,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public onBack() {
-    // If this form is dirty, propagate that to the parent
+    // // If this form is dirty, propagate that to the parent so the warning dialogue shows up
     if (this.form.dirty) {
       this.formState.form.markAsDirty();
     }
@@ -169,7 +169,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     if (!result) {
       return;
     }
-    // If changes are discarded, leave the page and mark parent form as pristine
+    // Leave the page and mark parent form as pristine so the parent form doesn't display the warning dialogue
     this.formState.form.markAsPristine();
   }
 }
