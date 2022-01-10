@@ -100,16 +100,11 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     // Inform the parent not to patch the form as there are outstanding changes
     // to the remote users that need to be persisted
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
-    const isFormDirty = this.route.snapshot.queryParams.isFormDirty === 'true';
     this.addedUpdatedRemoteUser = fromRemoteUser;
 
     // Remove query param from URL without refreshing
     this.routeUtils.removeQueryParams({ fromRemoteUser: null });
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
-
-    if (isFormDirty) {
-      this.formState.form.markAsDirty();
-    }
 
     // Needed if returning from Add/Update Remote User
     this.setHasRemoteUsersToggleState();

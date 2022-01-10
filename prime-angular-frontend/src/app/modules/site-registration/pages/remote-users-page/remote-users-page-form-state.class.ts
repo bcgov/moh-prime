@@ -81,13 +81,7 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     const group = this.remoteUserFormGroup();
 
     if (remoteUser) {
-      // This conversion is needed here since remoteUser from the backend has an array with key 'remoteUserCerrtifications'
-      // while remoteUser from the form has a key of a single 'remoteUserCertification'
-      if (remoteUser.remoteUserCertifications) {
-        remoteUser.remoteUserCertification = remoteUser.remoteUserCertifications?.[0];
-      }
-      const { id, firstName, lastName, email, remoteUserCertification, notified } = remoteUser;
-      group.patchValue({ id, firstName, lastName, email, notified, remoteUserCertification });
+      group.patchValue(remoteUser);
     }
 
     return group;

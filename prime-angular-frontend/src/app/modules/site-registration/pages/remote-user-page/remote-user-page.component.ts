@@ -81,7 +81,10 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['./'], { queryParams: { isFormDirty: this.form.dirty } });
+    if (this.form.dirty) {
+      this.formState.form.markAsDirty();
+    }
+    this.routeUtils.routeRelativeTo(['./']);
   }
 
   public collegeFilterPredicate() {
@@ -137,6 +140,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     // local form group for all changes prior to submission
     const parent = this.formState.form;
     const remoteUsersFormArray = parent.get('remoteUsers') as FormArray;
+    this.allowRoutingWhenDirty = true;
 
     if (this.remoteUserIndex !== 'new') {
       const remoteUserFormGroup = remoteUsersFormArray.at(+this.remoteUserIndex);
@@ -152,7 +156,18 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected afterSubmitIsSuccessful(): void {
+    // After adding a new remote user or updating an existing one, always mark parent form as dirty
+    this.formState.form.markAsDirty();
+
     // Inform the remote users view not to patch the form, otherwise updates will be lost
-    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true, isFormDirty: this.form.dirty } });
+    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+    // If changes are discarded, leave the page and mark parent form as pristine
+    this.formState.form.markAsPristine();
   }
 }
