@@ -197,7 +197,14 @@ namespace PrimeTests.UnitTests
                 {
                     License = new License
                     {
-                        Prefix = "91"
+                        LicenseDetails = new []
+                        {
+                            new LicenseDetail
+                            {
+                                Prefix = "91",
+                                Validate = true
+                            }
+                        }
                     },
                     LicenseNumber = "11111"
                 },
@@ -205,7 +212,14 @@ namespace PrimeTests.UnitTests
                 {
                     License = new License
                     {
-                        Prefix = "P1"
+                        LicenseDetails = new []
+                        {
+                            new LicenseDetail
+                            {
+                                Prefix = "P1",
+                                Validate = true
+                            }
+                        }
                     },
                     LicenseNumber = "22222"
                 },
@@ -213,7 +227,14 @@ namespace PrimeTests.UnitTests
                 {
                     License = new License
                     {
-                        Prefix = "96"
+                        LicenseDetails = new []
+                        {
+                            new LicenseDetail
+                            {
+                                Prefix = "96",
+                                Validate = true
+                            }
+                        }
                     },
                     LicenseNumber = "33333"
                 }

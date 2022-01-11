@@ -44,7 +44,7 @@ namespace Prime.Models.Api
                     return false;
                 }
 
-                return CollegeName.Equals(cert.License.Prefix, StringComparison.OrdinalIgnoreCase)
+                return CollegeName.Equals(cert.License.CurrentLicenseDetail.Prefix, StringComparison.OrdinalIgnoreCase)
                     && CollegeId.Equals(cert.LicenseNumber, StringComparison.OrdinalIgnoreCase);
             }
         }

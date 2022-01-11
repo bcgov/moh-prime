@@ -39,7 +39,7 @@ namespace PrimeTests.UnitTests
         [Fact]
         public async void TestGetLookups()
         {
-            var service = MockDependenciesFor<LookupService>();
+            var service = MockDependenciesFor<LookupService>(DefaultMapper());
 
             var results = await service.GetLookupsAsync();
             Assert.NotNull(results);

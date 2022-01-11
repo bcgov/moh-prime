@@ -64,6 +64,7 @@ namespace Prime.Services
                     .ThenInclude(ea => ea.Address)
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
+                        .ThenInclude(l => l.LicenseDetails)
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)

@@ -5,16 +5,24 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Models.HealthAuthorities;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
+using Prime.ViewModels;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Prime.Services
 {
     public class LookupService : BaseService, ILookupService
     {
+        private readonly IMapper _mapper;
         public LookupService(
             ApiDbContext context,
-            ILogger<LookupService> logger)
+            ILogger<LookupService> logger,
+            IMapper mapper)
             : base(context, logger)
-        { }
+        {
+            _mapper = mapper;
+        }
 
         public async Task<LookupEntity> GetLookupsAsync()
         {
@@ -30,7 +38,8 @@ namespace Prime.Services
                     .ToListAsync(),
                 Licenses = await _context.Set<License>()
                     .AsNoTracking()
-                    .Include(l => l.CollegeLicenses)
+                    .ProjectTo<LicenseViewModel>(_mapper.ConfigurationProvider)
+                    .DecompileAsync()
                     .ToListAsync(),
                 CareSettings = await _context.Set<CareSetting>()
                     .AsNoTracking()
