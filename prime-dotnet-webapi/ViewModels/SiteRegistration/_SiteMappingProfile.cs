@@ -27,8 +27,6 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<IndividualDeviceProvider, IndividualDeviceProviderViewModel>();
             CreateMap<IndividualDeviceProviderChangeModel, IndividualDeviceProvider>();
-            CreateMap<SiteRemoteUserUpdateModel, RemoteUser>()
-                .ForMember(dest => dest.RemoteUserCertification, opt => opt.MapFrom(src => src.RemoteUserCertification));
         }
     }
 }
