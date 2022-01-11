@@ -81,11 +81,9 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public onBack() {
-    // // If this form is dirty, propagate that to the parent so the warning dialogue shows up
-    if (this.form.dirty) {
-      this.formState.form.markAsDirty();
-    }
-    this.routeUtils.routeRelativeTo(['./']);
+    // Propagate this form state to the parent so the warning dialogue shows up appropriately
+    this.setParentFormState();
+    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
   }
 
   public collegeFilterPredicate() {
@@ -171,5 +169,11 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     }
     // Leave the page and mark parent form as pristine so the parent form doesn't display the warning dialogue
     this.formState.form.markAsPristine();
+  }
+
+  private setParentFormState(): void {
+    (this.form.dirty)
+      ? this.formState.form.markAsDirty()
+      : this.formState.form.markAsPristine();
   }
 }

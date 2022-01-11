@@ -111,6 +111,12 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
 
     // Needed if returning from Add/Update Remote User
     this.setHasRemoteUsersToggleState();
+
+    // If we end up in this page from any page other that Remote User, make form pristine again.
+    // otherwise this form should have the same state as the Remote User form
+    if (!fromRemoteUser) {
+      this.formState.form.markAsPristine();
+    }
   }
 
   protected initForm() {
