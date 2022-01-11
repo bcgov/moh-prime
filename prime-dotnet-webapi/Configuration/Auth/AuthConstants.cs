@@ -21,7 +21,6 @@ namespace Prime.Configuration.Auth
         public const string Address = "address";
         public const string Birthdate = "birthdate";
         public const string Email = "email";
-
         public const string RealmAccess = "realm_access";
         public const string AssuranceLevel = "identity_assurance_level";
         public const string IdentityProvider = "identity_provider";
@@ -56,5 +55,6 @@ namespace Prime.Configuration.Auth
         // Roles for External Systems
         public const string PhsaLabtech = "phsa_eforms_labtech";
         public const string PhsaImmunizer = "phsa_eforms_immunizer_covid19";
+        public const string PhsaEformsSat = "phsa_eforms_sat";
     }
 }

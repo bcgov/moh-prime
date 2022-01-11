@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220104212857_AddedHiddenFlagToSDDocument")]
+    partial class AddedHiddenFlagToSDDocument
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3416,9 +3418,6 @@ namespace Prime.Migrations
                     b.Property<string>("Subject")
                         .HasColumnType("text");
 
-                    b.Property<int>("UpdateCount")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -3663,17 +3662,6 @@ namespace Prime.Migrations
                             Template = "Dear @Model.EnrolleeName, <br> <br> Your PharmaNet Terms of Access must be accepted in PRIME before your PRIME enrolment is complete. Please log in to PRIME and accept your Terms of Access now. You can access PRIME here <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>. <br> <br> Thank you.",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EmailType = 19,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "To Whom it may concern, <br> <br> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ratione placeat necessitatibus adipisci dicta doloribus. Ratione inventore aperiam nobis consequuntur ab, cum, numquam praesentium magnam commodi quasi in voluptates enim repellat!",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -3790,7 +3778,7 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("EndTimestamp")
+                    b.Property<DateTime>("EndTimestamp")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("EnrolleeId")
@@ -4921,6 +4909,39 @@ namespace Prime.Migrations
                     b.HasIndex("CommunitySiteId");
 
                     b.ToTable("IndividualDeviceProvider");
+                });
+
+            modelBuilder.Entity("Prime.Models.Job", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("Job");
                 });
 
             modelBuilder.Entity("Prime.Models.JobName", b =>
@@ -6176,116 +6197,6 @@ namespace Prime.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLog");
-                });
-
-            modelBuilder.Entity("Prime.Models.Plr.CollegeForPlrRoleType", b =>
-                {
-                    b.Property<string>("RoleTypeCode")
-                        .HasColumnType("text");
-
-                    b.Property<int>("CollegeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("RoleTypeCode");
-
-                    b.ToTable("CollegeForPlrRoleType");
-
-                    b.HasData(
-                        new
-                        {
-                            RoleTypeCode = "RN",
-                            CollegeId = 3
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RNP",
-                            CollegeId = 3
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RPN",
-                            CollegeId = 3
-                        },
-                        new
-                        {
-                            RoleTypeCode = "PHARM",
-                            CollegeId = 2
-                        },
-                        new
-                        {
-                            RoleTypeCode = "PO",
-                            CollegeId = 1
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RAC",
-                            CollegeId = 18
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RM",
-                            CollegeId = 3
-                        },
-                        new
-                        {
-                            RoleTypeCode = "LPN",
-                            CollegeId = 3
-                        },
-                        new
-                        {
-                            RoleTypeCode = "MD",
-                            CollegeId = 1
-                        },
-                        new
-                        {
-                            RoleTypeCode = "OPT",
-                            CollegeId = 14
-                        },
-                        new
-                        {
-                            RoleTypeCode = "DEN",
-                            CollegeId = 7
-                        },
-                        new
-                        {
-                            RoleTypeCode = "OT",
-                            CollegeId = 12
-                        },
-                        new
-                        {
-                            RoleTypeCode = "PSYCH",
-                            CollegeId = 16
-                        },
-                        new
-                        {
-                            RoleTypeCode = "CHIRO",
-                            CollegeId = 4
-                        },
-                        new
-                        {
-                            RoleTypeCode = "PHYSIO",
-                            CollegeId = 15
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RMT",
-                            CollegeId = 10
-                        },
-                        new
-                        {
-                            RoleTypeCode = "PTECH",
-                            CollegeId = 2
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RD",
-                            CollegeId = 9
-                        },
-                        new
-                        {
-                            RoleTypeCode = "NAP",
-                            CollegeId = 11
-                        });
                 });
 
             modelBuilder.Entity("Prime.Models.Plr.PlrExpertise", b =>
@@ -11135,6 +11046,17 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.Navigation("CommunitySite");
+                });
+
+            modelBuilder.Entity("Prime.Models.Job", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany()
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Enrollee");
                 });
 
             modelBuilder.Entity("Prime.Models.OboSite", b =>

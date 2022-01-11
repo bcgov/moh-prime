@@ -24,6 +24,21 @@
 
   </form>
 
+  <div class="mb-4"
+       *ngIf="addedUpdatedRemoteUser">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Remote Practitioner added/updated
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        Continue adding remote practitioners if this site has more.
+      </ng-container>
+    </app-alert>
+  </div>
+
   <section>
     <ng-container *ngFor="let remoteUser of formState.remoteUsers.controls; let i = index; let last = last">
 

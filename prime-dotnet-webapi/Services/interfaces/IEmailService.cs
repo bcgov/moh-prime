@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -23,5 +24,6 @@ namespace Prime.Services
         Task<int> UpdateEmailLogStatuses(int limit);
         Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId);
         Task SendEnrolleeUnsignedToaReminderEmails();
+        Task SendEnrolleeAbsenceNotificationEmailAsync(int enrolleeId, EnrolleeAbsenceViewModel absence, string email);
     }
 }

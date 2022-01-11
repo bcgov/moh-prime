@@ -260,7 +260,6 @@ namespace PrimeTests.UnitTests
                 typeof(PhysicalAddress),
                 typeof(MailingAddress),
                 typeof(ICollection<Certification>),
-                typeof(ICollection<Job>),
                 typeof(ICollection<OboSite>),
                 typeof(ICollection<EnrolleeCareSetting>),
                 typeof(ICollection<EnrolleeHealthAuthority>),

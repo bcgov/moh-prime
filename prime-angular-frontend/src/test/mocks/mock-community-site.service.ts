@@ -55,14 +55,13 @@ export class MockCommunitySiteService {
           firstName: faker.name.firstName(),
           lastName: faker.name.lastName(),
           email: faker.internet.email(),
-          remoteUserCertifications: [
-            {
-              id: faker.random.number(),
-              collegeCode: faker.random.number(),
-              licenseNumber: faker.random.words(1),
-              licenseCode: faker.random.number(),
-            }
-          ],
+          remoteUserCertification:
+          {
+            id: faker.random.number(),
+            collegeCode: faker.random.number(),
+            licenseNumber: faker.random.words(1),
+            licenseCode: faker.random.number(),
+          },
           notified: faker.random.boolean()
         }
       ],

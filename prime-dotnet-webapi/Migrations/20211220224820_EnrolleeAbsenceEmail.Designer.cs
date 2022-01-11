@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211220224820_EnrolleeAbsenceEmail")]
+    partial class EnrolleeAbsenceEmail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3416,9 +3418,6 @@ namespace Prime.Migrations
                     b.Property<string>("Subject")
                         .HasColumnType("text");
 
-                    b.Property<int>("UpdateCount")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -4923,6 +4922,39 @@ namespace Prime.Migrations
                     b.ToTable("IndividualDeviceProvider");
                 });
 
+            modelBuilder.Entity("Prime.Models.Job", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("Job");
+                });
+
             modelBuilder.Entity("Prime.Models.JobName", b =>
                 {
                     b.Property<int>("Code")
@@ -6176,116 +6208,6 @@ namespace Prime.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLog");
-                });
-
-            modelBuilder.Entity("Prime.Models.Plr.CollegeForPlrRoleType", b =>
-                {
-                    b.Property<string>("RoleTypeCode")
-                        .HasColumnType("text");
-
-                    b.Property<int>("CollegeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("RoleTypeCode");
-
-                    b.ToTable("CollegeForPlrRoleType");
-
-                    b.HasData(
-                        new
-                        {
-                            RoleTypeCode = "RN",
-                            CollegeId = 3
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RNP",
-                            CollegeId = 3
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RPN",
-                            CollegeId = 3
-                        },
-                        new
-                        {
-                            RoleTypeCode = "PHARM",
-                            CollegeId = 2
-                        },
-                        new
-                        {
-                            RoleTypeCode = "PO",
-                            CollegeId = 1
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RAC",
-                            CollegeId = 18
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RM",
-                            CollegeId = 3
-                        },
-                        new
-                        {
-                            RoleTypeCode = "LPN",
-                            CollegeId = 3
-                        },
-                        new
-                        {
-                            RoleTypeCode = "MD",
-                            CollegeId = 1
-                        },
-                        new
-                        {
-                            RoleTypeCode = "OPT",
-                            CollegeId = 14
-                        },
-                        new
-                        {
-                            RoleTypeCode = "DEN",
-                            CollegeId = 7
-                        },
-                        new
-                        {
-                            RoleTypeCode = "OT",
-                            CollegeId = 12
-                        },
-                        new
-                        {
-                            RoleTypeCode = "PSYCH",
-                            CollegeId = 16
-                        },
-                        new
-                        {
-                            RoleTypeCode = "CHIRO",
-                            CollegeId = 4
-                        },
-                        new
-                        {
-                            RoleTypeCode = "PHYSIO",
-                            CollegeId = 15
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RMT",
-                            CollegeId = 10
-                        },
-                        new
-                        {
-                            RoleTypeCode = "PTECH",
-                            CollegeId = 2
-                        },
-                        new
-                        {
-                            RoleTypeCode = "RD",
-                            CollegeId = 9
-                        },
-                        new
-                        {
-                            RoleTypeCode = "NAP",
-                            CollegeId = 11
-                        });
                 });
 
             modelBuilder.Entity("Prime.Models.Plr.PlrExpertise", b =>
@@ -9443,9 +9365,6 @@ namespace Prime.Migrations
                     b.Property<string>("Filename")
                         .HasColumnType("text");
 
-                    b.Property<bool>("Hidden")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("SelfDeclarationTypeCode")
                         .HasColumnType("integer");
 
@@ -9975,7 +9894,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 17,
-                            Name = "No address from BC Services Card. Enrollee entered address."
+                            Name = "No address from BCSC. Enrollee entered address."
                         },
                         new
                         {
@@ -11135,6 +11054,17 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.Navigation("CommunitySite");
+                });
+
+            modelBuilder.Entity("Prime.Models.Job", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany()
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Enrollee");
                 });
 
             modelBuilder.Entity("Prime.Models.OboSite", b =>

@@ -1,6 +1,7 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 import { AbsenceManagementForm } from './absence-management-form.model';
 
@@ -25,6 +26,10 @@ export class AbsenceManagementFormState extends AbstractFormState<AbsenceManagem
     return this.range.get('end') as FormControl;
   }
 
+  public get email(): FormControl {
+    return this.form.get('email') as FormControl;
+  }
+
   public get json(): AbsenceManagementForm {
     if (!this.formInstance) {
       return;
@@ -33,6 +38,7 @@ export class AbsenceManagementFormState extends AbstractFormState<AbsenceManagem
     return {
       start: absence.range.start,
       end: absence.range.end,
+      email: absence.email
     };
   }
 
@@ -50,8 +56,9 @@ export class AbsenceManagementFormState extends AbstractFormState<AbsenceManagem
       range: this.fb.group(
         {
           start: ['', [Validators.required]],
-          end: ['', [Validators.required]],
-        })
+          end: ['', []]
+        }),
+      email: ['', [Validators.email]]
     });
   }
 }
