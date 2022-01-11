@@ -14,25 +14,25 @@ namespace Prime.Configuration.Database
             get
             {
                 return new[] {
-                    new CollegeForPlrRoleType { RoleTypeCode = "RN",     CollegeId = 3  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "RNP",    CollegeId = 3  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "RPN",    CollegeId = 3  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "PHARM",  CollegeId = 2  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "PO",     CollegeId = 1  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "RAC",    CollegeId = 18 },
-                    new CollegeForPlrRoleType { RoleTypeCode = "RM",     CollegeId = 3  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "LPN",    CollegeId = 3  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "MD",     CollegeId = 1  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "OPT",    CollegeId = 14 },
-                    new CollegeForPlrRoleType { RoleTypeCode = "DEN",    CollegeId = 7  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "OT",     CollegeId = 12 },
-                    new CollegeForPlrRoleType { RoleTypeCode = "PSYCH",  CollegeId = 16 },
-                    new CollegeForPlrRoleType { RoleTypeCode = "CHIRO",  CollegeId = 4  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "PHYSIO", CollegeId = 15 },
-                    new CollegeForPlrRoleType { RoleTypeCode = "RMT",    CollegeId = 10 },
-                    new CollegeForPlrRoleType { RoleTypeCode = "PTECH",  CollegeId = 2  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "RD",     CollegeId = 9  },
-                    new CollegeForPlrRoleType { RoleTypeCode = "NAP",    CollegeId = 11 }
+                    new CollegeForPlrRoleType { ProviderRoleType = "RN",     CollegeCode = 3  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "RNP",    CollegeCode = 3  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "RPN",    CollegeCode = 3  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "PHARM",  CollegeCode = 2  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "PO",     CollegeCode = 1  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "RAC",    CollegeCode = 18 },
+                    new CollegeForPlrRoleType { ProviderRoleType = "RM",     CollegeCode = 3  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "LPN",    CollegeCode = 3  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "MD",     CollegeCode = 1  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "OPT",    CollegeCode = 14 },
+                    new CollegeForPlrRoleType { ProviderRoleType = "DEN",    CollegeCode = 7  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "OT",     CollegeCode = 12 },
+                    new CollegeForPlrRoleType { ProviderRoleType = "PSYCH",  CollegeCode = 16 },
+                    new CollegeForPlrRoleType { ProviderRoleType = "CHIRO",  CollegeCode = 4  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "PHYSIO", CollegeCode = 15 },
+                    new CollegeForPlrRoleType { ProviderRoleType = "RMT",    CollegeCode = 10 },
+                    new CollegeForPlrRoleType { ProviderRoleType = "PTECH",  CollegeCode = 2  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "RD",     CollegeCode = 9  },
+                    new CollegeForPlrRoleType { ProviderRoleType = "ND",     CollegeCode = 11 }
                 };
             }
         }

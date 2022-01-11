@@ -10,9 +10,8 @@ namespace Prime.Models.Plr
     public class CollegeForPlrRoleType
     {
         [Key]
-        public string RoleTypeCode { get; set; }
+        public string ProviderRoleType { get; set; }
 
-        [Required]
-        public int CollegeId { get; set; }
+        public int CollegeCode { get; set; }
     }
 }
