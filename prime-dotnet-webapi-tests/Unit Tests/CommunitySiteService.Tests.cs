@@ -29,14 +29,11 @@ namespace PrimeTests.UnitTests
                         FirstName = "1",
                         LastName = "",
                         Email = "",
-                        RemoteUserCertifications = new List<RemoteUserCertification>
-                        {
-                            new RemoteUserCertification
+                        RemoteUserCertification = new RemoteUserCertification
                             {
                                 CollegeCode = 1,
                                 LicenseNumber = "11111"
                             }
-                        }
                     },
                     new RemoteUser
                     {
@@ -44,14 +41,11 @@ namespace PrimeTests.UnitTests
                         FirstName = "Dropped",
                         LastName = "",
                         Email = "",
-                        RemoteUserCertifications = new List<RemoteUserCertification>
-                        {
-                            new RemoteUserCertification
+                        RemoteUserCertification = new RemoteUserCertification
                             {
                                 CollegeCode = 1,
                                 LicenseNumber = "Dropped"
                             }
-                        }
                     }
                 }
             };
@@ -115,7 +109,7 @@ namespace PrimeTests.UnitTests
             Assert.False(TestDb.RemoteUserCertifications.Any(cert => cert.LicenseNumber == "Dropped"));
 
             var siteUsers = TestDb.RemoteUsers
-                .Include(user => user.RemoteUserCertifications)
+                .Include(user => user.RemoteUserCertification)
                 .Where(user => user.SiteId == site.Id)
                 .ToList();
 
@@ -123,13 +117,13 @@ namespace PrimeTests.UnitTests
             var updated = siteUsers.SingleOrDefault(user => user.Id == 1);
             Assert.NotNull(updated);
             Assert.Equal("Updated1", updated.FirstName);
-            Assert.Equal("Updated1", updated.RemoteUserCertifications.SingleOrDefault()?.LicenseNumber);
+            Assert.Equal("Updated1", updated.RemoteUserCertification?.LicenseNumber);
 
             // Adds
             var added1 = siteUsers.SingleOrDefault(user => user.FirstName == "Added1");
             Assert.NotNull(added1);
             Assert.NotEqual(0, added1.Id);
-            Assert.Equal("Added1", added1.RemoteUserCertifications.SingleOrDefault()?.LicenseNumber);
+            Assert.Equal("Added1", added1.RemoteUserCertification?.LicenseNumber);
 
             var added2 = siteUsers.SingleOrDefault(user => user.FirstName == "Added2");
             Assert.NotNull(added2);
