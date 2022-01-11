@@ -32,6 +32,9 @@ namespace PrimeTests
 
             services
                 .AddHealthChecks();
+
+            services
+                .AddSentry();
         }
 
         protected override void ConfigureHealthCheck(IApplicationBuilder app)
