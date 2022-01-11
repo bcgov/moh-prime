@@ -77,26 +77,22 @@ namespace Prime.Services
             {
                 var provider = await _context.PlrProviders
                     .AsNoTracking()
-                    .Where(p => _context.CollegeForPlrRoleTypes.Where(rt2c => rt2c.RoleTypeCode == p.ProviderRoleType).Select(rt2c => rt2c.CollegeId).Contains(cert.CollegeCode)
+                    // Select PlrProviders that match a certification on both college AND license number
+                    .Where(p => _context.CollegeForPlrRoleTypes.Where(rt2c => rt2c.ProviderRoleType == p.ProviderRoleType).Select(rt2c => rt2c.CollegeCode).Contains(cert.CollegeCode)
                         && p.CollegeId == cert.LicenseNumber)
                     .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
                     .SingleOrDefaultAsync();
                 if (provider != null)
                 {
+                    // If a PlrViewModel has ExpertiseCodes, translate the codes to human-readable text
+                    // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manually before return
+                    provider.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e =>
+                        (provider.ExpertiseCode != null && provider.ExpertiseCode.Contains(e.Code))).Select(e => e.Name));
                     plrProviders.Add(provider);
                 }
             }
-
-            // If a PlrViewModel has ExpertiseCodes, translate the codes to human-readable text
-            // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manually before return
-            return plrProviders.Select(p =>
-                {
-                    p.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e =>
-                        (p.ExpertiseCode != null && p.ExpertiseCode.Contains(e.Code))).Select(e => e.Name));
-                    return p;
-                });
+            return plrProviders;
         }
-
 
         public async Task<bool> PartyExistsInPlrWithCollegeIdAndNameAsync(int partyId)
         {
