@@ -9,7 +9,7 @@ namespace Prime.ViewModels
 
         public DateTime StartTimestamp { get; set; }
 
-        public DateTime EndTimestamp { get; set; }
+        public DateTime? EndTimestamp { get; set; }
     }
 
     public class EnrolleeAbsenceValidator : AbstractValidator<EnrolleeAbsenceViewModel>

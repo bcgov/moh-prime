@@ -111,7 +111,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public get filteredColleges(): CollegeConfig[] {
     return this.colleges.filter((college: CollegeConfig) =>
       // Allow the currently chosen value to persist
-      this.collegeCode.value === college.code || !this.selectedColleges.includes(college.code)
+      this.collegeCode.value === college.code || !this.selectedColleges?.includes(college.code)
     );
   }
 
@@ -209,7 +209,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
 
     // In case previous selection was BCCNM, clear validators
-    if(!this.condensed) {
+    if (!this.condensed) {
       this.formUtilsService.setValidators(this.nurseCategory, []);
       this.clearNursingCategoryValidators();
     }
@@ -270,7 +270,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.formUtilsService.setValidators(this.licenseCode, []);
     this.formUtilsService.setValidators(this.licenseNumber, []);
 
-    if(!this.condensed) {
+    if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, []);
     }
   }

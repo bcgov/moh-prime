@@ -229,6 +229,7 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress)
+                .Include(e => e.SelfDeclarationDocuments)
                 .SingleAsync(e => e.Id == enrolleeId);
 
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
@@ -264,7 +265,7 @@ namespace Prime.Services
             }
 
             // This is the temporary way we are adding self declaration documents until this gets refactored.
-            await CreateSelfDeclarationDocuments(enrolleeId, updateModel.SelfDeclarations);
+            await CreateSelfDeclarationDocuments(enrolleeId, updateModel.SelfDeclarations, enrollee.SelfDeclarationDocuments);
 
             try
             {
@@ -468,7 +469,7 @@ namespace Prime.Services
             }
         }
 
-        private async Task CreateSelfDeclarationDocuments(int enrolleeId, ICollection<SelfDeclaration> newDeclarations)
+        private async Task CreateSelfDeclarationDocuments(int enrolleeId, ICollection<SelfDeclaration> newDeclarations, IEnumerable<SelfDeclarationDocument> currentSelfDeclarationDocuments)
         {
             if (newDeclarations == null)
             {
@@ -493,6 +494,14 @@ namespace Prime.Services
                         Filename = filename,
                         UploadedDate = DateTimeOffset.Now
                     });
+                }
+            }
+
+            foreach (var currentDocument in currentSelfDeclarationDocuments)
+            {
+                if (!newDeclarations.Any(newDocument => newDocument.SelfDeclarationTypeCode == currentDocument.SelfDeclarationTypeCode))
+                {
+                    currentDocument.Hidden = true;
                 }
             }
         }
@@ -597,10 +606,11 @@ namespace Prime.Services
             return answered.Concat(unAnswered);
         }
 
-        public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId)
+        public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId, bool includeHidden = true)
         {
             return await _context.SelfDeclarationDocuments
                 .Where(sdd => sdd.EnrolleeId == enrolleeId)
+                .If(!includeHidden, q => q.Where(sdd => !sdd.Hidden))
                 .ProjectTo<SelfDeclarationDocumentViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -1031,7 +1041,7 @@ namespace Prime.Services
             {
                 EnrolleeId = enrolleeId,
                 StartTimestamp = createModel.StartTimestamp.ToUniversalTime(),
-                EndTimestamp = createModel.EndTimestamp.ToUniversalTime()
+                EndTimestamp = createModel.EndTimestamp?.ToUniversalTime()
             };
 
             _context.EnrolleeAbsences.Add(absence);
@@ -1046,7 +1056,7 @@ namespace Prime.Services
             return await _context.EnrolleeAbsences
                 .Where(ea => ea.EnrolleeId == enrolleeId)
                 .If(!includesPast,
-                    absences => absences.Where(ea => rightNow <= ea.EndTimestamp)
+                    absences => absences.Where(ea => rightNow <= ea.EndTimestamp || ea.EndTimestamp == null)
                 )
                 .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -1058,7 +1068,7 @@ namespace Prime.Services
             return await _context.EnrolleeAbsences
                 .Where(ea => ea.EnrolleeId == enrolleeId
                     && ea.StartTimestamp <= rightNow
-                    && rightNow <= ea.EndTimestamp)
+                    && (rightNow <= ea.EndTimestamp || ea.EndTimestamp == null))
                 .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
@@ -1069,7 +1079,7 @@ namespace Prime.Services
             var absence = await _context.EnrolleeAbsences
                 .SingleOrDefaultAsync(ea => ea.EnrolleeId == enrolleeId
                     && ea.StartTimestamp <= rightNow
-                    && rightNow <= ea.EndTimestamp);
+                    && (rightNow <= ea.EndTimestamp || ea.EndTimestamp == null));
 
             if (absence != null)
             {

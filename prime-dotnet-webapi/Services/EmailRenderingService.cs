@@ -226,5 +226,16 @@ namespace Prime.Services.EmailInternal
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeUnsignedToa, viewModel)
             );
         }
+
+        public async Task<Email> RenderEnrolleeAbsenceNotificationEmailAsync(string email, EnrolleeAbsenceNotificationEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: email,
+                subject: "Lorem ipsum",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeAbsenceNotification, viewModel)
+            );
+        }
     }
 }

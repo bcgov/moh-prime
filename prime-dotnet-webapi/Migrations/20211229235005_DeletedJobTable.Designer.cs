@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211229235005_DeletedJobTable")]
+    partial class DeletedJobTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3416,9 +3418,6 @@ namespace Prime.Migrations
                     b.Property<string>("Subject")
                         .HasColumnType("text");
 
-                    b.Property<int>("UpdateCount")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -3663,17 +3662,6 @@ namespace Prime.Migrations
                             Template = "Dear @Model.EnrolleeName, <br> <br> Your PharmaNet Terms of Access must be accepted in PRIME before your PRIME enrolment is complete. Please log in to PRIME and accept your Terms of Access now. You can access PRIME here <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>. <br> <br> Thank you.",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EmailType = 19,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "To Whom it may concern, <br> <br> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ratione placeat necessitatibus adipisci dicta doloribus. Ratione inventore aperiam nobis consequuntur ab, cum, numquam praesentium magnam commodi quasi in voluptates enim repellat!",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -3790,7 +3778,7 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("EndTimestamp")
+                    b.Property<DateTime>("EndTimestamp")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("EnrolleeId")
@@ -4873,21 +4861,6 @@ namespace Prime.Migrations
                         {
                             Code = "2.16.840.1.113883.4.530",
                             Name = "RDID"
-                        },
-                        new
-                        {
-                            Code = "2.16.840.1.113883.3.40.2.46",
-                            Name = "MOAID"
-                        },
-                        new
-                        {
-                            Code = "2.16.840.1.113883.3.40.2.44",
-                            Name = "PPID"
-                        },
-                        new
-                        {
-                            Code = "2.16.840.1.113883.4.538",
-                            Name = "NAPID"
                         });
                 });
 
@@ -6191,116 +6164,6 @@ namespace Prime.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLog");
-                });
-
-            modelBuilder.Entity("Prime.Models.Plr.CollegeForPlrRoleType", b =>
-                {
-                    b.Property<string>("ProviderRoleType")
-                        .HasColumnType("text");
-
-                    b.Property<int>("CollegeCode")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ProviderRoleType");
-
-                    b.ToTable("CollegeForPlrRoleType");
-
-                    b.HasData(
-                        new
-                        {
-                            ProviderRoleType = "RN",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RNP",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RPN",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PHARM",
-                            CollegeCode = 2
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PO",
-                            CollegeCode = 1
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RAC",
-                            CollegeCode = 18
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RM",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "LPN",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "MD",
-                            CollegeCode = 1
-                        },
-                        new
-                        {
-                            ProviderRoleType = "OPT",
-                            CollegeCode = 14
-                        },
-                        new
-                        {
-                            ProviderRoleType = "DEN",
-                            CollegeCode = 7
-                        },
-                        new
-                        {
-                            ProviderRoleType = "OT",
-                            CollegeCode = 12
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PSYCH",
-                            CollegeCode = 16
-                        },
-                        new
-                        {
-                            ProviderRoleType = "CHIRO",
-                            CollegeCode = 4
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PHYSIO",
-                            CollegeCode = 15
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RMT",
-                            CollegeCode = 10
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PTECH",
-                            CollegeCode = 2
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RD",
-                            CollegeCode = 9
-                        },
-                        new
-                        {
-                            ProviderRoleType = "ND",
-                            CollegeCode = 11
-                        });
                 });
 
             modelBuilder.Entity("Prime.Models.Plr.PlrExpertise", b =>
@@ -8192,11 +8055,6 @@ namespace Prime.Migrations
                         {
                             Code = "PHARMTECH",
                             Name = "PHARMTECH"
-                        },
-                        new
-                        {
-                            Code = "ND",
-                            Name = "Naturopathic Doctor"
                         });
                 });
 
@@ -9462,9 +9320,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("Filename")
                         .HasColumnType("text");
-
-                    b.Property<bool>("Hidden")
-                        .HasColumnType("boolean");
 
                     b.Property<int>("SelfDeclarationTypeCode")
                         .HasColumnType("integer");

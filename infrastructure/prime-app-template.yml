@@ -710,6 +710,7 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-webapi
+            - run-migrations
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
@@ -906,6 +907,7 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-document-manager
+            - run-migrations
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
