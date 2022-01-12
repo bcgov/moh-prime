@@ -80,73 +80,88 @@ namespace Prime.Services.Rules
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
-            var certifications = enrollee.Certifications.Where(c => c.License.Validate);
-
-            // If enrollee choses device provider, add device provider as a licence and check it against PharmaNet
-            if (!string.IsNullOrWhiteSpace(enrollee.DeviceProviderIdentifier))
-            {
-                certifications = certifications.Append(new Certification
-                {
-                    // ATTN: the prefix below is a placeholder
-                    License = new License { Prefix = "P1" },
-                    LicenseNumber = enrollee.DeviceProviderIdentifier
-                });
-            }
+            var certifications = MapCertifications(enrollee);
 
             bool passed = true;
 
             foreach (var cert in certifications)
             {
-                if (cert.License.PrescriberIdType == PrescriberIdType.Optional && cert.PractitionerId == null)
-                {
-                    continue;
-                }
-
-                var licenceNumber = cert.License.PrescriberIdType.HasValue
-                    ? cert.PractitionerId
-                    : cert.LicenseNumber;
-
-                var licenceText = $"{cert.License.Prefix}-{licenceNumber}";
-
                 PharmanetCollegeRecord record = null;
                 try
                 {
-                    record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.License.Prefix, licenceNumber);
+                    record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.Prefix, cert.LicenseNumber);
                 }
                 catch (PharmanetCollegeApiException)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, licenceText);
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "An error occurred calling the Pharmanet API.");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, cert.ToString());
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "An error occurred calling the Pharmanet API.");
                     passed = false;
                     continue;
                 }
                 if (record == null)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, licenceText);
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "Record not found in Pharmanet.");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, cert.ToString());
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "Record not found in Pharmanet.");
                     passed = false;
                     continue;
                 }
-                await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "A record was found in Pharmanet.");
+                await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "A record was found in Pharmanet.");
 
                 if (!record.MatchesEnrolleeByName(enrollee))
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{licenceText} returned \"{record.FirstName} {record.LastName}\".");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{cert} returned \"{record.FirstName} {record.LastName}\".");
                     passed = false;
                 }
                 if (record.DateofBirth.Date != enrollee.DateOfBirth.Date)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{licenceText} returned {record.DateofBirth:d MMM yyyy}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{cert} returned {record.DateofBirth:d MMM yyyy}");
                     passed = false;
                 }
                 if (record.Status != "P")
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.Practicing, licenceText);
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.Practicing, cert.ToString());
                     passed = false;
                 }
             }
 
             return passed;
+        }
+
+        private class CertificationDto
+        {
+            public string Prefix { get; set; }
+            public string LicenseNumber { get; set; }
+            public override string ToString()
+            {
+                return $"{Prefix}-{LicenseNumber}";
+            }
+        }
+
+        private static IEnumerable<CertificationDto> MapCertifications(Enrollee enrollee)
+        {
+            var filteredCertifications = enrollee.Certifications.Where(c =>
+                c.License.CurrentLicenseDetail.Validate
+                && !(c.License.CurrentLicenseDetail.PrescriberIdType == PrescriberIdType.Optional && c.PractitionerId == null)
+            ).Select(c => new CertificationDto
+            {
+                Prefix = c.License.CurrentLicenseDetail.Prefix,
+                LicenseNumber = c.License.CurrentLicenseDetail.PrescriberIdType.HasValue
+                    ? c.PractitionerId
+                    : c.LicenseNumber,
+            });
+
+            // If enrollee choses device provider, add device provider as a licence and check it against PharmaNet
+            if (!string.IsNullOrWhiteSpace(enrollee.DeviceProviderIdentifier))
+            {
+                filteredCertifications = filteredCertifications.Append(new CertificationDto
+                {
+                    // ATTN: the prefix below is a placeholder
+                    Prefix = "P1",
+                    LicenseNumber = enrollee.DeviceProviderIdentifier
+                });
+            }
+
+            return filteredCertifications;
         }
     }
 
@@ -171,7 +186,7 @@ namespace Prime.Services.Rules
             // Passes rule if enrollee.Certifications is null or empty
             foreach (var cert in enrollee.Certifications ?? Enumerable.Empty<Certification>())
             {
-                if (cert.License.Manual)
+                if (cert.License.CurrentLicenseDetail.Manual)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.LicenceClass);
                     return Task.FromResult(false);
