@@ -9,6 +9,8 @@ using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using Prime.ViewModels;
 using DelegateDecompiler.EntityFrameworkCore;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Prime.Services
 {
@@ -38,6 +40,7 @@ namespace Prime.Services
                     .ToListAsync(),
                 Licenses = await _context.Set<License>()
                     .AsNoTracking()
+                    .Where(l => l.CurrentLicenseDetail != null)
                     .ProjectTo<LicenseViewModel>(_mapper.ConfigurationProvider)
                     .DecompileAsync()
                     .ToListAsync(),
