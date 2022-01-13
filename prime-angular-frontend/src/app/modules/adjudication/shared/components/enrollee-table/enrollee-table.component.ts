@@ -109,7 +109,9 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     );
   }
 
-  public isPaperEnrolmentStatus(enrollee: EnrolleeListViewModel): boolean {
+  // Check to see if we want to filter/map the status
+  // Conditions: enrollee is a paper enrollee and the status is one of [Under Review, Editable] mapped to [Incomplete, Complete] respectively
+  public filterPaperEnrolmentStatus(enrollee: EnrolleeListViewModel): boolean {
     return !!(enrollee.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX) && this.paperEnrolmentStatusMap.get(enrollee.currentStatusCode));
   }
 
