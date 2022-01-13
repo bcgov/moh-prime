@@ -18,6 +18,7 @@ namespace Prime.HttpClients
             }
 
             var trimmedLicenceNumber = licenceNumber.TrimStart(new char[] { '0' });
+
             var info = trimmedLicenceNumber switch
             {
                 "1" => new { Date = "2000-05-17", Name = "ONE" },
