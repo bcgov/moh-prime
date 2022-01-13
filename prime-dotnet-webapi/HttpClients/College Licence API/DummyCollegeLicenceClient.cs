@@ -17,7 +17,8 @@ namespace Prime.HttpClients
                 throw new PharmanetCollegeApiException();
             }
 
-            var info = licenceNumber switch
+            var trimmedLicenceNumber = licenceNumber.TrimStart(new char[] { '0' });
+            var info = trimmedLicenceNumber switch
             {
                 "1" => new { Date = "2000-05-17", Name = "ONE" },
                 "2" => new { Date = "1998-08-07", Name = "TWO" },
