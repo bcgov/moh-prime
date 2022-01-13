@@ -60,6 +60,10 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   public EnrolmentStatus = EnrolmentStatusEnum;
   public Role = Role;
   public readonly PAPER_ENROLLEE_GPID_PREFIX = PAPER_ENROLLEE_GPID_PREFIX;
+  public readonly paperEnrolmentStatusMap = new Map<number, string>([
+    [1, 'Complete'],  // corresponds to regular enrolment 'Editable' status
+    [2, 'Incomplete'] // corresponds to regular enrolment 'Under Review' status
+  ]);
 
   private sortActiveKey: string;
   private sortDirectionKey: string;
@@ -103,6 +107,10 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
       enrollee.currentStatusCode === EnrolmentStatusEnum.UNDER_REVIEW ||
       enrollee.previousStatus?.statusCode === EnrolmentStatusEnum.UNDER_REVIEW
     );
+  }
+
+  public isFilterStatus(enrollee: EnrolleeListViewModel): boolean {
+    return !!(enrollee.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX) && this.paperEnrolmentStatusMap.get(enrollee.currentStatusCode));
   }
 
   public onNotify(enrollee: EnrolleeListViewModel): void {

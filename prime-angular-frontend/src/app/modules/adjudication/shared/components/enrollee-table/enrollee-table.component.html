@@ -163,9 +163,13 @@
               [class]="row.currentStatusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
 
             <div class="d-flex align-items-center">
-              <span class="mr-1">{{ row.currentStatusCode | configCode: 'statuses' | default }}</span>
+              <span class="mr-1 status"
+                    [class]="isFilterStatus(row) ? 'paper-enrolment-complete-incomplete': 'null'">
+                    {{ (isFilterStatus(row) ? paperEnrolmentStatusMap.get(row.currentStatusCode) : row.currentStatusCode | configCode: 'statuses') | default }}</span>
               <ng-container *ngIf="row.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX; else nonPaperEnrolleeIcons">
-                <mat-icon matTooltip="Paper Submission"
+                <mat-icon class="status"
+                          [class]="isFilterStatus(row) ? 'paper-enrolment-complete-incomplete': 'null'"
+                          matTooltip="Paper Submission"
                           matTooltipPosition="after">description
                 </mat-icon>
               </ng-container>
