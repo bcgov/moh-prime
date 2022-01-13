@@ -109,7 +109,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     );
   }
 
-  public isFilterStatus(enrollee: EnrolleeListViewModel): boolean {
+  public isPaperEnrolmentStatus(enrollee: EnrolleeListViewModel): boolean {
     return !!(enrollee.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX) && this.paperEnrolmentStatusMap.get(enrollee.currentStatusCode));
   }
 
