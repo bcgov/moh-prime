@@ -93,10 +93,10 @@ export class SatEformsEnrolmentResource {
       );
   }
 
-  public submitSatEnrollee(enrolleeId: number): NoContent {
-    return this.apiResource.post<NoContent>(`parties/sat/${enrolleeId}/submissions`)
+  public submitSatEnrollee(enrolleeId: number): Observable<boolean> {
+    return this.apiResource.post<boolean>(`parties/sat/${enrolleeId}/submissions`)
       .pipe(
-        NoContentResponse,
+        map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be submitted');
           this.logger.error('[SatEforms] SatEformsEnrolmentResource::submitSatEnrollee error has occurred: ', error);
