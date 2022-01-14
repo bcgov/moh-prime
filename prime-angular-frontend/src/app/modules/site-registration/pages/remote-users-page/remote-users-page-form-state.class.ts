@@ -37,8 +37,10 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     return this.formInstance.getRawValue().remoteUsers;
   }
 
-  public patchValue(remoteUsers: RemoteUser[]): void {
-    if (!this.formInstance || !remoteUsers?.length) {
+  public patchValue(remoteUsers: RemoteUser[], forcePatch: boolean = false): void {
+    // We want to force patch if the user goes back to previous page after removing all remote users
+    // that the length is now 0 for remote users.
+    if (!this.formInstance || (!remoteUsers?.length && !forcePatch)) {
       return;
     }
 

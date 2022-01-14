@@ -122,7 +122,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   protected initForm() {
     this.formState.remoteUsers.valueChanges
       .pipe(untilDestroyed(this))
-      .subscribe((remoteUsers: RemoteUser[]) => {
+      .subscribe((_) => {
         // Executed when removing Remote Users
         this.setHasRemoteUsersToggleState();
       });
@@ -139,12 +139,16 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
         this.addedUpdatedRemoteUser = false;
       });
 
+    this.formState.remoteUsers.length
+      ? this.formState.hasRemoteUsers.setValue(true)
+      : this.formState.hasRemoteUsers.setValue(false)
+
     this.patchForm();
   }
 
   private setHasRemoteUsersToggleState(): void {
-    this.formState.remoteUsers.length ?
-      this.formState.hasRemoteUsers.disable({ emitEvent: false })
+    this.formState.remoteUsers.length
+      ? this.formState.hasRemoteUsers.disable({ emitEvent: false })
       : this.formState.hasRemoteUsers.enable({ emitEvent: false });
   }
 
@@ -176,5 +180,15 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
       : SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(['../', routePath]);
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Reset the remoteUsersPage form value
+    const site = this.siteService.site;
+    this.siteFormStateService.remoteUsersPageFormState.patchValue(site?.remoteUsers, true);
   }
 }
