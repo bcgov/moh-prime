@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 
-import { exhaustMap } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -28,6 +28,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   public routeUtils: RouteUtils;
   public enrollee: SatEnrollee;
   public readonly certificationsKey: string;
+  public approved: boolean = null;
 
   constructor(
     protected dialog: MatDialog,
@@ -85,15 +86,22 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   protected performSubmission(): NoContent {
     const enrolleeId = +this.route.snapshot.params.eid;
-    this.formState.removeIncompleteCertifications(true);
     return this.enrolmentResource.updateSatEnrolleeCertifications(enrolleeId, this.formState.json.partyCertifications)
-      .pipe(
-        exhaustMap(() => this.enrolmentResource.submitSatEnrollee(enrolleeId))
-      );
+    .pipe(
+      exhaustMap(() => this.enrolmentResource.submitSatEnrollee(enrolleeId)),
+      map((approved: boolean) => {
+        this.approved = approved;
+        if (this.approved) {
+          this.formState.removeIncompleteCertifications(true);
+        }
+      })
+    );
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo(SatEformsRoutes.SUBMISSION_CONFIRMATION);
+    if (this.approved) {
+      this.routeUtils.routeRelativeTo(SatEformsRoutes.SUBMISSION_CONFIRMATION);
+    }
   }
 }
 
