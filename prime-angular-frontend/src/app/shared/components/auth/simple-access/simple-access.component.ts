@@ -17,6 +17,7 @@ export class SimpleAccessComponent implements OnInit {
   @Input() public title: string;
   @Input() public loginLabel: string;
   @Input() public showLogo: boolean;
+  @Input() public subtitle: string;
   /**
    * @description
    * Disable authentication.
@@ -28,6 +29,7 @@ export class SimpleAccessComponent implements OnInit {
     private viewportService: ViewportService
   ) {
     this.login = new EventEmitter<void>();
+    this.subtitle = 'for health professionals of British Columbia';
   }
 
   public get isMobile(): boolean {

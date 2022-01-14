@@ -14,6 +14,7 @@ import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 })
 export class SatEformsLoginPageComponent implements OnInit {
   public title: string;
+  public subtitle: string;
   public loginLabel: string;
   public bcscMobileSetupUrl: string;
   public disableLogin: boolean;
@@ -24,7 +25,8 @@ export class SatEformsLoginPageComponent implements OnInit {
     private authService: AuthService,
   ) {
     this.title = 'Enrol for access to Special Authority eForms';
-    this.loginLabel = 'Enrol using your BC Services Card';
+    this.subtitle = 'B.C. healthcare professionals enrol here for access to PharmaCare’s Special Authority eForms application';
+    this.loginLabel = 'Log in with the BC Services Card app';
     this.bcscMobileSetupUrl = config.bcscMobileSetupUrl;
   }
 
