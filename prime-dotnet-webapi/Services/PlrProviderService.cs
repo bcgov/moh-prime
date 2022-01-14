@@ -94,7 +94,7 @@ namespace Prime.Services
             return plrProviders;
         }
 
-        public async Task<bool> PartyExistsInPlrWithCollegeIdAndNameAsync(int partyId)
+        public async Task<bool> PartyExistsInPlrWithCollegeIdAndNameAndDobAsync(int partyId)
         {
             var party = await _context.Parties
                 .Where(p => p.Id == partyId)
@@ -104,7 +104,8 @@ namespace Prime.Services
                     p.LastName,
                     p.PreferredFirstName,
                     p.PreferredLastName,
-                    Licenses = p.PartyCertifications.Select(cert => cert.LicenseNumber)
+                    Licenses = p.PartyCertifications.Select(cert => cert.LicenseNumber),
+                    p.DateOfBirth
                 })
                 .SingleOrDefaultAsync();
 
@@ -113,6 +114,7 @@ namespace Prime.Services
                     p => party.Licenses.Contains(p.CollegeId)
                     && ((p.FirstName == party.FirstName && p.LastName == party.LastName)
                     || (party.PreferredFirstName != null && p.FirstName == party.PreferredFirstName && p.LastName == party.PreferredLastName))
+                    && (party.DateOfBirth.Date == p.DateOfBirth.Value.Date)
                 )
                 .AnyAsync();
         }

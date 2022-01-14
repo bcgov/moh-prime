@@ -197,7 +197,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var existsInPlr = await _plrProviderService.PartyExistsInPlrWithCollegeIdAndNameAsync(satId);
+            var existsInPlr = await _plrProviderService.PartyExistsInPlrWithCollegeIdAndNameAndDobAsync(satId);
             if (existsInPlr)
             {
                 await _partyService.CreateSubmissionAsync(satId, SubmissionType.SatEnrollee, existsInPlr);
