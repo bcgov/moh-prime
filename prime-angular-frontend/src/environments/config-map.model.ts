@@ -8,6 +8,8 @@ export class ConfigMap {
   loginRedirectUrl: string;
   documentManagerUrl: string;
   bcscMobileSetupUrl: string;
+  bcscSupportUrl: string;
+  satEformsSupportEmail: string;
   keycloakConfig: KeycloakOptions;
   mohKeycloakConfig: KeycloakOptions;
 }

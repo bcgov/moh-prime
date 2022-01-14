@@ -1,5 +1,33 @@
 <app-dashboard-header></app-dashboard-header>
 
+<div *ngIf="loginCancelled"
+     class="container">
+  <div class="row">
+    <app-alert class="col-sm-12"
+               type="info"
+               icon="error_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Login Cancelled
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        <p>You have cancelled your login to SA eForms.
+          For help, contact:
+          <a [attr.href]="'mailto:' + satEformsSupportEmail">{{ satEformsSupportEmail }}</a>
+        </p>
+        <p>
+          For help, log in using your BCSC contact:
+          <a
+        target="_blank"
+        rel="noopener noreferrer"
+        [attr.href]="bcscSupportUrl">
+        here</a>.
+        </p>
+      </ng-container>
+    </app-alert>
+  </div>
+</div>
 <app-simple-access [title]="title"
                    [subtitle]="subtitle"
                    [loginLabel]="loginLabel"
@@ -25,7 +53,7 @@
       <p>
         Questions about Special Authority eForms should be directed to:
         <br>
-        <a href="mailto:satransformation@gov.bc.ca">satransformation@gov.bc.ca</a>
+        <a [attr.href]="satEformsSupportEmail">{{ satEformsSupportEmail }}</a>
       </p>
     </section>
   </app-pill>

@@ -18,6 +18,9 @@ export class SatEformsLoginPageComponent implements OnInit {
   public loginLabel: string;
   public bcscMobileSetupUrl: string;
   public disableLogin: boolean;
+  public loginCancelled: boolean;
+  public bcscSupportUrl: string;
+  public satEformsSupportEmail: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,6 +31,10 @@ export class SatEformsLoginPageComponent implements OnInit {
     this.subtitle = 'B.C. healthcare professionals enrol here for access to PharmaCare’s Special Authority eForms application';
     this.loginLabel = 'Log in with the BC Services Card app';
     this.bcscMobileSetupUrl = config.bcscMobileSetupUrl;
+    this.bcscSupportUrl = config.bcscSupportUrl;
+    this.satEformsSupportEmail = config.satEformsSupportEmail;
+    this.loginCancelled =
+      this.route.snapshot.queryParams.action === 'cancelled';
   }
 
   public onLogin() {
