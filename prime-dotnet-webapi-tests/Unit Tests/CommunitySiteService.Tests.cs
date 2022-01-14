@@ -63,57 +63,51 @@ namespace PrimeTests.UnitTests
                 Id = site.Id,
                 RemoteUsers = new[]
                 {
-                    new RemoteUser
+                    new SiteRemoteUserUpdateModel
                     {
                         Id = 1,
                         FirstName = "Updated1",
                         LastName = "",
                         Email = "",
-                        RemoteUserCertifications = new[]
-                        {
-                            new RemoteUserCertification
+                        RemoteUserCertification = new RemoteUserCertification
                             {
                                 CollegeCode = 1,
                                 LicenseNumber = "Updated1"
                             }
-                        }
                     },
-                    new RemoteUser
+                    new SiteRemoteUserUpdateModel
                     {
                         Id = 0,
                         FirstName = "Added1",
                         LastName = "",
                         Email = "",
-                        RemoteUserCertifications = new[]
-                        {
-                            new RemoteUserCertification
+                        RemoteUserCertification = new RemoteUserCertification
                             {
                                 CollegeCode = 1,
                                 LicenseNumber = "Added1"
                             }
-                        }
                     },
-                    new RemoteUser
+                    new SiteRemoteUserUpdateModel
                     {
                         Id = 0,
                         FirstName = "Added2",
                         LastName = "",
                         Email = "",
-                        RemoteUserCertifications = new RemoteUserCertification[]{}
+                        RemoteUserCertification = new RemoteUserCertification()
                     },
-                    new RemoteUser
+                    new SiteRemoteUserUpdateModel
                     {
                         Id = 77,
                         FirstName = "Added3",
                         LastName = "",
                         Email = "",
-                        RemoteUserCertifications = new RemoteUserCertification[]{}
+                        RemoteUserCertification = new RemoteUserCertification()
                     }
                 }
             };
 
             // Act
-            await MockDependenciesFor<CommunitySiteService>().UpdateSiteAsync(site.Id, update);
+            await MockDependenciesFor<CommunitySiteService>(DefaultMapper()).UpdateSiteAsync(site.Id, update);
 
             // Assert
             // Drops
