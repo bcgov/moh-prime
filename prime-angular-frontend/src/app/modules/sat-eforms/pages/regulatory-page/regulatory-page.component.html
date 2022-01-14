@@ -7,6 +7,20 @@
         novalidate>
 
     <app-page-section>
+      <div *ngIf="approved === false" class="mb-5">
+        <app-alert type="danger"
+                   icon="warning">
+          <ng-container #alertTitle
+                        class="alert-title">
+            College Information not found
+          </ng-container>
+          <ng-container #alertContent
+                        class="alert-content">
+            Your college license information was not found in the PRIME system.
+            Confirm with your college before continuing with the enrolment.
+          </ng-container>
+        </app-alert>
+      </div>
 
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>College Information</ng-container>
