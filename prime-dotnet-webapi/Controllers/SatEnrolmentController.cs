@@ -205,7 +205,9 @@ namespace Prime.Controllers
                 await _keycloakClient.AssignRealmRole(satEnrollee.UserId, Roles.PhsaEformsSat);
             }
 
-            return Ok(partyExistsInPlr);
+            var enrolmentComplete = partyExistsInPlr == collegeCodeExistsInPlr == true;
+
+            return Ok(enrolmentComplete);
         }
     }
 }
