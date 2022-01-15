@@ -197,14 +197,15 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var existsInPlr = await _plrProviderService.PartyExistsInPlrWithCollegeIdAndNameAndDobAsync(satId);
-            if (existsInPlr)
+            var partyExistsInPlr = await _plrProviderService.PartyExistsInPlrWithCollegeIdAndNameAndDobAsync(satId);
+            var collegeCodeExistsInPlr = await _plrProviderService.PartyCollegeCodesExistInPlrRoleType(satId);
+            if (partyExistsInPlr && collegeCodeExistsInPlr)
             {
-                await _partyService.CreateSubmissionAsync(satId, SubmissionType.SatEnrollee, existsInPlr);
+                await _partyService.CreateSubmissionAsync(satId, SubmissionType.SatEnrollee, partyExistsInPlr);
                 await _keycloakClient.AssignRealmRole(satEnrollee.UserId, Roles.PhsaEformsSat);
             }
 
-            return Ok(existsInPlr);
+            return Ok(partyExistsInPlr);
         }
     }
 }

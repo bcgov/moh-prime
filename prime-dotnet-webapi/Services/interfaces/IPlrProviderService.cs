@@ -11,5 +11,6 @@ namespace Prime.Services
         Task<int> CreateOrUpdatePlrProviderAsync(PlrProvider dataObject, bool expectExists = false);
         Task<IEnumerable<PlrViewModel>> GetMatchingPlrDataAsync(IEnumerable<CertificationViewModel> certifications);
         Task<bool> PartyExistsInPlrWithCollegeIdAndNameAndDobAsync(int partyId);
+        Task<bool> PartyCollegeCodesExistInPlrRoleType(int partyId);
     }
 }

@@ -119,6 +119,31 @@ namespace Prime.Services
                 .AnyAsync();
         }
 
+        public async Task<bool> PartyCollegeCodesExistInPlrRoleType(int partyId)
+        {
+            var party = await _context.Parties
+                .Where(p => p.Id == partyId)
+                .Select(p => new
+                {
+                    CollegeCodes = p.PartyCertifications.Select(cert => cert.CollegeCode)
+                })
+                .SingleOrDefaultAsync();
+
+            var collegeCodes = await _context.CollegeForPlrRoleTypes
+                .Select(cc => cc.CollegeCode)
+                .ToListAsync();
+
+            foreach (var collegeCode in party.CollegeCodes)
+            {
+                bool collegeCodeExists = collegeCodes.Contains(collegeCode);
+                if (!collegeCodeExists)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private async Task TranslateIdentifierTypeAsync(PlrProvider dataObject)
         {
             var identifierType = await _context.Set<IdentifierType>()
