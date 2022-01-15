@@ -17,6 +17,7 @@ using RazorEngine.Templating;
 
 using Prime.Services.Razor;
 using Prime.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Prime.Services
 {
@@ -27,19 +28,22 @@ namespace Prime.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IEmailTemplateService _emailTemplateService;
+        private readonly ILogger _logger;
 
         public RazorConverterService(
             IRazorViewEngine viewEngine,
             ITempDataProvider tempDataProvider,
             IServiceProvider serviceProvider,
             IEmailTemplateService emailTemplateService,
-            IHttpContextAccessor contextAccessor)
+            IHttpContextAccessor contextAccessor,
+            ILogger<RazorConverterService> logger)
         {
             _viewEngine = viewEngine;
             _tempDataProvider = tempDataProvider;
             _serviceProvider = serviceProvider;
             _contextAccessor = contextAccessor;
             _emailTemplateService = emailTemplateService;
+            _logger = logger;
         }
 
         public async Task<string> RenderTemplateToStringAsync<TModel>(RazorTemplate<TModel> template, TModel viewModel)
@@ -85,7 +89,12 @@ namespace Prime.Services
         public async Task<string> RenderEmailTemplateToString<TModel>(EmailTemplateType type, TModel viewModel)
         {
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(type);
-            return RenderStringTemplateToString(emailTemplate.Template, viewModel);
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            var output = RenderStringTemplateToString(emailTemplate.Template, viewModel);
+            sw.Stop();
+
+            _logger.LogWarning($"--------- Template {emailTemplate.Template} render time: {sw.ElapsedMilliseconds}ms");
+            return output;
         }
 
         private IView GetView(ActionContext actionContext, string viewName)
