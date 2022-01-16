@@ -8,6 +8,7 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { CollectionNoticePageComponent } from './collection-notice-page.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 describe('CollectionNoticePageComponent', () => {
   let component: CollectionNoticePageComponent;
@@ -24,7 +25,11 @@ describe('CollectionNoticePageComponent', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
-        }
+        },
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

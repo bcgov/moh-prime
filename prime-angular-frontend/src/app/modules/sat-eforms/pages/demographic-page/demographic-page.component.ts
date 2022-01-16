@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Location } from '@angular/common';
 
-import { iif, Observable } from 'rxjs';
+import { iif, Observable, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
@@ -19,6 +19,8 @@ import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
 import { SatEformsEnrolmentResource } from '@sat/shared/resource/sat-eforms-enrolment-resource.service';
 import { SatEnrolleeService } from '@sat/shared/services/sat-enrollee.service';
 import { DemographicFormState } from './demographic-form-state.class';
+import { ConfigService } from '@config/config.service';
+import { NoContent } from '@core/resources/abstract-resource';
 
 // TODO create inheritable demographic class + mixins for reuse
 @Component({
@@ -31,6 +33,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   public formState: DemographicFormState;
   public enrollee: SatEnrollee;
   public routeUtils: RouteUtils;
+  public readonly certificationsKey: string;
   /**
    * @description
    * User information from the provider not contained
@@ -41,9 +44,11 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   public hasVerifiedAddress: boolean;
   public hasPhysicalAddress: boolean;
 
+
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    private configService: ConfigService,
     private fb: FormBuilder,
     private location: Location,
     private enrolmentResource: SatEformsEnrolmentResource,
@@ -56,18 +61,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SatEformsRoutes.MODULE_PATH);
-  }
-
-  public onPreferredNameChange({ checked }: { checked: boolean }): void {
-    if (!this.hasPreferredName) {
-      this.formState.form.get('preferredMiddleName').reset();
-    }
-
-    this.togglePreferredNameValidators(checked, this.formState.preferredFirstName, this.formState.preferredLastName);
-  }
-
-  public onPhysicalAddressChange({ checked }: { checked: boolean }): void {
-    this.toggleAddressLineValidators(checked, this.formState.physicalAddress);
+    this.certificationsKey = 'partyCertifications';
   }
 
   public ngOnInit(): void {
@@ -81,7 +75,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected createFormInstance() {
-    this.formState = new DemographicFormState(this.fb, this.formUtilsService);
+    this.formState = new DemographicFormState(this.fb, this.configService, this.formUtilsService, this.certificationsKey);
   }
 
   protected patchForm(): void {
@@ -96,16 +90,10 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected initForm() {
-    this.hasPreferredName = !!(this.formState.preferredFirstName.value || this.formState.preferredLastName.value);
-    this.togglePreferredNameValidators(this.hasPreferredName, this.formState.preferredFirstName, this.formState.preferredLastName);
-
-    this.hasVerifiedAddress = Address.isNotEmpty(this.bcscUser.verifiedAddress);
-    if (!this.hasVerifiedAddress) {
-      this.clearAddressValidator(this.formState.verifiedAddress);
-      this.setAddressValidator(this.formState.physicalAddress);
-    } else {
-      this.hasPhysicalAddress = Address.isNotEmpty(this.formState.physicalAddress.value);
-      this.toggleAddressLineValidators(this.hasPhysicalAddress, this.formState.physicalAddress);
+    // Always have at least one certification ready for
+    // the enrollee to fill out
+    if (!this.formState.certifications.length) {
+      this.formState.addEmptyCollegeCertification();
     }
   }
 
@@ -117,8 +105,8 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
       .pipe(
         map((user: BcscUser) => {
           // Ensure BCSC user information is never overwritten
-          const { firstName, lastName, givenNames, verifiedAddress, ...remainder } = user;
-          return { ...remainder, ...demographic, firstName, lastName, givenNames, verifiedAddress };
+          const { firstName, lastName, givenNames, ...remainder } = user;
+          return { ...remainder, ...demographic, firstName, lastName, givenNames };
         }),
         exhaustMap((enrollee: SatEnrollee) =>
           (!enrolleeId)
@@ -133,42 +121,22 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
               )
             : this.enrolmentResource.updateSatEnrollee(enrolleeId, enrollee)
               .pipe(map(() => enrolleeId))
-        )
+        ),
+        exhaustMap((enrolleeId: number) => {
+          this.formState.removeIncompleteCertifications(true);
+          return this.enrolmentResource.updateSatEnrolleeCertifications(enrolleeId, this.formState.json.partyCertifications)
+            .pipe(
+              exhaustMap(() => this.enrolmentResource.submitSatEnrollee(enrolleeId)),
+              map(() => enrolleeId)
+            );
+        })
       );
   }
 
   protected afterSubmitIsSuccessful(enrolleeId: number): void {
     // Must go up a route-level and down with newly minted or existing
     // enrollee ID to override the replaced route state during submission
-    this.routeUtils.routeRelativeTo(['../', enrolleeId, SatEformsRoutes.REGULATORY]);
-  }
-
-  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {
-    if (!hasPreferredName) {
-      this.formUtilsService.resetAndClearValidators(preferredFirstName);
-      this.formUtilsService.resetAndClearValidators(preferredLastName);
-    } else {
-      this.formUtilsService.setValidators(preferredFirstName, [Validators.required]);
-      this.formUtilsService.setValidators(preferredLastName, [Validators.required]);
-    }
-  }
-
-  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
-    if (!shouldToggle) {
-      return;
-    }
-
-    (!hasAddressLine)
-      ? this.clearAddressValidator(addressLine)
-      : this.setAddressValidator(addressLine);
-  }
-
-  private clearAddressValidator(addressLine: FormGroup): void {
-    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems);
-  }
-
-  private setAddressValidator(addressLine: FormGroup): void {
-    this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
+    this.routeUtils.routeRelativeTo(['../', enrolleeId, SatEformsRoutes.SUBMISSION_CONFIRMATION]);
   }
 
   /**

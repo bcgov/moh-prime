@@ -5,10 +5,6 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 export interface SatEnrollee extends BcscUser {
   id?: number;
   phone: string | null;
-  preferredFirstName?: string | null;
-  preferredMiddleName?: string | null;
-  preferredLastName?: string | null;
-  physicalAddress?: Address | null;
   partyCertifications: CollegeCertification[];
   submittedDate: string;
 }

@@ -18,7 +18,6 @@ export class SatEformsRoutes {
   public static satEformsRouteOrder(): string[] {
     return [
       SatEformsRoutes.DEMOGRAPHIC,
-      SatEformsRoutes.REGULATORY,
       SatEformsRoutes.SUBMISSION_CONFIRMATION
     ];
   }

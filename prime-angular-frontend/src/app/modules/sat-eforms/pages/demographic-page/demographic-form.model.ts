@@ -1,10 +1,6 @@
-import { Address } from '@lib/models/address.model';
+import { SatEnrollee } from '@sat/shared/models/sat-enrollee.model';
 
-export interface DemographicForm {
-  preferredFirstName?: string;
-  preferredMiddleName?: string;
-  preferredLastName?: string;
-  physicalAddress?: Address;
+export interface DemographicForm extends Pick<SatEnrollee, 'partyCertifications'> {
   email: string;
   phone: string;
 }

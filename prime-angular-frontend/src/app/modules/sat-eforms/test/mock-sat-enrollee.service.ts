@@ -21,12 +21,8 @@ export class MockSatEnrolleeService implements ISatEnrolleeService {
       lastName: faker.name.lastName(),
       givenNames: faker.name.firstName(),
       dateOfBirth: faker.date.past(2).toDateString(),
-      preferredFirstName: null,
-      preferredMiddleName: null,
-      preferredLastName: null,
       email: faker.internet.email(),
       phone: faker.phone.phoneNumber(),
-      physicalAddress: new Address(),
       verifiedAddress: new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode()),
       partyCertifications: [],
       submittedDate: faker.date.past(1).toDateString()
