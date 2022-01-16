@@ -25,20 +25,12 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
 
         public string GivenNames { get; set; }
 
-        public string PreferredFirstName { get; set; }
-
-        public string PreferredMiddleName { get; set; }
-
-        public string PreferredLastName { get; set; }
-
         public DateTime DateOfBirth { get; set; }
 
         /// <summary>
         /// Originating from BCSC
         /// </summary>
         public VerifiedAddress VerifiedAddress { get; set; }
-
-        public PhysicalAddress PhysicalAddress { get; set; }
 
         public string Email { get; set; }
 
@@ -56,9 +48,6 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
             party.GivenNames = GivenNames;
             party.DateOfBirth = DateOfBirth;
 
-            party.PreferredFirstName = PreferredFirstName;
-            party.PreferredMiddleName = PreferredMiddleName;
-            party.PreferredLastName = PreferredLastName;
             party.Email = Email;
             party.Phone = Phone;
 
@@ -77,24 +66,6 @@ namespace Prime.ViewModels.SpecialAuthorityTransformation
                 {
                     VerifiedAddress.Id = party.VerifiedAddress.Id;
                     party.VerifiedAddress.SetValues(VerifiedAddress);
-                }
-            }
-
-            if (PhysicalAddress != null)
-            {
-                // Add/Update PhysicalAddress
-                if (party.PhysicalAddress == null)
-                {
-                    party.Addresses.Add(new PartyAddress
-                    {
-                        Party = party,
-                        Address = PhysicalAddress,
-                    });
-                }
-                else
-                {
-                    PhysicalAddress.Id = party.PhysicalAddress.Id;
-                    party.PhysicalAddress.SetValues(PhysicalAddress);
                 }
             }
 
