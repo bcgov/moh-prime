@@ -9,7 +9,6 @@ import { SatEformsProgressIndicatorComponent } from './shared/components/sat-efo
 
 import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 import { DemographicPageComponent } from './pages/demographic-page/demographic-page.component';
-import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page.component';
 import { SubmissionConfirmationPageComponent } from './pages/submission-confirmation-page/submission-confirmation-page.component';
 
 @NgModule({
@@ -18,7 +17,6 @@ import { SubmissionConfirmationPageComponent } from './pages/submission-confirma
     SatEformsProgressIndicatorComponent,
     CollectionNoticePageComponent,
     DemographicPageComponent,
-    RegulatoryPageComponent,
     SubmissionConfirmationPageComponent
   ],
   imports: [
@@ -27,4 +25,4 @@ import { SubmissionConfirmationPageComponent } from './pages/submission-confirma
     SatEformsRoutingModule
   ]
 })
-export class SatEformsModule {}
+export class SatEformsModule { }

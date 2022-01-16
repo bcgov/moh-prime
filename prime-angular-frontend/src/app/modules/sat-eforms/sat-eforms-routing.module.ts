@@ -9,7 +9,6 @@ import { SatEformsDashboardComponent } from './shared/components/sat-eforms-dash
 
 import { CollectionNoticePageComponent } from '@sat/pages/collection-notice-page/collection-notice-page.component';
 import { DemographicPageComponent } from '@sat/pages/demographic-page/demographic-page.component';
-import { RegulatoryPageComponent } from '@sat/pages/regulatory-page/regulatory-page.component';
 import { SubmissionConfirmationPageComponent } from '@sat/pages/submission-confirmation-page/submission-confirmation-page.component';
 import { SatEformsGuard } from '@sat/shared/guards/sat-eforms.guard';
 
@@ -36,12 +35,6 @@ const routes: Routes = [
             data: { title: 'Special Authority E-Forms' }
           },
           {
-            path: SatEformsRoutes.REGULATORY,
-            component: RegulatoryPageComponent,
-            canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Special Authority E-Forms' }
-          },
-          {
             path: SatEformsRoutes.SUBMISSION_CONFIRMATION,
             component: SubmissionConfirmationPageComponent,
             data: { title: 'Special Authority E-Forms' }
@@ -61,4 +54,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SatEformsRoutingModule {}
+export class SatEformsRoutingModule { }
