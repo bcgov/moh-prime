@@ -14,7 +14,7 @@ namespace PlrIntakeUtility
     class Program
     {
         /// <summary>
-        /// Can be used like this:  `dotnet run PRIME_Test_Data_PLR_IAT20210617_v2.1.csv intake.log`
+        /// Can be used like this:  `dotnet run PRIME_Test_Data_PLR_IAT20210617_v2.0.csv intake.log`
         /// </summary>
         /// <param name="args">Expecting path to .csv file and desired log file</param>
         static void Main(string[] args)
@@ -30,7 +30,7 @@ namespace PlrIntakeUtility
             try
             {
                 ApiDbContext dbContext = new ApiDbContextFactory().CreateDbContext(args);
-
+                
                 using (var stream = new StreamReader(args[0]))
                 {
                     using (var reader = new CsvReader(stream, CultureInfo.InvariantCulture))
