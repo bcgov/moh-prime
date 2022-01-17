@@ -80,7 +80,8 @@ namespace Prime.Controllers
         /// <param name="careSettingCode"></param>
         /// <param name="providedEmails"></param>
         [HttpPost("/api/enrollees/{enrolleeId}/provisioner-access/send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
-        [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.TriageEnrollee)]
+        // [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.TriageEnrollee)]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -98,18 +99,18 @@ namespace Prime.Controllers
             {
                 return NotFound("No enrollee exists for this User Id.");
             }
-            if (!enrollee.PermissionsRecord().AccessableBy(User))
-            {
-                return Forbid();
-            }
-            if (enrollee.ExpiryDate == null)
-            {
-                return BadRequest("The enrollee for this User Id is not in a finished state.");
-            }
-            if (!enrollee.CurrentStatus.IsType(StatusType.Editable))
-            {
-                return BadRequest("The enrollee for this User Id is not in an editable state.");
-            }
+            // if (!enrollee.PermissionsRecord().AccessableBy(User))
+            // {
+            //     return Forbid();
+            // }
+            // if (enrollee.ExpiryDate == null)
+            // {
+            //     return BadRequest("The enrollee for this User Id is not in a finished state.");
+            // }
+            // if (!enrollee.CurrentStatus.IsType(StatusType.Editable))
+            // {
+            //     return BadRequest("The enrollee for this User Id is not in an editable state.");
+            // }
 
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
 
