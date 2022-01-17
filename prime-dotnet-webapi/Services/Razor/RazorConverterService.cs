@@ -17,7 +17,6 @@ using RazorEngine.Templating;
 
 using Prime.Services.Razor;
 using Prime.Models;
-using Microsoft.Extensions.Logging;
 
 namespace Prime.Services
 {
