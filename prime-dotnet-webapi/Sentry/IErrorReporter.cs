@@ -1,7 +1,10 @@
 using System;
 using System.Threading.Tasks;
-public interface IErrorReporter
+
+namespace SentryCustomReporter
 {
-    Task CaptureAsync(Exception exception);
-    Task CaptureAsync(string message);
+    public interface ISentryErrorReporter
+    {
+        Task CaptureAsync(Exception exception);
+    }
 }

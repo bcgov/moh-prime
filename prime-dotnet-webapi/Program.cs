@@ -10,7 +10,6 @@ using System.IO;
 using System.Reflection;
 
 using Prime.Configuration.Environment;
-
 namespace Prime
 {
     public class Program
@@ -55,8 +54,6 @@ namespace Prime
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    // This uses the SENTRY_DSN environment variable without injection
-                    // webBuilder.UseSentry();
                     webBuilder.UseStartup<Startup>();
                 })
                 .UseSerilog();

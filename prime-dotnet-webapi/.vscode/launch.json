@@ -14,7 +14,8 @@
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
       "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Sentry__Dsn": "https://73431fed1adc437b850c13d5826cf01a@sentry-moh.apps.silver.devops.gov.bc.ca/2"
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"

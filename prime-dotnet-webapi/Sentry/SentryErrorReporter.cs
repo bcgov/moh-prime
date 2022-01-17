@@ -1,61 +1,40 @@
 using System;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.Options;
-using Sentry;
-
+using Prime;
 using SharpRaven;
-using SharpRaven.Core;
 
-public class SentryErrorReporter : IErrorReporter
+namespace SentryCustomReporter
 {
-    private readonly IRavenClient _client;
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="SentryErrorReporter" /> class.
-    /// </summary>
-    /// <param name="options">The options.</param>
-    /// <exception cref="System.ArgumentNullException">
-    ///     options
-    ///     or
-    ///     Can not construct a SentryErrorReporter without a valid DSN!
-    /// </exception>
-    public SentryErrorReporter(IOptions<SentryOptions> options)
+    public class SentryErrorReporter : ISentryErrorReporter
     {
-        if (options == null)
-            throw new ArgumentNullException(nameof(options));
+        private readonly IRavenClient _client;
 
-        if (string.IsNullOrEmpty(options.Value.Dsn))
-            throw new ArgumentNullException("Can not construct a SentryErrorReporter without a valid DSN!");
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SentryErrorReporter" /> class.
+        /// </summary>
+        public SentryErrorReporter()
+        {
+            var sentryDsn = PrimeConfiguration.Current.Sentry.Dsn;
 
-        _client = new RavenClient(options.Value.Dsn);
-    }
+            if (!string.IsNullOrEmpty(sentryDsn))
+            {
+                _client = new RavenClient(sentryDsn);
+            }
+        }
 
-    /// <summary>
-    ///     Captures the specified exception asynchronously and hands it off to an error handling service.
-    /// </summary>
-    /// <param name="exception">The exception.</param>
-    /// <returns></returns>
-    /// <exception cref="System.ArgumentNullException">exception</exception>
-    public async Task CaptureAsync(Exception exception)
-    {
-        if (exception == null)
-            throw new ArgumentNullException(nameof(exception));
+        /// <summary>
+        /// Captures the specified exception asynchronously and hands it off to an error handling service.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">exception</exception>
+        public async Task CaptureAsync(Exception exception)
+        {
+            if (exception == null)
+                throw new ArgumentNullException(nameof(exception));
 
-        await _client.CaptureAsync(new SharpRaven.Core.Data.SentryEvent(exception));
-    }
-
-    /// <summary>
-    ///     Captures the specified message asynchronously and hands it off to an error handling service.
-    /// </summary>
-    /// <param name="message">The message.</param>
-    /// <returns></returns>
-    /// <exception cref="System.ArgumentNullException">message</exception>
-    public async Task CaptureAsync(string message)
-    {
-        if (string.IsNullOrEmpty(message))
-            throw new ArgumentNullException(nameof(message));
-
-        await _client.CaptureAsync(new SharpRaven.Core.Data.SentryEvent(message));
+            await _client.CaptureAsync(new SharpRaven.Data.SentryEvent(exception));
+        }
     }
 }

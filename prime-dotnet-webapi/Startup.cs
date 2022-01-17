@@ -34,6 +34,8 @@ using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 
+using SentryCustomReporter;
+using SentryCustomMiddleware;
 namespace Prime
 {
     public class Startup
@@ -53,7 +55,7 @@ namespace Prime
         public void ConfigureServices(IServiceCollection services)
         {
             InitializeConfiguration(services);
-            services.Configure<SentryOptions>(Configuration.GetSection("Sentry"));
+            // services.Configure<SentryOptionsCustom>(Configuration.GetSection("Sentry"));
 
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAgreementService, AgreementService>();
@@ -92,7 +94,7 @@ namespace Prime
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
-            services.AddScoped<IErrorReporter, SentryErrorReporter>();
+            services.AddScoped<ISentryErrorReporter, SentryErrorReporter>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
@@ -229,6 +231,11 @@ namespace Prime
                 app.UseDeveloperExceptionPage();
             }
 
+            if (!string.IsNullOrEmpty(PrimeConfiguration.Current.Sentry.Dsn))
+            {
+                app.UseMiddleware<SentryMiddleware>();
+            }
+
             ConfigureHealthCheck(app);
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
@@ -253,7 +260,7 @@ namespace Prime
             // Matches request to an endpoint
             app.UseRouting();
 
-            app.UseMiddleware<SentryMiddleware>();
+
 
             app.UseCors(CorsPolicy);
 
