@@ -55,7 +55,6 @@ namespace Prime
         public void ConfigureServices(IServiceCollection services)
         {
             InitializeConfiguration(services);
-            // services.Configure<SentryOptionsCustom>(Configuration.GetSection("Sentry"));
 
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAgreementService, AgreementService>();
@@ -89,12 +88,12 @@ namespace Prime
             services.AddScoped<IPlrProviderService, PlrProviderService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
+            services.AddScoped<ISentryErrorReporter, SentryErrorReporter>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<ISoapService, SoapService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
-            services.AddScoped<ISentryErrorReporter, SentryErrorReporter>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
@@ -259,8 +258,6 @@ namespace Prime
 
             // Matches request to an endpoint
             app.UseRouting();
-
-
 
             app.UseCors(CorsPolicy);
 

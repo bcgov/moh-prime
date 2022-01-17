@@ -10,6 +10,7 @@ using System.IO;
 using System.Reflection;
 
 using Prime.Configuration.Environment;
+
 namespace Prime
 {
     public class Program
