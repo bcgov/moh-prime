@@ -73,7 +73,7 @@ namespace Prime.Services
         public async Task<string> RenderEmailTemplateToString<TModel>(EmailTemplateType type, TModel viewModel)
         {
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(type);
-            return Engine.Razor.RunCompile(emailTemplate.Template, emailTemplate.UniqueName(), typeof(TModel), viewModel);
+            return Engine.Razor.RunCompile(emailTemplate.Template, emailTemplate.VersionedName(), typeof(TModel), viewModel);
         }
 
         private IView GetView(ActionContext actionContext, string viewName)

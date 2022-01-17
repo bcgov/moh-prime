@@ -13,7 +13,7 @@ namespace Prime.Models
         public DateTimeOffset ModifiedDate { get; set; }
         public EmailTemplateType EmailType { get; set; }
 
-        public string UniqueName()
+        public string VersionedName()
         {
             return $"{EmailType}_{ModifiedDate.ToUnixTimeMilliseconds()}";
         }
