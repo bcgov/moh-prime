@@ -93,7 +93,7 @@ namespace Prime.Services
             var output = RenderStringTemplateToString(emailTemplate.Template, viewModel);
             sw.Stop();
 
-            _logger.LogWarning($"---------- Template {emailTemplate.Template} render time: {sw.ElapsedMilliseconds}ms");
+            _logger.LogWarning($"---------- Template {type} render time: {sw.ElapsedMilliseconds}ms");
             return output;
         }
 
