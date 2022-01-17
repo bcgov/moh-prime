@@ -73,12 +73,7 @@ namespace Prime.Services
         public async Task<string> RenderEmailTemplateToString<TModel>(EmailTemplateType type, TModel viewModel)
         {
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(type);
-            var sw = System.Diagnostics.Stopwatch.StartNew();
-            var output = Engine.Razor.RunCompile(emailTemplate.Template, emailTemplate.UniqueName(), typeof(TModel), viewModel);
-            sw.Stop();
-
-            _logger.LogWarning($"---------- Template {type} render time: {sw.ElapsedMilliseconds}ms");
-            return output;
+            return Engine.Razor.RunCompile(emailTemplate.Template, emailTemplate.UniqueName(), typeof(TModel), viewModel);
         }
 
         private IView GetView(ActionContext actionContext, string viewName)
