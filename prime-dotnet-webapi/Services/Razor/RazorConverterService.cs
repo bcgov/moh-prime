@@ -28,22 +28,19 @@ namespace Prime.Services
         private readonly IServiceProvider _serviceProvider;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IEmailTemplateService _emailTemplateService;
-        private readonly ILogger _logger;
 
         public RazorConverterService(
             IRazorViewEngine viewEngine,
             ITempDataProvider tempDataProvider,
             IServiceProvider serviceProvider,
             IEmailTemplateService emailTemplateService,
-            IHttpContextAccessor contextAccessor,
-            ILogger<RazorConverterService> logger)
+            IHttpContextAccessor contextAccessor)
         {
             _viewEngine = viewEngine;
             _tempDataProvider = tempDataProvider;
             _serviceProvider = serviceProvider;
             _contextAccessor = contextAccessor;
             _emailTemplateService = emailTemplateService;
-            _logger = logger;
         }
 
         public async Task<string> RenderTemplateToStringAsync<TModel>(RazorTemplate<TModel> template, TModel viewModel)
