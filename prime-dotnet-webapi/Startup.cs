@@ -53,6 +53,7 @@ namespace Prime
         public void ConfigureServices(IServiceCollection services)
         {
             InitializeConfiguration(services);
+            services.Configure<SentryOptions>(Configuration.GetSection("Sentry"));
 
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAgreementService, AgreementService>();
@@ -91,6 +92,7 @@ namespace Prime
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
+            services.AddScoped<IErrorReporter, SentryErrorReporter>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
@@ -251,9 +253,7 @@ namespace Prime
             // Matches request to an endpoint
             app.UseRouting();
 
-            // Enable automatic tracing integration.
-            // Make sure to put this middleware right after `UseRouting()`.
-            app.UseSentryTracing();
+            app.UseMiddleware<SentryMiddleware>();
 
             app.UseCors(CorsPolicy);
 

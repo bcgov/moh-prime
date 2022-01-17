@@ -94,6 +94,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetSiteById(int siteId)
         {
             var record = await _communitySiteService.GetPermissionsRecordAsync(siteId);
+            throw null;
             if (record == null)
             {
                 return NotFound($"Site not found with id {siteId}");

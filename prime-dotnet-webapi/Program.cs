@@ -56,7 +56,7 @@ namespace Prime
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     // This uses the SENTRY_DSN environment variable without injection
-                    webBuilder.UseSentry();
+                    // webBuilder.UseSentry();
                     webBuilder.UseStartup<Startup>();
                 })
                 .UseSerilog();
@@ -101,7 +101,6 @@ namespace Prime
                     new JsonFormatter(),
                     $@"{path}/prime.json",
                     rollingInterval: RollingInterval.Day))
-                .WriteTo.Sentry()
                 .CreateLogger();
         }
     }
