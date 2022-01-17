@@ -7,6 +7,7 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,7 @@ export class AuthenticationGuard extends BaseGuard {
       const routes = this.config.routes;
       const adminRoutes = [routes.adjudication];
       const gisRoutes = [routes.gis];
+      const satEformsRoutes = [routes.sat];
       const moduleRoutes = [routes.enrolment, ...adminRoutes, ...gisRoutes];
       const targetModule = routePath.slice(1).split('/').shift();
 
@@ -52,7 +54,9 @@ export class AuthenticationGuard extends BaseGuard {
           ? IdentityProviderEnum.IDIR
           : (gisRoutes.includes(targetModule))
             ? IdentityProviderEnum.PHSA
-            : IdentityProviderEnum.BCSC;
+            : (satEformsRoutes.includes(targetModule))
+              ? IdentityProviderEnum.BCSC_EFORMS
+              : IdentityProviderEnum.BCSC;
 
         const options = {
           redirectUri,

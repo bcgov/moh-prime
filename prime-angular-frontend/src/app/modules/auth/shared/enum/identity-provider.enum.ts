@@ -2,5 +2,6 @@ export enum IdentityProviderEnum {
   BCSC = 'bcsc',
   IDIR = 'idir',
   BCEID = 'bceid',
-  PHSA = 'phsa'
+  PHSA = 'phsa',
+  BCSC_EFORMS = 'bcsc_eforms'
 }

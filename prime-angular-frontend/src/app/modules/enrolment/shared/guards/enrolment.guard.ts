@@ -18,6 +18,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -107,6 +108,8 @@ export class EnrolmentGuard extends BaseGuard {
         return this.manageBceidRouting(routePath);
       case IdentityProviderEnum.BCSC:
         return this.navigate(routePath, EnrolmentRoutes.BCSC_DEMOGRAPHIC);
+      case IdentityProviderEnum.BCSC_EFORMS:
+        return this.navigate(routePath, SatEformsRoutes.DEMOGRAPHIC);
       default:
         return false; // Identity provider is unknown and routing cannot be determined
     }

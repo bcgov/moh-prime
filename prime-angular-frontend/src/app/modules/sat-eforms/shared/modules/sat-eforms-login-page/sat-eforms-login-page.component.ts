@@ -47,7 +47,7 @@ export class SatEformsLoginPageComponent implements OnInit {
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
-      idpHint: IdentityProviderEnum.BCSC,
+      idpHint: IdentityProviderEnum.BCSC, // TODO: switch to BCSC_EFORMS when it's available?
       redirectUri
     });
   }
