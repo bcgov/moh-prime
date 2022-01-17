@@ -7,5 +7,4 @@ export interface RemoteUser {
   email: string;
   remoteUserCertification: RemoteUserCertification;
   notified: boolean;
-  // TODO: community site view model needed
 }
