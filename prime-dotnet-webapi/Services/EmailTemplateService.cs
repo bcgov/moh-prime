@@ -34,8 +34,11 @@ namespace Prime.Services
 
         public async Task<EmailTemplate> GetEmailTemplateByTypeAsync(EmailTemplateType type)
         {
-            return await _context.EmailTemplates
+            _logger.LogDebug("EmailTemplateService.GetEmailTemplateByTypeAsync called ...");
+            var emailTemplate = await _context.EmailTemplates
                 .SingleOrDefaultAsync(t => t.EmailType == type);
+            _logger.LogDebug("EmailTemplateService.GetEmailTemplateByTypeAsync completing ...");
+            return emailTemplate;
         }
 
         public async Task<IEnumerable<EmailTemplateListViewModel>> GetEmailTemplatesAsync()

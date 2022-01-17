@@ -17,6 +17,7 @@ using RazorEngine.Templating;
 
 using Prime.Services.Razor;
 using Prime.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Prime.Services
 {
@@ -28,18 +29,24 @@ namespace Prime.Services
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IEmailTemplateService _emailTemplateService;
 
+        protected readonly ILogger _logger;
+
+
         public RazorConverterService(
             IRazorViewEngine viewEngine,
             ITempDataProvider tempDataProvider,
             IServiceProvider serviceProvider,
             IEmailTemplateService emailTemplateService,
-            IHttpContextAccessor contextAccessor)
+            IHttpContextAccessor contextAccessor,
+            ILogger<RazorConverterService> logger)
         {
             _viewEngine = viewEngine;
             _tempDataProvider = tempDataProvider;
             _serviceProvider = serviceProvider;
             _contextAccessor = contextAccessor;
             _emailTemplateService = emailTemplateService;
+
+            _logger = logger;
         }
 
         public async Task<string> RenderTemplateToStringAsync<TModel>(RazorTemplate<TModel> template, TModel viewModel)
@@ -77,15 +84,20 @@ namespace Prime.Services
 
         public string RenderStringTemplateToString<TModel>(string template, TModel model)
         {
+            _logger.LogDebug("RazorConverterService.RenderStringTemplateToString called ...");
             try
             {
                 Guid guid = Guid.NewGuid();
-                return Engine.Razor.RunCompile(template, guid.ToString(), typeof(TModel), model);
+                _logger.LogDebug("Before Engine.Razor.RunCompile ...");
+                var rendered = Engine.Razor.RunCompile(template, guid.ToString(), typeof(TModel), model);
+                _logger.LogDebug("After Engine.Razor.RunCompile ...");
+                return rendered;
             }
             // Implicitly rethrow the exception to preserve stack trace:
             // https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2200
-            catch (TemplateCompilationException)
+            catch (TemplateCompilationException e)
             {
+                _logger.LogError(e.Message, e);
                 throw;
             }
 
@@ -93,8 +105,11 @@ namespace Prime.Services
 
         public async Task<string> RenderEmailTemplateToString<TModel>(EmailTemplateType type, TModel viewModel)
         {
+            _logger.LogDebug("RazorConverterService.RenderEmailTemplateToString called ...");
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(type);
-            return RenderStringTemplateToString(emailTemplate.Template, viewModel);
+            var rendered = RenderStringTemplateToString(emailTemplate.Template, viewModel);
+            _logger.LogDebug("RazorConverterService.RenderEmailTemplateToString completing ...");
+            return rendered;
         }
 
         private IView GetView(ActionContext actionContext, string viewName)

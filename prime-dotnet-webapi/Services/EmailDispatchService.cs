@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 using MassTransit;
-
+using Microsoft.Extensions.Logging;
 using Prime.Contracts;
 using Prime.Models;
 using Prime.ViewModels;
@@ -16,13 +16,17 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly IBus _bus;
 
+        protected readonly ILogger _logger;
+
+
         public EmailDispatchService(
             IBus bus,
-            IMapper mapper
-            )
+            IMapper mapper,
+            ILogger<EmailDispatchService> logger)
         {
             _mapper = mapper;
             _bus = bus;
+            _logger = logger;
         }
 
         public async Task SendBusinessLicenceUploadedAsync(CommunitySite site)
@@ -50,7 +54,7 @@ namespace Prime.Services
             await SendSiteEmailByType(site, SiteEmailType.SiteApprovedSigningAuthority);
         }
 
-       public async Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers)
+        public async Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers)
         {
             await _bus.Send<SendSiteEmail>(_mapper.Map<SendSiteEmailModel>(
                 site, opt => opt.AfterMap((src, dest) =>
@@ -98,7 +102,9 @@ namespace Prime.Services
 
         public async Task SendEnrolleeRenewalEmails()
         {
+            _logger.LogDebug("EmailDispatchService.SendEnrolleeRenewalEmails called ...");
             await _bus.Send<SendEnrolleeEmail>(new { EmailType = EnrolleeEmailType.EnrolleeRenewal });
+            _logger.LogDebug("EmailDispatchService.SendEnrolleeRenewalEmails completed");
         }
 
         public async Task SendEnrolleeUnsignedToaReminderEmails()

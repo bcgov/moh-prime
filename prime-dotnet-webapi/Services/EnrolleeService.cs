@@ -835,8 +835,11 @@ namespace Prime.Services
 
         public async Task<int> GetEnrolleeCountAsync()
         {
-            return await _context.Enrollees
+            _logger.LogDebug("EnrolleeService.GetEnrolleeCountAsync called ...");
+            int count = await _context.Enrollees
                 .CountAsync();
+            _logger.LogDebug("EnrolleeService.GetEnrolleeCountAsync completing ...");
+            return count;
         }
 
         public async Task UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null)

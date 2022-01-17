@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Logging;
 using Prime.HttpClients.Mail;
 using Prime.Models;
 using Prime.ViewModels.Emails;
@@ -18,12 +18,17 @@ namespace Prime.Services.EmailInternal
         private readonly IEmailTemplateService _emailTemplateService;
         private readonly IRazorConverterService _razorConverterService;
 
+        protected readonly ILogger _logger;
+
+
         public EmailRenderingService(
             IEmailTemplateService emailTemplateService,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
+            ILogger<EmailRenderingService> logger)
         {
             _emailTemplateService = emailTemplateService;
             _razorConverterService = razorConverterService;
+            _logger = logger;
         }
 
         public async Task<Email> RenderBusinessLicenceUploadedEmailAsync(string recipientEmail, LinkedEmailViewModel viewModel)
@@ -92,26 +97,32 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderRenewalPassedEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
-            return new Email
+            _logger.LogDebug("EmailService.RenderRenewalPassedEmailAsync called ...");
+            var rendered = new Email
             (
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: "Your PRIME Renewal Date Has Passed",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeRenewalPassed, viewModel)
             );
+            _logger.LogDebug("EmailService.RenderRenewalPassedEmailAsync completing ...");
+            return rendered;
         }
 
         public async Task<Email> RenderRenewalRequiredEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
+            _logger.LogDebug("EmailService.RenderRenewalRequiredEmailAsync called ...");
             viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
 
-            return new Email
+            var rendered = new Email
             (
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: "PRIME Renewal Required",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeRenewalRequired, viewModel)
             );
+            _logger.LogDebug("EmailService.RenderRenewalRequiredEmailAsync completing ...");
+            return rendered;
         }
 
         public async Task<Email> RenderSiteApprovedHibcEmailAsync(SiteApprovalEmailViewModel viewModel)

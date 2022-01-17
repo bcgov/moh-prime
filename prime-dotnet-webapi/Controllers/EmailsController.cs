@@ -8,6 +8,7 @@ using Prime.Services;
 using Prime.ViewModels.Emails;
 using System.Collections.Generic;
 using Prime.Models.Api;
+using Microsoft.Extensions.Logging;
 
 namespace Prime.Controllers
 {
@@ -20,11 +21,15 @@ namespace Prime.Controllers
         private readonly IEmailService _emailService;
         private readonly IEmailTemplateService _emailTemplateService;
 
-        public EmailsController(IEmailDispatchService emailDispatchService, IEmailService emailService, IEmailTemplateService emailTemplateService)
+        protected readonly ILogger _logger;
+
+        public EmailsController(IEmailDispatchService emailDispatchService, IEmailService emailService, IEmailTemplateService emailTemplateService,
+                                ILogger<EmailsController> logger)
         {
             _emailDispatchService = emailDispatchService;
             _emailService = emailService;
             _emailTemplateService = emailTemplateService;
+            _logger = logger;
         }
 
         // POST: api/Emails/management/statuses
@@ -55,7 +60,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendEnrolleeRenewalEmails()
         {
+            _logger.LogDebug("EmailsController.SendEnrolleeRenewalEmails called ...");
             await _emailDispatchService.SendEnrolleeRenewalEmails();
+            _logger.LogDebug("EmailsController.SendEnrolleeRenewalEmails completing ...");
 
             return NoContent();
         }

@@ -216,8 +216,10 @@ namespace Prime.Services
 
         public async Task SendEnrolleeRenewalEmails()
         {
+            _logger.LogDebug("EmailService.SendEnrolleeRenewalEmails called ...");
             var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
 
+            _logger.LogDebug("Selecting enrollee emails and expiry dates ...");
             var enrollees = await _context.Enrollees
                 .Select(e => new
                 {
@@ -229,9 +231,12 @@ namespace Prime.Services
                 .Where(e => e.ExpiryDate != null)
                 .DecompileAsync()
                 .ToListAsync();
+            _logger.LogDebug("Selecting enrollee emails and expiry dates completed.");
 
             foreach (var enrollee in enrollees)
             {
+                _logger.LogDebug($"Processing {enrollee.FirstName} {enrollee.LastName} within EmailService.SendEnrolleeRenewalEmails");
+
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
                 if (reminderEmailsIntervals.Contains(expiryDays))
                 {
@@ -244,6 +249,7 @@ namespace Prime.Services
                     await Send(email);
                 }
             }
+            _logger.LogDebug("EmailService.SendEnrolleeRenewalEmails completed");
         }
 
 
