@@ -47,7 +47,8 @@ namespace Prime.Configuration.Database
                     new PlrRoleType { Code = "COUN",      Name = "Counsellor" },
                     new PlrRoleType { Code = "MFT",       Name = "Marriage and Family Therapist" },
                     new PlrRoleType { Code = "RD",        Name = "Registered Dietitian" },
-                    new PlrRoleType { Code = "PHARMTECH", Name = "PHARMTECH" }
+                    new PlrRoleType { Code = "PHARMTECH", Name = "PHARMTECH" },
+                    new PlrRoleType { Code = "ND",        Name = "Naturopathic Doctor" }
                 };
             }
         }

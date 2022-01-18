@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Prime.Configuration.Environment;
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
+using Prime.Models.Plr;
 using Prime.Models.VerifiableCredentials;
 
 namespace Prime
@@ -117,7 +118,7 @@ namespace Prime
 
         // PLR Integration
         public DbSet<PlrProvider> PlrProviders { get; set; }
-
+        public DbSet<CollegeForPlrRoleType> CollegeForPlrRoleTypes { get; set; }
 
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
