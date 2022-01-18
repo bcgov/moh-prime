@@ -91,12 +91,19 @@ function main() {
     echo -e "-------- Calling PRIME-ODR API then Postgres COPY --------\n"
     # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url
     # ls -l /etc/ssl/certs
-    curl -sS --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
+    curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
       "${PRIME_ODR_API_URL}?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}" | \
       python3 /opt/scripts/parse_api_response.py | \
       exec_sql_no_resultset "\copy \"PharmanetTransactionLog\"(\"TransactionId\", \"TxDateTime\", \"UserId\", \"SourceIpAddress\", \"LocationIpAddress\", \"PharmacyId\", \"ProviderSoftwareId\", \"ProviderSoftwareVersion\", \"PractitionerId\", \"CollegePrefix\", \"TransactionType\", \"TransactionSubType\", \"TransactionOutcome\") FROM STDIN (FORMAT CSV)"
 
-    HAS_MORE=$(cat /tmp/isThereMoreData.txt)
+    if [ "${PRIME_ODR_API_FETCH_ONLY_ONCE}" = 'Y' ]
+    then 
+      echo -e "Set to fetch only once.\n"
+      HAS_MORE='N'
+    else 
+      HAS_MORE=$(cat /tmp/isThereMoreData.txt)     
+    fi
+
     echo
   done
   create_db_indices
