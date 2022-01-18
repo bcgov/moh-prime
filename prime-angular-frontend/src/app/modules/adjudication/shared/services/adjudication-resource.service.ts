@@ -87,6 +87,8 @@ export class AdjudicationResource {
         .pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
       selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`)
         .pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
+      selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`)
+        .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result)),
       adjudicatorIdir: this.apiResource.get<string>(`enrollees/${enrolleeId}/adjudicator-idir`)
         .pipe(map((response: ApiHttpResponse<string>) => response.result))
     })

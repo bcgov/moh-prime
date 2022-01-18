@@ -13,6 +13,7 @@ using Prime.Services;
 using Prime.ViewModels;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.ViewModels.Plr;
+using Prime.HttpClients.Mail;
 
 namespace Prime.Controllers
 {
@@ -30,18 +31,18 @@ namespace Prime.Controllers
         private readonly IPlrProviderService _plrProviderService;
 
         public EnrolleesController(
-            IEnrolleeService enrolleeService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
+            IEnrolleeService enrolleeService,
             IPlrProviderService plrProviderService,
             IDocumentService documentService)
         {
-            _enrolleeService = enrolleeService;
             _adminService = adminService;
             _businessEventService = businessEventService;
-            _emailService = emailService;
             _documentService = documentService;
+            _emailService = emailService;
+            _enrolleeService = enrolleeService;
             _plrProviderService = plrProviderService;
         }
 
@@ -455,12 +456,13 @@ namespace Prime.Controllers
         /// Gets an Enrollee's Self Declaration Documents.
         /// </summary>
         /// <param name="enrolleeId"></param>
+        /// <param name="includeHidden"></param>
         [HttpGet("{enrolleeId}/self-declarations/documents", Name = nameof(GetSelfDeclarationDocuments))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<SelfDeclarationDocumentViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetSelfDeclarationDocuments(int enrolleeId)
+        public async Task<ActionResult> GetSelfDeclarationDocuments(int enrolleeId, bool includeHidden = true)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -472,7 +474,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId));
+            return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId, includeHidden));
         }
 
         // POST: api/Enrollees/5/absences
@@ -619,6 +621,47 @@ namespace Prime.Controllers
             }
 
             await _enrolleeService.DeleteFutureEnrolleeAbsenceAsync(enrolleeId, absenceId);
+
+            return NoContent();
+        }
+
+        // POST: api/enrollees/1/absences/email
+        /// <summary>
+        ///    Sends Enrollee Absence Notification Email
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="email"></param>
+        [HttpPost("/api/enrollees/{enrolleeId}/absences/email", Name = nameof(SendEnrolleeAbsenceEmail))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> SendEnrolleeAbsenceEmail(int enrolleeId, FromBodyText email)
+        {
+            if (!Email.IsValidEmail(email))
+            {
+                return BadRequest("The email provided is not valid.");
+            }
+
+            var permissionsRecord = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (permissionsRecord == null)
+            {
+                return NotFound($"No enrollee exists with id: {enrolleeId}");
+            }
+            if (!permissionsRecord.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var absences = await _enrolleeService.GetEnrolleeAbsencesAsync(enrolleeId, false);
+            if (!absences.Any())
+            {
+                return NotFound($"No open absences found for enrollee with id: {enrolleeId}");
+            }
+
+            await _emailService.SendEnrolleeAbsenceNotificationEmailAsync(enrolleeId, absences.First(), email);
+            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Absence notification email sent to: {email.Data}");
 
             return NoContent();
         }
