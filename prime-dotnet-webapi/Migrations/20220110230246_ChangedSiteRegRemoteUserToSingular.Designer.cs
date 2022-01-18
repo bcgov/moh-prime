@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220110230246_ChangedSiteRegRemoteUserToSingular")]
+    partial class ChangedSiteRegRemoteUserToSingular
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4873,21 +4875,6 @@ namespace Prime.Migrations
                         {
                             Code = "2.16.840.1.113883.4.530",
                             Name = "RDID"
-                        },
-                        new
-                        {
-                            Code = "2.16.840.1.113883.3.40.2.46",
-                            Name = "MOAID"
-                        },
-                        new
-                        {
-                            Code = "2.16.840.1.113883.3.40.2.44",
-                            Name = "PPID"
-                        },
-                        new
-                        {
-                            Code = "2.16.840.1.113883.4.538",
-                            Name = "NAPID"
                         });
                 });
 
@@ -6191,116 +6178,6 @@ namespace Prime.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLog");
-                });
-
-            modelBuilder.Entity("Prime.Models.Plr.CollegeForPlrRoleType", b =>
-                {
-                    b.Property<string>("ProviderRoleType")
-                        .HasColumnType("text");
-
-                    b.Property<int>("CollegeCode")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ProviderRoleType");
-
-                    b.ToTable("CollegeForPlrRoleType");
-
-                    b.HasData(
-                        new
-                        {
-                            ProviderRoleType = "RN",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RNP",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RPN",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PHARM",
-                            CollegeCode = 2
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PO",
-                            CollegeCode = 1
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RAC",
-                            CollegeCode = 18
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RM",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "LPN",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "MD",
-                            CollegeCode = 1
-                        },
-                        new
-                        {
-                            ProviderRoleType = "OPT",
-                            CollegeCode = 14
-                        },
-                        new
-                        {
-                            ProviderRoleType = "DEN",
-                            CollegeCode = 7
-                        },
-                        new
-                        {
-                            ProviderRoleType = "OT",
-                            CollegeCode = 12
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PSYCH",
-                            CollegeCode = 16
-                        },
-                        new
-                        {
-                            ProviderRoleType = "CHIRO",
-                            CollegeCode = 4
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PHYSIO",
-                            CollegeCode = 15
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RMT",
-                            CollegeCode = 10
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PTECH",
-                            CollegeCode = 2
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RD",
-                            CollegeCode = 9
-                        },
-                        new
-                        {
-                            ProviderRoleType = "ND",
-                            CollegeCode = 11
-                        });
                 });
 
             modelBuilder.Entity("Prime.Models.Plr.PlrExpertise", b =>
@@ -8192,11 +8069,6 @@ namespace Prime.Migrations
                         {
                             Code = "PHARMTECH",
                             Name = "PHARMTECH"
-                        },
-                        new
-                        {
-                            Code = "ND",
-                            Name = "Naturopathic Doctor"
                         });
                 });
 

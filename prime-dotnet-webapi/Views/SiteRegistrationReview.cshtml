@@ -115,22 +115,20 @@
     <span class="ml-2">@user.FullName</span>
   </div>
 
-  @foreach (var certificate in @user.Certifications)
-  {
-    <div class="ml-2 mb-2">
-      <strong>Certification</strong>
-    </div>
 
-    <div class="ml-2 mb-2">
-      <h5>College</h5>
-      <span class="ml-2">@certificate.CollegeName</span>
-    </div>
+  <div class="ml-2 mb-2">
+    <strong>Certification</strong>
+  </div>
 
-    <div class="ml-2 mb-2">
-      <h5>Licence Number</h5>
-      <span class="ml-2">@certificate.LicenceNumber</span>
-    </div>
-  }
+  <div class="ml-2 mb-2">
+    <h5>College</h5>
+    <span class="ml-2">@user.Certification.CollegeName</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Licence Number</h5>
+    <span class="ml-2">@user.Certification.LicenceNumber</span>
+  </div>
 }
 
 <h2 class="mb-3">Signing Authority</h2>
