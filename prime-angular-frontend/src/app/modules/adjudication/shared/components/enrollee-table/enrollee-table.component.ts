@@ -16,7 +16,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { LocalStorageService } from '@core/services/local-storage.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
-import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum, PaperEnrolmentStatusMap } from '@shared/enums/enrolment-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { Admin } from '@auth/shared/models/admin.model';
@@ -59,11 +59,8 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public Role = Role;
+  public paperEnrolmentStatusMap = PaperEnrolmentStatusMap;
   public readonly PAPER_ENROLLEE_GPID_PREFIX = PAPER_ENROLLEE_GPID_PREFIX;
-  public readonly paperEnrolmentStatusMap = new Map<number, string>([
-    [1, 'Complete'],  // corresponds to regular enrolment 'Editable' status
-    [2, 'Incomplete'] // corresponds to regular enrolment 'Under Review' status
-  ]);
 
   private sortActiveKey: string;
   private sortDirectionKey: string;
@@ -107,12 +104,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
       enrollee.currentStatusCode === EnrolmentStatusEnum.UNDER_REVIEW ||
       enrollee.previousStatus?.statusCode === EnrolmentStatusEnum.UNDER_REVIEW
     );
-  }
-
-  // Check to see if we want to filter/map the status
-  // Conditions: enrollee is a paper enrollee and the status is one of [Under Review, Editable] mapped to [Incomplete, Complete] respectively
-  public filterPaperEnrolmentStatus(enrollee: EnrolleeListViewModel): boolean {
-    return !!(enrollee.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX) && this.paperEnrolmentStatusMap.get(enrollee.currentStatusCode));
   }
 
   public onNotify(enrollee: EnrolleeListViewModel): void {
