@@ -11,10 +11,8 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public int LicenseCode { get; set; }
 
-        [NotMapped]
         public License License { get; set; }
 
         public DateTime EffectiveDate { get; set; }
