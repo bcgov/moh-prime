@@ -1,17 +1,15 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using DelegateDecompiler.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Models.HealthAuthorities;
-using AutoMapper.QueryableExtensions;
-using AutoMapper;
 using Prime.ViewModels;
-using DelegateDecompiler.EntityFrameworkCore;
-using System.Linq;
-using System.Linq.Expressions;
-
 namespace Prime.Services
 {
     public class LookupService : BaseService, ILookupService
