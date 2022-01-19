@@ -14,6 +14,8 @@ namespace Prime.ViewModels.Profiles
                 .ReverseMap();
             CreateMap<RemoteUser, RemoteUserViewModel>()
                 .ReverseMap();
+            CreateMap<RemoteUser, SiteRemoteUserUpdateModel>()
+                .ReverseMap();
             CreateMap<RemoteUserCertification, RemoteUserCertificationViewModel>()
                 .ReverseMap();
 
