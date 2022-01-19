@@ -5,3 +5,8 @@ export enum EnrolmentStatusEnum {
   LOCKED,
   DECLINED,
 }
+
+export const PaperEnrolmentStatusMap: Record<number, string> = {
+  [EnrolmentStatusEnum.EDITABLE]: 'Complete',
+  [EnrolmentStatusEnum.UNDER_REVIEW]: 'Incomplete'
+};
