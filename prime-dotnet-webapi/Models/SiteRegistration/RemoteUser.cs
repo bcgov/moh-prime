@@ -30,6 +30,6 @@ namespace Prime.Models
         /// </summary>
         public bool Notified { get; set; }
 
-        public ICollection<RemoteUserCertification> RemoteUserCertifications { get; set; }
+        public RemoteUserCertification RemoteUserCertification { get; set; }
     }
 }
