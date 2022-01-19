@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using DelegateDecompiler;
 using Newtonsoft.Json;
 
 namespace Prime.Models
@@ -8,25 +10,22 @@ namespace Prime.Models
     [Table("LicenseLookup")]
     public class License : ILookup<int>
     {
+        public License()
+        {
+            // Initialize collections to prevent null exception on computed properties
+            LicenseDetails = new List<LicenseDetail>();
+        }
+
         [Key]
         public int Code { get; set; }
 
-        public int Weight { get; set; }
-
-        public string Prefix { get; set; }
-
-        public bool Manual { get; set; }
-
-        public bool Validate { get; set; }
-
-        public bool NamedInImReg { get; set; }
-
-        public bool LicensedToProvideCare { get; set; }
-
-        public PrescriberIdType? PrescriberIdType { get; set; }
-
         [Required]
         public string Name { get; set; }
+
+        public int Weight { get; set; }
+
+        [JsonIgnore]
+        public ICollection<LicenseDetail> LicenseDetails { get; set; }
 
         [JsonIgnore]
         public ICollection<Certification> Certifications { get; set; }
@@ -35,5 +34,14 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<DefaultPrivilege> DefaultPrivileges { get; set; }
+
+        [Computed]
+        [NotMapped]
+        public LicenseDetail CurrentLicenseDetail
+        {
+            get => LicenseDetails
+                .OrderByDescending(s => s.EffectiveDate)
+                .FirstOrDefault();
+        }
     }
 }
