@@ -224,7 +224,7 @@ namespace Prime.Services
                     updatedUser.SiteId = current.Id;
                     _context.Entry(existing).CurrentValues.SetValues(updatedUser);
 
-                    _context.RemoteUserCertifications.RemoveRange(existing.RemoteUserCertifications);
+                    _context.RemoteUserCertifications.Remove(existing.RemoteUserCertification);
 
                     updatedUser.RemoteUserCertification.RemoteUserId = updatedUser.Id;
                     _context.RemoteUserCertifications.Add(updatedUser.RemoteUserCertification);
@@ -426,7 +426,7 @@ namespace Prime.Services
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.BusinessHours)
                 .Include(s => s.RemoteUsers)
-                    .ThenInclude(r => r.RemoteUserCertifications)
+                    .ThenInclude(r => r.RemoteUserCertification)
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)

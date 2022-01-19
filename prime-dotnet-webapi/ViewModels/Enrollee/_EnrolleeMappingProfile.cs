@@ -72,6 +72,10 @@ namespace Prime.ViewModels.Profiles
             CreateMap<EnrolmentStatusReference, EnrolmentStatusReferenceViewModel>();
             CreateMap<EnrolleeNote, EnrolmentStatusReferenceNoteViewModel>();
             CreateMap<EnrolmentStatusReason, EnrolmentStatusReasonViewModel>();
+
+            CreateMap<License, LicenseViewModel>()
+                .IncludeMembers(l => l.CurrentLicenseDetail);
+            CreateMap<LicenseDetail, LicenseViewModel>();
         }
     }
 }
