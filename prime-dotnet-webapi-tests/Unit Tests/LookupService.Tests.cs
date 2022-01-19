@@ -92,14 +92,6 @@ namespace PrimeTests.UnitTests
             Assert.Equal(new LicenseConfiguration().SeedData.Count() + 1, newResults.Licenses.Count);
             Assert.Empty(newResults.Licenses.Where(l => l.Code == future.Code));
             Assert.NotEmpty(newResults.Licenses.Where(l => l.Code == past.Code));
-
-            // // Clean Up Test Data
-            // TestDb.Remove(future);
-            // TestDb.Remove(futureDetail);
-            // TestDb.Remove(past);
-            // TestDb.Remove(pastDetail);
-
-            // TestDb.SaveChanges();
         }
     }
 }
