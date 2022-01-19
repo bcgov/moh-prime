@@ -118,11 +118,11 @@ namespace Prime.Services.EmailInternal
                     RemoteUsers = s.RemoteUsers.Select(ru => new RemoteUserViewModel
                     {
                         FullName = $"{ru.FirstName} {ru.LastName}",
-                        Certifications = ru.RemoteUserCertifications.Select(c => new CertViewModel
+                        Certification = new CertViewModel
                         {
-                            CollegeName = c.College.Name,
-                            LicenceNumber = c.LicenseNumber
-                        })
+                            CollegeName = ru.RemoteUserCertification.College.Name,
+                            LicenceNumber = ru.RemoteUserCertification.LicenseNumber
+                        }
                     }),
                     SigningAuthority = new ContactViewModel
                     {

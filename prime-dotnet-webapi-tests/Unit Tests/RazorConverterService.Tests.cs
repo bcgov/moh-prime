@@ -133,13 +133,11 @@ namespace PrimeTests.UnitTests
                 {
                     new RemoteUserViewModel
                     {
-                        Certifications = new CertViewModel[]
-                        {
+                        Certification =
                             new CertViewModel
                             {
                                 CollegeName = certificationCollege
                             }
-                        }
                     }
                 },
                 SigningAuthority = new ContactViewModel()

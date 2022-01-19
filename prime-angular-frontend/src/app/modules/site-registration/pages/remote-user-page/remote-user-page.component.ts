@@ -81,7 +81,9 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['./']);
+    // Propagate this form state to the parent so the warning dialogue shows up appropriately
+    this.setParentFormState();
+    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
   }
 
   public collegeFilterPredicate() {
@@ -117,7 +119,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     const remoteUser = this.formState.getRemoteUsers()[+this.remoteUserIndex] ?? null;
 
     // Remote user at index does not exist likely due to a browser
-    // refresh on this page, and the URL param should be update
+    // refresh on this page, and the URL param should be updated
     if (this.remoteUserIndex !== 'new' && !remoteUser) {
       this.routeUtils.routeRelativeTo(['new']);
     }
@@ -148,13 +150,30 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
       remoteUsersFormArray.push(this.form);
     }
 
-    parent.markAsPristine();
-
     return of(noop());
   }
 
   protected afterSubmitIsSuccessful(): void {
+    // After adding a new remote user or updating an existing one, always mark parent form as dirty
+    // and allow routing while dirty
+    this.formState.form.markAsDirty();
+    this.allowRoutingWhenDirty = true;
+
     // Inform the remote users view not to patch the form, otherwise updates will be lost
     this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+    // Leave the page and mark parent form as pristine so the parent form doesn't display the warning dialogue
+    this.formState.form.markAsPristine();
+  }
+
+  private setParentFormState(): void {
+    (this.form.dirty)
+      ? this.formState.form.markAsDirty()
+      : this.formState.form.markAsPristine();
   }
 }

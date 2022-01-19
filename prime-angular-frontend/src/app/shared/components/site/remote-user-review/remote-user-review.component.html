@@ -5,29 +5,25 @@
 
   <ng-container *ngIf="remoteUsers?.length; else noRemoteUsers">
     <ng-container *ngFor="let remoteUser of remoteUsers">
-
       <div class="mb-3">
         <app-enrollee-property title="Name">
           {{ remoteUser | fullname | default }}
         </app-enrollee-property>
       </div>
 
-      <ng-container *ngFor="let remoteUserCertification of remoteUser.remoteUserCertifications">
-        <div class="mb-3">
-          <strong>Certification</strong>
-        </div>
+      <div class="mb-3">
+        <strong>Certification</strong>
+      </div>
 
-        <div class="ml-4 mb-3">
-          <app-enrollee-property title="College">
-            {{ remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
-          </app-enrollee-property>
+      <div class="ml-4 mb-3">
+        <app-enrollee-property title="College">
+          {{ remoteUser.remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
+        </app-enrollee-property>
 
-          <app-enrollee-property title="Licence">
-            {{ remoteUserCertification.licenseNumber | default }}
-          </app-enrollee-property>
-        </div>
-      </ng-container>
-
+        <app-enrollee-property title="Licence">
+          {{ remoteUser.remoteUserCertification.licenseNumber | default }}
+        </app-enrollee-property>
+      </div>
     </ng-container>
   </ng-container>
 
