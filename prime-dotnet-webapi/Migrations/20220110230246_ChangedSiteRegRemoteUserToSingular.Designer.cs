@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220110230246_ChangedSiteRegRemoteUserToSingular")]
+    partial class ChangedSiteRegRemoteUserToSingular
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4873,21 +4875,6 @@ namespace Prime.Migrations
                         {
                             Code = "2.16.840.1.113883.4.530",
                             Name = "RDID"
-                        },
-                        new
-                        {
-                            Code = "2.16.840.1.113883.3.40.2.46",
-                            Name = "MOAID"
-                        },
-                        new
-                        {
-                            Code = "2.16.840.1.113883.3.40.2.44",
-                            Name = "PPID"
-                        },
-                        new
-                        {
-                            Code = "2.16.840.1.113883.4.538",
-                            Name = "NAPID"
                         });
                 });
 
@@ -4988,9 +4975,27 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<bool>("LicensedToProvideCare")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Manual")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("NamedInImReg")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Prefix")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("PrescriberIdType")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Validate")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("Weight")
                         .HasColumnType("integer");
@@ -5003,1384 +5008,702 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Full - Family",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 1
                         },
                         new
                         {
                             Code = 2,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Full - Specialty",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 2
                         },
                         new
                         {
                             Code = 5,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Provisional - Family",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 3
                         },
                         new
                         {
                             Code = 6,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Provisional - Specialty",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 4
                         },
                         new
                         {
                             Code = 9,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Conditional - Practice Setting",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 5
                         },
                         new
                         {
                             Code = 8,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Conditional - Practice Limitations",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 6
                         },
                         new
                         {
                             Code = 10,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Conditional - Disciplined",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 7
                         },
                         new
                         {
                             Code = 22,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Surgical Assistant",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 8
                         },
                         new
                         {
                             Code = 16,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Clinical Observership",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 9
                         },
                         new
                         {
                             Code = 7,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Academic",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 10
                         },
                         new
                         {
                             Code = 4,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Osteopathic",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 11
                         },
                         new
                         {
                             Code = 3,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Special",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 12
                         },
                         new
                         {
                             Code = 17,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Visitor",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 13
                         },
                         new
                         {
                             Code = 12,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Educational - Postgraduate Resident",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 14
                         },
                         new
                         {
                             Code = 13,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Educational - Postgraduate Resident Elective",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 15
                         },
                         new
                         {
                             Code = 14,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Educational - Postgraduate Fellow",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 16
                         },
                         new
                         {
                             Code = 15,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Educational - Postgraduate Trainee",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 17
                         },
                         new
                         {
                             Code = 11,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Educational - Medical Student",
+                            NamedInImReg = false,
+                            Prefix = "91",
+                            Validate = false,
                             Weight = 18
                         },
                         new
                         {
                             Code = 23,
+                            LicensedToProvideCare = false,
+                            Manual = true,
                             Name = "Administrative",
+                            NamedInImReg = false,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 19
                         },
                         new
                         {
                             Code = 20,
+                            LicensedToProvideCare = false,
+                            Manual = true,
                             Name = "Retired - Life ",
+                            NamedInImReg = false,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 20
                         },
                         new
                         {
                             Code = 24,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Assessment",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 21
                         },
                         new
                         {
                             Code = 18,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Emergency - Family",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 22
                         },
                         new
                         {
                             Code = 19,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Emergency - Specialty",
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 23
                         },
                         new
                         {
                             Code = 21,
+                            LicensedToProvideCare = false,
+                            Manual = true,
                             Name = "Temporarily Inactive",
+                            NamedInImReg = false,
+                            Prefix = "91",
+                            Validate = true,
                             Weight = 24
                         },
                         new
                         {
                             Code = 59,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Podiatric Surgeon",
+                            NamedInImReg = false,
+                            Prefix = "93",
+                            Validate = true,
                             Weight = 25
                         },
                         new
                         {
                             Code = 65,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Educational - Podiatric Surgeon Student (Elective)",
+                            NamedInImReg = false,
+                            Prefix = "93",
+                            Validate = true,
                             Weight = 26
                         },
                         new
                         {
                             Code = 66,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Educational - Podiatric Surgeon Resident (Elective)",
+                            NamedInImReg = false,
+                            Prefix = "93",
+                            Validate = true,
                             Weight = 27
                         },
                         new
                         {
                             Code = 67,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Conditional - Podiatric Surgeon Disciplined",
+                            NamedInImReg = false,
+                            Prefix = "93",
+                            Validate = true,
                             Weight = 28
                         },
                         new
                         {
                             Code = 25,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Full Pharmacist",
+                            NamedInImReg = true,
+                            Prefix = "P1",
+                            Validate = true,
                             Weight = 1
                         },
                         new
                         {
                             Code = 26,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Limited Pharmacist",
+                            NamedInImReg = true,
+                            Prefix = "P1",
+                            Validate = true,
                             Weight = 2
                         },
                         new
                         {
                             Code = 28,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Student Pharmacist",
+                            NamedInImReg = false,
+                            Prefix = "P1",
+                            Validate = false,
                             Weight = 3
                         },
                         new
                         {
                             Code = 27,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Temporary Pharmacist",
+                            NamedInImReg = true,
+                            Prefix = "P1",
+                            Validate = true,
                             Weight = 4
                         },
                         new
                         {
                             Code = 30,
+                            LicensedToProvideCare = false,
+                            Manual = true,
                             Name = "Non-Practicing Pharmacist",
+                            NamedInImReg = true,
+                            Prefix = "P1",
+                            Validate = true,
                             Weight = 5
                         },
                         new
                         {
                             Code = 29,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Pharmacy Technician",
+                            NamedInImReg = false,
+                            Prefix = "T9",
+                            Validate = false,
                             Weight = 6
                         },
                         new
                         {
                             Code = 31,
+                            LicensedToProvideCare = false,
+                            Manual = true,
                             Name = "Non-Practicing Pharmacy Technician",
+                            NamedInImReg = false,
+                            Prefix = "T9",
+                            Validate = false,
                             Weight = 7
                         },
                         new
                         {
                             Code = 68,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Temporary Pharmacy Technician",
+                            NamedInImReg = false,
+                            Prefix = "T9",
+                            Validate = false,
                             Weight = 8
                         },
                         new
                         {
                             Code = 47,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Practicing Nurse Practitioner",
+                            NamedInImReg = true,
+                            Prefix = "96",
+                            PrescriberIdType = 2,
+                            Validate = true,
                             Weight = 1
                         },
                         new
                         {
                             Code = 48,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Provisional Nurse Practitioner",
+                            NamedInImReg = true,
+                            Prefix = "96",
+                            Validate = false,
                             Weight = 2
                         },
                         new
                         {
                             Code = 51,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Temporary Nurse Practitioner (Emergency)",
+                            NamedInImReg = true,
+                            Prefix = "96",
+                            PrescriberIdType = 2,
+                            Validate = true,
                             Weight = 4
                         },
                         new
                         {
                             Code = 49,
+                            LicensedToProvideCare = false,
+                            Manual = true,
                             Name = "Non-Practicing Nurse Practitioner",
+                            NamedInImReg = true,
+                            Prefix = "96",
+                            Validate = true,
                             Weight = 5
                         },
                         new
                         {
                             Code = 32,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Practicing Registered Nurse",
+                            NamedInImReg = false,
+                            Prefix = "R9",
+                            PrescriberIdType = 1,
+                            Validate = true,
                             Weight = 6
                         },
                         new
                         {
                             Code = 33,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Provisional Registered Nurse",
+                            NamedInImReg = false,
+                            Prefix = "R9",
+                            Validate = false,
                             Weight = 7
                         },
                         new
                         {
                             Code = 39,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Temporary Registered Nurse (Emergency)",
+                            NamedInImReg = false,
+                            Prefix = "R9",
+                            PrescriberIdType = 1,
+                            Validate = true,
                             Weight = 9
                         },
                         new
                         {
                             Code = 34,
+                            LicensedToProvideCare = false,
+                            Manual = true,
                             Name = "Non-Practicing Registered Nurse",
+                            NamedInImReg = false,
+                            Prefix = "R9",
+                            Validate = false,
                             Weight = 10
                         },
                         new
                         {
                             Code = 40,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Employed Student Nurse",
+                            NamedInImReg = false,
+                            Prefix = "R9",
+                            Validate = false,
                             Weight = 11
                         },
                         new
                         {
                             Code = 35,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Practicing Licensed Graduate Nurse",
+                            NamedInImReg = false,
+                            Prefix = "R9",
+                            PrescriberIdType = 1,
+                            Validate = false,
                             Weight = 12
                         },
                         new
                         {
                             Code = 36,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Provisional Licensed Graduate Nurse",
+                            NamedInImReg = false,
+                            Prefix = "R9",
+                            Validate = false,
                             Weight = 13
                         },
                         new
                         {
                             Code = 37,
+                            LicensedToProvideCare = false,
+                            Manual = false,
                             Name = "Non-Practicing Licensed Graduate Nurse",
+                            NamedInImReg = false,
+                            Prefix = "R9",
+                            Validate = true,
                             Weight = 14
                         },
                         new
                         {
                             Code = 41,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Practicing Registered Psychiatric Nurse",
+                            NamedInImReg = false,
+                            Prefix = "Y9",
+                            PrescriberIdType = 1,
+                            Validate = true,
                             Weight = 15
                         },
                         new
                         {
                             Code = 42,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Provisional Registered Psychiatric Nurse",
+                            NamedInImReg = false,
+                            Prefix = "Y9",
+                            Validate = false,
                             Weight = 16
                         },
                         new
                         {
                             Code = 45,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Temporary Registered Psychiatric Nurse (Emergency)",
+                            NamedInImReg = false,
+                            Prefix = "Y9",
+                            PrescriberIdType = 1,
+                            Validate = true,
                             Weight = 18
                         },
                         new
                         {
                             Code = 43,
+                            LicensedToProvideCare = false,
+                            Manual = true,
                             Name = "Non-Practicing Registered Psychiatric Nurse",
+                            NamedInImReg = false,
+                            Prefix = "Y9",
+                            Validate = false,
                             Weight = 19
                         },
                         new
                         {
                             Code = 46,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Employed Student Psychiatric Nurse",
+                            NamedInImReg = false,
+                            Prefix = "Y9",
+                            Validate = false,
                             Weight = 20
                         },
                         new
                         {
                             Code = 52,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Practicing Licensed Practical Nurse",
+                            NamedInImReg = false,
+                            Prefix = "L9",
+                            Validate = false,
                             Weight = 21
                         },
                         new
                         {
                             Code = 53,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Provisional Licensed Practical Nurse",
+                            NamedInImReg = false,
+                            Prefix = "L9",
+                            Validate = false,
                             Weight = 22
                         },
                         new
                         {
                             Code = 55,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Temporary Licensed Practical Nurse (Emergency)",
+                            NamedInImReg = false,
+                            Prefix = "L9",
+                            Validate = false,
                             Weight = 23
                         },
                         new
                         {
                             Code = 54,
+                            LicensedToProvideCare = false,
+                            Manual = true,
                             Name = "Non-Practicing Licensed Practical Nurse",
+                            NamedInImReg = false,
+                            Prefix = "L9",
+                            Validate = false,
                             Weight = 25
                         },
                         new
                         {
                             Code = 60,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Practising Midwife",
+                            NamedInImReg = false,
+                            Prefix = "98",
+                            Validate = false,
                             Weight = 28
                         },
                         new
                         {
                             Code = 61,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Provisional Midwife",
+                            NamedInImReg = false,
+                            Prefix = "98",
+                            Validate = false,
                             Weight = 29
                         },
                         new
                         {
                             Code = 62,
+                            LicensedToProvideCare = true,
+                            Manual = false,
                             Name = "Temporary Midwife (Emergency)",
+                            NamedInImReg = false,
+                            Prefix = "98",
+                            Validate = false,
                             Weight = 30
                         },
                         new
                         {
                             Code = 63,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Non-Practising Midwife",
+                            NamedInImReg = false,
+                            Prefix = "98",
+                            Validate = false,
                             Weight = 31
                         },
                         new
                         {
                             Code = 69,
+                            LicensedToProvideCare = true,
+                            Manual = true,
                             Name = "Student Midwife",
+                            NamedInImReg = false,
+                            Prefix = "98",
+                            Validate = false,
                             Weight = 32
                         },
                         new
                         {
                             Code = 64,
+                            LicensedToProvideCare = false,
+                            Manual = true,
                             Name = "Not Displayed",
-                            Weight = 1
-                        });
-                });
-
-            modelBuilder.Entity("Prime.Models.LicenseDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("EffectiveDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("LicenseCode")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("LicensedToProvideCare")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("Manual")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("NamedInImReg")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Prefix")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("PrescriberIdType")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("Validate")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LicenseCode");
-
-                    b.ToTable("LicenseDetail");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 1,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 2,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 5,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 6,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 9,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 8,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 10,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 22,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 22,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 16,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 16,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 7,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 4,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 3,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 17,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 17,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 12,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 13,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 14,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 15,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 15,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 11,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 23,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 23,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 20,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 20,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 24,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 24,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 18,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 18,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 19,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 21,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 21,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 59,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 59,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "93",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 65,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 65,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "93",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 66,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 66,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "93",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 67,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 67,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "93",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 25,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 25,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "P1",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 26,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 26,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "P1",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 28,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 28,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "P1",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 27,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 27,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "P1",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 30,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 30,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "P1",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 29,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 29,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "T9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 31,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 31,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "T9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 68,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 68,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "T9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 47,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 47,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "96",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 48,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 48,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "96",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 51,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 51,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "96",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 49,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 49,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "96",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 32,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 32,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 33,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 33,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 39,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 39,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 34,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 34,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 40,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 40,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 35,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 35,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 36,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 36,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 37,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 37,
-                            LicensedToProvideCare = false,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 41,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 41,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 42,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 42,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 45,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 45,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 43,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 43,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 46,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 46,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 52,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 52,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 53,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 53,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 55,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 55,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 54,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 54,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 60,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 60,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "98",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 61,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 61,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "98",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 62,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 62,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "98",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 63,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 63,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "98",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 69,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 69,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "98",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 64,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 64,
-                            LicensedToProvideCare = false,
-                            Manual = true,
                             NamedInImReg = false,
                             Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = false,
+                            Weight = 1
                         });
                 });
 
@@ -6855,116 +6178,6 @@ namespace Prime.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLog");
-                });
-
-            modelBuilder.Entity("Prime.Models.Plr.CollegeForPlrRoleType", b =>
-                {
-                    b.Property<string>("ProviderRoleType")
-                        .HasColumnType("text");
-
-                    b.Property<int>("CollegeCode")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ProviderRoleType");
-
-                    b.ToTable("CollegeForPlrRoleType");
-
-                    b.HasData(
-                        new
-                        {
-                            ProviderRoleType = "RN",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RNP",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RPN",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PHARM",
-                            CollegeCode = 2
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PO",
-                            CollegeCode = 1
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RAC",
-                            CollegeCode = 18
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RM",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "LPN",
-                            CollegeCode = 3
-                        },
-                        new
-                        {
-                            ProviderRoleType = "MD",
-                            CollegeCode = 1
-                        },
-                        new
-                        {
-                            ProviderRoleType = "OPT",
-                            CollegeCode = 14
-                        },
-                        new
-                        {
-                            ProviderRoleType = "DEN",
-                            CollegeCode = 7
-                        },
-                        new
-                        {
-                            ProviderRoleType = "OT",
-                            CollegeCode = 12
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PSYCH",
-                            CollegeCode = 16
-                        },
-                        new
-                        {
-                            ProviderRoleType = "CHIRO",
-                            CollegeCode = 4
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PHYSIO",
-                            CollegeCode = 15
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RMT",
-                            CollegeCode = 10
-                        },
-                        new
-                        {
-                            ProviderRoleType = "PTECH",
-                            CollegeCode = 2
-                        },
-                        new
-                        {
-                            ProviderRoleType = "RD",
-                            CollegeCode = 9
-                        },
-                        new
-                        {
-                            ProviderRoleType = "ND",
-                            CollegeCode = 11
-                        });
                 });
 
             modelBuilder.Entity("Prime.Models.Plr.PlrExpertise", b =>
@@ -8856,11 +8069,6 @@ namespace Prime.Migrations
                         {
                             Code = "PHARMTECH",
                             Name = "PHARMTECH"
-                        },
-                        new
-                        {
-                            Code = "ND",
-                            Name = "Naturopathic Doctor"
                         });
                 });
 
@@ -11822,17 +11030,6 @@ namespace Prime.Migrations
                     b.Navigation("CommunitySite");
                 });
 
-            modelBuilder.Entity("Prime.Models.LicenseDetail", b =>
-                {
-                    b.HasOne("Prime.Models.License", "License")
-                        .WithMany("LicenseDetails")
-                        .HasForeignKey("LicenseCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("License");
-                });
-
             modelBuilder.Entity("Prime.Models.OboSite", b =>
                 {
                     b.HasOne("Prime.Models.CareSetting", "CareSetting")
@@ -12532,8 +11729,6 @@ namespace Prime.Migrations
                     b.Navigation("CollegeLicenses");
 
                     b.Navigation("DefaultPrivileges");
-
-                    b.Navigation("LicenseDetails");
                 });
 
             modelBuilder.Entity("Prime.Models.Organization", b =>

@@ -68,6 +68,9 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public onRemove(index: number) {
     this.formState.remoteUsers.removeAt(index);
     this.addedUpdatedRemoteUser = false;
+
+    // After removing a remote user, always mark form as dirty
+    this.formState.form.markAsDirty();
   }
 
   public onEdit(index: number) {
@@ -75,6 +78,8 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   }
 
   public onBack() {
+    // This will allow the warning dialogue to be displayed when going back with a dirty form
+    this.canDeactivateAllowlist = [];
     const nextRoute = (!this.isCompleted)
       ? SiteRoutes.HOURS_OPERATION
       : SiteRoutes.SITE_REVIEW;
@@ -98,22 +103,26 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     // Inform the parent not to patch the form as there are outstanding changes
     // to the remote users that need to be persisted
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
-    this.addedUpdatedRemoteUser = fromRemoteUser;
+    this.addedUpdatedRemoteUser = fromRemoteUser && this.formState.form.dirty;
 
     // Remove query param from URL without refreshing
     this.routeUtils.removeQueryParams({ fromRemoteUser: null });
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
-    // TODO is this needed?
-    this.formState.form.markAsPristine();
 
     // Needed if returning from Add/Update Remote User
     this.setHasRemoteUsersToggleState();
+
+    // If we end up in this page from any page other that Remote User, make form pristine again.
+    // otherwise this form should have the same state as the Remote User form
+    if (!fromRemoteUser) {
+      this.formState.form.markAsPristine();
+    }
   }
 
   protected initForm() {
     this.formState.remoteUsers.valueChanges
       .pipe(untilDestroyed(this))
-      .subscribe((remoteUsers: RemoteUser[]) => {
+      .subscribe((_) => {
         // Executed when removing Remote Users
         this.setHasRemoteUsersToggleState();
       });
@@ -130,12 +139,16 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
         this.addedUpdatedRemoteUser = false;
       });
 
+    this.formState.remoteUsers.length
+      ? this.formState.hasRemoteUsers.setValue(true)
+      : this.formState.hasRemoteUsers.setValue(false)
+
     this.patchForm();
   }
 
   private setHasRemoteUsersToggleState(): void {
-    this.formState.remoteUsers.length ?
-      this.formState.hasRemoteUsers.disable({ emitEvent: false })
+    this.formState.remoteUsers.length
+      ? this.formState.hasRemoteUsers.disable({ emitEvent: false })
       : this.formState.hasRemoteUsers.enable({ emitEvent: false });
   }
 
@@ -167,5 +180,15 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
       : SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(['../', routePath]);
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Reset the remoteUsersPage form value
+    const site = this.siteService.site;
+    this.siteFormStateService.remoteUsersPageFormState.patchValue(site?.remoteUsers, true);
   }
 }

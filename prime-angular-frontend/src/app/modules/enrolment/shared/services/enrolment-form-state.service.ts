@@ -671,9 +671,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const hasCertification = certifications.some(c => c?.licenseNumber);
     const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities').value as boolean[];
     const hasOboSiteForEveryChosenHealthAuth = enrolleeHealthAuthorities
-      .every((wasChosen: boolean, healthAuthorityCode: HealthAuthorityEnum) =>
+      .every((wasChosen: boolean, healthAuthorityIndex: HealthAuthorityEnum) =>
         (wasChosen)
-          ? oboSites.some(os => os.healthAuthorityCode === healthAuthorityCode)
+          ? oboSites.some(os => os.healthAuthorityCode === this.configService.healthAuthorities[healthAuthorityIndex].code)
           : true
       );
 
