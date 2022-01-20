@@ -76,12 +76,14 @@ namespace PrimeTests.UnitTests
 
             var past = new License { Code = 2000, Weight = 2, Name = "Past License" };
             var pastDetail = new LicenseDetail { Id = 2000, LicenseCode = 2000, EffectiveDate = DateTime.UtcNow, Prefix = "91", Manual = false, Validate = true, NamedInImReg = true, LicensedToProvideCare = true };
+            var pastOlderDetail = new LicenseDetail { Id = 1999, LicenseCode = 2000, EffectiveDate = DateTime.UtcNow.AddYears(-1), Prefix = "91", Manual = true, Validate = true, NamedInImReg = true, LicensedToProvideCare = true };
 
             // Load Test Data
             TestDb.Add(future);
             TestDb.Add(futureDetail);
             TestDb.Add(past);
             TestDb.Add(pastDetail);
+            TestDb.Add(pastOlderDetail);
 
             TestDb.SaveChanges();
 
@@ -91,7 +93,10 @@ namespace PrimeTests.UnitTests
             Assert.NotEmpty(newResults.Licenses);
             Assert.Equal(new LicenseConfiguration().SeedData.Count() + 1, newResults.Licenses.Count);
             Assert.Empty(newResults.Licenses.Where(l => l.Code == future.Code));
-            Assert.NotEmpty(newResults.Licenses.Where(l => l.Code == past.Code));
+            var pastCodeLicenses = newResults.Licenses.Where(l => l.Code == past.Code);
+            Assert.NotEmpty(pastCodeLicenses);
+            Assert.Single(pastCodeLicenses);
+            Assert.False(pastCodeLicenses.Single().Manual);
         }
     }
 }
