@@ -93,6 +93,8 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.UnderReview)
                 .AddStatusReason(StatusReasonType.PaperEnrollee);
 
+            enrollee.AlwaysManual = true;
+
             _context.Enrollees.Add(enrollee);
             await _context.SaveChangesAsync();
 
