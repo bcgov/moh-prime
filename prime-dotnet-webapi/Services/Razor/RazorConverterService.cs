@@ -66,26 +66,10 @@ namespace Prime.Services
             return output.ToString();
         }
 
-        public string RenderStringTemplateToString<TModel>(string template, TModel model)
-        {
-            try
-            {
-                Guid guid = Guid.NewGuid();
-                return Engine.Razor.RunCompile(template, guid.ToString(), typeof(TModel), model);
-            }
-            // Implicitly rethrow the exception to preserve stack trace:
-            // https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2200
-            catch (TemplateCompilationException)
-            {
-                throw;
-            }
-
-        }
-
         public async Task<string> RenderEmailTemplateToString<TModel>(EmailTemplateType type, TModel viewModel)
         {
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(type);
-            return RenderStringTemplateToString(emailTemplate.Template, viewModel);
+            return Engine.Razor.RunCompile(emailTemplate.Template, emailTemplate.VersionedName(), typeof(TModel), viewModel);
         }
 
         private IView GetView(ActionContext actionContext, string viewName)
