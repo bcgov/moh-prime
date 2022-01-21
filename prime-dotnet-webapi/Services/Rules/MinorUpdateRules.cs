@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using KellermanSoftware.CompareNetObjects;
 using Prime.Models;
 using Prime.ViewModels;
-
+using Prime.Engines;
+using Prime.DTOs.AgreementEngine;
 
 namespace Prime.Services.Rules
 {
@@ -31,6 +32,43 @@ namespace Prime.Services.Rules
             }
 
             return Task.FromResult(enrollee.HasLatestAgreement());
+        }
+    }
+
+    /// <summary>
+    /// Enrollee has a signed a TOA that is of the type the agreementEngine would assign
+    /// at this point in time. In the case the agreementEngine returns indetermanate, return false.
+    /// </summary>
+    public class CorrectToaRule : MinorUpdateRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.Agreements == null)
+            {
+                return Task.FromResult(false);
+            }
+
+            var agreementDto = new AgreementEngineDto
+            {
+                CareSettingCodes = enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode).ToList(),
+                Certifications = enrollee.Certifications.Select(c => new CertificationDto
+                {
+                    CollegeCode = c.CollegeCode,
+                    License = c.License
+                }).ToList()
+            };
+            var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
+
+            var currentAgreementType = enrollee.Agreements
+                .OrderByDescending(a => a.CreatedDate)
+                .FirstOrDefault(a => a.AcceptedDate != null)?.AgreementVersion?.AgreementType;
+
+            if (expectedAgreementType == null || currentAgreementType != expectedAgreementType)
+            {
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
         }
     }
 

@@ -64,6 +64,7 @@ namespace Prime.Services
             {
                 new DateRule(),
                 new CurrentToaRule(),
+                new CorrectToaRule(),
                 new AllowableChangesRule(profileUpdate)
             };
 
