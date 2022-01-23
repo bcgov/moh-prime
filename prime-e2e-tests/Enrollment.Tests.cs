@@ -111,11 +111,8 @@ namespace TestPrimeE2E.Enrollment
             SelectDropdownItem("licenseCode", "Full - Family");
             PickDate("//mat-datepicker-toggle//span[@class='mat-button-wrapper']", "2023", "MAR", "5");
             TypeIntoField("CPSID Number", "20101");
-            // TODO: Why does 'Keep Changes and Continue' pop up without Sleep?
-            System.Threading.Thread.Sleep(1000);
             CheckLogThenScreenshot(expectedTitle);
-            // Need to Tab over to click ''Save and Continue' button
-            _driver.TabAndInteract(GetInputFieldXPath("CPSID Number"), 3, Keys.Enter);
+            _driver.ClickWithJavaScript(GetButtonXPath("Save and Continue"));
         }
 
 
