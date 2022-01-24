@@ -85,7 +85,7 @@ namespace TestPrimeE2E.SiteRegistration
             siteId.Clear();
             siteId.SendKeys(GeneratePecLikeString());
             _driver.TakeScreenshot("Site_Business_Licence");
-            ClickButton("Save and Continue");
+            _driver.ClickWithJavaScript(GetButtonXPath("Save and Continue"));
 
             //site address
             ClickButton("Add address manually");
@@ -95,8 +95,7 @@ namespace TestPrimeE2E.SiteRegistration
             postal.Clear();
             postal.SendKeys(_address.ZipCode("?#? #?#"));
             _driver.TakeScreenshot("Site_Address");
-            // Need to tab over and click "Save and Continue" button
-            _driver.TabAndInteract("//input[@formcontrolname='postal']", 2, Keys.Enter);
+            _driver.ClickWithJavaScript(GetButtonXPath("Save and Continue"));
 
             //hours of operation
             _driver.FindPatiently("//mat-slide-toggle").Click();
@@ -148,14 +147,13 @@ namespace TestPrimeE2E.SiteRegistration
             }
             //information review
             // tick checkbox
-            _driver.ClickWithJavaScript("//*[@id='mat-checkbox-9-input']");
+            _driver.ClickWithJavaScript("//input[@type='checkbox']");
             _driver.TakeScreenshot("Information_Review");
             // click accept button
             _driver.ClickWithJavaScript(GetButtonXPath("Submit"));
-            // TODO: Seem to need to pause or else end up remaining on page 
-            System.Threading.Thread.Sleep(1000);
             // confirm
-            _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Save Site')]]").Click();
+            _driver.ClickWithJavaScript(GetButtonXPath("Save Site"));
+
 
             // Last page
             // wait until page load complete

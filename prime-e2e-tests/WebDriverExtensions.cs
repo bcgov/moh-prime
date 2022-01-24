@@ -82,7 +82,7 @@ namespace TestPrimeE2E
 
         /// <summary>
         /// This method may be useful to interact with elements that can't be clicked on (e.g. getting OpenQA.Selenium.ElementClickInterceptedException instead)
-        /// or don't respond to being clicked on through Selenium API.
+        /// or don't respond to being clicked on through Selenium API.  But also consider <c>ClickWithJavaScript</c>
         /// </summary>
         /// <param name="xPathToStartElement">XPath expression to obtain reference to "start" page element (before "end" element in the tab sequence order)</param>
         /// <param name="numTabsToEndElement">Number of Tab presses to get to the "end" element</param>
