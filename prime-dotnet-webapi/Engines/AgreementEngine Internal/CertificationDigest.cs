@@ -27,12 +27,12 @@ namespace Prime.Engines.AgreementEngineInternal
 
             var cert = certs.Single();
 
-            if (!cert.License.LicensedToProvideCare)
+            if (!cert.License.CurrentLicenseDetail.LicensedToProvideCare)
             {
                 return new CannotProvideCare();
             }
 
-            bool regulated = cert.License.NamedInImReg;
+            bool regulated = cert.License.CurrentLicenseDetail.NamedInImReg;
 
             if (College.IsCollegeOfPharmacists(cert.CollegeCode))
             {

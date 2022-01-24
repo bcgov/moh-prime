@@ -15,14 +15,10 @@ namespace Prime.Services.EmailInternal
         private const string MohEmail = "HLTH.HnetConnection@gov.bc.ca";
         private const string ProviderEnrolmentTeamEmail = "Lori.Haggstrom@gov.bc.ca";
 
-        private readonly IEmailTemplateService _emailTemplateService;
         private readonly IRazorConverterService _razorConverterService;
 
-        public EmailRenderingService(
-            IEmailTemplateService emailTemplateService,
-            IRazorConverterService razorConverterService)
+        public EmailRenderingService(IRazorConverterService razorConverterService)
         {
-            _emailTemplateService = emailTemplateService;
             _razorConverterService = razorConverterService;
         }
 
