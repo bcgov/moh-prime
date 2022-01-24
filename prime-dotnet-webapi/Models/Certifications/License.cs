@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -40,6 +41,7 @@ namespace Prime.Models
         public LicenseDetail CurrentLicenseDetail
         {
             get => LicenseDetails
+                .Where(l => l.EffectiveDate <= DateTime.UtcNow)
                 .OrderByDescending(s => s.EffectiveDate)
                 .FirstOrDefault();
         }
