@@ -30,6 +30,12 @@ namespace PrimeTests.UnitTests
             // TODO: implement with better control over test DB and access term service.
         }
 
+        [Fact(Skip = "Awaiting test refactor")]
+        public void TestCorrectToaRule()
+        {
+            // TODO: Add small test, majority of funtionality is now tested in AgreementEngine.Tests
+        }
+
         [Theory]
         [MemberData(nameof(DateRuleData))]
         public async void TestDateRule(DateTimeOffset? expiryDate, bool expected)
