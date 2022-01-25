@@ -13,5 +13,11 @@ namespace Prime.Services
         Task CreateEnrolleeAgreementAsync(int enrolleeId);
         Task AcceptCurrentEnrolleeAgreementAsync(int enrolleeId);
         Task ExpireCurrentEnrolleeAgreementAsync(int enrolleeId);
+        /// <summary>
+        /// Returns whether the enrollee's current agreement is identical to the agreement they would be
+        /// assigned as of today.  Returns <c>true</c> if match, <c>false</c> if not identical
+        /// or if cannot be automatically determined which agreement would be assigned
+        /// </summary>
+        Task<bool> IsAgreementTypeIdenticalAsync(int enrolleeId);
     }
 }

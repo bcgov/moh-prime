@@ -4,10 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services.Razor;
+using Prime.DTOs.AgreementEngine;
+using Prime.Engines;
 
 namespace Prime.Services
 {
@@ -17,16 +20,19 @@ namespace Prime.Services
 
         private readonly IAgreementService _agreementService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IMapper _mapper;
 
         public EnrolleeAgreementService(
             ApiDbContext context,
             ILogger<EnrolleeAgreementService> logger,
             IAgreementService agreementService,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
+            IMapper mapper)
             : base(context, logger)
         {
             _agreementService = agreementService;
             _razorConverterService = razorConverterService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -120,6 +126,7 @@ namespace Prime.Services
         public async Task<Agreement> GetCurrentAgreementAsync(int enrolleeId)
         {
             return await _context.Agreements
+                .Include(a => a.AgreementVersion)
                 .OrderByDescending(at => at.CreatedDate)
                 .FirstAsync(at => at.EnrolleeId == enrolleeId);
         }
@@ -170,6 +177,31 @@ namespace Prime.Services
                     agreement.AgreementContent = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.Base, agreement);
                 }
             }
+        }
+
+        public async Task<bool> IsAgreementTypeIdenticalAsync(int enrolleeId)
+        {
+            var currentAgreement = await GetCurrentAgreementAsync(enrolleeId);
+
+            // Get only the information needed to determine expected agreement type
+            var enrollee = await _context.Enrollees
+                .AsNoTracking()
+                .Include(e => e.Certifications)
+                    .ThenInclude(c => c.License)
+                .Include(e => e.EnrolleeCareSettings)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            foreach (var cert in enrollee.Certifications)
+            {
+                cert.License.LicenseDetails = await _context.Set<LicenseDetail>()
+                    .OrderByDescending(ld => ld.EffectiveDate)
+                    .Where(ld => ld.LicenseCode == cert.License.Code)
+                    .Where(ld => ld.EffectiveDate <= DateTime.UtcNow)
+                    .ToListAsync();
+            }
+            var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
+
+            var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
+            return expectedAgreementType != null && expectedAgreementType.Value == currentAgreement.AgreementVersion.AgreementType;
         }
     }
 }
