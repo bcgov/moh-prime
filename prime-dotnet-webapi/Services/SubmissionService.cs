@@ -71,6 +71,7 @@ namespace Prime.Services
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeHealthAuthorities)
                 .Include(e => e.Agreements)
+                    .ThenInclude(a => a.AgreementVersion)
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.Submissions)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
