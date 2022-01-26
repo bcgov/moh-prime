@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { KeyValue } from '@angular/common';
 
@@ -10,7 +10,6 @@ import { noop, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { RemoteUser } from '@lib/models/remote-user.model';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -36,7 +35,6 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public hasNoRemoteUserError: boolean;
   public hasNoEmailError: boolean;
   public SiteRoutes = SiteRoutes;
-  public addedUpdatedRemoteUser: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -48,8 +46,6 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     router: Router
   ) {
     super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
-
-    this.canDeactivateAllowlist = ['hasRemoteUsers'];
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -67,24 +63,31 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
 
   public onRemove(index: number) {
     this.formState.remoteUsers.removeAt(index);
-    this.addedUpdatedRemoteUser = false;
 
     // After removing a remote user, always mark form as dirty
     this.formState.form.markAsDirty();
   }
 
   public onEdit(index: number) {
+    this.allowRoutingWhenDirty = true;
     this.routeUtils.routeRelativeTo(['../', SiteRoutes.REMOTE_USERS, index]);
   }
 
+  public onAdd() {
+    this.allowRoutingWhenDirty = true;
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.REMOTE_USERS, 'new']);
+  }
+
   public onBack() {
-    // This will allow the warning dialogue to be displayed when going back with a dirty form
-    this.canDeactivateAllowlist = [];
     const nextRoute = (!this.isCompleted)
       ? SiteRoutes.HOURS_OPERATION
       : SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(['../', nextRoute]);
+  }
+
+  public onToggleChange() {
+    this.formState.hasRemoteUsers.markAsPristine();
   }
 
   public ngOnInit(): void {
@@ -103,7 +106,6 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     // Inform the parent not to patch the form as there are outstanding changes
     // to the remote users that need to be persisted
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
-    this.addedUpdatedRemoteUser = fromRemoteUser && this.formState.form.dirty;
 
     // Remove query param from URL without refreshing
     this.routeUtils.removeQueryParams({ fromRemoteUser: null });
@@ -112,8 +114,6 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     // Needed if returning from Add/Update Remote User
     this.setHasRemoteUsersToggleState();
 
-    // If we end up in this page from any page other that Remote User, make form pristine again.
-    // otherwise this form should have the same state as the Remote User form
     if (!fromRemoteUser) {
       this.formState.form.markAsPristine();
     }
@@ -136,7 +136,6 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
 
         this.hasNoRemoteUserError = false;
         this.formState.remoteUsers.updateValueAndValidity({ emitEvent: false });
-        this.addedUpdatedRemoteUser = false;
       });
 
     this.formState.remoteUsers.length
