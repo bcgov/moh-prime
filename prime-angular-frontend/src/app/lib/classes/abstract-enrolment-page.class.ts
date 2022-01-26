@@ -248,7 +248,7 @@ export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>
    * Check that deactivation of the view is allowed in general
    * or specifically gated on a set of allowed control names.
    */
-  protected checkDeactivationIsAllowed(): boolean {
+  private checkDeactivationIsAllowed(): boolean {
     if (!this.allowRoutingWhenDirty && this.canDeactivateAllowlist?.length) {
       return Object.keys(this.formState.form.controls)
         .filter(key => !this.canDeactivateAllowlist.includes(key))
