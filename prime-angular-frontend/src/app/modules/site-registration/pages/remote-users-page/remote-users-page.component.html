@@ -26,7 +26,7 @@
   </form>
 
   <div class="mb-4"
-       *ngIf="formState.form.dirty && formState.remoteUsers.controls.length">
+       *ngIf="formState.form.dirty && !lastRemoteUserRemoved">
     <app-alert type="success"
                icon="check_circle_outline">
       <ng-container #alertTitle
@@ -41,7 +41,7 @@
   </div>
 
   <div class="mb-4"
-       *ngIf="formState.form.dirty && !formState.remoteUsers.controls.length">
+       *ngIf="formState.form.dirty && lastRemoteUserRemoved">
     <app-alert type="warning"
                icon="check_circle_outline">
       <ng-container #alertTitle

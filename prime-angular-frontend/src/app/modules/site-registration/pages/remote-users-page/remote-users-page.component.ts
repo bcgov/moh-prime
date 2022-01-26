@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { KeyValue } from '@angular/common';
 
@@ -34,6 +34,8 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public isCompleted: boolean;
   public hasNoRemoteUserError: boolean;
   public hasNoEmailError: boolean;
+  public lastRemoteUserRemoved: boolean;
+
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -46,6 +48,8 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     router: Router
   ) {
     super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
+
+    this.lastRemoteUserRemoved = false;
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -63,6 +67,10 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
 
   public onRemove(index: number) {
     this.formState.remoteUsers.removeAt(index);
+
+    this.lastRemoteUserRemoved = (this.formState.remoteUsers.length === 0)
+      ? true
+      : false;
 
     // After removing a remote user, always mark form as dirty
     this.formState.form.markAsDirty();
