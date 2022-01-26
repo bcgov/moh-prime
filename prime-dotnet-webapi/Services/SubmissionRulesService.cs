@@ -58,12 +58,12 @@ namespace Prime.Services
         /// All rules must pass for an update to be considered minor enough to not warrant going through the (Auto) adjudication proccess.
         /// These rules will not alter the enrollee object.
         /// </summary>
-        public async Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate)
+        public async Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate, List<int> newestAgreementVersionIds)
         {
             var rules = new List<MinorUpdateRule>
             {
                 new DateRule(),
-                new CurrentToaRule(),
+                new CurrentToaRule(newestAgreementVersionIds),
                 new CorrectToaRule(),
                 new AllowableChangesRule(profileUpdate)
             };

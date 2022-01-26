@@ -24,11 +24,11 @@ namespace Prime.Services.Rules
     /// </summary>
     public class CurrentToaRule : MinorUpdateRule
     {
-        private readonly EnrolleeUpdateModel _updatedProfile;
+        private readonly IEnumerable<int> _newestAgreementVersionIds;
 
-        public AllowableChangesRule(EnrolleeUpdateModel updatedProfile)
+        public CurrentToaRule(IEnumerable<int> newestAgreementVersionIds)
         {
-            _updatedProfile = updatedProfile;
+            _newestAgreementVersionIds = newestAgreementVersionIds;
         }
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
@@ -37,7 +37,7 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-            return Task.FromResult(enrollee.HasLatestAgreement());
+            return Task.FromResult(enrollee.HasLatestAgreement(_newestAgreementVersionIds));
         }
     }
 
