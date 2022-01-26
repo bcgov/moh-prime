@@ -24,6 +24,12 @@ namespace Prime.Services.Rules
     /// </summary>
     public class CurrentToaRule : MinorUpdateRule
     {
+        private readonly EnrolleeUpdateModel _updatedProfile;
+
+        public AllowableChangesRule(EnrolleeUpdateModel updatedProfile)
+        {
+            _updatedProfile = updatedProfile;
+        }
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
             if (enrollee.Agreements == null)
