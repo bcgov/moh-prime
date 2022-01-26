@@ -683,7 +683,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   /**
    * @description
    * Check if the user selected Device Provider as Care Setting
-   * then they shuold provide either Device Provider ID or Obo Site
+   * then they should provide either Device Provider ID or Obo Site
    */
   private hasDeviceProviderOrOboSite(): boolean {
     const { careSettings, certifications, deviceProviderIdentifier, oboSites } = this.json;
