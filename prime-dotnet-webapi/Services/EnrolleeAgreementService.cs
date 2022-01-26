@@ -126,9 +126,18 @@ namespace Prime.Services
         public async Task<Agreement> GetCurrentAgreementAsync(int enrolleeId)
         {
             return await _context.Agreements
-                .Include(a => a.AgreementVersion)
                 .OrderByDescending(at => at.CreatedDate)
                 .FirstAsync(at => at.EnrolleeId == enrolleeId);
+        }
+
+        public async Task<AgreementType> GetCurrentAgreementTypeAsync(int enrolleeId)
+        {
+            return await _context.Agreements
+                .Include(a => a.AgreementVersion)
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.EnrolleeId == enrolleeId)
+                .Select(a => a.AgreementVersion.AgreementType)
+                .FirstAsync();
         }
 
         /// <summary>
@@ -179,29 +188,22 @@ namespace Prime.Services
             }
         }
 
-        public async Task<bool> IsAgreementTypeIdenticalAsync(int enrolleeId)
+        public async Task<bool> IsOboToRuAgreementTypeChangeAsync(int enrolleeId)
         {
-            var currentAgreement = await GetCurrentAgreementAsync(enrolleeId);
+            var currentAgreementType = await GetCurrentAgreementTypeAsync(enrolleeId);
 
             // Get only the information needed to determine expected agreement type
             var enrollee = await _context.Enrollees
                 .AsNoTracking()
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
+                        .ThenInclude(l => l.LicenseDetails)
                 .Include(e => e.EnrolleeCareSettings)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-            foreach (var cert in enrollee.Certifications)
-            {
-                cert.License.LicenseDetails = await _context.Set<LicenseDetail>()
-                    .OrderByDescending(ld => ld.EffectiveDate)
-                    .Where(ld => ld.LicenseCode == cert.License.Code)
-                    .Where(ld => ld.EffectiveDate <= DateTime.UtcNow)
-                    .ToListAsync();
-            }
             var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
 
             var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
-            return expectedAgreementType != null && expectedAgreementType.Value == currentAgreement.AgreementVersion.AgreementType;
+            return expectedAgreementType != null && currentAgreementType.IsOnBehalfOfAgreement() && expectedAgreementType.Value.IsRegulatedUserAgreement();
         }
     }
 }

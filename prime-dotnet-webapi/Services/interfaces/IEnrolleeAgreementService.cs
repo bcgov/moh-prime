@@ -8,16 +8,17 @@ namespace Prime.Services
     public interface IEnrolleeAgreementService
     {
         Task<Agreement> GetCurrentAgreementAsync(int enrolleeId);
+        Task<AgreementType> GetCurrentAgreementTypeAsync(int enrolleeId);
         Task<Agreement> GetEnrolleeAgreementAsync(int enrolleeId, int agreementId, bool includeText = false);
         Task<IEnumerable<Agreement>> GetEnrolleeAgreementsAsync(int enrolleeId, AgreementFilters filters);
         Task CreateEnrolleeAgreementAsync(int enrolleeId);
         Task AcceptCurrentEnrolleeAgreementAsync(int enrolleeId);
         Task ExpireCurrentEnrolleeAgreementAsync(int enrolleeId);
         /// <summary>
-        /// Returns whether the enrollee's current agreement is identical to the agreement they would be
-        /// assigned as of today.  Returns <c>true</c> if match, <c>false</c> if not identical
-        /// or if cannot be automatically determined which agreement would be assigned
+        /// Returns whether the enrollee's current agreement type is OBO and changing to RU if their agreement would be
+        /// assigned as of today.  Returns <c>true</c> if such a change, <c>false</c> if not OR
+        /// if cannot be automatically determined which agreement would be assigned
         /// </summary>
-        Task<bool> IsAgreementTypeIdenticalAsync(int enrolleeId);
+        Task<bool> IsOboToRuAgreementTypeChangeAsync(int enrolleeId);
     }
 }

@@ -244,17 +244,17 @@ namespace Prime.Controllers
             return Ok(download);
         }
 
-        // GET: api/enrollees/5/agreements/current/matches-type
+        // GET: api/enrollees/5/agreements/current/obo-to-ru
         /// <summary>
-        /// Gets boolean re: whether enrollee's current agreement type matches the agreement type
-        /// they would be assigned if automatic assignment occurred today
+        /// Gets boolean re: whether enrollee's current agreement type is OBO and the agreement type
+        /// they would be assigned is RU, if automatic assignment occurred today
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/agreements/current/matches-type", Name = nameof(DoesAgreementTypeMatch))]
+        [HttpGet("{enrolleeId}/agreements/current/obo-to-ru", Name = nameof(IsOboToRuAgreementTypeChange))]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> DoesAgreementTypeMatch(int enrolleeId)
+        public async Task<ActionResult> IsOboToRuAgreementTypeChange(int enrolleeId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -266,9 +266,9 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var matchResult = await _enrolleeAgreementService.IsAgreementTypeIdenticalAsync(enrolleeId);
+            var isOboToRuChange = await _enrolleeAgreementService.IsOboToRuAgreementTypeChangeAsync(enrolleeId);
 
-            return Ok(matchResult);
+            return Ok(isOboToRuChange);
         }
     }
 }
