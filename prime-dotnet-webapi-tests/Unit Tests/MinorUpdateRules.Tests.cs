@@ -25,17 +25,17 @@ namespace PrimeTests.UnitTests
         }
 
         [Theory]
-        [InlineData(1, true)]
-        [InlineData(3, true)]
-        [InlineData(5, true)]
-        [InlineData(6, true)]
-        [InlineData(11, false)]
-        [InlineData(12, false)]
-        [InlineData(13, false)]
-        [InlineData(14, false)]
-        [InlineData(15, false)]
-        [InlineData(16, false)]
-        [InlineData(17, false)]
+        [InlineData(1, false)]
+        [InlineData(3, false)]
+        [InlineData(5, false)]
+        [InlineData(6, false)]
+        [InlineData(11, true)]
+        [InlineData(12, true)]
+        [InlineData(13, true)]
+        [InlineData(14, true)]
+        [InlineData(15, true)]
+        [InlineData(16, true)]
+        [InlineData(17, true)]
         public async void TestCurrentToaRule(int agreementVersionId, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
