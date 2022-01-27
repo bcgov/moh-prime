@@ -13,12 +13,14 @@ namespace Prime.Services
         /// Returns true if the Enrollee 1) exits 2) was created from a paper submission and 3) is currently "Under Review".
         /// </summary>
         /// <param name="enrolleeId"></param>
-        Task<bool> PaperSubmissionIsEditableAsync(int enrolleeId);
+        Task<bool> PaperSubmissionIsUpdateableAsync(int enrolleeId);
         Task<Enrollee> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel enrollee);
         Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel update);
         Task UpdateDemographicsAsync(int enrolleeId, PaperEnrolleeDemographicViewModel viewModel);
         Task UpdateOboSitesAsync(int enrolleeId, IEnumerable<PaperEnrolleeOboSiteViewModel> viewModels);
         Task UpdateCertificationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeCertificationViewModel> viewModels);
+
+        Task UpdateDeviceProviderAsync(int enrolleeId, string deviceProviderIdentifier);
         Task UpdateSelfDeclarationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> viewModel);
         Task UpdateAgreementAsync(int enrolleeId, PaperEnrolleeAgreementViewModel viewModel);
         Task SetProfileCompletedAsync(int enrolleeId);
@@ -30,5 +32,8 @@ namespace Prime.Services
         Task<bool> LinkEnrolleeToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId);
         Task<bool> SetLinkedGpidAsync(int enrolleeId, string userProvidedGpid);
         Task<string> GetLinkedGpidAsync(int enrolleeId);
+        Task<bool> IsEnrolleeLinkedAsync(int enrolleeId);
+        Task<bool> IsLinkedPaperEnrolment(int paperEnrolleeId);
+        Task<bool> IsPaperEnrolment(int paperEnrolleeId);
     }
 }

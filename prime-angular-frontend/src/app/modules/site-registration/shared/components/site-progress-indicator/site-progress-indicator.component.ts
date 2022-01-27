@@ -30,18 +30,27 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   ) {
     this.currentRoute = RouteUtils.currentRoutePath(this.router.url);
 
-    // Possible route pathways within site registration
-    const routePaths = (!organizationService.organization?.hasAcceptedAgreement)
-      // Combine organization and site routes, which includes
-      // the organization agreement
-      ? [SiteRoutes.initialRegistrationRouteOrder()]
-      // Otherwise, split organization and site routes for
-      // multiple registrations
-      : [SiteRoutes.organizationRegistrationRouteOrder(), SiteRoutes.siteRegistrationRouteOrder()];
+    const routePaths = this.getWorkflowRoutePaths();
 
     this.routes = routePaths.filter(rp => rp.includes(this.currentRoute)).shift();
     this.prefix = 'Registration';
   }
 
   public ngOnInit() { }
+
+  private getWorkflowRoutePaths() {
+    // Possible route paths within claim organization workflow, otherwise
+    // the default site registration workflow
+    if (this.router.url.includes(SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW)) {
+      return [SiteRoutes.claimOrganizationRoutes()];
+    }
+
+    return (!this.organizationService.organization?.hasAcceptedAgreement)
+      // Combine organization and site routes, which includes
+      // the organization agreement
+      ? [SiteRoutes.initialRegistrationRouteOrder()]
+      // Otherwise, split organization and site routes for
+      // multiple registrations
+      : [SiteRoutes.organizationRegistrationRouteOrder(), SiteRoutes.siteRegistrationRouteOrder()];
+  }
 }

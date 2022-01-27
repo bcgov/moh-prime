@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { EmailTemplateTypeEnum } from '@adjudication/shared/models/email-template-type.model';
 import { EmailTemplate } from '@adjudication/shared/models/email-template.model';
 import { EmailTemplateResourceService } from '@adjudication/shared/services/email-template-resource.service';
 
@@ -44,7 +43,7 @@ export class EmailNotificationListPageComponent implements OnInit {
       .subscribe(templates =>
         this.templates = templates
           .sort((a: EmailTemplate, b: EmailTemplate) =>
-            EmailTemplateTypeEnum[a.emailType].localeCompare(EmailTemplateTypeEnum[b.emailType])
+            a.templateName.localeCompare(b.templateName)
           )
       );
   }

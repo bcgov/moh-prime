@@ -14,6 +14,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 })
 export class SiteRegistrationLoginPageComponent implements OnInit {
   public title: string;
+  private readonly redirectRoutePath: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,12 +22,16 @@ export class SiteRegistrationLoginPageComponent implements OnInit {
     private authService: AuthService,
   ) {
     this.title = route.snapshot.data.title;
+    const redirectRouteSegment = route.snapshot.data.redirectRedirectSegment;
+    this.redirectRoutePath = (redirectRouteSegment)
+      ? `${redirectRouteSegment}/`
+      : ''
   }
 
   public onLogin() {
     // Route to COLLECTION_NOTICE which determines the direction of routing
-    const redirectRoute = SiteRoutes.routePath(SiteRoutes.COLLECTION_NOTICE);
-    const redirectUri = `${ this.config.loginRedirectUrl }${ redirectRoute }`;
+    const redirectRoute = SiteRoutes.routePath(`${this.redirectRoutePath}${SiteRoutes.COLLECTION_NOTICE}`);
+    const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
       idpHint: IdentityProviderEnum.BCSC,

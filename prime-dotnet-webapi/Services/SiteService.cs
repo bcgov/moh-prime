@@ -11,23 +11,43 @@ using Prime.ViewModels.Sites;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using LinqKit;
+using System.Security.Claims;
+using Prime.HttpClients;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Prime.Services
 {
     public class SiteService : BaseService, ISiteService
     {
         private readonly IBusinessEventService _businessEventService;
+        private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
 
         public SiteService(
             ApiDbContext context,
             ILogger<SiteService> logger,
             IBusinessEventService businessEventService,
+            IDocumentManagerClient documentClient,
             IMapper mapper)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
+            _documentClient = documentClient;
             _mapper = mapper;
+        }
+
+        public async Task<bool> SiteExistsAsync(int siteId)
+        {
+            return await _context.Sites.AnyAsync(s => s.Id == siteId);
+        }
+
+        public async Task<SiteStatusType> GetSiteCurrentStatusAsync(int siteId)
+        {
+            return await _context.Sites
+                .Where(s => s.Id == siteId)
+                .Select(s => s.Status)
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
         }
 
         public async Task<bool> PecAssignableAsync(int siteId, string pec)
@@ -37,15 +57,31 @@ namespace Prime.Services
                 .Where(site => site.Id == siteId)
                 .Select(site => new
                 {
-                    site.CareSettingCode,
-                    site.PEC
+                    site.PEC,
+                    healthAuthorityId = (int?)(site as HealthAuthoritySite).HealthAuthorityOrganizationId
                 })
                 .SingleAsync();
 
-            if (siteDto.CareSettingCode == (int)CareSettingType.HealthAuthority
-                || siteDto.PEC == pec)
+            if (siteDto.PEC == pec)
             {
                 return true;
+            }
+
+            if (siteDto.healthAuthorityId.HasValue)
+            {
+                var sites = await _context.Sites
+                    .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
+                    .AnyAsync();
+
+                var otherHealthAuthoritySites = await _context.HealthAuthoritySites
+                    .AsNoTracking()
+                    .Where(
+                        s => s.PEC == pec
+                        && s.HealthAuthorityOrganizationId != siteDto.healthAuthorityId
+                        )
+                    .AnyAsync();
+
+                return !sites && !otherHealthAuthoritySites;
             }
 
             return !await _context.Sites
@@ -301,6 +337,143 @@ namespace Prime.Services
             {
             }
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetNotificationsAsync(int siteId, int adminId)
+        {
+            return await _context.SiteRegistrationNotes
+                .Include(n => n.Adjudicator)
+                .Include(n => n.SiteNotification)
+                    .ThenInclude(ee => ee.Admin)
+                .Where(n => n.SiteId == siteId)
+                .Where(n => n.SiteNotification != null && n.SiteNotification.AssigneeId == adminId)
+                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task RemoveNotificationsAsync(int siteId)
+        {
+            var notifications = await _context.SiteNotifications
+                .Where(en => en.SiteRegistrationNote.SiteId == siteId)
+                .ToListAsync();
+
+            _context.SiteNotifications.RemoveRange(notifications);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateSiteFlag(int siteId, bool flagged)
+        {
+            var site = await _context.Sites
+                .SingleAsync(s => s.Id == siteId);
+
+            site.Flagged = flagged;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId)
+        {
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, HttpClients.DocumentManagerApiDefinitions.DestinationFolders.SiteAdjudicationDocuments);
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
+            var document = new SiteAdjudicationDocument
+            {
+                DocumentGuid = documentGuid,
+                SiteId = siteId,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now,
+                AdjudicatorId = adminId
+            };
+            _context.SiteAdjudicationDocuments.Add(document);
+
+            await _context.SaveChangesAsync();
+
+            return document;
+        }
+
+        public async Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId)
+        {
+            return await _context.SiteAdjudicationDocuments
+                .Where(bl => bl.SiteId == siteId)
+                .Include(bl => bl.Adjudicator)
+                .OrderByDescending(bl => bl.UploadedDate)
+                .ToListAsync();
+        }
+
+        public async Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId)
+        {
+            return await _context.SiteAdjudicationDocuments
+                .SingleOrDefaultAsync(d => d.Id == documentId);
+        }
+
+        public async Task DeleteSiteAdjudicationDocumentAsync(int documentId)
+        {
+            var document = await _context.SiteAdjudicationDocuments
+                .SingleOrDefaultAsync(d => d.Id == documentId);
+            if (document == null)
+            {
+                return;
+            }
+            _context.SiteAdjudicationDocuments.Remove(document);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<SiteNotification> CreateSiteNotificationAsync(int siteRegistrationNoteId, int adminId, int assineeId)
+        {
+            var notification = new SiteNotification
+            {
+                SiteRegistrationNoteId = siteRegistrationNoteId,
+                AdminId = adminId,
+                AssigneeId = assineeId
+            };
+
+            _context.SiteNotifications.Add(notification);
+
+            await _context.SaveChangesAsync();
+
+            return notification;
+        }
+
+        public async Task RemoveSiteNotificationAsync(int siteNotificationId)
+        {
+            var notification = await _context.SiteNotifications
+                .SingleOrDefaultAsync(se => se.Id == siteNotificationId);
+            if (notification == null)
+            {
+                return;
+            }
+            _context.SiteNotifications.Remove(notification);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user)
+        {
+            return await _context.SiteRegistrationNotes
+                .Where(en => en.SiteNotification != null && en.SiteNotification.Assignee.UserId == user.GetPrimeUserId())
+                .Select(en => en.SiteId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<SiteBusinessEventViewModel>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes)
+        {
+            return await _context.BusinessEvents
+                .Include(e => e.Admin)
+                .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
+                .Where(e => e.SiteId == siteId
+                        || e.Organization.Sites.Any(s => s.Id == siteId))
+                .OrderByDescending(e => e.EventDate)
+                .ProjectTo<SiteBusinessEventViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<string> GetSitePecAsync(int siteId)
+        {
+            return await _context.Sites
+                .Where(s => s.Id == siteId)
+                .Select(s => s.PEC)
+                .SingleOrDefaultAsync();
         }
     }
 }

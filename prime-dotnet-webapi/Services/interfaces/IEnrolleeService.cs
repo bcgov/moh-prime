@@ -32,7 +32,7 @@ namespace Prime.Services
         Task<IEnumerable<RemoteAccessLocationViewModel>> GetRemoteAccessLocationsAsync(int enrolleeId);
         Task<IEnumerable<RemoteAccessSiteViewModel>> GetRemoteAccessSitesAsync(int enrolleeId);
         Task<IEnumerable<SelfDeclarationViewModel>> GetSelfDeclarationsAsync(int enrolleeId);
-        Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId);
+        Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId, bool includeHidden);
         Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType);
         Task<IEnumerable<EnrolmentStatusAdminViewModel>> GetEnrolmentStatusesAsync(int enrolleeId);
         Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck);
@@ -68,5 +68,6 @@ namespace Prime.Services
         Task EndCurrentEnrolleeAbsenceAsync(int enrolleeId);
         Task DeleteFutureEnrolleeAbsenceAsync(int enrolleeId, int absenceId);
         Task<string> GetAdjudicatorIdirForEnrolleeAsync(int enrolleeId);
+        Task UpdateDateOfBirthAsync(int enrolleeId, DateTime dateOfBirth);
     }
 }

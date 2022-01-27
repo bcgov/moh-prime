@@ -16,7 +16,8 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
+import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,14 +56,27 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getAllHealthAuthoritySites(): Observable<HealthAuthoritySite[]> {
-    return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/sites`)
+  public getAllHealthAuthoritySites(): Observable<HealthAuthoritySiteAdminList[]> {
+    return this.apiResource.get<HealthAuthoritySiteAdminList[]>(`health-authorities/sites`)
       .pipe(
-        map((response: ApiHttpResponse<HealthAuthoritySite[]>) => response.result),
-        tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
+        map((response: ApiHttpResponse<HealthAuthoritySiteAdminList[]>) => response.result),
+        tap((healthAuthoritySites: HealthAuthoritySiteAdminList[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority sites could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getAllHealthAuthoritySites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getHealthAuthorityAdminSite(healthAuthorityId: number, siteId: number): Observable<HealthAuthoritySiteAdmin> {
+    return this.apiResource.get<HealthAuthoritySiteAdmin>(`health-authorities/${healthAuthorityId}/sites/${siteId}/admin-view`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthoritySiteAdmin>) => response.result),
+        tap((healthAuthoritySite: HealthAuthoritySiteAdmin) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityAdminSite error has occurred: ', error);
           throw error;
         })
       );
@@ -74,7 +88,7 @@ export class HealthAuthorityResource {
         NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority care types could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateCareTypes error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthorityCareTypes error has occurred: ', error);
           throw error;
         })
       );
@@ -86,7 +100,31 @@ export class HealthAuthorityResource {
         NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority vendors could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateVendors error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthorityVendors error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getHealthAuthorityVendorSiteIds(healthAuthorityId: number, vendorId: number): Observable<number[]> {
+    return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/vendors/${vendorId}/sites`)
+      .pipe(
+        map((response: ApiHttpResponse<number[]>) => response.result),
+        tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),
+        catchError((error: any) => {
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityVendorSiteIds error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getHealthAuthorityCareTypeSiteIds(healthAuthorityId: number, careTypeId: number): Observable<number[]> {
+    return this.apiResource.get<number[]>(`health-authorities/${healthAuthorityId}/care-types/${careTypeId}/sites`)
+      .pipe(
+        map((response: ApiHttpResponse<number[]>) => response.result),
+        tap((healthAuthoritySiteIds: number[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySiteIds)),
+        catchError((error: any) => {
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityCareTypeSiteIds error has occurred: ', error);
           throw error;
         })
       );
@@ -98,7 +136,7 @@ export class HealthAuthorityResource {
         NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority privacy office could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updatePrivacyOffice error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthorityPrivacyOffice error has occurred: ', error);
           throw error;
         })
       );

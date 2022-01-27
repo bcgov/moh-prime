@@ -26,16 +26,17 @@ export class SiteEventsComponent implements OnInit {
   }
 
   public getBusinessEvents(businessEventTypes?: BusinessEventTypeEnum[]) {
-    const enrolleeId = this.route.snapshot.params.sid;
+    const siteId = +this.route.snapshot.params.sid;
     this.businessEvents$ = this.siteResource
-      .getSiteBusinessEvents(enrolleeId, businessEventTypes ?? [])
+      .getSiteBusinessEvents(siteId, businessEventTypes ?? [])
       .pipe(
         map((businessEvents: BusinessEvent[]) =>
           businessEvents.map((businessEvent: BusinessEvent) => {
             return {
               date: businessEvent.eventDate,
               content: businessEvent.description,
-              name: businessEvent.adminIDIR
+              name: businessEvent.adminIDIR,
+              marginRight: businessEvent.partyName // Site Signing Authority
             };
           })
         )

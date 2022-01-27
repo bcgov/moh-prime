@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 
@@ -18,18 +19,24 @@ export class SiteRegistrationDashboardComponent implements OnInit, IDashboard {
   public logoutRedirectUrl: string;
 
   constructor(
-    @Inject(APP_CONFIG) protected config: AppConfig
+    @Inject(APP_CONFIG) protected config: AppConfig,
+    private router: Router
   ) {
     this.logoutRedirectUrl = `${ this.config.loginRedirectUrl }/${ SiteRoutes.LOGIN_PAGE }`;
   }
 
   public ngOnInit(): void {
+    // No dashboard links when claiming an organization
+    if(this.router.url.includes(SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW)) {
+      return;
+    }
+
     this.dashboardMenuItems = this.getDashboardMenuItems();
   }
 
   private getDashboardMenuItems(): Observable<DashboardMenuItem[]> {
     return of([
-      new DashboardRouteMenuItem('Site Management', SiteRoutes.SITE_MANAGEMENT, 'store', true)
+      new DashboardRouteMenuItem('Site Management', SiteRoutes.ORGANIZATIONS, 'store', true)
     ]);
   }
 }

@@ -19,10 +19,41 @@
 
     <mat-slide-toggle class="mb-3"
                       color="primary"
-                      formControlName="hasRemoteUsers">This site has remote practitioners
+                      formControlName="hasRemoteUsers"
+                      (change)="onToggleChange()">This site has remote practitioners
     </mat-slide-toggle>
 
   </form>
+
+  <div class="mb-4"
+       *ngIf="formState.form.dirty && !lastRemoteUserRemoved">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Remote Practitioner added/updated
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        Continue adding remote practitioners if this site has more.
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <div class="mb-4"
+       *ngIf="formState.form.dirty && lastRemoteUserRemoved">
+    <app-alert type="warning"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Remote Practitioner removed
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        Either add more remote users, or uncheck the toggle above.
+      </ng-container>
+    </app-alert>
+  </div>
 
   <section>
     <ng-container *ngFor="let remoteUser of formState.remoteUsers.controls; let i = index; let last = last">
@@ -73,7 +104,7 @@
           type="button"
           color="primary"
           class="mb-3"
-          [routerLink]="['new']">
+          (click)="onAdd()">
     <mat-icon class="add-icon">add</mat-icon>
     Add Remote Practitioners
   </button>

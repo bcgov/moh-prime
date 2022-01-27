@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { KeyValue } from '@angular/common';
 
@@ -10,7 +10,6 @@ import { noop, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { RemoteUser } from '@lib/models/remote-user.model';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -35,6 +34,8 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public isCompleted: boolean;
   public hasNoRemoteUserError: boolean;
   public hasNoEmailError: boolean;
+  public lastRemoteUserRemoved: boolean;
+
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -48,35 +49,41 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   ) {
     super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
-    this.canDeactivateAllowlist = ['hasRemoteUsers'];
+    this.lastRemoteUserRemoved = false;
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
   public getRemoteUserProperties(remoteUser: FormGroup): KeyValue<string, string>[] {
-    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
-
-    const collegeLicence = (remoteUserCertifications.length > 1)
-      ? 'More than one College licence'
-      : (remoteUserCertifications.length === 0)
-        ? 'No College licence'
-        : remoteUserCertifications.value[0].licenseNumber;
-
+    const remoteUserCertification = remoteUser.controls?.remoteUserCertification as FormGroup;
     return [
       {
         key: 'College Licence',
-        value: collegeLicence
+        value: remoteUserCertification.value.licenseNumber
       }
     ];
   }
 
   public onRemove(index: number) {
     this.formState.remoteUsers.removeAt(index);
+
+    this.lastRemoteUserRemoved = (this.formState.remoteUsers.length === 0)
+      ? true
+      : false;
+
+    // After removing a remote user, always mark form as dirty
+    this.formState.form.markAsDirty();
   }
 
   public onEdit(index: number) {
+    this.allowRoutingWhenDirty = true;
     this.routeUtils.routeRelativeTo(['../', SiteRoutes.REMOTE_USERS, index]);
+  }
+
+  public onAdd() {
+    this.allowRoutingWhenDirty = true;
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.REMOTE_USERS, 'new']);
   }
 
   public onBack() {
@@ -85,6 +92,10 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
       : SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(['../', nextRoute]);
+  }
+
+  public onToggleChange() {
+    this.formState.hasRemoteUsers.markAsPristine();
   }
 
   public ngOnInit(): void {
@@ -107,17 +118,21 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     // Remove query param from URL without refreshing
     this.routeUtils.removeQueryParams({ fromRemoteUser: null });
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
-    // TODO is this needed?
-    this.formState.form.markAsPristine();
+
+    // Needed if returning from Add/Update Remote User
+    this.setHasRemoteUsersToggleState();
+
+    if (!fromRemoteUser) {
+      this.formState.form.markAsPristine();
+    }
   }
 
   protected initForm() {
     this.formState.remoteUsers.valueChanges
       .pipe(untilDestroyed(this))
-      .subscribe((remoteUsers: RemoteUser[]) => {
-        (remoteUsers.length)
-          ? this.formState.hasRemoteUsers.disable({ emitEvent: false })
-          : this.formState.hasRemoteUsers.enable({ emitEvent: false });
+      .subscribe((_) => {
+        // Executed when removing Remote Users
+        this.setHasRemoteUsersToggleState();
       });
 
     this.formState.hasRemoteUsers.valueChanges
@@ -131,7 +146,17 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
         this.formState.remoteUsers.updateValueAndValidity({ emitEvent: false });
       });
 
+    this.formState.remoteUsers.length
+      ? this.formState.hasRemoteUsers.setValue(true)
+      : this.formState.hasRemoteUsers.setValue(false)
+
     this.patchForm();
+  }
+
+  private setHasRemoteUsersToggleState(): void {
+    this.formState.remoteUsers.length
+      ? this.formState.hasRemoteUsers.disable({ emitEvent: false })
+      : this.formState.hasRemoteUsers.enable({ emitEvent: false });
   }
 
   protected onSubmitFormIsValid(): void {
@@ -162,5 +187,15 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
       : SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(['../', routePath]);
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Reset the remoteUsersPage form value
+    const site = this.siteService.site;
+    this.siteFormStateService.remoteUsersPageFormState.patchValue(site?.remoteUsers, true);
   }
 }

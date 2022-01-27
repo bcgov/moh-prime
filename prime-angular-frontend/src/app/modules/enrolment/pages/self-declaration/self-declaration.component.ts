@@ -13,7 +13,7 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -113,18 +113,31 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     this.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
   }
 
+  public getSelfDeclarationDocuments(selfDeclarationType: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
+    return this.enrolment?.selfDeclarationDocuments.filter((sdd: SelfDeclarationDocument) => sdd.selfDeclarationTypeCode === selfDeclarationType);
+  }
+
+  public downloadSelfDeclarationDocument({ documentId }: { documentId: number }): void {
+    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrolment.id, documentId)
+      .subscribe((token: string) => this.utilService.downloadToken(token));
+  }
+
   public onBack() {
     const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm
       .get('careSettings').value as CareSetting[];
+    const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
+      careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+    const deviceProviderIdentifier = this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.value;
+
 
     let backRoutePath = EnrolmentRoutes.OVERVIEW;
     if (!this.isProfileComplete) {
       backRoutePath = (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
         ? EnrolmentRoutes.REMOTE_ACCESS
-        : (certifications.length)
-          ? EnrolmentRoutes.REGULATORY
-          : EnrolmentRoutes.OBO_SITES;
+        : (!certifications.length || (isDeviceProvider && !deviceProviderIdentifier))
+          ? EnrolmentRoutes.OBO_SITES
+          : EnrolmentRoutes.REGULATORY;
     }
 
     this.routeTo(backRoutePath);

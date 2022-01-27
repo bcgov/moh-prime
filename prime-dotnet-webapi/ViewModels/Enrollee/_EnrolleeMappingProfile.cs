@@ -3,6 +3,7 @@ using System.Linq;
 
 using Prime.DTOs.AgreementEngine;
 using Prime.Models;
+using System;
 
 namespace Prime.ViewModels.Profiles
 {
@@ -13,6 +14,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<EnrolleeCreateModel, Enrollee>();
 
             IQueryable<int> newestAgreementIds = null;
+            IQueryable<Enrollee> unlinkedPaperEnrolments = null;
             CreateMap<Enrollee, EnrolleeListViewModel>()
                 .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
@@ -23,16 +25,27 @@ namespace Prime.ViewModels.Profiles
                     !src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed
                     && src.PreviousStatus.StatusCode == (int)StatusType.RequiresToa
                 ))
+                .ForMember(dest => dest.LinkedEnrolleeId, opt => opt.MapFrom(src => (src.EnrolleeToPaperLink == null) ? src.PaperToEnrolleeLink.EnrolleeId : src.EnrolleeToPaperLink.PaperEnrolleeId))
+                .ForMember(dest => dest.PossiblePaperEnrolmentMatch, opt => opt.MapFrom(src => unlinkedPaperEnrolments.Any(e => e.DateOfBirth.Date == src.DateOfBirth.Date)))
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true));
 
             CreateMap<Enrollee, EnrolleeDTO>()
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true))
+                .ForMember(dest => dest.LinkedEnrolleeId, opt => opt.MapFrom(src => (src.EnrolleeToPaperLink == null) ? src.PaperToEnrolleeLink.EnrolleeId : src.EnrolleeToPaperLink.PaperEnrolleeId))
+                .ForMember(dest => dest.PossiblePaperEnrolmentMatch, opt => opt.MapFrom(src => (src.GPID != null && src.GPID.Contains(Enrollee.PaperGpidPrefix)) ? false : unlinkedPaperEnrolments.Any(e => e.DateOfBirth.Date == src.DateOfBirth.Date)))
                 .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(id => id == src.CurrentAgreementId)));
 
             CreateMap<EnrolleeDTO, EnrolleeViewModel>();
 
             CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
-            CreateMap<EnrolleeAbsence, EnrolleeAbsenceViewModel>();
+
+            CreateMap<EnrolleeAbsence, EnrolleeAbsenceViewModel>()
+                .ForMember(dest => dest.StartTimestamp, opt => opt.MapFrom(src => src.StartTimestamp.ToLocalTime()))
+                .ForMember(dest => dest.EndTimestamp, opt =>
+                {
+                    opt.PreCondition(src => src.EndTimestamp != null);
+                    opt.MapFrom(src => src.EndTimestamp.Value.ToLocalTime());
+                });
 
             CreateMap<Enrollee, AgreementEngineDto>()
                 .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
@@ -41,7 +54,6 @@ namespace Prime.ViewModels.Profiles
             CreateMap<AccessAgreementNote, AccessAgreementNoteViewModel>();
             CreateMap<Certification, CertificationDto>();
             CreateMap<Certification, CertificationViewModel>();
-            CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
             CreateMap<EnrolleeRemoteUser, EnrolleeRemoteUserViewModel>();
             CreateMap<OboSite, OboSiteViewModel>();
             CreateMap<RemoteAccessLocation, RemoteAccessLocationViewModel>();

@@ -122,6 +122,19 @@ export class PaperEnrolmentResource {
       );
   }
 
+  public updateDeviceProvider(enrolleeId: number, deviceProviderIdentifier: string = null): NoContent {
+    const payload = { data: deviceProviderIdentifier };
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/device-provider`, payload)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment device provider ID could not be updated');
+          this.logger.error('[Core] PaperEnrolmentResource::updateDeviceProvider error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public updateOboSites(enrolleeId: number, oboSites: OboSite[]): NoContent {
     return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/obo-sites`, oboSites)
       .pipe(

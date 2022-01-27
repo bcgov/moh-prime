@@ -1,17 +1,16 @@
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using DelegateDecompiler.EntityFrameworkCore;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
+using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
 {
@@ -199,7 +198,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateRemoteUsers(Site current, IEnumerable<RemoteUser> updateRemoteUsers)
+        private void UpdateRemoteUsers(Site current, IEnumerable<SiteRemoteUserUpdateModel> updateRemoteUsers)
         {
             if (updateRemoteUsers == null)
             {
@@ -208,7 +207,7 @@ namespace Prime.Services
 
             // All RemoteUserCertifications will be dropped and re-added, so we must set all incoming PKs/FKs to 0
             // This can be removed when / if the updated Certs become a View Model without FKs.
-            foreach (var cert in updateRemoteUsers.SelectMany(x => x.RemoteUserCertifications))
+            foreach (var cert in updateRemoteUsers.Select(x => x.RemoteUserCertification))
             {
                 cert.Id = 0;
                 cert.RemoteUserId = 0;
@@ -225,18 +224,17 @@ namespace Prime.Services
                     updatedUser.SiteId = current.Id;
                     _context.Entry(existing).CurrentValues.SetValues(updatedUser);
 
-                    _context.RemoteUserCertifications.RemoveRange(existing.RemoteUserCertifications);
-                    foreach (var cert in updatedUser.RemoteUserCertifications)
-                    {
-                        cert.RemoteUserId = updatedUser.Id;
-                        _context.RemoteUserCertifications.Add(cert);
-                    }
+                    _context.RemoteUserCertifications.Remove(existing.RemoteUserCertification);
+
+                    updatedUser.RemoteUserCertification.RemoteUserId = updatedUser.Id;
+                    _context.RemoteUserCertifications.Add(updatedUser.RemoteUserCertification);
                 }
                 else
                 {
-                    updatedUser.Id = 0;
-                    updatedUser.SiteId = current.Id;
-                    _context.RemoteUsers.Add(updatedUser);
+                    var newRemoteUser = _mapper.Map<RemoteUser>(updatedUser);
+                    newRemoteUser.Id = 0;
+                    newRemoteUser.SiteId = current.Id;
+                    _context.RemoteUsers.Add(newRemoteUser);
                 }
             }
 
@@ -393,137 +391,9 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes)
+        public async Task<bool> SiteExistsAsync(int siteId)
         {
-            return await _context.BusinessEvents
-                .Include(e => e.Admin)
-                .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
-                .Where(e => e.SiteId == siteId
-                        || e.Organization.Sites.Any(s => s.Id == siteId))
-                .OrderByDescending(e => e.EventDate)
-                .ToListAsync();
-        }
-
-        public async Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId)
-        {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SiteAdjudicationDocuments);
-            if (string.IsNullOrWhiteSpace(filename))
-            {
-                return null;
-            }
-
-            var document = new SiteAdjudicationDocument
-            {
-                DocumentGuid = documentGuid,
-                SiteId = siteId,
-                Filename = filename,
-                UploadedDate = DateTimeOffset.Now,
-                AdjudicatorId = adminId
-            };
-            _context.SiteAdjudicationDocuments.Add(document);
-
-            await _context.SaveChangesAsync();
-
-            return document;
-        }
-
-        public async Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId)
-        {
-            return await _context.SiteAdjudicationDocuments
-                .Where(bl => bl.SiteId == siteId)
-                .Include(bl => bl.Adjudicator)
-                .OrderByDescending(bl => bl.UploadedDate)
-                .ToListAsync();
-        }
-
-        public async Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId)
-        {
-            return await _context.SiteAdjudicationDocuments
-                .SingleOrDefaultAsync(d => d.Id == documentId);
-        }
-
-        public async Task DeleteSiteAdjudicationDocumentAsync(int documentId)
-        {
-            var document = await _context.SiteAdjudicationDocuments
-                .SingleOrDefaultAsync(d => d.Id == documentId);
-            if (document == null)
-            {
-                return;
-            }
-            _context.SiteAdjudicationDocuments.Remove(document);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<SiteNotification> CreateSiteNotificationAsync(int siteRegistrationNoteId, int adminId, int assineeId)
-        {
-            var notification = new SiteNotification
-            {
-                SiteRegistrationNoteId = siteRegistrationNoteId,
-                AdminId = adminId,
-                AssigneeId = assineeId
-            };
-
-            _context.SiteNotifications.Add(notification);
-
-            await _context.SaveChangesAsync();
-
-            return notification;
-        }
-
-        public async Task RemoveSiteNotificationAsync(int siteNotificationId)
-        {
-            var notification = await _context.SiteNotifications
-                .SingleOrDefaultAsync(se => se.Id == siteNotificationId);
-            if (notification == null)
-            {
-                return;
-            }
-            _context.SiteNotifications.Remove(notification);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetNotificationsAsync(int siteId, int adminId)
-        {
-            return await _context.SiteRegistrationNotes
-                .Include(n => n.Adjudicator)
-                .Include(n => n.SiteNotification)
-                    .ThenInclude(ee => ee.Admin)
-                .Where(n => n.SiteId == siteId)
-                .Where(n => n.SiteNotification != null && n.SiteNotification.AssigneeId == adminId)
-                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
-
-        public async Task RemoveNotificationsAsync(int siteId)
-        {
-            var notifications = await _context.SiteNotifications
-                .Where(en => en.SiteRegistrationNote.SiteId == siteId)
-                .ToListAsync();
-
-            _context.SiteNotifications.RemoveRange(notifications);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateSiteFlag(int siteId, bool flagged)
-        {
-            var site = await _context.Sites
-                .SingleAsync(s => s.Id == siteId);
-
-            site.Flagged = flagged;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user)
-        {
-            return await _context.SiteRegistrationNotes
-                .Where(en => en.SiteNotification != null && en.SiteNotification.Assignee.UserId == user.GetPrimeUserId())
-                .Select(en => en.SiteId)
-                .ToListAsync();
-        }
-
-        public async Task<bool> SiteExists(int siteId)
-        {
-            return await _context.Sites
+            return await _context.CommunitySites
                 .AsNoTracking()
                 .AnyAsync(s => s.Id == siteId);
         }
@@ -556,7 +426,7 @@ namespace Prime.Services
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.BusinessHours)
                 .Include(s => s.RemoteUsers)
-                    .ThenInclude(r => r.RemoteUserCertifications)
+                    .ThenInclude(r => r.RemoteUserCertification)
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Prime.Models;
 using Prime.HttpClients.Mail;
 using Prime.ViewModels.Emails;
+using Prime.ViewModels;
 
 namespace Prime.Services.EmailInternal
 {
@@ -22,5 +23,8 @@ namespace Prime.Services.EmailInternal
         Task<Email> RenderSiteReviewedNotificationEmailAsync(SiteReviewedEmailViewModel viewModel);
         Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel);
         Task<Email> RenderSiteActiveBeforeRegistrationEmailAsync(string newSigningAuthorityEmail, SiteActiveBeforeRegistrationEmailViewModel viewModel);
+        Task<Email> RenderPaperEnrolleeSubmissionEmail(string enrolleeEmail, PaperEnrolleeSubmissionEmailViewModel viewModel);
+        Task<Email> RenderUnsignedToaEmailAsync(string enrolleeEmail, EnrolleeUnsignedToaEmailViewModel viewModel);
+        Task<Email> RenderEnrolleeAbsenceNotificationEmailAsync(string email, EnrolleeAbsenceNotificationEmailViewModel viewModel);
     }
 }

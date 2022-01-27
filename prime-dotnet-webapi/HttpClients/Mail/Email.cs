@@ -20,6 +20,10 @@ namespace Prime.HttpClients.Mail
             : this(from, new[] { to }, Enumerable.Empty<string>(), subject, body, Enumerable.Empty<Pdf>())
         { }
 
+        public Email(string from, string to, string cc, string subject, string body)
+            : this(from, new[] { to }, new[] { cc }, subject, body, Enumerable.Empty<Pdf>())
+        { }
+
         public Email(string from, IEnumerable<string> to, string subject, string body)
             : this(from, to, Enumerable.Empty<string>(), subject, body, Enumerable.Empty<Pdf>())
         { }

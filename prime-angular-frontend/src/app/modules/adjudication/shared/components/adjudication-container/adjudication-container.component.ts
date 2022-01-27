@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { Sort, SortDirection } from '@angular/material/sort';
 
 import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription, forkJoin } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
@@ -10,7 +11,6 @@ import { EmailUtils } from '@lib/utils/email-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
-import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { EnrolleeListViewModel, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
@@ -34,6 +34,9 @@ import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
+import { DateOfBirthComponent } from '@shared/components/dialogs/content/date-of-birth/date-of-birth.component';
+import moment from 'moment';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -47,7 +50,9 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public busy: Subscription;
   public enrollees: EnrolleeListViewModel[];
+  public enrollee: HttpEnrollee;
   public enrolleeNavigation: EnrolleeNavigation;
+  public sort: Sort;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -78,30 +83,24 @@ export class AdjudicationContainerComponent implements OnInit {
     this.routeUtils.updateQueryParams({ textSearch });
   }
 
-  public onFilter(status: EnrolmentStatusEnum | null): void {
+  public onFilter(status: StatusFilterEnum | null): void {
     this.routeUtils.updateQueryParams({ status });
+  }
+
+  public onSort(sort: Sort): void {
+    // Do not use sorting queryParams for single row mode
+    if (!this.route.snapshot.params.id) {
+      this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
+    }
   }
 
   public onRefresh(): void {
     this.getDataset(this.route.snapshot.params.id, this.route.snapshot.queryParams);
   }
 
-  public onNotify(enrolleeId: number) {
-    this.adjudicationResource.getEnrolleeById(enrolleeId)
-      .pipe(
-        exhaustMap((enrollee: HttpEnrollee) => {
-          if (enrollee.email) {
-            return of(enrollee);
-          }
-          this.toastService.openErrorToast('Enrollee does not have a contact email.');
-          return EMPTY;
-        }),
-        exhaustMap((enrollee: HttpEnrollee) =>
-          this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
-            .pipe(map(() => enrollee))
-        )
-      )
-      .subscribe((enrollee: HttpEnrollee) => EmailUtils.openEmailClient(enrollee.email));
+  public onNotify(enrollee: EnrolleeListViewModel) {
+    this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
+      .subscribe(() => EmailUtils.openEmailClient(enrollee.email));
   }
 
   public onAssign(enrolleeId: number) {
@@ -181,8 +180,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.APPROVE)
       )
-      .subscribe((approvedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(approvedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -201,8 +200,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.DECLINE_PROFILE)
       )
-      .subscribe((declinedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(declinedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -221,8 +220,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.LOCK_PROFILE)
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(lockedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -241,8 +240,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(lockedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -261,8 +260,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -281,8 +280,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -301,8 +300,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.CANCEL_TOA)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -321,8 +320,8 @@ export class AdjudicationContainerComponent implements OnInit {
       .pipe(
         this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.RERUN_RULES)
       )
-      .subscribe((enableEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(enableEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -367,13 +366,10 @@ export class AdjudicationContainerComponent implements OnInit {
             ? of(noop)
             : EMPTY
         ),
-        exhaustMap(() =>
-          this.adjudicationResource.updateEnrolleeAlwaysManual(enrolleeId, alwaysManual)
-        ),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
+        exhaustMap(() => this.adjudicationResource.updateEnrolleeAlwaysManual(enrolleeId, alwaysManual)),
       )
-      .subscribe((flaggedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(flaggedEnrollee.id);
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
         this.action.emit();
       });
   }
@@ -384,7 +380,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onAssignToa({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
     this.busy = this.adjudicationResource.assignToaAgreementType(enrolleeId, agreementType)
-      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee.id));
+      .subscribe(() => this.updateEnrollee(enrolleeId));
   }
 
   public onSendBulkEmail() {
@@ -411,11 +407,45 @@ export class AdjudicationContainerComponent implements OnInit {
     this.onRoute([enrolleeId, RouteUtils.currentRoutePath(this.router.url)]);
   }
 
+  public onChangeDateOfBirth(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Change Date of Birth',
+      icon: 'edit_calendar',
+      actionHide: true,
+      cancelHide: true,
+      component: DateOfBirthComponent,
+      data: {
+        enrollee: this.enrollees[0]
+      }
+    };
+
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: { output: moment.Moment }) => {
+            if (result) {
+              return (result.output)
+                ? this.adjudicationResource.updatePaperEnrolleeDateOfBirth(enrolleeId, result.output)
+                : of(noop);
+            }
+            return EMPTY;
+          })
+        )
+        .subscribe(() => this.action.emit());
+    }
+  }
+
   public ngOnInit() {
     // Use existing query params for initial search, and
     // update results on query param change
     this.route.queryParams
-      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(this.route.snapshot.params.id, queryParams));
+      .subscribe((queryParams: { [key: string]: any }) => {
+        // Search is not applicable to single-row enrollee
+        if (!this.route.snapshot.params.id) {
+          this.getDataset(this.route.snapshot.params.id, queryParams);
+        }
+      });
     // url params could change due to jump action, subscribe to changes
     this.route.params
       .subscribe((params) => {
@@ -425,12 +455,15 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number }) {
+  protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number, sortActive?: string, sortDirection?: SortDirection }) {
     if (enrolleeId) {
       this.getEnrolleeById(enrolleeId);
     } else {
       this.busy = this.getEnrollees(queryParams)
-        .subscribe((enrollees: EnrolleeListViewModel[]) => this.enrollees = enrollees);
+        .subscribe((enrollees: EnrolleeListViewModel[]) => {
+          this.enrollees = enrollees;
+          this.sort = { active: queryParams.sortActive, direction: queryParams.sortDirection };
+        });
     }
   }
 
@@ -439,6 +472,7 @@ export class AdjudicationContainerComponent implements OnInit {
       forkJoin({
         enrollee: this.adjudicationResource.getEnrolleeById(enrolleeId)
           .pipe(
+            tap((enrollee) => this.enrollee = enrollee),
             map(this.toEnrolleeListViewModel),
             tap(() => this.showSearchFilter = false)
           ),
@@ -454,8 +488,19 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  private getEnrollees({ textSearch, status }: { textSearch?: string, status?: number }) {
-    return this.adjudicationResource.getEnrollees(textSearch, status)
+  private getEnrollees({ textSearch, status }: { textSearch?: string, status?: StatusFilterEnum }) {
+    // Transform the "statuses" for (un)linked paper enrollees into their own query string
+    var isLinkedPaperEnrolment = null;
+    if (+status === PaperStatusEnum.UNLINKED_PAPER_ENROLMENT) {
+      isLinkedPaperEnrolment = false;
+      status = null;
+    }
+    else if (+status === PaperStatusEnum.LINKED_PAPER_ENROLMENT) {
+      isLinkedPaperEnrolment = true;
+      status = null;
+    }
+
+    return this.adjudicationResource.getEnrollees({ textSearch, statusCode: status, isLinkedPaperEnrolment })
       .pipe(
         tap(() => this.showSearchFilter = true)
       );
@@ -467,6 +512,7 @@ export class AdjudicationContainerComponent implements OnInit {
         const index = this.enrollees.findIndex(e => e.id === enrollee.id);
         this.enrollees.splice(index, 1, this.toEnrolleeListViewModel(enrollee));
         this.enrollees = [...this.enrollees];
+        this.enrollee = enrollee;
       })
   }
 
@@ -479,8 +525,7 @@ export class AdjudicationContainerComponent implements OnInit {
         (note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, note, true)
           : of(noop)
-      ),
-      exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
+      )
     );
   }
 
@@ -528,8 +573,12 @@ export class AdjudicationContainerComponent implements OnInit {
       enrolleeCareSettings,
       requiresConfirmation,
       confirmed,
+      linkedEnrolleeId,
+      possiblePaperEnrolmentMatch,
       gpid,
-      adjudicatorIdir
+      adjudicatorIdir,
+      dateOfBirth,
+      email
     } = enrollee;
 
     return {
@@ -552,7 +601,11 @@ export class AdjudicationContainerComponent implements OnInit {
       hasNotification: false,
       requiresConfirmation,
       confirmed,
+      linkedEnrolleeId,
+      possiblePaperEnrolmentMatch,
       gpid,
+      dateOfBirth,
+      email
     };
   }
 }

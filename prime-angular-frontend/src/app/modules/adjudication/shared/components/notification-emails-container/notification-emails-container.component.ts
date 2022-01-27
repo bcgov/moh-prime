@@ -1,5 +1,4 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { EmailTemplateTypeEnum } from '@adjudication/shared/models/email-template-type.model';
 import { EmailTemplate } from '@adjudication/shared/models/email-template.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,8 +13,6 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 })
 export class NotificationEmailsContainerComponent implements OnInit {
   @Input() public emailTemplates: EmailTemplate[];
-
-  public EmailTemplateTypeEnum = EmailTemplateTypeEnum;
 
   private routeUtils: RouteUtils;
 

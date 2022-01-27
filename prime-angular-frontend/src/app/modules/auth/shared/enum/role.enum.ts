@@ -6,10 +6,12 @@ export enum Role {
 
   PHSA_LABTECH = 'phsa_eforms_labtech',
   PHSA_IMMUNIZER = 'phsa_eforms_immunizer_covid19',
+  PHSA_EFORMS_SAT = 'phsa_eforms_sat',
 
   // Feature Flags
   FEATURE_VC_ISSUANCE = 'feature_vc_issuance',
   FEATURE_SITE_PHARMACIST = 'feature_site_pharmacist',
+  // Also used for device provider user enrolment and device provider paper enrolment
   FEATURE_SITE_DEVICE_PROVIDER = 'feature_site_device_provider',
 
   VIEW_ENROLLEE = 'enrollee_view',

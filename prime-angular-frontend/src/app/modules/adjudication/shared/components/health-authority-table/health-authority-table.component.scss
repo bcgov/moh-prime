@@ -3,10 +3,6 @@
 
 @include statuses;
 
-.prefix {
-  width: 2rem;
-}
-
 .red-icon {
   color: theme-palette(red);
 }
@@ -21,4 +17,11 @@
 
 .expanded {
   background-color: theme-palette(blue, lightest);
+}
+
+.prefix-container {
+  height: 48px;
+  width: 24px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }

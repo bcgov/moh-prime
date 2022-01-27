@@ -55,9 +55,6 @@ namespace PrimeTests.Utils
             .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
             .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4));
 
-        public static Faker<Job> JobFaker = new Faker<Job>()
-            .RuleFor(j => j.Title, f => f.Random.Word());
-
         public static Faker<EnrolleeCareSetting> EnrolleeCareSettingFaker = new Faker<EnrolleeCareSetting>()
             .RuleFor(o => o.CareSettingCode, f => f.Random.Int(1, 2));
 
@@ -73,13 +70,13 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.GivenNames, f => f.Name.FirstName())
             .RuleFor(e => e.DateOfBirth, f => (f.Date.Past(20, DateTime.Now.AddYears(-18))).Date)
             .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
-            .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
-            .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
+            .RuleFor(e => e.DeviceProviderIdentifier, TestUtils.RandomDeviceProviderIdentifier())
             .RuleFor(e => e.EnrolleeCareSettings, f => EnrolleeCareSettingFaker.Generate(2))
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
             .RuleFor(e => e.IdentityAssuranceLevel, f => 3)
             .RuleFor(e => e.Agreements, f => new List<Agreement>())
-            .RuleFor(e => e.SelfDeclarations, f => new List<SelfDeclaration>());
+            .RuleFor(e => e.SelfDeclarations, f => new List<SelfDeclaration>())
+            .RuleFor(e => e.RemoteAccessSites, f => new List<RemoteAccessSite>());
 
         public static Faker<Agreement> AgreementFaker = new Faker<Agreement>()
             .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
@@ -100,7 +97,7 @@ namespace PrimeTests.Utils
             return new Faker().PickRandom(provinces.Except(excludedProvinceCodes));
         }
 
-        public static string RandomDeviceProviderNumber()
+        public static string RandomDeviceProviderIdentifier()
         {
             return new Faker().Random.Int(100000, 999999).ToString().Substring(1);
         }

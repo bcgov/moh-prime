@@ -56,8 +56,8 @@ namespace PrimeTests.UnitTests
             return new[]
             {
                 new object[] { null, true },
-                new object[] { DateTimeOffset.Now.AddDays(91), true },
-                new object[] { DateTimeOffset.Now.AddDays(89), false },
+                new object[] { DateTimeOffset.Now.AddDays(31), true },
+                new object[] { DateTimeOffset.Now.AddDays(29), false },
                 new object[] { DateTimeOffset.Now.AddDays(-1), false },
             };
         }
@@ -260,7 +260,6 @@ namespace PrimeTests.UnitTests
                 typeof(PhysicalAddress),
                 typeof(MailingAddress),
                 typeof(ICollection<Certification>),
-                typeof(ICollection<Job>),
                 typeof(ICollection<OboSite>),
                 typeof(ICollection<EnrolleeCareSetting>),
                 typeof(ICollection<EnrolleeHealthAuthority>),
@@ -268,6 +267,7 @@ namespace PrimeTests.UnitTests
                 typeof(ICollection<RemoteAccessSite>),
                 typeof(ICollection<RemoteAccessLocation>),
                 typeof(ICollection<SelfDeclaration>),
+                typeof(ICollection<RemoteAccessSiteUpdateModel>)
             };
 
             var unknownTypes = typeof(EnrolleeUpdateModel)

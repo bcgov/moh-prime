@@ -15,6 +15,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { Role } from '@auth/shared/enum/role.enum';
 
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
@@ -41,7 +43,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     private configService: ConfigService,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private route: ActivatedRoute,
-    router: Router
+    router: Router,
+    private permissionService: PermissionService
   ) {
     super(dialog, formUtilsService);
 
@@ -53,6 +56,12 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   public onBack() {
     this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.DEMOGRAPHIC]);
+  }
+
+  public disableCareSetting(careSettingCode: number): boolean {
+    return (careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
+      ? !this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER)
+      : false;
   }
 
   public ngOnInit(): void {
@@ -104,12 +113,12 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     let oboSites = this.enrollee.oboSites;
     const payload = this.formState.json;
 
-    // Remove health authorities if health authority care setting not chosen
+    // Remove health authorities when health authority care setting no longer selected
     if (!payload.careSettings.some(code => code === CareSettingEnum.HEALTH_AUTHORITY)) {
       payload.healthAuthorities = [];
     }
 
-    // Remove any oboSites belonging to careSetting which is no longer selected
+    // Remove obo sites when associated their care setting is no longer selected
     this.careSettingTypes.forEach(type => {
       if (!payload.careSettings.some(code => code === type.code)) {
         oboSites = oboSites.filter((site: OboSite) => site.careSettingCode !== type.code);
@@ -121,6 +130,12 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
     return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
       .pipe(
+        // Remove device provider identifier when care setting no longer selected
+        exhaustMap(() =>
+          (!payload.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER))
+            ? this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id)
+            : of(null)
+        ),
         exhaustMap(() =>
           (this.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)

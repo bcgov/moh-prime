@@ -70,5 +70,13 @@ namespace Prime.ViewModels
         public bool Confirmed { get; set; }
 
         public string GPID { get; set; }
+
+        public int LinkedEnrolleeId { get; set; }
+
+        public bool PossiblePaperEnrolmentMatch { get; set; }
+
+        public DateTime DateOfBirth { get; set; }
+
+        public string Email { get; set;}
     }
 }

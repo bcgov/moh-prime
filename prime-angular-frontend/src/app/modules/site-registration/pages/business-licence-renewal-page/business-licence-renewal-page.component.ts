@@ -72,14 +72,14 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
     this.uploadedFile = false;
   }
 
-  public onBack(): void {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
-  }
-
   public downloadBusinessLicence(event: Event): void {
     event.preventDefault();
     this.siteResource.getBusinessLicenceDocumentToken(this.siteService.site.id, this.siteService.site.businessLicence.id)
       .subscribe((token: string) => this.utilsService.downloadToken(token));
+  }
+
+  public onBack(): void {
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }
 
   public ngOnInit(): void {
@@ -89,9 +89,9 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
   }
 
   protected createFormInstance(): void {
-    // TODO refactor business licence into a single page, or inverse these pages so 
+    // TODO refactor business licence into a single page, or inverse these pages so
     //      the default is the renewal page, and the override is the initial submission
-    // Create out of band form state for renewals to be 
+    // Create out of band form state for renewals to be
     // transferred to the form state service on submit
     this.formState = new BusinessLicenceRenewalPageFormState(this.fb);
   }
@@ -126,6 +126,8 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
     const { businessLicenceGuid, businessLicenceExpiry } = this.siteFormStateService.businessLicenceFormState;
     businessLicenceGuid.patchValue(this.formState.businessLicenceGuid.value);
     businessLicenceExpiry.patchValue(this.formState.businessLicenceExpiry.value);
+
+    this.siteFormStateService.businessLicenceFormState.flagBusinessLicenceUpdated();
 
     // Updates only occur on submission after an
     // initial submission has been performed

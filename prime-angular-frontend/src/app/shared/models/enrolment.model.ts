@@ -24,7 +24,7 @@ export interface HttpEnrollee extends Enrollee {
   approvedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
-  deviceProviderNumber: string;
+  deviceProviderIdentifier: string;
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
@@ -42,7 +42,6 @@ export interface HttpEnrollee extends Enrollee {
   assignedTOAType: number;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
-  accessAgreementNote: EnrolleeNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice
@@ -56,7 +55,9 @@ export interface HttpEnrollee extends Enrollee {
   gpid: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
-  // This is needed for legacy enrolments
+  linkedEnrolleeId: number;
+  possiblePaperEnrolmentMatch: boolean;
+  // This is needed for older enrolment profile snapshots
   jobs: Job[];
 }
 
@@ -78,7 +79,7 @@ export interface Enrolment {
   approvedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
-  deviceProviderNumber: string;
+  deviceProviderIdentifier: string;
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
@@ -96,7 +97,6 @@ export interface Enrolment {
   assignedTOAType: number;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
-  accessAgreementNote: EnrolleeNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice
@@ -109,7 +109,9 @@ export interface Enrolment {
   base64QRCode: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
-  // This is needed for legacy enrolments
+  linkedEnrolleeId: number;
+  possiblePaperEnrolmentMatch: boolean;
+  // This is needed for older enrolment profile snapshots
   jobs: Job[];
 }
 
@@ -134,4 +136,8 @@ export interface EnrolleeListViewModel {
   requiresConfirmation: boolean;
   confirmed: boolean;
   gpid: string;
+  linkedEnrolleeId: number;
+  possiblePaperEnrolmentMatch: boolean;
+  dateOfBirth: string;
+  email: string;
 }

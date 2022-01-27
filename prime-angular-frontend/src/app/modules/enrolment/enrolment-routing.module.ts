@@ -16,8 +16,6 @@ import { IdSubmissionComponent } from './pages/id-submission/id-submission.compo
 import { BceidDemographicComponent } from './pages/bceid-demographic/bceid-demographic.component';
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
-// TODO Temporary removal of device provider for Community Practice
-// import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
@@ -126,13 +124,6 @@ const routes: Routes = [
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
-      // TODO Temporary removal of device provider for Community Practice
-      // {
-      //   path: EnrolmentRoutes.DEVICE_PROVIDER,
-      //   component: DeviceProviderComponent,
-      //   canDeactivate: [CanDeactivateFormGuard],
-      //   data: { title: 'PRIME Enrolment' }
-      // },
       {
         path: EnrolmentRoutes.REMOTE_ACCESS,
         component: RemoteAccessComponent,

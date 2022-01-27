@@ -55,7 +55,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   ) {
     super(fb, routeStateService, logger);
 
-    this.initialize([SiteRoutes.SITE_MANAGEMENT]);
+    this.initialize([SiteRoutes.ORGANIZATIONS]);
   }
 
   /**
@@ -180,7 +180,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       businessLicenceExpiryControl.clearValidators();
       businessLicenceExpiryControl.updateValueAndValidity();
 
-      if(isCommunityPharmacy && doingBusinessAsDeferred) {
+      if (isCommunityPharmacy && doingBusinessAsDeferred) {
         doingBusinessAsControl.clearValidators();
         doingBusinessAsControl.updateValueAndValidity();
       }
@@ -215,7 +215,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       businessLicenceExpiryControl.setValidators([Validators.required]);
       businessLicenceExpiryControl.updateValueAndValidity();
 
-      if(isCommunityPharmacy && doingBusinessAsDeferred) {
+      if (isCommunityPharmacy && doingBusinessAsDeferred) {
         doingBusinessAsControl.setValidators([Validators.required]);
         doingBusinessAsControl.updateValueAndValidity();
       }

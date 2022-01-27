@@ -745,7 +745,7 @@ namespace Prime.Controllers
 
             var certifications = await _enrolleeService.GetCertificationsAsync(enrolleeId);
 
-            return Ok(await _plrProviderService.GetMatchingPlrDataAsync(certifications.Select(c => c.LicenseNumber)));
+            return Ok(await _plrProviderService.GetMatchingPlrDataAsync(certifications));
         }
     }
 }

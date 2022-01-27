@@ -708,6 +708,11 @@ namespace Prime.Migrations
                         {
                             Code = 9,
                             Name = "Pharmanet API Call"
+                        },
+                        new
+                        {
+                            Code = 10,
+                            Name = "Paper Enrolment Link"
                         });
                 });
 
@@ -3411,6 +3416,9 @@ namespace Prime.Migrations
                     b.Property<string>("Subject")
                         .HasColumnType("text");
 
+                    b.Property<int>("UpdateCount")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -3633,6 +3641,39 @@ namespace Prime.Migrations
                             Template = "Thank you for registering your site (SiteID: @Model.Pec) in PRIME. If you need to update any site information in PRIME, you may log in at any time using your mobile BC Services Card. If you have any questions, please phone 1 - 844 - 397 - 7463 or email PRIMESupport@@gov.bc.ca. Thank you.",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EmailType = 17,
+                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Template = "Your request for PharmaNet access has been approved and recorded in PRIME. When it is possible for you to do so, you must enrol in PRIME using your mobile BC Services Card. <br> <br> <strong> Your temporary GPID is @Model.GPID. </strong> <br> <br> The first time you log into PRIME you should be asked if you have previously received permission to access PharmaNet via an offline process. If you do not see this prompt, please stop your enrollment and contact <a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EmailType = 18,
+                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Template = "Dear @Model.EnrolleeName, <br> <br> Your PharmaNet Terms of Access must be accepted in PRIME before your PRIME enrolment is complete. Please log in to PRIME and accept your Terms of Access now. You can access PRIME here <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>. <br> <br> Thank you.",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EmailType = 19,
+                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Template = "To Whom it may concern, <br> <br> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ratione placeat necessitatibus adipisci dicta doloribus. Ratione inventore aperiam nobis consequuntur ab, cum, numquam praesentium magnam commodi quasi in voluptates enim repellat!",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -3658,7 +3699,7 @@ namespace Prime.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("DeviceProviderNumber")
+                    b.Property<string>("DeviceProviderIdentifier")
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
@@ -3685,9 +3726,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("IdentityProvider")
                         .HasColumnType("text");
-
-                    b.Property<bool?>("IsInsulinPumpProvider")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -3752,7 +3790,7 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EndTimestamp")
+                    b.Property<DateTime?>("EndTimestamp")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("EnrolleeId")
@@ -3956,9 +3994,11 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnrolleeId");
+                    b.HasIndex("EnrolleeId")
+                        .IsUnique();
 
-                    b.HasIndex("PaperEnrolleeId");
+                    b.HasIndex("PaperEnrolleeId")
+                        .IsUnique();
 
                     b.ToTable("EnrolleeLinkedEnrolment");
                 });
@@ -4833,6 +4873,21 @@ namespace Prime.Migrations
                         {
                             Code = "2.16.840.1.113883.4.530",
                             Name = "RDID"
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.3.40.2.46",
+                            Name = "MOAID"
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.3.40.2.44",
+                            Name = "PPID"
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.538",
+                            Name = "NAPID"
                         });
                 });
 
@@ -4881,39 +4936,6 @@ namespace Prime.Migrations
                     b.HasIndex("CommunitySiteId");
 
                     b.ToTable("IndividualDeviceProvider");
-                });
-
-            modelBuilder.Entity("Prime.Models.Job", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.ToTable("Job");
                 });
 
             modelBuilder.Entity("Prime.Models.JobName", b =>
@@ -6169,6 +6191,116 @@ namespace Prime.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLog");
+                });
+
+            modelBuilder.Entity("Prime.Models.Plr.CollegeForPlrRoleType", b =>
+                {
+                    b.Property<string>("ProviderRoleType")
+                        .HasColumnType("text");
+
+                    b.Property<int>("CollegeCode")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ProviderRoleType");
+
+                    b.ToTable("CollegeForPlrRoleType");
+
+                    b.HasData(
+                        new
+                        {
+                            ProviderRoleType = "RN",
+                            CollegeCode = 3
+                        },
+                        new
+                        {
+                            ProviderRoleType = "RNP",
+                            CollegeCode = 3
+                        },
+                        new
+                        {
+                            ProviderRoleType = "RPN",
+                            CollegeCode = 3
+                        },
+                        new
+                        {
+                            ProviderRoleType = "PHARM",
+                            CollegeCode = 2
+                        },
+                        new
+                        {
+                            ProviderRoleType = "PO",
+                            CollegeCode = 1
+                        },
+                        new
+                        {
+                            ProviderRoleType = "RAC",
+                            CollegeCode = 18
+                        },
+                        new
+                        {
+                            ProviderRoleType = "RM",
+                            CollegeCode = 3
+                        },
+                        new
+                        {
+                            ProviderRoleType = "LPN",
+                            CollegeCode = 3
+                        },
+                        new
+                        {
+                            ProviderRoleType = "MD",
+                            CollegeCode = 1
+                        },
+                        new
+                        {
+                            ProviderRoleType = "OPT",
+                            CollegeCode = 14
+                        },
+                        new
+                        {
+                            ProviderRoleType = "DEN",
+                            CollegeCode = 7
+                        },
+                        new
+                        {
+                            ProviderRoleType = "OT",
+                            CollegeCode = 12
+                        },
+                        new
+                        {
+                            ProviderRoleType = "PSYCH",
+                            CollegeCode = 16
+                        },
+                        new
+                        {
+                            ProviderRoleType = "CHIRO",
+                            CollegeCode = 4
+                        },
+                        new
+                        {
+                            ProviderRoleType = "PHYSIO",
+                            CollegeCode = 15
+                        },
+                        new
+                        {
+                            ProviderRoleType = "RMT",
+                            CollegeCode = 10
+                        },
+                        new
+                        {
+                            ProviderRoleType = "PTECH",
+                            CollegeCode = 2
+                        },
+                        new
+                        {
+                            ProviderRoleType = "RD",
+                            CollegeCode = 9
+                        },
+                        new
+                        {
+                            ProviderRoleType = "ND",
+                            CollegeCode = 11
+                        });
                 });
 
             modelBuilder.Entity("Prime.Models.Plr.PlrExpertise", b =>
@@ -8060,6 +8192,11 @@ namespace Prime.Migrations
                         {
                             Code = "PHARMTECH",
                             Name = "PHARMTECH"
+                        },
+                        new
+                        {
+                            Code = "ND",
+                            Name = "Naturopathic Doctor"
                         });
                 });
 
@@ -9262,7 +9399,8 @@ namespace Prime.Migrations
 
                     b.HasIndex("LicenseCode");
 
-                    b.HasIndex("RemoteUserId");
+                    b.HasIndex("RemoteUserId")
+                        .IsUnique();
 
                     b.ToTable("RemoteUserCertification");
                 });
@@ -9325,6 +9463,9 @@ namespace Prime.Migrations
 
                     b.Property<string>("Filename")
                         .HasColumnType("text");
+
+                    b.Property<bool>("Hidden")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("SelfDeclarationTypeCode")
                         .HasColumnType("integer");
@@ -9790,7 +9931,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 4,
-                            Name = "College License or Practitioner ID not in PharmaNet table"
+                            Name = "College License, Practitioner ID, or Device Provider ID not in PharmaNet table"
                         },
                         new
                         {
@@ -9810,7 +9951,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 8,
-                            Name = "Insulin Pump Provider"
+                            Name = "Device Provider"
                         },
                         new
                         {
@@ -9855,7 +9996,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 17,
-                            Name = "No address from BCSC. Enrollee entered address."
+                            Name = "No address from BC Services Card. Enrollee entered address."
                         },
                         new
                         {
@@ -9870,7 +10011,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 20,
-                            Name = "Possible match with paper enrolment"
+                            Name = "Possible match with paper enrolment(s)"
                         },
                         new
                         {
@@ -10507,7 +10648,8 @@ namespace Prime.Migrations
                 {
                     b.HasOne("Prime.Models.Admin", "Admin")
                         .WithMany()
-                        .HasForeignKey("AdminId");
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.BusinessEventType", "BusinessEventType")
                         .WithMany("BusinessEvents")
@@ -10517,19 +10659,23 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
-                        .HasForeignKey("EnrolleeId");
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Organization", "Organization")
                         .WithMany()
-                        .HasForeignKey("OrganizationId");
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Party", "Party")
                         .WithMany()
-                        .HasForeignKey("PartyId");
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany()
-                        .HasForeignKey("SiteId");
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Admin");
 
@@ -10770,14 +10916,14 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolment", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany()
-                        .HasForeignKey("EnrolleeId")
+                        .WithOne("EnrolleeToPaperLink")
+                        .HasForeignKey("Prime.Models.EnrolleeLinkedEnrolment", "EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Prime.Models.Enrollee", "PaperEnrollee")
-                        .WithMany()
-                        .HasForeignKey("PaperEnrolleeId");
+                        .WithOne("PaperToEnrolleeLink")
+                        .HasForeignKey("Prime.Models.EnrolleeLinkedEnrolment", "PaperEnrolleeId");
 
                     b.Navigation("Enrollee");
 
@@ -11010,17 +11156,6 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.Navigation("CommunitySite");
-                });
-
-            modelBuilder.Entity("Prime.Models.Job", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany()
-                        .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Enrollee");
                 });
 
             modelBuilder.Entity("Prime.Models.OboSite", b =>
@@ -11257,8 +11392,8 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.HasOne("Prime.Models.RemoteUser", "RemoteUser")
-                        .WithMany("RemoteUserCertifications")
-                        .HasForeignKey("RemoteUserId")
+                        .WithOne("RemoteUserCertification")
+                        .HasForeignKey("Prime.Models.RemoteUserCertification", "RemoteUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -11665,11 +11800,15 @@ namespace Prime.Migrations
 
                     b.Navigation("EnrolleeRemoteUsers");
 
+                    b.Navigation("EnrolleeToPaperLink");
+
                     b.Navigation("EnrolmentStatuses");
 
                     b.Navigation("IdentificationDocuments");
 
                     b.Navigation("OboSites");
+
+                    b.Navigation("PaperToEnrolleeLink");
 
                     b.Navigation("RemoteAccessLocations");
 
@@ -11768,7 +11907,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.RemoteUser", b =>
                 {
-                    b.Navigation("RemoteUserCertifications");
+                    b.Navigation("RemoteUserCertification");
                 });
 
             modelBuilder.Entity("Prime.Models.SelfDeclarationType", b =>

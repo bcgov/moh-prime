@@ -7,11 +7,13 @@ import { forkJoin, of } from 'rxjs';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
+import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
+import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -22,6 +24,7 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -36,6 +39,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public showAdjudication: boolean;
   public documents: EnrolleeAdjudicationDocument[];
   public absence: EnrolleeAbsence;
+  public readonly PAPER_ENROLLEE_GPID_PREFIX = PAPER_ENROLLEE_GPID_PREFIX;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,
@@ -61,8 +65,12 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     this.hasActions = true;
   }
 
-  public onNavigateEnrollee(enrolleeId: number) {
+  public onNavigateEnrollee(enrolleeId: number): void {
     this.onRoute([enrolleeId, RouteUtils.currentRoutePath(this.router.url)]);
+  }
+
+  public onRedirectCommunitySite(routePath: RoutePath): void {
+    this.router.navigate([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.SITE_REGISTRATIONS, ...routePath]);
   }
 
   public ngOnInit(): void {
@@ -70,9 +78,6 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       .subscribe(params => this.loadEnrollee(params.id));
 
     this.action.subscribe(() => this.loadEnrollee(+this.route.snapshot.params.id));
-
-    this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id)
-      .subscribe(documents => this.documents = documents);
 
     this.enrolmentResource.getCurrentEnrolleeAbsence(+this.route.snapshot.params.id)
       .subscribe((absence: EnrolleeAbsence) => this.absence = absence);
@@ -89,7 +94,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
               enrolment: this.enrolmentAdapter(enrollee)
             }))
           ),
-        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId),
+        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId)
       }).pipe(
         map(
           ({ enrollee, enrolleeNavigation }) => {
@@ -107,8 +112,12 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
         exhaustMap((enrolleeId: number) => this.adjudicationResource.getPlrInfoByEnrolleeId(enrolleeId)
           .pipe(
             map((plrInfo: PlrInfo[]) => this.plrInfo = plrInfo),
-            catchError(_ => of([]))))
-      ).subscribe();
+            catchError(_ => of([])))),
+        exhaustMap(() =>
+          this.isPaperEnrollee(this.enrollee) ?
+            this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id) :
+            of(null))
+      ).subscribe((documents: EnrolleeAdjudicationDocument[]) => this.documents = documents);
   }
 
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
@@ -130,6 +139,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       smsPhone,
       phone,
       phoneExtension,
+      userProvidedGpid,
       ...remainder
     } = enrollee;
 
@@ -151,12 +161,17 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
         email,
         smsPhone,
         phone,
-        phoneExtension
+        phoneExtension,
+        userProvidedGpid
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
       careSettings: enrollee.enrolleeCareSettings,
       ...remainder
     };
+  }
+
+  private isPaperEnrollee(enrollee: Enrollee): boolean {
+    return (enrollee?.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX));
   }
 }

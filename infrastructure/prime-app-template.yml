@@ -710,6 +710,7 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-webapi
+            - run-migrations
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
@@ -774,7 +775,7 @@ objects:
             - migrate
           env:
             - name: CACHE_REDIS_HOST
-              value: redis
+              value: ${SVC_NAME}-redis
             - name: CACHE_REDIS_PASS
               valueFrom:
                 secretKeyRef:
@@ -906,6 +907,7 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-document-manager
+            - run-migrations
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
