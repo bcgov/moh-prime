@@ -13,7 +13,7 @@ using Prime.Configuration.Database;
 
 namespace PrimeTests.UnitTests
 {
-    public class MinorUpdateRulesTests
+    public class MinorUpdateRulesTests : InMemoryDbTest
     {
         /// <summary>
         /// Minor update rules should not add any staus reasons
@@ -24,16 +24,55 @@ namespace PrimeTests.UnitTests
             Assert.Empty(reasons);
         }
 
-        [Fact(Skip = "Awaiting test refactor")]
-        public void TestCurrentToaRule()
+        [Theory]
+        [InlineData(1, true)]
+        [InlineData(3, true)]
+        [InlineData(5, true)]
+        [InlineData(6, true)]
+        [InlineData(11, false)]
+        [InlineData(12, false)]
+        [InlineData(13, false)]
+        [InlineData(14, false)]
+        [InlineData(15, false)]
+        [InlineData(16, false)]
+        [InlineData(17, false)]
+        public async void TestCurrentToaRule(int agreementVersionId, bool expected)
         {
-            // TODO: implement with better control over test DB and access term service.
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            enrollee.Agreements = new[]
+            {
+                new Agreement
+                {
+                    AcceptedDate = DateTimeOffset.Now,
+                    AgreementVersionId = agreementVersionId
+                }
+            };
+
+            var agreementDtos = TestDb.AgreementVersions
+                .Select(av => new
+                {
+                    av.Id,
+                    av.AgreementType,
+                    av.EffectiveDate
+                })
+                .ToList();
+
+            var newestAgreementVersionIds = agreementDtos
+                .GroupBy(av => av.AgreementType)
+                .Select(group => group.OrderByDescending(av => av.EffectiveDate).First().Id)
+                .ToList();
+
+            var rule = new CurrentToaRule(newestAgreementVersionIds);
+            bool result = await rule.ProcessRule(enrollee);
+
+            Assert.Equal(expected, result);
+            AssertNoReasons(enrollee);
         }
 
         [Fact(Skip = "Awaiting test refactor")]
         public void TestCorrectToaRule()
         {
-            // TODO: Add small test, majority of funtionality is now tested in AgreementEngine.Tests
+            // Simple logic agreementEngine test cover most, would require pulling agreement engine out
         }
 
         [Theory]

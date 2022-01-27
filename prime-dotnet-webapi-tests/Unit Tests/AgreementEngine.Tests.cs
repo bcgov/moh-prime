@@ -1,18 +1,10 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
+
 using Xunit;
-using FakeItEasy;
-using AutoMapper;
 
 using Prime.Models;
 using Prime.Engines;
-using Prime.Services;
-using Prime.HttpClients;
 using Prime.DTOs.AgreementEngine;
 using PrimeTests.Utils;
-using PrimeTests.ModelFactories;
 
 namespace PrimeTests.UnitTests
 {
@@ -61,7 +53,7 @@ namespace PrimeTests.UnitTests
             // Act
             determinedType = AgreementEngine.DetermineAgreementType(withPharm);
             // Assert
-            Assert.Equal(null, determinedType);
+            Assert.Null(determinedType);
         }
 
         [Theory]
@@ -170,7 +162,7 @@ namespace PrimeTests.UnitTests
             // Act
             var determinedType = AgreementEngine.DetermineAgreementType(dto);
             // Assert
-            Assert.Equal(null, determinedType);
+            Assert.Null(determinedType);
         }
     }
 }
