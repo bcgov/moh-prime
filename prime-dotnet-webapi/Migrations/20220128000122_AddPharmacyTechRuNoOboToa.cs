@@ -16,7 +16,7 @@ namespace Prime.Migrations
                 columns: new[] { "CreatedUserId", "CreatedTimeStamp", "UpdatedUserId", "UpdatedTimeStamp", "Text", "AgreementType", "EffectiveDate" },
                 values: new object[] { Guid.Empty, SEEDING_DATE, Guid.Empty, SEEDING_DATE,
                     @"TOA TEMPLATE CONTENT",
-                    (int) AgreementType.PharmacyTechRuNoOboTOA, SEEDING_DATE });
+                    (int) AgreementType.PharmacyTechnicianTOA, SEEDING_DATE });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -126,7 +126,7 @@ namespace Prime.Engines.AgreementEngineInternal
         {
             if (Regulated)
             {
-                return AgreementType.PharmacyTechRuNoOboTOA;
+                return AgreementType.PharmacyTechnicianTOA;
             }
             else
             {
