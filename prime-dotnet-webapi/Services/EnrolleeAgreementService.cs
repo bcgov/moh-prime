@@ -136,6 +136,7 @@ namespace Prime.Services
             return await _context.Agreements
                 .OrderByDescending(a => a.CreatedDate)
                 .Where(a => a.EnrolleeId == enrolleeId)
+                .Where(a => a.AcceptedDate != null)
                 .Select(a => a.AgreementVersion.AgreementType)
                 .FirstOrDefaultAsync();
         }
