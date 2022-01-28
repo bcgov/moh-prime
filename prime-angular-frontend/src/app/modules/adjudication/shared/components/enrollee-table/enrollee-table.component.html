@@ -163,8 +163,14 @@
               [class]="row.currentStatusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
 
             <div class="d-flex align-items-center">
-              <span class="mr-1">{{ row.currentStatusCode | configCode: 'statuses' | default }}</span>
-              <ng-container *ngIf="row.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX; else nonPaperEnrolleeIcons">
+              <span class="mr-1">
+                    {{ ((row?.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX:'startsWith')
+                          && paperEnrolmentStatusMap[row.currentStatusCode]
+                            ? paperEnrolmentStatusMap[row.currentStatusCode]
+                            : row.currentStatusCode | configCode: 'statuses')
+                            | default }}</span>
+              <ng-container
+                            *ngIf="row.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX: 'startsWith'; else nonPaperEnrolleeIcons">
                 <mat-icon matTooltip="Paper Submission"
                           matTooltipPosition="after">description
                 </mat-icon>

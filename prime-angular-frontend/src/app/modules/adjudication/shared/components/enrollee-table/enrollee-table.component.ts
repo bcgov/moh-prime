@@ -16,7 +16,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { LocalStorageService } from '@core/services/local-storage.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
-import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum, PaperEnrolmentStatusMap } from '@shared/enums/enrolment-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { Admin } from '@auth/shared/models/admin.model';
@@ -59,6 +59,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public Role = Role;
+  public paperEnrolmentStatusMap = PaperEnrolmentStatusMap;
   public readonly PAPER_ENROLLEE_GPID_PREFIX = PAPER_ENROLLEE_GPID_PREFIX;
 
   private sortActiveKey: string;
