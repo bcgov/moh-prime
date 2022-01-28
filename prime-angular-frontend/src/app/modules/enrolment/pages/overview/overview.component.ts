@@ -85,18 +85,18 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       message: 'When your enrolment is submitted for adjudication, it can no longer be updated. Are you ready to submit your enrolment?',
       actionText: 'Submit Enrolment'
     };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+
+    this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.enrolmentResource.submitApplication(enrolment)
-            : EMPTY
-        )
-      )
-      .subscribe(() => {
-        this.toastService.openSuccessToast('Enrolment has been submitted');
-        this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
+      .subscribe((result: boolean) => {
+        if (result) {
+          this.busy =
+            this.enrolmentResource.submitApplication(enrolment)
+              .subscribe(() => {
+                this.toastService.openSuccessToast('Enrolment has been submitted');
+                this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
+              });
+        }
       });
   }
 
