@@ -215,7 +215,6 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
       // provider information was not altered by repopulating in the payload
       this.busy = this.authService.getUser$()
         .pipe(
-          // TODO add idenity provider check to fork for BCeID
           map(({ firstName, lastName, givenNames, verifiedAddress }: BcscUser) => {
             const enrolment = this.enrolmentFormStateService.json;
             enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, verifiedAddress };
