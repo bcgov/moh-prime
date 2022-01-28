@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Prime.Models;
@@ -9,6 +10,6 @@ namespace Prime.Services
     {
         Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee);
 
-        Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate);
+        Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate, List<int> newestAgreementVersionIds);
     }
 }
