@@ -16,13 +16,13 @@ namespace Prime.Migrations
                 columns: new[] { "CreatedUserId", "CreatedTimeStamp", "UpdatedUserId", "UpdatedTimeStamp", "Text", "AgreementType", "EffectiveDate" },
                 values: new object[] { Guid.Empty, SEEDING_DATE, Guid.Empty, SEEDING_DATE,
                     @"TOA TEMPLATE CONTENT",
-                    AgreementType.PharmacyTechRuNoOboTOA, SEEDING_DATE });
+                    (int) AgreementType.PharmacyTechRuNoOboTOA, SEEDING_DATE });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
-                table: "BusinessEventTypeLookup",
+                table: "AgreementVersion",
                 keyColumn: "Id",
                 keyValue: 18);
         }
