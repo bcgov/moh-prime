@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 
+using Prime.Extensions;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services.Razor;
@@ -26,13 +27,13 @@ namespace Prime.Services
             ApiDbContext context,
             ILogger<EnrolleeAgreementService> logger,
             IAgreementService agreementService,
-            IRazorConverterService razorConverterService,
-            IMapper mapper)
+            IMapper mapper,
+            IRazorConverterService razorConverterService)
             : base(context, logger)
         {
             _agreementService = agreementService;
-            _razorConverterService = razorConverterService;
             _mapper = mapper;
+            _razorConverterService = razorConverterService;
         }
 
         /// <summary>
@@ -130,14 +131,13 @@ namespace Prime.Services
                 .FirstAsync(at => at.EnrolleeId == enrolleeId);
         }
 
-        public async Task<AgreementType> GetCurrentAgreementTypeAsync(int enrolleeId)
+        public async Task<AgreementType?> GetCurrentAgreementTypeAsync(int enrolleeId)
         {
             return await _context.Agreements
-                .Include(a => a.AgreementVersion)
                 .OrderByDescending(a => a.CreatedDate)
                 .Where(a => a.EnrolleeId == enrolleeId)
                 .Select(a => a.AgreementVersion.AgreementType)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -203,7 +203,8 @@ namespace Prime.Services
             var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
 
             var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
-            return expectedAgreementType != null && currentAgreementType.IsOnBehalfOfAgreement() && expectedAgreementType.Value.IsRegulatedUserAgreement();
+            return expectedAgreementType.IsValid() && currentAgreementType.IsValid() &&
+                currentAgreementType.Value.IsOnBehalfOfAgreement() && expectedAgreementType.Value.IsRegulatedUserAgreement();
         }
     }
 }
