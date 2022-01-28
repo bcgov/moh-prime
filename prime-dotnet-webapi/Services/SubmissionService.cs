@@ -77,8 +77,9 @@ namespace Prime.Services
 
             var minorUpdate = await _submissionRulesService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
             await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, updatedProfile);
+            var hasOboToRuAgreementTypeChange = await _enrolleeAgreementService.IsOboToRuAgreementTypeChangeAsync(enrolleeId);
 
-            if (minorUpdate)
+            if (minorUpdate && !hasOboToRuAgreementTypeChange)
             {
                 return;
             }
