@@ -8,7 +8,6 @@ namespace Prime.Services
     public interface IEnrolleeAgreementService
     {
         Task<Agreement> GetCurrentAgreementAsync(int enrolleeId);
-        Task<AgreementType?> GetCurrentAgreementTypeAsync(int enrolleeId);
         Task<Agreement> GetEnrolleeAgreementAsync(int enrolleeId, int agreementId, bool includeText = false);
         Task<IEnumerable<Agreement>> GetEnrolleeAgreementsAsync(int enrolleeId, AgreementFilters filters);
         Task CreateEnrolleeAgreementAsync(int enrolleeId);
