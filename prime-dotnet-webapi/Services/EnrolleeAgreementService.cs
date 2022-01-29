@@ -131,16 +131,6 @@ namespace Prime.Services
                 .FirstAsync(at => at.EnrolleeId == enrolleeId);
         }
 
-        public async Task<AgreementType?> GetCurrentAgreementTypeAsync(int enrolleeId)
-        {
-            return await _context.Agreements
-                .OrderByDescending(a => a.CreatedDate)
-                .Where(a => a.EnrolleeId == enrolleeId)
-                .Where(a => a.AcceptedDate != null)
-                .Select(a => a.AgreementVersion.AgreementType)
-                .FirstOrDefaultAsync();
-        }
-
         /// <summary>
         /// Accepts the Enrollee's newest Agreement, if it hasn't already been accepted.
         /// </summary>
@@ -204,8 +194,18 @@ namespace Prime.Services
             var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
 
             var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
-            return expectedAgreementType.IsValid() && currentAgreementType.IsValid() &&
+            return expectedAgreementType != null && currentAgreementType != null &&
                 currentAgreementType.Value.IsOnBehalfOfAgreement() && expectedAgreementType.Value.IsRegulatedUserAgreement();
+        }
+
+        private async Task<AgreementType?> GetCurrentAgreementTypeAsync(int enrolleeId)
+        {
+            return await _context.Agreements
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.EnrolleeId == enrolleeId)
+                .Where(a => a.AcceptedDate != null)
+                .Select(a => (AgreementType?)a.AgreementVersion.AgreementType)
+                .FirstOrDefaultAsync();
         }
     }
 }
