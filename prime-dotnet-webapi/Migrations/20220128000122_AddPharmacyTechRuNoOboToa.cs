@@ -5,7 +5,7 @@ using Prime.Models;
 
 namespace Prime.Migrations
 {
-    public partial class AddPharmacyTechnicianToa : Migration
+    public partial class AddPharmacyTechRuNoOboToa : Migration
     {
         private static readonly DateTimeOffset SEEDING_DATE = DateTimeOffset.Parse("2019-09-16 -7:00");
 
