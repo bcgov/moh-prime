@@ -55,6 +55,7 @@ namespace PrimeTests.Utils
             TestDb.AddRange(new DefaultPrivilegeConfiguration().SeedData);
             TestDb.AddRange(new JobNameConfiguration().SeedData);
             TestDb.AddRange(new LicenseConfiguration().SeedData);
+            TestDb.AddRange(new LicenseDetailConfiguration().SeedData);
             TestDb.AddRange(new CareSettingConfiguration().SeedData);
             TestDb.AddRange(new PracticeConfiguration().SeedData);
             TestDb.AddRange(new PrivilegeConfiguration().SeedData);
