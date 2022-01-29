@@ -5,7 +5,7 @@ using Prime.Models;
 
 namespace Prime.Migrations
 {
-    public partial class AddPharmacyTechRuNoOboToa : Migration
+    public partial class AddPharmacyTechnicianToa : Migration
     {
         private static readonly DateTimeOffset SEEDING_DATE = DateTimeOffset.Parse("2019-09-16 -7:00");
 
@@ -15,336 +15,337 @@ namespace Prime.Migrations
                 table: "AgreementVersion",
                 columns: new[] { "CreatedUserId", "CreatedTimeStamp", "UpdatedUserId", "UpdatedTimeStamp", "Text", "AgreementType", "EffectiveDate" },
                 values: new object[] { Guid.Empty, SEEDING_DATE, Guid.Empty, SEEDING_DATE,
-                    @"<h1>PHARMANET TERMS OF ACCESS FOR PHARMACY TECHNICIANS</h1>
+                    @"
+                    <h1>PHARMANET TERMS OF ACCESS FOR PHARMACY TECHNICIANS</h1>
 
                     <p class=""bold"">
-                    By enrolling for access to PharmaNet, you agree to the following terms (the “Agreement”). Please read them carefully.
+                      By enrolling for access to PharmaNet, you agree to the following terms (the ”Agreement”). Please read them carefully.
                     </p>
 
                     <ol>
-                    <li>
+                      <li>
 
                         <p class=""bold underline"">
-                        BACKGROUND
+                          BACKGROUND
                         </p>
 
                         <p>
-                        The Province owns and is responsible for the operation of PharmaNet, the province-wide
-                        network that links B.C. pharmacies to a central data system. Every prescription dispensed
-                        in community pharmacies in B.C. is entered into PharmaNet.
+                          The Province owns and is responsible for the operation of PharmaNet, the province-wide
+                          network that links B.C. pharmacies to a central data system. Every prescription dispensed
+                          in community pharmacies in B.C. is entered into PharmaNet.
                         </p>
 
                         <p>
-                        The purpose of providing you with access to PharmaNet is to enhance patient care by
-                        providing timely and relevant information to persons involved in the provision of direct
-                        patient care.
+                          The purpose of providing you with access to PharmaNet is to enhance patient care by
+                          providing timely and relevant information to persons involved in the provision of direct
+                          patient care.
                         </p>
 
                         <p class=""bold underline"">
-                        PharmaNet contains highly sensitive confidential information, including Personal
-                        Information and the proprietary and confidential information of third-party licensors to
-                        the Province, and it is in the public interest to ensure that appropriate measures are in
-                        place to protect the confidentiality of all such information. All access to and use of
-                        PharmaNet and PharmaNet Data is subject to the Act and Privacy Laws.
+                          PharmaNet contains highly sensitive confidential information, including Personal
+                          Information and the proprietary and confidential information of third-party licensors to
+                          the Province, and it is in the public interest to ensure that appropriate measures are in
+                          place to protect the confidentiality of all such information. All access to and use of
+                          PharmaNet and PharmaNet Data is subject to the Act and Privacy Laws.
                         </p>
 
-                    </li>
-                    <li>
+                      </li>
+                      <li>
 
                         <p class=""bold underline"">
-                        INTERPRETATION
+                          INTERPRETATION
                         </p>
 
                         <ol type=""a"">
-                        <li>
+                          <li>
 
                             <p>
-                            <strong>Definitions.</strong> Unless otherwise provided in this Agreement, capitalized terms will
-                            have the meanings given below:
+                              <strong>Definitions.</strong> Unless otherwise provided in this Agreement, capitalized terms will
+                              have the meanings given below:
                             </p>
 
-                            <ul class=""list-unstyled"">
-                            <li>
-                                <strong>“Act”</strong> means the <i>Pharmaceutical Services Act</i>.
-                            </li>
-                            <li>
-                                <strong>“Approved Practice Site”</strong> means a location within which you are directly
+                            <ul>
+                              <li>
+                                <strong>”Act”</strong> means the <i>Pharmaceutical Services Act</i>.
+                              </li>
+                              <li>
+                                <strong>”Approved Practice Site”</strong> means a location within which you are directly
                                 providing Health Services, devices or related services to the person in
                                 respect of whom PharmaNet is being accessed and which is approved by
                                 the Province for PharmaNet access.
-                            </li>
-                            <li>
-                                <strong>“Approved SSO”</strong> means a software support organization approved by the
+                              </li>
+                              <li>
+                                <strong>”Approved SSO”</strong> means a software support organization approved by the
                                 Province that provides you with the information technology software
                                 and/or services through which you access PharmaNet.
-                            </li>
-                            <li>
-                                <strong>“Authorized Technician”</strong> means an “authorized technician” as defined in
+                              </li>
+                              <li>
+                                <strong>""Authorized Technician”</strong> means an ""authorized technician” as defined in
                                 the Information Management Regulation.
-                            </li>
-                            <li>
-                                <strong>“Claim”</strong> means a claim made under the Act for payment in respect of a
+                              </li>
+                              <li>
+                                <strong>""Claim”</strong> means a claim made under the Act for payment in respect of a
                                 benefit under the Act.
-                            </li>
-                            <li>
+                              </li>
+                              <li>
 
                                 <p>
-                                <strong>“Conformance Standards”</strong> means the following documents published by
-                                the Province, as amended from time to time:
+                                  <strong>""Conformance Standards”</strong> means the following documents published by
+                                  the Province, as amended from time to time:
                                 </p>
 
                                 <ol type=""i"">
-                                <li>
+                                  <li>
                                     PharmaNet Professional and Software Conformance Standards
                                     <br>
                                     <a href=""https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards"" target=""_blank"" rel=""noopener noreferrer"">https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards</a>
                                     ; and
-                                </li>
-                                <li>
-                                    Office of the Chief Information Officer: “Submission for Technical
+                                  </li>
+                                  <li>
+                                    Office of the Chief Information Officer: ""Submission for Technical
                                     Security Standard and High Level Architecture for Wireless Local
                                     Area Network Connectivity”.
                                     <br>
                                     <a href=""https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet"" target=""_blank"" rel=""noopener noreferrer"">https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet</a>
-                                </li>
+                                  </li>
                                 </ol>
 
-                            </li>
-                            <li>
-                                <strong>“Device Provider Agent”</strong> means a person enrolled under section 11 of
-                                the Act in the class of provider known as “device provider”.
-                            </li>
-                            <li>
-                                <strong>“Grant Holder”</strong> means a person permitted access to PharmaNet who has
-                                been issued a “grant” as defined in the Information Management
+                              </li>
+                              <li>
+                                <strong>""Device Provider Agent”</strong> means a person enrolled under section 11 of
+                                the Act in the class of provider known as ""device provider”.
+                              </li>
+                              <li>
+                                <strong>""Grant Holder”</strong> means a person permitted access to PharmaNet who has
+                                been issued a ""grant” as defined in the Information Management
                                 Regulation.
-                            </li>
-                            <li>
-                                <strong>“Health Services”</strong> means “health services” as defined in the Information
+                              </li>
+                              <li>
+                                <strong>""Health Services”</strong> means ""health services” as defined in the Information
                                 Management Regulation.
-                            </li>
-                            <li>
-                                <strong>“Information Management Regulation”</strong> means the <i>Information
-                                Management Regulation</i>, B.C. Reg. 328/2021.
-                            </li>
-                            <li>
-                                <strong>“Personal Information”</strong> means all recorded information that is about an
-                                identifiable individual or is defined as, or deemed to be, “personal
-                                information” or “personal health information” pursuant to any Privacy
+                              </li>
+                              <li>
+                                <strong>""Information Management Regulation”</strong> means the <i>Information
+                                  Management Regulation</i>, B.C. Reg. 328/2021.
+                              </li>
+                              <li>
+                                <strong>""Personal Information”</strong> means all recorded information that is about an
+                                identifiable individual or is defined as, or deemed to be, ""personal
+                                information” or ""personal health information” pursuant to any Privacy
                                 Laws.
-                            </li>
-                            <li>
-                                <strong>“PharmaCare Newsletter”</strong> means the PharmaCare newsletter published
+                              </li>
+                              <li>
+                                <strong>""PharmaCare Newsletter”</strong> means the PharmaCare newsletter published
                                 by the Province on the following website (or such other website as may be
                                 specified by the Province from time to time for this purpose):
 
                                 <br>
 
                                 <a href=""http://www.gov.bc.ca/pharmacarenewsletter"" target=""_blank"" rel=""noopener noreferrer"">www.gov.bc.ca/pharmacarenewsletter</a>
-                            </li>
-                            <li>
-                                <strong>“PharmaNet”</strong> means “PharmaNet” as defined in the Information
+                              </li>
+                              <li>
+                                <strong>""PharmaNet”</strong> means ""PharmaNet” as defined in the Information
                                 Management Regulation.
-                            </li>
-                            <li>
-                                <strong>“PharmaNet Data”</strong> includes any record or information contained in
+                              </li>
+                              <li>
+                                <strong>""PharmaNet Data”</strong> includes any record or information contained in
                                 PharmaNet and any record or information in your custody, control or
                                 possession obtained through your access to PharmaNet.
-                            </li>
-                            <li>
-                                <strong>“PRIME”</strong> means the online service provided by the Province that allows
+                              </li>
+                              <li>
+                                <strong>""PRIME”</strong> means the online service provided by the Province that allows
                                 users to apply for, and manage, their access to PharmaNet, and through
                                 which users are granted access by the Province.
-                            </li>
-                            <li>
-                                <strong>“Privacy Laws”</strong> means the Act, the <i>Freedom of Information and
-                                Protection of Privacy Act</i>, the Personal Information Protection Act, and
+                              </li>
+                              <li>
+                                <strong>""Privacy Laws”</strong> means the Act, the <i>Freedom of Information and
+                                  Protection of Privacy Act</i>, the Personal Information Protection Act, and
                                 any other statutory or legal obligations of privacy owed by you or the
                                 Province, whether arising under statute, by contract or at common law.
-                            </li>
-                            <li>
-                                <strong>“Provider”</strong> means a person enrolled under section 11 of the Act for the
+                              </li>
+                              <li>
+                                <strong>""Provider”</strong> means a person enrolled under section 11 of the Act for the
                                 purpose of receiving payment for providing benefits.
-                            </li>
-                            <li>
-                                <strong>“Provider Regulation”</strong> means the <i>Provider Regulation</i>, B.C. Reg.
+                              </li>
+                              <li>
+                                <strong>""Provider Regulation”</strong> means the <i>Provider Regulation</i>, B.C. Reg.
                                 222/2014.
-                            </li>
-                            <li>
-                                <strong>“Province”</strong> means Her Majesty the Queen in Right of British Columbia, as represented by the
+                              </li>
+                              <li>
+                                <strong>""Province”</strong> means Her Majesty the Queen in Right of British Columbia, as represented by the
                                 Minister of Health.
-                            </li>
-                            <li>
-                                <strong>“Professional College”</strong> is the regulatory body governing your provision
+                              </li>
+                              <li>
+                                <strong>""Professional College”</strong> is the regulatory body governing your provision
                                 of Health Services.
-                            </li>
-                            <li>
-                                <strong>“Unauthorized Person”</strong> means any person other than a Grant Holder or
+                              </li>
+                              <li>
+                                <strong>""Unauthorized Person”</strong> means any person other than a Grant Holder or
                                 an Authorized Technician.
-                            </li>
+                              </li>
                             </ul>
 
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Reference to Enactments.</strong> Unless otherwise specified, a reference to a statute or
                             regulation by name means the statute or regulation of British Columbia of that name, as amended or replaced from
                             time to time, and includes any enactment
                             made under the authority of that statute or regulation.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
 
                             <p>
-                            <strong>Conflicting Provisions.</strong> In the event of a conflict among provisions of this
-                            Agreement:
+                              <strong>Conflicting Provisions.</strong> In the event of a conflict among provisions of this
+                              Agreement:
                             </p>
 
                             <ol type=""i"">
-                            <li>
+                              <li>
                                 a provision in the body of this Agreement will prevail over any conflicting
                                 provision in any further limits or conditions communicated to you in
                                 writing by the Province, unless the conflicting provision expressly states
                                 otherwise; and
-                            </li>
-                            <li>
+                              </li>
+                              <li>
                                 a provision referred to in (i) above will prevail over any conflicting
                                 provision in the Conformance Standards.
-                            </li>
+                              </li>
                             </ol>
 
-                        </li>
+                          </li>
                         </ol>
 
-                    </li>
-                    <li>
+                      </li>
+                      <li>
 
                         <p class=""bold underline"">
-                        APPLICATION OF LEGISLATION
+                          APPLICATION OF LEGISLATION
                         </p>
 
                         <p>
-                        You will strictly comply with the Act, the Information Management Regulation and all
-                        Privacy Laws applicable to PharmaNet and PharmaNet Data.
+                          You will strictly comply with the Act, the Information Management Regulation and all
+                          Privacy Laws applicable to PharmaNet and PharmaNet Data.
                         </p>
 
-                    </li>
-                    <li>
+                      </li>
+                      <li>
 
                         <p class=""bold underline"">
-                        NOTICE THAT SPECIFIC PROVISIONS OF THE ACT APPLY DIRECTLY TO YOU
+                          NOTICE THAT SPECIFIC PROVISIONS OF THE ACT APPLY DIRECTLY TO YOU
                         </p>
 
                         <p>
-                        You acknowledge that:
+                          You acknowledge that:
                         </p>
 
                         <ol type=""a"">
-                        <li>
+                          <li>
                             PharmaNet Data accessed by you is disclosed to you by the Province under the
                             authority of the Act;
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             specific provisions of the Act (including but not limited to sections 24, 25 and 29)
                             and the Information Management Regulation apply directly to you as a result; and
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             this Agreement documents limits and conditions, set by the minister in writing,
                             that the Act requires you to comply with.
-                        </li>
+                          </li>
                         </ol>
 
-                    </li>
-                    <li>
+                      </li>
+                      <li>
 
                         <p class=""bold underline"">
-                        ACCESS
+                          ACCESS
                         </p>
 
                         <ol type=""a"">
-                        <li>
+                          <li>
                             <strong>Grant of Access.</strong> The Province will provide you with access to PharmaNet
                             subject to your compliance with the limits and conditions set out in this
                             Agreement. The Province may from time to time, at its discretion, amend or
                             change the scope of your access privileges to PharmaNet as privacy, security,
                             business and clinical practice requirements change. In such circumstances, the
                             Province will use reasonable efforts to notify you of such changes.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
 
                             <p>
-                            <strong>Requirements for Access.</strong> The following requirements apply to your access to
-                            PharmaNet:
+                              <strong>Requirements for Access.</strong> The following requirements apply to your access to
+                              PharmaNet:
                             </p>
 
                             <ol type=""i"">
-                            <li>
+                              <li>
                                 you will only access PharmaNet: at an Approved Practice Site, and using
                                 only the technologies and applications approved by the Province;
-                            </li>
-                            <li>
+                              </li>
+                              <li>
                                 you will not submit Claims on PharmaNet other than from an Approved
                                 Practice Site in respect of which a person is enrolled as a Provider;
-                            </li>
-                            <li>
+                              </li>
+                              <li>
                                 subject to section 6(b) of this Agreement, you will not use PharmaNet
                                 Data for the purposes of quality improvement, evaluation, health care
                                 planning, surveillance, research or other secondary uses, and will only use
                                 PharmaNet Data for your provision of Health Services;
-                            </li>
-                            <li>
+                              </li>
+                              <li>
                                 you will not permit any Unauthorized Person to access PharmaNet, and
                                 you will take all reasonable measures to ensure that no Unauthorized
                                 Person can access PharmaNet;
-                            </li>
-                            <li>
+                              </li>
+                              <li>
                                 you will complete any training program(s) that your Approved SSO makes
                                 available to you in relation to PharmaNet;
-                            </li>
-                            <li>
+                              </li>
+                              <li>
                                 you will comply with any additional limits or conditions applicable to you,
                                 as may be communicated to you by the Province in writing.
-                            </li>
+                              </li>
                             </ol>
-                        </li>
-                        <li>
+                          </li>
+                          <li>
 
                             <p>
-                            <strong>Privacy and Security Measures.</strong> You will take all reasonable measures to
-                            safeguard Personal Information, including any Personal Information in
-                            PharmaNet Data that is in your custody, control or possession.. In particular, you
-                            will:
+                              <strong>Privacy and Security Measures.</strong> You will take all reasonable measures to
+                              safeguard Personal Information, including any Personal Information in
+                              PharmaNet Data that is in your custody, control or possession.. In particular, you
+                              will:
                             </p>
 
                             <ol type=""i"">
-                            <li>
+                              <li>
                                 take all reasonable steps to ensure the physical security of Personal
                                 Information, generally and as required by Privacy Laws;
-                            </li>
-                            <li>
+                              </li>
+                              <li>
                                 secure any workstations used to access PharmaNet and all devices, codes
                                 or passwords that enable access to PharmaNet;
-                            </li>
-                            <li>
+                              </li>
+                              <li>
                                 take such other privacy and security measures as the Province may
                                 reasonably require from time-to-time.
-                            </li>
+                              </li>
                             </ol>
 
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Conformance Standards.</strong> You will comply with the rules specified in the
                             Conformance Standards when accessing and recording information in PharmaNet.
-                        </li>
+                          </li>
                         </ol>
 
-                    </li>
-                    <li>
+                      </li>
+                      <li>
 
                         <p class=""bold underline"">
-                        DISCLOSURE, STORAGE, AND ACCESS REQUESTS
+                          DISCLOSURE, STORAGE, AND ACCESS REQUESTS
                         </p>
 
                         <ol type=""a"">
-                        <li>
+                          <li>
                             <strong>Retention of PharmaNet Data.</strong> You will not store or retain PharmaNet Data in
                             any paper files or any electronic system, unless such storage or retention is
                             required for record keeping in accordance with the Act, the Provider Regulation,
@@ -354,26 +355,26 @@ namespace Prime.Migrations
                             than as may be expressly authorized in the Conformance Standards. For clarity,
                             you may annotate a discrete record provided that the discrete record is not itself
                             modified other than as expressly authorized in the Conformance Standards.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Disclosure to Third Parties.</strong> You will not disclose PharmaNet Data to any
                             Unauthorized Person, unless disclosure is required for Health Services or is
                             otherwise authorized under section 24(1) of the Act.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Responding to Patient Access Requests.</strong> Aside from any records retained by you
                             in accordance with section 6(a) of this Agreement, you will not provide to patients
-                            any copies of records containing PharmaNet Data or “print outs” produced
+                            any copies of records containing PharmaNet Data or ""print outs” produced
                             directly from PharmaNet, and will refer any requests for access to such records or
-                            “print outs” to the Province.
-                        </li>
-                        <li>
+                            ""print outs” to the Province.
+                          </li>
+                          <li>
                             <strong>Responding to Requests to Correct a Record Contained in PharmaNet.</strong> If you
                             receive a request for correction of any record or information contained in
                             PharmaNet that can not be completed at the pharmacy, you will refer the request
                             to the Province.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Legal Demands for Records Contained in PharmaNet.</strong> You will immediately
                             notify the Province if you receive any order, demand or request compelling, or
                             threatening to compel, disclosure of records contained in PharmaNet. You will
@@ -382,136 +383,136 @@ namespace Prime.Migrations
                             respect to any access requests or demands for records contained in PharmaNet,
                             and not records retained by you in accordance with section 6(a) of this
                             Agreement.
-                        </li>
+                          </li>
                         </ol>
 
-                    </li>
-                    <li>
+                      </li>
+                      <li>
 
                         <p class=""bold underline"">
-                        ACCURACY
+                          ACCURACY
                         </p>
 
                         <p>
-                        You will make reasonable efforts to ensure that any Personal Information recorded by
-                        you in PharmaNet is accurate, complete and up to date. In the event that you become
-                        aware of a material inaccuracy or error in such information, you will take reasonable
-                        steps to investigate the inaccuracy or error, correct it if necessary, and notify the Province
-                        of the inaccuracy or error and any steps taken.
+                          You will make reasonable efforts to ensure that any Personal Information recorded by
+                          you in PharmaNet is accurate, complete and up to date. In the event that you become
+                          aware of a material inaccuracy or error in such information, you will take reasonable
+                          steps to investigate the inaccuracy or error, correct it if necessary, and notify the Province
+                          of the inaccuracy or error and any steps taken.
                         </p>
 
-                    </li>
+                      </li>
 
-                    <li>
+                      <li>
 
                         <p class=""bold underline"">
-                        NOTICE OF NON COMPLIANCE AND DUTY TO INVESTIGATE
+                          NOTICE OF NON COMPLIANCE AND DUTY TO INVESTIGATE
                         </p>
 
                         <ol type=""a"">
-                        <li>
+                          <li>
 
                             <p>
-                            <strong>Non-Compliance.</strong> You will promptly notify the Province, and provide
-                            particulars, if:
+                              <strong>Non-Compliance.</strong> You will promptly notify the Province, and provide
+                              particulars, if:
                             </p>
 
                             <ol type=""i"">
-                            <li>
+                              <li>
                                 you do not comply, or you anticipate that you will be unable to comply
                                 with the terms of this Agreement in any respect, or
-                            </li>
-                            <li>
+                              </li>
+                              <li>
                                 you have knowledge of any circumstances, incidents or events which have
                                 or may jeopardize the security, confidentiality, or integrity of PharmaNet,
                                 the provincial drug program, or any government network or electronic
                                 system including any unauthorized attempt, by any person, to access
                                 PharmaNet.
-                            </li>
+                              </li>
                             </ol>
 
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <p>
-                            <strong>Reports to College or Privacy Commissioner.</strong> You acknowledge that the
-                            Province may report any material breach of the Act, the Information Management
-                            Regulation, or these terms to your Professional College or to the Information and
-                            Privacy Commissioner of British Columbia.
+                              <strong>Reports to College or Privacy Commissioner.</strong> You acknowledge that the
+                              Province may report any material breach of the Act, the Information Management
+                              Regulation, or these terms to your Professional College or to the Information and
+                              Privacy Commissioner of British Columbia.
                             </p>
-                        </li>
+                          </li>
                         </ol>
 
-                    </li>
-                    <li>
+                      </li>
+                      <li>
 
                         <p class=""bold underline"">
-                        TERM OF AGREEMENT, SUSPENSION & TERMINATION
+                          TERM OF AGREEMENT, SUSPENSION & TERMINATION
                         </p>
 
                         <ol type=""a"">
-                        <li>
+                          <li>
                             <strong>Term.</strong> The term of this Agreement begins on the date you are granted access to
                             PharmaNet by the Province and will continue until the date this Agreement is
                             terminated under paragraph (b), (c), (d) or (e) below.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Termination for Any Reason.</strong> You may terminate this Agreement at any time on
                             written notice to the Province.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Suspension or Termination of PharmaNet Access.</strong> If the Province suspends or
                             terminates your right to access PharmaNet under the Information Management
                             Regulation, the Province may also terminate this Agreement at any time thereafter
                             upon written notice to you.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Termination for Breach.</strong> Notwithstanding paragraph (c) above, the Province
                             may terminate this Agreement immediately upon notice to you if you fail to
                             comply with any provision of this Agreement.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Termination by Operation of the Information Management Regulation.</strong> This
                             Agreement will terminate automatically if your access to PharmaNet ends by
                             operation of section 39 or 40 of the Information Management Regulation.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Suspension of Account for Inactivity.</strong> As a security precaution, the Province
                             may suspend your account after a period of inactivity, in accordance with the
                             Province’s policies. Please contact the Province immediately if your account has
                             been suspended for inactivity but you still require access to PharmaNet.
-                        </li>
+                          </li>
                         </ol>
 
-                    </li>
-                    <li>
+                      </li>
+                      <li>
 
                         <p class=""bold underline"">
-                        DISCLAIMER OF WARRANTY, LIMITATION OF LIABILITY AND INDEMNITY
+                          DISCLAIMER OF WARRANTY, LIMITATION OF LIABILITY AND INDEMNITY
                         </p>
 
                         <ol type=""a"">
-                        <li>
+                          <li>
                             <strong>Information Provided As Is.</strong> You acknowledge and agree that any use of
                             PharmaNet and PharmaNet Data is solely at your own risk. All such access and
-                            information is provided on an “as is” and “as available” basis without warranty or
+                            information is provided on an ""as is” and ""as available” basis without warranty or
                             condition of any kind. The Province does not warrant the accuracy, completeness
                             or reliability of the PharmaNet Data or the availability of PharmaNet, or that
                             access to or the operation of PharmaNet will function without error, failure or
                             interruption.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>You Are Responsible.</strong> You are responsible for verifying the accuracy of
                             information disclosed to you as a result of your access to PharmaNet or otherwise
                             pursuant to this Agreement before relying or acting upon such information. The
                             clinical or other information disclosed to you pursuant to this Agreement is in no
                             way intended to be a substitute for professional judgment.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>The Province Not Liable for Loss.</strong> No action may be brought by any person
                             against the Province for any loss or damage of any kind caused by any reason or
                             purpose related to reliance on PharmaNet or PharmaNet Data.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>You Must Indemnify the Province If You Cause a Loss or Claim.</strong> You agree
                             to indemnify and save harmless the Province, and the Province’s employees and
                             agents (each an <strong>""Indemnified Person""</strong>) from any losses, claims, damages,
@@ -520,150 +521,150 @@ namespace Prime.Migrations
                             ends, which are based upon, arise out of or occur directly or indirectly by reason
                             of any act or omission by you in connection with this Agreement or in connection
                             with access to PharmaNet by you.
-                        </li>
+                          </li>
                         </ol>
 
-                    </li>
-                    <li>
+                      </li>
+                      <li>
 
                         <p class=""bold underline"">
-                        NOTICE
+                          NOTICE
                         </p>
 
                         <ol type=""a"">
-                        <li>
+                          <li>
 
                             <p>
-                            <strong>Notice to Province.</strong> Except where this Agreement expressly provides for another
-                            method of delivery, any notice to be given by you to the Province that is
-                            contemplated by this Agreement, to be effective, must be in writing and emailed
-                            or mailed to:
+                              <strong>Notice to Province.</strong> Except where this Agreement expressly provides for another
+                              method of delivery, any notice to be given by you to the Province that is
+                              contemplated by this Agreement, to be effective, must be in writing and emailed
+                              or mailed to:
                             </p>
 
                             <address>
-                            Director, Information and PharmaNet Development<br>
-                            Ministry of Health<br>
-                            PO Box 9652, STN PROV GOVT<br>
-                            Victoria, BC V8W 9P4<br>
+                              Director, Information and PharmaNet Development<br>
+                              Ministry of Health<br>
+                              PO Box 9652, STN PROV GOVT<br>
+                              Victoria, BC V8W 9P4<br>
 
-                            <br>
+                              <br>
 
-                            <a href=""mailto:PRIMESupport@gov.bc.ca"">PRIMESupport@gov.bc.ca</a>
+                              <a href=""mailto:PRIMESupport@gov.bc.ca"">PRIMESupport@gov.bc.ca</a>
                             </address>
 
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Notice to You.</strong> Any notice to you to be delivered under the terms of this
                             Agreement will be in writing and delivered by the Province to you using any of
                             the contact mechanisms identified by you in PRIME, including by mail to a
                             specified postal address, email to a specified email address or text message to the
                             specified cell phone number. You may be required to click a URL link or log into
                             PRIME to receive the content of any such notice.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Deemed Receipt.</strong> Any written communication from a party, if personally
                             delivered or sent electronically, will be deemed to have been received 24 hours
                             after the time the notice was sent, or, if sent by mail, will be deemed to have been
                             received 3 days (excluding Saturdays, Sundays and statutory holidays) after the
                             date the notice was sent.
-                        </li>
-                        <li>
+                          </li>
+                          <li>
                             <strong>Substitute Contact Information.</strong> You may notify the Province of a substitute
                             contact mechanism by updating your contact information in PRIME.
-                        </li>
+                          </li>
                         </ol>
 
-                    </li>
-                    <li>
+                      </li>
+                      <li>
 
                         <p class=""bold underline"">
-                        GENERAL
+                          GENERAL
                         </p>
 
                         <ol type=""a"">
-                        <li>
+                          <li>
 
                             <p>
-                            <strong>Severability.</strong> Each provision in this Agreement constitutes a separate covenant
-                            and is severable from any other covenant, and if any of them are held by a court,
-                            or other decision-maker, to be invalid, this Agreement will be interpreted as if
-                            such provisions were not included.
+                              <strong>Severability.</strong> Each provision in this Agreement constitutes a separate covenant
+                              and is severable from any other covenant, and if any of them are held by a court,
+                              or other decision-maker, to be invalid, this Agreement will be interpreted as if
+                              such provisions were not included.
                             </p>
 
-                        </li>
-                        <li>
+                          </li>
+                          <li>
 
                             <p>
-                            <strong>Survival.</strong> Any provision of this Agreement that expressly or by its nature
-                            continues after termination, shall survive termination of this Agreement.
+                              <strong>Survival.</strong> Any provision of this Agreement that expressly or by its nature
+                              continues after termination, shall survive termination of this Agreement.
                             </p>
 
-                        </li>
-                        <li>
+                          </li>
+                          <li>
 
                             <p>
-                            <strong>Governing Law.</strong> This Agreement will be governed by and will be construed and
-                            interpreted in accordance with the laws of British Columbia and the laws of
-                            Canada applicable therein.
+                              <strong>Governing Law.</strong> This Agreement will be governed by and will be construed and
+                              interpreted in accordance with the laws of British Columbia and the laws of
+                              Canada applicable therein.
                             </p>
 
-                        </li>
-                        <li>
+                          </li>
+                          <li>
 
                             <p>
-                            <strong>Assignment Restricted.</strong> Your rights and obligations under this Agreement may
-                            not be assigned without the prior written approval of the Province.
+                              <strong>Assignment Restricted.</strong> Your rights and obligations under this Agreement may
+                              not be assigned without the prior written approval of the Province.
                             </p>
 
-                        </li>
-                        <li>
+                          </li>
+                          <li>
 
                             <p>
-                            <strong>Waiver.</strong> The failure of the Province at any time to insist on performance of any
-                            provision of this Agreement by you is not a waiver of its right subsequently to
-                            insist on performance of that or any other provision of this Agreement.
+                              <strong>Waiver.</strong> The failure of the Province at any time to insist on performance of any
+                              provision of this Agreement by you is not a waiver of its right subsequently to
+                              insist on performance of that or any other provision of this Agreement.
                             </p>
 
-                        </li>
-                        <li>
+                          </li>
+                          <li>
 
                             <p>
-                            <strong>Province May Modify this Agreement.</strong> The Province may amend this
-                            Agreement, including this section, at any time in its sole discretion:
+                              <strong>Province May Modify this Agreement.</strong> The Province may amend this
+                              Agreement, including this section, at any time in its sole discretion:
                             </p>
 
                             <ol type=""i"">
-                            <li>
+                              <li>
                                 by written notice to you, in which case the amendment will become
                                 effective upon the later of (A) the date notice of the amendment is first
                                 delivered to you, or (B) the effective date of the amendment specified by
                                 the Province, if any; or
-                            </li>
-                            <li>
+                              </li>
+                              <li>
                                 by publishing notice of any such amendment in the PharmaCare
                                 Newsletter, in which case the notice will specify the effective date of the
                                 amendment, which date will be at least 30 (thirty) days after the date that
                                 the PharmaCare Newsletter containing the notice is first published.
-                            </li>
+                              </li>
                             </ol>
 
                             <p>
-                            If you use PharmaNet after the effective date of an amendment described in (i) or
-                            (ii) above, you will be deemed to have accepted the corresponding amendment,
-                            and this Agreement will be deemed to have been so amended as of the effective
-                            date. If you do not agree with any amendment for which notice has been provided
-                            by the Province in accordance with (i) or (ii) above, you must promptly (and in
-                            any event before the effective date) cease all access or use of PharmaNet by yourself and take the steps
-                            necessary to terminate this Agreement in accordance
-                            with section 10.
+                              If you use PharmaNet after the effective date of an amendment described in (i) or
+                              (ii) above, you will be deemed to have accepted the corresponding amendment,
+                              and this Agreement will be deemed to have been so amended as of the effective
+                              date. If you do not agree with any amendment for which notice has been provided
+                              by the Province in accordance with (i) or (ii) above, you must promptly (and in
+                              any event before the effective date) cease all access or use of PharmaNet by yourself and take the steps
+                              necessary to terminate this Agreement in accordance
+                              with section 10.
                             </p>
 
-                        </li>
+                          </li>
                         </ol>
 
-                    </li>
+                      </li>
                     </ol>
-                    Version date: January 28, 2022",
+                    ",
                     (int) AgreementType.PharmacyTechnicianTOA, SEEDING_DATE });
         }
 

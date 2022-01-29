@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20220128000122_AddPharmacyTechRuNoOboToa")]
-    partial class AddPharmacyTechRuNoOboToa
+    [Migration("20220129015717_AddPharmacyTechnicianToa")]
+    partial class AddPharmacyTechnicianToa
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -439,6 +439,17 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             Text = "<p class=\"text-center\">\n  This Agreement is made the {{day}} day of {{month}}, {{year}}\n</p>\n\n<h1>---- PLACEHOLDER TEXT ----</h1>\n",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 18,
+                            AgreementType = 8,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Text = "<h1>PHARMANET TERMS OF ACCESS FOR PHARMACY TECHNICIANS</h1>\n\n<p class=\"bold\">\n  By enrolling for access to PharmaNet, you agree to the following terms (the ”Agreement”). Please read them carefully.\n</p>\n\n<ol>\n  <li>\n\n    <p class=\"bold underline\">\n      BACKGROUND\n    </p>\n\n    <p>\n      The Province owns and is responsible for the operation of PharmaNet, the province-wide\n      network that links B.C. pharmacies to a central data system. Every prescription dispensed\n      in community pharmacies in B.C. is entered into PharmaNet.\n    </p>\n\n    <p>\n      The purpose of providing you with access to PharmaNet is to enhance patient care by\n      providing timely and relevant information to persons involved in the provision of direct\n      patient care.\n    </p>\n\n    <p class=\"bold underline\">\n      PharmaNet contains highly sensitive confidential information, including Personal\n      Information and the proprietary and confidential information of third-party licensors to\n      the Province, and it is in the public interest to ensure that appropriate measures are in\n      place to protect the confidentiality of all such information. All access to and use of\n      PharmaNet and PharmaNet Data is subject to the Act and Privacy Laws.\n    </p>\n\n  </li>\n  <li>\n\n    <p class=\"bold underline\">\n      INTERPRETATION\n    </p>\n\n    <ol type=\"a\">\n      <li>\n\n        <p>\n          <strong>Definitions.</strong> Unless otherwise provided in this Agreement, capitalized terms will\n          have the meanings given below:\n        </p>\n\n        <ul>\n          <li>\n            <strong>”Act”</strong> means the <i>Pharmaceutical Services Act</i>.\n          </li>\n          <li>\n            <strong>”Approved Practice Site”</strong> means a location within which you are directly\n            providing Health Services, devices or related services to the person in\n            respect of whom PharmaNet is being accessed and which is approved by\n            the Province for PharmaNet access.\n          </li>\n          <li>\n            <strong>”Approved SSO”</strong> means a software support organization approved by the\n            Province that provides you with the information technology software\n            and/or services through which you access PharmaNet.\n          </li>\n          <li>\n            <strong>\"Authorized Technician”</strong> means an \"authorized technician” as defined in\n            the Information Management Regulation.\n          </li>\n          <li>\n            <strong>\"Claim”</strong> means a claim made under the Act for payment in respect of a\n            benefit under the Act.\n          </li>\n          <li>\n\n            <p>\n              <strong>\"Conformance Standards”</strong> means the following documents published by\n              the Province, as amended from time to time:\n            </p>\n\n            <ol type=\"i\">\n              <li>\n                PharmaNet Professional and Software Conformance Standards\n                <br>\n                <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\" target=\"_blank\" rel=\"noopener noreferrer\">https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards</a>\n                ; and\n              </li>\n              <li>\n                Office of the Chief Information Officer: \"Submission for Technical\n                Security Standard and High Level Architecture for Wireless Local\n                Area Network Connectivity”.\n                <br>\n                <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet\" target=\"_blank\" rel=\"noopener noreferrer\">https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet</a>\n              </li>\n            </ol>\n\n          </li>\n          <li>\n            <strong>\"Device Provider Agent”</strong> means a person enrolled under section 11 of\n            the Act in the class of provider known as \"device provider”.\n          </li>\n          <li>\n            <strong>\"Grant Holder”</strong> means a person permitted access to PharmaNet who has\n            been issued a \"grant” as defined in the Information Management\n            Regulation.\n          </li>\n          <li>\n            <strong>\"Health Services”</strong> means \"health services” as defined in the Information\n            Management Regulation.\n          </li>\n          <li>\n            <strong>\"Information Management Regulation”</strong> means the <i>Information\n              Management Regulation</i>, B.C. Reg. 328/2021.\n          </li>\n          <li>\n            <strong>\"Personal Information”</strong> means all recorded information that is about an\n            identifiable individual or is defined as, or deemed to be, \"personal\n            information” or \"personal health information” pursuant to any Privacy\n            Laws.\n          </li>\n          <li>\n            <strong>\"PharmaCare Newsletter”</strong> means the PharmaCare newsletter published\n            by the Province on the following website (or such other website as may be\n            specified by the Province from time to time for this purpose):\n\n            <br>\n\n            <a href=\"http://www.gov.bc.ca/pharmacarenewsletter\" target=\"_blank\" rel=\"noopener noreferrer\">www.gov.bc.ca/pharmacarenewsletter</a>\n          </li>\n          <li>\n            <strong>\"PharmaNet”</strong> means \"PharmaNet” as defined in the Information\n            Management Regulation.\n          </li>\n          <li>\n            <strong>\"PharmaNet Data”</strong> includes any record or information contained in\n            PharmaNet and any record or information in your custody, control or\n            possession obtained through your access to PharmaNet.\n          </li>\n          <li>\n            <strong>\"PRIME”</strong> means the online service provided by the Province that allows\n            users to apply for, and manage, their access to PharmaNet, and through\n            which users are granted access by the Province.\n          </li>\n          <li>\n            <strong>\"Privacy Laws”</strong> means the Act, the <i>Freedom of Information and\n              Protection of Privacy Act</i>, the Personal Information Protection Act, and\n            any other statutory or legal obligations of privacy owed by you or the\n            Province, whether arising under statute, by contract or at common law.\n          </li>\n          <li>\n            <strong>\"Provider”</strong> means a person enrolled under section 11 of the Act for the\n            purpose of receiving payment for providing benefits.\n          </li>\n          <li>\n            <strong>\"Provider Regulation”</strong> means the <i>Provider Regulation</i>, B.C. Reg.\n            222/2014.\n          </li>\n          <li>\n            <strong>\"Province”</strong> means Her Majesty the Queen in Right of British Columbia, as represented by the\n            Minister of Health.\n          </li>\n          <li>\n            <strong>\"Professional College”</strong> is the regulatory body governing your provision\n            of Health Services.\n          </li>\n          <li>\n            <strong>\"Unauthorized Person”</strong> means any person other than a Grant Holder or\n            an Authorized Technician.\n          </li>\n        </ul>\n\n      </li>\n      <li>\n        <strong>Reference to Enactments.</strong> Unless otherwise specified, a reference to a statute or\n        regulation by name means the statute or regulation of British Columbia of that name, as amended or replaced from\n        time to time, and includes any enactment\n        made under the authority of that statute or regulation.\n      </li>\n      <li>\n\n        <p>\n          <strong>Conflicting Provisions.</strong> In the event of a conflict among provisions of this\n          Agreement:\n        </p>\n\n        <ol type=\"i\">\n          <li>\n            a provision in the body of this Agreement will prevail over any conflicting\n            provision in any further limits or conditions communicated to you in\n            writing by the Province, unless the conflicting provision expressly states\n            otherwise; and\n          </li>\n          <li>\n            a provision referred to in (i) above will prevail over any conflicting\n            provision in the Conformance Standards.\n          </li>\n        </ol>\n\n      </li>\n    </ol>\n\n  </li>\n  <li>\n\n    <p class=\"bold underline\">\n      APPLICATION OF LEGISLATION\n    </p>\n\n    <p>\n      You will strictly comply with the Act, the Information Management Regulation and all\n      Privacy Laws applicable to PharmaNet and PharmaNet Data.\n    </p>\n\n  </li>\n  <li>\n\n    <p class=\"bold underline\">\n      NOTICE THAT SPECIFIC PROVISIONS OF THE ACT APPLY DIRECTLY TO YOU\n    </p>\n\n    <p>\n      You acknowledge that:\n    </p>\n\n    <ol type=\"a\">\n      <li>\n        PharmaNet Data accessed by you is disclosed to you by the Province under the\n        authority of the Act;\n      </li>\n      <li>\n        specific provisions of the Act (including but not limited to sections 24, 25 and 29)\n        and the Information Management Regulation apply directly to you as a result; and\n      </li>\n      <li>\n        this Agreement documents limits and conditions, set by the minister in writing,\n        that the Act requires you to comply with.\n      </li>\n    </ol>\n\n  </li>\n  <li>\n\n    <p class=\"bold underline\">\n      ACCESS\n    </p>\n\n    <ol type=\"a\">\n      <li>\n        <strong>Grant of Access.</strong> The Province will provide you with access to PharmaNet\n        subject to your compliance with the limits and conditions set out in this\n        Agreement. The Province may from time to time, at its discretion, amend or\n        change the scope of your access privileges to PharmaNet as privacy, security,\n        business and clinical practice requirements change. In such circumstances, the\n        Province will use reasonable efforts to notify you of such changes.\n      </li>\n      <li>\n\n        <p>\n          <strong>Requirements for Access.</strong> The following requirements apply to your access to\n          PharmaNet:\n        </p>\n\n        <ol type=\"i\">\n          <li>\n            you will only access PharmaNet: at an Approved Practice Site, and using\n            only the technologies and applications approved by the Province;\n          </li>\n          <li>\n            you will not submit Claims on PharmaNet other than from an Approved\n            Practice Site in respect of which a person is enrolled as a Provider;\n          </li>\n          <li>\n            subject to section 6(b) of this Agreement, you will not use PharmaNet\n            Data for the purposes of quality improvement, evaluation, health care\n            planning, surveillance, research or other secondary uses, and will only use\n            PharmaNet Data for your provision of Health Services;\n          </li>\n          <li>\n            you will not permit any Unauthorized Person to access PharmaNet, and\n            you will take all reasonable measures to ensure that no Unauthorized\n            Person can access PharmaNet;\n          </li>\n          <li>\n            you will complete any training program(s) that your Approved SSO makes\n            available to you in relation to PharmaNet;\n          </li>\n          <li>\n            you will comply with any additional limits or conditions applicable to you,\n            as may be communicated to you by the Province in writing.\n          </li>\n        </ol>\n      </li>\n      <li>\n\n        <p>\n          <strong>Privacy and Security Measures.</strong> You will take all reasonable measures to\n          safeguard Personal Information, including any Personal Information in\n          PharmaNet Data that is in your custody, control or possession.. In particular, you\n          will:\n        </p>\n\n        <ol type=\"i\">\n          <li>\n            take all reasonable steps to ensure the physical security of Personal\n            Information, generally and as required by Privacy Laws;\n          </li>\n          <li>\n            secure any workstations used to access PharmaNet and all devices, codes\n            or passwords that enable access to PharmaNet;\n          </li>\n          <li>\n            take such other privacy and security measures as the Province may\n            reasonably require from time-to-time.\n          </li>\n        </ol>\n\n      </li>\n      <li>\n        <strong>Conformance Standards.</strong> You will comply with the rules specified in the\n        Conformance Standards when accessing and recording information in PharmaNet.\n      </li>\n    </ol>\n\n  </li>\n  <li>\n\n    <p class=\"bold underline\">\n      DISCLOSURE, STORAGE, AND ACCESS REQUESTS\n    </p>\n\n    <ol type=\"a\">\n      <li>\n        <strong>Retention of PharmaNet Data.</strong> You will not store or retain PharmaNet Data in\n        any paper files or any electronic system, unless such storage or retention is\n        required for record keeping in accordance with the Act, the Provider Regulation,\n        and Professional College requirements and in connection with your provision of\n        Health Services and otherwise is in compliance with the Conformance Standards.\n        You will not modify any records retained in accordance with this section other\n        than as may be expressly authorized in the Conformance Standards. For clarity,\n        you may annotate a discrete record provided that the discrete record is not itself\n        modified other than as expressly authorized in the Conformance Standards.\n      </li>\n      <li>\n        <strong>Disclosure to Third Parties.</strong> You will not disclose PharmaNet Data to any\n        Unauthorized Person, unless disclosure is required for Health Services or is\n        otherwise authorized under section 24(1) of the Act.\n      </li>\n      <li>\n        <strong>Responding to Patient Access Requests.</strong> Aside from any records retained by you\n        in accordance with section 6(a) of this Agreement, you will not provide to patients\n        any copies of records containing PharmaNet Data or \"print outs” produced\n        directly from PharmaNet, and will refer any requests for access to such records or\n        \"print outs” to the Province.\n      </li>\n      <li>\n        <strong>Responding to Requests to Correct a Record Contained in PharmaNet.</strong> If you\n        receive a request for correction of any record or information contained in\n        PharmaNet that can not be completed at the pharmacy, you will refer the request\n        to the Province.\n      </li>\n      <li>\n        <strong>Legal Demands for Records Contained in PharmaNet.</strong> You will immediately\n        notify the Province if you receive any order, demand or request compelling, or\n        threatening to compel, disclosure of records contained in PharmaNet. You will\n        cooperate and consult with the Province in responding to any such demands. For greater certainty, the foregoing\n        requires that you notify the Province only with\n        respect to any access requests or demands for records contained in PharmaNet,\n        and not records retained by you in accordance with section 6(a) of this\n        Agreement.\n      </li>\n    </ol>\n\n  </li>\n  <li>\n\n    <p class=\"bold underline\">\n      ACCURACY\n    </p>\n\n    <p>\n      You will make reasonable efforts to ensure that any Personal Information recorded by\n      you in PharmaNet is accurate, complete and up to date. In the event that you become\n      aware of a material inaccuracy or error in such information, you will take reasonable\n      steps to investigate the inaccuracy or error, correct it if necessary, and notify the Province\n      of the inaccuracy or error and any steps taken.\n    </p>\n\n  </li>\n\n  <li>\n\n    <p class=\"bold underline\">\n      NOTICE OF NON COMPLIANCE AND DUTY TO INVESTIGATE\n    </p>\n\n    <ol type=\"a\">\n      <li>\n\n        <p>\n          <strong>Non-Compliance.</strong> You will promptly notify the Province, and provide\n          particulars, if:\n        </p>\n\n        <ol type=\"i\">\n          <li>\n            you do not comply, or you anticipate that you will be unable to comply\n            with the terms of this Agreement in any respect, or\n          </li>\n          <li>\n            you have knowledge of any circumstances, incidents or events which have\n            or may jeopardize the security, confidentiality, or integrity of PharmaNet,\n            the provincial drug program, or any government network or electronic\n            system including any unauthorized attempt, by any person, to access\n            PharmaNet.\n          </li>\n        </ol>\n\n      </li>\n      <li>\n        <p>\n          <strong>Reports to College or Privacy Commissioner.</strong> You acknowledge that the\n          Province may report any material breach of the Act, the Information Management\n          Regulation, or these terms to your Professional College or to the Information and\n          Privacy Commissioner of British Columbia.\n        </p>\n      </li>\n    </ol>\n\n  </li>\n  <li>\n\n    <p class=\"bold underline\">\n      TERM OF AGREEMENT, SUSPENSION & TERMINATION\n    </p>\n\n    <ol type=\"a\">\n      <li>\n        <strong>Term.</strong> The term of this Agreement begins on the date you are granted access to\n        PharmaNet by the Province and will continue until the date this Agreement is\n        terminated under paragraph (b), (c), (d) or (e) below.\n      </li>\n      <li>\n        <strong>Termination for Any Reason.</strong> You may terminate this Agreement at any time on\n        written notice to the Province.\n      </li>\n      <li>\n        <strong>Suspension or Termination of PharmaNet Access.</strong> If the Province suspends or\n        terminates your right to access PharmaNet under the Information Management\n        Regulation, the Province may also terminate this Agreement at any time thereafter\n        upon written notice to you.\n      </li>\n      <li>\n        <strong>Termination for Breach.</strong> Notwithstanding paragraph (c) above, the Province\n        may terminate this Agreement immediately upon notice to you if you fail to\n        comply with any provision of this Agreement.\n      </li>\n      <li>\n        <strong>Termination by Operation of the Information Management Regulation.</strong> This\n        Agreement will terminate automatically if your access to PharmaNet ends by\n        operation of section 39 or 40 of the Information Management Regulation.\n      </li>\n      <li>\n        <strong>Suspension of Account for Inactivity.</strong> As a security precaution, the Province\n        may suspend your account after a period of inactivity, in accordance with the\n        Province’s policies. Please contact the Province immediately if your account has\n        been suspended for inactivity but you still require access to PharmaNet.\n      </li>\n    </ol>\n\n  </li>\n  <li>\n\n    <p class=\"bold underline\">\n      DISCLAIMER OF WARRANTY, LIMITATION OF LIABILITY AND INDEMNITY\n    </p>\n\n    <ol type=\"a\">\n      <li>\n        <strong>Information Provided As Is.</strong> You acknowledge and agree that any use of\n        PharmaNet and PharmaNet Data is solely at your own risk. All such access and\n        information is provided on an \"as is” and \"as available” basis without warranty or\n        condition of any kind. The Province does not warrant the accuracy, completeness\n        or reliability of the PharmaNet Data or the availability of PharmaNet, or that\n        access to or the operation of PharmaNet will function without error, failure or\n        interruption.\n      </li>\n      <li>\n        <strong>You Are Responsible.</strong> You are responsible for verifying the accuracy of\n        information disclosed to you as a result of your access to PharmaNet or otherwise\n        pursuant to this Agreement before relying or acting upon such information. The\n        clinical or other information disclosed to you pursuant to this Agreement is in no\n        way intended to be a substitute for professional judgment.\n      </li>\n      <li>\n        <strong>The Province Not Liable for Loss.</strong> No action may be brought by any person\n        against the Province for any loss or damage of any kind caused by any reason or\n        purpose related to reliance on PharmaNet or PharmaNet Data.\n      </li>\n      <li>\n        <strong>You Must Indemnify the Province If You Cause a Loss or Claim.</strong> You agree\n        to indemnify and save harmless the Province, and the Province’s employees and\n        agents (each an <strong>\"Indemnified Person\"</strong>) from any losses, claims, damages,\n        actions, causes of action, costs and expenses that an Indemnified Person may\n        sustain, incur, suffer or be put to at any time, either before or after this Agreement\n        ends, which are based upon, arise out of or occur directly or indirectly by reason\n        of any act or omission by you in connection with this Agreement or in connection\n        with access to PharmaNet by you.\n      </li>\n    </ol>\n\n  </li>\n  <li>\n\n    <p class=\"bold underline\">\n      NOTICE\n    </p>\n\n    <ol type=\"a\">\n      <li>\n\n        <p>\n          <strong>Notice to Province.</strong> Except where this Agreement expressly provides for another\n          method of delivery, any notice to be given by you to the Province that is\n          contemplated by this Agreement, to be effective, must be in writing and emailed\n          or mailed to:\n        </p>\n\n        <address>\n          Director, Information and PharmaNet Development<br>\n          Ministry of Health<br>\n          PO Box 9652, STN PROV GOVT<br>\n          Victoria, BC V8W 9P4<br>\n\n          <br>\n\n          <a href=\"mailto:PRIMESupport@gov.bc.ca\">PRIMESupport@gov.bc.ca</a>\n        </address>\n\n      </li>\n      <li>\n        <strong>Notice to You.</strong> Any notice to you to be delivered under the terms of this\n        Agreement will be in writing and delivered by the Province to you using any of\n        the contact mechanisms identified by you in PRIME, including by mail to a\n        specified postal address, email to a specified email address or text message to the\n        specified cell phone number. You may be required to click a URL link or log into\n        PRIME to receive the content of any such notice.\n      </li>\n      <li>\n        <strong>Deemed Receipt.</strong> Any written communication from a party, if personally\n        delivered or sent electronically, will be deemed to have been received 24 hours\n        after the time the notice was sent, or, if sent by mail, will be deemed to have been\n        received 3 days (excluding Saturdays, Sundays and statutory holidays) after the\n        date the notice was sent.\n      </li>\n      <li>\n        <strong>Substitute Contact Information.</strong> You may notify the Province of a substitute\n        contact mechanism by updating your contact information in PRIME.\n      </li>\n    </ol>\n\n  </li>\n  <li>\n\n    <p class=\"bold underline\">\n      GENERAL\n    </p>\n\n    <ol type=\"a\">\n      <li>\n\n        <p>\n          <strong>Severability.</strong> Each provision in this Agreement constitutes a separate covenant\n          and is severable from any other covenant, and if any of them are held by a court,\n          or other decision-maker, to be invalid, this Agreement will be interpreted as if\n          such provisions were not included.\n        </p>\n\n      </li>\n      <li>\n\n        <p>\n          <strong>Survival.</strong> Any provision of this Agreement that expressly or by its nature\n          continues after termination, shall survive termination of this Agreement.\n        </p>\n\n      </li>\n      <li>\n\n        <p>\n          <strong>Governing Law.</strong> This Agreement will be governed by and will be construed and\n          interpreted in accordance with the laws of British Columbia and the laws of\n          Canada applicable therein.\n        </p>\n\n      </li>\n      <li>\n\n        <p>\n          <strong>Assignment Restricted.</strong> Your rights and obligations under this Agreement may\n          not be assigned without the prior written approval of the Province.\n        </p>\n\n      </li>\n      <li>\n\n        <p>\n          <strong>Waiver.</strong> The failure of the Province at any time to insist on performance of any\n          provision of this Agreement by you is not a waiver of its right subsequently to\n          insist on performance of that or any other provision of this Agreement.\n        </p>\n\n      </li>\n      <li>\n\n        <p>\n          <strong>Province May Modify this Agreement.</strong> The Province may amend this\n          Agreement, including this section, at any time in its sole discretion:\n        </p>\n\n        <ol type=\"i\">\n          <li>\n            by written notice to you, in which case the amendment will become\n            effective upon the later of (A) the date notice of the amendment is first\n            delivered to you, or (B) the effective date of the amendment specified by\n            the Province, if any; or\n          </li>\n          <li>\n            by publishing notice of any such amendment in the PharmaCare\n            Newsletter, in which case the notice will specify the effective date of the\n            amendment, which date will be at least 30 (thirty) days after the date that\n            the PharmaCare Newsletter containing the notice is first published.\n          </li>\n        </ol>\n\n        <p>\n          If you use PharmaNet after the effective date of an amendment described in (i) or\n          (ii) above, you will be deemed to have accepted the corresponding amendment,\n          and this Agreement will be deemed to have been so amended as of the effective\n          date. If you do not agree with any amendment for which notice has been provided\n          by the Province in accordance with (i) or (ii) above, you must promptly (and in\n          any event before the effective date) cease all access or use of PharmaNet by yourself and take the steps\n          necessary to terminate this Agreement in accordance\n          with section 10.\n        </p>\n\n      </li>\n    </ol>\n\n  </li>\n</ol>\n",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -5974,6 +5985,51 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Id = 70,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 29,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "T9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 71,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 31,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "T9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 72,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 68,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "T9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
                             Id = 47,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -6368,6 +6424,254 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false
+                        },
+                        new
+                        {
+                            Id = 73,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 32,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "R9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 74,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 33,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "R9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 75,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 34,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "R9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 76,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 39,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "R9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 77,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 41,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "Y9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 78,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 42,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "Y9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 79,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 43,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "Y9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 80,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 45,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "Y9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 81,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 52,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "L9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 82,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 53,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "L9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 83,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 54,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "L9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 84,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 55,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "L9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 85,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 60,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "98",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 86,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 61,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "98",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 87,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 62,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "98",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 88,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 63,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "98",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
                         },
                         new
                         {
