@@ -130,7 +130,7 @@ namespace Prime.Engines.AgreementEngineInternal
             }
             else
             {
-                return null;
+                return AgreementType.PharmacyOboTOA;
             }
         }
     }
