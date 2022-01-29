@@ -16,10 +16,7 @@ namespace Prime.Extensions
                 .SingleOrDefault();
         }
 
-        // To avoid "The annotation for nullable reference types should only be used in code within a '#nullable' annotations context." warning
-#nullable enable
-        public static bool IsValid(this Enum? value)
-#nullable disable
+        public static bool IsValid(this Enum value)
         {
             if (value != null)
             {
