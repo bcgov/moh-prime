@@ -26,7 +26,7 @@ namespace Prime.Models
         [AgreementGroups(AgreementGroup.Organization)]
         DeviceProviderOrgAgreement = 7,
 
-        [AgreementGroups(AgreementGroup.Enrollee)]
+        [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.RegulatedUser)]
         PharmacyTechnicianTOA = 8
 
     }
