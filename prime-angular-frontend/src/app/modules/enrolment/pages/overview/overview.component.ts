@@ -4,7 +4,7 @@ import { FormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { EMPTY, Subscription, Observable, of, noop } from 'rxjs';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { exhaustMap, map, tap, mergeMap } from 'rxjs/operators';
 
 import { Address } from '@lib/models/address.model';
 import { DateUtils } from '@lib/utils/date-utils.class';
@@ -88,15 +88,13 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
     this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .subscribe((result: boolean) => {
-        if (result) {
-          this.busy =
-            this.enrolmentResource.submitApplication(enrolment)
-              .subscribe(() => {
-                this.toastService.openSuccessToast('Enrolment has been submitted');
-                this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
-              });
-        }
+      .subscribe((_) => {
+        this.busy =
+          this.enrolmentResource.submitApplication(enrolment)
+            .subscribe(() => {
+              this.toastService.openSuccessToast('Enrolment has been submitted');
+              this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
+            });
       });
   }
 
