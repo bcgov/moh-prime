@@ -251,6 +251,9 @@ namespace Prime
             // Matches request to an endpoint
             app.UseRouting();
 
+            app.UseMiddleware<My.Service.Logging.RequestLoggingMiddleware>();
+
+
             // Enable automatic tracing integration.
             // Make sure to put this middleware right after `UseRouting()`.
             app.UseSentryTracing();
