@@ -86,18 +86,20 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       actionText: 'Submit Enrolment'
     };
 
-    this.dialog.open(ConfirmDialogComponent, { data })
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .subscribe((result: boolean) => {
-        if (result) {
-          this.busy =
-            this.enrolmentResource.submitApplication(enrolment)
-              .subscribe(() => {
-                this.toastService.openSuccessToast('Enrolment has been submitted');
-                this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
-              });
-        }
+      .pipe(
+        exhaustMap((result: boolean) =>
+          (result)
+            ? this.enrolmentResource.submitApplication(enrolment)
+            : EMPTY
+        )
+      )
+      .subscribe(() => {
+        this.toastService.openSuccessToast('Enrolment has been submitted');
+        this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
       });
+
   }
 
   public canRequestRemoteAccess(): boolean {
