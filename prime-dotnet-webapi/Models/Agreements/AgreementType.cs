@@ -5,13 +5,13 @@ namespace Prime.Models
 {
     public enum AgreementType
     {
-        [AgreementGroups(AgreementGroup.Enrollee)]
+        [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.RegulatedUser)]
         CommunityPharmacistTOA = 1,
 
-        [AgreementGroups(AgreementGroup.Enrollee)]
+        [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.RegulatedUser)]
         RegulatedUserTOA = 2,
 
-        [AgreementGroups(AgreementGroup.Enrollee)]
+        [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.OnBehalfOf)]
         OboTOA = 3,
 
         [AgreementGroups(AgreementGroup.Organization)]
@@ -20,13 +20,13 @@ namespace Prime.Models
         [AgreementGroups(AgreementGroup.Organization)]
         CommunityPharmacyOrgAgreement = 5,
 
-        [AgreementGroups(AgreementGroup.Enrollee)]
+        [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.OnBehalfOf)]
         PharmacyOboTOA = 6,
 
         [AgreementGroups(AgreementGroup.Organization)]
         DeviceProviderOrgAgreement = 7,
 
-        [AgreementGroups(AgreementGroup.Enrollee)]
+        [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.RegulatedUser)]
         PharmacyTechnicianTOA = 8
 
     }
@@ -41,6 +41,16 @@ namespace Prime.Models
         public static bool IsOrganizationAgreement(this AgreementType agreementType)
         {
             return agreementType.HasGroup(AgreementGroup.Organization);
+        }
+
+        public static bool IsRegulatedUserAgreement(this AgreementType agreementType)
+        {
+            return agreementType.HasGroup(AgreementGroup.RegulatedUser);
+        }
+
+        public static bool IsOnBehalfOfAgreement(this AgreementType agreementType)
+        {
+            return agreementType.HasGroup(AgreementGroup.OnBehalfOf);
         }
 
         private static bool HasGroup(this AgreementType type, AgreementGroup group)

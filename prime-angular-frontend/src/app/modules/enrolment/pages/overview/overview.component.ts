@@ -44,6 +44,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public enrolleeAbsence: EnrolleeAbsence;
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
+  public hasOboToRuAgreementTypeChange: boolean;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -188,6 +189,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
             ? this.enrolmentResource.getLinkedGpid(this.enrolmentService.enrolment.id)
               .pipe(tap((paperEnrolleeGpid: string) => this.paperEnrolleeGpid = paperEnrolleeGpid))
             : of(noop())
+        ),
+        exhaustMap(() => this.enrolmentResource.getIsOboToRuAgreementTypeChange(this.enrolment.id)
+          .pipe(
+            tap((hasChanged: boolean) => this.hasOboToRuAgreementTypeChange = hasChanged)
+          )
         ),
         exhaustMap(() => this.enrolmentResource.getCurrentEnrolleeAbsence(this.enrolment.id))
       ).subscribe((enrolleeAbsence: EnrolleeAbsence) => this.enrolleeAbsence = enrolleeAbsence);
