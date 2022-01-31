@@ -88,13 +88,15 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
     this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .subscribe((_) => {
-        this.busy =
-          this.enrolmentResource.submitApplication(enrolment)
-            .subscribe(() => {
-              this.toastService.openSuccessToast('Enrolment has been submitted');
-              this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
-            });
+      .subscribe((result: boolean) => {
+        if (result) {
+          this.busy =
+            this.enrolmentResource.submitApplication(enrolment)
+              .subscribe(() => {
+                this.toastService.openSuccessToast('Enrolment has been submitted');
+                this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
+              });
+        }
       });
   }
 
