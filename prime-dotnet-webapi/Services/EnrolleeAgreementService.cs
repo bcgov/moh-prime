@@ -4,10 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 
+using Prime.Extensions;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services.Razor;
+using Prime.DTOs.AgreementEngine;
+using Prime.Engines;
 
 namespace Prime.Services
 {
@@ -17,15 +21,18 @@ namespace Prime.Services
 
         private readonly IAgreementService _agreementService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IMapper _mapper;
 
         public EnrolleeAgreementService(
             ApiDbContext context,
             ILogger<EnrolleeAgreementService> logger,
             IAgreementService agreementService,
+            IMapper mapper,
             IRazorConverterService razorConverterService)
             : base(context, logger)
         {
             _agreementService = agreementService;
+            _mapper = mapper;
             _razorConverterService = razorConverterService;
         }
 
@@ -170,6 +177,35 @@ namespace Prime.Services
                     agreement.AgreementContent = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.Base, agreement);
                 }
             }
+        }
+
+        public async Task<bool> IsOboToRuAgreementTypeChangeAsync(int enrolleeId)
+        {
+            var currentAgreementType = await GetCurrentAgreementTypeAsync(enrolleeId);
+
+            // Get only the information needed to determine expected agreement type
+            var enrollee = await _context.Enrollees
+                .AsNoTracking()
+                .Include(e => e.Certifications)
+                    .ThenInclude(c => c.License)
+                        .ThenInclude(l => l.LicenseDetails)
+                .Include(e => e.EnrolleeCareSettings)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
+
+            var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
+            return expectedAgreementType != null && currentAgreementType != null &&
+                currentAgreementType.Value.IsOnBehalfOfAgreement() && expectedAgreementType.Value.IsRegulatedUserAgreement();
+        }
+
+        private async Task<AgreementType?> GetCurrentAgreementTypeAsync(int enrolleeId)
+        {
+            return await _context.Agreements
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.EnrolleeId == enrolleeId)
+                .Where(a => a.AcceptedDate != null)
+                .Select(a => (AgreementType?)a.AgreementVersion.AgreementType)
+                .FirstOrDefaultAsync();
         }
     }
 }
