@@ -1,5 +1,5 @@
 from json.decoder import JSONDecodeError
-import sys, os, json, csv;
+import sys, os, json, csv, datetime;
 
 IS_THERE_MORE_DATA_FILE_LOCATION = "/tmp/isThereMoreData.txt"
 
@@ -14,7 +14,7 @@ except JSONDecodeError:
 
 output = csv.writer(sys.stdout);
 # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process 
-print('Converting JSON to CSV ...', file=sys.stderr)
+print(f"Converting JSON to CSV at {datetime.datetime.now()} ...", file=sys.stderr)
 num_pnet_logs = 0
 # Note that the columns in the CSV output need to match the invocation of the Postgres COPY command
 # Ultimately the `pnetTransactions` JSON fields need to be in the expected order 
