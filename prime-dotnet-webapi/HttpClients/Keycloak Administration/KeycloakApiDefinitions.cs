@@ -42,9 +42,9 @@ namespace Prime.HttpClients.KeycloakApiDefinitions
         public string Email { get; set; }
         public Dictionary<string, string[]> Attributes { get; set; }
 
-        public void SetPhone(string phoneNumber)
+        public void SetPhone(string phone)
         {
-            SetAttribute("phone", phoneNumber);
+            SetAttribute("phone", phone);
         }
 
         public void SetPhoneNumber(string phoneNumber)
@@ -59,6 +59,11 @@ namespace Prime.HttpClients.KeycloakApiDefinitions
 
         private void SetAttribute(string key, string value)
         {
+            if (Attributes == null)
+            {
+                Attributes = new();
+            }
+
             Attributes[key] = new string[] { value };
         }
     }
