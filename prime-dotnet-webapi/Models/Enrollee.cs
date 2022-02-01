@@ -304,7 +304,7 @@ namespace Prime.Models
         /// Returns true if the Enrollee's most recently accepted Agreement has no newer versions.
         /// Makes no determination if said Agreement is of the correct type for the Enrollee.
         /// </summary>
-        public bool HasLatestAgreement()
+        public bool HasLatestAgreement(IEnumerable<int> newestAgreementVersionIds)
         {
             if (Agreements == null)
             {
@@ -320,7 +320,7 @@ namespace Prime.Models
                 return false;
             }
 
-            return AgreementVersion.NewestAgreementVersionIds().Contains(currentAgreement.AgreementVersionId);
+            return newestAgreementVersionIds.Contains(currentAgreement.AgreementVersionId);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

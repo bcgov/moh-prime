@@ -33,8 +33,15 @@ namespace PrimeTests.UnitTests
                 {
                     Code = cert.LicenseCode,
                     Weight = 1,
-                    Manual = false,
-                    Validate = true
+                    LicenseDetails = new[]
+                    {
+                        new LicenseDetail
+                        {
+                            LicenseCode = cert.LicenseCode,
+                            Manual = false,
+                            Validate = true
+                        }
+                    }
                 };
             }
         }
@@ -42,13 +49,18 @@ namespace PrimeTests.UnitTests
         private void UpdateDeviceProvider(Enrollee enrollee, bool provider, bool isProviderInCareSetting)
         {
             enrollee.DeviceProviderIdentifier = provider ? TestUtils.RandomDeviceProviderIdentifier() : null;
-            if (provider || isProviderInCareSetting) {
-                enrollee.EnrolleeCareSettings.Add(new EnrolleeCareSetting{
+            if (provider || isProviderInCareSetting)
+            {
+                enrollee.EnrolleeCareSettings.Add(new EnrolleeCareSetting
+                {
                     CareSettingCode = (int)CareSettingType.DeviceProvider
                 });
-            } else {
+            }
+            else
+            {
                 var deviceProviderEntry = enrollee.EnrolleeCareSettings.SingleOrDefault(ecs => ecs.IsType(CareSettingType.DeviceProvider));
-                if (deviceProviderEntry != null) {
+                if (deviceProviderEntry != null)
+                {
                     enrollee.EnrolleeCareSettings.Remove(deviceProviderEntry);
                 }
             }
