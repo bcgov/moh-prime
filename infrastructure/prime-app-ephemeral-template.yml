@@ -216,7 +216,7 @@ objects:
       #user              www www;  ## Default: nobody
 
       worker_processes  auto;
-      error_log         "/opt/bitnami/nginx/logs/error.log";
+      error_log         "/opt/bitnami/nginx/logs/error.log" warn;
       pid               "/opt/bitnami/nginx/tmp/nginx.pid";
 
       events {
