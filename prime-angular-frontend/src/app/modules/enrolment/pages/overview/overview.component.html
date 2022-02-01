@@ -9,7 +9,7 @@
     <app-expiry-alert [expiryDates]="enrolment?.expiryDate">
       <ng-container #alertTitle
                     class="alert-title">
-        Your enrolment requires renewal.
+        Your enrolment requires renewal
       </ng-container>
       <ng-container #alertContent
                     class="alert-content">
@@ -34,12 +34,30 @@
       </ng-container>
     </app-alert>
 
+    <app-alert *ngIf="hasOboToRuAgreementTypeChange"
+               type="info"
+               icon="schedule">
+      <ng-container #alertTitle
+                    class="alert-title">
+        You are now an independent PharmaNet user
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        <ol>
+          <li>Review and update your PRIME profile.</li>
+          <li>Make sure your college information is correct.</li>
+          <li>Sign the terms of access for independent users.</li>
+          <li>Share your approval notification with your PharmaNet administrator.</li>
+        </ol>
+      </ng-container>
+    </app-alert>
+
     <ng-container *ngIf="!isInitialEnrolment && enrolment?.expiryDate">
 
       <app-alert type="success"
                  icon="check_circle_outline"
                  class="mb-2 col-12"
-                 *ngIf="!withinDaysOfRenewal">
+                 *ngIf="!withinDaysOfRenewal && !hasOboToRuAgreementTypeChange">
         <ng-container #alertTitle
                       class="alert-title">
           You have approval to access PharmaNet
@@ -53,7 +71,8 @@
         </ng-container>
       </app-alert>
 
-      <app-page-subheader [divider]="false">
+      <app-page-subheader [divider]="false"
+                          *ngIf="!hasOboToRuAgreementTypeChange">
         <ng-container appPageSubheaderTitle>GPID
         </ng-container>
         <ng-container appPageSubheaderSummary>
@@ -85,7 +104,8 @@
       </app-page-subheader>
     </ng-container>
 
-    <app-page-subheader divider="false">
+    <app-page-subheader divider="false"
+                        *ngIf="!hasOboToRuAgreementTypeChange">
       <ng-container appPageSubheaderTitle>
         {{
         (isInitialEnrolment)
