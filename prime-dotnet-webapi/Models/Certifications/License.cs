@@ -45,5 +45,10 @@ namespace Prime.Models
                 .OrderByDescending(s => s.EffectiveDate)
                 .FirstOrDefault();
         }
+
+        public static bool IsPharmacyTechnician(LicenseDetail licenseDetail)
+        {
+            return licenseDetail.Prefix == "T9";
+        }
     }
 }

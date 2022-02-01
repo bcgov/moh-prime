@@ -277,6 +277,18 @@ export class EnrolmentResource {
       );
   }
 
+  public getIsOboToRuAgreementTypeChange(enrolleeId: number): Observable<boolean> {
+    return this.apiResource.get<boolean>(`enrollees/${enrolleeId}/agreements/current/obo-to-ru`)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        tap((isChange: boolean) => this.logger.info('OBO_TO_RU', isChange)),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getIsOboToRuAgreementTypeChange error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getQrCode(enrolleeId: number): Observable<string> {
     return this.apiResource.get<string>(`enrollees/${enrolleeId}/qrCode`)
       .pipe(

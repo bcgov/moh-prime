@@ -77,7 +77,8 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
       { type: AgreementType.REGULATED_USER_TOA, name: 'RU' },
       { type: AgreementType.OBO_TOA, name: 'OBO' },
       { type: AgreementType.COMMUNITY_PHARMACIST_TOA, name: 'PharmRU' },
-      { type: AgreementType.PHARMACY_OBO_TOA, name: 'PharmOBO' }
+      { type: AgreementType.PHARMACY_OBO_TOA, name: 'PharmOBO' },
+      { type: AgreementType.PHARMACY_TECHNICIAN_TOA, name: 'PharmTech' }
     ];
   }
 
