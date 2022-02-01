@@ -4,7 +4,7 @@ import { FormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { EMPTY, Subscription, Observable, of, noop } from 'rxjs';
-import { exhaustMap, map, tap, mergeMap } from 'rxjs/operators';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { Address } from '@lib/models/address.model';
 import { DateUtils } from '@lib/utils/date-utils.class';
@@ -100,7 +100,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         this.toastService.openSuccessToast('Enrolment has been submitted');
         this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
       });
-
   }
 
   public canRequestRemoteAccess(): boolean {
