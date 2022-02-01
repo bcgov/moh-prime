@@ -243,5 +243,32 @@ namespace Prime.Controllers
 
             return Ok(download);
         }
+
+        // GET: api/enrollees/5/agreements/current/obo-to-ru
+        /// <summary>
+        /// Gets boolean re: whether enrollee's current agreement type is OBO and the agreement type
+        /// they would be assigned is RU, if automatic assignment occurred today
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/agreements/current/obo-to-ru", Name = nameof(IsOboToRuAgreementTypeChange))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> IsOboToRuAgreementTypeChange(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var isOboToRuChange = await _enrolleeAgreementService.IsOboToRuAgreementTypeChangeAsync(enrolleeId);
+
+            return Ok(isOboToRuChange);
+        }
     }
 }

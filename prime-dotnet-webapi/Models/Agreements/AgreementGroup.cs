@@ -10,6 +10,8 @@ namespace Prime.Models
     {
         Enrollee = 1,
         Organization = 2,
+        RegulatedUser = 3,
+        OnBehalfOf = 4
     }
 
     public static class AgreementGroupExtensions
