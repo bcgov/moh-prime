@@ -1,4 +1,4 @@
-<app-enrollee-page [busy]="busy">
+<app-enrollee-page [busy]="{busy, message: busyMessage}">
 
   <app-page-header>PRIME Profile</app-page-header>
 
@@ -89,10 +89,10 @@
       <ng-container appPageSubheaderTitle>
         {{
         (isInitialEnrolment)
-          ? 'Enrolment Review'
-          : (withinDaysOfRenewal)
-            ? 'Renew Enrolment'
-            : 'Enrolment Information'
+        ? 'Enrolment Review'
+        : (withinDaysOfRenewal)
+        ? 'Renew Enrolment'
+        : 'Enrolment Information'
         }}
       </ng-container>
 
