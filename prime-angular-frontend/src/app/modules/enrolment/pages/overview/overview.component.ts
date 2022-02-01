@@ -44,8 +44,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public enrolleeAbsence: EnrolleeAbsence;
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
-
   public busyMessage = 'Wait patiently, the submission can take up to a minute';
+
   protected allowRoutingWhenDirty: boolean;
 
   constructor(
