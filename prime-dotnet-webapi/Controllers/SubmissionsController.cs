@@ -10,7 +10,6 @@ using Prime.Services;
 using Prime.Models.Api;
 using Prime.ViewModels;
 
-using System.Threading;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
@@ -45,9 +44,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> Submit(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
-            Thread.Sleep(7000);
-            return BadRequest("New profile cannot be null.");
-
             if (updatedProfile == null)
             {
                 return BadRequest("New profile cannot be null.");
