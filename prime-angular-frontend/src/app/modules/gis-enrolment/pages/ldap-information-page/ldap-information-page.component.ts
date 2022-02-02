@@ -15,7 +15,6 @@ import { GisEnrolmentService } from '@gis/shared/services/gis-enrolment.service'
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { LdapInformationPageFormState } from './ldap-information-page-form-state.class';
 import { LdapErrorResponse } from '@gis/shared/models/ldap-error-response.model';
-import { NG_BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 
 @Component({
   selector: 'app-ldap-information-page',
@@ -28,7 +27,6 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   public unauthorized: boolean | null;
   public locked: boolean | null;
   public remainingAttempts: number;
-  public readonly NG_BUSY_SUBMISSION_MESSAGE = NG_BUSY_SUBMISSION_MESSAGE;
 
   private routeUtils: RouteUtils;
 
