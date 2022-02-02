@@ -11,6 +11,7 @@ import { PartyTypeEnum } from '@phsa/shared/enums/party-type.enum';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { PhsaEformsResource } from '@phsa/shared/resources/phsa-eforms-resource.service';
 import { PhsaEformsFormStateService } from '@phsa/shared/services/phsa-eforms-form-state.service';
+import { NG_BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 
 @Component({
   selector: 'app-available-access',
@@ -23,7 +24,7 @@ export class AvailableAccessComponent implements OnInit {
   public showProgress: boolean;
   public availablePartyTypes: PartyTypeEnum[];
   public hasNoRoleError: boolean;
-
+  public readonly NG_BUSY_SUBMISSION_MESSAGE = NG_BUSY_SUBMISSION_MESSAGE;
   private routeUtils: RouteUtils;
 
   constructor(

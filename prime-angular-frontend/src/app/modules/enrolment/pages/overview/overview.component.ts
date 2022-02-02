@@ -25,6 +25,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+import { NG_BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 
 @Component({
   selector: 'app-overview',
@@ -45,7 +46,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public hasOboToRuAgreementTypeChange: boolean;
-  public busyMessage = 'Wait patiently, the submission can take up to a minute';
+  public readonly NG_BUSY_SUBMISSION_MESSAGE = NG_BUSY_SUBMISSION_MESSAGE;
 
   protected allowRoutingWhenDirty: boolean;
 

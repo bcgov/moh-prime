@@ -23,6 +23,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { NG_BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 
 @Component({
   selector: 'app-overview-page',
@@ -44,6 +45,7 @@ export class OverviewPageComponent implements OnInit {
 
   public SiteRoutes = SiteRoutes;
   public SiteStatusType = SiteStatusType;
+  public readonly NG_BUSY_SUBMISSION_MESSAGE = NG_BUSY_SUBMISSION_MESSAGE;
 
   constructor(
     protected route: ActivatedRoute,

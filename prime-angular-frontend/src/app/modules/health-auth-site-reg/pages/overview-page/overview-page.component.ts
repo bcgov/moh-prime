@@ -23,6 +23,7 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
+import { NG_BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 
 @UntilDestroy()
 @Component({
@@ -41,6 +42,7 @@ export class OverviewPageComponent implements OnInit {
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
+  public readonly NG_BUSY_SUBMISSION_MESSAGE = NG_BUSY_SUBMISSION_MESSAGE;
 
   constructor(
     protected route: ActivatedRoute,
