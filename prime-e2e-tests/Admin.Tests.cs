@@ -71,7 +71,7 @@ namespace TestPrimeE2E.Admin
             _driver.FindPatiently("(//mat-list-item/div)[2]").Click();
 
             // Click on tab "Health Authorities"
-            _driver.FindPatiently("(//div[@role='tab'])[3]").Click();
+            _driver.ClickWithJavaScript("(//div[@role='tab'])[3]");
 
             // Click on triple vertical dots for the row of target Health Authority
             ClickHamburgerMenuInTable(TestParameters.HealthAuthority);
