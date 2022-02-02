@@ -26,7 +26,6 @@ export class MockAuthorizedUserService implements IAuthorizedUserService {
       email: faker.internet.email(),
       jobRoleTitle: '',
       healthAuthorityCode: HealthAuthorityEnum.FRASER_HEALTH,
-      employmentIdentifier: '',
       phone: faker.phone.phoneNumber(),
       status: AccessStatusEnum.UNDER_REVIEW,
     });
