@@ -25,6 +25,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+
+import { NgBusyService } from '@lib/modules/ngx-busy/ng-busy.service';
 import { NG_BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 
 @Component({
@@ -59,7 +61,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private enrolmentResource: EnrolmentResource,
     private enrolmentFormStateService: EnrolmentFormStateService,
     private toastService: ToastService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private ngBusyService: NgBusyService
   ) {
     super(route, router);
 
@@ -92,6 +95,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
+        tap(() => {
+          this.ngBusyService.updateMessage(NG_BUSY_SUBMISSION_MESSAGE);
+          this.ngBusyService.showSpinner(true);
+        }),
         exhaustMap((result: boolean) =>
           (result)
             ? this.enrolmentResource.submitApplication(enrolment)

@@ -1,8 +1,10 @@
-<div class="ng-busy-backdrop"></div>
+<div [class.ng-busy-backdrop]="message"></div>
 
 <div class="ng-busy-default-wrapper">
   <div class="align-center busy-front">
-    <div class="center mb-5">
+
+    <div *ngIf="isShowSpinner"
+         class="center mb-5">
       <mat-spinner></mat-spinner>
     </div>
 
