@@ -12,8 +12,6 @@ namespace Prime.Models
 
         public Party Party { get; set; }
 
-        public string EmploymentIdentifier { get; set; }
-
         [Required]
         public HealthAuthorityCode HealthAuthorityCode { get; set; }
 

@@ -25,7 +25,6 @@ namespace Prime.ViewModels.Parties
         public string Phone { get; set; }
         public string SmsPhone { get; set; }
         public string JobRoleTitle { get; set; }
-        public string EmploymentIdentifier { get; set; }
         public HealthAuthorityCode HealthAuthorityCode { get; set; }
 
         /// <summary>
@@ -34,7 +33,6 @@ namespace Prime.ViewModels.Parties
         /// </summary>
         public AuthorizedUser UpdateAuthorizedUser(AuthorizedUser authorizedUser, ClaimsPrincipal user)
         {
-            authorizedUser.EmploymentIdentifier = EmploymentIdentifier;
             authorizedUser.HealthAuthorityCode = HealthAuthorityCode;
 
             authorizedUser.Party = UpdateParty(authorizedUser.Party, user);
