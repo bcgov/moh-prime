@@ -88,6 +88,18 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
     );
   }
 
+  public isBusinessDay24Hours(businessDay: FormGroup, index: number, array: FormGroup[]): boolean {
+    // TODO: Get error `Cannot read properties of undefined (reading 'is24Hours')` with following code
+    // let is24Hours = this.is24Hours(businessDay);
+    let is24Hours = businessDay.get('startTime').value === '0000' &&
+      businessDay.get('endTime').value === '2400'
+    return is24Hours;
+  }
+
+  public get isSite247(): boolean {
+    return this.formState.businessDays.controls.every(this.isBusinessDay24Hours);
+  }
+
   public on24Hours(change: MatCheckboxChange, group: FormGroup): void {
     (change.checked)
       ? group.patchValue(this.business24Hours)
@@ -110,6 +122,12 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
         FormControlValidators.requiredLength(4)
       ]);
     }
+  }
+
+  public onSite247(change: MatCheckboxChange): void {
+    this.formState.businessDays.controls.forEach(businessDay => {
+      this.on24Hours(change, businessDay as FormGroup);
+    });
   }
 
   public onBack(): void {
