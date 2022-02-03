@@ -117,8 +117,8 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
   }
 
   public onSite247(change: MatCheckboxChange): void {
-    this.formState.businessDays.controls.forEach(businessDay => {
-      this.on24Hours(change, businessDay as FormGroup);
+    this.formState.businessDays.controls.forEach((businessDay: FormGroup) => {
+      this.on24Hours(change, businessDay);
     });
   }
 
