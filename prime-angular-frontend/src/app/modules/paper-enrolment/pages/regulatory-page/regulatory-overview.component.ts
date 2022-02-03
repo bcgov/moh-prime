@@ -53,7 +53,7 @@ import { RegulatoryForm } from './regulatory-form.model';
           {{ certification?.licenseNumber | default }}
         </app-enrollee-property>
 
-        <app-enrollee-property title="Prescriber ID">
+        <app-enrollee-property title="PharmaNet ID">
           {{ certification?.practitionerId | default }}
         </app-enrollee-property>
 
