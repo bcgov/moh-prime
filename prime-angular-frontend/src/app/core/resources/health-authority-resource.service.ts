@@ -18,6 +18,8 @@ import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { ApiResourceUtilsService } from './api-resource-utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +29,8 @@ export class HealthAuthorityResource {
     private apiResource: ApiResource,
     private toastService: ToastService,
     private logger: ConsoleLoggerService,
-    private capitalizePipe: CapitalizePipe
+    private capitalizePipe: CapitalizePipe,
+    private apiResourceUtilsService: ApiResourceUtilsService,
   ) { }
 
   public getHealthAuthorities(): Observable<HealthAuthorityRow[]> {
@@ -158,6 +161,30 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized users could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getAuthorizedUsersByHealthAuthority error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createOrganizationAgreementDocument(healthAuthorityId: number, documentGuid: string): Observable<BaseDocument> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this.apiResource.put<BaseDocument>(`health-authorities/${healthAuthorityId}/organization-agreement`, null, params)
+      .pipe(
+        map((response: ApiHttpResponse<BaseDocument>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Core] HealthAuthorityResource::createOrganizationAgreementDocument error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getOrganizationAgreementDocumentToken(healthAuthorityId: number): Observable<string> {
+    return this.apiResource.get<string>(`health-authorities/${healthAuthorityId}/organization-agreement/token`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization Agreeement token could not be Retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getOrganizationAgreementDocumentToken error has occurred: ', error);
           throw error;
         })
       );

@@ -12,6 +12,8 @@ using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
 using System.Linq;
+using System;
+using Prime.Models;
 
 namespace Prime.Controllers
 {
@@ -20,16 +22,22 @@ namespace Prime.Controllers
     [ApiController]
     public class HealthAuthoritiesController : PrimeControllerBase
     {
+        private readonly IBusinessEventService _businessEventService;
+        private readonly IDocumentService _documentService;
         private readonly IHealthAuthorityService _healthAuthorityService;
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly ISiteService _siteService;
 
         public HealthAuthoritiesController(
+            IBusinessEventService businessEventService,
+            IDocumentService documentService,
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
             ISiteService siteService
         )
         {
+            _businessEventService = businessEventService;
+            _documentService = documentService;
             _healthAuthorityService = healthAuthorityService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
             _siteService = siteService;
@@ -306,6 +314,59 @@ namespace Prime.Controllers
             var siteIds = await _healthAuthorityService.GetSitesByCareTypeAsync(healthAuthorityId, healthAuthorityCareTypeId);
 
             return Ok(siteIds);
+        }
+
+        // PUT: api/health-authorities/1/organization-agreement
+        /// <summary>
+        ///    Create or Update health auth organization agreement
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="documentGuid"></param>
+        [HttpPut("{healthAuthorityId}/organization-agreement", Name = nameof(CreateOrUpdateOgranizationAgreement))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthorityOrganizationAgreementDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> CreateOrUpdateOgranizationAgreement(int healthAuthorityId, [FromQuery] Guid documentGuid)
+        {
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+            }
+
+            var document = await _healthAuthorityService.AddOrReplaceBusinessLicenceDocumentAsync(healthAuthorityId, documentGuid);
+            if (document == null)
+            {
+                return BadRequest("Organization Agreement Document could not be created; network error or upload is already submitted");
+            }
+
+            // TODO: Potentially get a ticket to add business events to the Health Authority Organization Side of the app.
+
+            return Ok(document); ;
+        }
+
+        // Get: api/health-authorities/1/organization-agreement/token
+        /// <summary>
+        /// Gets a download token for the latest orgnanization agreement for a health authority.
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        [HttpGet("{healthAuthorityId}/organization-agreement/token", Name = nameof(GetOgranizationAgreementDocumentToken))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetOgranizationAgreementDocumentToken(int healthAuthorityId)
+        {
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+            }
+
+            var token = await _documentService.GetDownloadTokenForHealthAuthorityOrgAgreementDocument(healthAuthorityId);
+
+            return Ok(token);
         }
     }
 }
