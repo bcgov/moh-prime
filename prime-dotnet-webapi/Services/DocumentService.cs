@@ -81,7 +81,11 @@ namespace Prime.Services
         {
             var document = await _context.HealthAuthorities
                 .Include(ha => ha.HealthAuthorityOrganizationAgreementDocument)
-                .SingleAsync(ha => ha.Id == healthAuthorityId);
+                .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
+            if (document == null)
+            {
+                return null;
+            }
             return await _documentManagerClient.CreateDownloadTokenAsync(document.HealthAuthorityOrganizationAgreementDocument.DocumentGuid);
         }
     }

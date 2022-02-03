@@ -353,6 +353,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         [HttpGet("{healthAuthorityId}/organization-agreement/token", Name = nameof(GetOgranizationAgreementDocumentToken))]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -365,6 +366,10 @@ namespace Prime.Controllers
             }
 
             var token = await _documentService.GetDownloadTokenForHealthAuthorityOrgAgreementDocument(healthAuthorityId);
+            if (token == null)
+            {
+                return NotFound($"No Organization Agreement Document found for Health Authority with id {healthAuthorityId}");
+            }
 
             return Ok(token);
         }
