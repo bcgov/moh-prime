@@ -8,6 +8,5 @@ export const busyConfig = {
   delay: 50,
   minDuration: 600,
   disableAnimation: true,
-  wrapperClass: 'ng-busy',
-  message: ''
+  wrapperClass: 'ng-busy'
 } as BusyConfig;
