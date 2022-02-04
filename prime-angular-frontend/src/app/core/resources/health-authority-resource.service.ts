@@ -15,10 +15,10 @@ import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { ApiResourceUtilsService } from './api-resource-utils.service';
 
 @Injectable({
@@ -183,7 +183,7 @@ export class HealthAuthorityResource {
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Organization Agreeement token could not be Retrieved');
+          this.toastService.openErrorToast('Organization Agreement token could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getOrganizationAgreementDocumentToken error has occurred: ', error);
           throw error;
         })

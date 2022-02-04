@@ -323,7 +323,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="documentGuid"></param>
         [HttpPut("{healthAuthorityId}/organization-agreement", Name = nameof(CreateOrUpdateOgranizationAgreement))]
-        [Authorize(Roles = Roles.EditSite)]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -353,7 +353,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         [HttpGet("{healthAuthorityId}/organization-agreement/token", Name = nameof(GetOgranizationAgreementDocumentToken))]
-        [Authorize(Roles = Roles.EditSite)]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
