@@ -96,8 +96,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       .afterClosed()
       .pipe(
         tap(() => {
-          this.ngBusyService.updateMessage(NG_BUSY_SUBMISSION_MESSAGE);
-          this.ngBusyService.showSpinner(true);
+          this.ngBusyService.setMessage(NG_BUSY_SUBMISSION_MESSAGE);
+          this.ngBusyService.setShowSpinner(true);
         }),
         exhaustMap((result: boolean) =>
           (result)

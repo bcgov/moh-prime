@@ -10,11 +10,11 @@ export class NgBusyService {
 
   constructor() { };
 
-  public updateMessage(message: string): void {
+  public setMessage(message: string): void {
     this.message = message;
   }
 
-  public showSpinner(showSpinner: boolean): void {
+  public setShowSpinner(showSpinner: boolean): void {
     this.isShowSpinner = showSpinner;
   }
 
