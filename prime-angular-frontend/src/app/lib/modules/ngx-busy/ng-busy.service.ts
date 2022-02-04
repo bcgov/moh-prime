@@ -5,24 +5,24 @@ import { Injectable } from '@angular/core';
 })
 
 export class NgBusyService {
-  private message: string;
-  private isShowSpinner: boolean;
+  private _message: string;
+  private _isShowSpinner: boolean;
 
   constructor() { };
 
-  public setMessage(message: string): void {
-    this.message = message;
+  public set message(message: string) {
+    this._message = message;
   }
 
-  public setShowSpinner(showSpinner: boolean): void {
-    this.isShowSpinner = showSpinner;
+  public set isShowSpinner(showSpinner: boolean) {
+    this._isShowSpinner = showSpinner;
   }
 
-  public getMessage(): string {
-    return this.message
+  public get message(): string {
+    return this._message
   }
 
-  public getIsShowSpinner(): boolean {
-    return this.isShowSpinner;
+  public get isShowSpinner(): boolean {
+    return this._isShowSpinner;
   }
 }

@@ -12,10 +12,10 @@ export class BusyOverlayMessageComponent {
   ) { }
 
   public get message() {
-    return this.ngBusyService.getMessage();
+    return this.ngBusyService.message;
   }
 
   public get isShowSpinner() {
-    return this.ngBusyService.getIsShowSpinner();
+    return this.ngBusyService.isShowSpinner;
   }
 }

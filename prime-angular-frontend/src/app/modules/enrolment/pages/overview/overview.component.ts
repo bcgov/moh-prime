@@ -48,7 +48,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public hasOboToRuAgreementTypeChange: boolean;
-  public readonly NG_BUSY_SUBMISSION_MESSAGE = NG_BUSY_SUBMISSION_MESSAGE;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -96,8 +95,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       .afterClosed()
       .pipe(
         tap(() => {
-          this.ngBusyService.setMessage(NG_BUSY_SUBMISSION_MESSAGE);
-          this.ngBusyService.setShowSpinner(true);
+          this.ngBusyService.message = NG_BUSY_SUBMISSION_MESSAGE;
+          this.ngBusyService.isShowSpinner = true;
         }),
         exhaustMap((result: boolean) =>
           (result)
