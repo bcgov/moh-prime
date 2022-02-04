@@ -23,6 +23,7 @@ export class AvailableAccessComponent implements OnInit {
   public showProgress: boolean;
   public availablePartyTypes: PartyTypeEnum[];
   public hasNoRoleError: boolean;
+
   private routeUtils: RouteUtils;
 
   constructor(
