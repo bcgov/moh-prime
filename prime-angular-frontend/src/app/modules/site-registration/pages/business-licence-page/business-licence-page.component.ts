@@ -4,7 +4,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { Observable, concat } from 'rxjs';
+import { Observable, zip } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -137,13 +138,13 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     }
   }
 
-  protected submissionRequest(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
+  protected submissionRequest(): Observable<(BusinessLicence | BusinessLicenceDocument | void)[]> {
     const siteId = this.route.snapshot.params.sid;
     const currentBusinessLicence = this.siteService.site.businessLicence;
     const updatedBusinessLicence = this.siteFormStateService.businessLicenceFormState.json.businessLicence;
     const documentGuid = this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value;
 
-    return concat(
+    return zip(
       this.siteResource.updateSite(this.siteFormStateService.json),
       ...this.businessLicenceUpdates(
         siteId,
@@ -249,6 +250,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
         () => [
           this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id),
           this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)
+            .pipe(tap((doc: BusinessLicenceDocument) => this.siteFormStateService.businessLicenceFormState.patchDocument(doc)))
         ]
       ),
       this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)

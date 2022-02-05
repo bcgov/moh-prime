@@ -7,6 +7,7 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { BusinessLicenceForm } from './business-licence-form.model';
 
 export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceForm> {
@@ -87,6 +88,13 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       doingBusinessAs,
       pec
     });
+  }
+
+  public patchDocument(document: BusinessLicenceDocument): void {
+    if (!this.businessLicence) {
+      return;
+    }
+    this.businessLicence.businessLicenceDocument = document;
   }
 
   public buildForm(): void {
