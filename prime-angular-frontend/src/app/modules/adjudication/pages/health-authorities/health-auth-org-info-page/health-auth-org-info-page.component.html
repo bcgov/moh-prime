@@ -158,7 +158,7 @@
           </div>
         </ng-container>
 
-        <button *ngIf="!upload"
+        <button *ngIf="!hasClickedAddAgreement"
                 mat-button
                 type="button"
                 color="primary"
@@ -167,7 +167,7 @@
           Upload/Replace Organization Agreement
         </button>
 
-        <ng-container *ngIf="upload">
+        <ng-container *ngIf="hasClickedAddAgreement">
           <div class="row">
             <div class="col">
               <app-document-upload #documentUpload
@@ -194,7 +194,7 @@
                       class="align-self-end"
                       type="button"
                       color="primary"
-                      [disabled]="!orgAgreeDocument"
+                      [disabled]="!organizationAgreementDocument"
                       (click)="updateOrganizationAgreement()">
                 Upload Document
               </button>

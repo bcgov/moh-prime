@@ -6,10 +6,10 @@ import { Subscription } from 'rxjs';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { UtilsService } from '@core/services/utils.service';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 @Component({
   selector: 'app-health-auth-org-info-page',
@@ -26,9 +26,9 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
    * has not yet entered their organization information.
    */
   public isInitial: boolean;
-  public upload: boolean;
+  public hasClickedAddAgreement: boolean;
 
-  public orgAgreeDocument: BaseDocument;
+  public organizationAgreementDocument: BaseDocument;
 
   private routeUtils: RouteUtils;
 
@@ -39,7 +39,7 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
     private utilsService: UtilsService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
-    this.upload = false;
+    this.hasClickedAddAgreement = false;
   }
 
   public onRoute(routePath: string | (string | number)[]): void {
@@ -58,30 +58,30 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
   }
 
   public addOrgAgreement(): void {
-    this.upload = true;
+    this.hasClickedAddAgreement = true;
   }
 
   public cancelUpload(): void {
-    this.upload = false;
-    this.orgAgreeDocument = null;
+    this.hasClickedAddAgreement = false;
+    this.organizationAgreementDocument = null;
   }
 
   public updateOrganizationAgreement(): void {
     this.busy = this.healthAuthResource
-      .createOrganizationAgreementDocument(this.route.snapshot.params.haid, this.orgAgreeDocument.documentGuid)
+      .createOrganizationAgreementDocument(this.route.snapshot.params.haid, this.organizationAgreementDocument.documentGuid)
       .subscribe((document: BaseDocument) => {
         this.healthAuthority.healthAuthorityOrganizationAgreementDocument = document;
-        this.orgAgreeDocument = null;
-        this.upload = false;
+        this.organizationAgreementDocument = null;
+        this.hasClickedAddAgreement = false;
       });
   }
 
   public onUpload(document: BaseDocument): void {
-    this.orgAgreeDocument = document;
+    this.organizationAgreementDocument = document;
   }
 
   public onRemoveDocument(_: string): void {
-    this.orgAgreeDocument = null;
+    this.organizationAgreementDocument = null;
   }
 
   public downloadOrganizationAgreement(event: Event): void {
