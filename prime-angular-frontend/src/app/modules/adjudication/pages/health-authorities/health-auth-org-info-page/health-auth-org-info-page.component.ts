@@ -5,11 +5,11 @@ import { Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { UtilsService } from '@core/services/utils.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-health-auth-org-info-page',
