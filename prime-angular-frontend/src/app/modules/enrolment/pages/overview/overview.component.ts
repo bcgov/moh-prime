@@ -10,6 +10,7 @@ import { Address } from '@lib/models/address.model';
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { NgBusyService } from '@lib/modules/ngx-busy/ng-busy.service';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -25,8 +26,6 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
-
-import { NgBusyService } from '@lib/modules/ngx-busy/ng-busy.service';
 
 @Component({
   selector: 'app-overview',
