@@ -6,7 +6,8 @@ import { Injectable } from '@angular/core';
 
 export class NgBusyService {
   private _message: string;
-  private _isShowSpinner: boolean;
+  private _showMessage: boolean;
+  private _showSpinner: boolean;
 
   constructor() { };
 
@@ -14,15 +15,23 @@ export class NgBusyService {
     this._message = message;
   }
 
-  public set isShowSpinner(showSpinner: boolean) {
-    this._isShowSpinner = showSpinner;
+  public set showMessage(showMessage: boolean) {
+    this._showMessage = showMessage;
+  }
+
+  public set showSpinner(showSpinner: boolean) {
+    this._showSpinner = showSpinner;
   }
 
   public get message(): string {
     return this._message
   }
 
-  public get isShowSpinner(): boolean {
-    return this._isShowSpinner;
+  public get showMessage(): boolean {
+    return this._showMessage;
+  }
+
+  public get showSpinner(): boolean {
+    return this._showSpinner;
   }
 }

@@ -17,12 +17,3 @@
   display: flex;
   justify-content: center;
 }
-
-.delay {
-  animation: cssAnimation 0s 5s forwards;
-  visibility: hidden;
-}
-
-@keyframes cssAnimation {
-  to   { visibility: visible; }
-}

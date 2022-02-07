@@ -1,15 +1,15 @@
-<div [class.ng-busy-backdrop]="message"
-     [class.increased-opacity]="message"></div>
+<div [class.ng-busy-backdrop]="showMessage"
+     [class.increased-opacity]="showMessage"></div>
 
 <div class="ng-busy-default-wrapper">
   <div class="align-center busy-front">
 
-    <div *ngIf="isShowSpinner"
+    <div *ngIf="showSpinner"
          class="center mb-5">
       <mat-spinner></mat-spinner>
     </div>
 
-    <div class="center delay">
+    <div class="center">
       <h3>{{message}}</h3>
     </div>
   </div>

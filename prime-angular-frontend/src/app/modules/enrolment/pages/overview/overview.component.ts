@@ -27,7 +27,6 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
 import { NgBusyService } from '@lib/modules/ngx-busy/ng-busy.service';
-import { NG_BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 
 @Component({
   selector: 'app-overview',
@@ -95,8 +94,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       .afterClosed()
       .pipe(
         tap(() => {
-          this.ngBusyService.message = NG_BUSY_SUBMISSION_MESSAGE;
-          this.ngBusyService.isShowSpinner = true;
+          this.ngBusyService.showMessage = true;
+          this.ngBusyService.showSpinner = true;
         }),
         exhaustMap((result: boolean) =>
           (result)
