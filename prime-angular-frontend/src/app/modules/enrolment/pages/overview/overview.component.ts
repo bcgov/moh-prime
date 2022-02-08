@@ -61,7 +61,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private enrolmentFormStateService: EnrolmentFormStateService,
     private toastService: ToastService,
     private formUtilsService: FormUtilsService,
-    private ngBusyService: BusyService
+    private busyService: BusyService
   ) {
     super(route, router);
 
@@ -95,7 +95,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       .afterClosed()
       .pipe(
         tap(() => {
-          this.ngBusyService.showMessage(BUSY_SUBMISSION_MESSAGE);
+          this.busyService.showMessage(BUSY_SUBMISSION_MESSAGE);
         }),
         exhaustMap((result: boolean) =>
           (result)

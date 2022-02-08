@@ -1,6 +1,7 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { BusyService } from '../busy.service';
+
 @Component({
   selector: 'app-busy-overlay-message',
   templateUrl: './busy-overlay-message.component.html',
