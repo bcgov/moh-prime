@@ -8,6 +8,5 @@ export const busyConfig = {
   delay: 50,
   minDuration: 600,
   disableAnimation: true,
-  wrapperClass: 'ng-busy',
-  message: 'Wait patiently, the submission can take up to a minute.'
+  wrapperClass: 'ng-busy'
 } as BusyConfig;
