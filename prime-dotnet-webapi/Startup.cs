@@ -20,7 +20,6 @@ using Microsoft.OpenApi.Models;
 using Flurl;
 using Serilog;
 using SoapCore;
-using AutoMapper;
 using Newtonsoft.Json;
 using Wkhtmltopdf.NetCore;
 using IdentityModel.Client;
@@ -33,6 +32,7 @@ using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
+using Prime.Helpers;
 
 namespace Prime
 {
@@ -251,7 +251,7 @@ namespace Prime
             // Matches request to an endpoint
             app.UseRouting();
 
-            app.UseMiddleware<My.Service.Logging.RequestLoggingMiddleware>();
+            app.UseMiddleware<RequestLoggingMiddleware>();
 
 
             // Enable automatic tracing integration.
