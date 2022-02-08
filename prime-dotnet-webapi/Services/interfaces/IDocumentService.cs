@@ -12,5 +12,6 @@ namespace Prime.Services
         Task<string> GetDownloadTokenForEnrolleeAdjudicationDocument(int enrolleeAdjudicationDocumentId);
         Task<string> GetDownloadTokenForSiteAdjudicationDocument(int siteAdjudicationDocumentId);
         Task<string> FinalizeDocumentUpload(Guid documentGuid, string filePath);
+        Task<string> GetDownloadTokenForHealthAuthorityOrgAgreementDocument(int healthAuthorityId);
     }
 }
