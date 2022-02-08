@@ -81,14 +81,14 @@ function _initialize() {
  */
 function _getToken() {
   if (_isInitializedAndAuthenticated()) {
-    return Promise.resolve(keycloak.idToken);
+    return Promise.resolve(keycloak.token);
   }
 
   return _initialize()
     .then((authenticated) =>
       (!authenticated)
         ? keycloak.login({ redirectUri, idpHint: 'bcsc' })
-        : keycloak.idToken // Token
+        : keycloak.token
     )
     .catch(() => Promise.reject(new Error('Failed Authentication!')));
 }
