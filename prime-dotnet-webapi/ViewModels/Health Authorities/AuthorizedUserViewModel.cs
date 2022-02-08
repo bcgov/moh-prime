@@ -22,7 +22,6 @@ namespace Prime.ViewModels.Parties
         public string Phone { get; set; }
         public string SmsPhone { get; set; }
         public string JobRoleTitle { get; set; }
-        public string EmploymentIdentifier { get; set; }
         public HealthAuthorityCode HealthAuthorityCode { get; set; }
         public AccessStatusType Status { get; set; }
     }

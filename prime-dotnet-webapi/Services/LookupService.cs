@@ -24,6 +24,11 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
+        public async Task<int> GetCareSettingCountAsync()
+        {
+            return await _context.Set<CareSetting>().CountAsync();
+        }
+
         public async Task<LookupEntity> GetLookupsAsync()
         {
             return new LookupEntity
