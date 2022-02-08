@@ -75,20 +75,23 @@ namespace Prime.Services
             var plrProviders = new List<PlrViewModel>();
             foreach (var cert in certifications)
             {
-                var provider = await _context.PlrProviders
+                var matches = await _context.PlrProviders
                     .AsNoTracking()
                     // Select PlrProviders that match a certification on both college AND license number
                     .Where(p => _context.CollegeForPlrRoleTypes.Where(rt2c => rt2c.ProviderRoleType == p.ProviderRoleType).Select(rt2c => rt2c.CollegeCode).Contains(cert.CollegeCode)
                         && p.CollegeId == cert.LicenseNumber)
                     .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
-                    .SingleOrDefaultAsync();
-                if (provider != null)
+                    .ToListAsync();
+                if (matches.Count > 0)
                 {
-                    // If a PlrViewModel has ExpertiseCodes, translate the codes to human-readable text
-                    // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manually before return
-                    provider.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e =>
-                        (provider.ExpertiseCode != null && provider.ExpertiseCode.Contains(e.Code))).Select(e => e.Name));
-                    plrProviders.Add(provider);
+                    foreach (var match in matches)
+                    {
+                        // If a PlrViewModel has ExpertiseCodes, translate the codes to human-readable text
+                        // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manually before return
+                        match.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e =>
+                            (match.ExpertiseCode != null && match.ExpertiseCode.Contains(e.Code))).Select(e => e.Name));
+                        plrProviders.Add(match);
+                    }
                 }
             }
             return plrProviders;
