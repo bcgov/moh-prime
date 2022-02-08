@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.ViewModels.HealthAuthorities
@@ -12,5 +13,6 @@ namespace Prime.ViewModels.HealthAuthorities
         public PrivacyOfficeViewModel PrivacyOffice { get; set; }
         public IEnumerable<HealthAuthorityContactViewModel> TechnicalSupports { get; set; }
         public IEnumerable<HealthAuthorityContactViewModel> PharmanetAdministrators { get; set; }
+        public HealthAuthorityOrganizationAgreementDocument HealthAuthorityOrganizationAgreementDocument { get; set; }
     }
 }

@@ -2,10 +2,12 @@ import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { AbstractBaseHealthAuthoritySite } from './abstract-base-health-authority-site.class';
 import { BaseHealthAuthoritySite } from './base-health-authority-site.model';
+import { HealthAuthorityCareType } from './health-authority-care-type.model';
 import { HealthAuthorityVendor } from './health-authority-vendor.model';
 
 export interface HealthAuthorityAdminSiteListDto extends BaseHealthAuthoritySite {
   healthAuthorityVendor: HealthAuthorityVendor;
+  healthAuthorityCareType: HealthAuthorityCareType;
   siteName: string;
   pec: string;
   healthAuthorityName: string;
@@ -20,6 +22,7 @@ export class HealthAuthoritySiteAdminList extends AbstractBaseHealthAuthoritySit
     public id: number,
     public healthAuthorityOrganizationId: HealthAuthorityEnum,
     public healthAuthorityVendor: HealthAuthorityVendor,
+    public healthAuthorityCareType: HealthAuthorityCareType,
     public siteName,
     public pec: string,
     public readonly completed: boolean,
@@ -35,6 +38,7 @@ export class HealthAuthoritySiteAdminList extends AbstractBaseHealthAuthoritySit
     super(id, healthAuthorityOrganizationId, completed, submittedDate, approvedDate, status);
 
     this.healthAuthorityVendor = healthAuthorityVendor;
+    this.healthAuthorityCareType = healthAuthorityCareType;
     this.siteName = siteName;
     this.pec = pec;
 

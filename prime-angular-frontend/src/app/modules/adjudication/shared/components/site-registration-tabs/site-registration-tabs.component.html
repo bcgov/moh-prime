@@ -55,7 +55,7 @@
                        (refresh)="onRefresh()"></app-search-form>
     </div>
 
-    <app-site-registration-table *ngIf="busy.closed"
+    <app-site-registration-table *ngIf="busy?.closed"
                                  [dataSource]="dataSource"
                                  [columns]="columns"
                                  (assign)="onAssign($event)"
