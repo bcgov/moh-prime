@@ -48,6 +48,7 @@ export class HealthAuthorityTableComponent implements OnInit, OnChanges {
       'authorizedUser',
       'vendor',
       'siteId',
+      'careType',
       'submissionDate',
       'state',
       'assignedTo',

@@ -45,7 +45,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public hasPractices: boolean;
   /**
    * @description
-   * Indicates the prescriber ID type associated with a
+   * Indicates the prescriber ID (PharmaNet) type associated with a
    * chosen licence code.
    *
    * NOTE: Used to show the practitioner ID form element

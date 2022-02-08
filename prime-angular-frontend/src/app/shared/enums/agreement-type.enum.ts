@@ -4,6 +4,8 @@ const OBO_TOA = 'On Behalf Of User';
 const COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT = 'Community Practice Organization';
 const COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT = 'Community Pharmacy Organization';
 const PHARMACY_OBO_TOA = 'Pharmacy On Behalf Of User';
+const DEVICE_PROVIDER_ORG_AGREEMENT = 'Device Provider Organization';
+const PHARMACY_TECHNICIAN_TOA = 'Pharmacy Technician Toa';
 
 export enum AgreementType {
   COMMUNITY_PHARMACIST_TOA = 1,
@@ -11,7 +13,9 @@ export enum AgreementType {
   OBO_TOA,
   COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT,
   COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT,
-  PHARMACY_OBO_TOA
+  PHARMACY_OBO_TOA,
+  DEVICE_PROVIDER_ORG_AGREEMENT,
+  PHARMACY_TECHNICIAN_TOA
 }
 
 export const AgreementTypeNameMap: Record<AgreementType, string> = {
@@ -20,7 +24,9 @@ export const AgreementTypeNameMap: Record<AgreementType, string> = {
   [AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT]: COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT,
   [AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT]: COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT,
   [AgreementType.OBO_TOA]: OBO_TOA,
-  [AgreementType.PHARMACY_OBO_TOA]: PHARMACY_OBO_TOA
+  [AgreementType.PHARMACY_OBO_TOA]: PHARMACY_OBO_TOA,
+  [AgreementType.DEVICE_PROVIDER_ORG_AGREEMENT]: DEVICE_PROVIDER_ORG_AGREEMENT,
+  [AgreementType.PHARMACY_TECHNICIAN_TOA]: PHARMACY_TECHNICIAN_TOA
 };
 
 // Paper Enrolment
