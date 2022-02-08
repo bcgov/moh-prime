@@ -347,9 +347,9 @@ namespace Prime.Controllers
             return Ok(document); ;
         }
 
-        // Get: api/health-authorities/1/organization-agreement/token
+        // GET: api/health-authorities/1/organization-agreement/token
         /// <summary>
-        /// Gets a download token for the latest orgnanization agreement for a health authority.
+        /// Gets a download token for the latest organization agreement for a health authority.
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         [HttpGet("{healthAuthorityId}/organization-agreement/token", Name = nameof(GetOgranizationAgreementDocumentToken))]
