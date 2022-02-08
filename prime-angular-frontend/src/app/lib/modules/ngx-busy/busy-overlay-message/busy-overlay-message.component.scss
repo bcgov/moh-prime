@@ -1,6 +1,19 @@
+.busy-front {
+  z-index: 9002;
+}
+
+.increased-opacity {
+  opacity: 0.8;
+}
+
 .align-center {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
+}
+
+.center {
+  display: flex;
+  justify-content: center;
 }
