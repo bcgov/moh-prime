@@ -81,8 +81,7 @@ namespace Prime
             var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
-                // Ensuring logging will appear, for demo purposes
-                .MinimumLevel.ControlledBy(new LoggingLevelSwitch() { MinimumLevel = Serilog.Events.LogEventLevel.Debug })
+                .MinimumLevel.ControlledBy(new LoggingLevelSwitch() { MinimumLevel = PrimeConfiguration.LogLevel })
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)

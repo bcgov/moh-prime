@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
-namespace My.Service.Logging
+namespace Prime.Helpers
 {
     /// <summary>
     /// From https://blog.elmah.io/asp-net-core-request-logging-middleware/
