@@ -6,18 +6,12 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "PEC",
-                table: "OboSite");
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "PEC",
-                table: "OboSite",
-                type: "text",
-                nullable: true);
+
         }
     }
 }
