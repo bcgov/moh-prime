@@ -94,11 +94,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.busyService.showMessagePipe(BUSY_SUBMISSION_MESSAGE, exhaustMap((result: boolean) =>
-          (result)
-            ? this.enrolmentResource.submitApplication(enrolment)
-            : EMPTY
-        ))
+        exhaustMap((result: boolean) => (result) ? of(noop) : EMPTY),
+        this.busyService.showMessagePipe(BUSY_SUBMISSION_MESSAGE, this.enrolmentResource.submitApplication(enrolment))
       )
       .subscribe(() => {
         this.toastService.openSuccessToast('Enrolment has been submitted');
