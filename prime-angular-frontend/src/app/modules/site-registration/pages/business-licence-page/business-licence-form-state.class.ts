@@ -104,7 +104,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
         // only updated based on a document upload occurring.
         //
         // NOTE: Direct access only through getter
-        '',
+        null,
         []
       ],
       expiryDate: [
