@@ -7,6 +7,7 @@ import { Subscription, Observable, of, noop, EMPTY } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { Address } from '@lib/models/address.model';
+import { BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -27,7 +28,6 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 
-import { BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 
 @Component({
   selector: 'app-overview',
