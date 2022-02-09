@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable, of, noop } from 'rxjs';
+import { Subscription, Observable, of, noop, EMPTY } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { Address } from '@lib/models/address.model';
@@ -94,7 +94,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.busyService.showMessagePipe(BUSY_SUBMISSION_MESSAGE, this.enrolmentResource.submitApplication(enrolment))
+        this.busyService.showMessagePipe(BUSY_SUBMISSION_MESSAGE, exhaustMap((result: boolean) =>
+          (result)
+            ? this.enrolmentResource.submitApplication(enrolment)
+            : EMPTY
+        ))
       )
       .subscribe(() => {
         this.toastService.openSuccessToast('Enrolment has been submitted');

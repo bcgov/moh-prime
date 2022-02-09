@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { EMPTY, Observable, pipe, MonoTypeOperatorFunction } from 'rxjs';
-import { tap, exhaustMap } from 'rxjs/operators';
+import { Observable, pipe, OperatorFunction } from 'rxjs';
+import { tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,10 +14,16 @@ export class BusyService {
     return this._message
   }
 
-  public showMessagePipe<T>(message: string, request: Observable<any>): MonoTypeOperatorFunction<T> {
+  /**
+   * @description
+   * @param message the message to be displayed when a busy has a subscription or observable
+   * @param operator the operator to run while the busy message and spinner are shown
+   * @returns OperatorFunction
+   */
+  public showMessagePipe<T>(message: string, operator: OperatorFunction<T, any>): OperatorFunction<T, Observable<any>> {
     return pipe(
       tap((_) => { this._message = message }),
-      exhaustMap((result: T) => (result) ? request : EMPTY),
+      operator,
       tap((_) => { this._message = '' })
     );
   }
