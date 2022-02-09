@@ -264,12 +264,6 @@
               {{ site.facilityName | default }}
             </app-enrollee-property>
 
-            <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
-                                   title="Site ID"
-                                   [makeBold]="true">
-              {{ site.pec | default }}
-            </app-enrollee-property>
-
             <app-enrollee-property title="Job Title"
                                    [makeBold]="true">
               {{ site.jobTitle | default }}
