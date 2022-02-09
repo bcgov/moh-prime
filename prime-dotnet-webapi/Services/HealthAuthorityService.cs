@@ -14,19 +14,25 @@ using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.HealthAuthoritySites.Internal;
 using Prime.Engines;
+using System;
+using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.Services
 {
     public class HealthAuthorityService : BaseService, IHealthAuthorityService
     {
+        private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
 
         public HealthAuthorityService(
             ApiDbContext context,
+            IDocumentManagerClient documentClient,
             ILogger<HealthAuthorityService> logger,
             IMapper mapper)
             : base(context, logger)
         {
+            _documentClient = documentClient;
             _mapper = mapper;
         }
 
@@ -261,6 +267,33 @@ namespace Prime.Services
                     && has.HealthAuthorityCareTypeId == healthAuthorityCareTypeId)
                 .Select(has => has.Id)
                 .ToListAsync();
+        }
+
+        public async Task<HealthAuthorityOrganizationAgreementDocument> AddOrReplaceBusinessLicenceDocumentAsync(int healthAuthorityId, Guid documentGuid)
+        {
+            var healthAuthority = await _context.HealthAuthorities
+                .Include(ha => ha.HealthAuthorityOrganizationAgreementDocument)
+                .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
+
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.HealthAuthorityOrganizationAgreements);
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
+            var doc = new HealthAuthorityOrganizationAgreementDocument
+            {
+                DocumentGuid = documentGuid,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now
+            };
+
+            healthAuthority.HealthAuthorityOrganizationAgreementDocument = doc;
+
+            _context.HealthAuthorities.Update(healthAuthority);
+            await _context.SaveChangesAsync();
+
+            return doc;
         }
     }
 }

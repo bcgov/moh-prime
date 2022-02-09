@@ -76,5 +76,17 @@ namespace Prime.Services
         {
             return await _documentManagerClient.FinalizeUploadAsync(documentGuid, filePath);
         }
+
+        public async Task<string> GetDownloadTokenForHealthAuthorityOrgAgreementDocument(int healthAuthorityId)
+        {
+            var healthAuthority = await _context.HealthAuthorities
+                .Include(ha => ha.HealthAuthorityOrganizationAgreementDocument)
+                .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
+            if (healthAuthority == null)
+            {
+                return null;
+            }
+            return await _documentManagerClient.CreateDownloadTokenAsync(healthAuthority.HealthAuthorityOrganizationAgreementDocument.DocumentGuid);
+        }
     }
 }
