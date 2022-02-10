@@ -20,6 +20,8 @@ import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { ConfigService } from '@config/config.service';
+import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
@@ -27,6 +29,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 
 @Component({
@@ -61,7 +64,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private enrolmentFormStateService: EnrolmentFormStateService,
     private toastService: ToastService,
     private formUtilsService: FormUtilsService,
-    private busyService: BusyService
+    private busyService: BusyService,
+    private configService: ConfigService
   ) {
     super(route, router);
 
@@ -218,7 +222,18 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       certificate: !enrolment.certifications?.length,
       certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length,
       deviceProvider: isDeviceProvider && !hasDeviceProviderIdentifier,
-      deviceProviderOrOboSite: (isDeviceProvider && !hasDeviceProviderIdentifier) && !enrolment.oboSites?.length
+      deviceProviderOrOboSite: (isDeviceProvider && !hasDeviceProviderIdentifier) && !enrolment.oboSites?.length,
+      missingPharmaNetId: this.isMissingPharmaNetId(enrolment.certifications)
     };
+  }
+
+  private isMissingPharmaNetId(certifications: CollegeCertification[]): boolean {
+    return certifications.every((cert: CollegeCertification) => {
+      const prescriberIdType = this.configService.getPrescriberIdType(cert.licenseCode);
+      if (prescriberIdType === PrescriberIdTypeEnum.Mandatory) {
+        return cert.practitionerId === null;
+      }
+      else { return false; }
+    });
   }
 }
