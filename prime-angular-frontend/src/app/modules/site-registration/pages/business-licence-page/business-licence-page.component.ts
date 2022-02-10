@@ -4,15 +4,18 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { Observable, concat } from 'rxjs';
+import { Observable, concat, EMPTY } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -137,14 +140,13 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     }
   }
 
-  // TODO: Put Dialog in her
   protected submissionRequest(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
     const siteId = this.route.snapshot.params.sid;
     const currentBusinessLicence = this.siteService.site.businessLicence;
     const updatedBusinessLicence = this.siteFormStateService.businessLicenceFormState.json.businessLicence;
     const documentGuid = this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value;
 
-    return concat(
+    const request$ = concat(
       this.siteResource.updateSite(this.siteFormStateService.json),
       ...this.businessLicenceUpdates(
         siteId,
@@ -153,6 +155,27 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
         documentGuid
       )
     );
+
+    if (this.siteFormStateService.businessLicenceFormState.pec.value) {
+      return request$;
+    }
+
+    const data: DialogOptions = {
+      title: 'Site ID',
+      message: `Provide a Site ID if you have one. If you do not have one, or do not know what it is, you may continue.`,
+      actionText: 'Continue'
+    };
+
+    return this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((confirmation: boolean) => {
+          if (confirmation) {
+            return request$;
+          }
+          return EMPTY;
+        })
+      );
   }
 
   protected afterSubmitIsSuccessful(): void {
