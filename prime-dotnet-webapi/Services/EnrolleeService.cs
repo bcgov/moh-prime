@@ -833,12 +833,6 @@ namespace Prime.Services
             return newNote;
         }
 
-        public async Task<int> GetEnrolleeCountAsync()
-        {
-            return await _context.Enrollees
-                .CountAsync();
-        }
-
         public async Task UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null)
         {
             var enrollee = await _context.Enrollees
