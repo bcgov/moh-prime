@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Prime.Models;
 using Prime.Models.HealthAuthorities;
 using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthorities;
@@ -25,5 +26,6 @@ namespace Prime.Services
         Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId);
         Task<IEnumerable<int>> GetSitesByVendorAsync(int healthAuthorityId, int healthAuthorityVendorId);
         Task<IEnumerable<int>> GetSitesByCareTypeAsync(int healthAuthorityId, int healthAuthorityCareTypeId);
+        Task<HealthAuthorityOrganizationAgreementDocument> AddOrReplaceBusinessLicenceDocumentAsync(int healthAuthorityId, Guid documentGuid);
     }
 }

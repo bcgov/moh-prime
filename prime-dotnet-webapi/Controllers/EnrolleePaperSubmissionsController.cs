@@ -19,18 +19,21 @@ namespace Prime.Controllers
     public class EnrolleePaperSubmissionsController : PrimeControllerBase
     {
         private readonly IAdminService _adminService;
+        private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
         private readonly IEnrolleeService _enrolleeService;
 
         public EnrolleePaperSubmissionsController(
             IAdminService adminService,
+            IBusinessEventService businessEventService,
             IEmailService emailService,
             IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
             IEnrolleeService enrolleeService
         )
         {
             _adminService = adminService;
+            _businessEventService = businessEventService;
             _emailService = emailService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
             _enrolleeService = enrolleeService;
@@ -400,6 +403,8 @@ namespace Prime.Controllers
             }
 
             await _enrolleeService.UpdateDateOfBirthAsync(enrolleeId, dateOfBirth);
+
+            await _businessEventService.CreateEnrolleeEventAsync(enrolleeId, "Paper Enrollee Date of Birth Updated");
 
             return NoContent();
         }
