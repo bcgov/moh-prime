@@ -3,13 +3,15 @@ import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { EMPTY, Subscription, Observable, of, noop } from 'rxjs';
+import { Subscription, Observable, of, noop, EMPTY } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { Address } from '@lib/models/address.model';
+import { BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { BusyService } from '@lib/modules/ngx-busy/busy.service';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -25,6 +27,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+
 
 @Component({
   selector: 'app-overview',
@@ -57,7 +60,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private enrolmentResource: EnrolmentResource,
     private enrolmentFormStateService: EnrolmentFormStateService,
     private toastService: ToastService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private busyService: BusyService
   ) {
     super(route, router);
 
@@ -86,14 +90,12 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       message: 'When your enrolment is submitted for adjudication, it can no longer be updated. Are you ready to submit your enrolment?',
       actionText: 'Submit Enrolment'
     };
+
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.enrolmentResource.submitApplication(enrolment)
-            : EMPTY
-        )
+        exhaustMap((result: boolean) => (result) ? of(noop) : EMPTY),
+        this.busyService.showMessagePipe(BUSY_SUBMISSION_MESSAGE, this.enrolmentResource.submitApplication(enrolment))
       )
       .subscribe(() => {
         this.toastService.openSuccessToast('Enrolment has been submitted');
