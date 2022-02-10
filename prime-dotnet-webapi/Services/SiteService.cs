@@ -62,7 +62,7 @@ namespace Prime.Services
                 })
                 .SingleAsync();
 
-            if (siteDto.PEC == pec)
+            if (siteDto.PEC == pec || pec == null)
             {
                 return true;
             }

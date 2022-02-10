@@ -137,6 +137,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     }
   }
 
+  // TODO: Put Dialog in her
   protected submissionRequest(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
     const siteId = this.route.snapshot.params.sid;
     const currentBusinessLicence = this.siteService.site.businessLicence;
