@@ -127,6 +127,16 @@ export class ConfigService implements IConfigService {
     return of({ ...this.configuration });
   }
 
+  public getPrescriberIdType(licenceCode: number): PrescriberIdTypeEnum {
+    const prescriberIdTypes = this.licenses
+      .filter(licenseConfig => licenseConfig.code === licenceCode)
+      .map(licenseConfig => licenseConfig.prescriberIdType);
+
+    return (prescriberIdTypes.length)
+      ? prescriberIdTypes[0]
+      : PrescriberIdTypeEnum.NA;
+  }
+
   /**
    * @description
    * Get the configuration for bootstrapping the application.

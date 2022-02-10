@@ -191,7 +191,7 @@ export class CollegeCertificationFormComponent implements OnInit {
           this.loadLicensesByNursingCategory(collegeLicenseGroupingCode);
         });
     } else {
-      const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
+      const prescriberIdType = this.configService.getPrescriberIdType(this.licenseCode.value);
       const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
       this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
     }
@@ -276,7 +276,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setPractitionerInformation(licenseCode: number) {
-    const prescriberIdType = this.prescriberIdTypeByLicenceCode(licenseCode);
+    const prescriberIdType = this.configService.getPrescriberIdType(licenseCode);
     let isPrescribing = this.isPrescribing;
 
     switch (prescriberIdType) {
@@ -322,16 +322,6 @@ export class CollegeCertificationFormComponent implements OnInit {
   private resetPractitionerIdStateAndValidators() {
     this.isPrescribing = false;
     this.formUtilsService.resetAndClearValidators(this.practitionerId);
-  }
-
-  private prescriberIdTypeByLicenceCode(licenceCode: number): PrescriberIdTypeEnum {
-    const prescriberIdTypes = this.licenses
-      .filter(licenseConfig => licenseConfig.code === licenceCode)
-      .map(licenseConfig => licenseConfig.prescriberIdType);
-
-    return (prescriberIdTypes.length)
-      ? prescriberIdTypes[0]
-      : PrescriberIdTypeEnum.NA;
   }
 
   private removeValidations() {
