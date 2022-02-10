@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription, of } from 'rxjs';
+import { Subscription, of, noop } from 'rxjs';
 
 import { BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -47,7 +47,7 @@ export class AvailableAccessComponent implements OnInit {
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.phsaEformsFormStateService.json;
-      this.busy = of(1).pipe(
+      this.busy = of(noop).pipe(
         this.busyService.showMessagePipe(BUSY_SUBMISSION_MESSAGE, this.phsaEformsResource.createEnrollee(payload))
       )
         .subscribe(() => this.nextRoute());

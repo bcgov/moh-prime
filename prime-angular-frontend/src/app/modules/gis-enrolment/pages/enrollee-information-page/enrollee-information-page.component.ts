@@ -4,9 +4,11 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { exhaustMap } from 'rxjs/operators';
 
+import { BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
+import { BusyService } from '@lib/modules/ngx-busy/busy.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { GisEnrolmentService } from '@gis/shared/services/gis-enrolment.service';
@@ -31,6 +33,7 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
     private formStateService: GisEnrolmentFormStateService,
     private gisEnrolmentService: GisEnrolmentService,
     private gisEnrolmentResource: GisEnrolmentResource,
+    private busyService: BusyService,
     route: ActivatedRoute,
     router: Router,
   ) {
@@ -41,7 +44,7 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.LDAP_INFO_PAGE }`]);
+    this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.LDAP_INFO_PAGE}`]);
   }
 
   public ngOnInit(): void {
@@ -61,11 +64,14 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
   protected performSubmission(): NoContent {
     return this.gisEnrolmentResource.updateEnrolment(this.formStateService.json)
       .pipe(
-        exhaustMap(() => this.gisEnrolmentResource.submission(this.gisEnrolmentService.enrolment.id))
+        this.busyService.showMessagePipe(
+          BUSY_SUBMISSION_MESSAGE,
+          this.gisEnrolmentResource.submission(this.gisEnrolmentService.enrolment.id)
+        )
       );
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.SUBMISSION_CONFIRMATION }`]);
+    this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.SUBMISSION_CONFIRMATION}`]);
   }
 }

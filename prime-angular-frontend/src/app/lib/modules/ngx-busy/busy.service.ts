@@ -21,14 +21,16 @@ export class BusyService {
    * @param request the function or observable that will run while the busy message and spinner are shown
    * @returns OperatorFunction
    */
-  public showMessagePipe<T, R>(message: string, request: R): UnaryFunction<Observable<T>, Observable<any>> {
+  public showMessagePipe<T, R extends Function | Observable<any>>(message: string, request: R): UnaryFunction<Observable<any>, Observable<any>> {
+    const operator = exhaustMap((value: T) => (typeof request === 'function')
+      ? request(value)
+      : request
+    );
+
     return pipe(
-      tap((_) => { this._message = message }),
-      exhaustMap((value: T) => (typeof request === 'function')
-        ? request(value)
-        : request
-      ),
-      tap((_) => { this._message = '' })
+      tap((_) => this._message = message),
+      operator,
+      tap((_) => this._message = '')
     );
   }
 }
