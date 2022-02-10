@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Prime.Helpers
 {
     /// <summary>
-    /// From https://blog.elmah.io/asp-net-core-request-logging-middleware/
+    /// Based on https://blog.elmah.io/asp-net-core-request-logging-middleware/
     /// </summary>
     public class RequestLoggingMiddleware
     {
@@ -16,12 +16,13 @@ namespace Prime.Helpers
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<RequestLoggingMiddleware>();
+            _logger.LogInformation("In RequestLoggingMiddleware constructor");
         }
 
         public async Task Invoke(HttpContext context)
         {
             _logger.LogInformation(
-                "Incoming Request:  {method} {url}",
+                "Incoming request:  {method} {url}",
                 context.Request?.Method,
                 context.Request?.Path.Value);
 
