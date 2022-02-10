@@ -80,6 +80,9 @@
             <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">
               Must contain only alphanumeric characters
             </mat-error>
+            <mat-error *ngIf="licenseNumber.hasError('numeric') || licenseNumber.hasError('length')">
+              Must contain only 5 numeric characters
+            </mat-error>
           </mat-form-field>
 
         </div>
