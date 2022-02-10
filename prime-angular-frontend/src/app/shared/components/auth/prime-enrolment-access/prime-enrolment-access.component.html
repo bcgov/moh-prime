@@ -1,6 +1,28 @@
 <div class="container">
   <app-banner></app-banner>
   <div class="row">
+    <app-alert *ngIf="loginCancelled"
+               type="info"
+               icon="error_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Login Cancelled
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        <p>You have cancelled your login to PRIME</p>
+        <p>For assistance with PRIME, contact {{ primeSupportPhoneNumber | phone }} or
+          <a [attr.href]="'mailto:' + primeSupportEmail">{{ primeSupportEmail }}</a>
+        <p>
+          For assistance logging in with the BC Services Card app, contact the Helpdesk
+          <a
+              target="_blank"
+              rel="noopener noreferrer"
+              [attr.href]="bcscHelpDeskUrl">
+              here</a>.
+        </p>
+      </ng-container>
+    </app-alert>
     <div class="col-sm-12 logo">
 
       <app-prime-logo label="right"
