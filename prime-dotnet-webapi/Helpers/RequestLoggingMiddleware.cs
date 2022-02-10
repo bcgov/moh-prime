@@ -12,11 +12,15 @@ namespace Prime.Helpers
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 
+        /// <summary>
+        /// Called once in <c>Startup</c>
+        /// </summary>
+        /// <param name="next"></param>
+        /// <param name="loggerFactory"></param>
         public RequestLoggingMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<RequestLoggingMiddleware>();
-            _logger.LogInformation("In RequestLoggingMiddleware constructor");
         }
 
         public async Task Invoke(HttpContext context)
