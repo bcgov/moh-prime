@@ -15,7 +15,7 @@ namespace Prime.Models
         [JsonIgnore]
         public EnrolmentStatus EnrolmentStatus { get; set; }
 
-        public int AdjudicatorNoteId { get; set; }
+        public int? AdjudicatorNoteId { get; set; }
 
         public EnrolleeNote AdjudicatorNote { get; set; }
 
