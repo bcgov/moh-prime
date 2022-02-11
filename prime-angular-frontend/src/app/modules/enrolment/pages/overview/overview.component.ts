@@ -229,7 +229,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
   private isMissingPharmaNetId(certifications: CollegeCertification[]): boolean {
     return certifications.some((cert: CollegeCertification) => {
-      const prescriberIdType = this.configService.getPrescriberIdType(cert.licenseCode);
+      const prescriberIdType = this.enrolmentService.getPrescriberIdType(cert.licenseCode);
       if (prescriberIdType === PrescriberIdTypeEnum.Mandatory) {
         return cert.practitionerId === null;
       }
