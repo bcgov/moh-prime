@@ -4468,6 +4468,9 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<int?>("HealthAuthorityOrganizationAgreementDocumentId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -4478,6 +4481,8 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HealthAuthorityOrganizationAgreementDocumentId");
 
                     b.ToTable("HealthAuthorityOrganization");
 
@@ -4720,6 +4725,39 @@ namespace Prime.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Prime.Models.HealthAuthorityOrganizationAgreementDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DocumentGuid")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Filename")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("UploadedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HealthAuthorityOrganizationAgreementDocument");
+                });
+
             modelBuilder.Entity("Prime.Models.IdentificationDocument", b =>
                 {
                     b.Property<int>("Id")
@@ -4895,7 +4933,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = "2.16.840.1.113883.4.538",
-                            Name = "NAPID"
+                            Name = "NDID"
                         });
                 });
 
@@ -6555,7 +6593,6 @@ namespace Prime.Migrations
                             Manual = false,
                             NamedInImReg = true,
                             Prefix = "L9",
-                            PrescriberIdType = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
@@ -6601,7 +6638,6 @@ namespace Prime.Migrations
                             Manual = false,
                             NamedInImReg = true,
                             Prefix = "L9",
-                            PrescriberIdType = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
@@ -12063,6 +12099,15 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.Navigation("Contact");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", b =>
+                {
+                    b.HasOne("Prime.Models.HealthAuthorityOrganizationAgreementDocument", "HealthAuthorityOrganizationAgreementDocument")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityOrganizationAgreementDocumentId");
+
+                    b.Navigation("HealthAuthorityOrganizationAgreementDocument");
                 });
 
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
