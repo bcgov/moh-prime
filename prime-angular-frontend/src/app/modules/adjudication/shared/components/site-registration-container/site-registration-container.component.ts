@@ -175,13 +175,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
           ),
           exhaustMap(() => deleteRequest$),
           exhaustMap(() => {
-            // Route on singular resource views after deletion to refresh results
-            if (this.route.snapshot.data.oid) {
-              this.routeUtils.routeTo(AdjudicationRoutes.SITE_REGISTRATIONS);
-              return EMPTY;
-            }
-            // Otherwise, stay on the list resource view and remove locally
-            of(noop);
+            this.routeUtils.routeTo([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.SITE_REGISTRATIONS]);
+            return EMPTY;
           })
         );
     }
