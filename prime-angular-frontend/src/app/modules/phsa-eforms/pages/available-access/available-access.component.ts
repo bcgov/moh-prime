@@ -47,9 +47,10 @@ export class AvailableAccessComponent implements OnInit {
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.phsaEformsFormStateService.json;
-      this.busy = of(noop).pipe(
-        this.busyService.showMessagePipe(BUSY_SUBMISSION_MESSAGE, this.phsaEformsResource.createEnrollee(payload))
-      )
+      this.busy = of(noop())
+        .pipe(
+          this.busyService.showMessagePipe(BUSY_SUBMISSION_MESSAGE, this.phsaEformsResource.createEnrollee(payload))
+        )
         .subscribe(() => this.nextRoute());
     } else {
       this.hasNoRoleError = true;

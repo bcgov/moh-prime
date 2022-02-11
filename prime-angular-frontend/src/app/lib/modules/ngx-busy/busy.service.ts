@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, pipe, UnaryFunction } from 'rxjs';
+import { Observable, isObservable, pipe, UnaryFunction } from 'rxjs';
 import { tap, exhaustMap } from 'rxjs/operators';
 
 @Injectable({
@@ -18,19 +18,21 @@ export class BusyService {
   /**
    * @description
    * @param message the message to be displayed when a busy has a busy thing (subscription, promise, array of either... etc)
-   * @param request the function or observable that will run while the busy message and spinner are shown
+   * @param observableOrFunction the observable or function that will run while the busy message and spinner are shown
    * @returns OperatorFunction
    */
-  public showMessagePipe<T, R extends Function | Observable<any>>(message: string, request: R): UnaryFunction<Observable<any>, Observable<any>> {
-    const operator = exhaustMap((value: T) => (typeof request === 'function')
-      ? request(value)
-      : request
-    );
+  public showMessagePipe<T, R>(
+    message: string,
+    observableOrFunction: Observable<T> | ((params: R) => Observable<T>)
+  ): UnaryFunction<Observable<unknown>, Observable<T>> {
+    const operator = isObservable(observableOrFunction)
+      ? exhaustMap(() => observableOrFunction)
+      : exhaustMap(observableOrFunction);
 
     return pipe(
-      tap((_) => this._message = message),
+      tap((_) => (this._message = message)),
       operator,
-      tap((_) => this._message = '')
+      tap((_) => (this._message = ''))
     );
   }
 }

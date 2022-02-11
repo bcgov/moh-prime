@@ -89,7 +89,9 @@ export class OverviewPageComponent implements OnInit {
         this.busyService.showMessagePipe(
           BUSY_SUBMISSION_MESSAGE,
           ((healthAuthoritySite: HealthAuthoritySite) =>
-            this.healthAuthoritySiteResource.healthAuthoritySiteSubmit(haid, sid, healthAuthoritySite.forUpdate())))
+            this.healthAuthoritySiteResource.healthAuthoritySiteSubmit(haid, sid, healthAuthoritySite.forUpdate())
+          )
+        )
       )
       .subscribe(() => this.nextRoute());
   }
