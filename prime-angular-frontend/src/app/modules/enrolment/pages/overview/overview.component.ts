@@ -78,7 +78,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public onSubmit(): void {
-    if (!this.enrolmentFormStateService.isValidSubmission) {
+    if (!this.enrolmentFormStateService.isValidSubmission || this.isMissingPharmaNetId(this.enrolment.certifications)) {
       this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
       return;
