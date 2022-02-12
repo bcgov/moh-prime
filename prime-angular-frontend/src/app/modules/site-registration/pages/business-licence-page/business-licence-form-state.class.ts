@@ -124,11 +124,6 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
   }
 
   private checkPecIsAssignable(): (value: string) => Observable<boolean> {
-    return (value: string) => {
-      if (value) {
-        return this.siteResource.pecAssignable(this.siteId, value);
-      }
-      return of(true);
-    }
+    return (value: string) => value ? this.siteResource.pecAssignable(this.siteId, value) : of(true);
   }
 }
