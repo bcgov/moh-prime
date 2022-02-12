@@ -88,6 +88,10 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
     );
   }
 
+  public get isSite247(): boolean {
+    return this.formState.businessDays.controls.every((bd: FormGroup) => this.is24Hours(bd));
+  }
+
   public on24Hours(change: MatCheckboxChange, group: FormGroup): void {
     (change.checked)
       ? group.patchValue(this.business24Hours)
@@ -110,6 +114,12 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
         FormControlValidators.requiredLength(4)
       ]);
     }
+  }
+
+  public onSite247(change: MatCheckboxChange): void {
+    this.formState.businessDays.controls.forEach((businessDay: FormGroup) => {
+      this.on24Hours(change, businessDay);
+    });
   }
 
   public onBack(): void {

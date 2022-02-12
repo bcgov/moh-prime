@@ -6,6 +6,7 @@ import { ConfigService } from '@config/config.service';
 import { LicenseConfig } from '@config/config.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
+import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
@@ -98,5 +99,15 @@ export class EnrolmentService implements IEnrolmentService {
     // Non-Practicing Pharmacy Technician (31), and
     // Podiatrists (59, 65, 66, 67)
     return ![29, 31, 59, 65, 66, 67].includes(licenseCode);
+  }
+
+  public getPrescriberIdType(licenceCode: number): PrescriberIdTypeEnum {
+    const prescriberIdTypes = this.configService.licenses
+      .filter(licenseConfig => licenseConfig.code === licenceCode)
+      .map(licenseConfig => licenseConfig.prescriberIdType);
+
+    return (prescriberIdTypes.length)
+      ? prescriberIdTypes[0]
+      : PrescriberIdTypeEnum.NA;
   }
 }

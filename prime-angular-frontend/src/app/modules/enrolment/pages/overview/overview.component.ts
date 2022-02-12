@@ -18,6 +18,8 @@ import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { ConfigService } from '@config/config.service';
+import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
@@ -25,6 +27,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 @Component({
   selector: 'app-overview',
@@ -57,7 +60,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private enrolmentResource: EnrolmentResource,
     private enrolmentFormStateService: EnrolmentFormStateService,
     private toastService: ToastService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private configService: ConfigService
   ) {
     super(route, router);
 
@@ -74,7 +78,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public onSubmit(): void {
-    if (!this.enrolmentFormStateService.isValidSubmission) {
+    if (!this.enrolmentFormStateService.isValidSubmission || this.isMissingPharmaNetId(this.enrolment.certifications)) {
       this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
       return;
@@ -216,7 +220,18 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       certificate: !enrolment.certifications?.length,
       certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length,
       deviceProvider: isDeviceProvider && !hasDeviceProviderIdentifier,
-      deviceProviderOrOboSite: (isDeviceProvider && !hasDeviceProviderIdentifier) && !enrolment.oboSites?.length
+      deviceProviderOrOboSite: (isDeviceProvider && !hasDeviceProviderIdentifier) && !enrolment.oboSites?.length,
+      missingPharmaNetId: this.isMissingPharmaNetId(enrolment.certifications)
     };
+  }
+
+  private isMissingPharmaNetId(certifications: CollegeCertification[]): boolean {
+    return certifications.some((cert: CollegeCertification) => {
+      const prescriberIdType = this.enrolmentService.getPrescriberIdType(cert.licenseCode);
+      if (prescriberIdType === PrescriberIdTypeEnum.Mandatory) {
+        return cert.practitionerId === null;
+      }
+      else { return false; }
+    });
   }
 }
