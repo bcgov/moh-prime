@@ -7,5 +7,4 @@ export interface OboSite {
   facilityName: string;
   jobTitle: string;
   physicalAddress: Address;
-  pec: string;
 }
