@@ -23,5 +23,9 @@ namespace Prime.Models.HealthAuthorities
         public ICollection<HealthAuthorityTechnicalSupport> TechnicalSupports { get; set; }
 
         public ICollection<HealthAuthorityPharmanetAdministrator> PharmanetAdministrators { get; set; }
+
+        public int? HealthAuthorityOrganizationAgreementDocumentId { get; set; }
+
+        public HealthAuthorityOrganizationAgreementDocument HealthAuthorityOrganizationAgreementDocument { get; set; }
     }
 }

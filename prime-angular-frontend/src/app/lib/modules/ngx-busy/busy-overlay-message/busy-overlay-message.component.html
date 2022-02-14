@@ -1,8 +1,16 @@
+<div [class.ng-busy-backdrop]="message"
+     [class.increased-opacity]="message"></div>
+
 <div class="ng-busy-default-wrapper">
+  <div *ngIf="message"
+       class="align-center busy-front">
 
-  <!--
-  // NOTE: Already obvious to user that load is occurring this seems
-  // annoying, but left in case it becomes required
-  -->
+    <div class="center mb-5">
+      <mat-spinner></mat-spinner>
+    </div>
 
+    <div class="center">
+      <h3>{{message}}</h3>
+    </div>
+  </div>
 </div>

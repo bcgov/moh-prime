@@ -13,22 +13,22 @@ namespace Prime.Controllers
     [AllowAnonymous]
     public class HealthcheckController : PrimeControllerBase
     {
-        private readonly IEnrolleeService _enrolleeService;
+        private readonly ILookupService _lookupService;
 
-        public HealthcheckController(IEnrolleeService enrolleeService)
+        public HealthcheckController(ILookupService lookupService)
         {
-            _enrolleeService = enrolleeService;
+            _lookupService = lookupService;
         }
 
         // GET: api/Healthcheck
         /// <summary>
-        /// Does a healthcheck that queries the enrollee table to wake up the database
+        /// Does a healthcheck that queries the care setting lookup table to wake up the database
         /// </summary>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task GetHealthcheck()
         {
-            await _enrolleeService.GetEnrolleeCountAsync();
+            await _lookupService.GetCareSettingCountAsync();
         }
     }
 }
