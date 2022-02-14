@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription, of, noop } from 'rxjs';
+import { Subscription } from 'rxjs';
 
-import { BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { BusyService } from '@lib/modules/ngx-busy/busy.service';
 
 import { PartyTypeEnum } from '@phsa/shared/enums/party-type.enum';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
@@ -34,8 +32,7 @@ export class AvailableAccessComponent implements OnInit {
     protected router: Router,
     private phsaEformsResource: PhsaEformsResource,
     private phsaEformsFormStateService: PhsaEformsFormStateService,
-    private formUtilsService: FormUtilsService,
-    private busyService: BusyService
+    private formUtilsService: FormUtilsService
   ) {
     this.routeUtils = new RouteUtils(route, router, PhsaEformsRoutes.MODULE_PATH);
   }
@@ -47,10 +44,7 @@ export class AvailableAccessComponent implements OnInit {
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.phsaEformsFormStateService.json;
-      this.busy = of(noop())
-        .pipe(
-          this.busyService.showMessagePipe(BUSY_SUBMISSION_MESSAGE, this.phsaEformsResource.createEnrollee(payload))
-        )
+      this.busy = this.phsaEformsResource.createEnrollee(payload)
         .subscribe(() => this.nextRoute());
     } else {
       this.hasNoRoleError = true;
