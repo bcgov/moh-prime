@@ -341,8 +341,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         exclude: ['street2'],
         useDefaults: ['provinceCode', 'countryCode'],
         areDisabled: ['provinceCode', 'countryCode']
-      }),
-      pec: [null, []]
+      })
     });
   }
 
