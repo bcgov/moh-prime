@@ -457,7 +457,6 @@ namespace Prime.Services
                         HealthAuthorityCode = site.HealthAuthorityCode,
                         PhysicalAddress = newAddress,
                         SiteName = site.SiteName,
-                        PEC = site.PEC,
                         FacilityName = site.FacilityName,
                         JobTitle = site.JobTitle
                     };

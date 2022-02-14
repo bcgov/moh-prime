@@ -185,8 +185,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
         exclude: ['street2'],
         useDefaults: ['provinceCode', 'countryCode'],
         areDisabled: ['provinceCode', 'countryCode']
-      }),
-      pec: [null, []]
+      })
     });
   }
 }
