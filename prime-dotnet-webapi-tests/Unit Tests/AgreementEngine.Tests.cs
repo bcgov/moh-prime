@@ -1,4 +1,5 @@
-
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 using Prime.Models;
@@ -57,50 +58,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Theory]
-        // Community Pharmacy
-        [InlineData(CareSettingType.CommunityPharmacy, 1, true, true, null)]
-        [InlineData(CareSettingType.CommunityPharmacy, 1, true, false, null)]
-        [InlineData(CareSettingType.CommunityPharmacy, 1, false, true, null)]
-        [InlineData(CareSettingType.CommunityPharmacy, 2, true, true, AgreementType.CommunityPharmacistTOA)]
-        [InlineData(CareSettingType.CommunityPharmacy, 2, false, true, AgreementType.PharmacyOboTOA)]
-        // Community Practice
-        [InlineData(CareSettingType.CommunityPractice, 1, true, false, null)]
-        [InlineData(CareSettingType.CommunityPractice, 1, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 1, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 2, true, true, AgreementType.CommunityPharmacistTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 2, false, true, AgreementType.PharmacyOboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 3, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 3, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 4, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 4, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 5, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 5, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 6, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 6, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 7, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 7, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 8, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 8, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 9, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 9, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 10, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 10, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 11, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 11, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 12, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 12, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 13, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 13, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 14, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 14, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 15, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 15, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 16, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 16, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 17, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 17, false, true, AgreementType.OboTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 18, true, true, AgreementType.RegulatedUserTOA)]
-        [InlineData(CareSettingType.CommunityPractice, 18, false, true, AgreementType.OboTOA)]
+        [MemberData(nameof(SingleCareSettingTestData))]
         public void TestDetermineAgreementType_SingleCert_OneCareSetting(CareSettingType careSettingCode, int collegeCode, bool namedInImReg, bool licensedToProvideCare, AgreementType? expectedAgreementType)
         {
             var dto = new AgreementEngineDto
@@ -124,6 +82,30 @@ namespace PrimeTests.UnitTests
             var actual = AgreementEngine.DetermineAgreementType(dto);
 
             Assert.Equal(expectedAgreementType, actual);
+        }
+
+        public static IEnumerable<object[]> SingleCareSettingTestData()
+        {
+            // Pharmacists
+            yield return new object[] { CareSettingType.CommunityPharmacy, 2, true, false, null };
+            yield return new object[] { CareSettingType.CommunityPharmacy, 2, true, true, AgreementType.CommunityPharmacistTOA };
+            yield return new object[] { CareSettingType.CommunityPharmacy, 2, false, true, AgreementType.PharmacyOboTOA };
+
+            yield return new object[] { CareSettingType.CommunityPractice, 2, true, false, null };
+            yield return new object[] { CareSettingType.CommunityPractice, 2, true, true, AgreementType.CommunityPharmacistTOA };
+            yield return new object[] { CareSettingType.CommunityPractice, 2, false, true, AgreementType.PharmacyOboTOA };
+
+            // Everyone else
+            foreach (var collegeCode in Enumerable.Range(1, 18).Where(x => x != 2))
+            {
+                yield return new object[] { CareSettingType.CommunityPharmacy, collegeCode, true, false, null };
+                yield return new object[] { CareSettingType.CommunityPharmacy, collegeCode, true, true, null };
+                yield return new object[] { CareSettingType.CommunityPharmacy, collegeCode, false, true, null };
+
+                yield return new object[] { CareSettingType.CommunityPractice, collegeCode, true, false, null };
+                yield return new object[] { CareSettingType.CommunityPractice, collegeCode, true, true, AgreementType.RegulatedUserTOA };
+                yield return new object[] { CareSettingType.CommunityPractice, collegeCode, false, true, AgreementType.OboTOA };
+            }
         }
 
         [Fact]
