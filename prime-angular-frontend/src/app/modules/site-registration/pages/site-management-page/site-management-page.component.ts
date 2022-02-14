@@ -34,7 +34,6 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 })
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
-  public title: string;
   public organization: Organization;
   public organizationSitesExpiryDates: string[];
   public organizationAgreements: OrganizationAgreementViewModel[];
@@ -58,7 +57,6 @@ export class SiteManagementPageComponent implements OnInit {
     private addressPipe: AddressPipe,
     private configCodePipe: ConfigCodePipe
   ) {
-    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
