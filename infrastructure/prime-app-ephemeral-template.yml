@@ -650,22 +650,22 @@ objects:
                 memory: 500Mi
             startupProbe:
               httpGet:
-                path: /api/healthcheck
+                path: /api/healthcheck?p=startup
                 port: 8080
               timeoutSeconds: 30
               failureThreshold: 30
               periodSeconds: 35
             readinessProbe:
               httpGet:
-                path: /api/healthcheck
+                path: /api/healthcheck?p=readiness
                 port: 8080
               initialDelaySeconds: 5
               periodSeconds: 5
             livenessProbe:
               httpGet:
-                path: /api/healthcheck
+                path: /api/healthcheck?p=liveness
                 port: 8080
-              failureThreshold: 1
+              failureThreshold: 3
               periodSeconds: 5
             imagePullPolicy: IfNotPresent
             terminationMessagePolicy: File
