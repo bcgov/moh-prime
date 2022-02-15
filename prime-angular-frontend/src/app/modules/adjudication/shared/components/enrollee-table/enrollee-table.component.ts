@@ -50,7 +50,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Output() public sortEnrollee: EventEmitter<Sort>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
-  @ViewChild('secondaryPaginator') public secondaryPaginator: MatPaginator;
+  @ViewChild('secondaryPaginator', { static: true }) public secondaryPaginator: MatPaginator;
 
   public busy: Subscription;
   public dataSource: MatTableDataSource<EnrolleeListViewModel>;
@@ -189,26 +189,18 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.navigateEnrollee.emit(enrolleeId);
   }
 
-  public syncMainPaginator(event: ImprovedPageEvent): void {
-    this.secondaryPaginator.pageIndex = event.pageIndex;
-    this.secondaryPaginator.pageSize = event.pageSize;
+  public syncPaginator(event: ImprovedPageEvent, top: boolean): void {
+    const paginator = (top) ? this.paginator : this.secondaryPaginator;
+    const other = (!top) ? this.paginator : this.secondaryPaginator;
+
+    paginator.pageIndex = event.pageIndex;
+    paginator.pageSize = event.pageSize;
 
     if (event.stopPropogation) {
       return;
     }
     event.stopPropogation = true;
-    this.paginator.page.emit(event);
-  }
-
-  public syncSecondaryPaginator(event: ImprovedPageEvent): void {
-    this.paginator.pageIndex = event.pageIndex;
-    this.paginator.pageSize = event.pageSize;
-
-    if (event.stopPropogation) {
-      return;
-    }
-    event.stopPropogation = true;
-    this.secondaryPaginator.page.emit(event);
+    other.page.emit(event);
   }
 
   public ngOnInit(): void {

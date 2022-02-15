@@ -2,7 +2,7 @@
   <div class="col">
     <form [formGroup]="form">
       <app-paginator [hidePaginator]="hidePaginator">
-        <mat-paginator (page)="syncSecondaryPaginator($event)"></mat-paginator>
+        <mat-paginator (page)="syncPaginator($event, true)"></mat-paginator>
       </app-paginator>
 
       <table mat-table
@@ -265,7 +265,7 @@
 
       <app-paginator [hidePaginator]="hidePaginator">
         <mat-paginator #secondaryPaginator
-                       (page)="syncMainPaginator($event)"
+                       (page)="syncPaginator($event, false)"
                        [pageSize]="paginator.pageSize"
                        [pageIndex]="paginator.pageIndex"
                        [length]="paginator.length"
