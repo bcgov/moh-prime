@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, S
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
@@ -23,6 +23,10 @@ import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+
+class ImprovedPageEvent extends PageEvent {
+  public stopPropogation: boolean;
+}
 
 @UntilDestroy()
 @Component({
@@ -46,6 +50,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Output() public sortEnrollee: EventEmitter<Sort>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
+  @ViewChild('secondaryPaginator') public secondaryPaginator: MatPaginator;
 
   public busy: Subscription;
   public dataSource: MatTableDataSource<EnrolleeListViewModel>;
@@ -182,6 +187,28 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
 
   public navigateToEnrollee(enrolleeId: number): void {
     this.navigateEnrollee.emit(enrolleeId);
+  }
+
+  public syncMainPaginator(event: ImprovedPageEvent): void {
+    this.secondaryPaginator.pageIndex = event.pageIndex;
+    this.secondaryPaginator.pageSize = event.pageSize;
+
+    if (event.stopPropogation) {
+      return;
+    }
+    event.stopPropogation = true;
+    this.paginator.page.emit(event);
+  }
+
+  public syncSecondaryPaginator(event: ImprovedPageEvent): void {
+    this.paginator.pageIndex = event.pageIndex;
+    this.paginator.pageSize = event.pageSize;
+
+    if (event.stopPropogation) {
+      return;
+    }
+    event.stopPropogation = true;
+    this.secondaryPaginator.page.emit(event);
   }
 
   public ngOnInit(): void {
