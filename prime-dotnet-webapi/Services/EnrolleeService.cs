@@ -457,7 +457,6 @@ namespace Prime.Services
                         HealthAuthorityCode = site.HealthAuthorityCode,
                         PhysicalAddress = newAddress,
                         SiteName = site.SiteName,
-                        PEC = site.PEC,
                         FacilityName = site.FacilityName,
                         JobTitle = site.JobTitle
                     };
@@ -509,6 +508,8 @@ namespace Prime.Services
         public async Task DeleteEnrolleeAsync(int enrolleeId)
         {
             var enrollee = await _context.Enrollees
+                .Include(e => e.EnrolmentStatuses)
+                    .ThenInclude(es => es.EnrolmentStatusReference)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (enrollee == null)
@@ -831,12 +832,6 @@ namespace Prime.Services
             }
 
             return newNote;
-        }
-
-        public async Task<int> GetEnrolleeCountAsync()
-        {
-            return await _context.Enrollees
-                .CountAsync();
         }
 
         public async Task UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null)

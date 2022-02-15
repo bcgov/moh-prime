@@ -1,6 +1,6 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { InstanceConfigHolderService } from 'ng-busy';
+import { BusyService } from '../busy.service';
 
 @Component({
   selector: 'app-busy-overlay-message',
@@ -9,10 +9,10 @@ import { InstanceConfigHolderService } from 'ng-busy';
 })
 export class BusyOverlayMessageComponent {
   constructor(
-    @Inject('instanceConfigHolder') private instanceConfigHolder: InstanceConfigHolderService
+    private busyService: BusyService
   ) { }
 
   public get message() {
-    return this.instanceConfigHolder.config.message;
+    return this.busyService.message
   }
 }
