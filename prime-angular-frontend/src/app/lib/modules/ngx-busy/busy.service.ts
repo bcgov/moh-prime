@@ -17,9 +17,7 @@ export class BusyService {
 
   /**
    * @description
-   * @param message the message to be displayed when a busy has a busy thing (subscription, promise, array of either... etc)
-   * @param observableOrFunction the observable or function that will run while the busy message and spinner are shown
-   * @returns OperatorFunction
+   * Pipe for setting/clearing the busy message that wraps the execution of a customizeable operator function.
    */
   public showMessagePipe<T, R>(
     message: string,
