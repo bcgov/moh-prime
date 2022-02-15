@@ -23,8 +23,8 @@
         <div class="col-12">
 
           <mat-form-field class="w-100">
-            <mat-label> 
-               <strong>{{ healthAuthorityName }}</strong> Health Authority Facility Name 
+            <mat-label>
+              <strong>{{ healthAuthorityName }}</strong> Health Authority Facility Name
             </mat-label>
             <input matInput
                    formControlName="facilityName">
@@ -56,20 +56,6 @@
       <app-address-form [form]="site.get('physicalAddress')"
                         [formControlNames]="formControlNames"
                         [inBc]="true"></app-address-form>
-
-      <div *ngIf="careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
-           class="row">
-        <div class="col-12">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Site ID"
-                   formControlName="pec">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
 
     </section>
   </app-form-icon-group>
