@@ -251,11 +251,11 @@ namespace Prime
             // Matches request to an endpoint
             app.UseRouting();
 
-            app.UseMiddleware<RequestLoggingMiddleware>();
-
             // Enable automatic tracing integration.
             // Make sure to put this middleware right after `UseRouting()`.
             app.UseSentryTracing();
+
+            app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.UseCors(CorsPolicy);
 
