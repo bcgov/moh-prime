@@ -93,27 +93,30 @@
       {{ site.businessLicence.deferredLicenceReason | default }}
     </app-enrollee-property>
 
-    <ng-container *ngIf="site.businessLicence?.businessLicenceDocument && !admin; else businessLicenceListView">
-      <app-enrollee-property title="Expiry"
-                             [hasError]="!site.businessLicence?.expiryDate && withinRenewalPeriod"
-                             [errorMessage]="'Business licence expiry date is required'">
-        {{ site.businessLicence?.expiryDate | formatDate | default }}
-      </app-enrollee-property>
+    <ng-container *ngIf="!admin; else businessLicenceListView">
+      <ng-container *ngIf="site.businessLicence?.businessLicenceDocument">
 
-      <app-enrollee-property title="Filename">
-        <ng-container *ngIf="!businessLicenceUpdated; else businessLicenceUpdatedMessage">
-          <button mat-stroked-button
-                  color="primary"
-                  (click)="getBusinessLicence(site.businessLicence.id)">
-            <mat-icon class="mr-1">attachment</mat-icon>
-            {{ site.businessLicence?.businessLicenceDocument?.filename | default }}
-          </button>
-        </ng-container>
-        <ng-template #businessLicenceUpdatedMessage>
-          New business licence document has been uploaded for submission
-        </ng-template>
-      </app-enrollee-property>
+        <app-enrollee-property title="Expiry"
+                               [hasError]="!site.businessLicence?.expiryDate && withinRenewalPeriod"
+                               [errorMessage]="'Business licence expiry date is required'">
+          {{ site.businessLicence?.expiryDate | formatDate | default }}
+        </app-enrollee-property>
 
+        <app-enrollee-property title="Filename">
+          <ng-container *ngIf="!businessLicenceUpdated; else businessLicenceUpdatedMessage">
+            <button mat-stroked-button
+                    color="primary"
+                    (click)="getBusinessLicence(site.businessLicence.id)">
+              <mat-icon class="mr-1">attachment</mat-icon>
+              {{ site.businessLicence?.businessLicenceDocument?.filename | default }}
+            </button>
+          </ng-container>
+          <ng-template #businessLicenceUpdatedMessage>
+            New business licence document has been uploaded for submission
+          </ng-template>
+        </app-enrollee-property>
+
+      </ng-container>
     </ng-container>
 
     <ng-template #businessLicenceListView>

@@ -1,15 +1,25 @@
-import { Component, Input, OnInit, TemplateRef } from '@angular/core';
+import { Component, Inject, Input, OnInit, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
+import { EMPTY, noop, Observable, of, Subscription } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
+import { Role } from '@auth/shared/enum/role.enum';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
+import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
-import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-health-authority-site-container',
@@ -32,11 +42,43 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
     protected dialog: MatDialog,
     protected siteResource: SiteResource,
     protected adjudicationResource: AdjudicationResource,
-    protected healthAuthSiteResource: HealthAuthoritySiteResource
+    protected healthAuthSiteResource: HealthAuthoritySiteResource,
+    @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
+    private permissionService: PermissionService
   ) {
     super(route, router, dialog, siteResource, adjudicationResource, healthAuthSiteResource);
 
     this.hasActions = false;
+  }
+
+  public deleteSite(record: { siteId: number }) {
+    if (record.siteId) {
+      const request$ = this.siteResource.deleteSite(record.siteId);
+      this.busy = this.deleteResource<HealthAuthoritySiteAdminList>(this.defaultOptions.delete('site'), request$)
+        .subscribe(() => { });
+    }
+  }
+
+  private deleteResource<T>(dialogOptions: DialogOptions, deleteRequest$: NoContent): Observable<T> {
+    if (this.permissionService.hasRoles(Role.SUPER_ADMIN)) {
+      return this.dialog.open(ConfirmDialogComponent, { data: dialogOptions })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => deleteRequest$),
+          exhaustMap(() => {
+            this.routeUtils.routeTo(
+              [AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.SITE_REGISTRATIONS],
+              { queryParams: { careSetting: CareSettingEnum.HEALTH_AUTHORITY } }
+            );
+            return EMPTY;
+          })
+        );
+    }
   }
 
   public ngOnInit(): void {

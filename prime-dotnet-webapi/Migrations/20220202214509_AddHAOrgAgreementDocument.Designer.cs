@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,14 +10,15 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220202214509_AddHAOrgAgreementDocument")]
+    partial class AddHAOrgAgreementDocument
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.14")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
@@ -3558,7 +3560,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EmailType = 8,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "@{ var renewalDate = Model.RenewalDate.Date.ToShortDateString(); }Dear @Model.EnrolleeName, <br> <br> It is a requirement of PharmaNet that your PRIME information remains current. To continue to use PharmaNet, renew your enrolment information by @renewalDate. This can be done quickly:<br> <br><ul><li>Log in to PRIME <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a></li><li>Review your information and update where needed</li><li>Re-read and accept the PharmaNet user terms of access</li><li>Submit your enrolment</li></ul>In some cases, you will need to share your PRIME enrolment email with the person who sets up PharmaNet accounts at your workplace (PharmaNet administrator), as you did when you first enrolled.<br> <br>Share your approval notification with your PharmaNet administrator if:<br> <br><ul><li>You changed workplaces or care setting (new clinic, health authority, etc.) since you last updated your account (or you updated and did not share the approval notification with your new PharmaNet administrator)</a></li><li>You originally enrolled in PRIME before February 1, 2022 as a nurse (LPN, RN, or RPN), pharmacy technician or midwife</li></ul>Thank you, <br> <br>PRIME Support <br>1-844-397-7463<br> <br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            Template = "@{ var renewalDate = Model.RenewalDate.Date.ToShortDateString(); } Dear @Model.EnrolleeName, <br> <br> Your enrolment for PharmaNet access will expire on @renewalDate. In order to continue to use PharmaNet, you must renew your enrolment information. <br> Click here to visit PRIME. <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -3580,7 +3582,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EmailType = 10,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "Dear @Model.EnrolleeName,<br> <br>You did not renew your PRIME enrolment in time. PRIME will instruct your PharmaNet software vendor to de-activate your account. You may not use PharmaNet without being enrolled in PRIME. Any access will be recorded as unauthorized.<br> <br><strong>You can re-enrol in PRIME</strong> if you need PharmaNet to care for patients.<br> <br>Thank you,<br> <br>PRIME Support <br>1-844-397-7463<br> <br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            Template = "Dear @Model.EnrolleeName, <br> <br> Your enrolment has not been renewed. PRIME will be notifying your PharmaNet software vendor to deactivate your account.",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -4933,7 +4935,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = "2.16.840.1.113883.4.538",
-                            Name = "NDID"
+                            Name = "NAPID"
                         });
                 });
 
@@ -6593,6 +6595,7 @@ namespace Prime.Migrations
                             Manual = false,
                             NamedInImReg = true,
                             Prefix = "L9",
+                            PrescriberIdType = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
@@ -6638,6 +6641,7 @@ namespace Prime.Migrations
                             Manual = false,
                             NamedInImReg = true,
                             Prefix = "L9",
+                            PrescriberIdType = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
@@ -6778,6 +6782,9 @@ namespace Prime.Migrations
 
                     b.Property<string>("JobTitle")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PEC")
                         .HasColumnType("text");
 
                     b.Property<int>("PhysicalAddressId")
