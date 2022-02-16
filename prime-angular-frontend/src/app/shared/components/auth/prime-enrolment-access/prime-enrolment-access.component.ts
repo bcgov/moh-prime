@@ -10,6 +10,7 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { HtmlComponent } from '@shared/components/dialogs/content/html/html.component';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
+import { CollectionNoticeService } from '@shared/services/collection-notice.service';
 
 @UntilDestroy()
 @Component({
@@ -31,7 +32,8 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private viewportService: ViewportService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private collectionNoticeService: CollectionNoticeService
   ) {
     this.login = new EventEmitter<void>();
     this.locationCode = BannerLocationCode.ENROLMENT_LANDING_PAGE;
@@ -47,20 +49,10 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
 
   public onLogin() {
     const data: DialogOptions = {
-      title: 'Collection of Personal Information Notice',
-      //      title: 'Collection Notice',
+      title: this.collectionNoticeService.Title,
       component: HtmlComponent,
       data: {
-        content: `<p>
-            The personal information you provide to the PRIME application is collected by the British Columbia Ministry
-            of Health under the authority of s. 26(a) and 26(c) of the Freedom of Information and Protection of Privacy
-            Act (FOIPPA) and s. 22(1)(b) of the Pharmaceutical Services Act for the purpose of managing your access to,
-            and use of, PharmaNet. If you have any questions about the collection or use of this information, call
-          </p>
-          <p>
-            Director, Information and PharmaNet Innovation at <a href="tel:+${this.config.phoneNumbers.director}">${this.config.phoneNumbers.director}</a>
-            or <a href="mailto:${this.config.prime.email}">${this.config.prime.email}</a>.
-          </p>`,
+        content: this.collectionNoticeService.ContentToRender,
       },
       actionText: 'Next',
     };
