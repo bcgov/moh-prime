@@ -13,8 +13,12 @@ export class EnrolmentCollectionNoticeComponent extends AbstractCollectionNotice
   }
 
   public onAccept() {
-    this.accepted.emit();
+
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    // Display of the Collection Notice has moved to PrimeEnrolmentAccessComponent
+    // so we jump through this component but leave it in place for other routing logic
+    this.accepted.emit();
+  }
 }
