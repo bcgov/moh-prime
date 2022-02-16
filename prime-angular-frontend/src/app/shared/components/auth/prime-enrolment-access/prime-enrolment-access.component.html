@@ -11,15 +11,15 @@
       <ng-container #alertContent
                     class="alert-content">
         <p>You have cancelled your login to PRIME</p>
-        <p>For assistance with PRIME, contact {{ primeSupportPhoneNumber | phone }} or
-          <a [attr.href]="'mailto:' + primeSupportEmail">{{ primeSupportEmail }}</a>
+        <p>For assistance with PRIME, contact <app-prime-phone></app-prime-phone> or
+          <app-prime-support-email></app-prime-support-email>
         <p>
           For assistance logging in with the BC Services Card app, contact the Helpdesk
           <a
               target="_blank"
               rel="noopener noreferrer"
               [attr.href]="bcscHelpDeskUrl">
-              here</a>.
+              <u>here</u></a>.
         </p>
       </ng-container>
     </app-alert>

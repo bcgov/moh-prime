@@ -22,8 +22,6 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
   public bcscMobileSetupUrl: string;
   public loginCancelled: boolean;
   public bcscHelpDeskUrl: string;
-  public primeSupportEmail: string;
-  public primeSupportPhoneNumber: string;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -36,8 +34,6 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     this.loginCancelled =
       this.route.snapshot.queryParams.action === 'cancelled';
     this.bcscHelpDeskUrl = this.config.bcscHelpDeskUrl;
-    this.primeSupportEmail = this.config.prime.supportEmail;
-    this.primeSupportPhoneNumber = this.config.prime.phone;
   }
 
   public get isMobile(): boolean {
