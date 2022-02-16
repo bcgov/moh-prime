@@ -102,10 +102,12 @@
                               [rangePicker]="picker">
           <input matStartDate
                  formControlName="start"
-                 placeholder="Start date">
+                 placeholder="Start date"
+                 [readonly]="true">
           <input matEndDate
                  formControlName="end"
-                 placeholder="End date">
+                 placeholder="End date"
+                 [readonly]="true">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix
                                [for]="picker"></mat-datepicker-toggle>
