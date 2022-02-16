@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -19,14 +20,20 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
   @Output() public login: EventEmitter<void>;
   public locationCode: BannerLocationCode;
   public bcscMobileSetupUrl: string;
+  public loginCancelled: boolean;
+  public bcscHelpDeskUrl: string;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private viewportService: ViewportService
+    private viewportService: ViewportService,
+    private route: ActivatedRoute,
   ) {
     this.login = new EventEmitter<void>();
     this.locationCode = BannerLocationCode.ENROLMENT_LANDING_PAGE;
     this.bcscMobileSetupUrl = config.bcscMobileSetupUrl;
+    this.loginCancelled =
+      this.route.snapshot.queryParams.action === 'cancelled';
+    this.bcscHelpDeskUrl = this.config.bcscHelpDeskUrl;
   }
 
   public get isMobile(): boolean {
