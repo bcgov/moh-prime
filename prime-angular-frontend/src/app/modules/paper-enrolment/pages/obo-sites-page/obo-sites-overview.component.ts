@@ -47,12 +47,6 @@ import { OboSitesForm } from './obo-sites-form.model';
                 {{ oboSite.facilityName | default }}
               </app-enrollee-property>
 
-              <app-enrollee-property *ngIf="oboSite?.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
-                                     title="Site ID"
-                                     [makeBold]="true">
-                {{ oboSite.pec | default }}
-              </app-enrollee-property>
-
               <app-enrollee-property title="Job Title"
                                      [makeBold]="true">
                 {{ oboSite.jobTitle | default }}

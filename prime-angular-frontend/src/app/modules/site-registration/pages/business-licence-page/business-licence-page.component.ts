@@ -4,10 +4,9 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { Observable, concat, EMPTY } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { Observable, concat, EMPTY, pipe } from 'rxjs';
+import { exhaustMap, tap } from 'rxjs/operators';
 
-import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -148,7 +147,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
 
     const request$ = concat(
       this.siteResource.updateSite(this.siteFormStateService.json),
-      ...this.businessLicenceUpdates(
+      this.businessLicenceUpdates(
         siteId,
         currentBusinessLicence,
         updatedBusinessLicence,
@@ -245,10 +244,10 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     currentBusinessLicence: BusinessLicence,
     updatedBusinessLicence: BusinessLicence,
     documentGuid: string = null
-  ): Observable<BusinessLicence | BusinessLicenceDocument | void>[] {
+  ): Observable<BusinessLicence | BusinessLicenceDocument | void> {
     if (!currentBusinessLicence?.id) {
       // Create a business licence when none existed
-      return [this.siteResource.createBusinessLicence(siteId, updatedBusinessLicence, documentGuid)];
+      return this.siteResource.createBusinessLicence(siteId, updatedBusinessLicence, documentGuid);
     }
 
     updatedBusinessLicence.id = currentBusinessLicence.id;
@@ -256,26 +255,37 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     if (currentBusinessLicence.deferredLicenceReason !== updatedBusinessLicence.deferredLicenceReason) {
       // Remove an existing business licence document before updating
       // with a reason for deferment
-      return [
-        ...ArrayUtils.insertResultIf(
-          currentBusinessLicence?.businessLicenceDocument,
-          () => [this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id)]
-        ),
-        this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)
-      ];
+      return (currentBusinessLicence?.businessLicenceDocument)
+        ? this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id)
+          .pipe(
+            tap(() => this.siteFormStateService.businessLicenceFormState.patchDocument(null)),
+            exhaustMap(() => this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence))
+          )
+        // Create new document and update to remove the reason of deferment
+        : (documentGuid)
+          ? this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)
+            .pipe(
+              this.afterCreateBusinessLicenseDocumentPipe(siteId, updatedBusinessLicence)
+            )
+          // Reason of deferment changed
+          : this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)
     }
 
     // Create a business licence document each time a file is uploaded, and
     // update the existing business licence
-    return [
-      ...ArrayUtils.insertResultIf(
-        documentGuid,
-        () => [
-          this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id),
-          this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)
-        ]
-      ),
-      this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)
-    ];
+    return (documentGuid !== currentBusinessLicence.businessLicenceDocument?.documentGuid)
+      ? this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id)
+        .pipe(
+          exhaustMap(() => this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)),
+          this.afterCreateBusinessLicenseDocumentPipe(siteId, updatedBusinessLicence)
+        )
+      : this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence);
+  }
+
+  private afterCreateBusinessLicenseDocumentPipe(siteId: number, updatedBusinessLicence: BusinessLicence) {
+    return pipe(
+      tap((doc: BusinessLicenceDocument) => this.siteFormStateService.businessLicenceFormState.patchDocument(doc)),
+      exhaustMap(() => this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence))
+    )
   }
 }

@@ -149,7 +149,7 @@
     Request Remote Access
   </button>
 
-  <app-alert *ngIf="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite"
+  <app-alert *ngIf="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite || enrolmentErrors?.missingPharmaNetId"
              type="danger"
              icon="error">
     <ng-container #alertContent
