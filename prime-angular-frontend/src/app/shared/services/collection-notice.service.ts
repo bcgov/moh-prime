@@ -24,7 +24,7 @@ export class CollectionNoticeService {
       </p>
       <p>
         Director, Information and PharmaNet Innovation at <a href="tel:+${this.config.phoneNumbers.director}">${this.config.phoneNumbers.director}</a>
-        or <a href="mailto:${this.config.prime.email}">${this.config.prime.email}</a>.
+        or <a href="mailto:${this.config.prime.supportEmail}">${this.config.prime.supportEmail}</a>.
       </p>`;
   }
 }
