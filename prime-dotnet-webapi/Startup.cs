@@ -20,7 +20,6 @@ using Microsoft.OpenApi.Models;
 using Flurl;
 using Serilog;
 using SoapCore;
-using AutoMapper;
 using Newtonsoft.Json;
 using Wkhtmltopdf.NetCore;
 using IdentityModel.Client;
@@ -33,6 +32,7 @@ using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
+using Prime.Helpers;
 
 namespace Prime
 {
@@ -254,6 +254,8 @@ namespace Prime
             // Enable automatic tracing integration.
             // Make sure to put this middleware right after `UseRouting()`.
             app.UseSentryTracing();
+
+            app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.UseCors(CorsPolicy);
 
