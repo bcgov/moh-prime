@@ -1,6 +1,10 @@
 <div class="row">
   <div class="col">
     <form [formGroup]="form">
+      <app-paginator [hidePaginator]="hidePaginator">
+        <mat-paginator (page)="syncPaginator($event, true)"></mat-paginator>
+      </app-paginator>
+
       <table mat-table
              matSort
              class="w-100"
@@ -260,7 +264,12 @@
       </table>
 
       <app-paginator [hidePaginator]="hidePaginator">
-        <mat-paginator></mat-paginator>
+        <mat-paginator #secondaryPaginator
+                       (page)="syncPaginator($event, false)"
+                       [pageSize]="paginator.pageSize"
+                       [pageIndex]="paginator.pageIndex"
+                       [length]="paginator.length"
+                       [pageSizeOptions]="paginator.pageSizeOptions"></mat-paginator>
       </app-paginator>
     </form>
 
