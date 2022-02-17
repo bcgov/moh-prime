@@ -10,8 +10,10 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 import { Moment } from 'moment';
 
+import { BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { BusyService } from '@lib/modules/ngx-busy/busy.service';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
@@ -51,7 +53,8 @@ export class OverviewPageComponent implements OnInit {
     private healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     private healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private formUtilsService: FormUtilsService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private busyService: BusyService
   ) {
     this.showEditRedirect = true;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.MODULE_PATH));
@@ -74,6 +77,7 @@ export class OverviewPageComponent implements OnInit {
       message: 'When your site is saved, it will be submitted for review.',
       actionText: 'Save Site'
     };
+
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
@@ -82,8 +86,11 @@ export class OverviewPageComponent implements OnInit {
             ? of(this.healthAuthoritySiteFormStateService.json)
             : EMPTY
         ),
-        exhaustMap((healthAuthoritySite: HealthAuthoritySite) =>
-          this.healthAuthoritySiteResource.healthAuthoritySiteSubmit(haid, sid, healthAuthoritySite.forUpdate())
+        this.busyService.showMessagePipe(
+          BUSY_SUBMISSION_MESSAGE,
+          ((healthAuthoritySite: HealthAuthoritySite) =>
+            this.healthAuthoritySiteResource.healthAuthoritySiteSubmit(haid, sid, healthAuthoritySite.forUpdate())
+          )
         )
       )
       .subscribe(() => this.nextRoute());
