@@ -74,7 +74,7 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="Licence Number from College"
+                   [placeholder]="collegeCode.value === CollegeLicenceClassEnum.CPBC ? 'Registration Number' : 'Licence Number from College'"
                    formControlName="licenseNumber">
             <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
             <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">

@@ -98,7 +98,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: boolean) => (result) ? of(noop) : EMPTY),
+        exhaustMap((result: boolean) => (result) ? of(noop()) : EMPTY),
         this.busyService.showMessagePipe(BUSY_SUBMISSION_MESSAGE, this.enrolmentResource.submitApplication(enrolment))
       )
       .subscribe(() => {
