@@ -397,6 +397,7 @@ namespace Prime.Services
         private IQueryable<Enrollee> GetBaseQueryForEnrolleeApplicationRules()
         {
             return _context.Enrollees
+                .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.Submissions)
                 .Include(e => e.Addresses)
                     .ThenInclude(ea => ea.Address)

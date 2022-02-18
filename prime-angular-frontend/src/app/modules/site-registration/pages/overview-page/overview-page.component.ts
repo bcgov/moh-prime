@@ -8,9 +8,11 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { Moment } from 'moment';
 
+import { BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { BusyService } from '@lib/modules/ngx-busy/busy.service';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -54,7 +56,8 @@ export class OverviewPageComponent implements OnInit {
     private siteFormStateService: SiteFormStateService,
     private organizationService: OrganizationService,
     private toastService: ToastService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private busyService: BusyService
   ) {
     this.overviewType = (this.route.snapshot.routeConfig.path === SiteRoutes.ORGANIZATION_REVIEW)
       ? 'organization'
@@ -95,6 +98,7 @@ export class OverviewPageComponent implements OnInit {
       message: 'When your site is saved, it will be submitted for review.',
       actionText: 'Save Site'
     };
+
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
@@ -106,18 +110,20 @@ export class OverviewPageComponent implements OnInit {
             ])
             : EMPTY
         ),
-        exhaustMap(([updatedSite, uploadedDocumentGuid]: [Site, string]) => {
-          const { businessLicence, ...remainder } = updatedSite;
-          const documentGuid = (uploadedDocumentGuid) ? uploadedDocumentGuid : null;
-          const payload = {
-            ...remainder,
-            businessLicence: {
-              ...businessLicence,
-              documentGuid
-            }
-          };
-          return this.siteResource.submitSite(this.siteService.site.id, payload);
-        })
+        this.busyService.showMessagePipe(
+          BUSY_SUBMISSION_MESSAGE,
+          ([updatedSite, uploadedDocumentGuid]: [Site, string]) => {
+            const { businessLicence, ...remainder } = updatedSite;
+            const documentGuid = (uploadedDocumentGuid) ? uploadedDocumentGuid : null;
+            const payload = {
+              ...remainder,
+              businessLicence: {
+                ...businessLicence,
+                documentGuid
+              }
+            };
+            return this.siteResource.submitSite(this.siteService.site.id, payload);
+          })
       ).subscribe(() => this.nextRoute());
   }
 
