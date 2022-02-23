@@ -1,6 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { KeycloakService } from 'keycloak-angular';
 
@@ -52,10 +51,7 @@ describe('DashboardComponent', () => {
           useClass: MockAccessTokenService
         }
       ],
-      schemas: [
-        NO_ERRORS_SCHEMA,
-        CUSTOM_ELEMENTS_SCHEMA
-      ]
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 

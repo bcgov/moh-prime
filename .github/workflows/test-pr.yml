@@ -6,7 +6,6 @@ on:
       - 'master'
   workflow_dispatch:
 
-# Test 1234
 jobs:
   collect-frontend-coverage:
     defaults:
@@ -65,7 +64,6 @@ jobs:
 
   
   collect-backend-coverage:
-    needs: [ collect-frontend-coverage ]
     defaults:
       run:
         working-directory: ./prime-dotnet-webapi-tests
