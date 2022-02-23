@@ -15,9 +15,6 @@ module.exports = function (config) {
     client: {
       // leave Jasmine Spec Runner output visible in browser
       clearContext: false,
-      jasmine: {
-        random: false,
-      }
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/'),
