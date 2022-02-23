@@ -65,6 +65,7 @@ jobs:
 
   
   collect-backend-coverage:
+  needs: [ collect-frontend-coverage ]
     defaults:
       run:
         working-directory: ./prime-dotnet-webapi-tests
