@@ -12,6 +12,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 import { HealthAuthoritySiteContainerComponent } from './health-authority-site-container.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('HealthAuthoritySiteContainerComponent', () => {
   let component: HealthAuthoritySiteContainerComponent;
@@ -33,7 +34,8 @@ describe('HealthAuthoritySiteContainerComponent', () => {
           useValue: APP_DI_CONFIG
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

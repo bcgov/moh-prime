@@ -16,6 +16,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { SiteBannerListPageComponent } from './site-banner-list-page.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('SiteBannerListPageComponent', () => {
   let component: SiteBannerListPageComponent;
@@ -49,7 +50,8 @@ describe('SiteBannerListPageComponent', () => {
           provide: PermissionService,
           useClass: MockPermissionService
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

@@ -18,6 +18,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { OverviewComponent } from '@enrolment/pages/overview/overview.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('CollectionNoticeComponent', () => {
   let component: CollectionNoticeComponent;
@@ -56,7 +57,8 @@ describe('CollectionNoticeComponent', () => {
             provide: AuthService,
             useClass: MockAuthService
           }
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

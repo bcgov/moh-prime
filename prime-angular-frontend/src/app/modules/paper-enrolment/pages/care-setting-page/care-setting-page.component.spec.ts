@@ -13,6 +13,7 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
 import { CareSettingPageComponent } from './care-setting-page.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('CareSettingPageComponent', () => {
   let component: CareSettingPageComponent;
@@ -42,7 +43,8 @@ describe('CareSettingPageComponent', () => {
           provide: PermissionService,
           useClass: MockPermissionService
         },
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

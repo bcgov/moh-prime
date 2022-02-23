@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -11,13 +12,14 @@ describe('SiteRegAccessComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [SiteRegAccessComponent],
       providers: [
-        { 
-          provide: APP_CONFIG, 
-          useValue: AppConfig 
+        {
+          provide: APP_CONFIG,
+          useValue: AppConfig
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -12,6 +12,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { SiteOverviewComponent } from './site-overview.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('SiteOverviewComponent', () => {
   let component: SiteOverviewComponent;
@@ -36,7 +37,8 @@ describe('SiteOverviewComponent', () => {
           provide: PermissionService,
           useClass: MockPermissionService
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

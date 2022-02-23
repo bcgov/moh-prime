@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AuthorizedUserDeclinedPageComponent } from './authorized-user-declined-page.component';
@@ -8,9 +9,10 @@ describe('AuthorizedUserDeclinedPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AuthorizedUserDeclinedPageComponent ]
+      declarations: [AuthorizedUserDeclinedPageComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

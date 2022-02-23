@@ -26,6 +26,7 @@ import { EnrolmentModule } from '@enrolment/enrolment.module';
 
 
 import { AbsenceManagementPageComponent } from './absence-management-page.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AbsenceManagementPageComponent', () => {
   let component: AbsenceManagementPageComponent;
@@ -65,7 +66,8 @@ describe('AbsenceManagementPageComponent', () => {
           useClass: MockAccessTokenService
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

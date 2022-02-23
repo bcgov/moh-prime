@@ -8,6 +8,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { ConfigService } from '@config/config.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('SiteRegistrationActionsComponent', () => {
   let component: SiteRegistrationActionsComponent;
@@ -29,7 +30,8 @@ describe('SiteRegistrationActionsComponent', () => {
           useClass: MockConfigService
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

@@ -2,6 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PageSubheaderComponent } from './page-subheader.component';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('PageSubheaderComponent', () => {
   let component: PageSubheaderComponent;
@@ -15,7 +16,8 @@ describe('PageSubheaderComponent', () => {
         ],
         declarations: [
           PageSubheaderComponent
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

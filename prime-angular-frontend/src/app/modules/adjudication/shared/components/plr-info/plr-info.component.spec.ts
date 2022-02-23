@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PlrInfoComponent } from './plr-info.component';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('PlrInfoComponent', () => {
   let component: PlrInfoComponent;
@@ -14,9 +15,10 @@ describe('PlrInfoComponent', () => {
         PlrInfoComponent,
         DefaultPipe,
         FormatDatePipe
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

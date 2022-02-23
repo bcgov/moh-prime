@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
@@ -19,6 +19,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AuthorizedUserPageComponent } from './authorized-user-page.component';
+import { NgxMaskModule } from 'ngx-mask';
 
 describe('AuthorizedUserPageComponent', () => {
   let component: AuthorizedUserPageComponent;
@@ -34,7 +35,8 @@ describe('AuthorizedUserPageComponent', () => {
         RouterTestingModule,
         ReactiveFormsModule,
         NgxMaterialModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        NgxMaskModule.forRoot()
       ],
       declarations: [
         AuthorizedUserPageComponent
@@ -60,7 +62,7 @@ describe('AuthorizedUserPageComponent', () => {
         OrganizationFormStateService,
         CapitalizePipe
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 

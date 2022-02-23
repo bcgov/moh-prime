@@ -13,6 +13,7 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 
 import { SiteOverviewPageComponent } from './site-overview-page.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('SiteOverviewPageComponent', () => {
   let component: SiteOverviewPageComponent;
@@ -38,7 +39,8 @@ describe('SiteOverviewPageComponent', () => {
           useClass: MockPermissionService
         },
         CapitalizePipe
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

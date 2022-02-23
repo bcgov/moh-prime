@@ -20,6 +20,7 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { PaperEnrolleeReturneesPageComponent } from './paper-enrollee-returnees-page.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('PaperEnrolleeReturneesComponent', () => {
   let component: PaperEnrolleeReturneesPageComponent;
@@ -57,7 +58,10 @@ describe('PaperEnrolleeReturneesComponent', () => {
         },
         KeycloakService
       ],
-      declarations: [PaperEnrolleeReturneesPageComponent]
+      declarations: [
+        PaperEnrolleeReturneesPageComponent
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });
