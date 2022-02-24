@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
@@ -22,37 +22,37 @@ describe('SiteManagementPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-        imports: [
-          HttpClientTestingModule,
-          RouterTestingModule,
-          NgxMaterialModule
-        ],
-        declarations: [
-          SiteManagementPageComponent,
-          CapitalizePipe,
-          CasePipe
-        ],
-        providers: [
-          {
-            provide: APP_CONFIG,
-            useValue: APP_DI_CONFIG
-          },
-          {
-            provide: ConfigService,
-            useClass: MockConfigService
-          },
-          {
-            provide: AuthService,
-            useClass: MockAuthService
-          },
-          {
-            provide: AuthorizedUserService,
-            useClass: MockAuthorizedUserService
-          },
-          CapitalizePipe
-        ],
-        schemas: [NO_ERRORS_SCHEMA]
-      }
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        NgxMaterialModule
+      ],
+      declarations: [
+        SiteManagementPageComponent,
+        CapitalizePipe,
+        CasePipe
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
+        },
+        {
+          provide: AuthorizedUserService,
+          useClass: MockAuthorizedUserService
+        },
+        CapitalizePipe
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    }
     ).compileComponents();
   });
 

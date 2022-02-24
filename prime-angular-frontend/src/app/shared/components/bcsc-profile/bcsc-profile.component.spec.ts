@@ -17,6 +17,7 @@ import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { BcscProfileComponent } from './bcsc-profile.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('BcscProfileComponent', () => {
   let component: BcscProfileComponent;
@@ -43,7 +44,8 @@ describe('BcscProfileComponent', () => {
           useClass: MockAuthService
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 

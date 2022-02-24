@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HealthAuthSiteOverviewContainerComponent } from './health-auth-site-overview-container.component';
@@ -8,7 +9,8 @@ describe('HealthAuthOverviewContainerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HealthAuthSiteOverviewContainerComponent]
+      declarations: [HealthAuthSiteOverviewContainerComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

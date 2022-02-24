@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
@@ -18,7 +18,7 @@ describe('AdminLoginPageComponent', () => {
       imports: [
         RouterTestingModule
       ],
-      declarations: [ AdminLoginPageComponent ],
+      declarations: [AdminLoginPageComponent],
       providers: [
         {
           provide: APP_CONFIG,
@@ -29,9 +29,9 @@ describe('AdminLoginPageComponent', () => {
           useClass: MockAuthService
         }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

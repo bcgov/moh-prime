@@ -11,6 +11,7 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { RegulatoryPageComponent } from './regulatory-page.component';
 
 import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('RegulatoryPageComponent', () => {
   let component: RegulatoryPageComponent;
@@ -45,7 +46,8 @@ describe('RegulatoryPageComponent', () => {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

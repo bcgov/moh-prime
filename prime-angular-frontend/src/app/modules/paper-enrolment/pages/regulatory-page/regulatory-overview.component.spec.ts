@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { RegulatoryOverviewComponent } from './regulatory-overview.component';
 
 import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('RegulatoryOverviewComponent', () => {
   let component: RegulatoryOverviewComponent;
@@ -17,7 +18,8 @@ describe('RegulatoryOverviewComponent', () => {
       declarations: [
         RegulatoryOverviewComponent,
         DefaultPipe
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

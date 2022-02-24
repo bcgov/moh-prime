@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -15,6 +15,7 @@ import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUsersPageComponent } from './remote-users-page.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('RemoteUsersPageComponent', () => {
   let component: RemoteUsersPageComponent;
@@ -27,7 +28,8 @@ describe('RemoteUsersPageComponent', () => {
         RouterTestingModule,
         ReactiveFormsModule,
         NgxMaterialModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        MatTooltipModule
       ],
       declarations: [
         RemoteUsersPageComponent,
@@ -46,7 +48,7 @@ describe('RemoteUsersPageComponent', () => {
         AddressPipe,
         KeycloakService
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 

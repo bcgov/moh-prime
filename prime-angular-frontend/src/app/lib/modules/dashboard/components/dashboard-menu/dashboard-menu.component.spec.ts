@@ -1,5 +1,6 @@
+
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { DashboardMenuComponent } from './dashboard-menu.component';
 
@@ -12,7 +13,7 @@ describe('DashboardMenuComponent', () => {
       declarations: [
         DashboardMenuComponent
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

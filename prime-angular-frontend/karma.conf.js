@@ -24,7 +24,7 @@ module.exports = function (config) {
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_WARN,
     autoWatch: true,
     browsers: ['Chrome'],
     customLaunchers: {
@@ -69,6 +69,9 @@ module.exports = function (config) {
         base: 'ChromeHeadless',
         flags: ['--no-sandbox', '--disable-gpu']
       }
+    },
+    browserConsoleLogOptions: {
+      level: 'warn'
     }
   });
 };

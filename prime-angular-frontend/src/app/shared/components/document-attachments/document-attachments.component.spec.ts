@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('DocumentAttachmentsComponent', () => {
   let component: DocumentAttachmentsComponent;
@@ -51,7 +52,8 @@ describe('DocumentAttachmentsComponent', () => {
           provide: APP_CONFIG,
           useValue: AppConfig
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

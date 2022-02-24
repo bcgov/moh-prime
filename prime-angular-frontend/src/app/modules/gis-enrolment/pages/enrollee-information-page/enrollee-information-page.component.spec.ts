@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -9,6 +9,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EnrolleeInformationPageComponent } from './enrollee-information-page.component';
+import { NgxMaskModule } from 'ngx-mask';
 
 describe('EnrolleeInformationPageComponent', () => {
   let component: EnrolleeInformationPageComponent;
@@ -21,7 +22,8 @@ describe('EnrolleeInformationPageComponent', () => {
         RouterTestingModule,
         HttpClientTestingModule,
         BrowserAnimationsModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        NgxMaskModule.forRoot()
       ],
       declarations: [EnrolleeInformationPageComponent],
       providers: [
@@ -30,7 +32,7 @@ describe('EnrolleeInformationPageComponent', () => {
           useValue: APP_DI_CONFIG
         }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 

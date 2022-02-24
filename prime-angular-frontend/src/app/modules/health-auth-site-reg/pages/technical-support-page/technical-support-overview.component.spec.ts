@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TechnicalSupportOverviewComponent } from './technical-support-overview.component';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('TechnicalSupportOverviewComponent', () => {
   let component: TechnicalSupportOverviewComponent;
@@ -18,7 +19,8 @@ describe('TechnicalSupportOverviewComponent', () => {
         TechnicalSupportOverviewComponent,
         FullnamePipe,
         DefaultPipe
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 

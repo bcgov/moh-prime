@@ -5,6 +5,7 @@ import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
 import { NextStepsPageComponent } from './next-steps-page.component';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('NextStepsPageComponent', () => {
   let component: NextStepsPageComponent;
@@ -21,7 +22,8 @@ describe('NextStepsPageComponent', () => {
           useClass: MockOrganizationService
         }
       ],
-      declarations: [NextStepsPageComponent]
+      declarations: [NextStepsPageComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   });

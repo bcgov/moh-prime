@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,6 +16,8 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { BannerMaintenanceComponent } from './banner-maintenance.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 describe('BannerMaintenanceComponent', () => {
   let component: BannerMaintenanceComponent;
@@ -29,7 +31,9 @@ describe('BannerMaintenanceComponent', () => {
         RouterTestingModule,
         NgxMaskModule.forRoot(),
         NgxMaterialModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        MatInputModule,
+        MatDatepickerModule
       ],
       providers: [
         KeycloakService,
@@ -46,7 +50,7 @@ describe('BannerMaintenanceComponent', () => {
           useClass: MockPermissionService
         }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 
