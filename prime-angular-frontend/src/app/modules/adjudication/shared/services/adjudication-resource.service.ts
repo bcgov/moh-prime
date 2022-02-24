@@ -43,6 +43,7 @@ import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.mode
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import moment from 'moment';
+import { PaginatedList } from '@core/models/paginated-list.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,12 +56,12 @@ export class AdjudicationResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public getEnrollees(params: { textSearch?: string, statusCode?: number, isLinkedPaperEnrolment?: boolean }): Observable<EnrolleeListViewModel[]> {
+  public getEnrollees(params: { textSearch?: string, statusCode?: number, isLinkedPaperEnrolment?: boolean, page?: number }): Observable<PaginatedList<EnrolleeListViewModel>> {
     const httpParams = this.apiResourceUtilsService.makeHttpParams(params);
-    return this.apiResource.get<EnrolleeListViewModel[]>('enrollees', httpParams)
+    return this.apiResource.get<PaginatedList<EnrolleeListViewModel>>('enrollees', httpParams)
       .pipe(
-        map((response: ApiHttpResponse<EnrolleeListViewModel[]>) => response.result),
-        tap((enrollees: EnrolleeListViewModel[]) => this.logger.info('ENROLLEES', enrollees)),
+        map((response: ApiHttpResponse<PaginatedList<EnrolleeListViewModel>>) => response.result),
+        tap((enrollees: PaginatedList<EnrolleeListViewModel>) => this.logger.info('PAGINATED_ENROLLEES', enrollees)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolments could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrollees error has occurred: ', error);

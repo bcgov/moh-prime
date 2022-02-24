@@ -13,6 +13,7 @@
 
   <app-enrollee-table *ngIf="busy.closed || enrollees?.length"
                       [enrollees]="enrollees"
+                      [pagination]="pagination"
                       [enrolleeNavigation]="enrolleeNavigation"
                       [sort]="sort"
                       localStoragePrefix="enrollees"

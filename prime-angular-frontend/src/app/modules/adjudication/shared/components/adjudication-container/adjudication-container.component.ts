@@ -37,6 +37,8 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
 import { DateOfBirthComponent } from '@shared/components/dialogs/content/date-of-birth/date-of-birth.component';
 import moment from 'moment';
+import { PaginatedList } from '@core/models/paginated-list.model';
+import { Pagination } from '@core/models/pagination.model';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -53,6 +55,7 @@ export class AdjudicationContainerComponent implements OnInit {
   public enrollee: HttpEnrollee;
   public enrolleeNavigation: EnrolleeNavigation;
   public sort: Sort;
+  public pagination: Pagination;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -455,13 +458,14 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number, sortActive?: string, sortDirection?: SortDirection }) {
+  protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number, sortActive?: string, sortDirection?: SortDirection, page?: number }) {
     if (enrolleeId) {
       this.getEnrolleeById(enrolleeId);
     } else {
       this.busy = this.getEnrollees(queryParams)
-        .subscribe((enrollees: EnrolleeListViewModel[]) => {
-          this.enrollees = enrollees;
+        .subscribe((enrollees: PaginatedList<EnrolleeListViewModel>) => {
+          this.enrollees = enrollees.results;
+          this.pagination = enrollees;
           this.sort = { active: queryParams.sortActive, direction: queryParams.sortDirection };
         });
     }
@@ -488,7 +492,7 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  private getEnrollees({ textSearch, status }: { textSearch?: string, status?: StatusFilterEnum }) {
+  private getEnrollees({ textSearch, status, page }: { textSearch?: string, status?: StatusFilterEnum, page?: number }) {
     // Transform the "statuses" for (un)linked paper enrollees into their own query string
     var isLinkedPaperEnrolment = null;
     if (+status === PaperStatusEnum.UNLINKED_PAPER_ENROLMENT) {
@@ -500,7 +504,7 @@ export class AdjudicationContainerComponent implements OnInit {
       status = null;
     }
 
-    return this.adjudicationResource.getEnrollees({ textSearch, statusCode: status, isLinkedPaperEnrolment })
+    return this.adjudicationResource.getEnrollees({ textSearch, statusCode: status, isLinkedPaperEnrolment, page })
       .pipe(
         tap(() => this.showSearchFilter = true)
       );
