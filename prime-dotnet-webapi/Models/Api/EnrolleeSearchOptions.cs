@@ -5,5 +5,6 @@ namespace Prime.Models.Api
         public bool? IsLinkedPaperEnrolment { get; set; }
         public int? StatusCode { get; set; }
         public string TextSearch { get; set; }
+        public int? Page { get; set; }
     }
 }
