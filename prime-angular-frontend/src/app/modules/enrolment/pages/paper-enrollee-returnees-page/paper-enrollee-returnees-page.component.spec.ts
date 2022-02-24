@@ -20,6 +20,7 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { PaperEnrolleeReturneesPageComponent } from './paper-enrollee-returnees-page.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('PaperEnrolleeReturneesComponent', () => {
@@ -34,6 +35,7 @@ describe('PaperEnrolleeReturneesComponent', () => {
         HttpClientModule,
         MatSnackBarModule,
         ReactiveFormsModule,
+        HttpClientTestingModule
       ],
       providers: [
         {
