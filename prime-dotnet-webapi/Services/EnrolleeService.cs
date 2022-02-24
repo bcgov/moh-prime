@@ -126,7 +126,7 @@ namespace Prime.Services
             return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
-        public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
+        public async Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
             searchOptions ??= new EnrolleeSearchOptions();
 
@@ -144,7 +144,7 @@ namespace Prime.Services
                     && !_context.EnrolleeLinkedEnrolments
                         .Any(link => link.PaperEnrolleeId == e.Id));
 
-            return await _context.Enrollees
+            var query = _context.Enrollees
                 .AsNoTracking()
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(e => e.FirstName,
@@ -168,8 +168,9 @@ namespace Prime.Services
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
-                .OrderBy(e => e.Id)
-                .ToListAsync();
+                .OrderBy(e => e.Id);
+
+            return await PaginatedList<EnrolleeListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
         }
 
         public async Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId)

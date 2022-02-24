@@ -1,8 +1,11 @@
 <div class="row">
   <div class="col">
     <form [formGroup]="form">
-      <app-paginator [hidePaginator]="hidePaginator">
-        <mat-paginator (page)="syncPaginator($event, true)"></mat-paginator>
+      <app-paginator [hidePaginator]="pagination.totalPages === 1">
+        <mat-paginator (page)="onPage($event, true)"
+                       [pageIndex]="pagination.page - 1"
+                       [pageSize]="pagination.pageSize"
+                       [length]="pagination.total"></mat-paginator>
       </app-paginator>
 
       <table mat-table
@@ -263,13 +266,12 @@
             *matRowDef="let row; columns: columns;"></tr>
       </table>
 
-      <app-paginator [hidePaginator]="hidePaginator">
+      <app-paginator [hidePaginator]="pagination.totalPages === 1">
         <mat-paginator #secondaryPaginator
-                       (page)="syncPaginator($event, false)"
-                       [pageSize]="paginator.pageSize"
-                       [pageIndex]="paginator.pageIndex"
-                       [length]="paginator.length"
-                       [pageSizeOptions]="paginator.pageSizeOptions"></mat-paginator>
+                       (page)="onPage($event, false)"
+                       [pageIndex]="pagination.page - 1"
+                       [pageSize]="pagination.pageSize"
+                       [length]="pagination.total"></mat-paginator>
       </app-paginator>
     </form>
 

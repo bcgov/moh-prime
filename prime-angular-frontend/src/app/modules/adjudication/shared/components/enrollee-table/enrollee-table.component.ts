@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
@@ -23,6 +23,8 @@ import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { Pagination } from '@core/models/pagination.model';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 
 class ImprovedPageEvent extends PageEvent {
   public stopPropogation: boolean;
@@ -38,6 +40,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrollees: EnrolleeListViewModel[];
   @Input() public enrolleeNavigation: EnrolleeNavigation;
   @Input() public sort: Sort;
+  @Input() public pagination: Pagination;
   @Input() public localStoragePrefix: string;
   @Output() public notify: EventEmitter<EnrolleeListViewModel>;
   @Output() public assign: EventEmitter<number>;
@@ -54,7 +57,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
 
   public busy: Subscription;
   public dataSource: MatTableDataSource<EnrolleeListViewModel>;
-  public hidePaginator: boolean;
   public form: FormGroup;
   public columns: string[];
   public hasAppliedDateRange: boolean;
@@ -70,12 +72,15 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   private sortActiveKey: string;
   private sortDirectionKey: string;
 
+  protected routeUtils: RouteUtils;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private authService: AuthService,
     private utilsService: UtilsService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    router: Router
   ) {
     this.notify = new EventEmitter<EnrolleeListViewModel>();
     this.assign = new EventEmitter<number>();
@@ -102,6 +107,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     ];
     this.dataSource = new MatTableDataSource<EnrolleeListViewModel>([]);
     this.hasAssignedToFilter$ = new BehaviorSubject<boolean>(false);
+    this.routeUtils = new RouteUtils(activatedRoute, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
   }
 
   public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
@@ -189,17 +195,13 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.navigateEnrollee.emit(enrolleeId);
   }
 
-  public syncPaginator(event: ImprovedPageEvent, top: boolean): void {
-    const paginator = (top) ? this.paginator : this.secondaryPaginator;
+  public onPage(event: ImprovedPageEvent, top: boolean): void {
     const other = (!top) ? this.paginator : this.secondaryPaginator;
-
-    paginator.pageIndex = event.pageIndex;
-    paginator.pageSize = event.pageSize;
-
     if (event.stopPropogation) {
       return;
     }
     event.stopPropogation = true;
+    this.routeUtils.updateQueryParams({ page: `${event.pageIndex + 1}` });
     other.page.emit(event);
   }
 
@@ -209,10 +211,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.createFormInstance();
     this.initForm();
     this.dataSource.filterPredicate = this.getFilterPredicate();
-    this.dataSource.paginator = this.paginator;
-    // Paginator must exist within the DOM, but does not
-    // have to be visible based on the size of the dataset
-    this.hidePaginator = (this.paginator?.pageSize ?? 0) > this.enrollees.length;
     this.dataSource.data = this.enrollees;
 
     const queryParams = this.activatedRoute.snapshot.queryParams;
