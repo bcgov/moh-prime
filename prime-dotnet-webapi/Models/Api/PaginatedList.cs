@@ -27,7 +27,7 @@ namespace Prime.Models.Api
     {
         private static int GetPageSize()
         {
-            return 10;
+            return 100;
         }
 
         public int Page { get; private set; }
