@@ -4,8 +4,8 @@ import { AbstractCollectionNoticeAlert } from '@shared/components/collection-not
 
 @Component({
   selector: 'app-enrolment-collection-notice',
-  templateUrl: './enrolment-collection-notice.component.html',
-  styleUrls: ['./enrolment-collection-notice.component.scss']
+  template: '',
+  styleUrls: []
 })
 export class EnrolmentCollectionNoticeComponent extends AbstractCollectionNoticeAlert implements OnInit {
   constructor() {
