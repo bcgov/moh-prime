@@ -68,9 +68,13 @@ namespace Prime.Models.Api
 
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int page)
         {
+            var pageNumber = Math.Abs(page);
             var count = await source.CountAsync();
-            var items = await source.Skip((page - 1) * GetPageSize()).Take(GetPageSize()).ToListAsync();
-            return new PaginatedList<T>(items, count, page, GetPageSize());
+
+            pageNumber = (pageNumber * GetPageSize() < count) ? pageNumber : Convert.ToInt32(Math.Ceiling((double)count / GetPageSize()));
+
+            var items = await source.Skip((pageNumber - 1) * GetPageSize()).Take(GetPageSize()).ToListAsync();
+            return new PaginatedList<T>(items, count, pageNumber, GetPageSize());
         }
     }
 }

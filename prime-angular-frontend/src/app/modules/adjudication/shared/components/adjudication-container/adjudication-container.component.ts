@@ -467,6 +467,10 @@ export class AdjudicationContainerComponent implements OnInit {
           this.enrollees = enrollees.results;
           this.pagination = enrollees;
           this.sort = { active: queryParams.sortActive, direction: queryParams.sortDirection };
+
+          if (queryParams.page !== enrollees.page) {
+            this.routeUtils.updateQueryParams({ page: enrollees.page });
+          }
         });
     }
   }
