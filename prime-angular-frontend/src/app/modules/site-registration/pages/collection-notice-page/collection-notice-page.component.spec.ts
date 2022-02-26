@@ -33,7 +33,6 @@ describe('CollectionNoticePageComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        SiteRegistrationModule,
         RouterTestingModule.withRoutes([
           {
             path: SiteRoutes.ORGANIZATIONS,
