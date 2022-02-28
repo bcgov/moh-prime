@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, pipe, UnaryFunction } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
 import { AbstractContactsPage } from '@lib/classes/abstract-contacts-page.class';
@@ -15,6 +15,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 
 @Component({
   selector: 'app-technical-supports-page',
@@ -22,6 +23,10 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
   styleUrls: ['./technical-supports-page.component.scss']
 })
 export class TechnicalSupportsPageComponent extends AbstractContactsPage implements OnInit {
+
+  public healthAuthorityVendors: HealthAuthorityVendor[];
+
+
   constructor(
     protected route: ActivatedRoute,
     protected dialog: MatDialog,
@@ -40,6 +45,9 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
   public ngOnInit(): void {
     this.cardTitlePrefix = 'Technical Support: ';
     this.init();
+
+    this.busy = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+      .subscribe((healthAuthority: HealthAuthority) => { this.healthAuthorityVendors = healthAuthority.vendors });
   }
 
   protected getContactsPipe(): UnaryFunction<Observable<HealthAuthority>, Observable<Contact[]>> {

@@ -13,6 +13,19 @@
         <ng-container appPageSubheader2Summary>
           Provide information for a Technical Support Contact for this Health Authority.
         </ng-container>
+
+        <ng-container nonContactDetails>
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Title>Vendor</ng-container>
+            <ng-container appPageSubheader2Summary>
+              What vendor does this PharmaNet Administrator work with?
+            </ng-container>
+          </app-page-subheader2>
+          <ng-container *ngIf="healthAuthorityVendors">
+            Anything? {{healthAuthorityVendors.length}}
+          </ng-container>
+        </ng-container>
+
       </app-contact-profile-form>
 
     </ng-container>
