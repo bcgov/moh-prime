@@ -7,9 +7,9 @@ import { UnderagedComponent } from '@lib/modules/root-routes/components/underage
 import { KeycloakService } from 'keycloak-angular';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
+
 import { UnderagedGuard } from './underaged.guard';
-import { AppRoutes } from 'app/app.routes';
-import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
+
 
 describe('UnderagedGuard', () => {
   let guard: UnderagedGuard;
