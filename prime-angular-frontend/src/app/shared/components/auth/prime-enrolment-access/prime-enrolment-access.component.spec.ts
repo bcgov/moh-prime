@@ -1,5 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -12,7 +13,8 @@ describe('PrimeEnrolmentAccessComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        MatDialogModule
       ],
       declarations: [PrimeEnrolmentAccessComponent],
       providers: [
