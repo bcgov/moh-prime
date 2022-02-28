@@ -28,10 +28,11 @@ namespace create_mock_data
                 return;
             }
 
-            ApiDbContext dbContext = new ApiDbContextFactory().CreateDbContext(args);
+            ApiDbContext dbContext = null;
             int numEnrollees = int.Parse(args[0]);
             if (numEnrollees > 0)
             {
+                dbContext = new ApiDbContextFactory().CreateDbContext(args);
                 var enrolleeFactory = new EnrolleeFactory();
                 // Avoid primary key conflicts 
                 EnrolleeFactory.IdCounter = (dbContext.Enrollees.Count() != 0) ? (dbContext.Enrollees.Max(e => e.Id) + 1) : 1;
@@ -61,11 +62,16 @@ namespace create_mock_data
                 {
                     Log.Error(e, "Unexpected error encountered generating enrollees.");
                 }
+                finally
+                {
+                    dbContext.Dispose();
+                }
             }
 
             int numSites = int.Parse(args[1]);
             if (numSites > 0)
             {
+                dbContext = new ApiDbContextFactory().CreateDbContext(args);
                 var siteFactory = new CommunitySiteFactory();
                 try
                 {
@@ -81,6 +87,10 @@ namespace create_mock_data
                 catch (Exception e)
                 {
                     Log.Error(e, "Unexpected error encountered generating sites.");
+                }
+                finally
+                {
+                    dbContext.Dispose();
                 }
             }
         }
