@@ -30,14 +30,13 @@ export class CollectionNoticePageComponent implements OnInit {
     this.nextRoute = this.route.snapshot.data.redirectRouteSegments.nextRoute;
   }
 
-  public onAccept(): void {
+  public ngOnInit(): void {
+    // Display of the Collection Notice has moved to SiteRegAccessComponent
+    // so we jump through this component but leave it in place for other routing logic
+
     this.authService.hasJustLoggedIn = false;
     // Attempt to redirect to centralized default route, and the guard will
     // redirect an appropriate route when not allowed
     this.routeUtils.routeRelativeTo(this.nextRoute);
-  }
-
-  public ngOnInit(): void {
-    this.authService.hasJustLoggedIn = true;
   }
 }
