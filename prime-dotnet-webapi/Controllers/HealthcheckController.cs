@@ -25,6 +25,9 @@ namespace Prime.Controllers
         /// Does a healthcheck that queries the care setting lookup table to wake up the database
         /// </summary>
         [HttpGet]
+        [HttpGet("liveness")]
+        [HttpGet("readiness")]
+        [HttpGet("startup")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task GetHealthcheck()
         {
