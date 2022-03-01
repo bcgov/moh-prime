@@ -8,6 +8,8 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
 import { AbstractContactsPage } from '@lib/classes/abstract-contacts-page.class';
+import { ConfigService } from '@config/config.service';
+import { VendorConfig } from '@config/config.model';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
@@ -34,12 +36,19 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     protected fb: FormBuilder,
     protected healthAuthResource: HealthAuthorityResource,
     protected utilsService: UtilsService,
+    protected configService: ConfigService,
     router: Router
   ) {
     super(route, dialog, formUtilsService, fb, healthAuthResource, utilsService, router);
 
     this.backRoute = AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE;
     this.nextRoute = AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS;
+  }
+
+  public VendorName(vendorCode: number): string {
+    let matches = this.configService.vendors
+      .filter((vendorConfig: VendorConfig) => vendorConfig.code === vendorCode)
+    return matches ? matches[0].name : '';
   }
 
   public ngOnInit(): void {
