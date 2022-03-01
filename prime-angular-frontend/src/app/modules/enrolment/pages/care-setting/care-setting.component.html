@@ -27,26 +27,20 @@
 
             <app-form-icon-group [show]="careSettings.length > 1"
                                  (event)="removeCareSetting(i)">
-              <app-form-icon-group>
-                <mat-form-field class="w-100">
-                  <mat-label>Care Setting</mat-label>
-                  <mat-select formControlName="careSettingCode">
-                    <mat-option *ngFor="let careSettingType of filterCareSettingTypes(careSetting)"
-                                [disabled]="disableCareSetting(careSettingType.code)"
-                                [value]="careSettingType.code">
-                      {{ careSettingType.name }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="
+              <mat-form-field class="w-100">
+                <mat-label>Care Setting</mat-label>
+                <mat-select formControlName="careSettingCode">
+                  <mat-option *ngFor="let careSettingType of filterCareSettingTypes(careSetting)"
+                              [disabled]="disableCareSetting(careSettingType.code)"
+                              [value]="careSettingType.code">
+                    {{ careSettingType.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="
                                 careSetting.get('careSettingCode').hasError('required')">
-                    Required
-                  </mat-error>
-                </mat-form-field>
-
-                <ng-container appContextualContent>
-                  Care setting is the location where you access PharmaNet to deliver patient care.
-                </ng-container>
-              </app-form-icon-group>
+                  Required
+                </mat-error>
+              </mat-form-field>
             </app-form-icon-group>
 
           </ng-container>
