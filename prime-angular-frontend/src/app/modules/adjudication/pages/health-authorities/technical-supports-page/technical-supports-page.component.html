@@ -21,9 +21,11 @@
               What vendor does this PharmaNet Administrator work with?
             </ng-container>
           </app-page-subheader2>
-          <ng-container *ngIf="healthAuthorityVendors">
-            <ng-container *ngFor="let vendor of healthAuthorityVendors">
-              <mat-checkbox>
+          <ng-container *ngIf="healthAuthorityVendors"
+                        [formGroup]="formState.form">
+            <ng-container *ngFor="let vendor of healthAuthorityVendors; let i = index"
+                          formArrayName="vendors">
+              <mat-checkbox [formControlName]="i">
                 {{VendorName(vendor.vendorCode)}}
               </mat-checkbox>
             </ng-container>

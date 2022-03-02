@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, pipe, UnaryFunction } from 'rxjs';
@@ -18,6 +18,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
+import { TechnicalSupportsFormState } from '@lib/classes/technical-supports-form-state';
 
 @Component({
   selector: 'app-technical-supports-page',
@@ -51,12 +52,20 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     return matches ? matches[0].name : '';
   }
 
+  // public get vendors(): FormGroup {
+  //   return this.formState.form.get('vendors') as FormGroup;
+  // }
+
   public ngOnInit(): void {
     this.cardTitlePrefix = 'Technical Support: ';
     this.init();
 
     this.busy = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe((healthAuthority: HealthAuthority) => { this.healthAuthorityVendors = healthAuthority.vendors });
+  }
+
+  protected createFormInstance(): void {
+    this.formState = new TechnicalSupportsFormState(this.fb, this.formUtilsService);
   }
 
   protected getContactsPipe(): UnaryFunction<Observable<HealthAuthority>, Observable<Contact[]>> {
