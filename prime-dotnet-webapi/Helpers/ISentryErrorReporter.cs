@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace SentryCustomReporter
+namespace Prime.Helpers
 {
     public interface ISentryErrorReporter
     {

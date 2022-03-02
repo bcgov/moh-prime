@@ -34,8 +34,6 @@ using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.Helpers;
 
-using SentryCustomReporter;
-using SentryCustomMiddleware;
 namespace Prime
 {
     public class Startup

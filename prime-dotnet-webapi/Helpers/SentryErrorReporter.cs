@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Prime;
 using SharpRaven;
 
-namespace SentryCustomReporter
+namespace Prime.Helpers
 {
     public class SentryErrorReporter : ISentryErrorReporter
     {

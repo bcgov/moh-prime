@@ -2,8 +2,8 @@ using System;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
-using SentryCustomReporter;
-namespace SentryCustomMiddleware
+
+namespace Prime.Helpers
 {
     public class SentryMiddleware
     {
