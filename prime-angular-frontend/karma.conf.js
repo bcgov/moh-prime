@@ -15,6 +15,12 @@ module.exports = function (config) {
     client: {
       // leave Jasmine Spec Runner output visible in browser
       clearContext: false,
+      /*** Uncomment below for debugging ***/
+      // jasmine: {
+      //   random: false,
+      //   /*** Seed will only work if random is set to true ***/
+      //   seed: 1234
+      // }
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/'),
