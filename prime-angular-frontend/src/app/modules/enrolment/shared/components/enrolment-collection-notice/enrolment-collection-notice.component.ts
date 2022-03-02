@@ -4,8 +4,8 @@ import { AbstractCollectionNoticeAlert } from '@shared/components/collection-not
 
 @Component({
   selector: 'app-enrolment-collection-notice',
-  templateUrl: './enrolment-collection-notice.component.html',
-  styleUrls: ['./enrolment-collection-notice.component.scss']
+  template: '',
+  styleUrls: []
 })
 export class EnrolmentCollectionNoticeComponent extends AbstractCollectionNoticeAlert implements OnInit {
   constructor() {
@@ -13,8 +13,12 @@ export class EnrolmentCollectionNoticeComponent extends AbstractCollectionNotice
   }
 
   public onAccept() {
-    this.accepted.emit();
+
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    // Display of the Collection Notice has moved to PrimeEnrolmentAccessComponent
+    // so we jump through this component but leave it in place for other routing logic
+    this.accepted.emit();
+  }
 }
