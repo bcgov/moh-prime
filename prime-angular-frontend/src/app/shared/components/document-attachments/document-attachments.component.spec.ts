@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { DocumentAttachmentsComponent } from './document-attachments.component';
@@ -12,9 +12,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 describe('DocumentAttachmentsComponent', () => {
   let component: DocumentAttachmentsComponent;
   let fixture: ComponentFixture<DocumentAttachmentsComponent>;
-  const mockActivatedRoute = {
-    snapshot: { params: { eid: 1 } }
-  };
   const mockDocuments = [
     {
       id: 1,
@@ -40,7 +37,7 @@ describe('DocumentAttachmentsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        HttpClientModule,
+        HttpClientTestingModule,
         MatSnackBarModule
       ],
       declarations: [
@@ -66,7 +63,6 @@ describe('DocumentAttachmentsComponent', () => {
   });
 
   it('should create', () => {
-
     expect(component).toBeTruthy();
   });
 });

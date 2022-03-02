@@ -19,6 +19,8 @@ import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { OverviewComponent } from '@enrolment/pages/overview/overview.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { AppRoutes } from 'app/app.routes';
+import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 
 describe('CollectionNoticeComponent', () => {
   let component: CollectionNoticeComponent;
@@ -33,6 +35,10 @@ describe('CollectionNoticeComponent', () => {
             {
               path: EnrolmentRoutes.OVERVIEW,
               component: OverviewComponent
+            },
+            {
+              path: AppRoutes.UNDERAGED,
+              component: UnderagedComponent
             }
           ]),
           NgxMaterialModule,

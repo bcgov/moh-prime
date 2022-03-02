@@ -8,6 +8,9 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { CollectionNoticePageComponent } from './collection-notice-page.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 
+import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes'
+import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
+
 describe('CollectionNoticePageComponent', () => {
   let component: CollectionNoticePageComponent;
   let fixture: ComponentFixture<CollectionNoticePageComponent>;
@@ -17,7 +20,12 @@ describe('CollectionNoticePageComponent', () => {
       {
         imports: [
           HttpClientTestingModule,
-          RouterTestingModule
+          RouterTestingModule.withRoutes([
+            {
+              path: HealthAuthSiteRegRoutes.SITE_MANAGEMENT,
+              component: SiteManagementPageComponent
+            }
+          ])
         ],
         declarations: [CollectionNoticePageComponent],
         providers: [
