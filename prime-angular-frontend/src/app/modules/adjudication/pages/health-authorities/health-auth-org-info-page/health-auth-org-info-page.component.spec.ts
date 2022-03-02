@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -12,8 +12,8 @@ describe('HealthAuthOrgInfoPageComponent', () => {
   let component: HealthAuthOrgInfoPageComponent;
   let fixture: ComponentFixture<HealthAuthOrgInfoPageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
@@ -31,7 +31,7 @@ describe('HealthAuthOrgInfoPageComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HealthAuthOrgInfoPageComponent);

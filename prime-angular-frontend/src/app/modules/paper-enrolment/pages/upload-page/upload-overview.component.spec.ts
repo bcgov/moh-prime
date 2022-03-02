@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { UploadOverviewComponent } from './upload-overview.component';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -8,8 +8,8 @@ describe('UploadOverviewComponent', () => {
   let component: UploadOverviewComponent;
   let fixture: ComponentFixture<UploadOverviewComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
@@ -19,7 +19,7 @@ describe('UploadOverviewComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UploadOverviewComponent);

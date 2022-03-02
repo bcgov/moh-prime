@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { KeycloakService } from 'keycloak-angular';
@@ -18,8 +18,8 @@ describe('HealthAuthoritySiteContainerComponent', () => {
   let component: HealthAuthoritySiteContainerComponent;
   let fixture: ComponentFixture<HealthAuthoritySiteContainerComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         NgxBusyModule,
@@ -38,7 +38,7 @@ describe('HealthAuthoritySiteContainerComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HealthAuthoritySiteContainerComponent);

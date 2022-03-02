@@ -1,4 +1,4 @@
-import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -14,8 +14,8 @@ describe('SiteInformationFormComponent', () => {
   let component: SiteInformationFormComponent;
   let fixture: ComponentFixture<SiteInformationFormComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       declarations: [SiteInformationFormComponent],
       imports: [
         HttpClientTestingModule,
@@ -34,7 +34,7 @@ describe('SiteInformationFormComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(inject([SiteFormStateService], (siteFormStateService: SiteFormStateService) => {
     fixture = TestBed.createComponent(SiteInformationFormComponent);

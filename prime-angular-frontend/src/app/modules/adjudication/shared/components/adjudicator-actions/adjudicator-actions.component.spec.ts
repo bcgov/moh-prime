@@ -12,8 +12,8 @@ describe('AdjudicatorActionsComponent', () => {
   let component: AdjudicatorActionsComponent;
   let fixture: ComponentFixture<AdjudicatorActionsComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         NgxMaterialModule
@@ -27,7 +27,7 @@ describe('AdjudicatorActionsComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AdjudicatorActionsComponent);

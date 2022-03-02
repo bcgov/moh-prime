@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
@@ -10,8 +10,8 @@ describe('ContextualSiteNotificationComponent', () => {
   let component: ContextualSiteNotificationComponent;
   let fixture: ComponentFixture<ContextualSiteNotificationComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         NgxMaterialModule
@@ -26,7 +26,7 @@ describe('ContextualSiteNotificationComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContextualSiteNotificationComponent);

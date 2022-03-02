@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SharedModule } from '@shared/shared.module';
@@ -13,8 +13,8 @@ describe('EnrolleeOverviewComponent', () => {
   let component: EnrolleeOverviewComponent;
   let fixture: ComponentFixture<EnrolleeOverviewComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
@@ -32,7 +32,7 @@ describe('EnrolleeOverviewComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EnrolleeOverviewComponent);

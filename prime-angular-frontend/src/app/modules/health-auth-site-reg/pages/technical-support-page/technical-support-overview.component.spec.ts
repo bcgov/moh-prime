@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { TechnicalSupportOverviewComponent } from './technical-support-overview.component';
@@ -10,8 +10,8 @@ describe('TechnicalSupportOverviewComponent', () => {
   let component: TechnicalSupportOverviewComponent;
   let fixture: ComponentFixture<TechnicalSupportOverviewComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
@@ -22,7 +22,7 @@ describe('TechnicalSupportOverviewComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TechnicalSupportOverviewComponent);

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -12,8 +12,8 @@ describe('AuthorizedUserApprovedPageComponent', () => {
   let component: AuthorizedUserApprovedPageComponent;
   let fixture: ComponentFixture<AuthorizedUserApprovedPageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
@@ -31,7 +31,7 @@ describe('AuthorizedUserApprovedPageComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AuthorizedUserApprovedPageComponent);

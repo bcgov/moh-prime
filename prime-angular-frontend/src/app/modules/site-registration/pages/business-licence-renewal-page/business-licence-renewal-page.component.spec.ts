@@ -1,4 +1,4 @@
-import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,8 +16,8 @@ describe('BusinessLicenceRenewalPageComponent', () => {
   let component: BusinessLicenceRenewalPageComponent;
   let fixture: ComponentFixture<BusinessLicenceRenewalPageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
@@ -40,7 +40,7 @@ describe('BusinessLicenceRenewalPageComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(inject(
     [SiteService, SiteFormStateService],

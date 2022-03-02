@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -11,8 +11,8 @@ describe('GisEnrolmentProgressIndicatorComponent', () => {
   let component: GisEnrolmentProgressIndicatorComponent;
   let fixture: ComponentFixture<GisEnrolmentProgressIndicatorComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         SharedModule,
         HttpClientTestingModule,
@@ -27,7 +27,7 @@ describe('GisEnrolmentProgressIndicatorComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GisEnrolmentProgressIndicatorComponent);

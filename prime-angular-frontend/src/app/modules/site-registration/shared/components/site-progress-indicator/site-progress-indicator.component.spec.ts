@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -14,8 +14,8 @@ describe('SiteProgressIndicatorComponent', () => {
   let component: SiteProgressIndicatorComponent;
   let fixture: ComponentFixture<SiteProgressIndicatorComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         SharedModule,
         HttpClientTestingModule,
@@ -36,7 +36,7 @@ describe('SiteProgressIndicatorComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SiteProgressIndicatorComponent);

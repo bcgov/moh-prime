@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
@@ -11,8 +11,8 @@ describe('NextStepsPageComponent', () => {
   let component: NextStepsPageComponent;
   let fixture: ComponentFixture<NextStepsPageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
@@ -26,7 +26,7 @@ describe('NextStepsPageComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NextStepsPageComponent);

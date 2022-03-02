@@ -1,4 +1,4 @@
-import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -19,8 +19,8 @@ describe('RemoteUserPageComponent', () => {
   let component: RemoteUserPageComponent;
   let fixture: ComponentFixture<RemoteUserPageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         BrowserAnimationsModule,
         HttpClientTestingModule,
@@ -51,7 +51,7 @@ describe('RemoteUserPageComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(inject(
     [SiteService, SiteFormStateService],
