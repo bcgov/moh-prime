@@ -23,12 +23,12 @@
           </app-page-subheader2>
           <ng-container *ngIf="healthAuthorityVendors"
                         [formGroup]="formState.form">
-            <ng-container *ngFor="let vendor of healthAuthorityVendors; let i = index"
-                          formArrayName="vendors">
+            <div *ngFor="let vendor of healthAuthorityVendors; let i = index"
+                 formArrayName="vendors">
               <mat-checkbox [formControlName]="i">
                 {{VendorName(vendor.vendorCode)}}
               </mat-checkbox>
-            </ng-container>
+            </div>
           </ng-container>
         </ng-container>
 

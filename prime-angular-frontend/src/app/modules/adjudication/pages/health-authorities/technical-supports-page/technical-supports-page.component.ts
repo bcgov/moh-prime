@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, pipe, UnaryFunction } from 'rxjs';
@@ -52,16 +52,21 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     return matches ? matches[0].name : '';
   }
 
-  // public get vendors(): FormGroup {
-  //   return this.formState.form.get('vendors') as FormGroup;
-  // }
+  public get vendors(): FormArray {
+    return this.formState.form.get('vendors') as FormArray;
+  }
 
   public ngOnInit(): void {
     this.cardTitlePrefix = 'Technical Support: ';
     this.init();
 
     this.busy = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
-      .subscribe((healthAuthority: HealthAuthority) => { this.healthAuthorityVendors = healthAuthority.vendors });
+      .subscribe((healthAuthority: HealthAuthority) => {
+        this.healthAuthorityVendors = healthAuthority.vendors
+        this.healthAuthorityVendors.forEach((_) => this.vendors.push(
+          this.fb.control(false, [])
+        ))
+      });
   }
 
   protected createFormInstance(): void {
