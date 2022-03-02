@@ -70,14 +70,4 @@ describe('CollectionNoticeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  describe('testing onAccept()', () => {
-    it('should set authService.hasJustLoggedIn to false', () => {
-      expect<any>((component as any).authService.hasJustLoggedIn).toBeTrue();
-
-      component.onAccept();
-
-      expect<any>((component as any).authService.hasJustLoggedIn).toBeFalse();
-    });
-  });
 });
