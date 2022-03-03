@@ -1,0 +1,33 @@
+import { Component, OnInit } from '@angular/core';
+import { throwError } from 'rxjs';
+
+@Component({
+  selector: 'app-test-codeclimate',
+  templateUrl: './test-codeclimate.component.html',
+  styleUrls: ['./test-codeclimate.component.scss']
+})
+export class TestCodeclimateComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+  public add(x, y) {
+    return x + y;
+  }
+
+  public sub(x, y) {
+    return x - y;
+  }
+
+  public mult(x, y) {
+    return x * y;
+  }
+  public div(x, y) {
+    return x > 0
+      ? x / y
+      : throwError('can\'t divide by zero');
+  }
+
+}
