@@ -15,6 +15,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AccessAgreementHistoryComponent', () => {
   let component: AccessAgreementHistoryComponent;
@@ -50,7 +51,8 @@ describe('AccessAgreementHistoryComponent', () => {
             useClass: MockAccessTokenService
           },
           KeycloakService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));
