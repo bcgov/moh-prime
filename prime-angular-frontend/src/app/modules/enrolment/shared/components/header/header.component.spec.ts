@@ -4,6 +4,7 @@ import { NgxProgressModule } from '@lib/modules/ngx-progress/ngx-progress.module
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
 import { HeaderComponent } from './header.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -18,7 +19,8 @@ describe('HeaderComponent', () => {
         ],
         declarations: [
           HeaderComponent
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

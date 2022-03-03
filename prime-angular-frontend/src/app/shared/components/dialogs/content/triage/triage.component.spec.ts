@@ -11,6 +11,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { TriageComponent } from './triage.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('TriageComponent', () => {
   let component: TriageComponent;
@@ -38,7 +39,8 @@ describe('TriageComponent', () => {
           useClass: MockPermissionService
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -17,6 +17,7 @@ import { MockPermissionService } from 'test/mocks/mock-permission.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { DeviceProviderPageComponent } from './device-provider-page.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 describe('DeviceProviderPageComponent', () => {
   let component: DeviceProviderPageComponent;
@@ -32,7 +33,8 @@ describe('DeviceProviderPageComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        MatDatepickerModule
       ],
       providers: [
         {
@@ -53,7 +55,7 @@ describe('DeviceProviderPageComponent', () => {
         },
         KeycloakService
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

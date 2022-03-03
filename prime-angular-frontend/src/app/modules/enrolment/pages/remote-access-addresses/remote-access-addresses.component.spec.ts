@@ -16,6 +16,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('RemoteAccessAddressesComponent', () => {
   let component: RemoteAccessAddressesComponent;
@@ -55,7 +56,8 @@ describe('RemoteAccessAddressesComponent', () => {
           useClass: MockConfigService
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

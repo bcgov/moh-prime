@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AccessDeclinedComponent } from './access-declined.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AccessDeclinedComponent', () => {
   let component: AccessDeclinedComponent;
@@ -23,7 +24,8 @@ describe('AccessDeclinedComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

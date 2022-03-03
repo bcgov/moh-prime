@@ -10,6 +10,7 @@ import { ConfigService } from '@config/config.service';
 import { SharedModule } from '@shared/shared.module';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('PartyReviewComponent', () => {
   let component: PartyReviewComponent;
@@ -35,7 +36,8 @@ describe('PartyReviewComponent', () => {
           provide: OrganizationService,
           useClass: MockOrganizationService
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

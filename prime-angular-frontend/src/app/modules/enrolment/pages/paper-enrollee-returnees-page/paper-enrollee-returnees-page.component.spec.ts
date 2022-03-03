@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
@@ -20,19 +20,22 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { PaperEnrolleeReturneesPageComponent } from './paper-enrollee-returnees-page.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('PaperEnrolleeReturneesComponent', () => {
   let component: PaperEnrolleeReturneesPageComponent;
   let fixture: ComponentFixture<PaperEnrolleeReturneesPageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
         MatDialogModule,
         HttpClientModule,
         MatSnackBarModule,
         ReactiveFormsModule,
+        HttpClientTestingModule
       ],
       providers: [
         {
@@ -57,10 +60,13 @@ describe('PaperEnrolleeReturneesComponent', () => {
         },
         KeycloakService
       ],
-      declarations: [PaperEnrolleeReturneesPageComponent]
+      declarations: [
+        PaperEnrolleeReturneesPageComponent
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PaperEnrolleeReturneesPageComponent);

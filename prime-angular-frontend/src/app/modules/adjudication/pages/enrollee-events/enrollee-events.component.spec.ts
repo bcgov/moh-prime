@@ -8,6 +8,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { EnrolleeEventsComponent } from './enrollee-events.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('EnrolleeEventsComponent', () => {
   let component: EnrolleeEventsComponent;
@@ -28,7 +29,8 @@ describe('EnrolleeEventsComponent', () => {
           useValue: APP_DI_CONFIG
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 
