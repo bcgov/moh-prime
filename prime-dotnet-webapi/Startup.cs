@@ -86,6 +86,7 @@ namespace Prime
             services.AddScoped<IPlrProviderService, PlrProviderService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
+            services.AddScoped<ISentryErrorReporter, SentryErrorReporter>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<ISoapService, SoapService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
@@ -227,6 +228,11 @@ namespace Prime
                 app.UseDeveloperExceptionPage();
             }
 
+            if (!string.IsNullOrEmpty(PrimeConfiguration.Current.Sentry.Dsn))
+            {
+                app.UseMiddleware<SentryMiddleware>();
+            }
+
             ConfigureHealthCheck(app);
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
@@ -250,10 +256,6 @@ namespace Prime
 
             // Matches request to an endpoint
             app.UseRouting();
-
-            // Enable automatic tracing integration.
-            // Make sure to put this middleware right after `UseRouting()`.
-            app.UseSentryTracing();
 
             app.UseMiddleware<RequestLoggingMiddleware>();
 
