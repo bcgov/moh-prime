@@ -16,6 +16,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('RemoteAccessComponent', () => {
   let component: RemoteAccessComponent;
@@ -52,7 +53,8 @@ describe('RemoteAccessComponent', () => {
         },
         KeycloakService
       ],
-      declarations: [RemoteAccessComponent]
+      declarations: [RemoteAccessComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

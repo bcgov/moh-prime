@@ -10,6 +10,7 @@ import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AccessTermsComponent', () => {
   let component: AccessTermsComponent;
@@ -37,7 +38,8 @@ describe('AccessTermsComponent', () => {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
           }
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

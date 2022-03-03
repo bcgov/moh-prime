@@ -10,6 +10,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AccessLockedComponent', () => {
   let component: AccessLockedComponent;
@@ -34,7 +35,8 @@ describe('AccessLockedComponent', () => {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
           },
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

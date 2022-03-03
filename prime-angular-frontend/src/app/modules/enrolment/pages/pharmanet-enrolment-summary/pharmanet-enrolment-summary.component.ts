@@ -244,7 +244,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Private Community Health Practices',
             settingCode: careSetting.careSettingCode,
             formControl: this.communityHealthEmails,
-            subheaderContent: `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office manager).`
+            subheaderContent: `Share your approval to your private community health practice's PharmaNet administrator (e.g., office manager).`
           };
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
@@ -253,7 +253,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Community Pharmacies',
             settingCode: careSetting.careSettingCode,
             formControl: this.pharmacistEmails,
-            subheaderContent: `Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).`
+            subheaderContent: `Share your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).`
           };
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {
@@ -262,7 +262,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Health Authorities',
             settingCode: careSetting.careSettingCode,
             formControl: this.healthAuthorityEmails,
-            subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are unsure who this is). If you work in more than one facility or site you can include the email addresses for all the PharmaNet administrators separated by a comma.`
+            subheaderContent: `Share your approval to your facility’s PharmaNet access administrator (ask your manager if you are unsure who this is). If you work in more than one facility or site you can include the email addresses for all the PharmaNet administrators separated by a comma.`
           };
         }
       }

@@ -1,6 +1,6 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { asyncValidator } from '@lib/validators/form-async.validators';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
@@ -121,7 +121,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       ],
       pec: [
         null,
-        [Validators.required],
+        [],
         asyncValidator(this.checkPecIsAssignable(), 'assignable')
       ],
       activeBeforeRegistration: [
@@ -132,6 +132,6 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
   }
 
   private checkPecIsAssignable(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecAssignable(this.siteId, value);
+    return (value: string) => value ? this.siteResource.pecAssignable(this.siteId, value) : of(true);
   }
 }

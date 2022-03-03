@@ -632,7 +632,7 @@ objects:
                 protocol: TCP
             startupProbe:
               httpGet:
-                path: /api/healthcheck?p=startup
+                path: /api/healthcheck/startup
                 port: 8080
                 scheme: HTTP
               timeoutSeconds: 30
@@ -641,7 +641,7 @@ objects:
               failureThreshold: 30
             readinessProbe:
               httpGet:
-                path: /api/healthcheck?p=readiness
+                path: /api/healthcheck/readiness
                 port: 8080
                 scheme: HTTP
               initialDelaySeconds: 5
@@ -651,7 +651,7 @@ objects:
               failureThreshold: 3
             livenessProbe:
               httpGet:
-                path: /api/healthcheck?p=liveness
+                path: /api/healthcheck/liveness
                 port: 8080
                 scheme: HTTP
               timeoutSeconds: 1

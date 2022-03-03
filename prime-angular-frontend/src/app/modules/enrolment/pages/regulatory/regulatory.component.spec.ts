@@ -27,6 +27,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { RegulatoryFormState } from './regulatory-form-state';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('RegulatoryComponent', () => {
   let component: RegulatoryComponent;
@@ -70,7 +71,8 @@ describe('RegulatoryComponent', () => {
             useClass: MockAccessTokenService
           },
           KeycloakService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));
