@@ -17,6 +17,7 @@ import { SharedModule } from '@shared/shared.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('OptionsFormComponent', () => {
   let component: OptionsFormComponent;
@@ -48,7 +49,8 @@ describe('OptionsFormComponent', () => {
           },
           EnrolmentFormStateService,
           KeycloakService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

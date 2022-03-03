@@ -89,7 +89,7 @@ export class DashboardV1Component implements OnInit {
     // Dashboard is only used for Enrolments now, and will eventually
     // be replaced, but logout needs to force auth route now with
     // the existence of PHSA
-    let routePath = EnrolmentRoutes.BCSC_LOGIN;
+    let routePath = `${this.config.loginRedirectUrl}/${EnrolmentRoutes.BCSC_LOGIN}`;
 
     if (this.permissionService.hasRoles(Role.ADMIN)) {
       routePath = `${routePath}/${AdjudicationRoutes.LOGIN_PAGE}`;

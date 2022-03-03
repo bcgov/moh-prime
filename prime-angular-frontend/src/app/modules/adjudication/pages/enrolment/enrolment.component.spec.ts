@@ -9,6 +9,7 @@ import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-co
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { KeycloakService } from 'keycloak-angular';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('EnrolmentComponent', () => {
   let component: EnrolmentComponent;
@@ -31,7 +32,8 @@ describe('EnrolmentComponent', () => {
             useValue: APP_DI_CONFIG
           },
           KeycloakService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

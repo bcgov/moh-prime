@@ -12,6 +12,8 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgxMaskModule } from 'ngx-mask';
 
 describe('ContactInformationComponent', () => {
   let component: ContactInformationFormComponent;
@@ -24,7 +26,8 @@ describe('ContactInformationComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
-        EnrolmentModule
+        EnrolmentModule,
+        NgxMaskModule.forRoot()
       ],
       declarations: [
         ContactInformationFormComponent
@@ -40,7 +43,8 @@ describe('ContactInformationComponent', () => {
         },
         EnrolmentFormStateService,
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

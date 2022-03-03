@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { DocumentAttachmentsComponent } from './document-attachments.component';
@@ -7,13 +7,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('DocumentAttachmentsComponent', () => {
   let component: DocumentAttachmentsComponent;
   let fixture: ComponentFixture<DocumentAttachmentsComponent>;
-  const mockActivatedRoute = {
-    snapshot: { params: { eid: 1 } }
-  };
   const mockDocuments = [
     {
       id: 1,
@@ -35,11 +33,11 @@ describe('DocumentAttachmentsComponent', () => {
     },
   ];
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        HttpClientModule,
+        HttpClientTestingModule,
         MatSnackBarModule
       ],
       declarations: [
@@ -51,10 +49,11 @@ describe('DocumentAttachmentsComponent', () => {
           provide: APP_CONFIG,
           useValue: AppConfig
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DocumentAttachmentsComponent);
@@ -64,7 +63,6 @@ describe('DocumentAttachmentsComponent', () => {
   });
 
   it('should create', () => {
-
     expect(component).toBeTruthy();
   });
 });
