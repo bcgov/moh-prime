@@ -81,7 +81,6 @@ import { SiteOverviewPageComponent } from './pages/health-authorities/site-overv
 import { SiteEventsPageComponent } from './pages/health-authorities/site-events-page/site-events-page.component';
 import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
 import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
-import { TestComponent } from './test-component/test/test.component';
 import { TestCodeclimateComponent } from './test-codeclimate/test-codeclimate.component';
 
 @NgModule({
@@ -158,7 +157,6 @@ import { TestCodeclimateComponent } from './test-codeclimate/test-codeclimate.co
     SiteEventsPageComponent,
     SiteNotesPageComponent,
     SiteDocumentsPageComponent,
-    TestComponent,
     TestCodeclimateComponent
   ],
   imports: [
