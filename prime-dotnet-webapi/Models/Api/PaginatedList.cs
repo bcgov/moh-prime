@@ -25,17 +25,14 @@ namespace Prime.Models.Api
     }
     public class PaginatedList<T> : List<T>
     {
-        private static int GetPageSize()
-        {
-            return 100;
-        }
+        private const int _pageSize = 100;
 
         public int Page { get; private set; }
         public int TotalPages { get; private set; }
         public int Total { get; private set; }
         public int PageSize { get; private set; }
 
-        public PaginatedList(List<T> items, int count, int page, int pageSize)
+        public PaginatedList(IEnumerable<T> items, int count, int page, int pageSize)
         {
             Page = page;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
@@ -71,8 +68,8 @@ namespace Prime.Models.Api
             var pageNumber = page < 1 ? 1 : page;
             var count = await source.CountAsync();
 
-            var items = await source.Skip((pageNumber - 1) * GetPageSize()).Take(GetPageSize()).ToListAsync();
-            return new PaginatedList<T>(items, count, pageNumber, GetPageSize());
+            var items = await source.Skip((pageNumber - 1) * _pageSize).Take(_pageSize).ToListAsync();
+            return new PaginatedList<T>(items, count, pageNumber, _pageSize);
         }
     }
 }
