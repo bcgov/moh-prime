@@ -11,6 +11,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('EnrolleeAccessTermEnrolmentComponent', () => {
   let component: EnrolleeAccessTermEnrolmentComponent;
@@ -36,7 +37,8 @@ describe('EnrolleeAccessTermEnrolmentComponent', () => {
           useClass: MockAuthService
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

@@ -22,6 +22,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { BcscDemographicFormState } from './bcsc-demographic-form-state.class';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('BcscDemographicComponent', () => {
   let component: BcscDemographicComponent;
@@ -59,7 +60,8 @@ describe('BcscDemographicComponent', () => {
             useClass: MockEnrolmentService
           },
           KeycloakService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));
