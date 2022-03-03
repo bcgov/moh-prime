@@ -17,6 +17,7 @@ import { SharedModule } from '@shared/shared.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('OboSiteFormComponent', () => {
   let component: OboSiteFormComponent;
@@ -47,7 +48,8 @@ describe('OboSiteFormComponent', () => {
         },
         EnrolmentFormStateService,
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

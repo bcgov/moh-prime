@@ -2,6 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdjudicationDashboardComponent } from './adjudication-dashboard.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AdjudicationDashboardComponent', () => {
   let component: AdjudicationDashboardComponent;
@@ -15,7 +16,8 @@ describe('AdjudicationDashboardComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

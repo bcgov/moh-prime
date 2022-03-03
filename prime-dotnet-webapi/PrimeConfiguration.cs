@@ -49,6 +49,8 @@ namespace Prime
 
         public LdapApiConfiguration LdapApi { get; set; }
 
+        public SentryConfiguration Sentry { get; set; }
+
         private static LogEventLevel ParseLogLevel()
         {
             if (int.TryParse(Environment.GetEnvironmentVariable("LogLevel"), out var logLevel))

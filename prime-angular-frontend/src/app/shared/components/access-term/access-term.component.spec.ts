@@ -2,6 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessTermComponent } from './access-term.component';
 import { SafePipe } from '@shared/pipes/safe.pipe';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AccessTermComponent', () => {
   let component: AccessTermComponent;
@@ -11,7 +12,8 @@ describe('AccessTermComponent', () => {
       declarations: [
         AccessTermComponent,
         SafePipe
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

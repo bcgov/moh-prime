@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -12,13 +12,14 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { SiteOverviewComponent } from './site-overview.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('SiteOverviewComponent', () => {
   let component: SiteOverviewComponent;
   let fixture: ComponentFixture<SiteOverviewComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
@@ -36,10 +37,11 @@ describe('SiteOverviewComponent', () => {
           provide: PermissionService,
           useClass: MockPermissionService
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SiteOverviewComponent);

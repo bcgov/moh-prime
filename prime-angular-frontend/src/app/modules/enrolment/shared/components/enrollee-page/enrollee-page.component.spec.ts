@@ -10,6 +10,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { KeycloakService } from 'keycloak-angular';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('EnrolleePageComponent', () => {
   let component: EnrolleePageComponent;
@@ -35,7 +36,8 @@ describe('EnrolleePageComponent', () => {
           useValue: APP_DI_CONFIG
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

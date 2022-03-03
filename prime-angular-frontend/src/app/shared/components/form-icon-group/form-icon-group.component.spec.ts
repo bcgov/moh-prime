@@ -8,6 +8,8 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('FormIconGroupComponent', () => {
   let component: FormIconGroupComponent;
@@ -18,7 +20,8 @@ describe('FormIconGroupComponent', () => {
       {
         imports: [
           NgxContextualHelpModule,
-          NgxMaterialModule
+          NgxMaterialModule,
+          MatTooltipModule
         ],
         declarations: [
           FormIconGroupComponent
@@ -32,7 +35,8 @@ describe('FormIconGroupComponent', () => {
             provide: AccessTokenService,
             useClass: MockAccessTokenService
           },
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

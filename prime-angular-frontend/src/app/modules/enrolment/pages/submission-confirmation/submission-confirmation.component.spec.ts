@@ -12,6 +12,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { KeycloakService } from 'keycloak-angular';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('SubmissionConfirmationComponent', () => {
   let component: SubmissionConfirmationComponent;
@@ -38,7 +39,8 @@ describe('SubmissionConfirmationComponent', () => {
             useClass: MockEnrolmentService
           },
           KeycloakService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

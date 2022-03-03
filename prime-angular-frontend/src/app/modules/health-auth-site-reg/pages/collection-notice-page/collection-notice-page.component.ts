@@ -24,16 +24,17 @@ export class CollectionNoticePageComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
 
-  public onAccept(): void {
-    this.authService.hasJustLoggedIn = false;
+  public ngOnInit(): void {
+    this.authService.hasJustLoggedIn = true;
     this.nextRoute();
   }
 
-  public ngOnInit(): void {
-    this.authService.hasJustLoggedIn = true;
-  }
-
   private nextRoute(): void {
+    // Display of the Collection Notice has moved to SiteRegAccessComponent
+    // so we jump through this component but leave it in place for other routing logic
+
+    this.authService.hasJustLoggedIn = false;
+
     // Redirect to site management and allow the guards to
     // figure out the proper routing
     this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_MANAGEMENT);
