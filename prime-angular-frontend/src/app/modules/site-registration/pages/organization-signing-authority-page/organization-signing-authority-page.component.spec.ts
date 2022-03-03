@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -21,6 +21,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { NgxMaskModule } from 'ngx-mask';
 
 describe('OrganizationSigningAuthorityPageComponent', () => {
   let component: OrganizationSigningAuthorityPageComponent;
@@ -41,7 +42,8 @@ describe('OrganizationSigningAuthorityPageComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        NgxMaskModule.forRoot()
       ],
       providers: [
         {
@@ -62,7 +64,7 @@ describe('OrganizationSigningAuthorityPageComponent', () => {
         },
         OrganizationFormStateService
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

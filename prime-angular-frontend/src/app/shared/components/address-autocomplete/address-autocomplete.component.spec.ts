@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AddressAutocompleteComponent } from './address-autocomplete.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AddressAutocompleteComponent', () => {
   let component: AddressAutocompleteComponent;
@@ -27,7 +28,8 @@ describe('AddressAutocompleteComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

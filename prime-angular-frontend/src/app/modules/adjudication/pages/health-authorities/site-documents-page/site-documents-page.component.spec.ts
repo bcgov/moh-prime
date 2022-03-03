@@ -7,6 +7,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 import { SiteDocumentsPageComponent } from './site-documents-page.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('SiteDocumentsPageComponent', () => {
   let component: SiteDocumentsPageComponent;
@@ -26,7 +27,8 @@ describe('SiteDocumentsPageComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

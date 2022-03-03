@@ -7,6 +7,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { EnrolleeReviewStatusComponent } from './enrollee-review-status.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('EnrolleeReviewStatusComponent', () => {
   let component: EnrolleeReviewStatusComponent;
@@ -26,7 +27,8 @@ describe('EnrolleeReviewStatusComponent', () => {
           useValue: APP_DI_CONFIG
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

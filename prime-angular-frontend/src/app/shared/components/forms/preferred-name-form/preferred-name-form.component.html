@@ -1,4 +1,5 @@
-<div [formGroup]="form">
+<div *ngIf="form"
+     [formGroup]="form">
   <div *ngFor="let control of formControlConfig"
        class="row">
     <div [class.col-12]="mode === 'column'"
