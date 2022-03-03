@@ -18,11 +18,12 @@ export const environment: AppEnvironment = {
   loginRedirectUrl: 'http://localhost:4200',
   documentManagerUrl: 'http://localhost:6001',
   bcscMobileSetupUrl: 'https://www2.gov.bc.ca/gov/content?id=034E906146794F84A00535A3F9354913',
+  bcscHelpDeskUrl: 'https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help',
   prime: {
     displayPhone: '1-844-39PRIME',
     phone: '1-844-397-7463',
     email: 'prime@gov.bc.ca',
-    supportEmail: 'primesupport@gov.bc.ca'
+    supportEmail: 'PRIMESupport@gov.bc.ca'
   },
   phoneNumbers: {
     director: '236-478-0282'

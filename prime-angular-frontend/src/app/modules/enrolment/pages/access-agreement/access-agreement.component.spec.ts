@@ -16,6 +16,7 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -51,7 +52,8 @@ describe('AccessAgreementComponent', () => {
             useClass: MockAccessTokenService
           },
           KeycloakService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

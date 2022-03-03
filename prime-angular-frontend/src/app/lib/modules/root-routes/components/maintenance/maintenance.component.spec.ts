@@ -4,6 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { RootRoutesModule } from '../../root-routes.module';
 import { MaintenanceComponent } from './maintenance.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('MaintenanceComponent', () => {
   let component: MaintenanceComponent;
@@ -22,7 +23,8 @@ describe('MaintenanceComponent', () => {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
           }
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

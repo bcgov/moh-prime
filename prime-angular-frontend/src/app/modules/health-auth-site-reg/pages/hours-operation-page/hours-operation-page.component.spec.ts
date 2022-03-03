@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -13,6 +13,9 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 import { HoursOperationPageComponent } from './hours-operation-page.component';
+import { NgxMaskModule } from 'ngx-mask';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('HoursOperationPageComponent', () => {
   let component: HoursOperationPageComponent;
@@ -39,7 +42,10 @@ describe('HoursOperationPageComponent', () => {
         RouterTestingModule,
         ReactiveFormsModule,
         MatDialogModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        NgxMaskModule.forRoot(),
+        MatInputModule,
+        BrowserAnimationsModule
       ],
       providers: [
         {
@@ -56,7 +62,7 @@ describe('HoursOperationPageComponent', () => {
         },
         CapitalizePipe
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

@@ -10,6 +10,7 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { SharedModule } from '@shared/shared.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AccessAgreementCurrentComponent', () => {
   let component: AccessAgreementCurrentComponent;
@@ -35,7 +36,8 @@ describe('AccessAgreementCurrentComponent', () => {
           provide: EnrolmentService,
           useClass: MockEnrolmentService
         },
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

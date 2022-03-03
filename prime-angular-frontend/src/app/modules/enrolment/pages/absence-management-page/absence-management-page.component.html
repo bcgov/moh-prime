@@ -4,12 +4,19 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderSummary>
-      In case of a prolonged absence (e.g. maternity leave, sick leave, or other extended leave) please report it here.
-      Return to this page to end a current absence, or cancel an upcoming absence. If you are leaving a position and
-      have no further need to use PharmaNet, only select the start date and leave the end date empty.<br><br>
-
-      If you take a position in future that requires you to use PharmaNet,  return to PRIME and indicate the end of
-      your absence, and your GPID can be used again immediately.
+      <p>
+        In case of a prolonged absence greater than 90 days (e.g., maternity leave, sick leave, or other extended
+        leave), please report it
+        here. Return to this page to end a current absence or to cancel an upcoming absence.
+      </p>
+      <p>
+        If you no longer require access to PharmaNet at any care setting, only select the start and leave the end date
+        empty.
+      </p>
+      <p>
+        If you require access to PharmaNet in future, return to PRIME and enter the last day of your absence in the end
+        date field.
+      </p>
     </ng-container>
   </app-page-subheader>
 
@@ -102,10 +109,14 @@
                               [rangePicker]="picker">
           <input matStartDate
                  formControlName="start"
-                 placeholder="Start date">
+                 placeholder="Start date"
+                 [readonly]="true"
+                 (click)="picker.open()">
           <input matEndDate
                  formControlName="end"
-                 placeholder="End date">
+                 placeholder="End date"
+                 [readonly]="true"
+                 (click)="picker.open()">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix
                                [for]="picker"></mat-datepicker-toggle>
