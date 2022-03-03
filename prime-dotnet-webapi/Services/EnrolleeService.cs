@@ -166,9 +166,33 @@ namespace Prime.Services
                     .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                         && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
+                .If(!string.IsNullOrWhiteSpace(searchOptions.AssignedTo), q => q
+                    .Where(e => e.Adjudicator.IDIR == searchOptions.AssignedTo)
+                )
+                .If(searchOptions.RenewalDateRangeStart.HasValue && searchOptions.RenewalDateRangeEnd.HasValue, q => q
+                    .Where(e => e.ExpiryDate != null
+                        && e.ExpiryDate >= searchOptions.RenewalDateRangeStart
+                        && e.ExpiryDate <= searchOptions.RenewalDateRangeEnd
+                    )
+                )
+                .If(searchOptions.AppliedDateRangeStart.HasValue && searchOptions.AppliedDateRangeEnd.HasValue, q => q
+                    .Where(e => e.AppliedDate != null
+                        && e.AppliedDate >= searchOptions.AppliedDateRangeStart
+                        && e.AppliedDate <= searchOptions.AppliedDateRangeEnd
+                    )
+                )
+                .If(!string.IsNullOrWhiteSpace(searchOptions.SortOrder), q =>
+                        searchOptions.SortOrder switch
+                        {
+                            "renewalDate_asc" => q.OrderBy(s => s.ExpiryDate),
+                            "renewalDate_desc" => q.OrderByDescending(s => s.ExpiryDate),
+                            "appliedDate_asc" => q.OrderBy(s => s.AppliedDate),
+                            "appliedDate_desc" => q.OrderByDescending(s => s.AppliedDate),
+                            _ => q.OrderBy(e => e.Id),
+                        }
+                )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
-                .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
-                .OrderBy(e => e.Id);
+                .DecompileAsync();
 
             return await PaginatedList<EnrolleeListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
         }

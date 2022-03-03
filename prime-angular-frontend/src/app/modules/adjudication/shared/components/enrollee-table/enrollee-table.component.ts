@@ -10,10 +10,10 @@ import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import moment from 'moment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-import { DateUtils } from '@lib/utils/date-utils.class';
 import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
-import { UtilsService } from '@core/services/utils.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { LocalStorageService } from '@core/services/local-storage.service';
+import { Pagination } from '@core/models/pagination.model';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum, PaperEnrolmentStatusMap } from '@shared/enums/enrolment-status.enum';
@@ -23,8 +23,6 @@ import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { Pagination } from '@core/models/pagination.model';
-import { RouteUtils } from '@lib/utils/route-utils.class';
 
 class ImprovedPageEvent extends PageEvent {
   public stopPropogation: boolean;
@@ -50,7 +48,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Output() public sendBulkEmail: EventEmitter<void>;
   @Output() public maintenance: EventEmitter<void>;
   @Output() public navigateEnrollee: EventEmitter<number>;
-  @Output() public sortEnrollee: EventEmitter<Sort>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
   @ViewChild('secondaryPaginator', { static: true }) public secondaryPaginator: MatPaginator;
@@ -78,7 +75,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private authService: AuthService,
-    private utilsService: UtilsService,
     private localStorageService: LocalStorageService,
     router: Router
   ) {
@@ -90,7 +86,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.sendBulkEmail = new EventEmitter<void>();
     this.maintenance = new EventEmitter<void>();
     this.navigateEnrollee = new EventEmitter<number>();
-    this.sortEnrollee = new EventEmitter<Sort>();
     this.columns = [
       'prefixes',
       'displayId',
@@ -145,36 +140,26 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.localStorageService.set(this.sortActiveKey, sort.active);
     this.localStorageService.set(this.sortDirectionKey, sort.direction);
 
-    this.sortEnrollee.emit(sort);
-
-    if (!sort.active || !sort.direction) {
-      return;
+    // Do not use sorting queryParams for single row mode
+    if (!this.activatedRoute.snapshot.params.id) {
+      this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
     }
-
-    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
-      switch (sort.active) {
-        case 'displayId':
-          return this.utilsService.sortByDirection(a.id, b.id, sort.direction);
-        case 'appliedDate':
-          return this.utilsService.sortByDirection(a.appliedDate, b.appliedDate, sort.direction);
-        case 'renewalDate':
-          return this.utilsService.sortByDirection(a.expiryDate, b.expiryDate, sort.direction);
-        default:
-          return 0;
-      }
-    });
   }
 
   public clearAppliedDateRange() {
     this.form.get('appliedDateRangeStart').reset();
     this.form.get('appliedDateRangeEnd').reset();
     this.hasAppliedDateRange = false;
+
+    this.routeUtils.updateQueryParams({ appliedDateRangeStart: null, appliedDateRangeEnd: null });
   }
 
   public clearRenewalDateRange() {
     this.form.get('renewalDateRangeStart').reset();
     this.form.get('renewalDateRangeEnd').reset();
     this.hasRenewalDateRange = false;
+
+    this.routeUtils.updateQueryParams({ renewalDateRangeStart: null, renewalDateRangeEnd: null });
   }
 
   public toggleFilterAssigned() {
@@ -208,15 +193,27 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   public ngOnInit(): void {
     this.sortActiveKey = `${this.localStoragePrefix}-sort-active-key`;
     this.sortDirectionKey = `${this.localStoragePrefix}-sort-direction-key`;
+
+    const {
+      renewalDateRangeStart,
+      renewalDateRangeEnd,
+      appliedDateRangeStart,
+      appliedDateRangeEnd,
+      sortActive,
+      sortDirection,
+      assignedTo
+    } = this.activatedRoute.snapshot.queryParams;
+
+    this.hasAssignedToFilter$.next(!!assignedTo);
+
     this.createFormInstance();
     this.initForm();
-    this.dataSource.filterPredicate = this.getFilterPredicate();
+
     this.dataSource.data = this.enrollees;
 
-    const queryParams = this.activatedRoute.snapshot.queryParams;
     const sort = <Sort>{
-      active: queryParams.sortActive,
-      direction: queryParams.sortDirection
+      active: sortActive,
+      direction: sortDirection
     };
 
     if (!!sort.active && !!sort.direction) {
@@ -229,6 +226,9 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
         direction: this.localStorageService.get(this.sortDirectionKey)
       });
     }
+
+    this.hasRenewalDateRange = (renewalDateRangeStart && renewalDateRangeEnd);
+    this.hasAppliedDateRange = (appliedDateRangeStart && appliedDateRangeEnd);
   }
 
   private createFormInstance(): void {
@@ -237,56 +237,38 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
       appliedDateRangeEnd: ['', []],
       renewalDateRangeStart: ['', []],
       renewalDateRangeEnd: ['', []],
-      assignedTo: ['', []]
     });
   }
-
   private initForm(): void {
-    this.form.valueChanges
-      .pipe(untilDestroyed(this))
-      .subscribe(value => this.dataSource.filter = value);
-
     combineLatest([
       this.authService.getAdmin$(),
       this.hasAssignedToFilter$
     ])
       .pipe(untilDestroyed(this))
       .subscribe(([{ idir }, value]: [Admin, boolean]) =>
-        this.form.get('assignedTo').patchValue((value) ? idir : '')
+        this.routeUtils.updateQueryParams({ assignedTo: (value) ? idir : null })
       );
 
-    ['appliedDateRangeStart', 'appliedDateRangeEnd'].forEach(controlName =>
-      this.form.get(controlName).valueChanges
-        .pipe(untilDestroyed(this))
-        .subscribe(value => this.hasAppliedDateRange = value ?? this.hasAppliedDateRange)
-    );
+    this.form.get('appliedDateRangeEnd').valueChanges.pipe(untilDestroyed(this))
+      .subscribe((value: moment.Moment) => {
+        const start = this.form.get('appliedDateRangeStart').value as moment.Moment;
 
-    ['renewalDateRangeStart', 'renewalDateRangeEnd'].forEach(controlName =>
-      this.form.get(controlName).valueChanges
-        .pipe(untilDestroyed(this))
-        .subscribe(value => this.hasRenewalDateRange = value ?? this.hasRenewalDateRange)
-    );
-  }
+        if (!value || !start) {
+          return;
+        }
+        this.routeUtils.updateQueryParams({ appliedDateRangeStart: start.toISOString(), appliedDateRangeEnd: value.toISOString() });
+        this.hasAppliedDateRange = true;
+      });
 
-  private getFilterPredicate() {
-    return (row: EnrolleeListViewModel, filter: any) => {
-      const matchFilter = [];
+    this.form.get('renewalDateRangeEnd').valueChanges.pipe(untilDestroyed(this))
+      .subscribe((value: moment.Moment) => {
+        const start = this.form.get('renewalDateRangeStart').value as moment.Moment;
 
-      if (this.hasAppliedDateRange && filter.appliedDateRangeStart && filter.appliedDateRangeEnd) {
-        const date = moment(row.appliedDate).local();
-        matchFilter.push(DateUtils.isWithinDateRange(date, filter.appliedDateRangeStart, filter.appliedDateRangeEnd));
-      }
-
-      if (this.hasRenewalDateRange && filter.renewalDateRangeStart && filter.renewalDateRangeEnd) {
-        const date = moment(row.expiryDate).local();
-        matchFilter.push(DateUtils.isWithinDateRange(date, filter.renewalDateRangeStart, filter.renewalDateRangeEnd));
-      }
-
-      if (this.hasAssignedToFilter$.value) {
-        matchFilter.push(row.adjudicatorIdir === filter.assignedTo);
-      }
-
-      return matchFilter.every(Boolean);
-    };
+        if (!value || !start) {
+          return;
+        }
+        this.routeUtils.updateQueryParams({ renewalDateRangeStart: start.toISOString(), renewalDateRangeEnd: value.toISOString() });
+        this.hasRenewalDateRange = true;
+      });
   }
 }
