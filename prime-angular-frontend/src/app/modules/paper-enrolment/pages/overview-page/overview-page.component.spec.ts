@@ -20,6 +20,7 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('OverviewComponent', () => {
   let component: OverviewPageComponent;
@@ -60,7 +61,8 @@ describe('OverviewComponent', () => {
             provide: AuthService,
             useClass: MockAuthService
           }
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

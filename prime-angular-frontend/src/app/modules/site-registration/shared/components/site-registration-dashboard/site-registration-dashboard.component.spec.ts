@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { SiteRegistrationDashboardComponent } from './site-registration-dashboard.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('SiteRegistrationDashboardComponent', () => {
   let component: SiteRegistrationDashboardComponent;
@@ -19,7 +20,8 @@ describe('SiteRegistrationDashboardComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

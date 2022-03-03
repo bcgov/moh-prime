@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -8,6 +8,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HoursOperationPageComponent } from './hours-operation-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { NgxMaskModule } from 'ngx-mask';
+import { MatInputModule } from '@angular/material/input';
 
 describe('HoursOperationPageComponent', () => {
   let component: HoursOperationPageComponent;
@@ -23,7 +25,9 @@ describe('HoursOperationPageComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        NgxMaskModule.forRoot(),
+        MatInputModule
       ],
       providers: [
         {
@@ -31,7 +35,7 @@ describe('HoursOperationPageComponent', () => {
           useValue: APP_DI_CONFIG
         }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 
