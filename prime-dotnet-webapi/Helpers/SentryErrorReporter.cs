@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 
-using Prime;
 using SharpRaven;
+using SharpRaven.Data;
 
 namespace Prime.Helpers
 {
@@ -34,7 +34,7 @@ namespace Prime.Helpers
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
 
-            await _client.CaptureAsync(new SharpRaven.Data.SentryEvent(exception));
+            await _client.CaptureAsync(new SentryEvent(exception));
         }
     }
 }
