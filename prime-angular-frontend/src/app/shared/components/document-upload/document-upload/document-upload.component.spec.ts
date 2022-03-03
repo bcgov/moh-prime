@@ -8,6 +8,7 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { DocumentUploadComponent } from './document-upload.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('DocumentUploadComponent', () => {
   let component: DocumentUploadComponent;
@@ -28,7 +29,8 @@ describe('DocumentUploadComponent', () => {
           useValue: APP_DI_CONFIG
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

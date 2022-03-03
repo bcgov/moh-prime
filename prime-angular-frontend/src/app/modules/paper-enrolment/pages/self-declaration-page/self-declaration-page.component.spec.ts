@@ -18,6 +18,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { ActivatedRoute } from '@angular/router';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('SelfDeclarationPageComponent', () => {
   let component: SelfDeclarationPageComponent;
@@ -36,7 +38,8 @@ describe('SelfDeclarationPageComponent', () => {
           NgxContextualHelpModule,
           NgxMaterialModule,
           ReactiveFormsModule,
-          RouterTestingModule
+          RouterTestingModule,
+          MatTooltipModule
         ],
         providers: [
           {
@@ -60,7 +63,8 @@ describe('SelfDeclarationPageComponent', () => {
             useValue: mockActivatedRoute
           },
           KeycloakService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));
