@@ -1,9 +1,10 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { EnrolleePropertyErrorComponent } from './enrollee-property-error.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('EnrolleePropertyErrorComponent', () => {
   let component: EnrolleePropertyErrorComponent;
@@ -13,11 +14,12 @@ describe('EnrolleePropertyErrorComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         NgxMaterialModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        MatTooltipModule
       ],
       declarations: [],
       providers: [],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

@@ -21,6 +21,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('CareSettingComponent', () => {
   let component: CareSettingComponent;
@@ -57,7 +58,9 @@ describe('CareSettingComponent', () => {
             provide: AuthService,
             useClass: MockAuthService
           },
-          KeycloakService]
+          KeycloakService
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -14,6 +14,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
+import { NgxMaskModule } from 'ngx-mask';
 
 describe('ContactProfileFormComponent', () => {
   let component: ContactProfileFormComponent;
@@ -29,7 +30,8 @@ describe('ContactProfileFormComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         MatSnackBarModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgxMaskModule.forRoot()
       ],
       providers: [
         {
@@ -46,7 +48,7 @@ describe('ContactProfileFormComponent', () => {
         },
         SiteFormStateService
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 
