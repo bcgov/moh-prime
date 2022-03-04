@@ -30,26 +30,26 @@ export class TestCodeclimateComponent implements OnInit {
       : throwError('can\'t divide by zero.');
   }
 
-  // public add2(x, y) {
-  //   return x + y;
-  // }
+  public add2(x, y) {
+    return x + y;
+  }
 
-  // public sub2(x, y) {
-  //   return x - y;
-  // }
+  public sub2(x, y) {
+    return x - y;
+  }
 
-  // public mult2(x, y) {
-  //   return x * y;
-  // }
-  // public div2(x, y) {
-  //   return x > 0
-  //     ? x / y
-  //     : throwError('can\'t divide by zero.');
-  // }
+  public mult2(x, y) {
+    return x * y;
+  }
+  public div2(x, y) {
+    return x > 0
+      ? x / y
+      : throwError('can\'t divide by zero.');
+  }
 
-  // public add3(x, y) {
-  //   return x + y;
-  // }
+  public add3(x, y) {
+    return x + y;
+  }
 
   // public sub3(x, y) {
   //   return x - y;
