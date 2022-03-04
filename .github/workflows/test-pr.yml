@@ -47,7 +47,7 @@ jobs:
       run: |
         echo "${{github.ref}}"
         echo "${{github.event.pull_request_target.merged}}"
-        echo "github"
+        echo "${{github}}"
 
   collect-frontend-coverage:
     defaults:
