@@ -1,20 +1,20 @@
 name: CodeClimate-Checks
 on:
   pull_request:
-    types: [closed]
+    # types: [closed]
 
-    # types: [opened, reopened, synchronize, closed]
-    # branches-ignore:
-    #   - 'develop'
-    #   - 'test'
-    #   - 'master'
-  push:
+    types: [opened, reopened, synchronize, closed]
     branches-ignore:
-      - 'fix/code-climate-diff-changes'
-      - 'code-climate-diff-changes'
       - 'develop'
       - 'test'
       - 'master'
+  # push:
+  #   branches-ignore:
+  #     - 'fix/code-climate-diff-changes'
+  #     - 'code-climate-diff-changes'
+  #     - 'develop'
+  #     - 'test'
+  #     - 'master'
   workflow_dispatch:
 
 env:
@@ -24,7 +24,7 @@ jobs:
   test1:
     runs-on: ubuntu-latest
 
-    if: github.ref != 'fix/code-climate-diff-changes'
+    if: github.ref != 'refs/heads/code-climate-diff-changes'
 
     steps:
       - name: 'branch'
@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: 'is merge'
-        run: echo "not fix/code-climate-diff-changes"
+        run: echo "is merge"
 
   test3:
     runs-on: ubuntu-latest
@@ -46,15 +46,16 @@ jobs:
     - name: info
       run: |
         echo "${{github.ref}}"
+        echo "${{github.head_ref}}"
         echo "${{github.event.pull_request_target.merged}}"
-        echo "github"
+        echo "${{github}}"
 
   collect-frontend-coverage:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
   
-    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+    if: github.ref != 'refs/heads/fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
 
     runs-on: ubuntu-latest
 
@@ -116,7 +117,7 @@ jobs:
       run:
         working-directory: ./prime-dotnet-webapi-tests
 
-    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+    if: github.ref != 'refs/heads/fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
 
     runs-on: ubuntu-latest
 
@@ -180,7 +181,7 @@ jobs:
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
 
-    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+    if: github.ref != 'refs/heads/fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
 
     runs-on: ubuntu-latest
 
