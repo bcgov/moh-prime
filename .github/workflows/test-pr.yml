@@ -185,9 +185,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - test
-        run: |
-
       - name: set-date
         run: |
           echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
