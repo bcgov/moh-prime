@@ -22,10 +22,11 @@ jobs:
         node-version: [14.x]
 
     steps:
-      - name: set release date
+      - uses: actions/checkout@v1
+
+      - name: set-date
         run: |
           echo "GIT_COMMITTED_AT=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
-      - uses: actions/checkout@v1
 
       # - name: Cache node modules
       #   uses: actions/cache@v2
