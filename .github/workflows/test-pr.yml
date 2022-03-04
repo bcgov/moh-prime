@@ -26,7 +26,7 @@ jobs:
 
       - name: set-date
         run: |
-          echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
+          echo "${{env.GIT_COMMITTED_AT}}=$(date +%s)"
 
       # - name: Cache node modules
       #   uses: actions/cache@v2
