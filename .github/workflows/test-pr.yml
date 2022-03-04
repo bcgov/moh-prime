@@ -1,25 +1,61 @@
 name: CodeClimate-Checks
 on:
   pull_request:
-    types: [opened, reopened, synchronize, closed]
+    types: [closed]
+
+    # types: [opened, reopened, synchronize, closed]
+    # branches-ignore:
+    #   - 'develop'
+    #   - 'test'
+    #   - 'master'
+  push:
     branches-ignore:
+      - 'fix/code-climate-diff-changes'
+      - 'code-climate-diff-changes'
       - 'develop'
       - 'test'
       - 'master'
-  # push:
-  #   branches:
-  #     - 'fix/code-climate-diff-changes'
   workflow_dispatch:
 
 env:
   GIT_COMMITTED_AT: 
 
 jobs:
+  test1:
+    runs-on: ubuntu-latest
+
+    if: github.ref != 'fix/code-climate-diff-changes'
+
+    steps:
+      - name: 'branch'
+        run: echo "not fix/code-climate-diff-changes"
+
+  test2:
+    runs-on: ubuntu-latest
+
+    if: github.event.pull_request_target.merged == true
+
+    steps:
+      - name: 'is merge'
+        run: echo "not fix/code-climate-diff-changes"
+
+  test3:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: info
+      run: |
+        echo "${{github.ref}}"
+        echo "${{github.event.pull_request_target.merged}}"
+        echo "github"
+
   collect-frontend-coverage:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
   
+    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -79,6 +115,8 @@ jobs:
     defaults:
       run:
         working-directory: ./prime-dotnet-webapi-tests
+
+    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
 
     runs-on: ubuntu-latest
 
@@ -142,9 +180,10 @@ jobs:
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
 
+    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+
     runs-on: ubuntu-latest
 
-    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
     steps:
       - name: set-date
         run: |
