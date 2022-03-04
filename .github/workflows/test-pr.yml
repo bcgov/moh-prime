@@ -10,6 +10,8 @@ on:
     #   - 'master'
   push:
     branches-ignore:
+      - 'fix/code-climate-diff-changes'
+      - 'code-climate-diff-changes'
       - 'develop'
       - 'test'
       - 'master'
