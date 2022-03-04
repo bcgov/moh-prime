@@ -174,7 +174,7 @@ namespace Prime.Services
                 Pec = site.PEC
             };
 
-            var email = await _emailRenderingService.RenderSiteApprovedPharmaNetAdministratorEmailAsync(site.AdministratorPharmaNet.Email, viewModel, site.Id);
+            var email = await _emailRenderingService.RenderSiteApprovedPharmaNetAdministratorEmailAsync(site.AdministratorPharmaNet.Email, viewModel);
             await Send(email);
         }
 
@@ -186,7 +186,7 @@ namespace Prime.Services
                 Pec = site.PEC
             };
 
-            var email = await _emailRenderingService.RenderSiteApprovedSigningAuthorityEmailAsync(site.Provisioner.Email, viewModel, site.Id);
+            var email = await _emailRenderingService.RenderSiteApprovedSigningAuthorityEmailAsync(site.Provisioner.Email, viewModel);
             await Send(email);
         }
 

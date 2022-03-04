@@ -121,24 +121,24 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteApprovedPharmaNetAdministratorEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel, int siteId)
+        public async Task<Email> RenderSiteApprovedPharmaNetAdministratorEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel)
         {
             return new Email
             (
                 from: PrimeEmail,
                 to: recipientEmail,
-                subject: $"[{siteId}] Site Registration Approved",
+                subject: "Site Registration Approved",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteApprovedPharmaNetAdministrator, viewModel)
             );
         }
 
-        public async Task<Email> RenderSiteApprovedSigningAuthorityEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel, int siteId)
+        public async Task<Email> RenderSiteApprovedSigningAuthorityEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel)
         {
             return new Email
             (
                 from: PrimeEmail,
                 to: recipientEmail,
-                subject: $"[{siteId}] Site Registration Approved",
+                subject: "Site Registration Approved",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteApprovedSigningAuthority, viewModel)
             );
         }
@@ -151,7 +151,7 @@ namespace Prime.Services.EmailInternal
                 (
                     from: PrimeEmail,
                     to: PrimeSupportEmail,
-                    subject: $"[{siteId}] PRIME Site Registration Submission",
+                    subject: "PRIME Site Registration Submission",
                     body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
                 );
             }
