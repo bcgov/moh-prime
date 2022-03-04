@@ -1,14 +1,18 @@
 name: CodeClimate-Checks
 on:
   pull_request:
-    types: [opened, reopened, synchronize, closed]
+    types: [closed]
+
+    # types: [opened, reopened, synchronize, closed]
+    # branches-ignore:
+    #   - 'develop'
+    #   - 'test'
+    #   - 'master'
+  push:
     branches-ignore:
       - 'develop'
       - 'test'
       - 'master'
-  # push:
-  #   branches:
-  #     - 'fix/code-climate-diff-changes'
   workflow_dispatch:
 
 env:
