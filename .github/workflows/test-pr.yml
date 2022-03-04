@@ -1,14 +1,14 @@
 name: CodeClimate-Checks
 on:
   pull_request:
+    types: types: [opened, edited, synchronize, closed]
     branches-ignore:
-      - 'fix/code-climate-diff-changes'
       - 'develop'
       - 'test'
       - 'master'
-  push:
-    branches:
-      - 'fix/code-climate-diff-changes'
+  # push:
+  #   branches:
+  #     - 'fix/code-climate-diff-changes'
   workflow_dispatch:
 
 env:
@@ -144,6 +144,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
     steps:
       - name: set-date
         run: |
