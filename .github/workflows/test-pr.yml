@@ -55,7 +55,7 @@ jobs:
       run:
         working-directory: ./prime-angular-frontend
   
-    if: github.ref != 'refs/heads/fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
 
     runs-on: ubuntu-latest
 
@@ -70,7 +70,7 @@ jobs:
         run: |
           echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
 
-      # - name: Cache node modules
+      # - name: Cache node modules.
       #   uses: actions/cache@v2
       #   with:
       #     path: ~/.npm
@@ -117,7 +117,7 @@ jobs:
       run:
         working-directory: ./prime-dotnet-webapi-tests
 
-    if: github.ref != 'refs/heads/fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
 
     runs-on: ubuntu-latest
 
@@ -181,7 +181,7 @@ jobs:
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
 
-    if: github.ref != 'refs/heads/fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
 
     runs-on: ubuntu-latest
 
