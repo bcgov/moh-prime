@@ -6,6 +6,9 @@ on:
       - 'master'
   workflow_dispatch:
 
+env:
+  GIT_COMMITED_AT: $(date +'%Y-%m-%d')
+
 jobs:
   collect-frontend-coverage:
     defaults:
