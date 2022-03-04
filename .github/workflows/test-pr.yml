@@ -1,7 +1,7 @@
 name: CodeClimate-Checks
 on:
   pull_request:
-    types: [opened, edited, synchronize, closed]
+    types: [opened, reopened, synchronize, closed]
     branches-ignore:
       - 'develop'
       - 'test'
