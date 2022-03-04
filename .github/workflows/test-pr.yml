@@ -1,12 +1,13 @@
 name: CodeClimate-Checks
 on:
   pull_request:
-    branches:
-      fix/code-climate-diff-changes
-  push:
     branches-ignore:
+      - 'develop'
       - 'test'
       - 'master'
+  push:
+    branches:
+      - 'fix/code-climate-diff-changes'
   workflow_dispatch:
 
 jobs:
