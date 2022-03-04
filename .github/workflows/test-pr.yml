@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  GIT_COMMITTED_AT: ""
+  GIT_COMMITTED_AT: 
 
 jobs:
   collect-frontend-coverage:
@@ -83,6 +83,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: set-date
+        run: |
+          echo "${{env.GIT_COMMITTED_AT}}=$(date +%s)"
+
       - name: Setup .NET Core 5.0
         uses: actions/setup-dotnet@v1
         with:
@@ -135,6 +140,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: set-date
+        run: |
+          echo "${{env.GIT_COMMITTED_AT}}=$(date +%s)"
+
       - uses: amancevice/setup-code-climate@v0
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
