@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  GIT_COMMITED_AT: $(date +'%Y-%m-%d')
+  GIT_COMMITED_AT: $(date)
 
 jobs:
   collect-frontend-coverage:
