@@ -1,6 +1,7 @@
 name: CodeClimate-Checks
 on:
   pull_request:
+    types: [opened, reopened, edited]
     branches-ignore:
       - 'fix/code-climate-diff-changes'
       - 'develop'
