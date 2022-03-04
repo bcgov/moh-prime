@@ -70,7 +70,7 @@ jobs:
         run: |
           echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
 
-      # - name: Cache node modules
+      # - name: Cache node modules.
       #   uses: actions/cache@v2
       #   with:
       #     path: ~/.npm
