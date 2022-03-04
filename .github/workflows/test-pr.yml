@@ -26,7 +26,7 @@ jobs:
 
       - name: set-date
         run: |
-          echo "${{env.GIT_COMMITTED_AT}}=$(date +%s)"
+          echo "${{env.GIT_COMMITTED_AT}}=$(date +%s)" >> ${GITHUB_ENV}
 
       # - name: Cache node modules
       #   uses: actions/cache@v2
@@ -86,7 +86,7 @@ jobs:
 
       - name: set-date
         run: |
-          echo "${{env.GIT_COMMITTED_AT}}=$(date +%s)"
+          echo "${{env.GIT_COMMITTED_AT}}=$(date +%s)" >> ${GITHUB_ENV}
 
       - name: Setup .NET Core 5.0
         uses: actions/setup-dotnet@v1
@@ -142,7 +142,7 @@ jobs:
     steps:
       - name: set-date
         run: |
-          echo "${{env.GIT_COMMITTED_AT}}=$(date +%s)"
+          echo "${{env.GIT_COMMITTED_AT}}=$(date +%s)" >> ${GITHUB_ENV}
 
       - uses: amancevice/setup-code-climate@v0
         with:
