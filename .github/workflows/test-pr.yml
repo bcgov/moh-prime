@@ -46,6 +46,7 @@ jobs:
     - name: info
       run: |
         echo "${{github.ref}}"
+        echo "${{github.head_ref}}"
         echo "${{github.event.pull_request_target.merged}}"
         echo "${{github}}"
 
