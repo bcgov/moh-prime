@@ -1,8 +1,5 @@
 name: CodeClimate-Checks
 on:
-  pull_request:
-    branches:
-      fix/code-climate-diff-changes
   push:
     branches-ignore:
       - 'test'
