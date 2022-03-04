@@ -14,6 +14,7 @@ import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('SiteInformationComponent', () => {
   let component: SiteInformationComponent;
@@ -40,7 +41,8 @@ describe('SiteInformationComponent', () => {
           useClass: MockConfigService
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

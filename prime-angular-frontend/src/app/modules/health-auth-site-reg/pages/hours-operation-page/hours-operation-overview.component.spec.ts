@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
@@ -9,8 +9,8 @@ describe('HoursOperationOverviewComponent', () => {
   let component: HoursOperationOverviewComponent;
   let fixture: ComponentFixture<HoursOperationOverviewComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
@@ -19,9 +19,9 @@ describe('HoursOperationOverviewComponent', () => {
         WeekdayPipe
       ],
       providers: [],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HoursOperationOverviewComponent);

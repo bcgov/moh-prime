@@ -229,7 +229,7 @@ namespace Prime.Services.EmailInternal
             (
                 from: PrimeEmail,
                 to: email,
-                subject: "Lorem ipsum",
+                subject: "PRIME Absence Notification",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeAbsenceNotification, viewModel)
             );
         }

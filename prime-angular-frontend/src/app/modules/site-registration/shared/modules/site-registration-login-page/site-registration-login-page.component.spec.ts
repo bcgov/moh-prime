@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
@@ -13,8 +13,8 @@ describe('SiteRegistrationLoginPageComponent', () => {
   let component: SiteRegistrationLoginPageComponent;
   let fixture: ComponentFixture<SiteRegistrationLoginPageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
@@ -29,10 +29,10 @@ describe('SiteRegistrationLoginPageComponent', () => {
           useClass: MockAuthService
         }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SiteRegistrationLoginPageComponent);
