@@ -21,41 +21,38 @@ env:
   GIT_COMMITTED_AT: 
 
 jobs:
-  # test1:
-  #   runs-on: ubuntu-latest
+  test1:
+    if: github.ref != 'fix/code-climate-diff-changes'
+    runs-on: ubuntu-latest
 
-  #   if: github.ref != 'refs/heads/code-climate-diff-changes'
+    steps:
+      - name: 'branch name'
+        run: echo "not fix/code-climate-diff-changes"
 
-  #   steps:
-  #     - name: 'branch'
-  #       run: echo "not fix/code-climate-diff-changes"
+  test2:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
 
-  # test2:
-  #   runs-on: ubuntu-latest
+    steps:
+      - name: 'is merge'
+        run: echo "is merge"
 
-  #   if: github.event.pull_request_target.merged == true
+  test3:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: 'is merge'
-  #       run: echo "is merge"
-
-  # test3:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - name: info
-  #     run: |
-  #       echo "${{github.ref}}"
-  #       echo "${{github.head_ref}}"
-  #       echo "${{github.event.pull_request_target.merged}}"
-  #       echo "${{github}}"
-
+    steps:
+    - name: info
+      run: |
+        echo "${{github.ref}}"
+        echo "${{github.head_ref}}"
+        echo "${{github.event.pull_request.merged}}"
+        echo "${{github}}"
   collect-frontend-coverage:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
   
-    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
 
@@ -69,8 +66,7 @@ jobs:
       - name: set-date
         run: |
           echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
-
-      # - name: Cache node modules
+      # - name: Cache node modules.
       #   uses: actions/cache@v2
       #   with:
       #     path: ~/.npm
@@ -99,7 +95,6 @@ jobs:
         run: |
           yarn
           yarn run test
-
       - name: Collect Frontend Report
         run: |
           cc-test-reporter format-coverage --debug -t lcov -o coverage/frontend.json coverage/lcov.info
@@ -117,7 +112,7 @@ jobs:
       run:
         working-directory: ./prime-dotnet-webapi-tests
 
-    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
 
@@ -131,7 +126,6 @@ jobs:
       - name: set-date
         run: |
           echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
-
       - name: Setup .NET Core 5.0
         uses: actions/setup-dotnet@v1
         with:
@@ -142,7 +136,6 @@ jobs:
         run: |
           cd ../
           dotnet restore
-
       - name: Install ReportGenerator
         run: |
           cd ../
@@ -160,16 +153,13 @@ jobs:
           EXCLUDE: "**/ApiDbContextModelSnapshot.cs%2c**/**Designer.cs%2c**/Migrations/**%2c**/Views/**%2c"
         run: |
           dotnet test /p:ExcludeByFile=$EXCLUDE /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* --filter FullyQualifiedName\!~Integration
-
       - name: Run report generator
         run: |
           reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:coverage" -reporttype:lcov "-filefilters:-ApiDbContextModelSnapshot.cs;" -verbosity:Error
-
       - name: Collect Backend Report
         run: |
           cd ../prime-dotnet-webapi
           cc-test-reporter format-coverage --debug -t lcov -o ../prime-dotnet-webapi-tests/coverage/backend.json ../prime-dotnet-webapi-tests/coverage/lcov.info -p /home/runner/work/moh-prime/moh-prime/prime-dotnet-webapi
-
       - name: Create backend coverage file artifact
         uses: actions/upload-artifact@v2
         with:
@@ -181,7 +171,7 @@ jobs:
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
 
-    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request_target.merged == true
+    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
 
@@ -189,7 +179,6 @@ jobs:
       - name: set-date
         run: |
           echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
-
       - uses: amancevice/setup-code-climate@v0
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
@@ -199,11 +188,13 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: frontend
+          # path: frontend/
 
       - name: Download backend artifact
         uses: actions/download-artifact@v2
         with:
           name: backend
+          # path: backend/
 
       - name: Sum files
         run: |          
