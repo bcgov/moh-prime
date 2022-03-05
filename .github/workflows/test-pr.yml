@@ -30,7 +30,11 @@ jobs:
         run: echo "not fix/code-climate-diff-changes"
 
   test2:
+<<<<<<< HEAD
     if: github.event.pull_request.merged == 'true'
+=======
+    if: github.event.pull_request_target.merged == true
+>>>>>>> code-climate-diff-changes
     runs-on: ubuntu-latest
 
     steps:
@@ -45,7 +49,11 @@ jobs:
       run: |
         echo "${{github.ref}}"
         echo "${{github.head_ref}}"
+<<<<<<< HEAD
         echo "${{github.event.pull_request.merged}}"
+=======
+        echo "${{github.event.pull_request_target.merged}}"
+>>>>>>> code-climate-diff-changes
         echo "${{github}}"
 
   collect-frontend-coverage:
