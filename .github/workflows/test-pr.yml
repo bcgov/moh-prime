@@ -97,7 +97,7 @@ jobs:
           yarn run test
       - name: Collect Frontend Report
         run: |
-          cc-test-reporter format-coverage --debug -t lcov -o coverage/frontend.json coverage/lcov.info
+          cc-test-reporter format-coverage  -t lcov -o coverage/frontend.json coverage/lcov.info
       
       - name: Create frontend coverage file artifact
         uses: actions/upload-artifact@v2
@@ -159,7 +159,7 @@ jobs:
       - name: Collect Backend Report
         run: |
           cd ../prime-dotnet-webapi
-          cc-test-reporter format-coverage --debug -t lcov -o ../prime-dotnet-webapi-tests/coverage/backend.json ../prime-dotnet-webapi-tests/coverage/lcov.info -p /home/runner/work/moh-prime/moh-prime/prime-dotnet-webapi
+          cc-test-reporter format-coverage  -t lcov -o ../prime-dotnet-webapi-tests/coverage/backend.json ../prime-dotnet-webapi-tests/coverage/lcov.info -p /home/runner/work/moh-prime/moh-prime/prime-dotnet-webapi
       - name: Create backend coverage file artifact
         uses: actions/upload-artifact@v2
         with:
@@ -198,8 +198,8 @@ jobs:
 
       - name: Sum files
         run: |          
-          cc-test-reporter sum-coverage --debug -p 2 frontend.json backend.json
-          cc-test-reporter upload-coverage --debug -i ./coverage/codeclimate.json
+          cc-test-reporter sum-coverage  -p 2 frontend.json backend.json
+          cc-test-reporter upload-coverage  -i ./coverage/codeclimate.json
       
       - name: Create summed report
         uses: actions/upload-artifact@v2
