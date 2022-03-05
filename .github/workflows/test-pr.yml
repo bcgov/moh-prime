@@ -21,34 +21,32 @@ env:
   GIT_COMMITTED_AT: 
 
 jobs:
-  # test1:
-  #   runs-on: ubuntu-latest
+  test1:
+    if: github.ref != 'fix/code-climate-diff-changes'
+    runs-on: ubuntu-latest
 
-  #   if: github.ref != 'refs/heads/code-climate-diff-changes'
+    steps:
+      - name: 'branch name'
+        run: echo "not fix/code-climate-diff-changes"
 
-  #   steps:
-  #     - name: 'branch'
-  #       run: echo "not fix/code-climate-diff-changes"
+  test2:
+    if: github.event.pull_request_target.merged == true
+    runs-on: ubuntu-latest
 
-  # test2:
-  #   runs-on: ubuntu-latest
+    steps:
+      - name: 'is merge'
+        run: echo "is merge"
 
-  #   if: github.event.pull_request_target.merged == true
+  test3:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: 'is merge'
-  #       run: echo "is merge"
-
-  # test3:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - name: info
-  #     run: |
-  #       echo "${{github.ref}}"
-  #       echo "${{github.head_ref}}"
-  #       echo "${{github.event.pull_request_target.merged}}"
-  #       echo "${{github}}"
+    steps:
+    - name: info
+      run: |
+        echo "${{github.ref}}"
+        echo "${{github.head_ref}}"
+        echo "${{github.event.pull_request_target.merged}}"
+        echo "${{github}}"
 
   collect-frontend-coverage:
     defaults:
