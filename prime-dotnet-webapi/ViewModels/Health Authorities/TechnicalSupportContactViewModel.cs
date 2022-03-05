@@ -7,6 +7,6 @@ namespace Prime.ViewModels.HealthAuthorities
         /// <summary>
         /// Codes representing the vendors this Technical Support contact works with
         /// </summary>
-        public ICollection<int> VendorsWorkedWith { get; set; }
+        public IEnumerable<int> VendorsWorkedWith { get; set; }
     }
 }

@@ -27,6 +27,9 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<Contact, PrivacyOfficerViewModel>();
             CreateMap<Contact, HealthAuthorityContactViewModel>();
+            // TODO:
+            CreateMap<Contact, TechnicalSupportContactViewModel>()
+                .ForMember(dest => dest.VendorsWorkedWith, opt => opt.MapFrom(o => new int[] { 1, 2, 3 }));
             CreateMap<HealthAuthorityContact, HealthAuthorityContactViewModel>()
                 .IncludeMembers(src => src.Contact)
                 .ForMember(dest => dest.ContactId, opt => opt.MapFrom(src => src.Contact.Id));
