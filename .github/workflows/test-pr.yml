@@ -7,8 +7,8 @@ on:
       - 'master'
   workflow_dispatch:
 
-env:
-  GIT_COMMITTED_AT: 
+# env:
+#   GIT_COMMITTED_AT: 
 
 jobs:
   collect-frontend-coverage:
