@@ -1,20 +1,10 @@
 name: CodeClimate-Checks
 on:
   pull_request:
-    # types: [closed]
-
     types: [opened, reopened, synchronize, closed]
     branches-ignore:
-      - 'develop'
       - 'test'
       - 'master'
-  # push:
-  #   branches-ignore:
-  #     - 'fix/code-climate-diff-changes'
-  #     - 'code-climate-diff-changes'
-  #     - 'develop'
-  #     - 'test'
-  #     - 'master'
   workflow_dispatch:
 
 env:
@@ -22,7 +12,7 @@ env:
 
 jobs:
   test1:
-    if: github.ref != 'fix/code-climate-diff-changes'
+    if: github.ref != 'develop'
     runs-on: ubuntu-latest
 
     steps:
@@ -52,7 +42,7 @@ jobs:
       run:
         working-directory: ./prime-angular-frontend
   
-    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request.merged == true
+    if: github.ref != 'develop' || github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
 
@@ -112,7 +102,7 @@ jobs:
       run:
         working-directory: ./prime-dotnet-webapi-tests
 
-    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request.merged == true
+    if: github.ref != 'develop' || github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
 
@@ -171,7 +161,7 @@ jobs:
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
 
-    if: github.ref != 'fix/code-climate-diff-changes' || github.event.pull_request.merged == true
+    if: github.ref != 'develop' || github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
 
