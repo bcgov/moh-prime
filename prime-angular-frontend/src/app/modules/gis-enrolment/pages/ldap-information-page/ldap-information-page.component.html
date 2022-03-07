@@ -13,7 +13,7 @@
           LDAP Information
         </ng-container>
         <ng-container appPageSubheader2Summary>
-          Enter your LDAP information below
+          Enter your HealthNetBC credentials below
         </ng-container>
       </app-page-subheader2>
 
@@ -22,7 +22,7 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="GIS User Name"
+                   placeholder="HealthNetBC User Name"
                    formControlName="ldapUsername">
             <mat-error *ngIf="formState.ldapUsername.hasError('required')">Required</mat-error>
           </mat-form-field>
@@ -33,7 +33,7 @@
           <mat-form-field class="w-100">
             <input matInput
                    type="password"
-                   placeholder="LDAP Password"
+                   placeholder="HealthNetBC Password"
                    formControlName="ldapPassword">
             <mat-error *ngIf="formState.ldapPassword.hasError('required')">Required</mat-error>
           </mat-form-field>
