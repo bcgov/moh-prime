@@ -61,7 +61,7 @@ export class TestCodeclimateComponent implements OnInit {
   public div3(x, y) {
     return x > 0
       ? x / y
-      : throwError('can\'t divide by zero');
+      : throwError('can\'t divide by zero.');
   }
 
   public add4(x, y) {
