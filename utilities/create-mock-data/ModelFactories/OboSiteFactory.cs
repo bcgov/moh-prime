@@ -17,7 +17,6 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.CareSettingCode, f => f.PickRandom(CareSettingLookup.All).Code);
             RuleFor(x => x.HealthAuthorityCode, f => f.PickRandom(HealthAuthorityLookup.All).Code);
             RuleFor(x => x.SiteName, f => f.Lorem.Word());
-            RuleFor(x => x.PEC, f => f.Address.BuildingNumber());
             RuleFor(x => x.FacilityName, f => f.Lorem.Word());
             RuleFor(x => x.JobTitle, f => f.Lorem.Word());
             RuleFor(x => x.PhysicalAddress, f => new PhysicalAddressFactory().Generate());
