@@ -7,9 +7,6 @@ on:
       - 'master'
   workflow_dispatch:
 
-# env:
-#   GIT_COMMITTED_AT: 
-
 jobs:
   collect-frontend-coverage:
     defaults:
@@ -114,7 +111,7 @@ jobs:
 
       - name: Generate coverage report
         env:
-          EXCLUDE: "**/ApiDbContextModelSnapshot.cs%2c**/**Designer.cs%2c**/Migrations/**%2c**/Views/**%2c"
+          EXCLUDE: "**/ApiDbContextModelSnapshot.cs%2c**/**Designer.cs%2c**/Migrations/**%2c**/Views/**"
         run: |
           dotnet test /p:ExcludeByFile=$EXCLUDE /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* --filter FullyQualifiedName\!~Integration
       - name: Run report generator
