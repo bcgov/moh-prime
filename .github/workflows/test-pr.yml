@@ -111,7 +111,7 @@ jobs:
 
       - name: Generate coverage report
         env:
-          EXCLUDE: "**/ApiDbContextModelSnapshot.cs%2c**/**Designer.cs%2c**/Migrations/**%2c**/Views/**"
+          EXCLUDE: "**/ApiDbContextModelSnapshot.cs%2c**/**Designer.cs%2c**/Migrations/**%2c**/Views/**%2c**/Configuration/**%2c**/DTOs/**%2c**/Extensions/**%2c**/HttpClients/**%2c**/Infrastructure/**%2c**/Helpers/**%2c**/ViewModels/**%2c**/Resource/**"
         run: |
           dotnet test /p:ExcludeByFile=$EXCLUDE /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* --filter FullyQualifiedName\!~Integration
       - name: Run report generator
