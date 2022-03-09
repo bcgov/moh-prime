@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { Sort, SortDirection } from '@angular/material/sort';
+import { SortDirection } from '@angular/material/sort';
 
 import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription, forkJoin } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
@@ -54,7 +54,6 @@ export class AdjudicationContainerComponent implements OnInit {
   public enrollees: EnrolleeListViewModel[];
   public enrollee: HttpEnrollee;
   public enrolleeNavigation: EnrolleeNavigation;
-  public sort: Sort;
   public pagination: Pagination;
 
   public showSearchFilter: boolean;
@@ -88,13 +87,6 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onFilter(status: StatusFilterEnum | null): void {
     this.routeUtils.updateQueryParams({ status });
-  }
-
-  public onSort(sort: Sort): void {
-    // Do not use sorting queryParams for single row mode
-    if (!this.route.snapshot.params.id) {
-      this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
-    }
   }
 
   public onRefresh(): void {
@@ -458,15 +450,25 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number, sortActive?: string, sortDirection?: SortDirection, page?: number }) {
+  protected getDataset(
+    enrolleeId: number,
+    queryParams: {
+      search?: string, status?: number, sortActive?: string, sortDirection?: SortDirection,
+      page?: number,
+      assignedTo?: number,
+      appliedDateStart?: string,
+      appliedDateEnd?: string,
+      renewalDateStart?: string,
+      renewalDateEnd?: string
+    }
+  ) {
     if (enrolleeId) {
       this.getEnrolleeById(enrolleeId);
     } else {
-      this.busy = this.getEnrollees(queryParams)
+      this.busy = this.getEnrollees({ ...queryParams, sortOrder: `${queryParams.sortActive}_${queryParams.sortDirection}` })
         .subscribe((enrollees: PaginatedList<EnrolleeListViewModel>) => {
           this.enrollees = enrollees.results;
           this.pagination = enrollees;
-          this.sort = { active: queryParams.sortActive, direction: queryParams.sortDirection };
         });
     }
   }
@@ -492,7 +494,17 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  private getEnrollees({ textSearch, status, page }: { textSearch?: string, status?: StatusFilterEnum, page?: number }) {
+  private getEnrollees({ status, ...rest }: {
+    status?: StatusFilterEnum,
+    textSearch?: string,
+    page?: number,
+    sortOrder?: string,
+    assignedTo?: number,
+    appliedDateStart?: string,
+    appliedDateEnd?: string,
+    renewalDateStart?: string,
+    renewalDateEnd?: string
+  }) {
     // Transform the "statuses" for (un)linked paper enrollees into their own query string
     var isLinkedPaperEnrolment = null;
     if (+status === PaperStatusEnum.UNLINKED_PAPER_ENROLMENT) {
@@ -504,7 +516,7 @@ export class AdjudicationContainerComponent implements OnInit {
       status = null;
     }
 
-    return this.adjudicationResource.getEnrollees({ textSearch, statusCode: status, isLinkedPaperEnrolment, page })
+    return this.adjudicationResource.getEnrollees({ statusCode: status, isLinkedPaperEnrolment, ...rest })
       .pipe(
         tap(() => this.showSearchFilter = true)
       );

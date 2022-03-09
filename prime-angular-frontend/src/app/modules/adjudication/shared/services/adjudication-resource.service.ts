@@ -56,7 +56,18 @@ export class AdjudicationResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public getEnrollees(params: { textSearch?: string, statusCode?: number, isLinkedPaperEnrolment?: boolean, page?: number }): Observable<PaginatedList<EnrolleeListViewModel>> {
+  public getEnrollees(params: {
+    textSearch?: string,
+    statusCode?: number,
+    isLinkedPaperEnrolment?: boolean,
+    page?: number,
+    sortOrder?: string,
+    assignedTo?: number,
+    appliedDateStart?: string,
+    appliedDateEnd?: string,
+    renewalDateStart?: string,
+    renewalDateEnd?: string
+  }): Observable<PaginatedList<EnrolleeListViewModel>> {
     const httpParams = this.apiResourceUtilsService.makeHttpParams(params);
     return this.apiResource.get<PaginatedList<EnrolleeListViewModel>>('enrollees', httpParams)
       .pipe(

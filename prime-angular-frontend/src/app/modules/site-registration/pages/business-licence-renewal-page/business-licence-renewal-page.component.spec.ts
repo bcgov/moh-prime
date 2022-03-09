@@ -1,5 +1,5 @@
-import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -16,8 +16,8 @@ describe('BusinessLicenceRenewalPageComponent', () => {
   let component: BusinessLicenceRenewalPageComponent;
   let fixture: ComponentFixture<BusinessLicenceRenewalPageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
@@ -38,18 +38,18 @@ describe('BusinessLicenceRenewalPageComponent', () => {
         },
         SiteFormStateService
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(inject(
     [SiteService, SiteFormStateService],
     (siteService: SiteService, siteFormStateService: SiteFormStateService) => {
-    fixture = TestBed.createComponent(BusinessLicenceRenewalPageComponent);
-    component = fixture.componentInstance;
-    siteFormStateService.setForm(siteService.site);
-    fixture.detectChanges();
-  }));
+      fixture = TestBed.createComponent(BusinessLicenceRenewalPageComponent);
+      component = fixture.componentInstance;
+      siteFormStateService.setForm(siteService.site);
+      fixture.detectChanges();
+    }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

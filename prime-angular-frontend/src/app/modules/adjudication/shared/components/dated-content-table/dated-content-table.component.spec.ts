@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { DatedContentTableComponent } from './dated-content-table.component';
@@ -20,7 +20,7 @@ describe('DatedContentTableComponent', () => {
           useValue: APP_DI_CONFIG
         }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 
