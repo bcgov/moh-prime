@@ -57,6 +57,7 @@ namespace Prime.ViewModels.Profiles
         public void Process(HealthAuthorityTechnicalSupport source, TechnicalSupportContactViewModel destination, ResolutionContext context)
         {
             System.Diagnostics.Debug.WriteLine($"Inside {nameof(Process)}");
+            throw new NotImplementedException("TODO!");
         }
     }
 }
