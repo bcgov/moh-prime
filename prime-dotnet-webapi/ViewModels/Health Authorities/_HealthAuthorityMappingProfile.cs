@@ -28,36 +28,17 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<Contact, PrivacyOfficerViewModel>();
             CreateMap<Contact, HealthAuthorityContactViewModel>();
-
             CreateMap<HealthAuthorityContact, HealthAuthorityContactViewModel>()
                 // See https://automapperdocs.readthedocs.io/en/latest/Mapping-inheritance.html
                 .IncludeAllDerived()
                 .IncludeMembers(src => src.Contact)
                 .ForMember(dest => dest.ContactId, opt => opt.MapFrom(src => src.Contact.Id));
-            // TODO:
             CreateMap<HealthAuthorityTechnicalSupport, TechnicalSupportContactViewModel>()
-                .AfterMap<MapVendorsWorkedWithAction>();
+                .ForMember(dest => dest.VendorsSupported, opt => opt.MapFrom(src => src.VendorsSupported.Select(v => v.Id)));
 
             CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
                 .IncludeMembers(src => src.Party);
             CreateMap<Party, AuthorizedUserViewModel>();
-        }
-    }
-
-
-    public class MapVendorsWorkedWithAction : IMappingAction<HealthAuthorityTechnicalSupport, TechnicalSupportContactViewModel>
-    {
-        private readonly ApiDbContext _context;
-
-        public MapVendorsWorkedWithAction(ApiDbContext context)
-        {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
-
-        public void Process(HealthAuthorityTechnicalSupport source, TechnicalSupportContactViewModel destination, ResolutionContext context)
-        {
-            System.Diagnostics.Debug.WriteLine($"Inside {nameof(Process)}");
-            throw new NotImplementedException("TODO!");
         }
     }
 }
