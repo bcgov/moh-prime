@@ -54,7 +54,7 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<PaginatedList<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
             var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);

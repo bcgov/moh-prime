@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { Sort, SortDirection } from '@angular/material/sort';
+import { SortDirection } from '@angular/material/sort';
 
 import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription, forkJoin } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
@@ -54,7 +54,6 @@ export class AdjudicationContainerComponent implements OnInit {
   public enrollees: EnrolleeListViewModel[];
   public enrollee: HttpEnrollee;
   public enrolleeNavigation: EnrolleeNavigation;
-  public sort: Sort;
   public pagination: Pagination;
 
   public showSearchFilter: boolean;
@@ -470,7 +469,6 @@ export class AdjudicationContainerComponent implements OnInit {
         .subscribe((enrollees: PaginatedList<EnrolleeListViewModel>) => {
           this.enrollees = enrollees.results;
           this.pagination = enrollees;
-          this.sort = { active: queryParams.sortActive, direction: queryParams.sortDirection };
         });
     }
   }

@@ -37,7 +37,6 @@ class ImprovedPageEvent extends PageEvent {
 export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrollees: EnrolleeListViewModel[];
   @Input() public enrolleeNavigation: EnrolleeNavigation;
-  @Input() public sort: Sort;
   @Input() public pagination: Pagination;
   @Input() public localStoragePrefix: string;
   @Output() public notify: EventEmitter<EnrolleeListViewModel>;
@@ -136,12 +135,19 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.sendBulkEmail.emit();
   }
 
-  public sortData(sort: Sort) {
-    this.localStorageService.set(this.sortActiveKey, sort.active);
-    this.localStorageService.set(this.sortDirectionKey, sort.direction);
-
+  public updateDateSortParams(sort: Sort) {
     // Do not use sorting queryParams for single row mode
-    if (!this.activatedRoute.snapshot.params.id) {
+    if (this.activatedRoute.snapshot.params.id) {
+      return
+    }
+
+    if (!sort.active || !sort.direction) {
+      this.localStorageService.removeItem(this.sortActiveKey);
+      this.localStorageService.removeItem(this.sortDirectionKey);
+      this.routeUtils.updateQueryParams({ sortActive: null, sortDirection: null });
+    } else {
+      this.localStorageService.set(this.sortActiveKey, sort.active);
+      this.localStorageService.set(this.sortDirectionKey, sort.direction);
       this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
     }
   }
@@ -172,7 +178,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     }
 
     if (changes.sort?.firstChange === false) {
-      this.sortData(changes.sort.currentValue);
+      this.updateDateSortParams(changes.sort.currentValue);
     }
   }
 
@@ -211,17 +217,8 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
 
     this.dataSource.data = this.enrollees;
 
-    const sort = <Sort>{
-      active: sortActive,
-      direction: sortDirection
-    };
-
-    if (!!sort.active && !!sort.direction) {
-      this.sortData(sort);
-    }
-
-    if (!sort.active || !sort.direction) {
-      this.sortData(<Sort>{
+    if (!sortActive || !sortDirection) {
+      this.updateDateSortParams(<Sort>{
         active: this.localStorageService.get(this.sortActiveKey),
         direction: this.localStorageService.get(this.sortDirectionKey)
       });
