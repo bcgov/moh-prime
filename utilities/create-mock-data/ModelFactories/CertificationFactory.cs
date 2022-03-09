@@ -28,19 +28,19 @@ namespace PrimeTests.ModelFactories
 
             RuleSet("licence.manual", (set) =>
             {
-                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.Manual)).Code);
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.CurrentLicenseDetail.Manual)).Code);
             });
             RuleSet("licence.auto", (set) =>
             {
-                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.Manual)).Code);
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.CurrentLicenseDetail.Manual)).Code);
             });
             RuleSet("licence.regulated", (set) =>
             {
-                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.NamedInImReg)).Code);
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.CurrentLicenseDetail.NamedInImReg)).Code);
             });
             RuleSet("licence.nonRegulated", (set) =>
             {
-                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.NamedInImReg)).Code);
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.CurrentLicenseDetail.NamedInImReg)).Code);
             });
 
             FinishWith((f, x) =>
