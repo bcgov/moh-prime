@@ -16,6 +16,7 @@ import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 import { MockPermissionService } from 'test/mocks/mock-permission.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('DashboardComponent', () => {
   let component: DashboardV1Component;
@@ -53,7 +54,8 @@ describe('DashboardComponent', () => {
             useClass: MockAccessTokenService
           },
           KeycloakService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

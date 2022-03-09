@@ -2,6 +2,8 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PageComponent } from './page.component';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('PageComponent', () => {
   let component: PageComponent;
@@ -11,11 +13,13 @@ describe('PageComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          NgxBusyModule
+          NgxBusyModule,
+          MatTooltipModule
         ],
         declarations: [
           PageComponent
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
@@ -15,6 +15,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 describe('EnrolleeReviewComponent', () => {
   let component: EnrolleeReviewComponent;
@@ -25,7 +26,8 @@ describe('EnrolleeReviewComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        SharedModule
+        SharedModule,
+        MatTooltipModule
       ],
       providers: [
         {
@@ -46,7 +48,7 @@ describe('EnrolleeReviewComponent', () => {
         },
         KeycloakService
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

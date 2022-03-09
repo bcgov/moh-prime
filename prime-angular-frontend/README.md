@@ -60,6 +60,21 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 1. `ng lint` to lint the application code using TSLint.
 1. `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io). The test runner has a variety of options that can be used to refine how the test suite is executed that can be found by running `ng test --help`.  One of these options allows for the narrowing of the tests run through the use of globbing patterns - `ng test --include='**/*.pipe.spec.ts'`.
 1. `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+1. `npm test` will run the tests the same way they work on github actions.
+
+
+##### Unit tests issues
+
+Sometimes unit tests will start to fail either consistently or intermitently. Intermitenet unit tests that are not considered (non-deterministic) can be troublesome and hard to detect.
+
+ Below are some steps to be able to find out where the issues are
+
+ 1- Go to karma.conf.js and uncomment the jasmine client that sets the order of execution to non-random
+ 2- Run the tests and see if the failure occurs consitently and take note of the failing test number or where the errors occur
+ 3- Investigate the tests that are failing as well as the tests before the ones that are failing.
+ 4- If tests fail with routing issues and you can't find the test file name in the logs, keep note of the route that is failing and investigate the spec files of the components that try to call those routes
+
+ Sometimes running tests in order may note reproduce the error. In that case you can set the random flag to true and play with the seed until you find one that reproduces the error and stick with it. Alternatively, set the random flag to true and comment out the seed for now. You can use a tool that logs out the seed, and when a random run fails get the seed and use it by setting `jasmin: { random: true, seed: (the seed you found)}`
 
 ##### Getting Help
 

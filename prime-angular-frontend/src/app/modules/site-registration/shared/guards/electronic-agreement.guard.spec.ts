@@ -7,12 +7,18 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SharedModule } from '@shared/shared.module';
+import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
 describe('ElectronicAgreementGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([
+          {
+            path: HealthAuthSiteRegRoutes.SITE_MANAGEMENT,
+            component: ElectronicAgreementGuard
+          }
+        ]),
         HttpClientTestingModule,
         SharedModule
       ],

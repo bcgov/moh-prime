@@ -17,6 +17,8 @@ import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { BceidDemographicFormState } from './bceid-demographic-form-state.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 describe('BceidDemographicComponent', () => {
   let component: BceidDemographicComponent;
@@ -29,7 +31,8 @@ describe('BceidDemographicComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        MatDatepickerModule
       ],
       declarations: [
         BceidDemographicComponent
@@ -49,7 +52,8 @@ describe('BceidDemographicComponent', () => {
         },
         KeycloakService,
         EnrolmentFormStateService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 
