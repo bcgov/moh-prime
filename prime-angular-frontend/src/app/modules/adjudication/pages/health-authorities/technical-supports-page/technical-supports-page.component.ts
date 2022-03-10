@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, pipe, UnaryFunction } from 'rxjs';
@@ -27,8 +28,7 @@ import { TechnicalSupportsFormState } from '@lib/classes/technical-supports-form
 })
 export class TechnicalSupportsPageComponent extends AbstractContactsPage implements OnInit {
 
-  public healthAuthorityVendors: HealthAuthorityVendor[];
-
+  public healthAuthority: HealthAuthority;
 
   constructor(
     protected route: ActivatedRoute,
@@ -56,14 +56,33 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     return this.formState.form.get('vendors') as FormArray;
   }
 
+  public onNoVendors(change: MatCheckboxChange): void {
+    this.vendors.controls.forEach((vendorCheckbox: FormControl) => {
+      vendorCheckbox.setValue(false);
+    });
+  }
+
+  // TODO:
+  public isVendorSelected(healthAuthorityVendor: HealthAuthorityVendor): boolean {
+    console.log(`healthAuthorityVendor.vendorCode=${healthAuthorityVendor.vendorCode}`);
+    console.log(`this.healthAuthority.technicalSupports[this.editedContactIndex].vendorsSupported=${this.healthAuthority.technicalSupports[this.editedContactIndex].vendorsSupported}`)
+    let result = this.editedContactIndex != this.unsavedContactIndexValue ?
+      this.healthAuthority.technicalSupports[this.editedContactIndex].vendorsSupported.includes(healthAuthorityVendor.vendorCode) :
+      false;
+    console.log(`result=${result}`);
+    return result;
+  }
+
   public ngOnInit(): void {
     this.cardTitlePrefix = 'Technical Support: ';
     this.init();
 
     this.busy = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe((healthAuthority: HealthAuthority) => {
-        this.healthAuthorityVendors = healthAuthority.vendors
-        this.healthAuthorityVendors.forEach((_) => this.vendors.push(
+        this.healthAuthority = healthAuthority;
+        // TODO:
+        console.log("After this.healthAuthResource.getHealthAuthorityById ------------------------------------");
+        this.healthAuthority.vendors.forEach((haVendor: HealthAuthorityVendor) => this.vendors.push(
           this.fb.control(false, [])
         ))
       });
