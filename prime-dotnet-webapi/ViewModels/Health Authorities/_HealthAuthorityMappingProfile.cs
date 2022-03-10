@@ -34,7 +34,7 @@ namespace Prime.ViewModels.Profiles
                 .IncludeMembers(src => src.Contact)
                 .ForMember(dest => dest.ContactId, opt => opt.MapFrom(src => src.Contact.Id));
             CreateMap<HealthAuthorityTechnicalSupport, TechnicalSupportContactViewModel>()
-                .ForMember(dest => dest.VendorsSupported, opt => opt.MapFrom(src => src.VendorsSupported.Select(v => v.Id)));
+                .ForMember(dest => dest.VendorsSupported, opt => opt.MapFrom(src => src.VendorsSupported.Select(v => v.VendorCode)));
 
             CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
                 .IncludeMembers(src => src.Party);
