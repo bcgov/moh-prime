@@ -16,6 +16,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
+import { HealthAuthorityTechnicalSupport } from '@shared/models/health-authority-technical-support';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
@@ -96,7 +97,20 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     return pipe(map(({ technicalSupports }: HealthAuthority) => technicalSupports));
   }
 
-  protected performSubmissionRequest(contact: Contact[]): NoContent {
+  protected performSubmissionRequest(contact: HealthAuthorityTechnicalSupport[]): NoContent {
     return this.healthAuthResource.updateHealthAuthorityTechnicalSupports(this.route.snapshot.params.haid, contact);
+  }
+
+  protected addNonContactDetails(json: any): any {
+    const selectedVendorCodes: number[] = [];
+    this.healthAuthority.vendors.forEach((haVendor: HealthAuthorityVendor, i: number) => {
+      if (json.vendors[i]) {
+        // If checkbox checked, add corresponding vendor code
+        selectedVendorCodes.push(haVendor.vendorCode);
+      }
+    });
+    // Adjust JSON to match shape of HealthAuthorityTechnicalSupport class
+    json.vendorsSupported = selectedVendorCodes;
+    return json;
   }
 }
