@@ -115,10 +115,20 @@ fdescribe('EnrolleeAdjudicatorDocumentsComponent', () => {
       spyOnDownloadToken = spyOn((component as any).utilsService, 'downloadToken');
     });
 
-    describe('with a documentId', () => {
+    describe('with a getEnrolleeAdjudicationDocumentDownloadToken completing properly', () => {
       it('should call downloadToken', () => {
         component.onGetDocumentByGuid(1);
         expect(spyOnDownloadToken).toHaveBeenCalledWith(mockToken);
+      });
+    });
+
+    describe('with a getEnrolleeAdjudicationDocumentDownloadToken not completing', () => {
+      it('should not call downloadToken', () => {
+        try {
+          spyOnGetEnrolleeAdjudicationDocumentDownloadToken.and.returnValue(throwError('Some Error'));
+          component.onGetDocumentByGuid(1);
+          expect(spyOnDownloadToken).not.toHaveBeenCalled();
+        } catch { }
       });
     });
   });
@@ -150,7 +160,7 @@ fdescribe('EnrolleeAdjudicatorDocumentsComponent', () => {
       it('should not call getDocuments()', () => {
         // We can use try/catch block or override the spy method to return an Observable<Never> instead
         try {
-          spyOnDeleteEnrolleeAdjudicationDocument.and.returnValue(throwError({ status: 404 }));
+          spyOnDeleteEnrolleeAdjudicationDocument.and.returnValue(throwError('Some Error'));
           mockDocumentId = faker.random.number();
 
           component.onDeleteDocumentById(mockDocumentId);
