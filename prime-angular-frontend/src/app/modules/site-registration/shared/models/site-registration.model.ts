@@ -14,7 +14,6 @@ export interface OrganizationListViewModelPartial extends
 }
 
 export interface OrganizationSearchListViewModel {
-  matchOn: string[];
   organization: Organization;
 }
 
@@ -26,8 +25,4 @@ export interface OrganizationSearchListViewModel {
  * NOTE: should only be used within the SiteRegistrationContainer,
  * SiteRegistrationTable, and SiteRegistrationActions
  */
-export interface SiteRegistrationListViewModel extends OrganizationListViewModelPartial, SiteListViewModelPartial {
-  // Only exists when viewing a list of site registrations, and
-  // populated by the OrganizationSearchListViewModel
-  matchOn?: string[];
-}
+export interface SiteRegistrationListViewModel extends OrganizationListViewModelPartial, SiteListViewModelPartial { }

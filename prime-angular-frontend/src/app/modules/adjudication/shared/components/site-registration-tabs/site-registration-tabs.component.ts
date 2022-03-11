@@ -22,6 +22,8 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { PaginatedList } from '@core/models/paginated-list.model';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
   selector: 'app-site-registration-tabs',
@@ -136,11 +138,8 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
       this.healthAuthResource.getAllHealthAuthoritySites()
         .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = sites)
     } else {
-      this.busy = this.getOrganizations({ careSettingCode, ...queryParams })
-        .pipe(
-          map(this.toSiteRegistrations),
-        )
-        .subscribe((siteRegistrations: SiteRegistrationListViewModel[]) => this.dataSource.data = siteRegistrations);
+      this.busy = this.getPaginatedSites({ careSettingCode, ...queryParams })
+        .subscribe((paginatedList: PaginatedList<SiteRegistrationListViewModel>) => this.dataSource.data = paginatedList.results);
     }
   }
 
@@ -154,29 +153,12 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
       .update<SiteRegistrationListViewModel>(this.dataSource, 'siteId', updatedSiteRegistration);
   }
 
-  private getOrganizations(
+  private getPaginatedSites(
     queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum }
-  ): Observable<OrganizationSearchListViewModel[]> {
-    return this.organizationResource.getOrganizations(queryParam)
+  ): Observable<PaginatedList<SiteRegistrationListViewModel>> {
+    return this.siteResource.getPaginatedSites(queryParam)
       .pipe(
         tap(() => this.showSearchFilter = true)
       );
-  }
-
-  private toSiteRegistrations(results: OrganizationSearchListViewModel[]): SiteRegistrationListViewModel[] {
-    const siteRegistrations = results.reduce((registrations, result) => {
-      const { matchOn, organization: ovm } = result;
-      const { id: organizationId, sites, ...organization } = ovm;
-      const registration = sites.map((svm: Site, index: number) => {
-        const { id, doingBusinessAs, ...site } = svm;
-        return (!index)
-          ? { organizationId, ...organization, id, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn }
-          : { organizationId, id, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn };
-      });
-      registrations.push(registration);
-      return registrations;
-    }, []);
-
-    return [].concat(...siteRegistrations);
   }
 }

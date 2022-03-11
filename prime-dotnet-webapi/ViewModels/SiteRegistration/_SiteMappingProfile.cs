@@ -17,6 +17,12 @@ namespace Prime.ViewModels.Profiles
             CreateMap<CommunitySite, CommunitySiteListViewModel>()
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
                 .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count));
+            CreateMap<CommunitySite, CommunitySiteAdminListViewModel>()
+                .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
+                .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count))
+                .ForMember(dest => dest.DisplayId, opt => opt.MapFrom(src => src.Organization.DisplayId))
+                .ForMember(dest => dest.SigningAuthority, opt => opt.MapFrom(src => src.Organization.SigningAuthority.FirstName + " " + src.Organization.SigningAuthority.LastName))
+                .ForMember(dest => dest.MissingBusinessLicence, opt => opt.MapFrom(src => src.BusinessLicence == null || src.BusinessLicence.BusinessLicenceDocument == null));
 
             CreateMap<BusinessLicence, BusinessLicence>();
 

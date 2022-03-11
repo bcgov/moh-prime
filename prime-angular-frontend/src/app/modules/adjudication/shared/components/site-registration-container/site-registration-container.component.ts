@@ -9,6 +9,7 @@ import { exhaustMap, map, tap, take } from 'rxjs/operators';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { PaginatedList } from '@core/models/paginated-list.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -21,8 +22,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import {
   SiteRegistrationListViewModel,
-  SiteListViewModelPartial,
-  OrganizationSearchListViewModel
+  SiteListViewModelPartial
 } from '@registration/shared/models/site-registration.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { NoContent } from '@core/resources/abstract-resource';
@@ -106,9 +106,9 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
           take(1),
           map(this.toSiteRegistration())
         )
-      : this.getOrganizations(queryParams)
+      : this.getPaginatedSites(queryParams)
         .pipe(
-          map(this.toSiteRegistrations)
+          map((paginatedList: PaginatedList<SiteRegistrationListViewModel>) => paginatedList.results)
         );
 
     this.busy = request$
@@ -125,8 +125,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
       .update<SiteRegistrationListViewModel>(this.dataSource, 'siteId', updatedSiteRegistration);
   }
 
-  private getOrganizations(queryParams: { textSearch?: string }): Observable<OrganizationSearchListViewModel[]> {
-    return this.organizationResource.getOrganizations(queryParams)
+  private getPaginatedSites(queryParams: { textSearch?: string }): Observable<PaginatedList<SiteRegistrationListViewModel>> {
+    return this.siteResource.getPaginatedSites(queryParams)
       .pipe(
         tap(() => this.showSearchFilter = true)
       );
@@ -180,23 +180,6 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
           })
         );
     }
-  }
-
-  private toSiteRegistrations(results: OrganizationSearchListViewModel[]): SiteRegistrationListViewModel[] {
-    const siteRegistrations = results.reduce((registrations, result) => {
-      const { matchOn, organization: ovm } = result;
-      const { id: organizationId, sites, ...organization } = ovm;
-      const registration = sites.map((svm: Site, index: number) => {
-        const { id: siteId, doingBusinessAs, ...site } = svm;
-        return (!index)
-          ? { organizationId, ...organization, siteId, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn }
-          : { organizationId, siteId, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn };
-      });
-      registrations.push(registration);
-      return registrations;
-    }, []);
-
-    return [].concat(...siteRegistrations);
   }
 
   private toSiteRegistration(): ([organization, site]: [Organization, Site]) => SiteRegistrationListViewModel[] {

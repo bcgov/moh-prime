@@ -14,10 +14,11 @@ import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/m
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 import { Organization } from '@registration/shared/models/organization.model';
-import { OrganizationSearchListViewModel } from '@registration/shared/models/site-registration.model';
+import { OrganizationSearchListViewModel, SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { OrganizationClaimFormModel } from '@registration/shared/models/organization-claim-form.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
+import { PaginatedList } from '@core/models/paginated-list.model';
 
 @Injectable({
   providedIn: 'root'
@@ -112,22 +113,6 @@ export class OrganizationResource {
 
           this.toastService.openErrorToast('Organizations could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizationByUserId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getOrganizations(
-    queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum }
-  ): Observable<OrganizationSearchListViewModel[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
-    return this.apiResource.get<OrganizationSearchListViewModel[]>('organizations', params)
-      .pipe(
-        map((response: ApiHttpResponse<OrganizationSearchListViewModel[]>) => response.result),
-        tap((organizations: OrganizationSearchListViewModel[]) => this.logger.info('ORGANIZATIONS', organizations)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organizations could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getOrganizations error has occurred: ', error);
           throw error;
         })
       );

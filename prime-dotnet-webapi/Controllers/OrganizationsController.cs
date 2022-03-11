@@ -56,28 +56,6 @@ namespace Prime.Controllers
             _partyService = partyService;
         }
 
-        // GET: api/Organizations
-        /// <summary>
-        /// Gets all of the Organizations.
-        /// </summary>
-        [HttpGet(Name = nameof(GetOrganizations))]
-        [Authorize(Roles = Roles.ViewSite)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationSearchViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetOrganizations([FromQuery] OrganizationSearchOptions search)
-        {
-            var organizations = await _organizationService.GetOrganizationsAsync(search);
-
-            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
-            foreach (var site in organizations.Select(o => o.Organization).SelectMany(o => o.Sites))
-            {
-                site.HasNotification = notifiedIds.Contains(site.Id);
-            }
-
-            return Ok(organizations);
-        }
-
         // GET: api/Organizations/5
         /// <summary>
         /// Gets a specific Organization.

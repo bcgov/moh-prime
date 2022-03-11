@@ -11,6 +11,7 @@ using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
 using AutoMapper.QueryableExtensions;
+using Prime.Models.Api;
 
 namespace Prime.Services
 {
@@ -43,6 +44,30 @@ namespace Prime.Services
             }
 
             return await query.ToListAsync();
+        }
+
+        public async Task<PaginatedList<CommunitySiteAdminListViewModel>> GetSitesAsync(OrganizationSearchOptions searchOptions)
+        {
+            searchOptions ??= new OrganizationSearchOptions();
+
+            var query = _context.CommunitySites
+                .AsNoTracking()
+                .If(searchOptions.CareSettingCode.HasValue, q => q
+                    .Where(s => s.CareSettingCode == searchOptions.CareSettingCode)
+                )
+                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
+                    .Search(
+                        s => s.DoingBusinessAs,
+                        s => s.PEC,
+                        s => s.Organization.Name,
+                        s => s.Organization.DisplayId.ToString(),
+                        s => s.Organization.SigningAuthority.FirstName + " " + s.Organization.SigningAuthority.LastName)
+                    .Containing(searchOptions.TextSearch)
+                )
+                .ProjectTo<CommunitySiteAdminListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync();
+
+            return await PaginatedList<CommunitySiteAdminListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
         }
 
         public async Task<CommunitySite> GetSiteAsync(int siteId)
