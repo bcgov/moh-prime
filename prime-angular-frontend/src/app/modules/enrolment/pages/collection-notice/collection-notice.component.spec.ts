@@ -18,6 +18,9 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { OverviewComponent } from '@enrolment/pages/overview/overview.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { AppRoutes } from 'app/app.routes';
+import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 
 describe('CollectionNoticeComponent', () => {
   let component: CollectionNoticeComponent;
@@ -32,6 +35,10 @@ describe('CollectionNoticeComponent', () => {
             {
               path: EnrolmentRoutes.OVERVIEW,
               component: OverviewComponent
+            },
+            {
+              path: AppRoutes.UNDERAGED,
+              component: UnderagedComponent
             }
           ]),
           NgxMaterialModule,
@@ -56,7 +63,8 @@ describe('CollectionNoticeComponent', () => {
             provide: AuthService,
             useClass: MockAuthService
           }
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));
@@ -69,15 +77,5 @@ describe('CollectionNoticeComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  describe('testing onAccept()', () => {
-    it('should set authService.hasJustLoggedIn to false', () => {
-      expect<any>((component as any).authService.hasJustLoggedIn).toBeTrue();
-
-      component.onAccept();
-
-      expect<any>((component as any).authService.hasJustLoggedIn).toBeFalse();
-    });
   });
 });

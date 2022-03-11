@@ -1,10 +1,15 @@
 import { Component, EventEmitter, OnInit, Output, Input, Inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { HtmlComponent } from '@shared/components/dialogs/content/html/html.component';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
+import { CollectionNoticeService } from '@shared/services/collection-notice.service';
 import { SiteRegistrationTypeEnum } from '@health-auth/shared/enums/site-registration-type.enum';
 
 @UntilDestroy()
@@ -44,7 +49,9 @@ export class SiteRegAccessComponent implements OnInit {
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private viewportService: ViewportService
+    private viewportService: ViewportService,
+    private dialog: MatDialog,
+    private collectionNoticeService: CollectionNoticeService
   ) {
     this.mode = 'single';
     this.login = new EventEmitter<SiteRegistrationTypeEnum>();
@@ -61,7 +68,20 @@ export class SiteRegAccessComponent implements OnInit {
       return;
     }
 
-    this.login.emit(type);
+    const data: DialogOptions = {
+      title: this.collectionNoticeService.Title,
+      component: HtmlComponent,
+      data: {
+        content: this.collectionNoticeService.ContentToRender,
+      },
+      actionText: 'Next',
+    };
+
+    this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .subscribe((isNext: boolean) => {
+        if (isNext) this.login.emit(type)
+      });
   }
 
   public ngOnInit(): void {

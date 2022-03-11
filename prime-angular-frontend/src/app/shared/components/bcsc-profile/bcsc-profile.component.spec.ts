@@ -2,7 +2,7 @@ import { SharedModule } from '@shared/shared.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -17,13 +17,14 @@ import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { BcscProfileComponent } from './bcsc-profile.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('BcscProfileComponent', () => {
   let component: BcscProfileComponent;
   let fixture: ComponentFixture<BcscProfileComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
         RouterTestingModule,
@@ -43,9 +44,10 @@ describe('BcscProfileComponent', () => {
           useClass: MockAuthService
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BcscProfileComponent);

@@ -1,6 +1,7 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -19,7 +20,8 @@ describe('DateOfBirthComponent', () => {
       imports: [
         ReactiveFormsModule,
         BrowserAnimationsModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        MatDatepickerModule
       ],
       declarations: [],
       providers: [
@@ -38,7 +40,7 @@ describe('DateOfBirthComponent', () => {
           useValue: {}
         },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

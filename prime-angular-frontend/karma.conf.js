@@ -15,6 +15,12 @@ module.exports = function (config) {
     client: {
       // leave Jasmine Spec Runner output visible in browser
       clearContext: false,
+      /*** Uncomment below for debugging ***/
+      // jasmine: {
+      //   random: false,
+      //   /*** Seed will only work if random is set to true ***/
+      //   seed: 1234
+      // }
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/'),
@@ -24,7 +30,7 @@ module.exports = function (config) {
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_WARN,
     autoWatch: true,
     browsers: ['Chrome'],
     customLaunchers: {
@@ -69,6 +75,9 @@ module.exports = function (config) {
         base: 'ChromeHeadless',
         flags: ['--no-sandbox', '--disable-gpu']
       }
+    },
+    browserConsoleLogOptions: {
+      level: 'warn'
     }
   });
 };

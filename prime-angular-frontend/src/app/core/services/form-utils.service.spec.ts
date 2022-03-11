@@ -44,6 +44,7 @@ describe('FormUtilsService', () => {
         ]
       })
     ];
+    // Note the two that are expected to be false print errors to console when running tests
     expect(service.checkValidity(forms[0])).toBe(false, 'form should be invalid');
     expect(service.checkValidity(forms[1])).toBe(true, 'form should be valid');
 
