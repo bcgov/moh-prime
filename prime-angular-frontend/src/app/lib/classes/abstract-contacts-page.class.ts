@@ -24,12 +24,9 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
   public formState: ContactFormState;
   public isInitialEntry: boolean;
   public isEditing: boolean;
-  public editedContactIndex: number;
   public contacts: Contact[];
   public contactCardListItems: CardListItem[];
   public showAddressFields: boolean;
-
-  protected readonly unsavedContactIndexValue: number = -1;
 
   protected cardTitlePrefix: string;
   protected backRoute: string;
@@ -62,13 +59,11 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
 
   public onAdd(): void {
     this.isEditing = true;
-    this.editedContactIndex = this.unsavedContactIndexValue;
     this.formState.form.reset({ id: 0 });
   }
 
   public onEdit(index: number): void {
     this.isEditing = true;
-    this.editedContactIndex = index;
     this.formState.patchValue(this.contacts[index]);
   }
 
@@ -210,7 +205,6 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
 
     if (!contacts.length) {
       this.isEditing = true;
-      this.editedContactIndex = this.unsavedContactIndexValue;
     }
   }
 
