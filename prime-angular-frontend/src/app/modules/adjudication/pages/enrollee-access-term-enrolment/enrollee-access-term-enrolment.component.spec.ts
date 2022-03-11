@@ -17,6 +17,9 @@ describe('EnrolleeAccessTermEnrolmentComponent', () => {
   let component: EnrolleeAccessTermEnrolmentComponent;
   let fixture: ComponentFixture<EnrolleeAccessTermEnrolmentComponent>;
 
+  let spyOnRouteWithin;
+  let route;
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -47,9 +50,26 @@ describe('EnrolleeAccessTermEnrolmentComponent', () => {
     fixture = TestBed.createComponent(EnrolleeAccessTermEnrolmentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    spyOnRouteWithin = spyOn((component as any).routeUtils, 'routeWithin');
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('test onRoute()', () => {
+    it('with a string only', () => {
+      route = 'mockRoute';
+      component.onRoute(route);
+
+      expect(spyOnRouteWithin).toHaveBeenCalledWith(route);
+    });
+
+    it('with a (string | number)[]', () => {
+      route = ['mockRoute', 1];
+      component.onRoute(route);
+
+      expect(spyOnRouteWithin).toHaveBeenCalledWith(route);
+    });
   });
 });
