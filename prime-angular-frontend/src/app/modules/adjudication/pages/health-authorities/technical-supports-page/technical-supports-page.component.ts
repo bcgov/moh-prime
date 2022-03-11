@@ -63,17 +63,6 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     });
   }
 
-  // TODO:
-  public isVendorSelected(healthAuthorityVendor: HealthAuthorityVendor): boolean {
-    console.log(`healthAuthorityVendor.vendorCode=${healthAuthorityVendor.vendorCode}`);
-    console.log(`this.healthAuthority.technicalSupports[this.editedContactIndex].vendorsSupported=${this.healthAuthority.technicalSupports[this.editedContactIndex].vendorsSupported}`)
-    let result = this.editedContactIndex != this.unsavedContactIndexValue ?
-      this.healthAuthority.technicalSupports[this.editedContactIndex].vendorsSupported.includes(healthAuthorityVendor.vendorCode) :
-      false;
-    console.log(`result=${result}`);
-    return result;
-  }
-
   public ngOnInit(): void {
     this.cardTitlePrefix = 'Technical Support: ';
     this.init();
@@ -81,12 +70,20 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     this.busy = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe((healthAuthority: HealthAuthority) => {
         this.healthAuthority = healthAuthority;
-        // TODO:
-        console.log("After this.healthAuthResource.getHealthAuthorityById ------------------------------------");
         this.healthAuthority.vendors.forEach((haVendor: HealthAuthorityVendor) => this.vendors.push(
           this.fb.control(false, [])
         ))
       });
+  }
+
+  public onEdit(contactIndex: number): void {
+    super.onEdit(contactIndex);
+
+    const vendorsCheckState: boolean[] = [];
+    this.healthAuthority.vendors.forEach((haVendor: HealthAuthorityVendor) => {
+      vendorsCheckState.push(this.healthAuthority.technicalSupports[contactIndex].vendorsSupported.includes(haVendor.vendorCode));
+    });
+    this.vendors.patchValue(vendorsCheckState);
   }
 
   protected createFormInstance(): void {

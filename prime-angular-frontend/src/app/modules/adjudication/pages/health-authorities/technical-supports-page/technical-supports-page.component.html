@@ -24,9 +24,9 @@
           <ng-container *ngIf="healthAuthority?.vendors"
                         [formGroup]="formState.form">
             <div *ngFor="let vendor of healthAuthority.vendors; let i = index"
-                 formArrayName="vendors">
-              <mat-checkbox [formControlName]="i"
-                            [checked]="isVendorSelected(vendor)">
+                 formArrayName="vendors"
+                 class="mb-3">
+              <mat-checkbox [formControlName]="i">
                 {{VendorName(vendor.vendorCode)}}
               </mat-checkbox>
             </div>
