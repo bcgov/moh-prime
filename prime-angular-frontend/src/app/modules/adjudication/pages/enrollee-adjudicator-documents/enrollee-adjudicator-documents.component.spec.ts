@@ -1,6 +1,6 @@
 import * as faker from 'faker';
 
-import { Observable, of, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -148,6 +148,7 @@ fdescribe('EnrolleeAdjudicatorDocumentsComponent', () => {
 
     describe('with deleteEnrolleeAdjudicationDocument throwing error', () => {
       it('should not call getDocuments()', () => {
+        // We can use try/catch block or override the spy method to return an Observable<Never> instead
         try {
           spyOnDeleteEnrolleeAdjudicationDocument.and.returnValue(throwError({ status: 404 }));
           mockDocumentId = faker.random.number();
