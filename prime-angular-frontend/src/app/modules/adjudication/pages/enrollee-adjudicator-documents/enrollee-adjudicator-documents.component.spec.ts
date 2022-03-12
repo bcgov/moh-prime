@@ -12,7 +12,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EnrolleeAdjudicatorDocumentsComponent } from './enrollee-adjudicator-documents.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-fdescribe('EnrolleeAdjudicatorDocumentsComponent', () => {
+describe('EnrolleeAdjudicatorDocumentsComponent', () => {
   let component: EnrolleeAdjudicatorDocumentsComponent;
   let fixture: ComponentFixture<EnrolleeAdjudicatorDocumentsComponent>;
 
