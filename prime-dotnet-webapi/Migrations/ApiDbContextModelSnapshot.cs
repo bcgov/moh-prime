@@ -4559,20 +4559,20 @@ namespace Prime.Migrations
                     b.Property<int>("HealthAuthorityTechnicalSupportId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("HealthAuthorityVendorId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("VendorCode")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("HealthAuthorityTechnicalSupportId");
 
-                    b.HasIndex("VendorCode");
+                    b.HasIndex("HealthAuthorityVendorId");
 
                     b.ToTable("HealthAuthorityTechnicalSupportVendor");
                 });
@@ -12144,20 +12144,20 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupportVendor", b =>
                 {
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", "HealthAuthorityTechnicalSupport")
-                        .WithMany()
+                        .WithMany("VendorsSupported")
                         .HasForeignKey("HealthAuthorityTechnicalSupportId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Prime.Models.Vendor", "Vendor")
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityVendor", "HealthAuthorityVendor")
                         .WithMany()
-                        .HasForeignKey("VendorCode")
+                        .HasForeignKey("HealthAuthorityVendorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("HealthAuthorityTechnicalSupport");
 
-                    b.Navigation("Vendor");
+                    b.Navigation("HealthAuthorityVendor");
                 });
 
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
@@ -13023,6 +13023,11 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Vendor", b =>
                 {
                     b.Navigation("SiteVendors");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", b =>
+                {
+                    b.Navigation("VendorsSupported");
                 });
 
             modelBuilder.Entity("Prime.Models.CommunitySite", b =>

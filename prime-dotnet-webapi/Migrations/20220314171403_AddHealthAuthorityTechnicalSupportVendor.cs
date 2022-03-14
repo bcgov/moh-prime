@@ -15,7 +15,7 @@ namespace Prime.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     HealthAuthorityTechnicalSupportId = table.Column<int>(type: "integer", nullable: false),
-                    VendorCode = table.Column<int>(type: "integer", nullable: false),
+                    HealthAuthorityVendorId = table.Column<int>(type: "integer", nullable: false),
                     CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedTimeStamp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -31,10 +31,10 @@ namespace Prime.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_HealthAuthorityTechnicalSupportVendor_VendorLookup_VendorCo~",
-                        column: x => x.VendorCode,
-                        principalTable: "VendorLookup",
-                        principalColumn: "Code",
+                        name: "FK_HealthAuthorityTechnicalSupportVendor_HealthAuthorityVendor~",
+                        column: x => x.HealthAuthorityVendorId,
+                        principalTable: "HealthAuthorityVendor",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -44,9 +44,9 @@ namespace Prime.Migrations
                 column: "HealthAuthorityTechnicalSupportId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HealthAuthorityTechnicalSupportVendor_VendorCode",
+                name: "IX_HealthAuthorityTechnicalSupportVendor_HealthAuthorityVendor~",
                 table: "HealthAuthorityTechnicalSupportVendor",
-                column: "VendorCode");
+                column: "HealthAuthorityVendorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

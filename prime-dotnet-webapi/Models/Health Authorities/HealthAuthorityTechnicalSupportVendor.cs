@@ -21,9 +21,9 @@ namespace Prime.Models.HealthAuthorities
         public HealthAuthorityTechnicalSupport HealthAuthorityTechnicalSupport { get; set; }
 
         [Required]
-        public int VendorCode { get; set; }
+        public int HealthAuthorityVendorId { get; set; }
 
         [JsonIgnore]
-        public Vendor Vendor { get; set; }
+        public HealthAuthorityVendor HealthAuthorityVendor { get; set; }
     }
 }
