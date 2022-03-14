@@ -116,7 +116,7 @@ namespace Prime.Services
             return true;
         }
 
-        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<ContactViewModel> contacts) where T : HealthAuthorityContact, new()
+        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<IContactViewModel> contacts) where T : HealthAuthorityContact, new()
         {
             var oldContacts = await _context.HealthAuthorityContacts
                 .Include(c => c.Contact.PhysicalAddress)
@@ -131,6 +131,18 @@ namespace Prime.Services
 
             _context.Addresses.RemoveRange(oldContacts.Select(c => c.PhysicalAddress).Where(a => a != null));
 
+            // if (contacts is IEnumerable<TechnicalSupportContactViewModel>)
+            // {
+            //     foreach (var techSupportContact in techSupportContacts)
+            //     {
+            //         var oldAssociations = await _context.HealthAuthorityTechnicalSupportVendors
+            //             .Where(hatsv => hatsv.HealthAuthorityTechnicalSupportId == techSupportContact.ContactId)
+            //             .Select(hatsv => hatsv)
+            //             .ToListAsync();
+            //         _context.HealthAuthorityTechnicalSupportVendors.RemoveRange(oldAssociations);
+            //     }
+            // }
+
             var newContacts = contacts.Select(contact =>
             {
                 contact.Id = 0;
@@ -142,6 +154,22 @@ namespace Prime.Services
             });
 
             _context.HealthAuthorityContacts.AddRange(newContacts);
+
+            // if (contacts is IEnumerable<TechnicalSupportContactViewModel>)
+            // {
+            //     foreach (var techSupportContact in techSupportContacts)
+            //     {
+            //         var newAssociations = techSupportContact.VendorsSupported.Select(supportedVendor =>
+            //         {
+            //             return new HealthAuthorityTechnicalSupportVendor
+            //             {
+            //                 HealthAuthorityTechnicalSupportId = techSupportContact.ContactId,
+            //                 VendorCode = supportedVendor
+            //             };
+            //         });
+            //         _context.HealthAuthorityTechnicalSupportVendors.AddRange(newAssociations);
+            //     }
+            // }
 
             await _context.SaveChangesAsync();
         }
