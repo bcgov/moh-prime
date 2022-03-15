@@ -131,46 +131,35 @@ namespace Prime.Services
 
             _context.Addresses.RemoveRange(oldContacts.Select(c => c.PhysicalAddress).Where(a => a != null));
 
-            // if (contacts is IEnumerable<TechnicalSupportContactViewModel>)
-            // {
-            //     foreach (var techSupportContact in techSupportContacts)
-            //     {
-            //         var oldAssociations = await _context.HealthAuthorityTechnicalSupportVendors
-            //             .Where(hatsv => hatsv.HealthAuthorityTechnicalSupportId == techSupportContact.ContactId)
-            //             .Select(hatsv => hatsv)
-            //             .ToListAsync();
-            //         _context.HealthAuthorityTechnicalSupportVendors.RemoveRange(oldAssociations);
-            //     }
-            // }
-
-            var newContacts = contacts.Select(contact =>
+            IEnumerable<T> newContacts;
+            if (contacts is IEnumerable<TechnicalSupportContactViewModel>)
             {
-                contact.Id = 0;
-                return new T
+                newContacts = (IEnumerable<T>)contacts.Select(contact =>
                 {
-                    HealthAuthorityOrganizationId = healthAuthorityId,
-                    Contact = _mapper.Map<Contact>(contact)
-                };
-            });
+                    contact.Id = 0;
+                    var healthAuthorityTechnicalSupport = new HealthAuthorityTechnicalSupport
+                    {
+                        HealthAuthorityOrganizationId = healthAuthorityId,
+                        Contact = _mapper.Map<Contact>(contact)
+                    };
+                    healthAuthorityTechnicalSupport.VendorsSupported = MapToVendorsSupported(healthAuthorityTechnicalSupport, (TechnicalSupportContactViewModel)contact, _context.HealthAuthorityVendors);
+                    return healthAuthorityTechnicalSupport;
+                });
+            }
+            else
+            {
+                newContacts = contacts.Select(contact =>
+                {
+                    contact.Id = 0;
+                    return new T
+                    {
+                        HealthAuthorityOrganizationId = healthAuthorityId,
+                        Contact = _mapper.Map<Contact>(contact)
+                    };
+                });
+            }
 
             _context.HealthAuthorityContacts.AddRange(newContacts);
-
-            // if (contacts is IEnumerable<TechnicalSupportContactViewModel>)
-            // {
-            //     foreach (var techSupportContact in techSupportContacts)
-            //     {
-            //         var newAssociations = techSupportContact.VendorsSupported.Select(supportedVendor =>
-            //         {
-            //             return new HealthAuthorityTechnicalSupportVendor
-            //             {
-            //                 HealthAuthorityTechnicalSupportId = techSupportContact.ContactId,
-            //                 VendorCode = supportedVendor
-            //             };
-            //         });
-            //         _context.HealthAuthorityTechnicalSupportVendors.AddRange(newAssociations);
-            //     }
-            // }
-
             await _context.SaveChangesAsync();
         }
 
@@ -322,6 +311,23 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return doc;
+        }
+
+        private static ICollection<HealthAuthorityTechnicalSupportVendor> MapToVendorsSupported(HealthAuthorityTechnicalSupport healthAuthorityTechnicalSupport, TechnicalSupportContactViewModel contact, DbSet<HealthAuthorityVendor> healthAuthorityVendors)
+        {
+            var result = new List<HealthAuthorityTechnicalSupportVendor>();
+            foreach (var vendorCode in contact.VendorsSupported)
+            {
+                result.Add(new HealthAuthorityTechnicalSupportVendor
+                {
+                    HealthAuthorityTechnicalSupport = healthAuthorityTechnicalSupport,
+                    HealthAuthorityVendor = healthAuthorityVendors
+                        .Where(hav => hav.HealthAuthorityOrganizationId == healthAuthorityTechnicalSupport.HealthAuthorityOrganizationId)
+                        .Where(hav => hav.VendorCode == vendorCode)
+                        .Single()
+                });
+            }
+            return result;
         }
     }
 }
