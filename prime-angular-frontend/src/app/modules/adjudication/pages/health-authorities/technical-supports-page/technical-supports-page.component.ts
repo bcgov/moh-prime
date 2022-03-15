@@ -94,11 +94,11 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     return pipe(map(({ technicalSupports }: HealthAuthority) => technicalSupports));
   }
 
-  protected performSubmissionRequest(contact: HealthAuthorityTechnicalSupport[]): NoContent {
-    return this.healthAuthResource.updateHealthAuthorityTechnicalSupports(this.route.snapshot.params.haid, contact);
+  protected performSubmissionRequest(contacts: HealthAuthorityTechnicalSupport[]): NoContent {
+    return this.healthAuthResource.updateHealthAuthorityTechnicalSupports(this.route.snapshot.params.haid, contacts);
   }
 
-  protected addNonContactDetails(json: any): any {
+  protected manipulateFormStateJsonPreSubmission(json: any): any {
     const selectedVendorCodes: number[] = [];
     this.healthAuthority.vendors.forEach((haVendor: HealthAuthorityVendor, i: number) => {
       if (json.vendors[i]) {
