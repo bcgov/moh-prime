@@ -75,12 +75,13 @@ namespace TestPrimeE2E.Admin
 
             // Click on triple vertical dots for the row of target Health Authority
             ClickHamburgerMenuInTable(TestParameters.HealthAuthority);
-            ClickHamburgerMenuItem("Add Organization Information");
+            ClickHamburgerMenuItem("Add/Update Organization Information");
 
-            ClickButton("Add Organization Information");
+            _driver.ClickWithJavaScript(GetButtonXPath("Add Organization Information"));
 
             string expectedTitle = "Health Authority Care Types";
-            Assert.AreEqual(expectedTitle, _driver.FindPatiently("//h2[contains(@class, 'title')]").Text);
+            string actualTitle = _driver.FindPatiently("//h2[contains(@class, 'title')]").Text;
+            Assert.IsTrue(expectedTitle.Equals(actualTitle) || expectedTitle.Equals("business\r\nOrganization Information"));
             TypeIntoField("Care Type", "Acute Care");
             CheckLogThenScreenshot(expectedTitle);
             ClickButton("Save and Continue");

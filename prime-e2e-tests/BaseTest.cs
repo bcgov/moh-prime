@@ -85,7 +85,7 @@ namespace TestPrimeE2E
         protected void ClickHamburgerMenuInTable(string uniqueTextOfRow)
         {
             // See https://stackoverflow.com/questions/4608097/xpath-to-select-a-table-row-that-has-a-cell-containing-specified-text
-            _driver.FindPatiently($"//tr[td//text()[contains(., '{uniqueTextOfRow}')]]/td/button/span/mat-icon[contains(text(), 'more_vert')]").Click();
+            _driver.ClickWithJavaScript($"//tr[td//text()[contains(., '{uniqueTextOfRow}')]]/td/button/span/mat-icon[contains(text(), 'more_vert')]");
         }
 
 
