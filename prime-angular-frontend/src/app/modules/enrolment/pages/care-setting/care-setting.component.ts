@@ -156,12 +156,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.removeIncompleteCareSettings();
   }
 
@@ -202,23 +202,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected nextRouteAfterSubmit() {
-    const oboSites = this.enrolmentFormStateService.oboSitesForm.get('oboSites').value as OboSite[];
-    const certifications = this.enrolmentFormStateService.regulatoryFormState.certifications;
-
-    let nextRoutePath: string;
-    if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.REGULATORY;
-    } else if (this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.OVERVIEW;
-    } else if (oboSites?.length) {
-      // Should edit existing Job/OboSites next
-      nextRoutePath = EnrolmentRoutes.OBO_SITES;
-    } else if (!certifications.length && !oboSites?.length) {
-      // No College Licence and need to enter Job information
-      nextRoutePath = EnrolmentRoutes.OBO_SITES;
-    }
-
-    super.nextRouteAfterSubmit(nextRoutePath);
+    super.nextRouteAfterSubmit(
+      this.isProfileComplete
+        ? EnrolmentRoutes.OVERVIEW
+        : EnrolmentRoutes.REGULATORY
+    );
   }
 
   private removeIncompleteCareSettings(allowEmptyCareSettings: boolean = true) {

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Prime.Configuration.Environment;
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
+using Prime.Models.Plr;
 using Prime.Models.VerifiableCredentials;
 
 namespace Prime
@@ -50,9 +51,6 @@ namespace Prime
         }
 
         public DbSet<ClientLog> ClientLogs { get; set; }
-
-        // Enrollee Jobs have been migrated onto OboSites, but we are not dropping the old table for the time being
-        public DbSet<Job> Jobs { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Address> Addresses { get; set; }
@@ -98,7 +96,6 @@ namespace Prime
         public DbSet<HealthAuthorityVendor> HealthAuthorityVendors { get; set; }
         public DbSet<PrivacyOffice> PrivacyOffices { get; set; }
 
-
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
         public DbSet<IdentificationDocument> IdentificationDocuments { get; set; }
         public DbSet<EnrolleeAdjudicationDocument> EnrolleeAdjudicationDocuments { get; set; }
@@ -120,7 +117,7 @@ namespace Prime
 
         // PLR Integration
         public DbSet<PlrProvider> PlrProviders { get; set; }
-
+        public DbSet<CollegeForPlrRoleType> CollegeForPlrRoleTypes { get; set; }
 
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }

@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
@@ -18,8 +18,8 @@ describe('EnrolleeSelfDeclarationsComponent', () => {
   let component: EnrolleeSelfDeclarationsComponent;
   let fixture: ComponentFixture<EnrolleeSelfDeclarationsComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         NgxMaterialModule
@@ -39,9 +39,9 @@ describe('EnrolleeSelfDeclarationsComponent', () => {
         },
         KeycloakService
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(inject([EnrolmentService], (enrolmentService: EnrolmentService) => {
     fixture = TestBed.createComponent(EnrolleeSelfDeclarationsComponent);

@@ -4,17 +4,21 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
+import { ToastService } from '@core/services/toast.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
+import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
+interface HealthAuthorityVendorMap extends VendorConfig {
+  id?: number;
+}
 @Component({
   selector: 'app-vendors-page',
   templateUrl: './vendors-page.component.html',
@@ -25,8 +29,8 @@ export class VendorsPageComponent implements OnInit {
   public title: string;
   public form: FormGroup;
   public isInitialEntry: boolean;
-  public filteredVendors: BehaviorSubject<VendorConfig[]>;
-  public healthAuthorityVendors: VendorConfig[];
+  public filteredVendors: BehaviorSubject<HealthAuthorityVendorMap[]>;
+  public healthAuthorityVendors: HealthAuthorityVendorMap[];
 
   private routeUtils: RouteUtils;
 
@@ -36,6 +40,7 @@ export class VendorsPageComponent implements OnInit {
     private formUtilsService: FormUtilsService,
     private configService: ConfigService,
     private route: ActivatedRoute,
+    private toastService: ToastService,
     router: Router
   ) {
     this.title = route.snapshot.data.title;
@@ -48,9 +53,9 @@ export class VendorsPageComponent implements OnInit {
     ]);
 
     this.healthAuthorityVendors = this.configService.vendors
-      .filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
+      .filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) as HealthAuthorityVendorMap[];
 
-    this.filteredVendors = new BehaviorSubject<VendorConfig[]>(this.healthAuthorityVendors);
+    this.filteredVendors = new BehaviorSubject<HealthAuthorityVendorMap[]>(this.healthAuthorityVendors);
   }
 
   public get vendors(): FormArray {
@@ -58,21 +63,36 @@ export class VendorsPageComponent implements OnInit {
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const vendorCodes = [...new Set(this.vendors.value.map(({ vendor }) => vendor.code) as number[])];
-      this.healthAuthResource.updateHealthAuthorityVendors(this.route.snapshot.params.haid, vendorCodes)
+    // A disabled form signifies no changes
+    if (this.formUtilsService.checkValidity(this.form) || this.form.disabled) {
+      const vendorCodes = [...new Set(this.vendors.getRawValue().map(({ vendor }) => vendor.code) as number[])];
+      this.busy = this.healthAuthResource.updateHealthAuthorityVendors(this.route.snapshot.params.haid, vendorCodes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
   }
 
-  public addVendor(vendor: VendorConfig = null) {
+  public addVendor(vendor: HealthAuthorityVendorMap = null) {
     this.vendors.push(this.fb.group({
-      vendor: [vendor ?? null, Validators.required]
+      vendor: [{ value: vendor, disabled: vendor?.id }, Validators.required]
     }));
   }
 
   public removeVendor(index: number) {
-    this.vendors.removeAt(index);
+    const vendorId = this.vendors.getRawValue()[index]?.vendor?.id;
+
+    if (!vendorId) {
+      // when vendorId is undefined that means we're deleting a vendor after adding it and before hitting Save and Continue
+      // i.e. before it was given an Id
+      this.vendors.removeAt(index);
+      return;
+    }
+
+    this.busy = this.healthAuthResource.getHealthAuthorityVendorSiteIds(this.route.snapshot.params.haid, vendorId)
+      .subscribe((healthAuthoritySites) => {
+        (!healthAuthoritySites.length)
+          ? this.vendors.removeAt(index)
+          : this.toastService.openErrorToast('Vendor could not be removed, one or more sites are using it');
+      });
   }
 
   public onBack() {
@@ -86,25 +106,28 @@ export class VendorsPageComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      vendors: this.fb.array([], FormArrayValidators.atLeast(1))
+      vendors: this.fb.array([])
     });
   }
 
   private initForm() {
     this.form.valueChanges
-      .subscribe(({ vendors }: { vendors: { vendor: VendorConfig }[] }) => {
-        const selectedVendorCodes = vendors.map(ct => ct.vendor?.code);
+      .subscribe(() => {
+        const selectedVendorCodes = this.vendors.getRawValue().map(v => v.vendor?.code);
         // Filter out the selected vendors to avoid visual duplicates
         const filteredVendors = this.healthAuthorityVendors.filter(v => !selectedVendorCodes.includes(v.code));
         this.filteredVendors.next(filteredVendors);
       });
 
-    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+    this.busy = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ vendors }: HealthAuthority) =>
         (vendors?.length)
-          ? this.configService.vendors
-            .filter(v => vendors.some(({ vendorCode }) => v.code === vendorCode))
-            .map(v => this.addVendor(v))
+          ? vendors.map((vendor: HealthAuthorityVendor) =>
+            this.addVendor({
+              ...this.healthAuthorityVendors.find((v) => v.code === vendor.vendorCode),
+              id: vendor.id
+            })
+          )
           : this.addVendor()
       );
   }

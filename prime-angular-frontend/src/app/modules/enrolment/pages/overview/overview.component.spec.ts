@@ -17,6 +17,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('OverviewComponent', () => {
   let component: OverviewComponent;
@@ -51,7 +52,8 @@ describe('OverviewComponent', () => {
             provide: AuthService,
             useClass: MockAuthService
           }
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

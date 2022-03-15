@@ -632,7 +632,7 @@ objects:
                 protocol: TCP
             startupProbe:
               httpGet:
-                path: /api/healthcheck
+                path: /api/healthcheck/startup
                 port: 8080
                 scheme: HTTP
               timeoutSeconds: 30
@@ -641,7 +641,7 @@ objects:
               failureThreshold: 30
             readinessProbe:
               httpGet:
-                path: /api/healthcheck
+                path: /api/healthcheck/readiness
                 port: 8080
                 scheme: HTTP
               initialDelaySeconds: 5
@@ -651,13 +651,13 @@ objects:
               failureThreshold: 3
             livenessProbe:
               httpGet:
-                path: /api/healthcheck
+                path: /api/healthcheck/liveness
                 port: 8080
                 scheme: HTTP
               timeoutSeconds: 1
               periodSeconds: 5
               successThreshold: 1
-              failureThreshold: 1
+              failureThreshold: 3
             imagePullPolicy: IfNotPresent
             terminationMessagePolicy: File
             envFrom:
@@ -710,6 +710,7 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-webapi
+            - run-migrations
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
@@ -906,6 +907,7 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-document-manager
+            - run-migrations
           from:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"

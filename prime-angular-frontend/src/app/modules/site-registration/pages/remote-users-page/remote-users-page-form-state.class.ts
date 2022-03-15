@@ -1,10 +1,8 @@
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { RemoteUser } from '@lib/models/remote-user.model';
-import { RemoteUserCertification } from '@lib/models/remote-user-certification.model';
 
 export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
   public constructor(
@@ -23,8 +21,8 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     return this.formInstance.get('hasRemoteUsers') as FormControl;
   }
 
-  public get remoteUserCertifications(): FormArray {
-    return this.formInstance.get('remoteUserCertifications') as FormArray;
+  public get remoteUserCertification(): FormGroup {
+    return this.formInstance.get('remoteUserCertification') as FormGroup;
   }
 
   public getRemoteUsers(): RemoteUser[] {
@@ -39,8 +37,10 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     return this.formInstance.getRawValue().remoteUsers;
   }
 
-  public patchValue(remoteUsers: RemoteUser[]): void {
-    if (!this.formInstance || !remoteUsers?.length) {
+  public patchValue(remoteUsers: RemoteUser[], forcePatch: boolean = false): void {
+    // We want to force patch if the user goes back to previous page after removing all remote users
+    // that the length is now 0 for remote users.
+    if (!this.formInstance || (!remoteUsers?.length && !forcePatch)) {
       return;
     }
 
@@ -83,31 +83,10 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     const group = this.remoteUserFormGroup();
 
     if (remoteUser) {
-      const { id, firstName, lastName, email, remoteUserCertifications, notified } = remoteUser;
-      group.patchValue({ id, firstName, lastName, email, notified });
-
-      const certs = group.get('remoteUserCertifications') as FormArray;
-      remoteUserCertifications.map((cert: RemoteUserCertification) => {
-        const formGroup = this.remoteUserCertificationFormGroup();
-        formGroup.patchValue(cert);
-        return formGroup;
-      }).forEach((remoteUserCertificationFormGroup: FormGroup) =>
-        certs.push(remoteUserCertificationFormGroup)
-      );
+      group.patchValue(remoteUser);
     }
 
     return group;
-  }
-
-  public remoteUserCertificationFormGroup(): FormGroup {
-    return this.fb.group({
-      // Force selection of "None" on new certifications
-      collegeCode: ['', []],
-      // Validators are applied at the component-level when
-      // fields are made visible to allow empty submissions
-      licenseNumber: [null, []],
-      licenseCode: [null, []]
-    });
   }
 
   private remoteUserFormGroup(): FormGroup {
@@ -128,10 +107,14 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
         null,
         [Validators.required, FormControlValidators.email]
       ],
-      remoteUserCertifications: this.fb.array(
-        [],
-        { validators: FormArrayValidators.atLeast(1) }
-      ),
+      remoteUserCertification: this.fb.group({
+        // Force selection of "None" on new certifications
+        collegeCode: ['', []],
+        // Validators are applied at the component-level when
+        // fields are made visible to allow empty submissions
+        licenseNumber: [null, []],
+        licenseCode: [null, []]
+      }),
       notified: [
         false,
         []

@@ -93,7 +93,7 @@ function _initialize() {
  */
 function _getToken() {
   if (isInitializedAndAuthenticated()) {
-    return Promise.resolve(keycloak.idToken);
+    return Promise.resolve(keycloak.token);
   }
 
   return _initialize()
@@ -103,7 +103,7 @@ function _getToken() {
           redirectUri: redirectUri,
           idpHint: 'bcsc'
         })
-        : keycloak.idToken; // Token
+        : keycloak.token;
     })
     .catch(function () {
       return Promise.reject(new Error('Failed Authentication!'));

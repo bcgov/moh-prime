@@ -60,6 +60,7 @@ namespace Prime.Services
                     .ThenInclude(ea => ea.Address)
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
+                        .ThenInclude(l => l.LicenseDetails)
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress)
                 .Include(e => e.EnrolleeRemoteUsers)
@@ -70,11 +71,26 @@ namespace Prime.Services
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeHealthAuthorities)
                 .Include(e => e.Agreements)
+                    .ThenInclude(a => a.AgreementVersion)
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.Submissions)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            var minorUpdate = await _submissionRulesService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
+            var agreementDtos = await _context.AgreementVersions
+                .Select(av => new
+                {
+                    av.Id,
+                    av.AgreementType,
+                    av.EffectiveDate
+                })
+                .ToListAsync();
+
+            var newestAgreementVersionIds = agreementDtos
+                .GroupBy(av => av.AgreementType)
+                .Select(group => group.OrderByDescending(av => av.EffectiveDate).First().Id)
+                .ToList();
+
+            var minorUpdate = await _submissionRulesService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile, newestAgreementVersionIds);
             await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, updatedProfile);
 
             if (minorUpdate)
@@ -381,6 +397,7 @@ namespace Prime.Services
         private IQueryable<Enrollee> GetBaseQueryForEnrolleeApplicationRules()
         {
             return _context.Enrollees
+                .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.Submissions)
                 .Include(e => e.Addresses)
                     .ThenInclude(ea => ea.Address)
@@ -388,7 +405,8 @@ namespace Prime.Services
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.EnrolmentStatusReasons)
                 .Include(e => e.Certifications)
-                    .ThenInclude(c => c.License);
+                    .ThenInclude(c => c.License)
+                        .ThenInclude(l => l.LicenseDetails);
         }
     }
 }

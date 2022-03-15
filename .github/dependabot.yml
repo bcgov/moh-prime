@@ -7,6 +7,12 @@ updates:
       interval: "weekly"
       day: "tuesday"
       time: "18:00"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "SoapCore"
+      - dependency-name: "Sentry"
+    open-pull-requests-limit: 2
   # npm dependencies - frontend
   - package-ecosystem: "npm"
     directory: "/prime-angular-frontend"
@@ -14,3 +20,13 @@ updates:
       interval: "weekly"
       day: "tuesday"
       time: "18:00"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    open-pull-requests-limit: 2
+  # Disable dependabot for angular POC
+  - package-ecosystem: "npm"
+    directory: "/poc/prime-angular-poc"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0

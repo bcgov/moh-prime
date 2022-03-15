@@ -1,6 +1,10 @@
 <div class="row">
   <div class="col">
     <form [formGroup]="form">
+      <app-paginator [hidePaginator]="hidePaginator">
+        <mat-paginator (page)="syncPaginator($event, true)"></mat-paginator>
+      </app-paginator>
+
       <table mat-table
              matSort
              class="w-100"
@@ -35,7 +39,7 @@
 
               <app-triage *ngIf="row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
                           class="align-self-start"
-                          [enrolleeId]="row.id"
+                          [enrollee]="row"
                           [assigned]="(row.adjudicatorIdir)"
                           (reload)="onReload()"></app-triage>
 
@@ -163,8 +167,14 @@
               [class]="row.currentStatusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
 
             <div class="d-flex align-items-center">
-              <span class="mr-1">{{ row.currentStatusCode | configCode: 'statuses' | default }}</span>
-              <ng-container *ngIf="row.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX; else nonPaperEnrolleeIcons">
+              <span class="mr-1">
+                    {{ ((row?.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX:'startsWith')
+                          && paperEnrolmentStatusMap[row.currentStatusCode]
+                            ? paperEnrolmentStatusMap[row.currentStatusCode]
+                            : row.currentStatusCode | configCode: 'statuses')
+                            | default }}</span>
+              <ng-container
+                            *ngIf="row.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX: 'startsWith'; else nonPaperEnrolleeIcons">
                 <mat-icon matTooltip="Paper Submission"
                           matTooltipPosition="after">description
                 </mat-icon>
@@ -254,7 +264,12 @@
       </table>
 
       <app-paginator [hidePaginator]="hidePaginator">
-        <mat-paginator></mat-paginator>
+        <mat-paginator #secondaryPaginator
+                       (page)="syncPaginator($event, false)"
+                       [pageSize]="paginator.pageSize"
+                       [pageIndex]="paginator.pageIndex"
+                       [length]="paginator.length"
+                       [pageSizeOptions]="paginator.pageSizeOptions"></mat-paginator>
       </app-paginator>
     </form>
 
@@ -332,7 +347,7 @@
         <mat-divider [inset]="true"></mat-divider>
 
         <button mat-menu-item
-                (click)="onNotify(row.id)">
+                (click)="onNotify(row)">
           <mat-icon>email</mat-icon>
           <span>Send Email</span>
         </button>

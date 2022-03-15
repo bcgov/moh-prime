@@ -80,8 +80,12 @@ function main() {
 
   drop_db_indices
   HAS_MORE='Y'
-  while [ "${HAS_MORE}" = 'Y' ]
+  num_iterations=0
+  while [[ "${HAS_MORE}" = 'Y' && "$num_iterations" -lt "${PRIME_ODR_API_MAX_FETCH_TIMES}" ]]
   do
+    ((num_iterations=num_iterations+1))
+    echo -e "-------- Iteration #${num_iterations} --------\n"
+     
     get_last_tx_id LAST_TX_ID
     echo -e "Last transaction id:  _${LAST_TX_ID}_\n"
 
@@ -89,14 +93,15 @@ function main() {
     echo -e "Generated request id:  _${UUID}_"
 
     echo -e "-------- Calling PRIME-ODR API then Postgres COPY --------\n"
+    get_now_timestamp NOW_TIMESTAMP; echo -e "Calling curl at ${NOW_TIMESTAMP}"
     # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url
     # ls -l /etc/ssl/certs
-    curl -sS --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
+    curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
       "${PRIME_ODR_API_URL}?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}" | \
       python3 /opt/scripts/parse_api_response.py | \
       exec_sql_no_resultset "\copy \"PharmanetTransactionLog\"(\"TransactionId\", \"TxDateTime\", \"UserId\", \"SourceIpAddress\", \"LocationIpAddress\", \"PharmacyId\", \"ProviderSoftwareId\", \"ProviderSoftwareVersion\", \"PractitionerId\", \"CollegePrefix\", \"TransactionType\", \"TransactionSubType\", \"TransactionOutcome\") FROM STDIN (FORMAT CSV)"
 
-    HAS_MORE=$(cat /tmp/isThereMoreData.txt)
+    HAS_MORE=$(cat /tmp/isThereMoreData.txt)     
     echo
   done
   create_db_indices

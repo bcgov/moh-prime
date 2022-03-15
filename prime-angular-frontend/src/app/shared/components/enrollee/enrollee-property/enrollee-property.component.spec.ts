@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnrolleePropertyComponent } from './enrollee-property.component';
@@ -8,7 +9,8 @@ describe('EnrolleePropertyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [EnrolleePropertyComponent]
+      declarations: [EnrolleePropertyComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

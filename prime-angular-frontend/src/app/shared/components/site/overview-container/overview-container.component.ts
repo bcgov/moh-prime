@@ -10,7 +10,6 @@ import { UtilsService } from '@core/services/utils.service';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { ValidationErrors } from '@angular/forms';
 
@@ -24,8 +23,8 @@ export class OverviewContainerComponent implements OnInit {
   @Input() public organization: Organization;
   @Input() public site: Site;
   @Input() public admin: boolean;
-  @Input() public businessLicences: BusinessLicence[];
   @Input() public siteErrors: ValidationErrors;
+  @Input() public businessLicenceUpdated: boolean;
 
   public withinRenewalPeriod: boolean;
   public routeUtils: RouteUtils;
@@ -40,7 +39,7 @@ export class OverviewContainerComponent implements OnInit {
     private utilsService: UtilsService,
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.businessLicences = [];
+    this.businessLicenceUpdated = false;
   }
 
   public onRoute(routePath: string | (string | number)[]) {

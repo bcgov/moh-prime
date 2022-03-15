@@ -35,6 +35,7 @@ import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { ContainsPipe } from '@shared/pipes/contains.pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { HtmlComponent } from '@shared/components/dialogs/content/html/html.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 
 import { PageComponent } from '@shared/components/pages/page/page.component';
@@ -146,6 +147,7 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     PartyTypePipe,
     AddressFormComponent,
     ConfirmDialogComponent,
+    HtmlComponent,
     PageComponent,
     ProgressIndicatorComponent,
     PageHeaderComponent,

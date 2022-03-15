@@ -42,7 +42,6 @@ export interface HttpEnrollee extends Enrollee {
   assignedTOAType: number;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
-  accessAgreementNote: EnrolleeNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice
@@ -58,7 +57,7 @@ export interface HttpEnrollee extends Enrollee {
   confirmed: boolean;
   linkedEnrolleeId: number;
   possiblePaperEnrolmentMatch: boolean;
-  // This is needed for legacy enrolments
+  // This is needed for older enrolment profile snapshots
   jobs: Job[];
 }
 
@@ -98,7 +97,6 @@ export interface Enrolment {
   assignedTOAType: number;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
-  accessAgreementNote: EnrolleeNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice
@@ -113,7 +111,7 @@ export interface Enrolment {
   confirmed: boolean;
   linkedEnrolleeId: number;
   possiblePaperEnrolmentMatch: boolean;
-  // This is needed for legacy enrolments
+  // This is needed for older enrolment profile snapshots
   jobs: Job[];
 }
 
@@ -141,4 +139,5 @@ export interface EnrolleeListViewModel {
   linkedEnrolleeId: number;
   possiblePaperEnrolmentMatch: boolean;
   dateOfBirth: string;
+  email: string;
 }

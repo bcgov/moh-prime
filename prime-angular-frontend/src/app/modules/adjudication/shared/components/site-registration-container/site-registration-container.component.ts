@@ -86,14 +86,11 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
     this.route.queryParams
       .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
 
-    // Listen for requests to refresh the data layer
-    if (this.refresh instanceof Observable) {
-      this.refresh.subscribe((shouldRefresh: boolean) => {
-        if (shouldRefresh) {
-          this.onRefresh();
-        }
-      });
-    }
+    this.refresh?.subscribe((shouldRefresh: boolean) => {
+      if (shouldRefresh) {
+        this.onRefresh();
+      }
+    });
   }
 
   protected getDataset(queryParams: { textSearch?: string }): void {
@@ -178,13 +175,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
           ),
           exhaustMap(() => deleteRequest$),
           exhaustMap(() => {
-            // Route on singular resource views after deletion to refresh results
-            if (this.route.snapshot.data.oid) {
-              this.routeUtils.routeTo(AdjudicationRoutes.SITE_REGISTRATIONS);
-              return EMPTY;
-            }
-            // Otherwise, stay on the list resource view and remove locally
-            of(noop);
+            this.routeUtils.routeTo([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.SITE_REGISTRATIONS]);
+            return EMPTY;
           })
         );
     }

@@ -20,7 +20,6 @@ using Microsoft.OpenApi.Models;
 using Flurl;
 using Serilog;
 using SoapCore;
-using AutoMapper;
 using Newtonsoft.Json;
 using Wkhtmltopdf.NetCore;
 using IdentityModel.Client;
@@ -33,6 +32,7 @@ using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
+using Prime.Helpers;
 
 namespace Prime
 {
@@ -86,6 +86,7 @@ namespace Prime
             services.AddScoped<IPlrProviderService, PlrProviderService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
+            services.AddScoped<ISentryErrorReporter, SentryErrorReporter>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<ISoapService, SoapService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
@@ -227,6 +228,11 @@ namespace Prime
                 app.UseDeveloperExceptionPage();
             }
 
+            if (!string.IsNullOrEmpty(PrimeConfiguration.Current.Sentry.Dsn))
+            {
+                app.UseMiddleware<SentryMiddleware>();
+            }
+
             ConfigureHealthCheck(app);
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
@@ -250,6 +256,9 @@ namespace Prime
 
             // Matches request to an endpoint
             app.UseRouting();
+
+            app.UseMiddleware<RequestLoggingMiddleware>();
+
             app.UseCors(CorsPolicy);
 
             app.UseAuthentication();

@@ -1,6 +1,30 @@
 <div class="container">
   <app-banner></app-banner>
   <div class="row">
+    <div *ngIf="loginCancelled"
+         class="col-sm-12">
+      <app-alert type="info"
+                 icon="error_outline">
+        <ng-container #alertTitle
+                      class="alert-title">
+          Login Cancelled
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          <p>You have cancelled your login to PRIME</p>
+          <p>For assistance with PRIME, contact <app-prime-phone></app-prime-phone> or
+            <app-prime-support-email></app-prime-support-email>
+          <p>
+            For assistance logging in with the BC Services Card app, contact the Helpdesk
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              [attr.href]="bcscHelpDeskUrl">
+              <u>here</u></a>.
+          </p>
+        </ng-container>
+      </app-alert>
+    </div>
     <div class="col-sm-12 logo">
 
       <app-prime-logo label="right"
@@ -42,8 +66,8 @@
           <h2>BC Services Card</h2>
 
           <p>
-            Set up your BC Services Card on your mobile device if you haven't done so already (this is a one-time
-            process). Once finished, come back to PRIME and complete the enrolment.
+            Set up the BC Services Card app on a mobile device, if you haven’t done so already. Once finished, come back
+            to PRIME and complete your enrolment.
 
             <br>
             <br>
@@ -51,7 +75,7 @@
             <a [href]="bcscMobileSetupUrl"
                target="_blank"
                rel="noopener noreferrer">
-              How to set up a mobile card
+              How to set up the BC Services Card app.
             </a>
           </p>
         </section>
@@ -70,9 +94,9 @@
           <h2>PRIME Enrolment</h2>
 
           <p>
-            Complete PRIME enrolment by answering a set of questions. It usually only takes a few minutes.
-            If you are a registrant of a health professional College in B.C.,
-            you will need your College licence number and next renewal date.
+            Complete PRIME enrolment by answering a set of questions. It usually only takes a few minutes. If you are a
+            registrant of a B.C. health college, you will need your College Information (licence number/ registration
+            number/ CPSID/ BCCNM ID) and next renewal date.
           </p>
         </section>
 
@@ -90,8 +114,8 @@
           <h2>Enrolment Notification</h2>
 
           <p>
-            Once approved by the Ministry of Health, notify your PharmaNet administrator so they can set up your
-            PharmaNet access with your vendor.
+            Once you are approved to use PharmNet, you will enter the email of the person who sets up PharmaNet accounts
+            in your workplace. They will get you connected to PharmaNet.
           </p>
         </section>
 

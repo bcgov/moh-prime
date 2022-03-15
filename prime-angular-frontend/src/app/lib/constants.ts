@@ -22,3 +22,9 @@ export const DISPLAY_ID_OFFSET = 1000;
  * Paper enrollee GPID filter.
  */
 export const PAPER_ENROLLEE_GPID_PREFIX = 'NOBCSC';
+
+/**
+ * @description
+ * Busy submission message
+ */
+export const BUSY_SUBMISSION_MESSAGE = 'Wait patiently. The submission can take up to a minute.';

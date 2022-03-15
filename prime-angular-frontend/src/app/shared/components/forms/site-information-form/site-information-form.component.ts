@@ -21,7 +21,6 @@ export class SiteInformationFormComponent implements OnInit {
 
   public busy: Subscription;
   public doingBusinessAsNames: string[];
-  public isNewSite: FormControl;
 
   constructor(
     private organizationResource: OrganizationResource,
@@ -29,7 +28,6 @@ export class SiteInformationFormComponent implements OnInit {
     private siteService: SiteService,
   ) {
     this.doingBusinessAsNames = [];
-    this.isNewSite = new FormControl(false);
   }
 
   public get doingBusinessAs(): FormControl {
@@ -52,22 +50,6 @@ export class SiteInformationFormComponent implements OnInit {
     if (this.organizationId) {
       this.getDoingBusinessAs(this.organizationId);
     }
-
-    this.isNewSite.valueChanges
-      .subscribe(value => {
-        if (value) {
-          this.pec.patchValue(null);
-          this.pec.disable();
-        } else {
-          this.pec.enable();
-        }
-      });
-
-    if (this.isCommunityPharmacy()) {
-      this.pec.enable();
-    }
-
-    this.isNewSite.setValue(this.pec.disabled);
   }
 
   private getDoingBusinessAs(organizationId: number) {

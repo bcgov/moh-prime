@@ -9,6 +9,7 @@ import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-co
 import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
 import { PageSubheaderComponent } from '@shared/components/pages/page-subheader/page-subheader.component';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('ProvisionerAccessComponent', () => {
   let component: ProvisionerAccessComponent;
@@ -33,7 +34,8 @@ describe('ProvisionerAccessComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

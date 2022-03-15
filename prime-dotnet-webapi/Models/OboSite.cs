@@ -27,8 +27,6 @@ namespace Prime.Models
 
         public string SiteName { get; set; }
 
-        public string PEC { get; set; }
-
         public string FacilityName { get; set; }
 
         [Required]

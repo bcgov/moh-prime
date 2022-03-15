@@ -14,6 +14,7 @@ import { ConfigService } from 'app/config/config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { EnrolmentStatusReason } from '@shared/enums/enrolment-status-reason.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('ReviewStatusContentComponent', () => {
   const mockDocument = {
@@ -50,6 +51,39 @@ describe('ReviewStatusContentComponent', () => {
     question: "question",
     potentialMatchIds: [],
   };
+  const mockEnrolleeReviewStatus = {
+    enrolmentStatuses: mockEnrolmentStatuses,
+    selfDeclarationDocuments: [],
+    identificationDocuments: []
+  };
+
+  const mockSelfDeclarations =
+    [
+      {
+        selfDeclarationTypeCode: 0,
+        selfDeclarationDetails: faker.random.words(),
+        documentGuids: [faker.random.word()],
+        answered: true,
+      },
+      {
+        selfDeclarationTypeCode: 1,
+        selfDeclarationDetails: faker.random.words(),
+        documentGuids: [faker.random.word()],
+        answered: false,
+      },
+      {
+        selfDeclarationTypeCode: 2,
+        selfDeclarationDetails: faker.random.words(),
+        documentGuids: [faker.random.word()],
+        answered: false,
+      },
+      {
+        selfDeclarationTypeCode: 3,
+        selfDeclarationDetails: faker.random.words(),
+        documentGuids: [faker.random.word()],
+        answered: false,
+      }
+    ];
 
   let component: ReviewStatusContentComponent;
   let fixture: ComponentFixture<ReviewStatusContentComponent>;
@@ -75,7 +109,8 @@ describe('ReviewStatusContentComponent', () => {
           provide: ConfigService,
           useClass: MockConfigService
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));
@@ -173,7 +208,7 @@ describe('ReviewStatusContentComponent', () => {
     describe('with statusReasaonCode set to SELF_DECLARATION', () => {
       it('should call parseSelfDeclarations', () => {
         mockHttpEnrollee.currentStatus.enrolmentStatusReasons[0].statusReasonCode = EnrolmentStatusReason.SELF_DECLARATION;
-        const spyOnParseSelfDeclarations = spyOn<any>(component, 'parseSelfDeclarations');
+        const spyOnParseSelfDeclarations = spyOn<any>(component, 'parseSelfDeclarations').and.returnValue([]);
 
         component.parseReasons(mockHttpEnrollee.currentStatus);
 
@@ -196,16 +231,18 @@ describe('ReviewStatusContentComponent', () => {
   describe('testing parseSelfDeclarations', () => {
     describe('with selfDeclarations', () => {
       it('should return an array of reasons of same length as the selfDeclarations', () => {
-        const reasons = component.parseSelfDeclarations(mockHttpEnrollee);
 
-        expect(reasons.length).toEqual(mockHttpEnrollee.selfDeclarations.length);
+        mockHttpEnrollee.selfDeclarations = mockSelfDeclarations;
+        const reasons = component.parseSelfDeclarations(mockHttpEnrollee, mockEnrolleeReviewStatus);
+
+        expect(reasons.length).toEqual(1);
       });
     });
 
     describe('with no selfDeclarations', () => {
       it('should return an empty array', () => {
         mockHttpEnrollee.selfDeclarations = [];
-        const reasons = component.parseSelfDeclarations(mockHttpEnrollee);
+        const reasons = component.parseSelfDeclarations(mockHttpEnrollee, mockEnrolleeReviewStatus);
 
         expect(reasons).toEqual([]);
       });

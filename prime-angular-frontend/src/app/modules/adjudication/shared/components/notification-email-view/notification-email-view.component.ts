@@ -10,7 +10,6 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 import { Role } from '@auth/shared/enum/role.enum';
 
-import { EmailTemplateTypeEnum } from '@adjudication/shared/models/email-template-type.model';
 import { EmailTemplate } from '@adjudication/shared/models/email-template.model';
 import { EmailTemplateResourceService } from '@adjudication/shared/services/email-template-resource.service';
 
@@ -25,7 +24,6 @@ export class NotificationEmailViewComponent implements OnInit {
   public editable: boolean;
   public form: FormGroup;
 
-  public EmailTemplateTypeEnum = EmailTemplateTypeEnum;
   public Role = Role;
 
   constructor(

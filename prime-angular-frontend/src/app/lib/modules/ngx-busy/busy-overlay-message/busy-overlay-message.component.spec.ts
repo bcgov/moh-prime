@@ -4,6 +4,7 @@ import { NgBusyModule, InstanceConfigHolderService } from 'ng-busy';
 
 import { BusyOverlayMessageComponent } from './busy-overlay-message.component';
 import { busyConfig } from '../busy.config';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('BusyOverlayMessageComponent', () => {
   let component: BusyOverlayMessageComponent;
@@ -23,7 +24,8 @@ describe('BusyOverlayMessageComponent', () => {
             provide: 'instanceConfigHolder',
             useClass: InstanceConfigHolderService
           }
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

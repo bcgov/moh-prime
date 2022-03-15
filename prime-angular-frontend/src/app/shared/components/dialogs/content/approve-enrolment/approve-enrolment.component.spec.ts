@@ -2,6 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ApproveEnrolmentComponent } from './approve-enrolment.component';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('ApproveEnrolmentComponent', () => {
   let component: ApproveEnrolmentComponent;
@@ -12,7 +13,8 @@ describe('ApproveEnrolmentComponent', () => {
       imports: [
         NgxMaterialModule
       ],
-      declarations: [ApproveEnrolmentComponent]
+      declarations: [ApproveEnrolmentComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

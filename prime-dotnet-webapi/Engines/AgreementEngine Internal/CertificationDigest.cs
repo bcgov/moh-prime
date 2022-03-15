@@ -27,16 +27,23 @@ namespace Prime.Engines.AgreementEngineInternal
 
             var cert = certs.Single();
 
-            if (!cert.License.LicensedToProvideCare)
+            if (!cert.License.CurrentLicenseDetail.LicensedToProvideCare)
             {
                 return new CannotProvideCare();
             }
 
-            bool regulated = cert.License.NamedInImReg;
+            bool regulated = cert.License.CurrentLicenseDetail.NamedInImReg;
 
             if (College.IsCollegeOfPharmacists(cert.CollegeCode))
             {
-                return new Pharmacist(regulated);
+                if (License.IsPharmacyTechnician(cert.License.CurrentLicenseDetail))
+                {
+                    return new PharmacyTechnician(regulated);
+                }
+                else
+                {
+                    return new Pharmacist(regulated);
+                }
             }
             else
             {
@@ -98,6 +105,28 @@ namespace Prime.Engines.AgreementEngineInternal
             if (Regulated)
             {
                 return AgreementType.CommunityPharmacistTOA;
+            }
+            else
+            {
+                return AgreementType.PharmacyOboTOA;
+            }
+        }
+    }
+
+    public class PharmacyTechnician : ICertificationDigest
+    {
+        private bool Regulated { get; set; }
+
+        public PharmacyTechnician(bool regulated)
+        {
+            Regulated = regulated;
+        }
+
+        public AgreementType? ResolveWith(SettingsDigest settings)
+        {
+            if (Regulated)
+            {
+                return AgreementType.PharmacyTechnicianTOA;
             }
             else
             {

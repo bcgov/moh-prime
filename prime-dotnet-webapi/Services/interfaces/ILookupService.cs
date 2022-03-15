@@ -6,5 +6,6 @@ namespace Prime.Services
     public interface ILookupService
     {
         Task<LookupEntity> GetLookupsAsync();
+        Task<int> GetCareSettingCountAsync();
     }
 }

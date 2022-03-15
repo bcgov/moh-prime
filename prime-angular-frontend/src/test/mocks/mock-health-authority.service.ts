@@ -15,7 +15,8 @@ export class MockHealthAuthorityService {
       vendors: [],
       privacyOffice: null,
       technicalSupports: [],
-      pharmanetAdministrators: []
+      pharmanetAdministrators: [],
+      healthAuthorityOrganizationAgreementDocument: null
     });
   }
 

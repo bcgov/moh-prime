@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, S
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
@@ -16,13 +16,17 @@ import { UtilsService } from '@core/services/utils.service';
 import { LocalStorageService } from '@core/services/local-storage.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
-import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum, PaperEnrolmentStatusMap } from '@shared/enums/enrolment-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+
+class ImprovedPageEvent extends PageEvent {
+  public stopPropogation: boolean;
+}
 
 @UntilDestroy()
 @Component({
@@ -35,7 +39,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrolleeNavigation: EnrolleeNavigation;
   @Input() public sort: Sort;
   @Input() public localStoragePrefix: string;
-  @Output() public notify: EventEmitter<number>;
+  @Output() public notify: EventEmitter<EnrolleeListViewModel>;
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
@@ -46,6 +50,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Output() public sortEnrollee: EventEmitter<Sort>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
+  @ViewChild('secondaryPaginator', { static: true }) public secondaryPaginator: MatPaginator;
 
   public busy: Subscription;
   public dataSource: MatTableDataSource<EnrolleeListViewModel>;
@@ -59,6 +64,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public Role = Role;
+  public paperEnrolmentStatusMap = PaperEnrolmentStatusMap;
   public readonly PAPER_ENROLLEE_GPID_PREFIX = PAPER_ENROLLEE_GPID_PREFIX;
 
   private sortActiveKey: string;
@@ -71,7 +77,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     private utilsService: UtilsService,
     private localStorageService: LocalStorageService
   ) {
-    this.notify = new EventEmitter<number>();
+    this.notify = new EventEmitter<EnrolleeListViewModel>();
     this.assign = new EventEmitter<number>();
     this.reassign = new EventEmitter<number>();
     this.refresh = new EventEmitter<number>();
@@ -105,8 +111,8 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     );
   }
 
-  public onNotify(enrolleeId: number): void {
-    this.notify.emit(enrolleeId);
+  public onNotify(enrollee: EnrolleeListViewModel): void {
+    this.notify.emit(enrollee);
   }
 
   public onAssign(enrolleeId: number): void {
@@ -181,6 +187,20 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
 
   public navigateToEnrollee(enrolleeId: number): void {
     this.navigateEnrollee.emit(enrolleeId);
+  }
+
+  public syncPaginator(event: ImprovedPageEvent, top: boolean): void {
+    const paginator = (top) ? this.paginator : this.secondaryPaginator;
+    const other = (!top) ? this.paginator : this.secondaryPaginator;
+
+    paginator.pageIndex = event.pageIndex;
+    paginator.pageSize = event.pageSize;
+
+    if (event.stopPropogation) {
+      return;
+    }
+    event.stopPropogation = true;
+    other.page.emit(event);
   }
 
   public ngOnInit(): void {

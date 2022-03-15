@@ -198,7 +198,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateRemoteUsers(Site current, IEnumerable<RemoteUser> updateRemoteUsers)
+        private void UpdateRemoteUsers(Site current, IEnumerable<SiteRemoteUserUpdateModel> updateRemoteUsers)
         {
             if (updateRemoteUsers == null)
             {
@@ -207,7 +207,7 @@ namespace Prime.Services
 
             // All RemoteUserCertifications will be dropped and re-added, so we must set all incoming PKs/FKs to 0
             // This can be removed when / if the updated Certs become a View Model without FKs.
-            foreach (var cert in updateRemoteUsers.SelectMany(x => x.RemoteUserCertifications))
+            foreach (var cert in updateRemoteUsers.Select(x => x.RemoteUserCertification))
             {
                 cert.Id = 0;
                 cert.RemoteUserId = 0;
@@ -224,18 +224,17 @@ namespace Prime.Services
                     updatedUser.SiteId = current.Id;
                     _context.Entry(existing).CurrentValues.SetValues(updatedUser);
 
-                    _context.RemoteUserCertifications.RemoveRange(existing.RemoteUserCertifications);
-                    foreach (var cert in updatedUser.RemoteUserCertifications)
-                    {
-                        cert.RemoteUserId = updatedUser.Id;
-                        _context.RemoteUserCertifications.Add(cert);
-                    }
+                    _context.RemoteUserCertifications.Remove(existing.RemoteUserCertification);
+
+                    updatedUser.RemoteUserCertification.RemoteUserId = updatedUser.Id;
+                    _context.RemoteUserCertifications.Add(updatedUser.RemoteUserCertification);
                 }
                 else
                 {
-                    updatedUser.Id = 0;
-                    updatedUser.SiteId = current.Id;
-                    _context.RemoteUsers.Add(updatedUser);
+                    var newRemoteUser = _mapper.Map<RemoteUser>(updatedUser);
+                    newRemoteUser.Id = 0;
+                    newRemoteUser.SiteId = current.Id;
+                    _context.RemoteUsers.Add(newRemoteUser);
                 }
             }
 
@@ -427,7 +426,7 @@ namespace Prime.Services
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.BusinessHours)
                 .Include(s => s.RemoteUsers)
-                    .ThenInclude(r => r.RemoteUserCertifications)
+                    .ThenInclude(r => r.RemoteUserCertification)
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)

@@ -6,7 +6,8 @@ namespace Prime.Configuration.Database
     public class IdentifierTypeConfiguration : SeededTable<IdentifierType>
     {
         /// <summary>
-        /// This was populated from the Excel spreadsheet "Appendix-A-BC-PLR-OID-list.xls" obtained from Sekhon, Khushwinder (Vinder) of the PLR team
+        /// This was initially populated from the Excel spreadsheet "Appendix-A-BC-PLR-OID-list.xls" obtained from Sekhon, Khushwinder (Vinder) of the PLR team.
+        /// PRIME will not necessarily receive data that uses all these OIDs.  For example, there are no plans for PLR to provide data containing MOAID and PPID.
         /// </summary>
         public override IEnumerable<IdentifierType> SeedData
         {
@@ -35,6 +36,9 @@ namespace Prime.Configuration.Database
                     new IdentifierType { Code = "2.16.840.1.113883.4.477",     Name = "COUNID"   },
                     new IdentifierType { Code = "2.16.840.1.113883.4.452",     Name = "MFTID"    },
                     new IdentifierType { Code = "2.16.840.1.113883.4.530",     Name = "RDID"     },
+                    new IdentifierType { Code = "2.16.840.1.113883.3.40.2.46", Name = "MOAID"    },
+                    new IdentifierType { Code = "2.16.840.1.113883.3.40.2.44", Name = "PPID"     },
+                    new IdentifierType { Code = "2.16.840.1.113883.4.538",     Name = "NDID"    },
                 };
             }
         }

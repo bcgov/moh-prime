@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { RootRoutesModule } from '../../root-routes.module';
 import { PageNotFoundComponent } from './page-not-found.component';
@@ -26,7 +26,7 @@ describe('PageNotFoundComponent', () => {
             useValue: APP_DI_CONFIG
           }
         ],
-        schemas: [NO_ERRORS_SCHEMA]
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

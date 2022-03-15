@@ -3,6 +3,7 @@ using System.Linq;
 
 using Prime.DTOs.AgreementEngine;
 using Prime.Models;
+using System;
 
 namespace Prime.ViewModels.Profiles
 {
@@ -37,7 +38,14 @@ namespace Prime.ViewModels.Profiles
             CreateMap<EnrolleeDTO, EnrolleeViewModel>();
 
             CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
-            CreateMap<EnrolleeAbsence, EnrolleeAbsenceViewModel>();
+
+            CreateMap<EnrolleeAbsence, EnrolleeAbsenceViewModel>()
+                .ForMember(dest => dest.StartTimestamp, opt => opt.MapFrom(src => src.StartTimestamp.ToLocalTime()))
+                .ForMember(dest => dest.EndTimestamp, opt =>
+                {
+                    opt.PreCondition(src => src.EndTimestamp != null);
+                    opt.MapFrom(src => src.EndTimestamp.Value.ToLocalTime());
+                });
 
             CreateMap<Enrollee, AgreementEngineDto>()
                 .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
@@ -64,6 +72,10 @@ namespace Prime.ViewModels.Profiles
             CreateMap<EnrolmentStatusReference, EnrolmentStatusReferenceViewModel>();
             CreateMap<EnrolleeNote, EnrolmentStatusReferenceNoteViewModel>();
             CreateMap<EnrolmentStatusReason, EnrolmentStatusReasonViewModel>();
+
+            CreateMap<License, LicenseViewModel>()
+                .IncludeMembers(l => l.CurrentLicenseDetail);
+            CreateMap<LicenseDetail, LicenseViewModel>();
         }
     }
 }

@@ -1,4 +1,8 @@
 <app-page>
+  <form [formGroup]="formState.form"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        autocomplete="off">
   <app-page-header>{{ title }}</app-page-header>
 
   <app-gis-enrolment-progress-indicator [inProgress]="true"></app-gis-enrolment-progress-indicator>
@@ -9,15 +13,11 @@
         Enrollee Information
       </ng-container>
       <ng-container appPageSubheader2Summary>
-        This information comes from your LDAP credential, provide missing information or update your information using
-        the edit button.
+        This information comes from your Health Authority credential.
+        Please provide missing information or update your information.
       </ng-container>
     </app-page-subheader2>
 
-    <form [formGroup]="formState.form"
-          (ngSubmit)="onSubmit()"
-          novalidate
-          autocomplete="off">
       <div class="row">
         <div class="col-12">
 
@@ -45,11 +45,12 @@
 
         </div>
       </div>
-    </form>
-  </app-page-section>
+    </app-page-section>
 
-  <app-page-footer [isInitialEnrolment]="true"
-                   [hasSecondaryAction]="true"
-                   (back)="onBack()"
-                   (save)="onSubmit()"></app-page-footer>
+    <app-page-footer [isInitialEnrolment]="true"
+                     [hasSecondaryAction]="true"
+                     buttonType="submit"
+                     (back)="onBack()"
+                     (save)="onSubmit()"></app-page-footer>
+  </form>
 </app-page>

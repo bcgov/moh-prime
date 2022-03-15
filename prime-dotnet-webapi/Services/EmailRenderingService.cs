@@ -15,14 +15,10 @@ namespace Prime.Services.EmailInternal
         private const string MohEmail = "HLTH.HnetConnection@gov.bc.ca";
         private const string ProviderEnrolmentTeamEmail = "Lori.Haggstrom@gov.bc.ca";
 
-        private readonly IEmailTemplateService _emailTemplateService;
         private readonly IRazorConverterService _razorConverterService;
 
-        public EmailRenderingService(
-            IEmailTemplateService emailTemplateService,
-            IRazorConverterService razorConverterService)
+        public EmailRenderingService(IRazorConverterService razorConverterService)
         {
-            _emailTemplateService = emailTemplateService;
             _razorConverterService = razorConverterService;
         }
 
@@ -114,13 +110,13 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteApprovedHibcEmailAsync(SiteApprovalEmailViewModel viewModel)
+        public async Task<Email> RenderSiteApprovedHibcEmailAsync(SiteApprovalEmailViewModel viewModel, int siteId)
         {
             return new Email
             (
                 from: PrimeEmail,
                 to: MohEmail,
-                subject: "Site Registration Approved",
+                subject: $"[{siteId}] Site Registration Approved",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.HIBCSiteSubmission, viewModel)
             );
         }
@@ -147,7 +143,7 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode)
+        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode, int siteId)
         {
             if (careSettingCode == CareSettingType.CommunityPharmacy)
             {
@@ -165,7 +161,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: MohEmail,
                 cc: PrimeSupportEmail,
-                subject: "PRIME Site Registration Submission",
+                subject: $"[{siteId}] PRIME Site Registration Submission",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
             );
         }
@@ -224,6 +220,17 @@ namespace Prime.Services.EmailInternal
                 to: recipientEmail,
                 subject: "PharmaNet Terms of Access requires signing",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeUnsignedToa, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderEnrolleeAbsenceNotificationEmailAsync(string email, EnrolleeAbsenceNotificationEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: email,
+                subject: "PRIME Absence Notification",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeAbsenceNotification, viewModel)
             );
         }
     }

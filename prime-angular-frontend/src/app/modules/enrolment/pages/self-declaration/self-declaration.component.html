@@ -12,11 +12,10 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
       <ng-container appPageSubheaderSummary>
-        Self-declaration information is collected under the authority of the Information Management
-        Regulation of the Pharmaceutical Services Act and confidentiality is protected under the
-        Freedom of Information and Protection of Privacy Act. Self-declaration information is used
-        to verify the applicant is in good standing with their respective College(s) and to determine
-        eligibility for and access to PharmaNet.
+        Self-declaration information is collected under the authority of the Information Management Regulation of the
+        Pharmaceutical Services Act and is protected under the Freedom of Information and Protection of Privacy Act.
+        Self-declaration information is used to verify the applicant is in good standing with their respective colleges
+        and to determine eligibility for and access to PharmaNet.
       </ng-container>
     </app-page-subheader>
 
@@ -86,6 +85,12 @@
                                  (remove)="onRemove('hasConvictionDocumentGuids', $event)">
             </app-document-upload>
 
+            <app-enrollee-property>
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_CONVICTION)
+                                       (download)="downloadSelfDeclarationDocument($event)">
+              </app-document-attachment>
+            </app-enrollee-property>
+
           </ol>
 
         </div>
@@ -148,6 +153,13 @@
                                  (completed)="onUpload('hasRegistrationSuspendedDocumentGuids', $event)"
                                  (remove)="onRemove('hasRegistrationSuspendedDocumentGuids', $event)">
             </app-document-upload>
+
+            <app-enrollee-property>
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED)
+                                       (download)="downloadSelfDeclarationDocument($event)">
+              </app-document-attachment>
+            </app-enrollee-property>
+
           </ol>
         </div>
       </div>
@@ -206,6 +218,13 @@
                                  (completed)="onUpload('hasDisciplinaryActionDocumentGuids', $event)"
                                  (remove)="onRemove('hasDisciplinaryActionDocumentGuids', $event)">
             </app-document-upload>
+
+            <app-enrollee-property>
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION)
+                                       (download)="downloadSelfDeclarationDocument($event)">
+              </app-document-attachment>
+            </app-enrollee-property>
+
           </ol>
         </div>
       </div>
@@ -263,6 +282,13 @@
                                  (completed)="onUpload('hasPharmaNetSuspendedDocumentGuids', $event)"
                                  (remove)="onRemove('hasPharmaNetSuspendedDocumentGuids', $event)">
             </app-document-upload>
+
+            <app-enrollee-property>
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED)
+                                       (download)="downloadSelfDeclarationDocument($event)">
+              </app-document-attachment>
+            </app-enrollee-property>
+
           </ol>
         </div>
       </div>

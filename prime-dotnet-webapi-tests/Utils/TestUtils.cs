@@ -55,9 +55,6 @@ namespace PrimeTests.Utils
             .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
             .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4));
 
-        public static Faker<Job> JobFaker = new Faker<Job>()
-            .RuleFor(j => j.Title, f => f.Random.Word());
-
         public static Faker<EnrolleeCareSetting> EnrolleeCareSettingFaker = new Faker<EnrolleeCareSetting>()
             .RuleFor(o => o.CareSettingCode, f => f.Random.Int(1, 2));
 
@@ -119,11 +116,20 @@ namespace PrimeTests.Utils
 
             if (!db.Set<License>().Any())
             {
-                db.AddRange(new License { Code = 1, Manual = false, Validate = true, Name = "Full - Family" });
-                db.AddRange(new License { Code = 2, Manual = false, Validate = true, Name = "Full - Specialty" });
-                db.AddRange(new License { Code = 3, Manual = true, Validate = true, Name = "Special" });
-                db.AddRange(new License { Code = 4, Manual = false, Validate = true, Name = "Osteopathic" });
-                db.AddRange(new License { Code = 5, Manual = true, Validate = true, Name = "Provisional - Family" });
+                db.AddRange(new License { Code = 1, Name = "Full - Family" });
+                db.AddRange(new License { Code = 2, Name = "Full - Specialty" });
+                db.AddRange(new License { Code = 3, Name = "Special" });
+                db.AddRange(new License { Code = 4, Name = "Osteopathic" });
+                db.AddRange(new License { Code = 5, Name = "Provisional - Family" });
+            }
+
+            if (!db.Set<LicenseDetail>().Any())
+            {
+                db.AddRange(new LicenseDetail { Id = 1, LicenseCode = 1, Manual = false, Validate = true });
+                db.AddRange(new LicenseDetail { Id = 2, LicenseCode = 2, Manual = false, Validate = true });
+                db.AddRange(new LicenseDetail { Id = 3, LicenseCode = 3, Manual = true, Validate = true });
+                db.AddRange(new LicenseDetail { Id = 4, LicenseCode = 4, Manual = false, Validate = true });
+                db.AddRange(new LicenseDetail { Id = 5, LicenseCode = 5, Manual = true, Validate = true });
             }
 
             if (!db.Set<CollegeLicense>().Any())

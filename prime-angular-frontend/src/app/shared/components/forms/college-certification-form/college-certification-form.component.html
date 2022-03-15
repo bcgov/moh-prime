@@ -74,11 +74,14 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="Licence Number from College"
+                   [placeholder]="collegeCode.value === CollegeLicenceClassEnum.CPBC ? 'Registration Number' : 'Licence Number from College'"
                    formControlName="licenseNumber">
             <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
             <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">
               Must contain only alphanumeric characters
+            </mat-error>
+            <mat-error *ngIf="licenseNumber.hasError('numeric') || licenseNumber.hasError('length')">
+              Must contain only 5 numeric characters
             </mat-error>
           </mat-form-field>
 
@@ -153,7 +156,7 @@
             <mat-slide-toggle class="mr-4"
                               [checked]="practitionerId.value"
                               (change)="onPrescribing($event)">
-              Do you have a Prescriber ID issued by the College?
+              Do you have a PharmaNet ID issued by the College?
             </mat-slide-toggle>
           </div>
 
@@ -162,7 +165,7 @@
             <app-form-icon-group>
               <mat-form-field class="w-100">
                 <input matInput
-                       placeholder="Prescriber ID"
+                       placeholder="PharmaNet ID"
                        formControlName="practitionerId"
                        maxlength="5">
                 <mat-error *ngIf="practitionerId.hasError('required')">Required</mat-error>
@@ -172,7 +175,7 @@
               </mat-form-field>
 
               <ng-container appContextualContent>
-                Your Prescriber ID is a 5-digit number assigned to you by the BCCNM, to allow you to prescribe.
+                Your PharmaNet ID is a 5-digit number assigned to you by the BCCNM, to allow you to prescribe.
               </ng-container>
             </app-form-icon-group>
 

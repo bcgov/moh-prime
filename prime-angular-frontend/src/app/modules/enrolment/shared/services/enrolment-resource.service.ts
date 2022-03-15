@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { from, forkJoin, Observable, of } from 'rxjs';
-import { catchError, map, tap, exhaustMap, mergeMap } from 'rxjs/operators';
+import { forkJoin, Observable, of } from 'rxjs';
+import { catchError, map, tap, exhaustMap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { Address, AddressType, addressTypes } from '@lib/models/address.model';
@@ -17,7 +17,6 @@ import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
-import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { EnrolmentStatusAdmin } from '@shared/models/enrolment-status-admin.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
@@ -44,6 +43,7 @@ export class EnrolmentResource {
   ) { }
 
   public enrollee(userId: string): Observable<Enrolment> {
+    const selfDeclarationDocumentsParams = this.apiResourceUtilsService.makeHttpParams({ includeHidden: false });
     return this.apiResource.get<HttpEnrollee>(`enrollees/${userId}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
@@ -64,7 +64,7 @@ export class EnrolmentResource {
               .pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
             selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrollee.id}/self-declarations`)
               .pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
-            selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrollee.id}/self-declarations/documents`)
+            selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrollee.id}/self-declarations/documents`, selfDeclarationDocumentsParams)
               .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result))
           })
             .pipe(
@@ -277,6 +277,18 @@ export class EnrolmentResource {
       );
   }
 
+  public getIsOboToRuAgreementTypeChange(enrolleeId: number): Observable<boolean> {
+    return this.apiResource.get<boolean>(`enrollees/${enrolleeId}/agreements/current/obo-to-ru`)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        tap((isChange: boolean) => this.logger.info('OBO_TO_RU', isChange)),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getIsOboToRuAgreementTypeChange error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getQrCode(enrolleeId: number): Observable<string> {
     return this.apiResource.get<string>(`enrollees/${enrolleeId}/qrCode`)
       .pipe(
@@ -413,6 +425,21 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee Absence could not be removed.');
           this.logger.error('[Enrolment] EnrolmentResource::deleteFutureEnrolleeAbsence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public sendEnrolleeAbsenceEmail(enrolleeId: number, email: string): Observable<NoContent> {
+    const payload = { data: email };
+    return this.apiResource
+      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/absences/email`, payload)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openErrorToast('Email has been sent')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Email could not be sent');
+          this.logger.error('[Enrolment] EnrolmentResource::sendEnrolleeAbsenceEmail error has occurred: ', error);
           throw error;
         })
       );

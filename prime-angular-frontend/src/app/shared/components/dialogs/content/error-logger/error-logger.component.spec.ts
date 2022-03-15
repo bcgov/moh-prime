@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -10,8 +10,8 @@ describe('ErrorLoggerComponent', () => {
   let component: ErrorLoggerComponent;
   let fixture: ComponentFixture<ErrorLoggerComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         MatDialogModule
       ],
@@ -34,9 +34,9 @@ describe('ErrorLoggerComponent', () => {
         },
         FormatDatePipe
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ErrorLoggerComponent);
