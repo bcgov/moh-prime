@@ -27,6 +27,7 @@ import {
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
+import { Pagination } from '@core/models/pagination.model';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 
 @Component({
@@ -200,6 +201,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         displayId,
         signingAuthorityId,
         signingAuthority,
+        signingAuthorityName: `${signingAuthority.firstName} ${signingAuthority.lastName}`,
+        organizationName: name,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
         hasClaim,
@@ -228,7 +231,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
     return {
       id,
       physicalAddress,
-      siteDoingBusinessAs: doingBusinessAs,
+      doingBusinessAs,
       submittedDate,
       approvedDate,
       careSettingCode,

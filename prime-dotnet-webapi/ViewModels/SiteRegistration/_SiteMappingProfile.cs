@@ -21,7 +21,8 @@ namespace Prime.ViewModels.Profiles
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
                 .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count))
                 .ForMember(dest => dest.DisplayId, opt => opt.MapFrom(src => src.Organization.DisplayId))
-                .ForMember(dest => dest.SigningAuthority, opt => opt.MapFrom(src => src.Organization.SigningAuthority.FirstName + " " + src.Organization.SigningAuthority.LastName))
+                .ForMember(dest => dest.OrganizationId, opt => opt.MapFrom(src => src.Organization.Id))
+                .ForMember(dest => dest.SigningAuthorityName, opt => opt.MapFrom(src => src.Organization.SigningAuthority.FirstName + " " + src.Organization.SigningAuthority.LastName))
                 .ForMember(dest => dest.MissingBusinessLicence, opt => opt.MapFrom(src => src.BusinessLicence == null || src.BusinessLicence.BusinessLicenceDocument == null));
 
             CreateMap<BusinessLicence, BusinessLicence>();

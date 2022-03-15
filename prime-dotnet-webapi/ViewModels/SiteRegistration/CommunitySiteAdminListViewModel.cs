@@ -8,8 +8,9 @@ namespace Prime.ViewModels
         public int Id { get; set; }
         public bool HasNotification { get; set; }
         public int DisplayId { get; set; }
+        public int OrganizationId { get; set; }
         public string OrganizationName { get; set; }
-        public string SigningAuthority { get; set; }
+        public string SigningAuthorityName { get; set; }
         public string DoingBusinessAs { get; set; }
         public DateTimeOffset? SubmittedDate { get; set; }
         public DateTimeOffset? ApprovedDate { get; set; }

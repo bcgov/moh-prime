@@ -23,6 +23,7 @@ import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { PaginatedList } from '@core/models/paginated-list.model';
+import { Pagination } from '@core/models/pagination.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
@@ -36,6 +37,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
 
   public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
   public healthAuthoritySites: HealthAuthoritySiteAdminList[];
+  public pagination: Pagination;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -139,7 +141,10 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
         .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = sites)
     } else {
       this.busy = this.getPaginatedSites({ careSettingCode, ...queryParams })
-        .subscribe((paginatedList: PaginatedList<SiteRegistrationListViewModel>) => this.dataSource.data = paginatedList.results);
+        .subscribe((paginatedList: PaginatedList<SiteRegistrationListViewModel>) => {
+          this.dataSource.data = paginatedList.results;
+          this.pagination = paginatedList;
+        });
     }
   }
 

@@ -2,8 +2,7 @@ import { SiteListViewModel } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
 export interface SiteListViewModelPartial extends
-  Omit<SiteListViewModel, 'completed' | 'doingBusinessAs'> {
-  siteDoingBusinessAs: string;
+  Omit<SiteListViewModel, 'completed'> {
   flagged: boolean;
 }
 
@@ -25,4 +24,7 @@ export interface OrganizationSearchListViewModel {
  * NOTE: should only be used within the SiteRegistrationContainer,
  * SiteRegistrationTable, and SiteRegistrationActions
  */
-export interface SiteRegistrationListViewModel extends OrganizationListViewModelPartial, SiteListViewModelPartial { }
+export interface SiteRegistrationListViewModel extends OrganizationListViewModelPartial, SiteListViewModelPartial {
+  signingAuthorityName: string;
+  organizationName: string;
+}
