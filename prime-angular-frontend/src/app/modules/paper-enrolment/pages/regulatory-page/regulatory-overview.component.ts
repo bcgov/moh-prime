@@ -32,7 +32,7 @@ import { RegulatoryForm } from './regulatory-form.model';
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
 
         <button mat-icon-button
-                matTooltip="Edit College Licenses"
+                matTooltip="Edit college licences"
                 (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">
           <mat-icon>edit</mat-icon>
         </button>

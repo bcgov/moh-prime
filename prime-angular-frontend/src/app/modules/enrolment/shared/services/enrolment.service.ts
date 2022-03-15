@@ -66,7 +66,7 @@ export class EnrolmentService implements IEnrolmentService {
    * Remote access rules:
    * - No College of Pharmacist can request remote access
    * - No Community Pharmacist care setting
-   * - Licences "Named in IM Reg" or "Licenced to Provide Care"
+   * - Licences "Named in IM Reg" or "Licensed to Provide Care"
    */
   public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
     const isCollegeOfPharmacists = certifications
