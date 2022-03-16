@@ -70,14 +70,6 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
   public ngOnInit(): void {
     this.cardTitlePrefix = 'Technical Support: ';
     this.init();
-
-    this.busy = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
-      .subscribe((healthAuthority: HealthAuthority) => {
-        this.healthAuthority = healthAuthority;
-        this.healthAuthority.vendors.forEach((haVendor: HealthAuthorityVendor) => this.vendors.push(
-          this.fb.control(false, [])
-        ))
-      });
   }
 
   public onEdit(contactIndex: number): void {
@@ -94,11 +86,17 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     this.formState = new TechnicalSupportsFormState(this.fb, this.formUtilsService);
   }
 
+  /**
+   * This gets executed during `ngOnInit` and after saving Contact
+   */
   protected getContactsPipe(): UnaryFunction<Observable<HealthAuthority>, Observable<Contact[]>> {
     return pipe(
       tap((healthAuthority: HealthAuthority) => {
-        // Important to update HealthAuthority details in order to properly display vendors supported by a tech support contact
         this.healthAuthority = healthAuthority;
+        this.vendors.controls.length = 0;
+        this.healthAuthority.vendors.forEach((haVendor: HealthAuthorityVendor) => this.vendors.push(
+          this.fb.control(false, []))
+        );
       }),
       map(({ technicalSupports }: HealthAuthority) => technicalSupports));
   }
