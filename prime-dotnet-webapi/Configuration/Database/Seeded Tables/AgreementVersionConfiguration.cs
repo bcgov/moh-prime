@@ -34,7 +34,6 @@ namespace Prime.Configuration.Database
                     new AgreementVersion { Id = 17, AgreementType = AgreementType.DeviceProviderOrgAgreement,    Text =  "device-provider-org-v1.html",         EffectiveDate = SEEDING_DATE,                                CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new AgreementVersion { Id = 18, AgreementType = AgreementType.PharmacyTechnicianTOA,         Text =  "pharmacy-tech-ru-no-obo-toa-v1.html", EffectiveDate = SEEDING_DATE,                                CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new AgreementVersion { Id = 19, AgreementType = AgreementType.PharmacyTechnicianTOA,         Text =  "pharmacy-tech-ru-no-obo-toa-v2.html", EffectiveDate = DateTimeOffset.Parse("2022-03-16 00:00:00"), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-
                 };
             }
         }
