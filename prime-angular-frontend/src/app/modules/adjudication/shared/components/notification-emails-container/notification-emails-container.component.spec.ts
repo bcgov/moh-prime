@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { NotificationEmailsContainerComponent } from './notification-emails-container.component';
@@ -8,18 +8,18 @@ describe('NotificationEmailsContainerComponent', () => {
   let component: NotificationEmailsContainerComponent;
   let fixture: ComponentFixture<NotificationEmailsContainerComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
       declarations: [
         NotificationEmailsContainerComponent
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NotificationEmailsContainerComponent);

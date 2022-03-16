@@ -11,6 +11,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SharedModule } from '@shared/shared.module';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('CertificateComponent', () => {
   let component: CertificateComponent;
@@ -38,7 +39,8 @@ describe('CertificateComponent', () => {
             provide: AuthService,
             useClass: MockAuthService
           }
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

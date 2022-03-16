@@ -19,6 +19,8 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 describe('CollegeCertificationFormComponent', () => {
   let component: CollegeCertificationFormComponent;
@@ -33,7 +35,8 @@ describe('CollegeCertificationFormComponent', () => {
         RouterTestingModule,
         NgxMaskModule.forRoot(),
         NgxMaterialModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatDatepickerModule
       ],
       declarations: [
         CollegeCertificationFormComponent,
@@ -54,7 +57,8 @@ describe('CollegeCertificationFormComponent', () => {
         },
         EnrolmentFormStateService,
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { KeycloakService } from 'keycloak-angular';
@@ -12,13 +12,14 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 import { HealthAuthoritySiteContainerComponent } from './health-authority-site-container.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('HealthAuthoritySiteContainerComponent', () => {
   let component: HealthAuthoritySiteContainerComponent;
   let fixture: ComponentFixture<HealthAuthoritySiteContainerComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         NgxBusyModule,
@@ -33,10 +34,11 @@ describe('HealthAuthoritySiteContainerComponent', () => {
           useValue: APP_DI_CONFIG
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HealthAuthoritySiteContainerComponent);

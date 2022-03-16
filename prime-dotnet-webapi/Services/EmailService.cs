@@ -82,7 +82,7 @@ namespace Prime.Services
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(businessLicenceId);
 
-            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode);
+            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode, siteId);
             email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(siteId);
             await Send(email);
 
@@ -92,7 +92,7 @@ namespace Prime.Services
 
         public async Task SendHealthAuthoritySiteRegistrationSubmissionAsync(int healthAuthoritySiteId)
         {
-            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(null), CareSettingType.HealthAuthority);
+            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(null), CareSettingType.HealthAuthority, healthAuthoritySiteId);
             var attachment = await _emailDocumentService.GenerateHealthAuthorityRegistrationReviewAttachmentAsync(healthAuthoritySiteId);
             email.Attachments = new[] { attachment };
             await Send(email);
@@ -212,7 +212,7 @@ namespace Prime.Services
                 Pec = site.PEC
             };
 
-            var email = await _emailRenderingService.RenderSiteApprovedHibcEmailAsync(viewModel);
+            var email = await _emailRenderingService.RenderSiteApprovedHibcEmailAsync(viewModel, site.Id);
             await Send(email);
         }
 
@@ -224,6 +224,7 @@ namespace Prime.Services
 
             var enrollees = await _context.Enrollees
                 .Where(e => e.ExpiryDate.HasValue
+                    && e.CurrentStatus.StatusCode == (int)StatusType.Editable
                     && !e.EnrolleeAbsences.Any(ea => ea.StartTimestamp <= now
                         && (ea.EndTimestamp >= now || ea.EndTimestamp == null)))
                 .Select(e => new

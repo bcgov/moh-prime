@@ -1,5 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { DashboardMenuComponent } from './dashboard-menu.component';
 
@@ -7,14 +8,14 @@ describe('DashboardMenuComponent', () => {
   let component: DashboardMenuComponent;
   let fixture: ComponentFixture<DashboardMenuComponent>;
 
-  beforeEach(async() => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       declarations: [
         DashboardMenuComponent
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardMenuComponent);

@@ -14,6 +14,7 @@ import { ConfigService } from 'app/config/config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { EnrolmentStatusReason } from '@shared/enums/enrolment-status-reason.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('ReviewStatusContentComponent', () => {
   const mockDocument = {
@@ -108,7 +109,8 @@ describe('ReviewStatusContentComponent', () => {
           provide: ConfigService,
           useClass: MockConfigService
         }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));
