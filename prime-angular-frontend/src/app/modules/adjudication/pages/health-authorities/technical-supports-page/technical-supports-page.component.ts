@@ -5,7 +5,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, pipe, UnaryFunction } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
 import { AbstractContactsPage } from '@lib/classes/abstract-contacts-page.class';
@@ -57,6 +57,10 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     return this.formState.form.get('vendors') as FormArray;
   }
 
+  public get anyVendorsChecked(): boolean {
+    return this.vendors.controls.some((vendorCheckbox: FormControl) => vendorCheckbox.value);
+  }
+
   public onNoVendors(change: MatCheckboxChange): void {
     this.vendors.controls.forEach((vendorCheckbox: FormControl) => {
       vendorCheckbox.setValue(false);
@@ -91,7 +95,12 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
   }
 
   protected getContactsPipe(): UnaryFunction<Observable<HealthAuthority>, Observable<Contact[]>> {
-    return pipe(map(({ technicalSupports }: HealthAuthority) => technicalSupports));
+    return pipe(
+      tap((healthAuthority: HealthAuthority) => {
+        // Important to update HealthAuthority details in order to properly display vendors supported by a tech support contact
+        this.healthAuthority = healthAuthority;
+      }),
+      map(({ technicalSupports }: HealthAuthority) => technicalSupports));
   }
 
   protected performSubmissionRequest(contacts: HealthAuthorityTechnicalSupport[]): NoContent {

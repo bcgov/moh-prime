@@ -31,7 +31,8 @@
               </mat-checkbox>
             </div>
             <div>
-              <mat-checkbox (change)="onNoVendors($event)">None</mat-checkbox>
+              <mat-checkbox (change)="onNoVendors($event)"
+                            [checked]="!anyVendorsChecked">None</mat-checkbox>
             </div>
           </ng-container>
         </ng-container>
