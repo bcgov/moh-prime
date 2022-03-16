@@ -224,6 +224,7 @@ namespace Prime.Services
 
             var enrollees = await _context.Enrollees
                 .Where(e => e.ExpiryDate.HasValue
+                    && e.CurrentStatus.StatusCode == (int)StatusType.Editable
                     && !e.EnrolleeAbsences.Any(ea => ea.StartTimestamp <= now
                         && (ea.EndTimestamp >= now || ea.EndTimestamp == null)))
                 .Select(e => new
