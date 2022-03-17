@@ -11,7 +11,6 @@ import { Contact } from '@lib/models/contact.model';
 import { AbstractContactsPage } from '@lib/classes/abstract-contacts-page.class';
 import { TechnicalSupportsFormState } from '@lib/classes/technical-supports-form-state';
 import { ConfigService } from '@config/config.service';
-import { VendorConfig } from '@config/config.model';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
@@ -19,9 +18,9 @@ import { UtilsService } from '@core/services/utils.service';
 import { CardListItem } from '@shared/components/card-list/card-list.component';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityTechnicalSupport } from '@shared/models/health-authority-technical-support';
+import { HealthAuthorityVendorPipe } from '@shared/pipes/health-authority-vendor.pipe';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { HealthAuthorityVendorPipe } from '@adjudication/shared/pipes/health-authority-vendor.pipe';
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 
 @Component({
