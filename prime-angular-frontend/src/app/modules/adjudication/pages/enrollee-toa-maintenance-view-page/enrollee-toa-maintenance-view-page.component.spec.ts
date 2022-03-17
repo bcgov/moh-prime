@@ -60,4 +60,13 @@ describe('EnrolleeToaMaintenanceViewPageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('testing onBack()', () => {
+    it('should call routeRelativeTo with [\'./\']', () => {
+      const spyOnRouteRelativeTo = spyOn((component as any).routeUtils, 'routeRelativeTo');
+
+      component.onBack();
+      expect(spyOnRouteRelativeTo).toHaveBeenCalledOnceWith(['./']);
+    });
+  });
 });

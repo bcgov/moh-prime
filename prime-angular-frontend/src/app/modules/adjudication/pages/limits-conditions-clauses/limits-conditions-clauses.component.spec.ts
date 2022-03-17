@@ -1,3 +1,5 @@
+import faker from 'faker';
+
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -15,10 +17,22 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { LimitsConditionsClausesComponent } from './limits-conditions-clauses.component';
+import { of, noop } from 'rxjs';
 
-describe('LimitsConditionsClausesComponent', () => {
+fdescribe('LimitsConditionsClausesComponent', () => {
+  const mockEditor = {
+    getContent() {
+      return 'some value';
+    }
+  }
+
   let component: LimitsConditionsClausesComponent;
   let fixture: ComponentFixture<LimitsConditionsClausesComponent>;
+
+  let spyOnUpdateAccessAgreementNote;
+
+  let mockId;
+  let mockNoteValue;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -52,9 +66,48 @@ describe('LimitsConditionsClausesComponent', () => {
     fixture = TestBed.createComponent(LimitsConditionsClausesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    spyOnUpdateAccessAgreementNote = spyOn((component as any).adjudicationResource, 'updateAccessAgreementNote')
+      .and.returnValue(of(noop));
+    mockId = faker.random.number();
+    mockNoteValue = faker.random.words();
+    (component as any).route.snapshot.params.id = mockId;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('testing onSubmit()', () => {
+    describe('with valid form', () => {
+      it('should call adjudicationResource.updateAccessAgreementNote', () => {
+        component.note.setValue(mockNoteValue);
+        component.onSubmit();
+
+        expect(spyOnUpdateAccessAgreementNote).toHaveBeenCalledOnceWith(mockId, mockNoteValue);
+      });
+    });
+
+    describe('with invalid form', () => {
+      it('should not call adjudicationResource.updateAccessAgreementNote', () => {
+        component.onSubmit();
+        expect(spyOnUpdateAccessAgreementNote).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('testing onUpdate', () => {
+    describe('with a null editor', () => {
+      it('should return without setting component.preview', () => {
+        component.onUpdate({ editor: null });
+        expect(component.preview).toBeFalsy();
+      });
+    });
+
+    describe('with a valid editor', () => {
+      it('should set component.preview to a string value', () => {
+        component.onUpdate({ editor: mockEditor });
+        expect(component.preview).toBe('some value');
+      });
+    });
   });
 });
