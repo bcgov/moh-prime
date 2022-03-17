@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { KeycloakService } from 'keycloak-angular';
@@ -20,8 +20,8 @@ describe('ContextualEnrolmentConfirmationComponent', () => {
   let component: ContextualEnrolmentConfirmationComponent;
   let fixture: ComponentFixture<ContextualEnrolmentConfirmationComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         NgxMaterialModule
@@ -51,9 +51,9 @@ describe('ContextualEnrolmentConfirmationComponent', () => {
           useClass: MockPermissionService
         }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContextualEnrolmentConfirmationComponent);

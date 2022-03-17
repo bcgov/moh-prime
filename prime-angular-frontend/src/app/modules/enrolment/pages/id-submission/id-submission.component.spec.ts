@@ -13,6 +13,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AuthService } from '@auth/shared/services/auth.service';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('IdSubmissionComponent', () => {
   let component: IdSubmissionComponent;
@@ -43,7 +44,8 @@ describe('IdSubmissionComponent', () => {
           useClass: MockConfigService
         },
         KeycloakService
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));

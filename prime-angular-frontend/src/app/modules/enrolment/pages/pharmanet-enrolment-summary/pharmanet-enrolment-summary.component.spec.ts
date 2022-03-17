@@ -16,6 +16,8 @@ import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 describe('PharmanetEnrolmentSummaryComponent', () => {
@@ -29,7 +31,8 @@ describe('PharmanetEnrolmentSummaryComponent', () => {
           BrowserAnimationsModule,
           HttpClientTestingModule,
           RouterTestingModule,
-          EnrolmentModule
+          EnrolmentModule,
+          ReactiveFormsModule
         ],
         providers: [
           {
@@ -53,7 +56,8 @@ describe('PharmanetEnrolmentSummaryComponent', () => {
             useClass: MockPermissionService
           },
           KeycloakService
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

@@ -3,6 +3,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 
 import { ConfirmDialogComponent } from './confirm-dialog.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('ConfirmDialogComponent', () => {
   let component: ConfirmDialogComponent;
@@ -28,7 +29,8 @@ describe('ConfirmDialogComponent', () => {
             provide: MAT_DIALOG_DATA,
             useValue: {}
           }
-        ]
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
     ).compileComponents();
   }));

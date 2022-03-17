@@ -3,21 +3,21 @@
         (ngSubmit)="onSubmit()"
         novalidate
         autocomplete="off">
-  <app-page-header>{{ title }}</app-page-header>
+    <app-page-header>{{ title }}</app-page-header>
 
-  <app-gis-enrolment-progress-indicator [inProgress]="true"></app-gis-enrolment-progress-indicator>
+    <app-gis-enrolment-progress-indicator [inProgress]="true"></app-gis-enrolment-progress-indicator>
 
-  <app-page-section>
-    <app-page-subheader2 [showUnderline]="false">
-      <ng-container appPageSubheader2Title>
-        LDAP User
-      </ng-container>
-      <ng-container appPageSubheader2Summary>
-        Are you an existing LDAP user?
-      </ng-container>
-    </app-page-subheader2>
+    <app-page-section>
+      <app-page-subheader2 [showUnderline]="false">
+        <ng-container appPageSubheader2Title>
+          GIS User
+        </ng-container>
+        <ng-container appPageSubheader2Summary>
+          Are you an existing GIS user?
+        </ng-container>
+      </app-page-subheader2>
 
-      <mat-radio-group aria-label="Are you an existing LDAP user?"
+      <mat-radio-group aria-label="Are you an existing GIS user?"
                        formControlName="ldapUser">
         <mat-radio-button *ngFor="let option of [true, false]"
                           class="mr-5 mb-3"
@@ -31,7 +31,7 @@
                  icon="warning">
         <ng-container #alertContent
                       class="alert-content">
-          Must indicate whether you are an existing LDAP user or not
+          Must indicate whether you are an existing GIS user or not
         </ng-container>
       </app-alert>
 
@@ -44,7 +44,7 @@
 
         <ng-container #alertContent
                       class="alert-content">
-          In order to enrol with GIS you must be an active LDAP user.
+          In order to enrol with GIS you must be an active GIS user.
         </ng-container>
       </app-alert>
     </app-page-section>
