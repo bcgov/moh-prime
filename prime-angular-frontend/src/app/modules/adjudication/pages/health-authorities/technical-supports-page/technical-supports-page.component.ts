@@ -9,6 +9,7 @@ import { map, tap } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
 import { AbstractContactsPage } from '@lib/classes/abstract-contacts-page.class';
+import { TechnicalSupportsFormState } from '@lib/classes/technical-supports-form-state';
 import { ConfigService } from '@config/config.service';
 import { VendorConfig } from '@config/config.model';
 import { NoContent } from '@core/resources/abstract-resource';
@@ -20,8 +21,8 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityTechnicalSupport } from '@shared/models/health-authority-technical-support';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { HealthAuthorityVendorPipe } from '@adjudication/shared/pipes/health-authority-vendor.pipe';
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
-import { TechnicalSupportsFormState } from '@lib/classes/technical-supports-form-state';
 
 @Component({
   selector: 'app-technical-supports-page',
@@ -48,11 +49,6 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     this.nextRoute = AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS;
   }
 
-  public VendorName(vendorCode: number): string {
-    let matches = this.configService.vendors
-      .filter((vendorConfig: VendorConfig) => vendorConfig.code === vendorCode)
-    return matches ? matches[0].name : '';
-  }
 
   public get vendors(): FormArray {
     return this.formState.form.get('vendors') as FormArray;
@@ -120,21 +116,17 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
   }
 
   protected getContactListItem(): (contact: HealthAuthorityTechnicalSupport) => CardListItem {
+    const healthAuthorityVendorPipe = new HealthAuthorityVendorPipe(this.configService);
     return (contact: HealthAuthorityTechnicalSupport) => ({
       icon: 'account_circle',
       title: `${this.cardTitlePrefix}${contact.firstName} ${contact.lastName}`,
       properties: [
         { key: 'Job Title', value: contact.jobRoleTitle },
-        { key: 'Vendor', value: this.getReadableVendorList(contact.vendorsSupported) }
+        { key: 'Vendor', value: healthAuthorityVendorPipe.transform(contact.vendorsSupported) }
       ],
       action: {
         title: 'Update Information'
       }
     });
-  }
-
-  private getReadableVendorList(vendorCodes: number[]): string {
-    let vendorNames = vendorCodes.map((vendorCode: number) => this.VendorName(vendorCode));
-    return vendorNames.join(", ");
   }
 }

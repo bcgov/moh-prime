@@ -27,7 +27,7 @@
                  formArrayName="vendors"
                  class="mb-3">
               <mat-checkbox [formControlName]="i">
-                {{VendorName(vendor.vendorCode)}}
+                {{ vendor.vendorCode | healthAuthorityVendor }}
               </mat-checkbox>
             </div>
             <div>
