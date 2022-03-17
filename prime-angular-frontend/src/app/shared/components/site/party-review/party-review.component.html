@@ -25,6 +25,11 @@
   {{ party?.email | default }}
 </app-enrollee-property>
 
+<!-- <app-enrollee-property *ngIf="party instanceof HealthAuthorityTechnicalSupport"
+                       title="Vendor">
+  {{ $any(party).vendorsSupported | healthAuthorityVendor | default }}
+</app-enrollee-property> -->
+
 <ng-container *ngFor="let addressType of ['physicalAddress', 'mailingAddress']">
 
   <ng-container *ngIf="party && party[addressType] && !excludeList.includes(addressType)">
