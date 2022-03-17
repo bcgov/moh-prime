@@ -15,6 +15,7 @@ import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { UtilsService } from '@core/services/utils.service';
+import { CardListItem } from '@shared/components/card-list/card-list.component';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityTechnicalSupport } from '@shared/models/health-authority-technical-support';
 
@@ -116,5 +117,24 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     // Adjust JSON to match shape of HealthAuthorityTechnicalSupport class
     json.vendorsSupported = selectedVendorCodes;
     return json;
+  }
+
+  protected getContactListItem(): (contact: HealthAuthorityTechnicalSupport) => CardListItem {
+    return (contact: HealthAuthorityTechnicalSupport) => ({
+      icon: 'account_circle',
+      title: `${this.cardTitlePrefix}${contact.firstName} ${contact.lastName}`,
+      properties: [
+        { key: 'Job Title', value: contact.jobRoleTitle },
+        { key: 'Vendor', value: this.getReadableVendorList(contact.vendorsSupported) }
+      ],
+      action: {
+        title: 'Update Information'
+      }
+    });
+  }
+
+  private getReadableVendorList(vendorCodes: number[]): string {
+    let vendorNames = vendorCodes.map((vendorCode: number) => this.VendorName(vendorCode));
+    return vendorNames.join(", ");
   }
 }
