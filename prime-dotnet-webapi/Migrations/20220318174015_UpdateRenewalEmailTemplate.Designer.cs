@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20220309194030_UpdateRenewalEmailTemplate")]
+    [Migration("20220318174015_UpdateRenewalEmailTemplate")]
     partial class UpdateRenewalEmailTemplate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -6471,7 +6471,7 @@ namespace Prime.Migrations
                             Manual = false,
                             NamedInImReg = true,
                             Prefix = "R9",
-                            PrescriberIdType = 2,
+                            PrescriberIdType = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
