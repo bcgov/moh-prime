@@ -14,10 +14,10 @@
                          imageName="notification"
                          class="col-12">
           <ng-container appInfographicHeader>
-            Share your approval with your PharmaNet administrator.
+            Share your approval with your PharmaNet administrator
           </ng-container>
           <ng-container appInfographicDescription>
-            PRIME will send your enrolment information to your PharmaNet administrator(s) so they can set up your
+            PRIME will share your enrolment information with your PharmaNet administrator(s) so they can set up your
             access.
           </ng-container>
           <ng-container appInfographicContent
@@ -41,8 +41,8 @@
 
               <button mat-icon-button
                       type="button"
-                      aria-label="Copy your GPID to clipboard"
-                      matTooltip="Copy your GPID to clipboard"
+                      aria-label="Copy your GPID"
+                      matTooltip="Copy your GPID"
                       [cdkCopyToClipboard]="GPID"
                       (cdkCopyToClipboardCopied)="onCopy()">
                 <mat-icon>content_paste</mat-icon>
@@ -115,16 +115,16 @@
         <app-infographic imageName="notification"
                          class="col-12">
           <ng-container appInfographicHeader>
-            Resend your approval with your PharmaNet administrator.
+            Share your approval with your PharmaNet administrator
           </ng-container>
           <ng-container appInfographicDescription>
             When PRIME approved you to access PharmaNet, you were assigned a global PharmaNet ID (GPID).
-            <br>
+            <br><br>
             Examples of when you would need to share your GPID:
             <ul>
-              <li>If I change work sites.</li>
-              <li>If I change jobs.</li>
-              <li>If my worksite has new PharmaNet software.</li>
+              <li>If I change work sites</li>
+              <li>If I change jobs</li>
+              <li>If my worksite has new PharmaNet software</li>
             </ul>
           </ng-container>
           <ng-container appInfographicContent
@@ -132,7 +132,7 @@
 
             <p>
               To share your GPID, enter the email address of your PharmaNet administrator(s) below. A PharmaNet
-              administrator is the person in your workplace who set up PharmaNet access.
+              administrator is the person in your workplace who sets up PharmaNet access.
             </p>
 
             <p>
@@ -140,7 +140,7 @@
               access.
             </p>
 
-            <p class="mb-4 font-weight-bold">
+            <p class="mb-4">
               Note: You cannot access PharmaNet without completing this step.
             </p>
 
@@ -172,7 +172,7 @@
                        imageName="moa"
                        class="col-12">
         <ng-container appInfographicHeader>
-          Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.
+          Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up
         </ng-container>
       </app-infographic>
 
@@ -286,7 +286,7 @@
                  let-provisioner="provisioner">
       <p class="mb-4">
         Provide the email address of the person in your organization who is responsible for contacting
-        {{ provisioner }} to set up accounts (e.g. your Office Manager or MOA). Use a comma to separate multiple
+        {{ provisioner }} to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple
         emails addresses. Do not enter your own email as you will be copied on the communication.
       </p>
     </ng-template>

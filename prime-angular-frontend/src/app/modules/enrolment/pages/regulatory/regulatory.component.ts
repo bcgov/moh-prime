@@ -131,7 +131,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   protected onSubmitFormIsValid() {
     // Enrollees can not have certifications and jobs
     this.removeOboSites();
-    // Remove remote access data when enrollee is no longer eligible, e.g. licence type changes
+    // Remove remote access data when enrollee is no longer eligible, e.g., licence type changes
     if (this.cannotRequestRemoteAccess) {
       this.removeRemoteAccessData();
     }
