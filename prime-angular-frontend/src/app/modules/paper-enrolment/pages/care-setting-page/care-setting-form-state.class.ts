@@ -63,9 +63,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
       });
     }
 
-    this.enrolleeCareSettings.valueChanges.subscribe(() => {
-      this.setHealthAuthorityValidator()
-    });
+    this.enrolleeCareSettings.valueChanges.subscribe(() => this.setHealthAuthorityValidator());
 
     this.enrolleeHealthAuthorities.clear();
     // Set value of checkboxes according to previous selections, if any
