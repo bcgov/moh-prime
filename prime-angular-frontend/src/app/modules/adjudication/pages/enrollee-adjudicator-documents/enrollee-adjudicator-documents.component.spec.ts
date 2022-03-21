@@ -10,6 +10,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 import { EnrolleeAdjudicatorDocumentsComponent } from './enrollee-adjudicator-documents.component';
+import { AdjudicatorDocumentsComponent } from '@adjudication/shared/components/adjudicator-documents/adjudicator-documents.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('EnrolleeAdjudicatorDocumentsComponent', () => {
@@ -27,7 +28,10 @@ describe('EnrolleeAdjudicatorDocumentsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [EnrolleeAdjudicatorDocumentsComponent],
+      declarations: [
+        EnrolleeAdjudicatorDocumentsComponent,
+        AdjudicatorDocumentsComponent
+      ],
       imports: [
         RouterTestingModule,
         ReactiveFormsModule,

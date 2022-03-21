@@ -19,7 +19,7 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { LimitsConditionsClausesComponent } from './limits-conditions-clauses.component';
 import { of, noop } from 'rxjs';
 
-fdescribe('LimitsConditionsClausesComponent', () => {
+describe('LimitsConditionsClausesComponent', () => {
   const mockEditor = {
     getContent() {
       return 'some value';
@@ -89,6 +89,7 @@ fdescribe('LimitsConditionsClausesComponent', () => {
 
     describe('with invalid form', () => {
       it('should not call adjudicationResource.updateAccessAgreementNote', () => {
+        component.form.controls['note'].setErrors({ 'some error': true });
         component.onSubmit();
         expect(spyOnUpdateAccessAgreementNote).not.toHaveBeenCalled();
       });
