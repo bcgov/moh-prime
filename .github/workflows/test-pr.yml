@@ -1,10 +1,14 @@
 name: CodeClimate-Checks
 on:
   pull_request:
-    types: [opened, reopened, synchronize, closed]
+    types: [opened, reopened, synchronize]
     branches-ignore:
       - 'test'
       - 'master'
+      - 'develop'
+  push:
+    branches:
+      - 'develop'
   workflow_dispatch:
 
 jobs:
@@ -13,8 +17,6 @@ jobs:
       run:
         working-directory: ./prime-angular-frontend
   
-    if: github.ref != 'develop' || (github.ref == 'develop' && github.event.pull_request.merged == true)
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -73,8 +75,6 @@ jobs:
       run:
         working-directory: ./prime-dotnet-webapi-tests
 
-    if: github.ref != 'develop' || (github.ref == 'develop' && github.event.pull_request.merged == true)
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -131,8 +131,6 @@ jobs:
 
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
-
-    if: github.ref != 'develop' || (github.ref == 'develop' && github.event.pull_request.merged == true)
 
     runs-on: ubuntu-latest
 
