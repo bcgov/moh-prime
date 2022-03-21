@@ -82,11 +82,11 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onSearch(textSearch: string | null): void {
-    this.routeUtils.updateQueryParams({ textSearch });
+    this.routeUtils.updateQueryParams({ textSearch, page: null });
   }
 
   public onFilter(status: StatusFilterEnum | null): void {
-    this.routeUtils.updateQueryParams({ status });
+    this.routeUtils.updateQueryParams({ status, page: null });
   }
 
   public onRefresh(): void {
