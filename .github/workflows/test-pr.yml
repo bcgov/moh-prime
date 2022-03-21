@@ -5,7 +5,6 @@ on:
     branches-ignore:
       - 'test'
       - 'master'
-      - 'develop'
   push:
     branches:
       - 'develop'
@@ -69,7 +68,6 @@ jobs:
           path: ./prime-angular-frontend/coverage/frontend.json
           retention-days: 1
 
-  
   collect-backend-coverage:
     defaults:
       run:
@@ -128,7 +126,6 @@ jobs:
           path: ./prime-dotnet-webapi-tests/coverage/backend.json
           retention-days: 1
           
-
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
 
