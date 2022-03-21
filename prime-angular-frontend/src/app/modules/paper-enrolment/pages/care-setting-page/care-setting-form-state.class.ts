@@ -63,7 +63,9 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
       });
     }
 
-    this.enrolleeCareSettings.valueChanges.subscribe(() => this.setHealthAuthorityValidator());
+    this.enrolleeCareSettings.valueChanges.subscribe(() => {
+      this.setHealthAuthorityValidator()
+    });
 
     this.enrolleeHealthAuthorities.clear();
     // Set value of checkboxes according to previous selections, if any
@@ -157,5 +159,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     this.hasSelectedHACareSetting()
       ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: FormControl) => control.value))
       : this.enrolleeHealthAuthorities.clearValidators();
+
+    this.enrolleeHealthAuthorities.updateValueAndValidity();
   }
 }
