@@ -47,7 +47,7 @@ export class DocumentUploadComponent implements OnInit {
     private accessTokenService: AccessTokenService,
     private logger: ConsoleLoggerService
   ) {
-    this.labelMessage = 'Click to Browse or Drop files here';
+    this.labelMessage = 'Click to browse, or drop files here';
     this.filePondFiles = [];
     this.completed = new EventEmitter();
     this.remove = new EventEmitter<string>();
