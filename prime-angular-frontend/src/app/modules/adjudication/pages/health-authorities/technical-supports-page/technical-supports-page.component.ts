@@ -101,7 +101,7 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     return this.healthAuthResource.updateHealthAuthorityTechnicalSupports(this.route.snapshot.params.haid, contacts);
   }
 
-  protected manipulateFormStateJsonPreSubmission(json: any): any {
+  protected manipulateJsonPreSubmission(json: any): any {
     const selectedVendorCodes: number[] = [];
     this.healthAuthority.vendors.forEach((haVendor: HealthAuthorityVendor, i: number) => {
       if (json.vendors[i]) {
@@ -121,7 +121,7 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
       title: `${this.cardTitlePrefix}${contact.firstName} ${contact.lastName}`,
       properties: [
         { key: 'Job Title', value: contact.jobRoleTitle },
-        { key: 'Vendor', value: healthAuthorityVendorPipe.transform(contact.vendorsSupported) }
+        { key: 'Vendor(s)', value: healthAuthorityVendorPipe.transform(contact.vendorsSupported) }
       ],
       action: {
         title: 'Update Information'

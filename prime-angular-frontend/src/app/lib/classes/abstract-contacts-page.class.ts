@@ -157,7 +157,7 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
    * Update the contact information.
    */
   protected performSubmission(): Observable<void> {
-    const updatedContact = this.manipulateFormStateJsonPreSubmission(this.formState.json);
+    const updatedContact = this.manipulateJsonPreSubmission(this.formState.json);
     const payload = (!updatedContact.id)
       ? this.contacts.concat([updatedContact])
       : this.contacts.map(contact =>
@@ -189,9 +189,10 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
 
   /**
    * @description
-   * Hook to capture any non-contact details, for example.  Returns post-manipulation JSON
+   * Hook to capture any non-contact details, for example.
+   * Returns post-manipulation JSON representing the form state.
    */
-  protected manipulateFormStateJsonPreSubmission(json: any): any {
+  protected manipulateJsonPreSubmission(json: any): any {
     // Default implementation is a no-op.
     return json;
   }
