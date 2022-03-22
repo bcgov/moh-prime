@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
@@ -179,6 +179,10 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
 
     if (changes.sort?.firstChange === false) {
       this.updateDateSortParams(changes.sort.currentValue);
+    }
+
+    if (changes.pagination.currentValue.page !== +this.activatedRoute.snapshot.queryParams.page) {
+      console.log(changes.pagination);
     }
   }
 
