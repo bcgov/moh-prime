@@ -33,6 +33,7 @@ import { JoinPipe } from '@shared/pipes/join.pipe';
 import { RolePipe } from '@shared/pipes/role-pipe';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { ContainsPipe } from '@shared/pipes/contains.pipe';
+import { HealthAuthorityVendorPipe } from '@shared/pipes/health-authority-vendor.pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { HtmlComponent } from '@shared/components/dialogs/content/html/html.component';
@@ -145,6 +146,7 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     CareSettingPipe,
     JoinPipe,
     PartyTypePipe,
+    HealthAuthorityVendorPipe,
     AddressFormComponent,
     ConfirmDialogComponent,
     HtmlComponent,
@@ -265,6 +267,7 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     InRolePipe,
     ContainsPipe,
     PartyTypePipe,
+    HealthAuthorityVendorPipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
