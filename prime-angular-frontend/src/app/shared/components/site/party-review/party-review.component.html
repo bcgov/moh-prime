@@ -25,9 +25,9 @@
   {{ party?.email | default }}
 </app-enrollee-property>
 
-<app-enrollee-property *ngIf="$any(party).vendorsSupported !== undefined"
-                       title="Vendor">
-  {{ $any(party).vendorsSupported | healthAuthorityVendor | default }}
+<app-enrollee-property *ngIf="healthAuthorityTechnicalSupport?.vendorsSupported"
+                       title="Vendor(s)">
+  {{ healthAuthorityTechnicalSupport.vendorsSupported | healthAuthorityVendor | default }}
 </app-enrollee-property>
 
 <ng-container *ngFor="let addressType of ['physicalAddress', 'mailingAddress']">

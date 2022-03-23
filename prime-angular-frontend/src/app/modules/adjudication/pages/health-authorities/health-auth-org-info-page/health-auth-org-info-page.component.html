@@ -89,7 +89,8 @@
                 <ng-container *ngIf="healthAuthority?.technicalSupports.length; else noTechnicalSupports">
                   <ng-container *ngFor="let technicalSupport of healthAuthority.technicalSupports">
                     <app-enrollee-property title="Technical Support">
-                      <app-party-review [party]="technicalSupport"></app-party-review>
+                      <app-party-review [party]="technicalSupport"
+                                        [healthAuthorityTechnicalSupport]="technicalSupport"></app-party-review>
                     </app-enrollee-property>
                   </ng-container>
                 </ng-container>
