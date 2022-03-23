@@ -1,5 +1,6 @@
 using System;
 using Prime.Models;
+using System.Collections.Generic;
 
 namespace Prime.ViewModels
 {

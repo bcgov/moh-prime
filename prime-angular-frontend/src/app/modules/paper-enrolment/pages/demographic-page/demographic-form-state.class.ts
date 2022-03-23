@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -36,6 +36,22 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
     return this.form.get('physicalAddress') as FormGroup;
   }
 
+  public get additionalAddresses(): FormArray {
+    return this.form.get('additionalAddresses') as FormArray;
+  }
+
+  public addAdditionalAddress() {
+    const additionalAddress = this.formUtilsService.buildAddressForm({
+      areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal']
+    });
+
+    this.additionalAddresses.push(additionalAddress);
+  }
+
+  public removeAdditionalAddress(index: number) {
+    this.additionalAddresses.removeAt(index);
+  }
+
   public get json(): DemographicForm {
     if (!this.formInstance) {
       return;
@@ -70,6 +86,7 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
       physicalAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal']
       }),
+      additionalAddresses: this.fb.array([]),
       email: [null, [
         Validators.required,
         FormControlValidators.email

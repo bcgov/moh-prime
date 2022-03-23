@@ -84,11 +84,45 @@
 
       <app-address-form [form]="formState.physicalAddress"
                         [showManualButton]="true"
-                        [showAddressFields]="showAddressFields"></app-address-form>
+                        [showAddressFields]="showAddressFields(formState.physicalAddress.value)"></app-address-form>
+
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Summary>Provide any additional addresses.</ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3"
+             formArrayName="additionalAddresses">
+
+          <ng-container *ngFor="let additionalAddress of formState.additionalAddresses.controls; let i = index;"
+                        [formGroupName]="i">
+
+            <app-form-icon-group [show]="formState.additionalAddresses.length > 0"
+                                 (event)="formState.removeAdditionalAddress(i)">
+              <app-form-icon-group>
+                <app-address-form [form]="additionalAddress"
+                                  [showManualButton]="true"
+                                  [showAddressFields]="showAddressFields(additionalAddress.value)">
+                </app-address-form>
+              </app-form-icon-group>
+            </app-form-icon-group>
+          </ng-container>
+
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="formState.addAdditionalAddress()">
+            <mat-icon>add</mat-icon>
+            Add additional address
+          </button>
+        </div>
+      </div>
+
     </app-page-section>
 
     <app-contact-information-form [form]="formState.form"
-                                  contactDescription="Provide a phone number that may be used to contact the enrollee."></app-contact-information-form>
+                                  contactDescription="Provide a phone number that may be used to contact the enrollee.">
+    </app-contact-information-form>
 
   </form>
 

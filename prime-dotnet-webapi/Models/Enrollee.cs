@@ -154,6 +154,16 @@ namespace Prime.Models
                 .SingleOrDefault();
         }
 
+        [NotMapped]
+        [Computed]
+        public ICollection<AdditionalAddress> AdditionalAddresses
+        {
+            get => Addresses
+                .Select(a => a.Address)
+                .OfType<AdditionalAddress>()
+                .ToList();
+        }
+
         /// <summary>
         /// Gets the most recent Enrolment Status on the Enrollee.
         /// </summary>

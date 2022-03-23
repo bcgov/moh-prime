@@ -1,10 +1,11 @@
 using AutoMapper;
 using System.Linq;
+using System;
+using System.Collections.Generic;
 
 using Prime.DTOs.AgreementEngine;
 using Prime.Models;
-using System;
-
+using Prime.ViewModels.PaperEnrollees;
 namespace Prime.ViewModels.Profiles
 {
     public class EnrolleeMappingProfile : Profile
@@ -49,6 +50,10 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<Enrollee, AgreementEngineDto>()
                 .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
+
+            CreateMap<Enrollee, PaperEnrolleeDemographicViewModel>()
+                .ForMember(dest => dest.AdditionalAddresses, opt => opt.MapFrom(src => src.AdditionalAddresses))
+                .ReverseMap();
 
             // ------- Children -------
             CreateMap<AccessAgreementNote, AccessAgreementNoteViewModel>();
