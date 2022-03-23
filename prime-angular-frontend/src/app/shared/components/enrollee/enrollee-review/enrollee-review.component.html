@@ -116,6 +116,8 @@
   <ng-container *ngFor="let careSetting of enrolment.careSettings">
 
     <app-enrollee-property title="Care Setting"
+                           [hasError]="enrolmentErrors?.missingHealthAuthorityCareSetting && careSetting.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
+                           errorMessage="Must select health authorities when selecting health authority as your care setting."
                            [makeBold]="true">
       {{ careSetting.careSettingCode | configCode: 'careSettings' }}
     </app-enrollee-property>
