@@ -49,8 +49,7 @@ export class ErrorHandlerService implements ErrorHandler {
             return;
           }
 
-          // dialogLogger.log(logId);
-          throw (error);
+          dialogLogger.log(logId);
         });
     }
 
