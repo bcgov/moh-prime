@@ -10,6 +10,8 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { EmailUtils } from '@lib/utils/email-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { ToastService } from '@core/services/toast.service';
+import { PaginatedList } from '@core/models/paginated-list.model';
+import { Pagination } from '@core/models/pagination.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { EnrolleeListViewModel, HttpEnrollee } from '@shared/models/enrolment.model';
@@ -37,8 +39,6 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
 import { DateOfBirthComponent } from '@shared/components/dialogs/content/date-of-birth/date-of-birth.component';
 import moment from 'moment';
-import { PaginatedList } from '@core/models/paginated-list.model';
-import { Pagination } from '@core/models/pagination.model';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -453,7 +453,10 @@ export class AdjudicationContainerComponent implements OnInit {
   protected getDataset(
     enrolleeId: number,
     queryParams: {
-      search?: string, status?: number, sortActive?: string, sortDirection?: SortDirection,
+      search?: string,
+      status?: number,
+      sortActive?: string,
+      sortDirection?: SortDirection,
       page?: number,
       assignedTo?: number,
       appliedDateStart?: string,

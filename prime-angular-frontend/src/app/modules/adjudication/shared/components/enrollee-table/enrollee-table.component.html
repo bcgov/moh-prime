@@ -6,7 +6,7 @@
         <mat-paginator (page)="onPage($event, true)"
                        [pageIndex]="pagination?.page - 1"
                        [pageSize]="pagination?.pageSize"
-                       [length]="pagination?.total"></mat-paginator>
+                       [length]="pagination?.totalResults"></mat-paginator>
       </app-paginator>
 
       <table mat-table
@@ -273,7 +273,7 @@
                        (page)="onPage($event, false)"
                        [pageIndex]="pagination?.page - 1"
                        [pageSize]="pagination?.pageSize"
-                       [length]="pagination?.total"></mat-paginator>
+                       [length]="pagination?.totalResults"></mat-paginator>
       </app-paginator>
     </form>
 

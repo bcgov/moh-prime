@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
@@ -180,10 +180,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     if (changes.sort?.firstChange === false) {
       this.updateDateSortParams(changes.sort.currentValue);
     }
-
-    if (changes.pagination.currentValue.page !== +this.activatedRoute.snapshot.queryParams.page) {
-      console.log(changes.pagination);
-    }
   }
 
   public navigateToEnrollee(enrolleeId: number): void {
@@ -251,24 +247,24 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
       );
 
     this.form.get('appliedDateRangeEnd').valueChanges.pipe(untilDestroyed(this))
-      .subscribe((value: moment.Moment) => {
+      .subscribe((end: moment.Moment) => {
         const start = this.form.get('appliedDateRangeStart').value as moment.Moment;
 
-        if (!value || !start) {
+        if (!end || !start) {
           return;
         }
-        this.routeUtils.updateQueryParams({ appliedDateRangeStart: start.toISOString(), appliedDateRangeEnd: value.toISOString() });
+        this.routeUtils.updateQueryParams({ appliedDateRangeStart: start.toISOString(), appliedDateRangeEnd: end.toISOString() });
         this.hasAppliedDateRange = true;
       });
 
     this.form.get('renewalDateRangeEnd').valueChanges.pipe(untilDestroyed(this))
-      .subscribe((value: moment.Moment) => {
+      .subscribe((end: moment.Moment) => {
         const start = this.form.get('renewalDateRangeStart').value as moment.Moment;
 
-        if (!value || !start) {
+        if (!end || !start) {
           return;
         }
-        this.routeUtils.updateQueryParams({ renewalDateRangeStart: start.toISOString(), renewalDateRangeEnd: value.toISOString() });
+        this.routeUtils.updateQueryParams({ renewalDateRangeStart: start.toISOString(), renewalDateRangeEnd: end.toISOString() });
         this.hasRenewalDateRange = true;
       });
   }
