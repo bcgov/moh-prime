@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { SortDirection } from '@angular/material/sort';
 
+import moment from 'moment';
 import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription, forkJoin } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
@@ -38,9 +39,6 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
 import { DateOfBirthComponent } from '@shared/components/dialogs/content/date-of-birth/date-of-birth.component';
-import moment from 'moment';
-import { PaginatedList } from '@core/models/paginated-list.model';
-import { Pagination } from '@core/models/pagination.model';
 
 @Component({
   selector: 'app-adjudication-container',

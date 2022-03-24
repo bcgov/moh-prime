@@ -1,8 +1,9 @@
-<app-paginator [hidePaginator]="(pagination?.totalPages ?? 1) === 1">
+<app-paginator [hidePaginator]="(pagination?.totalPages ?? 1) === 1"
+               [page]="pagination?.page">
   <mat-paginator (page)="onPage($event, true)"
                  [pageIndex]="pagination?.page - 1"
                  [pageSize]="pagination?.pageSize"
-                 [length]="pagination?.total"></mat-paginator>
+                 [length]="pagination?.totalResults"></mat-paginator>
 </app-paginator>
 
 <table mat-table
@@ -155,12 +156,13 @@
       *matRowDef="let row; columns: columns;"></tr>
 </table>
 
-<app-paginator [hidePaginator]="(pagination?.totalPages ?? 1) === 1">
+<app-paginator [hidePaginator]="(pagination?.totalPages ?? 1) === 1"
+               [page]="pagination?.page">
   <mat-paginator #secondaryPaginator
                  (page)="onPage($event, false)"
                  [pageIndex]="pagination?.page - 1"
                  [pageSize]="pagination?.pageSize"
-                 [length]="pagination?.total"></mat-paginator>
+                 [length]="pagination?.totalResults"></mat-paginator>
 </app-paginator>
 
 <p *ngIf="!dataSource?.data.length"

@@ -100,15 +100,15 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
   }
 
   public onSearch(textSearch: string | null): void {
-    this.routeUtils.updateQueryParams({ textSearch });
+    this.routeUtils.updateQueryParams({ textSearch, page: null });
   }
 
   public onFilter(status: any | null): void {
-    this.routeUtils.updateQueryParams({ status });
+    this.routeUtils.updateQueryParams({ status, page: null });
   }
 
   public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
-    this.routeUtils.updateQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index] });
+    this.routeUtils.updateQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index], page: null });
   }
 
   public ngOnInit(): void {
