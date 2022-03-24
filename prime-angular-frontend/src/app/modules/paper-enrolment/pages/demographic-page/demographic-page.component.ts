@@ -99,10 +99,6 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
             phoneExtension,
             smsPhone
           });
-
-          // if (Address.isNotEmpty(physicalAddress)) {
-          //   this.showAddressFields = true;
-          // }
         }
       });
   }
