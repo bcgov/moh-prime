@@ -116,7 +116,7 @@ namespace Prime.Services
             return true;
         }
 
-        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<ContactViewModel> contacts) where T : HealthAuthorityContact, new()
+        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<IContactViewModel> contacts) where T : HealthAuthorityContact, new()
         {
             var oldContacts = await _context.HealthAuthorityContacts
                 .Include(c => c.Contact.PhysicalAddress)
@@ -131,18 +131,35 @@ namespace Prime.Services
 
             _context.Addresses.RemoveRange(oldContacts.Select(c => c.PhysicalAddress).Where(a => a != null));
 
-            var newContacts = contacts.Select(contact =>
+            IEnumerable<T> newContacts;
+            if (contacts is IEnumerable<TechnicalSupportContactViewModel>)
             {
-                contact.Id = 0;
-                return new T
+                newContacts = (IEnumerable<T>)contacts.Select(contact =>
                 {
-                    HealthAuthorityOrganizationId = healthAuthorityId,
-                    Contact = _mapper.Map<Contact>(contact)
-                };
-            });
+                    contact.Id = 0;
+                    var healthAuthorityTechnicalSupport = new HealthAuthorityTechnicalSupport
+                    {
+                        HealthAuthorityOrganizationId = healthAuthorityId,
+                        Contact = _mapper.Map<Contact>(contact)
+                    };
+                    healthAuthorityTechnicalSupport.VendorsSupported = MapToVendorsSupported(healthAuthorityTechnicalSupport, (TechnicalSupportContactViewModel)contact, _context.HealthAuthorityVendors);
+                    return healthAuthorityTechnicalSupport;
+                });
+            }
+            else
+            {
+                newContacts = contacts.Select(contact =>
+                {
+                    contact.Id = 0;
+                    return new T
+                    {
+                        HealthAuthorityOrganizationId = healthAuthorityId,
+                        Contact = _mapper.Map<Contact>(contact)
+                    };
+                });
+            }
 
             _context.HealthAuthorityContacts.AddRange(newContacts);
-
             await _context.SaveChangesAsync();
         }
 
@@ -294,6 +311,23 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return doc;
+        }
+
+        private static ICollection<HealthAuthorityTechnicalSupportVendor> MapToVendorsSupported(HealthAuthorityTechnicalSupport healthAuthorityTechnicalSupport, TechnicalSupportContactViewModel contact, DbSet<HealthAuthorityVendor> healthAuthorityVendors)
+        {
+            var result = new List<HealthAuthorityTechnicalSupportVendor>();
+            foreach (var vendorCode in contact.VendorsSupported)
+            {
+                result.Add(new HealthAuthorityTechnicalSupportVendor
+                {
+                    HealthAuthorityTechnicalSupport = healthAuthorityTechnicalSupport,
+                    HealthAuthorityVendor = healthAuthorityVendors
+                        .Where(hav => hav.HealthAuthorityOrganizationId == healthAuthorityTechnicalSupport.HealthAuthorityOrganizationId)
+                        .Where(hav => hav.VendorCode == vendorCode)
+                        .Single()
+                });
+            }
+            return result;
         }
     }
 }
