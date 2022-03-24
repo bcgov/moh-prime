@@ -32,11 +32,11 @@ namespace Prime.Models.Api
         public int TotalResults { get; private set; }
         public int PageSize { get; private set; }
 
-        public PaginatedList(IEnumerable<T> items, int count, int page, int pageSize)
+        private PaginatedList(IEnumerable<T> items, int totalResults, int page, int pageSize)
         {
             Page = page;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-            TotalResults = count;
+            TotalPages = (int)Math.Ceiling(totalResults / (double)pageSize);
+            TotalResults = totalResults;
             PageSize = pageSize;
 
             AddRange(items);

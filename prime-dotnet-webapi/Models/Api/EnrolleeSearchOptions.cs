@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Prime.ViewModels;
 
 namespace Prime.Models.Api
 {
@@ -17,6 +14,5 @@ namespace Prime.Models.Api
         public DateTime? RenewalDateRangeEnd { get; set; }
         public DateTime? AppliedDateRangeStart { get; set; }
         public DateTime? AppliedDateRangeEnd { get; set; }
-
     }
 }
