@@ -14,11 +14,9 @@ import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/m
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 import { Organization } from '@registration/shared/models/organization.model';
-import { OrganizationSearchListViewModel, SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { OrganizationClaimFormModel } from '@registration/shared/models/organization-claim-form.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
-import { PaginatedList } from '@core/models/paginated-list.model';
 
 @Injectable({
   providedIn: 'root'

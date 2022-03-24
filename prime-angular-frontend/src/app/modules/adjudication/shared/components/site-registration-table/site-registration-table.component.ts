@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Role } from '@auth/shared/enum/role.enum';
@@ -9,8 +11,6 @@ import { Pagination } from '@core/models/pagination.model';
 
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { RouteUtils } from '@lib/utils/route-utils.class';
 
 class ImprovedPageEvent extends PageEvent {
   public stopPropogation: boolean;

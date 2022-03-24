@@ -86,8 +86,7 @@ namespace Prime.Controllers
         /// Gets all Sites.
         /// </summary>
         [HttpGet(Name = nameof(GetAllSites))]
-        // [Authorize(Roles = Roles.ViewSite)]
-        [AllowAnonymous]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<CommunitySiteListViewModel>>), StatusCodes.Status200OK)]

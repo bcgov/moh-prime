@@ -1,30 +1,26 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 
 import { Subscription, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
-import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { SiteResource } from '@core/resources/site-resource.service';
-import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { Site } from '@registration/shared/models/site.model';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import {
-  SiteRegistrationListViewModel,
-  OrganizationSearchListViewModel
-} from '@registration/shared/models/site-registration.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
-import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { PaginatedList } from '@core/models/paginated-list.model';
 import { Pagination } from '@core/models/pagination.model';
-import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
+import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
+import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-site-registration-tabs',
