@@ -68,7 +68,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.licenses = this.configService.licenses;
     this.practices = this.configService.practices;
     this.nurseGroups = this.configService.collegeLicenseGroupings;
-    this.minRenewalDate = moment();
+    this.minRenewalDate = (this.enrolmentService.isProfileComplete) ? null : moment();
     this.condensed = false;
     this.defaultOption = true;
   }
