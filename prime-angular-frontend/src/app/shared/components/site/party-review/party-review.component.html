@@ -25,6 +25,8 @@
   {{ party?.email | default }}
 </app-enrollee-property>
 
+<ng-content select="[nonPartyDetails]"></ng-content>
+
 <ng-container *ngFor="let addressType of ['physicalAddress', 'mailingAddress']">
 
   <ng-container *ngIf="party && party[addressType] && !excludeList.includes(addressType)">
