@@ -247,24 +247,24 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
       );
 
     this.form.get('appliedDateRangeEnd').valueChanges.pipe(untilDestroyed(this))
-      .subscribe((value: moment.Moment) => {
+      .subscribe((end: moment.Moment) => {
         const start = this.form.get('appliedDateRangeStart').value as moment.Moment;
 
-        if (!value || !start) {
+        if (!end || !start) {
           return;
         }
-        this.routeUtils.updateQueryParams({ appliedDateRangeStart: start.toISOString(), appliedDateRangeEnd: value.toISOString() });
+        this.routeUtils.updateQueryParams({ appliedDateRangeStart: start.toISOString(), appliedDateRangeEnd: end.toISOString() });
         this.hasAppliedDateRange = true;
       });
 
     this.form.get('renewalDateRangeEnd').valueChanges.pipe(untilDestroyed(this))
-      .subscribe((value: moment.Moment) => {
+      .subscribe((end: moment.Moment) => {
         const start = this.form.get('renewalDateRangeStart').value as moment.Moment;
 
-        if (!value || !start) {
+        if (!end || !start) {
           return;
         }
-        this.routeUtils.updateQueryParams({ renewalDateRangeStart: start.toISOString(), renewalDateRangeEnd: value.toISOString() });
+        this.routeUtils.updateQueryParams({ renewalDateRangeStart: start.toISOString(), renewalDateRangeEnd: end.toISOString() });
         this.hasRenewalDateRange = true;
       });
   }

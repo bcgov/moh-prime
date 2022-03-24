@@ -181,13 +181,16 @@ namespace Prime.Services
                         && e.AppliedDate <= searchOptions.AppliedDateRangeEnd
                     )
                 )
+                // By default postgres treats NULL values as infinitely large, where as angular material table sort does the opposite.
+                // Added the first OrderBy to maintain NULL being infinitely small.
                 .If(!string.IsNullOrWhiteSpace(searchOptions.SortOrder), q =>
                         searchOptions.SortOrder switch
                         {
-                            "renewalDate_asc" => q.OrderBy(s => s.ExpiryDate),
-                            "renewalDate_desc" => q.OrderByDescending(s => s.ExpiryDate),
-                            "appliedDate_asc" => q.OrderBy(s => s.AppliedDate),
-                            "appliedDate_desc" => q.OrderByDescending(s => s.AppliedDate),
+                            "renewalDate_asc" => q.OrderByDescending(s => s.ExpiryDate.HasValue).ThenBy(e => e.ExpiryDate).ThenBy(e => e.Id),
+                            "renewalDate_desc" => q.OrderBy(s => s.ExpiryDate.HasValue).ThenByDescending(e => e.ExpiryDate).ThenBy(e => e.Id),
+                            "appliedDate_asc" => q.OrderByDescending(s => s.AppliedDate.HasValue).ThenBy(e => e.AppliedDate).ThenBy(e => e.Id),
+                            "appliedDate_desc" => q.OrderBy(s => s.AppliedDate.HasValue).ThenByDescending(e => e.AppliedDate).ThenBy(e => e.Id),
+                            "displayId_desc" => q.OrderByDescending(e => e.Id),
                             _ => q.OrderBy(e => e.Id),
                         }
                 )

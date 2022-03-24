@@ -10,6 +10,8 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { EmailUtils } from '@lib/utils/email-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { ToastService } from '@core/services/toast.service';
+import { PaginatedList } from '@core/models/paginated-list.model';
+import { Pagination } from '@core/models/pagination.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { EnrolleeListViewModel, HttpEnrollee } from '@shared/models/enrolment.model';
@@ -82,11 +84,11 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onSearch(textSearch: string | null): void {
-    this.routeUtils.updateQueryParams({ textSearch });
+    this.routeUtils.updateQueryParams({ textSearch, page: null });
   }
 
   public onFilter(status: StatusFilterEnum | null): void {
-    this.routeUtils.updateQueryParams({ status });
+    this.routeUtils.updateQueryParams({ status, page: null });
   }
 
   public onRefresh(): void {
@@ -453,7 +455,10 @@ export class AdjudicationContainerComponent implements OnInit {
   protected getDataset(
     enrolleeId: number,
     queryParams: {
-      search?: string, status?: number, sortActive?: string, sortDirection?: SortDirection,
+      search?: string,
+      status?: number,
+      sortActive?: string,
+      sortDirection?: SortDirection,
       page?: number,
       assignedTo?: number,
       appliedDateStart?: string,
@@ -504,7 +509,7 @@ export class AdjudicationContainerComponent implements OnInit {
     appliedDateEnd?: string,
     renewalDateStart?: string,
     renewalDateEnd?: string
-  }) {
+  }): Observable<PaginatedList<EnrolleeListViewModel>> {
     // Transform the "statuses" for (un)linked paper enrollees into their own query string
     var isLinkedPaperEnrolment = null;
     if (+status === PaperStatusEnum.UNLINKED_PAPER_ENROLMENT) {

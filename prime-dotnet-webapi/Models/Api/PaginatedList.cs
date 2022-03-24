@@ -11,7 +11,7 @@ namespace Prime.Models.Api
         public List<T> Results { get; set; }
         public int Page { get; set; }
         public int TotalPages { get; set; }
-        public int Total { get; set; }
+        public int TotalResults { get; set; }
         public int PageSize { get; set; }
 
         public PaginatedResponse(PaginatedList<T> list)
@@ -19,7 +19,7 @@ namespace Prime.Models.Api
             Results = list;
             Page = list.Page;
             TotalPages = list.TotalPages;
-            Total = list.Total;
+            TotalResults = list.TotalResults;
             PageSize = list.PageSize;
         }
     }
@@ -29,14 +29,14 @@ namespace Prime.Models.Api
 
         public int Page { get; private set; }
         public int TotalPages { get; private set; }
-        public int Total { get; private set; }
+        public int TotalResults { get; private set; }
         public int PageSize { get; private set; }
 
-        public PaginatedList(IEnumerable<T> items, int count, int page, int pageSize)
+        private PaginatedList(IEnumerable<T> items, int totalResults, int page, int pageSize)
         {
             Page = page;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-            Total = count;
+            TotalPages = (int)Math.Ceiling(totalResults / (double)pageSize);
+            TotalResults = totalResults;
             PageSize = pageSize;
 
             AddRange(items);
