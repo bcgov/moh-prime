@@ -6,6 +6,7 @@ using Prime.Models.HealthAuthorities;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
+using System;
 
 namespace Prime.ViewModels.Profiles
 {
@@ -28,8 +29,13 @@ namespace Prime.ViewModels.Profiles
             CreateMap<Contact, PrivacyOfficerViewModel>();
             CreateMap<Contact, HealthAuthorityContactViewModel>();
             CreateMap<HealthAuthorityContact, HealthAuthorityContactViewModel>()
+                // See https://automapperdocs.readthedocs.io/en/latest/Mapping-inheritance.html
+                .IncludeAllDerived()
                 .IncludeMembers(src => src.Contact)
                 .ForMember(dest => dest.ContactId, opt => opt.MapFrom(src => src.Contact.Id));
+            CreateMap<HealthAuthorityTechnicalSupport, TechnicalSupportContactViewModel>()
+                .ForMember(dest => dest.VendorsSupported, opt => opt.MapFrom(src => src.VendorsSupported.Select(v => v.HealthAuthorityVendor.VendorCode)));
+            CreateMap<IContactViewModel, Contact>();
 
             CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
                 .IncludeMembers(src => src.Party);
