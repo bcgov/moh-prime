@@ -74,6 +74,13 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
       ? model.givenNames.replace(model.firstName, '').trim()
       : '';
 
+    model.additionalAddresses.map((additionalAddress) => {
+      const additionalAddressFormGroup = this.formUtilsService.buildAddressForm();
+
+      additionalAddressFormGroup.patchValue(additionalAddress)
+      this.additionalAddresses.push(additionalAddressFormGroup);
+    });
+
     this.formInstance.patchValue({ ...model, middleName });
   }
 

@@ -99,12 +99,11 @@
 
             <app-form-icon-group [show]="formState.additionalAddresses.length > 0"
                                  (event)="formState.removeAdditionalAddress(i)">
-              <app-form-icon-group>
-                <app-address-form [form]="additionalAddress"
-                                  [showManualButton]="true"
-                                  [showAddressFields]="showAddressFields(additionalAddress.value)">
-                </app-address-form>
-              </app-form-icon-group>
+
+              <app-address-form [form]="additionalAddress"
+                                [showManualButton]="true"
+                                [showAddressFields]="showAddressFields(additionalAddress.value)">
+              </app-address-form>
             </app-form-icon-group>
           </ng-container>
 
