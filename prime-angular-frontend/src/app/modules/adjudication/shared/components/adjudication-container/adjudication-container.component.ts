@@ -507,7 +507,7 @@ export class AdjudicationContainerComponent implements OnInit {
     appliedDateEnd?: string,
     renewalDateStart?: string,
     renewalDateEnd?: string
-  }) {
+  }): Observable<PaginatedList<EnrolleeListViewModel>> {
     // Transform the "statuses" for (un)linked paper enrollees into their own query string
     var isLinkedPaperEnrolment = null;
     if (+status === PaperStatusEnum.UNLINKED_PAPER_ENROLMENT) {

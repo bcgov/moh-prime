@@ -181,6 +181,8 @@ namespace Prime.Services
                         && e.AppliedDate <= searchOptions.AppliedDateRangeEnd
                     )
                 )
+                // By default postgres treats NULL values as infinitely large, where as angular material table sort does the opposite.
+                // Added the first OrderBy to maintain NULL being infinitely small.
                 .If(!string.IsNullOrWhiteSpace(searchOptions.SortOrder), q =>
                         searchOptions.SortOrder switch
                         {
