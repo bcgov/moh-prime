@@ -12,9 +12,47 @@
     </button>
   </app-page-subheader>
 
-  <ng-container *ngTemplateOutlet="(hasAddress) ? addressIf : addressElse"></ng-container>
-
+  <ng-container *ngTemplateOutlet="(hasAddress)
+                                    ? (isMultiple)
+                                      ? addressesIf
+                                      : addressIf
+                                    : addressElse"></ng-container>
 </section>
+
+<ng-template #addressesIf>
+  <ng-container *ngFor="let additionalAddress of additionalAddresses; let index = index">
+    <app-page-subheader>
+      <ng-container appPageSubheaderSummary>
+        <strong> Address: {{ index + 1 }}</strong>
+      </ng-container>
+    </app-page-subheader>
+
+    <app-enrollee-property title="Country">
+      {{ additionalAddress?.countryCode | configCode: 'countries' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Province">
+      {{ additionalAddress?.provinceCode | configCode: 'provinces' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Street Address">
+      {{ additionalAddress?.street | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property *ngIf="address?.street2"
+                           title="Street Address 2">
+      {{ additionalAddress?.street2 | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="City">
+      {{ additionalAddress?.city | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Postal Code">
+      {{ additionalAddress?.postal | postal | default }}
+    </app-enrollee-property>
+  </ng-container>
+</ng-template>
 
 <ng-template #addressIf>
   <app-enrollee-property title="Country">

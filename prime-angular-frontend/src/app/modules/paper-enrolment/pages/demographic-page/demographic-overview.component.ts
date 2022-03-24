@@ -43,6 +43,12 @@ import { DemographicForm } from './demographic-form.model';
                       [showIfEmpty]="true"
                       (route)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)"></app-address-view>
 
+    <app-address-view title="Additional Addresses"
+                      [additionalAddresses]="demographic?.additionalAddresses"
+                      [showRedirect]="true"
+                      [showIfEmpty]="false"
+                      (route)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)"></app-address-view>
+
     <app-page-section>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Contact Information</ng-container>

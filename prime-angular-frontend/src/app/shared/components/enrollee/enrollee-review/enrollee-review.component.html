@@ -54,6 +54,12 @@
                   [showIfEmpty]="true"
                   (route)="onRoute(demographicRoutePath)"></app-address-view>
 
+<app-address-view title="Additional Addresses"
+                  [additionalAddresses]="enrollee?.additionalAddresses"
+                  [showRedirect]="showEditRedirect"
+                  [showIfEmpty]="enrollee.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX: 'startsWith'"
+                  (route)="onRoute(demographicRoutePath)"></app-address-view>
+
 <app-page-section>
 
   <app-page-subheader>
