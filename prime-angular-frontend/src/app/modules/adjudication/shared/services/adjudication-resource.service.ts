@@ -3,13 +3,17 @@ import { Injectable } from '@angular/core';
 
 import { forkJoin, Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
+import moment from 'moment';
 
+import { Admin } from '@auth/shared/models/admin.model';
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { ApiResource } from '@core/resources/api-resource.service';
+import { PaginatedList } from '@core/models/paginated-list.model';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
@@ -18,31 +22,28 @@ import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { EnrolmentCard } from '@shared/models/enrolment-card.model';
-import { Admin } from '@auth/shared/models/admin.model';
-
-import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
-import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
-import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
-import { SelfDeclaration } from '@shared/models/self-declarations.model';
-import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
-import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
-import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
-import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
-import { EnrolleeNotification } from '../models/enrollee-notification.model';
-import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
-import { SiteNotification } from '../models/site-notification.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
 import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
-
-import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
-import moment from 'moment';
+import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
+
+import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
+import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
+import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
+import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { EnrolleeNotification } from '../models/enrollee-notification.model';
+import { SiteNotification } from '../models/site-notification.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -55,12 +56,23 @@ export class AdjudicationResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public getEnrollees(params: { textSearch?: string, statusCode?: number, isLinkedPaperEnrolment?: boolean }): Observable<EnrolleeListViewModel[]> {
+  public getEnrollees(params: {
+    textSearch?: string,
+    statusCode?: number,
+    isLinkedPaperEnrolment?: boolean,
+    page?: number,
+    sortOrder?: string,
+    assignedTo?: number,
+    appliedDateStart?: string,
+    appliedDateEnd?: string,
+    renewalDateStart?: string,
+    renewalDateEnd?: string
+  }): Observable<PaginatedList<EnrolleeListViewModel>> {
     const httpParams = this.apiResourceUtilsService.makeHttpParams(params);
-    return this.apiResource.get<EnrolleeListViewModel[]>('enrollees', httpParams)
+    return this.apiResource.get<PaginatedList<EnrolleeListViewModel>>('enrollees', httpParams)
       .pipe(
-        map((response: ApiHttpResponse<EnrolleeListViewModel[]>) => response.result),
-        tap((enrollees: EnrolleeListViewModel[]) => this.logger.info('ENROLLEES', enrollees)),
+        map((response: ApiHttpResponse<PaginatedList<EnrolleeListViewModel>>) => response.result),
+        tap((enrollees: PaginatedList<EnrolleeListViewModel>) => this.logger.info('PAGINATED_ENROLLEES', enrollees)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolments could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrollees error has occurred: ', error);
