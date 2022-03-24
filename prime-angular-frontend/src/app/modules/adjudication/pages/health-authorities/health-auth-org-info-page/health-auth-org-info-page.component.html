@@ -89,7 +89,13 @@
                 <ng-container *ngIf="healthAuthority?.technicalSupports.length; else noTechnicalSupports">
                   <ng-container *ngFor="let technicalSupport of healthAuthority.technicalSupports">
                     <app-enrollee-property title="Technical Support">
-                      <app-party-review [party]="technicalSupport"></app-party-review>
+                      <app-party-review [party]="technicalSupport">
+                        <ng-container nonPartyDetails>
+                          <app-enrollee-property title="Vendor(s)">
+                            {{ technicalSupport.vendorsSupported | healthAuthorityVendor | default }}
+                          </app-enrollee-property>
+                        </ng-container>
+                      </app-party-review>
                     </app-enrollee-property>
                   </ng-container>
                 </ng-container>
