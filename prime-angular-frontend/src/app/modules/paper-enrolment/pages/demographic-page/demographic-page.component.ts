@@ -28,7 +28,6 @@ import { DemographicFormState } from './demographic-form-state.class';
 export class DemographicPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: DemographicFormState;
   public maxDateOfBirth: moment.Moment;
-  // public showAddressFields: boolean;
 
   private enrollee: HttpEnrollee | null;
   private routeUtils: RouteUtils;
@@ -137,9 +136,5 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
       : ['../', enrollee.id, PaperEnrolmentRoutes.CARE_SETTING];
 
     this.routeUtils.routeRelativeTo(nextRoutePath);
-  }
-
-  protected onSubmitFormIsInvalid(): void {
-    // this.showAddressFields = true;
   }
 }
