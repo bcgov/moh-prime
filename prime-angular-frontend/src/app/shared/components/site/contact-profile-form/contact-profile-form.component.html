@@ -112,6 +112,11 @@
     </div>
   </app-page-section>
 
+  <app-page-section>
+    <ng-content select="[nonContactDetails]"></ng-content>
+  </app-page-section>
+
+
   <!-- Must bind to hidden instead of using *ngIf so toggle can be located by ViewChild -->
   <div [hidden]="!hasAddressToggle">
     <div class="mb-4">
