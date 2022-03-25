@@ -202,7 +202,7 @@ export class OverviewPageComponent implements OnInit {
     this.siteFormStateService.setForm(site);
 
     this.isBusinessLicenceUpdated = this.siteFormStateService.businessLicenceFormState.isBusinessLicenceUpdated
-      || (this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value && !this.site.businessLicence.businessLicenceDocument);
+      || (this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value && !this.site.businessLicence?.businessLicenceDocument);
 
     this.siteErrors = this.getSiteErrors(site);
   }
@@ -233,8 +233,8 @@ export class OverviewPageComponent implements OnInit {
     return {
       deviceProviderSite: !site.individualDeviceProviders?.length
         && site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER,
-      missingBusinessLicenceOrReason: !site.businessLicence.businessLicenceDocument
-        && !site.businessLicence.deferredLicenceReason && !this.isBusinessLicenceUpdated
+      missingBusinessLicenceOrReason: !site.businessLicence?.businessLicenceDocument
+        && !site.businessLicence?.deferredLicenceReason && !this.isBusinessLicenceUpdated
     };
   }
 }
