@@ -147,6 +147,10 @@ export class OverviewPageComponent implements OnInit {
       );
   }
 
+  public hasErrors(): boolean {
+    return Object.values(this.siteErrors).some(val => val);
+  }
+
   public ngOnInit(): void {
     this.organization = (
       this.overviewType === 'organization' ||
@@ -186,8 +190,6 @@ export class OverviewPageComponent implements OnInit {
       };
     }
 
-    this.siteErrors = this.getSiteErrors(site);
-
     // Store a local copy of the site for overview
     this.site = site;
 
@@ -199,7 +201,10 @@ export class OverviewPageComponent implements OnInit {
     // updates when not already patched and contains changes
     this.siteFormStateService.setForm(site);
 
-    this.isBusinessLicenceUpdated = this.siteFormStateService.businessLicenceFormState.isBusinessLicenceUpdated;
+    this.isBusinessLicenceUpdated = this.siteFormStateService.businessLicenceFormState.isBusinessLicenceUpdated
+      || (this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value && !this.site.businessLicence?.businessLicenceDocument);
+
+    this.siteErrors = this.getSiteErrors(site);
   }
 
   /**
@@ -227,7 +232,9 @@ export class OverviewPageComponent implements OnInit {
   private getSiteErrors(site: Site): ValidationErrors {
     return {
       deviceProviderSite: !site.individualDeviceProviders?.length
-        && site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER
+        && site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER,
+      missingBusinessLicenceOrReason: !site.businessLicence?.businessLicenceDocument
+        && !site.businessLicence?.deferredLicenceReason && !this.isBusinessLicenceUpdated
     };
   }
 }
