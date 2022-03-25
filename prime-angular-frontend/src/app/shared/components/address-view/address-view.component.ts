@@ -64,7 +64,7 @@ export class AddressViewComponent implements OnInit {
   }
 
   public get isMultiple(): boolean {
-    return (!!this.additionalAddresses)
+    return (!!this.additionalAddresses?.length);
   }
 
   public onRoute(routePath: string | string[]) {
