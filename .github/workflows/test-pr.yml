@@ -1,6 +1,7 @@
 name: CodeClimate-Checks
 on:
-  push:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
     branches-ignore:
       - 'test'
       - 'master'
@@ -12,6 +13,8 @@ jobs:
       run:
         working-directory: ./prime-angular-frontend
   
+    if: github.ref != 'develop' || (github.ref == 'develop' && github.event.pull_request.merged == true)
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -21,7 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      # - name: Cache node modules
+      - name: set-date
+        run: |
+          echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
+      # - name: Cache node modules.
       #   uses: actions/cache@v2
       #   with:
       #     path: ~/.npm
@@ -50,7 +56,6 @@ jobs:
         run: |
           yarn
           yarn run test
-
       - name: Collect Frontend Report
         run: |
           cc-test-reporter format-coverage -t lcov -o coverage/frontend.json coverage/lcov.info
@@ -68,6 +73,8 @@ jobs:
       run:
         working-directory: ./prime-dotnet-webapi-tests
 
+    if: github.ref != 'develop' || (github.ref == 'develop' && github.event.pull_request.merged == true)
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -76,6 +83,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: set-date
+        run: |
+          echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
       - name: Setup .NET Core 5.0
         uses: actions/setup-dotnet@v1
         with:
@@ -86,7 +97,6 @@ jobs:
         run: |
           cd ../
           dotnet restore
-
       - name: Install ReportGenerator
         run: |
           cd ../
@@ -101,19 +111,16 @@ jobs:
 
       - name: Generate coverage report
         env:
-          EXCLUDE: "**/ApiDbContextModelSnapshot.cs%2c**/**Designer.cs%2c**/Migrations/**%2c**/Views/**%2c"
+          EXCLUDE: "**/Migrations/**%2c**/Models/**%2c**/Views/**%2c**/ViewModels/**%2c**/Configuration/**%2c**/DTOs/**%2c**/Helpers/**%2c**/Resources/**%2c**/**Definitions.cs"
         run: |
           dotnet test /p:ExcludeByFile=$EXCLUDE /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* --filter FullyQualifiedName\!~Integration
-
       - name: Run report generator
         run: |
           reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:coverage" -reporttype:lcov "-filefilters:-ApiDbContextModelSnapshot.cs;" -verbosity:Error
-
       - name: Collect Backend Report
         run: |
           cd ../prime-dotnet-webapi
           cc-test-reporter format-coverage -t lcov -o ../prime-dotnet-webapi-tests/coverage/backend.json ../prime-dotnet-webapi-tests/coverage/lcov.info -p /home/runner/work/moh-prime/moh-prime/prime-dotnet-webapi
-
       - name: Create backend coverage file artifact
         uses: actions/upload-artifact@v2
         with:
@@ -125,9 +132,14 @@ jobs:
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
 
+    if: github.ref != 'develop' || (github.ref == 'develop' && github.event.pull_request.merged == true)
+
     runs-on: ubuntu-latest
 
     steps:
+      - name: set-date
+        run: |
+          echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
       - uses: amancevice/setup-code-climate@v0
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
