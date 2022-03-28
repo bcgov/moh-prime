@@ -85,6 +85,7 @@
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    [disableSave]="showProgress"
                    (save)="onSubmit()"
-                   (back)="onBack(EnrolmentRoutes.REGULATORY)"></app-page-footer>
+                   (back)="onBack(EnrolmentRoutes.REGULATORY)"
+                   (continue)="onBack()"></app-page-footer>
 
 </app-enrollee-page>
