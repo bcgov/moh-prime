@@ -2,11 +2,9 @@ name: CodeClimate-Checks
 on:
   pull_request:
     types: [opened, reopened, synchronize]
-    branches-ignore:
+    branches:
       - 'feature/PRIME-2071-codeclimate-diff-changes_FIX'
       - 'develop'
-      - 'test'
-      - 'master'
   push:
     branches:
       - 'feature/PRIME-2071-codeclimate-diff-changes_FIX'
