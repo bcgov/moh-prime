@@ -12,7 +12,7 @@ import { AbstractFormState } from './abstract-form-state.class';
 })
 export class ContactFormState extends AbstractFormState<Contact> {
   public constructor(
-    private fb: FormBuilder,
+    protected fb: FormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();
