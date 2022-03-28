@@ -273,7 +273,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
 
     // Create a business licence document each time a file is uploaded, and
     // update the existing business licence
-    return (documentGuid !== currentBusinessLicence.businessLicenceDocument?.documentGuid)
+    return (documentGuid && documentGuid !== currentBusinessLicence.businessLicenceDocument?.documentGuid)
       ? this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id)
         .pipe(
           exhaustMap(() => this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)),
