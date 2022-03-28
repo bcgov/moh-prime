@@ -382,7 +382,7 @@ namespace Prime.Controllers
             }
 
             var existingLicence = site.BusinessLicence;
-            var isNewDocument = existingLicence.BusinessLicenceDocument.DocumentGuid != newLicence.DocumentGuid && newLicence.DocumentGuid != null;
+            var isNewDocument = existingLicence.BusinessLicenceDocument?.DocumentGuid != newLicence.DocumentGuid && newLicence.DocumentGuid != null;
 
             if (site.ApprovedDate == null)
             {
