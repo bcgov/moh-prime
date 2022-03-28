@@ -40,8 +40,8 @@ export const APP_DATE_FORMATS = {
     monthYearA11yLabel: 'MMM YYYY',
   }
 };
+
 const appPaginatorCustomOptions = {
-  pageSize: 100,
   hidePageSize: true,
   showFirstLastButtons: true
 };

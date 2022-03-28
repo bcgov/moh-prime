@@ -13,7 +13,7 @@
     </ng-container>
   </app-expiry-alert>
 
-  <app-alert *ngIf="siteErrors?.deviceProviderSite"
+  <app-alert *ngIf="hasErrors()"
              type="danger"
              icon="error">
     <ng-container #alertContent
@@ -51,7 +51,7 @@
       <div class="col text-right">
         <button mat-flat-button
                 color="primary"
-                [disabled]="!accept.checked || siteErrors?.deviceProviderSite"
+                [disabled]="!accept.checked || hasErrors()"
                 (click)="onSubmit()">
           Submit
         </button>

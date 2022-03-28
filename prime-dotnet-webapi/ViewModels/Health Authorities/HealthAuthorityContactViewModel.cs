@@ -1,6 +1,6 @@
 namespace Prime.ViewModels.HealthAuthorities
 {
-    public class HealthAuthorityContactViewModel
+    public class HealthAuthorityContactViewModel : IContactViewModel
     {
         public int Id { get; set; }
         public int ContactId { get; set; }

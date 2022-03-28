@@ -1,6 +1,9 @@
 namespace Prime.ViewModels
 {
-    public class ContactViewModel : IContactViewModel
+    /// <summary>
+    /// Common interface for more flexibility and re-use.
+    /// </summary>
+    public interface IContactViewModel
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -9,7 +12,6 @@ namespace Prime.ViewModels
         public string Email { get; set; }
         public string Phone { get; set; }
         public string SMSPhone { get; set; }
-        public string Fax { get; set; }
         public AddressViewModel PhysicalAddress { get; set; }
     }
 }
