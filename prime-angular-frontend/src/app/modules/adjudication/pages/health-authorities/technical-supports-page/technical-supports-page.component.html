@@ -13,6 +13,30 @@
         <ng-container appPageSubheader2Summary>
           Provide information for a Technical Support Contact for this Health Authority.
         </ng-container>
+
+        <ng-container nonContactDetails>
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Title>Vendor(s)</ng-container>
+            <ng-container appPageSubheader2Summary>
+              What vendor(s) does this PharmaNet Administrator work with?
+            </ng-container>
+          </app-page-subheader2>
+          <ng-container *ngIf="healthAuthority?.vendors"
+                        [formGroup]="formState.form">
+            <div *ngFor="let vendor of healthAuthority.vendors; let i = index"
+                 formArrayName="vendors"
+                 class="mb-3">
+              <mat-checkbox [formControlName]="i">
+                {{ vendor.vendorCode | healthAuthorityVendor }}
+              </mat-checkbox>
+            </div>
+            <div>
+              <mat-checkbox (change)="onNoVendors($event)"
+                            [checked]="!anyVendorsChecked">None</mat-checkbox>
+            </div>
+          </ng-container>
+        </ng-container>
+
       </app-contact-profile-form>
 
     </ng-container>
