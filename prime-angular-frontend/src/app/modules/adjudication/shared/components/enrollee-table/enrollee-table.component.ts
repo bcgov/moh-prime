@@ -3,17 +3,17 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
 import moment from 'moment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-import { DateUtils } from '@lib/utils/date-utils.class';
 import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
-import { UtilsService } from '@core/services/utils.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { LocalStorageService } from '@core/services/local-storage.service';
+import { Pagination } from '@core/models/pagination.model';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum, PaperEnrolmentStatusMap } from '@shared/enums/enrolment-status.enum';
@@ -37,7 +37,7 @@ class ImprovedPageEvent extends PageEvent {
 export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrollees: EnrolleeListViewModel[];
   @Input() public enrolleeNavigation: EnrolleeNavigation;
-  @Input() public sort: Sort;
+  @Input() public pagination: Pagination;
   @Input() public localStoragePrefix: string;
   @Output() public notify: EventEmitter<EnrolleeListViewModel>;
   @Output() public assign: EventEmitter<number>;
@@ -47,14 +47,12 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Output() public sendBulkEmail: EventEmitter<void>;
   @Output() public maintenance: EventEmitter<void>;
   @Output() public navigateEnrollee: EventEmitter<number>;
-  @Output() public sortEnrollee: EventEmitter<Sort>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
   @ViewChild('secondaryPaginator', { static: true }) public secondaryPaginator: MatPaginator;
 
   public busy: Subscription;
   public dataSource: MatTableDataSource<EnrolleeListViewModel>;
-  public hidePaginator: boolean;
   public form: FormGroup;
   public columns: string[];
   public hasAppliedDateRange: boolean;
@@ -70,12 +68,14 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   private sortActiveKey: string;
   private sortDirectionKey: string;
 
+  protected routeUtils: RouteUtils;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private authService: AuthService,
-    private utilsService: UtilsService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    router: Router
   ) {
     this.notify = new EventEmitter<EnrolleeListViewModel>();
     this.assign = new EventEmitter<number>();
@@ -85,7 +85,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.sendBulkEmail = new EventEmitter<void>();
     this.maintenance = new EventEmitter<void>();
     this.navigateEnrollee = new EventEmitter<number>();
-    this.sortEnrollee = new EventEmitter<Sort>();
     this.columns = [
       'prefixes',
       'displayId',
@@ -102,6 +101,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     ];
     this.dataSource = new MatTableDataSource<EnrolleeListViewModel>([]);
     this.hasAssignedToFilter$ = new BehaviorSubject<boolean>(false);
+    this.routeUtils = new RouteUtils(activatedRoute, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
   }
 
   public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
@@ -135,40 +135,37 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.sendBulkEmail.emit();
   }
 
-  public sortData(sort: Sort) {
-    this.localStorageService.set(this.sortActiveKey, sort.active);
-    this.localStorageService.set(this.sortDirectionKey, sort.direction);
-
-    this.sortEnrollee.emit(sort);
-
-    if (!sort.active || !sort.direction) {
-      return;
+  public updateDateSortParams(sort: Sort) {
+    // Do not use sorting queryParams for single row mode
+    if (this.activatedRoute.snapshot.params.id) {
+      return
     }
 
-    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
-      switch (sort.active) {
-        case 'displayId':
-          return this.utilsService.sortByDirection(a.id, b.id, sort.direction);
-        case 'appliedDate':
-          return this.utilsService.sortByDirection(a.appliedDate, b.appliedDate, sort.direction);
-        case 'renewalDate':
-          return this.utilsService.sortByDirection(a.expiryDate, b.expiryDate, sort.direction);
-        default:
-          return 0;
-      }
-    });
+    if (!sort.active || !sort.direction) {
+      this.localStorageService.removeItem(this.sortActiveKey);
+      this.localStorageService.removeItem(this.sortDirectionKey);
+      this.routeUtils.updateQueryParams({ sortActive: null, sortDirection: null });
+    } else {
+      this.localStorageService.set(this.sortActiveKey, sort.active);
+      this.localStorageService.set(this.sortDirectionKey, sort.direction);
+      this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
+    }
   }
 
   public clearAppliedDateRange() {
     this.form.get('appliedDateRangeStart').reset();
     this.form.get('appliedDateRangeEnd').reset();
     this.hasAppliedDateRange = false;
+
+    this.routeUtils.updateQueryParams({ appliedDateRangeStart: null, appliedDateRangeEnd: null });
   }
 
   public clearRenewalDateRange() {
     this.form.get('renewalDateRangeStart').reset();
     this.form.get('renewalDateRangeEnd').reset();
     this.hasRenewalDateRange = false;
+
+    this.routeUtils.updateQueryParams({ renewalDateRangeStart: null, renewalDateRangeEnd: null });
   }
 
   public toggleFilterAssigned() {
@@ -181,7 +178,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     }
 
     if (changes.sort?.firstChange === false) {
-      this.sortData(changes.sort.currentValue);
+      this.updateDateSortParams(changes.sort.currentValue);
     }
   }
 
@@ -189,48 +186,46 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.navigateEnrollee.emit(enrolleeId);
   }
 
-  public syncPaginator(event: ImprovedPageEvent, top: boolean): void {
-    const paginator = (top) ? this.paginator : this.secondaryPaginator;
+  public onPage(event: ImprovedPageEvent, top: boolean): void {
     const other = (!top) ? this.paginator : this.secondaryPaginator;
-
-    paginator.pageIndex = event.pageIndex;
-    paginator.pageSize = event.pageSize;
-
     if (event.stopPropogation) {
       return;
     }
     event.stopPropogation = true;
+    this.routeUtils.updateQueryParams({ page: `${event.pageIndex + 1}` });
     other.page.emit(event);
   }
 
   public ngOnInit(): void {
     this.sortActiveKey = `${this.localStoragePrefix}-sort-active-key`;
     this.sortDirectionKey = `${this.localStoragePrefix}-sort-direction-key`;
+
+    const {
+      renewalDateRangeStart,
+      renewalDateRangeEnd,
+      appliedDateRangeStart,
+      appliedDateRangeEnd,
+      sortActive,
+      sortDirection,
+      assignedTo
+    } = this.activatedRoute.snapshot.queryParams;
+
+    this.hasAssignedToFilter$.next(!!assignedTo);
+
     this.createFormInstance();
     this.initForm();
-    this.dataSource.filterPredicate = this.getFilterPredicate();
-    this.dataSource.paginator = this.paginator;
-    // Paginator must exist within the DOM, but does not
-    // have to be visible based on the size of the dataset
-    this.hidePaginator = (this.paginator?.pageSize ?? 0) > this.enrollees.length;
+
     this.dataSource.data = this.enrollees;
 
-    const queryParams = this.activatedRoute.snapshot.queryParams;
-    const sort = <Sort>{
-      active: queryParams.sortActive,
-      direction: queryParams.sortDirection
-    };
-
-    if (!!sort.active && !!sort.direction) {
-      this.sortData(sort);
-    }
-
-    if (!sort.active || !sort.direction) {
-      this.sortData(<Sort>{
+    if (!sortActive || !sortDirection) {
+      this.updateDateSortParams(<Sort>{
         active: this.localStorageService.get(this.sortActiveKey),
         direction: this.localStorageService.get(this.sortDirectionKey)
       });
     }
+
+    this.hasRenewalDateRange = (renewalDateRangeStart && renewalDateRangeEnd);
+    this.hasAppliedDateRange = (appliedDateRangeStart && appliedDateRangeEnd);
   }
 
   private createFormInstance(): void {
@@ -239,56 +234,38 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
       appliedDateRangeEnd: ['', []],
       renewalDateRangeStart: ['', []],
       renewalDateRangeEnd: ['', []],
-      assignedTo: ['', []]
     });
   }
-
   private initForm(): void {
-    this.form.valueChanges
-      .pipe(untilDestroyed(this))
-      .subscribe(value => this.dataSource.filter = value);
-
     combineLatest([
       this.authService.getAdmin$(),
       this.hasAssignedToFilter$
     ])
       .pipe(untilDestroyed(this))
       .subscribe(([{ idir }, value]: [Admin, boolean]) =>
-        this.form.get('assignedTo').patchValue((value) ? idir : '')
+        this.routeUtils.updateQueryParams({ assignedTo: (value) ? idir : null })
       );
 
-    ['appliedDateRangeStart', 'appliedDateRangeEnd'].forEach(controlName =>
-      this.form.get(controlName).valueChanges
-        .pipe(untilDestroyed(this))
-        .subscribe(value => this.hasAppliedDateRange = value ?? this.hasAppliedDateRange)
-    );
+    this.form.get('appliedDateRangeEnd').valueChanges.pipe(untilDestroyed(this))
+      .subscribe((end: moment.Moment) => {
+        const start = this.form.get('appliedDateRangeStart').value as moment.Moment;
 
-    ['renewalDateRangeStart', 'renewalDateRangeEnd'].forEach(controlName =>
-      this.form.get(controlName).valueChanges
-        .pipe(untilDestroyed(this))
-        .subscribe(value => this.hasRenewalDateRange = value ?? this.hasRenewalDateRange)
-    );
-  }
+        if (!end || !start) {
+          return;
+        }
+        this.routeUtils.updateQueryParams({ appliedDateRangeStart: start.toISOString(), appliedDateRangeEnd: end.toISOString() });
+        this.hasAppliedDateRange = true;
+      });
 
-  private getFilterPredicate() {
-    return (row: EnrolleeListViewModel, filter: any) => {
-      const matchFilter = [];
+    this.form.get('renewalDateRangeEnd').valueChanges.pipe(untilDestroyed(this))
+      .subscribe((end: moment.Moment) => {
+        const start = this.form.get('renewalDateRangeStart').value as moment.Moment;
 
-      if (this.hasAppliedDateRange && filter.appliedDateRangeStart && filter.appliedDateRangeEnd) {
-        const date = moment(row.appliedDate).local();
-        matchFilter.push(DateUtils.isWithinDateRange(date, filter.appliedDateRangeStart, filter.appliedDateRangeEnd));
-      }
-
-      if (this.hasRenewalDateRange && filter.renewalDateRangeStart && filter.renewalDateRangeEnd) {
-        const date = moment(row.expiryDate).local();
-        matchFilter.push(DateUtils.isWithinDateRange(date, filter.renewalDateRangeStart, filter.renewalDateRangeEnd));
-      }
-
-      if (this.hasAssignedToFilter$.value) {
-        matchFilter.push(row.adjudicatorIdir === filter.assignedTo);
-      }
-
-      return matchFilter.every(Boolean);
-    };
+        if (!end || !start) {
+          return;
+        }
+        this.routeUtils.updateQueryParams({ renewalDateRangeStart: start.toISOString(), renewalDateRangeEnd: end.toISOString() });
+        this.hasRenewalDateRange = true;
+      });
   }
 }

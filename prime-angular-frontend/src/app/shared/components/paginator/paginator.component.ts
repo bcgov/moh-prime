@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ContentChild, EventEmitter, Input, Output } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { UtilsService } from '@core/services/utils.service';
@@ -10,7 +10,7 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.scss']
 })
-export class PaginatorComponent implements AfterContentInit {
+export class PaginatorComponent implements AfterContentInit, OnChanges {
   /**
    * @description
    * Hide the paginator from view.
@@ -20,6 +20,7 @@ export class PaginatorComponent implements AfterContentInit {
    * being found as the table datasource is initialized.
    */
   @Input() public hidePaginator: boolean;
+  @Input() public page: number;
   @Output() public changed: EventEmitter<{ pageIndex: number }>;
   @ContentChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
@@ -57,6 +58,13 @@ export class PaginatorComponent implements AfterContentInit {
         pageSize: this.paginator.pageSize,
         length: this.paginator.length
       });
+    }
+
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.page) {
+      this.form?.patchValue(changes.page.currentValue);
     }
   }
 

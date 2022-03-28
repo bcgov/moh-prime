@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace Prime.Models.HealthAuthorities
 {
@@ -22,6 +23,11 @@ namespace Prime.Models.HealthAuthorities
     }
 
     public class HealthAuthorityPrivacyOfficer : HealthAuthorityContact { }
-    public class HealthAuthorityTechnicalSupport : HealthAuthorityContact { }
+
+    public class HealthAuthorityTechnicalSupport : HealthAuthorityContact
+    {
+        public ICollection<HealthAuthorityTechnicalSupportVendor> VendorsSupported { get; set; }
+    }
+
     public class HealthAuthorityPharmanetAdministrator : HealthAuthorityContact { }
 }

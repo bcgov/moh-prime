@@ -11,7 +11,7 @@ namespace Prime.ViewModels.HealthAuthorities
         public IEnumerable<HealthAuthorityCareTypeViewModel> CareTypes { get; set; }
         public IEnumerable<HealthAuthorityVendorViewModel> Vendors { get; set; }
         public PrivacyOfficeViewModel PrivacyOffice { get; set; }
-        public IEnumerable<HealthAuthorityContactViewModel> TechnicalSupports { get; set; }
+        public IEnumerable<TechnicalSupportContactViewModel> TechnicalSupports { get; set; }
         public IEnumerable<HealthAuthorityContactViewModel> PharmanetAdministrators { get; set; }
         public HealthAuthorityOrganizationAgreementDocument HealthAuthorityOrganizationAgreementDocument { get; set; }
     }
