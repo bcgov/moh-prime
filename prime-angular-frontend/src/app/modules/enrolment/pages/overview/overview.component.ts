@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable, of, noop, EMPTY } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
+import moment from 'moment';
 
 import { Address } from '@lib/models/address.model';
 import { BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
@@ -30,7 +31,6 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import moment from 'moment';
 
 
 @Component({
