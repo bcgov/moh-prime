@@ -36,6 +36,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public showCommunityHealth: boolean;
   public showPharmacist: boolean;
   public showHealthAuthority: boolean;
+  public showDeviceProvider: boolean;
+
   public initialEnrolment: boolean;
   public complete: boolean;
 
@@ -61,6 +63,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.showCommunityHealth = true;
     this.showPharmacist = true;
     this.showHealthAuthority = true;
+    this.showDeviceProvider = true;
+
     this.form = this.buildVendorEmailGroup();
     this.careSettingConfigs = [];
   }
@@ -95,6 +99,10 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return this.form.get('healthAuthorityEmails') as FormControl;
   }
 
+  public get deviceProviderEmails(): FormControl {
+    return this.form.get('deviceProviderEmails') as FormControl;
+  }
+
   public get GPID(): string {
     return this.enrollee.gpid;
   }
@@ -120,6 +128,10 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         this.showHealthAuthority = show;
         break;
       }
+      case this.CareSettingEnum.DEVICE_PROVIDER: {
+        this.showDeviceProvider = show;
+        break;
+      }
     }
   }
 
@@ -133,6 +145,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       }
       case this.CareSettingEnum.HEALTH_AUTHORITY: {
         return this.showHealthAuthority;
+      }
+      case this.CareSettingEnum.DEVICE_PROVIDER: {
+        return this.showDeviceProvider;
       }
       default: {
         return false;
@@ -158,6 +173,10 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       }
       case this.CareSettingEnum.HEALTH_AUTHORITY: {
         formControl = this.healthAuthorityEmails;
+        break;
+      }
+      case this.CareSettingEnum.DEVICE_PROVIDER: {
+        formControl = this.deviceProviderEmails;
         break;
       }
     }
@@ -265,6 +284,15 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             subheaderContent: `Enter the email of the PharmaNet administrator in your workplace. If you work at more than one workplace, include the email addresses for each PharmaNet administrator, separated by a comma.`
           };
         }
+        case CareSettingEnum.DEVICE_PROVIDER: {
+          return {
+            setting: 'Device Provider',
+            settingPlural: 'Device Providers',
+            settingCode: careSetting.careSettingCode,
+            formControl: this.deviceProviderEmails,
+            subheaderContent: `Enter the email of the PharmaNet administrator in your workplace. If you work at more than one workplace, include the email addresses for each PharmaNet administrator, separated by a comma.`
+          };
+        }
       }
     });
   }
@@ -273,7 +301,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return this.fb.group({
       communityHealthEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
       pharmacistEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      healthAuthorityEmails: [null, [Validators.required, FormControlValidators.multipleEmails]]
+      healthAuthorityEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      deviceProviderEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
     });
   }
 }
