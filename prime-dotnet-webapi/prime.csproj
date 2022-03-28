@@ -27,7 +27,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="5.0.15" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
@@ -66,6 +66,7 @@
     <EmbeddedResource Include="Configuration\Database\Resources\pharmacy-obo-toa-v1.html" />
     <EmbeddedResource Include="Configuration\Database\Resources\device-provider-org-v1.html" />
     <EmbeddedResource Include="Configuration\Database\Resources\pharmacy-tech-ru-no-obo-toa-v1.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\pharmacy-tech-ru-no-obo-toa-v2.html" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">
