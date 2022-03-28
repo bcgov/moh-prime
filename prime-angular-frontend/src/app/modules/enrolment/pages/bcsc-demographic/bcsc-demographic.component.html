@@ -114,6 +114,7 @@
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    [hasSecondaryAction]="isProfileComplete || isMatchingPaperEnrollee"
                    (save)="onSubmit()"
-                   (back)="onBack(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)"></app-page-footer>
+                   (back)="onBack(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)"
+                   (continue)="onBack()"></app-page-footer>
 
 </app-enrollee-page>
