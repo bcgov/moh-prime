@@ -54,18 +54,18 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
             var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
-            var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+            var paginatedList = await _enrolleeService.GetEnrolleesAsync(searchOptions);
 
-            foreach (var enrollee in enrollees)
+            foreach (var enrollee in paginatedList)
             {
                 enrollee.HasNotification = notifiedIds.Contains(enrollee.Id);
             }
 
-            return Ok(enrollees);
+            return Ok(paginatedList.Response);
         }
 
         // POST: api/enrollees
