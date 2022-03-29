@@ -14,7 +14,6 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -34,7 +33,6 @@ export class EnrolleeReviewComponent {
   public CareSettingEnum = CareSettingEnum;
   public EnrolmentRoutes = EnrolmentRoutes;
   public AdjudicationRoutes = AdjudicationRoutes;
-  public readonly PAPER_ENROLLEE_GPID_PREFIX = PAPER_ENROLLEE_GPID_PREFIX;
 
   constructor(
     private authService: AuthService,

@@ -43,7 +43,7 @@ import { DemographicForm } from './demographic-form.model';
                       [showIfEmpty]="true"
                       (route)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)"></app-address-view>
 
-    <ng-container *ngIf="demographic?.additionalAddresses.length">
+    <ng-container *ngIf="demographic?.additionalAddresses?.length">
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Additional Addresses</ng-container>
         <button mat-icon-button
@@ -59,11 +59,7 @@ import { DemographicForm } from './demographic-form.model';
             <strong> Address: {{ index + 1 }}</strong>
           </ng-container>
         </app-page-subheader>
-        <app-address-view title=""
-                          [address]="additionalAddress"
-                          [showRedirect]="true"
-                          [showIfEmpty]="false"
-                          (route)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)"></app-address-view>
+        <app-address-view [address]="additionalAddress"></app-address-view>
       </ng-container>
     </ng-container>
     <app-page-section>

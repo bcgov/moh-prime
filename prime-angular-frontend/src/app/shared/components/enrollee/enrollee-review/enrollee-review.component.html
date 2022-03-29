@@ -54,7 +54,7 @@
                   [showIfEmpty]="true"
                   (route)="onRoute(demographicRoutePath)"></app-address-view>
 
-<ng-container *ngIf="enrollee?.additionalAddresses.length">
+<ng-container *ngIf="enrollee?.additionalAddresses?.length">
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Additional Addresses</ng-container>
   </app-page-subheader>
@@ -64,10 +64,7 @@
         <strong> Address: {{ index + 1 }}</strong>
       </ng-container>
     </app-page-subheader>
-    <app-address-view [address]="additionalAddress"
-                      [showRedirect]="showEditRedirect"
-                      [showIfEmpty]="enrollee.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX: 'startsWith'">
-    </app-address-view>
+    <app-address-view [address]="additionalAddress"></app-address-view>
   </ng-container>
 </ng-container>
 <app-page-section>
