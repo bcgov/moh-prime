@@ -1,6 +1,6 @@
 import * as faker from 'faker';
 
-import { of, throwError } from 'rxjs';
+import { NEVER, Observable, of } from 'rxjs';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -11,8 +11,8 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 import { EnrolleeAdjudicatorDocumentsComponent } from './enrollee-adjudicator-documents.component';
 import { AdjudicatorDocumentsComponent } from '@adjudication/shared/components/adjudicator-documents/adjudicator-documents.component';
-import { DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output } from '@angular/core';
+import { AdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 describe('EnrolleeAdjudicatorDocumentsComponent', () => {
   let component: EnrolleeAdjudicatorDocumentsComponent;
@@ -27,12 +27,38 @@ describe('EnrolleeAdjudicatorDocumentsComponent', () => {
   let mockGuidArray;
   let mockDocumentId;
 
+  @Component({
+    selector: 'app-adjudicator-document',
+    template: '',
+    providers: [
+      {
+        provide: AdjudicatorDocumentsComponent,
+        useClass: AdjudicatorDocumentsStubComponent
+      }]
+  })
+  class AdjudicatorDocumentsStubComponent {
+    @Input() public documents$: Observable<AdjudicationDocument[]>;
+    @Output() public saveDocuments: EventEmitter<string[]>;
+    @Output() public getDocumentByGuid: EventEmitter<number>;
+    @Output() public deleteDocumentById: EventEmitter<number>;
+    public documentGuids: string[];
+    public uploadedFile: boolean;
+
+    removeFiles = jasmine.createSpy('removeFiles');
+    onSubmit = () => { };
+    onUpload = () => { };
+    onRemoveDocument = () => { };
+    getDocument = () => { };
+    onDelete = () => { };
+    ngOnInit = () => { };
+    documentUploadComponent = null;
+  }
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         EnrolleeAdjudicatorDocumentsComponent,
-        AdjudicatorDocumentsComponent,
-        DocumentUploadComponent
+        AdjudicatorDocumentsStubComponent
       ],
       imports: [
         RouterTestingModule,
@@ -55,9 +81,11 @@ describe('EnrolleeAdjudicatorDocumentsComponent', () => {
     fixture = TestBed.createComponent(EnrolleeAdjudicatorDocumentsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    component.adjudicatorDocumentsComponent = new AdjudicatorDocumentsStubComponent();
   });
 
   it('should create', () => {
+    expect(component.adjudicatorDocumentsComponent).toBeTruthy();
     expect(component).toBeTruthy();
   });
 
@@ -130,12 +158,9 @@ describe('EnrolleeAdjudicatorDocumentsComponent', () => {
 
     describe('with a getEnrolleeAdjudicationDocumentDownloadToken not completing', () => {
       it('should not call downloadToken', () => {
-
-        spyOnGetEnrolleeAdjudicationDocumentDownloadToken.and.returnValue(throwError('Some Error1'));
+        spyOnGetEnrolleeAdjudicationDocumentDownloadToken.and.returnValue(NEVER);
         component.onGetDocumentByGuid(1);
         expect(spyOnDownloadToken).not.toHaveBeenCalled();
-        expect(spyOnGetEnrolleeAdjudicationDocumentDownloadToken).toThrow('Some Error1');
-
       });
     });
   });
@@ -166,14 +191,10 @@ describe('EnrolleeAdjudicatorDocumentsComponent', () => {
     describe('with deleteEnrolleeAdjudicationDocument throwing error', () => {
       it('should not call getDocuments()', () => {
         // We can use try/catch block or override the spy method to return an Observable<Never> instead
-
-        spyOnDeleteEnrolleeAdjudicationDocument.and.returnValue(throwError('Some Error2'));
+        spyOnDeleteEnrolleeAdjudicationDocument.and.returnValue(NEVER);
         mockDocumentId = faker.random.number();
-
         component.onDeleteDocumentById(mockDocumentId);
         expect(spyOnGetDocuments).not.toHaveBeenCalled();
-        expect(spyOnDeleteEnrolleeAdjudicationDocument).toThrow('Some Error2');
-
       });
     });
   });
