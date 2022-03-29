@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable, of, noop, EMPTY } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
+import moment from 'moment';
 
 import { Address } from '@lib/models/address.model';
 import { BUSY_SUBMISSION_MESSAGE } from '@lib/constants';
@@ -224,6 +225,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       missingPharmaNetId: this.isMissingPharmaNetId(enrolment.certifications),
       missingHealthAuthorityCareSetting: enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
         && !enrolment.enrolleeHealthAuthorities?.some(ha => ha.healthAuthorityCode),
+      expiredCertification: enrolment.certifications.some(cert => moment(cert.renewalDate).isBefore(moment())),
     };
   }
 
