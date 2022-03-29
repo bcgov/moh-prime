@@ -146,13 +146,13 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     const documentGuid = this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value;
 
     const request$ = concat(
-      this.siteResource.updateSite(this.siteFormStateService.json),
       this.businessLicenceUpdates(
         siteId,
         currentBusinessLicence,
         updatedBusinessLicence,
         documentGuid
-      )
+      ),
+      this.siteResource.updateSite(this.siteFormStateService.json)
     );
 
     if (this.siteFormStateService.businessLicenceFormState.pec.value) {

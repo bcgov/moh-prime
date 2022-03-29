@@ -138,8 +138,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public hasErrors() {
-    const { certificateOrOboSite, deviceProviderOrOboSite } = this.getEnrolmentErrors(this.enrolment);
-    return certificateOrOboSite || deviceProviderOrOboSite;
+    return (this.enrolmentErrors) ? Object.values(this.enrolmentErrors).some(value => value) : false;
   }
 
   public ngOnInit(): void {
@@ -214,16 +213,17 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
    * enrolment for checking validation instead of form state.
    */
   private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
-    const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
-      careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-    const hasDeviceProviderIdentifier = this.enrolmentService.enrolment.deviceProviderIdentifier;
-
     return {
       certificate: !enrolment.certifications?.length,
       certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length,
-      deviceProvider: isDeviceProvider && !hasDeviceProviderIdentifier,
-      deviceProviderOrOboSite: (isDeviceProvider && !hasDeviceProviderIdentifier) && !enrolment.oboSites?.length,
-      missingPharmaNetId: this.isMissingPharmaNetId(enrolment.certifications)
+      deviceProvider: enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
+        && !enrolment.deviceProviderIdentifier,
+      deviceProviderOrOboSite: (enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
+        && !enrolment.deviceProviderIdentifier)
+        && !enrolment.oboSites?.length,
+      missingPharmaNetId: this.isMissingPharmaNetId(enrolment.certifications),
+      missingHealthAuthorityCareSetting: enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
+        && !enrolment.enrolleeHealthAuthorities?.some(ha => ha.healthAuthorityCode),
     };
   }
 
