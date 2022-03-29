@@ -79,8 +79,8 @@ namespace Prime.Services
                 {
                     Address = _mapper.Map<PhysicalAddress>(viewModel.PhysicalAddress)
                 },
-
             };
+
             foreach (var additionalAddress in viewModel.AdditionalAddresses)
             {
                 enrolleeAddresses.Add(
@@ -90,6 +90,7 @@ namespace Prime.Services
                     }
                 );
             }
+
             enrollee.Addresses = enrolleeAddresses;
 
             enrollee.Submissions = new[]
