@@ -73,13 +73,25 @@ namespace Prime.Services
 
             enrollee.UserId = Guid.NewGuid();
             enrollee.GPID = Gpid.NewGpid(Enrollee.PaperGpidPrefix);
-            enrollee.Addresses = new[]
+            var enrolleeAddresses = new List<EnrolleeAddress>()
             {
                 new EnrolleeAddress
                 {
                     Address = _mapper.Map<PhysicalAddress>(viewModel.PhysicalAddress)
-                }
+                },
+
             };
+            foreach (var additionalAddress in viewModel.AdditionalAddresses)
+            {
+                enrolleeAddresses.Add(
+                    new EnrolleeAddress
+                    {
+                        Address = _mapper.Map<AdditionalAddress>(additionalAddress)
+                    }
+                );
+            }
+            enrollee.Addresses = enrolleeAddresses;
+
             enrollee.Submissions = new[]
             {
                 new Submission

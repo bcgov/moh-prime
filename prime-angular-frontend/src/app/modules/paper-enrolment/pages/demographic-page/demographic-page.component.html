@@ -90,32 +90,31 @@
         <ng-container appPageSubheader2Summary>Provide any additional addresses.</ng-container>
       </app-page-subheader2>
 
-      <div class="row">
-        <div class="col col-sm-10 py-3"
-             formArrayName="additionalAddresses">
+      <ng-container formArrayName="additionalAddresses">
 
-          <ng-container *ngFor="let additionalAddress of formState.additionalAddresses.controls; let i = index;"
-                        [formGroupName]="i">
+        <ng-container *ngFor="let additionalAddress of formState.additionalAddresses.controls; let i = index;"
+                      [formGroupName]="i">
 
-            <app-form-icon-group [show]="formState.additionalAddresses.length > 0"
-                                 (event)="formState.removeAdditionalAddress(i)">
+          <app-form-icon-group [show]="formState.additionalAddresses.length > 0"
+                               (event)="formState.removeAdditionalAddress(i)">
 
-              <app-address-form [form]="additionalAddress"
-                                [showManualButton]="true"
-                                [showAddressFields]="showAddressFields(additionalAddress.value)">
-              </app-address-form>
-            </app-form-icon-group>
-          </ng-container>
+            <app-address-form [form]="additionalAddress"
+                              [showManualButton]="true"
+                              [showAddressFields]="showAddressFields(additionalAddress.value)">
+            </app-address-form>
+          </app-form-icon-group>
+          <app-page-subheader [divider]="true"> </app-page-subheader>
+        </ng-container>
 
-          <button mat-button
-                  type="button"
-                  color="primary"
-                  (click)="formState.addAdditionalAddress()">
-            <mat-icon>add</mat-icon>
-            Add additional address
-          </button>
-        </div>
-      </div>
+        <button mat-button
+                type="button"
+                color="primary"
+                (click)="formState.addAdditionalAddress()">
+          <mat-icon>add</mat-icon>
+          Add additional address
+        </button>
+      </ng-container>
+
 
     </app-page-section>
 

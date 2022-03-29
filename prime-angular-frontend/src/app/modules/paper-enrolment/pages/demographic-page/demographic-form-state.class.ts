@@ -40,7 +40,7 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
     return this.form.get('additionalAddresses') as FormArray;
   }
 
-  public addAdditionalAddress() {
+  public addAdditionalAddress(): void {
     const additionalAddress = this.formUtilsService.buildAddressForm({
       areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal']
     });
@@ -48,7 +48,7 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
     this.additionalAddresses.push(additionalAddress);
   }
 
-  public removeAdditionalAddress(index: number) {
+  public removeAdditionalAddress(index: number): void {
     this.additionalAddresses.removeAt(index);
   }
 

@@ -21,11 +21,6 @@ export class AddressViewComponent implements OnInit {
   @Input() public address: Address;
   /**
    * @description
-   * Additional Addresses for viewing.
-   */
-  @Input() public additionalAddresses: Address[];
-  /**
-   * @description
    * Show a message indicating an address does not exist.
    */
   @Input() public showIfEmpty: boolean;
@@ -58,13 +53,7 @@ export class AddressViewComponent implements OnInit {
   }
 
   public get hasAddress(): boolean {
-    return (this.isMultiple)
-      ? this.additionalAddresses.every((additionalAddress) => Address.isNotEmpty(additionalAddress))
-      : Address.isNotEmpty(this.address, this.optionalAddressLineItems);
-  }
-
-  public get isMultiple(): boolean {
-    return (!!this.additionalAddresses?.length);
+    return Address.isNotEmpty(this.address, this.optionalAddressLineItems);
   }
 
   public onRoute(routePath: string | string[]) {
