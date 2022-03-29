@@ -209,7 +209,9 @@
       {{ certification.practitionerId | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Renewal Date">
+    <app-enrollee-property [hasError]="enrolmentErrors?.expiredCertification"
+                           errorMessage="Renewal date must be in the future."
+                           title="Renewal Date">
       {{ certification.renewalDate | formatDate | default }}
     </app-enrollee-property>
 
