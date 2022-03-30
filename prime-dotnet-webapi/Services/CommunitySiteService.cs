@@ -65,7 +65,7 @@ namespace Prime.Services
                     .Containing(searchOptions.TextSearch)
                 )
                 .ProjectTo<CommunitySiteAdminListViewModel>(_mapper.ConfigurationProvider)
-                .OrderBy(s => s.DisplayId).ThenByDescending(s => s.SubmittedDate.HasValue).ThenByDescending(s => s.SubmittedDate)
+                .OrderBy(s => s.DisplayId).ThenByDescending(s => s.SubmittedDate.HasValue).ThenBy(s => s.SubmittedDate)
                 .DecompileAsync();
 
             return await PaginatedList<CommunitySiteAdminListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
