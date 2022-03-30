@@ -1,11 +1,11 @@
 name: CodeClimate-Checks
 on:
   push:
-    branches:
-      - feature/PRIME-2071-codeclimate-diff-changes_FIX
-  pull_request:
-    branches:
-      - feature/PRIME-2071-codeclimate-diff-changes_FIX
+  #   branches:
+  #     - feature/PRIME-2071-codeclimate-diff-changes_FIX
+  # pull_request:
+  #   branches:
+  #     - feature/PRIME-2071-codeclimate-diff-changes_FIX
   workflow_dispatch:
 
 jobs:
