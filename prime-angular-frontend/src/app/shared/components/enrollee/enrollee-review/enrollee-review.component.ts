@@ -116,6 +116,13 @@ export class EnrolleeReviewComponent {
       : [];
   }
 
+  public div(a: number, b: number): number {
+    if (b == 0) {
+      throw Error('cannot divide by zero');
+    }
+    return a / b;
+  }
+
   public showCollegePrefix(licenceCode: number, collegeCode: number): number {
     return (this.enrolmentService.shouldShowCollegePrefix(licenceCode))
       ? collegeCode
