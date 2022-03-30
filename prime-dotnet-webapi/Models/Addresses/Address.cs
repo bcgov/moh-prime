@@ -9,7 +9,8 @@ namespace Prime.Models
     {
         Physical = 1,
         Mailing = 2,
-        Verified = 3
+        Verified = 3,
+        Additional = 4,
     };
 
     [Table("Address")]
@@ -100,5 +101,8 @@ namespace Prime.Models
     { }
 
     public class VerifiedAddress : Address
+    { }
+
+    public class AdditionalAddress : Address
     { }
 }

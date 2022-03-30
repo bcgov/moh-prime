@@ -1,5 +1,6 @@
 using System;
 using Prime.Models;
+using System.Collections.Generic;
 
 namespace Prime.ViewModels
 {
@@ -34,6 +35,8 @@ namespace Prime.ViewModels
         public AddressViewModel MailingAddress { get; set; }
 
         public AddressViewModel VerifiedAddress { get; set; }
+
+        public ICollection<AdditionalAddress> AdditionalAddresses { get; set; }
 
         public string Email { get; set; }
 
