@@ -62,4 +62,10 @@ describe('EnrolleeReviewComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('testing div', () => {
+    it('should return 2', () => {
+      expect(component.div(2, 1)).toEqual(2);
+    });
+  });
 });
