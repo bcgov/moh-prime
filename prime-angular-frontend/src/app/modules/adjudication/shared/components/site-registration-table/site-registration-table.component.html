@@ -1,3 +1,11 @@
+<app-paginator [hidePaginator]="(pagination?.totalPages ?? 1) === 1"
+               [page]="pagination?.page">
+  <mat-paginator (page)="onPage($event, true)"
+                 [pageIndex]="pagination?.page - 1"
+                 [pageSize]="pagination?.pageSize"
+                 [length]="pagination?.totalResults"></mat-paginator>
+</app-paginator>
+
 <table mat-table
        [dataSource]="dataSource"
        class="w-100">
@@ -36,7 +44,7 @@
         *matHeaderCellDef
         scope="col"> Organization Name </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.name | default: '' }} </td>
+        *matCellDef="let row;"> {{ row.organizationName | default: '' }} </td>
   </ng-container>
 
   <ng-container matColumnDef="signingAuthority">
@@ -44,7 +52,7 @@
         *matHeaderCellDef
         scope="col"> Signing Authority </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.signingAuthority | fullname | default: '' }} </td>
+        *matCellDef="let row;"> {{ row.signingAuthorityName | default: '' }} </td>
   </ng-container>
 
   <ng-container matColumnDef="siteDoingBusinessAs">
@@ -52,7 +60,7 @@
         *matHeaderCellDef
         scope="col"> Site Name (Doing Business As) </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.siteDoingBusinessAs | default }} </td>
+        *matCellDef="let row;"> {{ row.doingBusinessAs | default }} </td>
   </ng-container>
 
   <ng-container matColumnDef="submissionDate">
@@ -121,7 +129,7 @@
         scope="col"> Missing Business Licence </th>
     <td mat-cell
         *matCellDef="let row;"> {{ ((row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
-      ? !row.businessLicence?.businessLicenceDocument : null) | yesNo | default: 'N/A' }} </td>
+      ? row.missingBusinessLicence : null) | yesNo | default: 'N/A' }} </td>
   </ng-container>
 
   <ng-container matColumnDef="actions">
@@ -147,6 +155,15 @@
   <tr mat-row
       *matRowDef="let row; columns: columns;"></tr>
 </table>
+
+<app-paginator [hidePaginator]="(pagination?.totalPages ?? 1) === 1"
+               [page]="pagination?.page">
+  <mat-paginator #secondaryPaginator
+                 (page)="onPage($event, false)"
+                 [pageIndex]="pagination?.page - 1"
+                 [pageSize]="pagination?.pageSize"
+                 [length]="pagination?.totalResults"></mat-paginator>
+</app-paginator>
 
 <p *ngIf="!dataSource?.data.length"
    class="px-4 py-2 text-muted">

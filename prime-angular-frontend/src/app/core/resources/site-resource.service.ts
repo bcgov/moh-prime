@@ -14,7 +14,9 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { PaginatedList } from '@core/models/paginated-list.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { CertSearch } from '@enrolment/shared/models/cert-search.model';
 import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
@@ -26,6 +28,7 @@ import { BusinessLicenceDocument } from '@registration/shared/models/business-li
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { IndividualDeviceProvider } from '@registration/shared/models/individual-device-provider.model';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +52,22 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getPaginatedSites(
+    queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum, page?: number }
+  ): Observable<PaginatedList<SiteRegistrationListViewModel>> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
+    return this.apiResource.get<PaginatedList<SiteRegistrationListViewModel>>('sites', params)
+      .pipe(
+        map((response: ApiHttpResponse<PaginatedList<SiteRegistrationListViewModel>>) => response.result),
+        tap((organizations: PaginatedList<SiteRegistrationListViewModel>) => this.logger.info('PAGINATED_SITES', organizations)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Sites could not be retrieved');
+          this.logger.error('[SiteRegistration] SiteResource::getPaginatedSites error has occurred: ', error);
           throw error;
         })
       );

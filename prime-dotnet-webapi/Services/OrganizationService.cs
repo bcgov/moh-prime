@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.ViewModels;
 
 namespace Prime.Services
@@ -46,34 +45,6 @@ namespace Prime.Services
             return await _context.Organizations
                 .AsNoTracking()
                 .AnyAsync(e => e.Id == organizationId);
-        }
-
-        public async Task<IEnumerable<OrganizationSearchViewModel>> GetOrganizationsAsync(OrganizationSearchOptions searchOptions)
-        {
-            searchOptions ??= new OrganizationSearchOptions();
-
-            var results = await _context.Organizations
-                .AsNoTracking()
-                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
-                    .Search(
-                        o => o.Name,
-                        o => o.DisplayId.ToString(),
-                        o => o.SigningAuthority.FirstName + " " + o.SigningAuthority.LastName)
-                    .SearchCollections(
-                        o => o.Sites.Select(s => s.DoingBusinessAs),
-                        o => o.Sites.Select(s => s.PEC))
-                    .Containing(searchOptions.TextSearch)
-                )
-                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider, new { careSettingCode = searchOptions.CareSettingCode })
-                .DecompileAsync()
-                .ToListAsync();
-
-            return results
-                .Select(r => new OrganizationSearchViewModel
-                {
-                    Organization = r,
-                    MatchedOn = r.MatchedOn(searchOptions.TextSearch)
-                });
         }
 
         public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId)
