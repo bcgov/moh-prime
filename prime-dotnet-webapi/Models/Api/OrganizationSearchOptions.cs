@@ -4,5 +4,6 @@ namespace Prime.Models.Api
     {
         public string TextSearch { get; set; }
         public int? CareSettingCode { get; set; }
+        public int? Page { get; set; }
     }
 }
