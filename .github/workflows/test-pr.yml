@@ -1,6 +1,6 @@
 name: CodeClimate-Checks
 on:
-  # pull_request:
+  pull_request:
   #   branches:
   #     - 'feature/PRIME-2071-codeclimate-diff-changes_FIX'
   push:
