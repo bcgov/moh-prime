@@ -64,14 +64,6 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     this.formState = new DemographicFormState(this.fb, this.formUtilsService);
   }
 
-  public div(a: number, b: number): number {
-    if (a === 0) {
-      throw new Error(' can\'t div by 0');
-    }
-
-    return a / b;
-  }
-
   protected patchForm(): void {
     const enrolleeId = +this.route.snapshot.params.eid;
     if (!enrolleeId) {
