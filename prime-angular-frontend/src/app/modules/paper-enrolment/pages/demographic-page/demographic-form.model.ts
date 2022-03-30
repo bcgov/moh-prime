@@ -6,6 +6,7 @@ export interface DemographicForm {
   givenNames: string;
   dateOfBirth: string;
   physicalAddress: Address;
+  additionalAddresses: Address[];
   email: string;
   phone: string;
   phoneExtension?: string;

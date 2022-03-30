@@ -12,7 +12,8 @@ namespace Prime.Configuration.Database
                 .HasDiscriminator<AddressType>("AddressType")
                 .HasValue<PhysicalAddress>(AddressType.Physical)
                 .HasValue<MailingAddress>(AddressType.Mailing)
-                .HasValue<VerifiedAddress>(AddressType.Verified);
+                .HasValue<VerifiedAddress>(AddressType.Verified)
+                .HasValue<AdditionalAddress>(AddressType.Additional);
         }
     }
 }
