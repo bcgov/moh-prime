@@ -1,10 +1,9 @@
 using AutoMapper;
 using System.Linq;
+using System;
 
 using Prime.DTOs.AgreementEngine;
 using Prime.Models;
-using System;
-
 namespace Prime.ViewModels.Profiles
 {
     public class EnrolleeMappingProfile : Profile
