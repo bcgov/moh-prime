@@ -1,17 +1,13 @@
 name: CodeClimate-Checks
 on:
-  # pull_request:
-  #   types: [opened, reopened, synchronize]
-  #   branches:
-  #     - 'feature/PRIME-2071-codeclimate-diff-changes_FIX'
-  #     - 'develop'
+  pull_request:
+    branches:
+      - 'feature/PRIME-2071-codeclimate-diff-changes_FIX'
   push:
-    branches-ignore:
-      - 'master'
-      - 'test'
-    # branches:
-    #   - 'feature/PRIME-2071-codeclimate-diff-changes_FIX'
-    #   - 'develop'
+    branches:
+      - 'feature/PRIME-2071-codeclimate-diff-changes_FIX'
+
+
   workflow_dispatch:
 
 jobs:
