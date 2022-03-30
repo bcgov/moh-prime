@@ -28,10 +28,11 @@ import { DemographicFormState } from './demographic-form-state.class';
 export class DemographicPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: DemographicFormState;
   public maxDateOfBirth: moment.Moment;
-  public showAddressFields: boolean;
 
   private enrollee: HttpEnrollee | null;
   private routeUtils: RouteUtils;
+
+  public forceShowAddressFieldsIfEmpty: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -47,6 +48,11 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     // Must be 18 years of age or older
     this.maxDateOfBirth = moment().subtract(MINIMUM_AGE, 'years');
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
+    this.forceShowAddressFieldsIfEmpty = false;
+  }
+
+  public showAddressFields(address: Address): boolean {
+    return Address.isNotEmpty(address) || this.forceShowAddressFieldsIfEmpty;
   }
 
   public ngOnInit(): void {
@@ -84,6 +90,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
             lastName,
             dateOfBirth,
             physicalAddress,
+            additionalAddresses,
             email,
             phone,
             phoneExtension,
@@ -97,15 +104,12 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
             lastName,
             dateOfBirth,
             physicalAddress,
+            additionalAddresses,
             email,
             phone,
             phoneExtension,
             smsPhone
           });
-
-          if (Address.isNotEmpty(physicalAddress)) {
-            this.showAddressFields = true;
-          }
         }
       });
   }
@@ -142,6 +146,6 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected onSubmitFormIsInvalid(): void {
-    this.showAddressFields = true;
+    this.forceShowAddressFieldsIfEmpty = true;
   }
 }

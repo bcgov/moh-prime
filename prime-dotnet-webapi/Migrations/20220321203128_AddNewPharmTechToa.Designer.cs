@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220321203128_AddNewPharmTechToa")]
+    partial class AddNewPharmTechToa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4552,40 +4554,6 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupportVendor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("HealthAuthorityTechnicalSupportId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("HealthAuthorityVendorId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HealthAuthorityTechnicalSupportId");
-
-                    b.HasIndex("HealthAuthorityVendorId");
-
-                    b.ToTable("HealthAuthorityTechnicalSupportVendor");
                 });
 
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
@@ -12152,25 +12120,6 @@ namespace Prime.Migrations
                     b.Navigation("HealthAuthorityOrganizationAgreementDocument");
                 });
 
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupportVendor", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", "HealthAuthorityTechnicalSupport")
-                        .WithMany("VendorsSupported")
-                        .HasForeignKey("HealthAuthorityTechnicalSupportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityVendor", "HealthAuthorityVendor")
-                        .WithMany()
-                        .HasForeignKey("HealthAuthorityVendorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("HealthAuthorityTechnicalSupport");
-
-                    b.Navigation("HealthAuthorityVendor");
-                });
-
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
                 {
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
@@ -13034,11 +12983,6 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Vendor", b =>
                 {
                     b.Navigation("SiteVendors");
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", b =>
-                {
-                    b.Navigation("VendorsSupported");
                 });
 
             modelBuilder.Entity("Prime.Models.CommunitySite", b =>

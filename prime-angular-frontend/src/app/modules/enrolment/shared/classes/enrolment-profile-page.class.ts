@@ -118,7 +118,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
       : true;
   }
 
-  public onBack(route: string) {
+  public onBack(route: string = '') {
     this.routeUtils.routeTo([EnrolmentRoutes.MODULE_PATH, this.isProfileComplete
       ? EnrolmentRoutes.OVERVIEW
       : route]);
