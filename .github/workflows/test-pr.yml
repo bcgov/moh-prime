@@ -8,13 +8,13 @@ on:
 
 jobs:
   get-develop-branch-sha:
-    # As per code climate support, code climate diff-changes won't show if two reports are made on the same commit_sha.
-    # Since when we create a branch it triggers a push with the same sha of the base branch, we want to skip the first run 
-    # after creating the branch as it will send a report on the same commit sha.
-    runs-on: ubuntu-latest
-    outputs:
-      run_rest_of_jobs: ${{ steps.set_output.outputs.run_jobs }}
-      
+  # As per code climate support, code climate diff-changes won't show if two reports are made on the same commit_sha.
+  # Since when we create a branch it triggers a push with the same sha of the base branch, we want to skip the first run 
+  # after creating the branch as it will send a report on the same commit sha.
+  runs-on: ubuntu-latest
+  outputs:
+    run_rest_of_jobs: ${{ steps.set_output.outputs.run_jobs }}
+
   steps:
     - name: new-sha 
       id: get-sha
