@@ -60,4 +60,13 @@ describe('EnrolleeBannerListPageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('testing onBack()', () => {
+    it('should navigate to \'../\'', () => {
+      const spyOnRouteRelativeTo = spyOn((component as any).routeUtils, 'routeRelativeTo');
+
+      component.onBack();
+      expect(spyOnRouteRelativeTo).toHaveBeenCalledOnceWith(['../']);
+    });
+  });
 });

@@ -4,11 +4,14 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.ViewModels;
 using System.Security.Claims;
+using Prime.Models.Api;
+
 namespace Prime.Services
 {
     public interface ICommunitySiteService
     {
         Task<IEnumerable<CommunitySite>> GetSitesAsync(int? organizationId = null);
+        Task<PaginatedList<CommunitySiteAdminListViewModel>> GetSitesAsync(OrganizationSearchOptions searchOptions);
         Task<CommunitySite> GetSiteAsync(int siteId);
         Task<int> CreateSiteAsync(int organizationId);
         Task UpdateSiteAsync(int siteId, CommunitySiteUpdateModel updatedSite);

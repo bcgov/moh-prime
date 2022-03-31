@@ -58,6 +58,7 @@
     <app-site-registration-table *ngIf="busy?.closed"
                                  [dataSource]="dataSource"
                                  [columns]="columns"
+                                 [pagination]="pagination"
                                  (assign)="onAssign($event)"
                                  (reassign)="onReassign($event)"
                                  (notify)="onNotify($event)"
