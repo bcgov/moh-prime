@@ -4,7 +4,6 @@ on:
     branches-ignore:
       - 'master'
       - 'test'
-
   workflow_dispatch:
 
 jobs:
