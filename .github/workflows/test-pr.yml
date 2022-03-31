@@ -15,27 +15,27 @@ jobs:
     outputs:
       run_rest_of_jobs: ${{ steps.set_output.outputs.run_jobs }}
 
-  # - name: new-sha 
-  #   id: get-sha
-  #   run: |
-  #     echo ::set-output name=sha::$( curl -u "u:${{github.token}}" https://api.github.com/repos/bcgov/moh-prime/git/ref/heads/develop | jq .object.sha | tr -d '"' )
+  - name: new-sha 
+    id: get-sha
+    run: |
+      echo ::set-output name=sha::$( curl -u "u:${{github.token}}" https://api.github.com/repos/bcgov/moh-prime/git/ref/heads/develop | jq .object.sha | tr -d '"' )
 
-  # - name: set-output
-  #   id: set_output
-  #   env: 
-  #     DEFAULT_BRANCH_SHA: ${{ steps.get-sha.outputs.sha }}
-  #   run: |
-  #     if [ "$DEFAULT_BRANCH_SHA" == "$GITHUB_SHA" ]; 
-  #     then
-  #       echo "setting to false"
-  #       echo "::set-output name=run_jobs::false"
-  #     else      
-  #       echo "setting to true, SET"      
-  #       echo "::set-output name=run_jobs::true"
-  #     fi
+  - name: set-output
+    id: set_output
+    env: 
+      DEFAULT_BRANCH_SHA: ${{ steps.get-sha.outputs.sha }}
+    run: |
+      if [ "$DEFAULT_BRANCH_SHA" == "$GITHUB_SHA" ]; 
+      then
+        echo "setting to false"
+        echo "::set-output name=run_jobs::false"
+      else      
+        echo "setting to true, SET"      
+        echo "::set-output name=run_jobs::true"
+      fi
 
-  #     echo "Default SHA: ${{env.DEFAULT_BRANCH_SHA}}"
-  #     echo "COMMIT SHA: ${GITHUB_SHA}"
+      echo "Default SHA: ${{env.DEFAULT_BRANCH_SHA}}"
+      echo "COMMIT SHA: ${GITHUB_SHA}"
 
   collect-frontend-coverage:
     needs: [get-main-branch-sha]
