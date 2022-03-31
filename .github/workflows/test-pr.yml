@@ -144,7 +144,7 @@ jobs:
 
       - name: Generate coverage report
         env:
-          EXCLUDE: "**/Migrations/**%2c**/Models/**%2c**/Views/**%2c**/ViewModels/**%2c**/obj/**%2c**/Properties/**%2c**/Configuration/**%2c**/DTOs/**%2c**/Helpers/**%2c**/Resources/**%2c**/logs/**%2c**/*Definitions.cs%2c**/*Designer.cs"
+          EXCLUDE: #"**/Migrations/**%2c**/Models/**%2c**/Views/**%2c**/ViewModels/**%2c**/obj/**%2c**/Properties/**%2c**/Configuration/**%2c**/DTOs/**%2c**/Helpers/**%2c**/Resources/**%2c**/logs/**%2c**/*Definitions.cs%2c**/*Designer.cs"
         run: |
           dotnet test /p:ExcludeByFile=$EXCLUDE /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* --filter FullyQualifiedName\!~Integration
       - name: Run report generator
