@@ -15,6 +15,7 @@ import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { EmailNotificationViewPageComponent } from './email-notification-view-page.component';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 describe('EmailNotificationViewPageComponent', () => {
   let component: EmailNotificationViewPageComponent;
@@ -59,5 +60,15 @@ describe('EmailNotificationViewPageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('testing onBack()', () => {
+    it('should navigate with \'../\' and AdjudicationRoutes.NOTIFICATION_EMAILS', () => {
+      const spyOnRouteRelativeTo = spyOn((component as any).routeUtils, 'routeRelativeTo');
+
+      component.onBack();
+      expect(spyOnRouteRelativeTo).toHaveBeenCalledTimes(1);
+      expect(spyOnRouteRelativeTo).toHaveBeenCalledOnceWith(['../', AdjudicationRoutes.NOTIFICATION_EMAILS]);
+    });
   });
 });
