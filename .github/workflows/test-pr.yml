@@ -38,8 +38,8 @@ jobs:
       echo "COMMIT SHA: ${GITHUB_SHA}"
 
   collect-frontend-coverage:
-    needs: [get-main-branch-sha]
-    if: needs.get-main-branch-sha.outputs.run_rest_of_jobs == 'true'
+    needs: [get-develop-branch-sha]
+    if: needs.get-develop-branch-sha.outputs.run_rest_of_jobs == 'true'
     defaults:
       run:
         working-directory: ./prime-angular-frontend
@@ -97,8 +97,8 @@ jobs:
           retention-days: 1
 
   collect-backend-coverage:
-    needs: [get-main-branch-sha]
-    if: needs.get-main-branch-sha.outputs.run_rest_of_jobs == 'true'
+    needs: [get-develop-branch-sha]
+    if: needs.get-develop-branch-sha.outputs.run_rest_of_jobs == 'true'
     defaults:
       run:
         working-directory: ./prime-dotnet-webapi-tests
