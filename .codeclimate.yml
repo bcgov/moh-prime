@@ -8,9 +8,6 @@ plugins:
     enabled: false
   similar-code:
     enabled: false
-  identical-code:
-    enabled: false
-
 
 exclude_patterns:
   # Exclude Folder Pattern
