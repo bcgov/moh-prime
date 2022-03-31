@@ -1,17 +1,9 @@
 //
-// Theme Fonts
-//
-// Google fonts noted with load time is SLOW, may need to reduce font load if this becomes a problem
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,700&display=swap');
-
-//
 // Fonts Palettes
 //
 
-$fonts: (
-  header: #{"Roboto, Helvetica Neue, sans-serif"},
-  body: #{"Roboto, Helvetica Neue, sans-serif"}
-);
+$fonts: (header: #{"Roboto, Helvetica Neue, sans-serif"},
+  body: #{"Roboto, Helvetica Neue, sans-serif"});
 
 //
 // Font Mapping Extractor
