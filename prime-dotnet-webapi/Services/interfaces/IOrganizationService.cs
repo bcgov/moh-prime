@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.ViewModels;
 
 namespace Prime.Services
@@ -10,7 +9,6 @@ namespace Prime.Services
     public interface IOrganizationService
     {
         Task<bool> OrganizationExistsAsync(int organizationId);
-        Task<IEnumerable<OrganizationSearchViewModel>> GetOrganizationsAsync(OrganizationSearchOptions search);
         Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
         Task<Organization> GetOrganizationAsync(int organizationId);
         Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId);
