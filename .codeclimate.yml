@@ -26,7 +26,7 @@ exclude_patterns:
   - "**/prime-dotnet-webapi/Migrations/"
   - "**/prime-dotnet-webapi/Views/"
   - "**/prime-dotnet-webapi/ViewModels/"
-    - "**/prime-dotnet-webapi/Models/"
+  - "**/prime-dotnet-webapi/Models/"
   - "**/prime-dotnet-webapi/Resrouces/"
   - "**/prime-dotnet-webapi/Configuration/"
   - "**/prime-dotnet-webapi/logs/"
