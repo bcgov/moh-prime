@@ -1,0 +1,107 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: Template for job that parses the pnet transaction into the enrollee pharmanet transaction log for better reporting
+    tags: cronjob
+  name: parse-pnet-logs-cronjob-template
+objects:
+  - apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: '${CRON_NAME}'
+    spec:
+      concurrencyPolicy: Forbid
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+                - command:
+                  - bash
+                  - '-c'
+                  - >-
+                    #!/usr/bin/env bash
+
+                    function exec_sql_no_resultset() {
+                      # $1 parameter - SQL to execute
+                      # No result set will be returned
+
+                      # Quote parameter to handle spaces in SQL string
+                      psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c "$1"
+                    }
+
+                    function parse_transaction_data_into_enrollee_transaction() {
+                      # Grab up to 50,000 un-processed PharmaNetTransactionLogs and
+                      # match them to enrollee on UserId = GPID, then create
+                      # EnrolleeTransactionLog for easy mapping
+
+                      echo -e "-------- Generating Enrollee Transactions --------"
+                      exec_sql_no_resultset 'INSERT INTO "EnrolleeTransactionLog" ("EnrolleeId", "PharmanetTransactionLogId") SELECT e."Id" AS "EnrolleeId", l."Id" AS "PharmanetTransactionLogId" FROM "Enrollee" e JOIN (SELECT "Id", "TransactionId", "CreatedTimeStamp", "UserId" FROM "PharmanetTransactionLog" ptl WHERE "Processed" = false ORDER BY "CreatedTimeStamp" ASC, "TransactionId" ASC LIMIT 50000) l ON l."UserId" = e."GPID";'
+                      echo
+                    }
+
+                    function mark_processed() {
+                      # Grab up to 50,000 PharmaNetTransactionLogs and mark them as processed
+
+                      echo -e "-------- Marking Processed Files as Processed --------"
+                      exec_sql_no_resultset 'UPDATE "PharmanetTransactionLog" SET "Processed" = true WHERE "Id" IN (SELECT "Id" FROM "PharmanetTransactionLog" ptl WHERE "Processed" = false ORDER BY "CreatedTimeStamp" ASC, "TransactionId" ASC LIMIT 50000);'
+                      echo
+                    }
+
+                    function main() {
+                      echo -e "-------- STARTING CRON at $(date +"%B %d, %Y %T") UTC --------\n"
+
+                      echo -e "Connecting to database host:  _${PGHOST}_"
+                      echo -e "API client name:  _${PRIME_ODR_API_CLIENT_NAME}_"
+                      echo -e "Fetch size:  _${PRIME_ODR_API_FETCH_SIZE}_"
+                      echo
+
+                      parse_transaction_data_into_enrollee_transaction
+                      mark_processed
+
+                      echo -e "-------- CRON COMPLETE --------\n"
+                    }
+
+                    main  # Ensure the whole file is downloaded before executing
+                  env:
+                    - name: PGHOST
+                      value: ${SVC_NAME}-patroni
+                    - name: PGDATABASE
+                      valueFrom:
+                        secretKeyRef:
+                          name: ${SVC_NAME}-patroni-secret
+                          key: app-db-name
+                    # If working with model changes during PR, specify PR database, but don't merge hard-coding into `develop`
+                    # - name: PGDATABASE
+                    #   value: prime-pr-1912
+                    - name: PGUSER
+                      valueFrom:
+                        secretKeyRef:
+                          name: ${SVC_NAME}-patroni-secret
+                          key: app-db-username
+                    - name: PGPASSWORD
+                      valueFrom:
+                        secretKeyRef:
+                          name: ${SVC_NAME}-patroni-secret
+                          key: app-db-password
+                  image: public.ecr.aws/h0h9t7p1/farma-retriever:12
+                  limits:
+                    cpu: 500m
+                    memory: 2Gi
+                  name: '${CRON_NAME}'
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+                  resources: null
+              restartPolicy: Never
+      schedule: '${CRON_SCHEDULE}'
+parameters:
+  - description: 'Cron-like schedule expression'
+    name: CRON_SCHEDULE
+    value: '*/60 * * * *'
+  - name: CRON_NAME
+    value: retrieve-pnet-logs-cronjob
+  - description: 'Environment name'
+    name: SVC_NAME
+    value: dev

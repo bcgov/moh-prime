@@ -71,6 +71,7 @@ namespace Prime
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
         public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
         public DbSet<EnrolleeAbsence> EnrolleeAbsences { get; set; }
+        public DbSet<EnrolleeTransactionLog> EnrolleeTransactionLog { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }

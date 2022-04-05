@@ -60,5 +60,7 @@ namespace Prime.Models
 
         [JsonProperty("providerSoftwareVer")]
         public string ProviderSoftwareVersion { get; set; }
+
+        public bool Processed { get; set; }
     }
 }
