@@ -101,7 +101,7 @@ parameters:
     name: CRON_SCHEDULE
     value: '*/60 * * * *'
   - name: CRON_NAME
-    value: retrieve-pnet-logs-cronjob
+    value: parse-pnet-logs-cronjob
   - description: 'Environment name'
     name: SVC_NAME
     value: dev
