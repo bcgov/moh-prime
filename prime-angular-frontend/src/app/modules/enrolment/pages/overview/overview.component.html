@@ -27,7 +27,8 @@
       </ng-container>
       <ng-container #alertContent
                     class="alert-content">
-        You currently have terms of access that is pending acceptance, please use the link below to accept those terms.
+        You must accept the user terms of access to complete your renewal. Please use the link below to go to the Terms
+        of Access.
         <br/>
         <a [routerLink]="" (click)="routeTo(EnrolmentRoutes.PENDING_ACCESS_TERM)">Terms of Access</a>
       </ng-container>
@@ -230,7 +231,8 @@
                icon="warning">
       <ng-container #alertContent
                     class="alert-content">
-        Your enrolment is awaiting acceptance of new terms of access. To read and accept them, use the link below.
+        You must accept the user terms of access to complete your renewal. Please use the link below to go to the Terms
+        of Access.
         <br>
         <a [routerLink]="" (click)="routeTo(EnrolmentRoutes.PENDING_ACCESS_TERM)">Terms of Access</a>
       </ng-container>
