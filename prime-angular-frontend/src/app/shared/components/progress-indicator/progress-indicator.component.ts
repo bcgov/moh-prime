@@ -38,13 +38,13 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
   /**
    * @description
    * Prefix for the default percent complete message.
-   * e.g. "Registration" 25% Completed
+   * e.g., "Registration" 25% Completed
    */
   @Input() public prefix: string;
   /**
    * @description
    * Customized message under the progressed indicator.
-   * e.g. 100% complete and don't need percent complete,
+   * e.g., 100% complete and don't need percent complete,
    * but want to provide a message.
    */
   @Input() public message: string;

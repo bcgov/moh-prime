@@ -38,7 +38,7 @@ export class OverviewPageComponent implements OnInit {
   public organization: Organization | null;
   public site: Site | null;
   public siteExpiryDate: string | Moment | null;
-  public isUnderReview: boolean;
+  public isEditable: boolean;
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
   public siteErrors: ValidationErrors;
@@ -83,7 +83,7 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    if (this.isUnderReview) {
+    if (!this.isEditable) {
       return;
     }
 
@@ -170,9 +170,9 @@ export class OverviewPageComponent implements OnInit {
 
     // Using the source of truth set values that the user has
     // no control over when interacting with the application
-    this.isUnderReview = site.status === SiteStatusType.IN_REVIEW;
-    // Once submitted and under review no submissions are allowed
-    this.showSubmissionAction = !this.isUnderReview;
+    this.isEditable = site.status === SiteStatusType.EDITABLE;
+    // Submissions are allowed only if site is in editable state
+    this.showSubmissionAction = this.isEditable;
 
     this.siteExpiryDate = (site.approvedDate)
       ? Site.getExpiryDate(site)
