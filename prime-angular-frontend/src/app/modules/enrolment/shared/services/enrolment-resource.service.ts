@@ -365,7 +365,7 @@ export class EnrolmentResource {
       );
   }
 
-  public deleteEnrolleeAdjudicationDocument(enrolleeId: number, documentId: number) {
+  public deleteEnrolleeAdjudicationDocument(enrolleeId: number, documentId: number): Observable<EnrolleeAdjudicationDocument> {
     return this.apiResource.delete<EnrolleeAdjudicationDocument>(
       `enrollees/${enrolleeId}/adjudication-documents/${documentId}`)
       .pipe(

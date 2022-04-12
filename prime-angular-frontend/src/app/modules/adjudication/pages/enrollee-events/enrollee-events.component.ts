@@ -22,7 +22,7 @@ export class EnrolleeEventsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private adjucationResource: AdjudicationResource,
+    private adjudicationResource: AdjudicationResource,
   ) {
     this.hasActions = true;
     this.businessEventTypes = [];
@@ -33,7 +33,7 @@ export class EnrolleeEventsComponent implements OnInit {
       this.businessEventTypes = businessEventTypes;
     }
     const enrolleeId = this.route.snapshot.params.id;
-    this.businessEvents$ = this.adjucationResource
+    this.businessEvents$ = this.adjudicationResource
       .getEnrolleeBusinessEvents(enrolleeId, this.businessEventTypes)
       .pipe(
         map((businessEvents: BusinessEvent[]) =>

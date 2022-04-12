@@ -81,6 +81,28 @@ namespace Prime.Controllers
             return Ok(_mapper.Map<IEnumerable<CommunitySiteListViewModel>>(sites));
         }
 
+        // GET: api/Sites
+        /// <summary>
+        /// Gets all Sites.
+        /// </summary>
+        [HttpGet(Name = nameof(GetAllSites))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<CommunitySiteListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAllSites([FromQuery] OrganizationSearchOptions search)
+        {
+            var paginatedList = await _communitySiteService.GetSitesAsync(search);
+
+            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
+            foreach (var site in paginatedList)
+            {
+                site.HasNotification = notifiedIds.Contains(site.Id);
+            }
+
+            return Ok(paginatedList.Response);
+        }
+
         // GET: api/Sites/5
         /// <summary>
         /// Gets a specific Site.
@@ -360,7 +382,7 @@ namespace Prime.Controllers
             }
 
             var existingLicence = site.BusinessLicence;
-            var isNewDocument = existingLicence.BusinessLicenceDocument.DocumentGuid != newLicence.DocumentGuid && newLicence.DocumentGuid != null;
+            var isNewDocument = existingLicence.BusinessLicenceDocument?.DocumentGuid != newLicence.DocumentGuid && newLicence.DocumentGuid != null;
 
             if (site.ApprovedDate == null)
             {

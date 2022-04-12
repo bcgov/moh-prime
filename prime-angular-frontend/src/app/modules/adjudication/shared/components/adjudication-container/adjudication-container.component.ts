@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { Sort, SortDirection } from '@angular/material/sort';
+import { SortDirection } from '@angular/material/sort';
 
+import moment from 'moment';
 import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription, forkJoin } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
@@ -10,6 +11,8 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { EmailUtils } from '@lib/utils/email-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { ToastService } from '@core/services/toast.service';
+import { PaginatedList } from '@core/models/paginated-list.model';
+import { Pagination } from '@core/models/pagination.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { EnrolleeListViewModel, HttpEnrollee } from '@shared/models/enrolment.model';
@@ -36,7 +39,6 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
 import { DateOfBirthComponent } from '@shared/components/dialogs/content/date-of-birth/date-of-birth.component';
-import moment from 'moment';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -52,7 +54,7 @@ export class AdjudicationContainerComponent implements OnInit {
   public enrollees: EnrolleeListViewModel[];
   public enrollee: HttpEnrollee;
   public enrolleeNavigation: EnrolleeNavigation;
-  public sort: Sort;
+  public pagination: Pagination;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -80,18 +82,11 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onSearch(textSearch: string | null): void {
-    this.routeUtils.updateQueryParams({ textSearch });
+    this.routeUtils.updateQueryParams({ textSearch, page: null });
   }
 
   public onFilter(status: StatusFilterEnum | null): void {
-    this.routeUtils.updateQueryParams({ status });
-  }
-
-  public onSort(sort: Sort): void {
-    // Do not use sorting queryParams for single row mode
-    if (!this.route.snapshot.params.id) {
-      this.routeUtils.updateQueryParams({ sortActive: sort.active, sortDirection: sort.direction });
-    }
+    this.routeUtils.updateQueryParams({ status, page: null });
   }
 
   public onRefresh(): void {
@@ -455,14 +450,28 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number, sortActive?: string, sortDirection?: SortDirection }) {
+  protected getDataset(
+    enrolleeId: number,
+    queryParams: {
+      search?: string,
+      status?: number,
+      sortActive?: string,
+      sortDirection?: SortDirection,
+      page?: number,
+      assignedTo?: number,
+      appliedDateStart?: string,
+      appliedDateEnd?: string,
+      renewalDateStart?: string,
+      renewalDateEnd?: string
+    }
+  ) {
     if (enrolleeId) {
       this.getEnrolleeById(enrolleeId);
     } else {
-      this.busy = this.getEnrollees(queryParams)
-        .subscribe((enrollees: EnrolleeListViewModel[]) => {
-          this.enrollees = enrollees;
-          this.sort = { active: queryParams.sortActive, direction: queryParams.sortDirection };
+      this.busy = this.getEnrollees({ ...queryParams, sortOrder: `${queryParams.sortActive}_${queryParams.sortDirection}` })
+        .subscribe((enrollees: PaginatedList<EnrolleeListViewModel>) => {
+          this.enrollees = enrollees.results;
+          this.pagination = enrollees;
         });
     }
   }
@@ -488,7 +497,17 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  private getEnrollees({ textSearch, status }: { textSearch?: string, status?: StatusFilterEnum }) {
+  private getEnrollees({ status, ...rest }: {
+    status?: StatusFilterEnum,
+    textSearch?: string,
+    page?: number,
+    sortOrder?: string,
+    assignedTo?: number,
+    appliedDateStart?: string,
+    appliedDateEnd?: string,
+    renewalDateStart?: string,
+    renewalDateEnd?: string
+  }): Observable<PaginatedList<EnrolleeListViewModel>> {
     // Transform the "statuses" for (un)linked paper enrollees into their own query string
     var isLinkedPaperEnrolment = null;
     if (+status === PaperStatusEnum.UNLINKED_PAPER_ENROLMENT) {
@@ -500,7 +519,7 @@ export class AdjudicationContainerComponent implements OnInit {
       status = null;
     }
 
-    return this.adjudicationResource.getEnrollees({ textSearch, statusCode: status, isLinkedPaperEnrolment })
+    return this.adjudicationResource.getEnrollees({ statusCode: status, isLinkedPaperEnrolment, ...rest })
       .pipe(
         tap(() => this.showSearchFilter = true)
       );

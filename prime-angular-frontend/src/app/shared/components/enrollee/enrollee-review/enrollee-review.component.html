@@ -54,6 +54,19 @@
                   [showIfEmpty]="true"
                   (route)="onRoute(demographicRoutePath)"></app-address-view>
 
+<ng-container *ngIf="enrollee?.additionalAddresses?.length">
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Additional Addresses</ng-container>
+  </app-page-subheader>
+  <ng-container *ngFor="let additionalAddress of enrollee?.additionalAddresses; let index = index">
+    <app-page-subheader>
+      <ng-container appPageSubheaderSummary>
+        <strong> Address: {{ index + 1 }}</strong>
+      </ng-container>
+    </app-page-subheader>
+    <app-address-view [address]="additionalAddress"></app-address-view>
+  </ng-container>
+</ng-container>
 <app-page-section>
 
   <app-page-subheader>
@@ -116,6 +129,8 @@
   <ng-container *ngFor="let careSetting of enrolment.careSettings">
 
     <app-enrollee-property title="Care Setting"
+                           [hasError]="enrolmentErrors?.missingHealthAuthorityCareSetting && careSetting.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
+                           errorMessage="Must specify the health authorities you work at when selecting health authority as your care setting."
                            [makeBold]="true">
       {{ careSetting.careSettingCode | configCode: 'careSettings' }}
     </app-enrollee-property>
@@ -207,7 +222,9 @@
       {{ certification.practitionerId | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Renewal Date">
+    <app-enrollee-property [hasError]="enrolmentErrors?.expiredCertification"
+                           errorMessage="Renewal date must be in the future."
+                           title="Renewal Date">
       {{ certification.renewalDate | formatDate | default }}
     </app-enrollee-property>
 

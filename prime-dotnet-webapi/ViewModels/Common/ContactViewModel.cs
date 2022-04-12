@@ -1,6 +1,6 @@
 namespace Prime.ViewModels
 {
-    public class ContactViewModel
+    public class ContactViewModel : IContactViewModel
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

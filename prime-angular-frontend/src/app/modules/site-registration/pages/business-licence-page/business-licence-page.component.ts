@@ -146,13 +146,13 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     const documentGuid = this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value;
 
     const request$ = concat(
-      this.siteResource.updateSite(this.siteFormStateService.json),
       this.businessLicenceUpdates(
         siteId,
         currentBusinessLicence,
         updatedBusinessLicence,
         documentGuid
-      )
+      ),
+      this.siteResource.updateSite(this.siteFormStateService.json)
     );
 
     if (this.siteFormStateService.businessLicenceFormState.pec.value) {
@@ -273,7 +273,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
 
     // Create a business licence document each time a file is uploaded, and
     // update the existing business licence
-    return (documentGuid !== currentBusinessLicence.businessLicenceDocument?.documentGuid)
+    return (documentGuid && documentGuid !== currentBusinessLicence.businessLicenceDocument?.documentGuid)
       ? this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id)
         .pipe(
           exhaustMap(() => this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)),

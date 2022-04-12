@@ -5,6 +5,7 @@ import { BaseDocument } from '@shared/components/document-upload/document-upload
 
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 import { HealthAuthorityCareType } from '@health-auth/shared/models/health-authority-care-type.model';
+import { HealthAuthorityTechnicalSupport } from './health-authority-technical-support';
 
 export interface HealthAuthority {
   id?: number;
@@ -12,7 +13,7 @@ export interface HealthAuthority {
   careTypes: HealthAuthorityCareType[];
   vendors: HealthAuthorityVendor[];
   privacyOffice: PrivacyOffice;
-  technicalSupports: Contact[];
+  technicalSupports: HealthAuthorityTechnicalSupport[];
   pharmanetAdministrators: Contact[];
   healthAuthorityOrganizationAgreementDocument: BaseDocument;
 }

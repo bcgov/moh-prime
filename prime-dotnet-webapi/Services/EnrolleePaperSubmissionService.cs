@@ -73,13 +73,26 @@ namespace Prime.Services
 
             enrollee.UserId = Guid.NewGuid();
             enrollee.GPID = Gpid.NewGpid(Enrollee.PaperGpidPrefix);
-            enrollee.Addresses = new[]
+            var enrolleeAddresses = new List<EnrolleeAddress>()
             {
                 new EnrolleeAddress
                 {
                     Address = _mapper.Map<PhysicalAddress>(viewModel.PhysicalAddress)
-                }
+                },
             };
+
+            foreach (var additionalAddress in viewModel.AdditionalAddresses)
+            {
+                enrolleeAddresses.Add(
+                    new EnrolleeAddress
+                    {
+                        Address = _mapper.Map<AdditionalAddress>(additionalAddress)
+                    }
+                );
+            }
+
+            enrollee.Addresses = enrolleeAddresses;
+
             enrollee.Submissions = new[]
             {
                 new Submission
@@ -110,8 +123,27 @@ namespace Prime.Services
                 .ThenInclude(a => a.Address)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
+            var additionalAddresses = enrollee.Addresses
+                .Where(ea => ea.Address.GetType() == typeof(AdditionalAddress));
+
             _mapper.Map(viewModel, enrollee);
             _mapper.Map(viewModel.PhysicalAddress, enrollee.PhysicalAddress);
+
+            foreach (var additionalAddress in additionalAddresses)
+            {
+                _context.Remove(additionalAddress);
+                _context.Remove(additionalAddress.Address);
+            }
+
+            foreach (var newAdditionalAddress in viewModel.AdditionalAddresses)
+            {
+                enrollee.Addresses.Add(
+                    new EnrolleeAddress
+                    {
+                        Address = _mapper.Map<AdditionalAddress>(newAdditionalAddress)
+                    }
+                );
+            }
 
             await _context.SaveChangesAsync();
         }
