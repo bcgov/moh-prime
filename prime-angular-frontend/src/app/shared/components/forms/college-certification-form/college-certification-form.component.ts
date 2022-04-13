@@ -138,7 +138,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     return CollegeCertification.hasPractice(this.collegeCode.value, this.licenseCode.value);
   }
 
-  public showLicenceClass() {
+  public showLicenceClass(): boolean {
     return this.filteredLicenses.some(l => l.name !== 'Not Displayed');
   }
 

@@ -139,7 +139,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
   }
 
-  public hasErrors() {
+  public hasErrors(): boolean {
     return (this.enrolmentErrors) ? Object.values(this.enrolmentErrors).some(value => value) : false;
   }
 
