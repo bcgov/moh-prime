@@ -78,6 +78,15 @@ namespace Prime.Configuration.Database
                     new License { Code = 63, Weight = 31, Name = "Non-Practising Midwife"                                 },
                     new License { Code = 69, Weight = 32, Name = "Student Midwife"                                        },
 
+                    // Dental Surgeons
+                    new License { Code = 70, Weight = 1, Name = "Practicing Dentist" },
+
+                    // Optometrists
+                    new License { Code = 71, Weight = 1, Name = "Therapeutic Optometrist" },
+                    new License { Code = 72, Weight = 2, Name = "Non-Therapeutic Optometrist" },
+                    new License { Code = 73, Weight = 3, Name = "Non-Practicing Optometrist" },
+                    new License { Code = 74, Weight = 4, Name = "Limited Optometrist" },
+
                     // All other colleges are assigned the "Not Displayed" Type
                     new License { Code = 64, Weight = 1, Name = "Not Displayed" },
                 };
