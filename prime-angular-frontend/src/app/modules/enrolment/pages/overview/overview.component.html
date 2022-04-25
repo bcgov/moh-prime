@@ -6,7 +6,7 @@
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <div class="mb-4">
-    <app-expiry-alert *ngIf="enrolment?.currentStatus.statusCode !== EnrolmentStatus.REQUIRES_TOA"
+    <app-expiry-alert *ngIf="currentStatus !== EnrolmentStatus.REQUIRES_TOA"
                       [expiryDates]="enrolment?.expiryDate">
       <ng-container #alertTitle
                     class="alert-title">
@@ -18,7 +18,7 @@
       </ng-container>
     </app-expiry-alert>
 
-    <app-alert *ngIf="enrolment?.expiryDate && enrolment?.currentStatus.statusCode === EnrolmentStatus.REQUIRES_TOA"
+    <app-alert *ngIf="enrolment?.expiryDate && currentStatus === EnrolmentStatus.REQUIRES_TOA"
                type="warning"
                icon="warning">
       <ng-container #alertTitle

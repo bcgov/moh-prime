@@ -208,7 +208,9 @@
       {{ certification.collegeCode | configCode: 'colleges' | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Licence Class">
+    <app-enrollee-property [hasError]="enrolmentErrors?.requiresLicenceUpdate"
+                           errorMessage="Licence class requires update."
+                           title="Licence Class">
       {{ certification.licenseCode | configCode: 'licenses' | default }}
     </app-enrollee-property>
 

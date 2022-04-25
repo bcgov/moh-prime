@@ -21,6 +21,7 @@ import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { EnrolmentStatusAdmin } from '@shared/models/enrolment-status-admin.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
@@ -284,6 +285,18 @@ export class EnrolmentResource {
         tap((isChange: boolean) => this.logger.info('OBO_TO_RU', isChange)),
         catchError((error: any) => {
           this.logger.error('[Enrolment] EnrolmentResource::getIsOboToRuAgreementTypeChange error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getCurrentAgreementGroupForAnEnrollee(enrolleeId: number): Observable<AgreementTypeGroup> {
+    return this.apiResource.get<AgreementTypeGroup>(`enrollees/${enrolleeId}/agreements/current/agreement-group`)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementTypeGroup>) => response.result),
+        tap((group: AgreementTypeGroup) => this.logger.info('AGREEMENT_GROUP', group)),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getCurrentAgreementGroupForAnEnrollee error has occurred: ', error);
           throw error;
         })
       );
