@@ -215,7 +215,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
    */
   private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
     return {
-      certificate: !enrolment.certifications?.length,
       certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length,
       deviceProvider: enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
         && !enrolment.deviceProviderIdentifier,
