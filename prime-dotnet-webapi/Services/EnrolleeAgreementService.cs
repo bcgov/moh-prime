@@ -198,6 +198,24 @@ namespace Prime.Services
                 currentAgreementType.Value.IsOnBehalfOfAgreement() && expectedAgreementType.Value.IsRegulatedUserAgreement();
         }
 
+        public async Task<AgreementGroup?> GetCurrentAgreementGroupForAnEnrolleeAsync(int enrolleeId)
+        {
+            var currentAgreementType = await GetCurrentAgreementTypeAsync(enrolleeId);
+
+            if (currentAgreementType == null)
+            {
+                return null;
+            }
+
+            if (currentAgreementType.Value.IsOnBehalfOfAgreement())
+            {
+                return AgreementGroup.OnBehalfOf;
+            }
+
+            return AgreementGroup.RegulatedUser;
+        }
+
+
         private async Task<AgreementType?> GetCurrentAgreementTypeAsync(int enrolleeId)
         {
             return await _context.Agreements
