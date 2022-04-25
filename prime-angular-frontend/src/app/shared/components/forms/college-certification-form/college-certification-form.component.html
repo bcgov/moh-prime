@@ -54,7 +54,7 @@
 
       <ng-container
                     *ngIf="collegeCode.value !== CollegeLicenceClassEnum.BCCNM && collegeCode.value || collegeCode.value === CollegeLicenceClassEnum.BCCNM && (condensed || nurseCategory?.value)">
-        <div *ngIf="filteredLicenses?.length > 1"
+        <div *ngIf="showLicenceClass()"
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
@@ -74,7 +74,10 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   [placeholder]="collegeCode.value === CollegeLicenceClassEnum.CPBC ? 'Registration Number' : 'Licence Number from College'"
+                   [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.CPBC
+                    || collegeCode.value === CollegeLicenceClassEnum.CDSBC
+                    || collegeCode.value === CollegeLicenceClassEnum.OptometryBC)
+                    ? 'Registration Number' : 'Licence Number from College'"
                    formControlName="licenseNumber">
             <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
             <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">

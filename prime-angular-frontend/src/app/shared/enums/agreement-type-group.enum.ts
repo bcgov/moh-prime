@@ -1,4 +1,6 @@
 export enum AgreementTypeGroup {
   ENROLLEE = 1,
-  ORGANIZATION
+  ORGANIZATION,
+  REGULATED_USER,
+  ON_BEHALF_OF
 }

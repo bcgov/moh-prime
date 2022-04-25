@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
-
-import { EnrolmentCertificate } from '../../shared/models/enrolment-certificate.model';
 import moment from 'moment';
+
+import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
+import { EnrolmentCertificate } from '../../shared/models/enrolment-certificate.model';
 import { ProvisionerAccessResource } from '../../shared/services/provisioner-access-resource.service';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
@@ -45,6 +46,10 @@ export class CertificateComponent implements OnInit {
     return !this.hasPreferredName
       ? `${this.certificate.firstName} ${this.certificate.lastName}`
       : `${this.certificate.preferredFirstName} ${this.middleName || ''} ${this.certificate.preferredLastName}`;
+  }
+
+  public get userType(): string {
+    return !this.certificate.group ? '-' : this.certificate.group === AgreementTypeGroup.ON_BEHALF_OF ? 'On behalf of user' : "Independent user";
   }
 
   public ngOnInit() {
