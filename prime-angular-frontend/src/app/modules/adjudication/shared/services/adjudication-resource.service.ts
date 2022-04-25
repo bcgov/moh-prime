@@ -60,6 +60,7 @@ export class AdjudicationResource {
     textSearch?: string,
     statusCode?: number,
     isLinkedPaperEnrolment?: boolean,
+    isRenewedManualEnrolment?: boolean,
     page?: number,
     sortOrder?: string,
     assignedTo?: number,
