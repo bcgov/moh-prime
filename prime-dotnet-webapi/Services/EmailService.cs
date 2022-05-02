@@ -216,7 +216,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendEnrolleeRenewalEmails()
+        public async Task<IEnumerable<int>> SendEnrolleeRenewalEmails()
         {
             var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
 
@@ -229,6 +229,7 @@ namespace Prime.Services
                         && (ea.EndTimestamp >= now || ea.EndTimestamp == null)))
                 .Select(e => new
                 {
+                    e.Id,
                     e.FirstName,
                     e.LastName,
                     e.Email,
@@ -252,15 +253,17 @@ namespace Prime.Services
                     await Send(email);
                 }
             }
+
+            return enrollees.Select(e => e.Id);
         }
 
-
-        public async Task SendEnrolleeUnsignedToaReminderEmails()
+        public async Task<IEnumerable<int>> SendEnrolleeUnsignedToaReminderEmails()
         {
             var enrollees = await _context.Enrollees
                 .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa)
                 .Select(e => new
                 {
+                    e.Id,
                     e.FirstName,
                     e.LastName,
                     e.Email,
@@ -278,6 +281,8 @@ namespace Prime.Services
                     await Send(email);
                 }
             }
+
+            return enrollees.Select(e => e.Id);
         }
 
         public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
