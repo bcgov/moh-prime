@@ -69,6 +69,41 @@
 
         </div>
       </div>
+      <div class="row">
+
+        <div class="col col-sm-10 py-3" formArrayName="unlistedCertifications">
+          <app-toggle-content label="This user has a college licence not listed in the dropdown"
+            [checked]="hasUnlistedCertification"
+            (toggle)="onUnlistedCertification($event)">
+
+            <ng-container *ngFor="let unlistedCertificate of formState.unlistedCertifications.controls; let i = index;"
+                          [formGroupName]="i">
+              <app-unlisted-college-licence-form [form]="unlistedCertificate">
+
+              </app-unlisted-college-licence-form>
+            </ng-container>
+
+
+            <!-- below here worked at some point or another -->
+            <!-- <ng-container *ngFor="let certificate of formState.certifications.controls; let i = index;"
+                          [formGroupName]="i"> -->
+              <!-- <app-unlisted-college-licence-form [form]="formState.form"
+                                               >
+
+              </app-unlisted-college-licence-form> -->
+
+                <!-- <app-college-certification-form [form]="certificate"
+                                                [index]="i"
+                                                [total]="formState.certifications.controls.length"
+                                                [selectedColleges]="formState.selectedCollegeCodes"
+                                                (remove)="formState.removeCertification($event)">
+                </app-college-certification-form> -->
+              <!-- </ng-container> -->
+
+          </app-toggle-content>
+        </div>
+      </div>
+
     </app-page-section>
 
   </form>

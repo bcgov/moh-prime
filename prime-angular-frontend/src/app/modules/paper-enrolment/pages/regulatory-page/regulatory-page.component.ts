@@ -18,6 +18,7 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
+import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
 @Component({
   selector: 'app-regulatory-page',
@@ -29,6 +30,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   public routeUtils: RouteUtils;
   public enrollee: HttpEnrollee;
   public isDeviceProvider: boolean;
+  public hasUnlistedCertification: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -42,6 +44,10 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     super(dialog, formUtilsService);
 
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
+  }
+
+  public onUnlistedCertification({ checked }: ToggleContentChange) {
+    console.log("TOOGLE");
   }
 
   public onBack(): void {
@@ -70,6 +76,10 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     if (!this.formState.certifications.length) {
       this.formState.addEmptyCollegeCertification();
     }
+    // if (!this.formState.unlistedCertifications.length && this.hasUnlistedCertification) {
+      this.formState.addEmptyUnlistedCollegeCertification();
+      console.log(this.formState.unlistedCertifications.controls);
+    // }
   }
 
   protected patchForm(): Observable<void> {
@@ -84,11 +94,11 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
           if (enrollee) {
             this.enrollee = enrollee;
             // Attempt to patch the form if not already patched
-            const { certifications, deviceProviderIdentifier } = enrollee;
+            const { certifications, deviceProviderIdentifier, unlistedCertifications } = enrollee;
             this.isDeviceProvider = enrollee.enrolleeCareSettings.some((careSetting) =>
               careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
             this.enableDeviceProviderValidator();
-            this.formState.patchValue({ certifications, deviceProviderIdentifier });
+            this.formState.patchValue({ certifications, deviceProviderIdentifier, unlistedCertifications });
           }
         })
       );
