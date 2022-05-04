@@ -1,57 +1,56 @@
 
 <ng-container [formGroup]="form">
 
-  <div class="row">
-    <div class="col" formGroupName="unlistedCertifications">
+  <app-form-icon-group [show]="total > 1"
+    (event)="removeUnlistedCertification()">
+    <div class="row">
+      <div class="col">
 
-      <mat-form-field class="w-100">
-        <input matInput
-               placeholder="College Name"
-               formControlName="unlistedCollegeName">
-        <mat-error *ngIf="unlistedCollegeName.hasError('required')">Required</mat-error>
-      </mat-form-field>
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="College Name"
+                 formControlName="unlistedCollegeName">
+          <mat-error *ngIf="unlistedCollegeName.errors?.['required']">Required</mat-error>
+        </mat-form-field>
 
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col">
+    <div class="row">
+      <div class="col">
 
-      <mat-form-field class="w-100">
-        <input matInput
-               placeholder="College Licence"
-               formControlName="unlistedCollegeLicence">
-        <mat-error *ngIf="unlistedCollegeLicence.hasError('required')">Required</mat-error>
-      </mat-form-field>
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="College Code"
+                 formControlName="unlistedCollegeCode">
+          <mat-error *ngIf="unlistedCollegeCode.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="unlistedCollegeCode.hasError('numeric') || unlistedCollegeCode.hasError('length')">
+            Must contain only 5 numeric characters
+          </mat-error>
+        </mat-form-field>
 
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12 pl-5">
+    <div class="row">
+      <div class="col-sm-12 pl-5">
 
-      <mat-form-field class="w-100">
-        <input matInput
-               placeholder="Next Renewal Date"
-               [min]="minRenewalDate"
-               [matDatepicker]="picker"
-               formControlName="unlistedRenewalDate"
-               readonly
-               (click)="picker.open()">
-        <mat-datepicker-toggle matSuffix
-                               [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker
-                        startView="multi-year"
-                        [touchUi]="isMobile"></mat-datepicker>
-        <mat-error *ngIf="unlistedRenewalDate.hasError('required')">Required</mat-error>
-      </mat-form-field>
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Next Renewal Date"
+                 [min]="minRenewalDate"
+                 [matDatepicker]="picker"
+                 formControlName="unlistedRenewalDate"
+                 readonly
+                 (click)="picker.open()">
+          <mat-datepicker-toggle matSuffix
+                                 [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker
+                          startView="multi-year"
+                          [touchUi]="isMobile"></mat-datepicker>
+          <mat-error *ngIf="unlistedRenewalDate.hasError('required')">Required</mat-error>
+        </mat-form-field>
 
+      </div>
     </div>
-  </div>
-  <button mat-button
-    type="button"
-    color="primary"
-    (click)="formState.addEmptyUnlistedCollegeCertification()">
-    <mat-icon>add</mat-icon>
-    Add Additional Licences
-  </button>
+</app-form-icon-group>
 
 </ng-container>

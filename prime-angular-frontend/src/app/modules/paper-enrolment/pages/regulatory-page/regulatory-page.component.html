@@ -78,27 +78,23 @@
 
             <ng-container *ngFor="let unlistedCertificate of formState.unlistedCertifications.controls; let i = index;"
                           [formGroupName]="i">
-              <app-unlisted-college-licence-form [form]="unlistedCertificate">
+              <app-unlisted-college-licence-form [form]="unlistedCertificate"
+                                                 [index]="i"
+                                                 [total]="formState.unlistedCertifications.controls.length"
+                                                 [formState]="formState"
+                                                 (validate)="hasUnlistedCertification"
+                                                 (remove)="formState.removeUnlistedCertification($event)">
 
               </app-unlisted-college-licence-form>
             </ng-container>
 
-
-            <!-- below here worked at some point or another -->
-            <!-- <ng-container *ngFor="let certificate of formState.certifications.controls; let i = index;"
-                          [formGroupName]="i"> -->
-              <!-- <app-unlisted-college-licence-form [form]="formState.form"
-                                               >
-
-              </app-unlisted-college-licence-form> -->
-
-                <!-- <app-college-certification-form [form]="certificate"
-                                                [index]="i"
-                                                [total]="formState.certifications.controls.length"
-                                                [selectedColleges]="formState.selectedCollegeCodes"
-                                                (remove)="formState.removeCertification($event)">
-                </app-college-certification-form> -->
-              <!-- </ng-container> -->
+            <button mat-button
+                    type="button"
+                    color="primary"
+                    (click)="formState.addEmptyUnlistedCollegeCertification()">
+              <mat-icon>add</mat-icon>
+              Add Additional Licences
+            </button>
 
           </app-toggle-content>
         </div>

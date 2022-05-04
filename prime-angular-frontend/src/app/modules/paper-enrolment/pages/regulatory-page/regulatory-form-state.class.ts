@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfigService } from '@config/config.service';
 import { RegulatoryFormState as BaseRegulatoryPageFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
@@ -92,7 +92,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     }
 
     if (unlistedCertifications.length) {
-      unlistedCertifications.forEach((uc: UnlistedCertification) => this.addUnlistedCertification(uc));
+      unlistedCertifications.forEach(() => this.addUnlistedCertification());
     }
 
     this.formInstance.patchValue({ certifications, deviceProviderIdentifier, unlistedCertifications });
@@ -124,14 +124,14 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     })
   }
 
-  public addUnlistedCertification(unlistedCertification?: UnlistedCertification): void {
+  public addUnlistedCertification(): void {
     const unlistedCert = this.buildUnlistedCollegeCertificationForm();
     this.unlistedCertifications.push(unlistedCert);
   }
 
   public addEmptyUnlistedCollegeCertification(): void {
-    // this.addUnlistedCertification();
-    this.buildUnlistedCollegeCertificationForm();
+    this.addUnlistedCertification();
+    // this.buildUnlistedCollegeCertificationForm();
   }
 
   /**
@@ -142,6 +142,10 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
    */
   public removeCertification(index: number): void {
     this.certifications.removeAt(index);
+  }
+
+  public removeUnlistedCertification(index: number): void {
+    this.unlistedCertifications.removeAt(index);
   }
 
   /**
@@ -165,11 +169,4 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     }
   }
 
-  // public blah() {
-  //   this.unlistedCertifications = this.fb.group({
-  //     unlistedCollegeName: ['', []],
-  //     unlistedCollegeLicence: ['', []],
-  //     unlistedRenewalDate: ['', []]
-  //   })
-  // }
 }

@@ -30,7 +30,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   public routeUtils: RouteUtils;
   public enrollee: HttpEnrollee;
   public isDeviceProvider: boolean;
-  public hasUnlistedCertification: boolean;
+  // public hasUnlistedCertification: EventEmitterboolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -47,7 +47,13 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public onUnlistedCertification({ checked }: ToggleContentChange) {
-    console.log("TOOGLE");
+    console.log("TOOGLE", checked);
+    // this.hasUnlistedCertification = checked;
+    // this.formState.buildUnlistedCollegeCertificationForm();
+    // if (!this.hasUnlistedCertification) {
+    //   this.formState.form.get('unlistedCertifications').reset();
+    // }
+    // this.toggleUnlistedCertificationsValidator();
   }
 
   public onBack(): void {
@@ -163,5 +169,15 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
         FormControlValidators.numeric
       ])
       : this.formUtilsService.resetAndClearValidators(this.formState.deviceProviderIdentifier);
+  }
+
+  private toggleUnlistedCertificationsValidator(): void {
+    // this.hasUnlistedCertification
+    //   ? this.formUtilsService.setValidators(this.formState.unlisted, [
+    //     FormControlValidators.requiredLength(5),
+    //     FormControlValidators.numeric
+    //   ])
+    //   : this.formUtilsService.resetAndClearValidators(this.formState.unlistedCertifications);
+    // this.formState.unlistedCertifications.addValidators()
   }
 }
