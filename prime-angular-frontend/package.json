@@ -51,7 +51,7 @@
     "tslib": "^2.0.0",
     "tus-js-client": "^1.8.0",
     "web-animations-js": "^2.3.2",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.5"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.9",
