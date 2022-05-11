@@ -159,6 +159,12 @@ namespace Prime.Services
                 .If(searchOptions.StatusCode.HasValue, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
                 )
+                .If(searchOptions.IsRenewedManualEnrolment == true, q => q
+                    .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview
+                        && e.EnrolmentStatuses
+                            .Any(es => es.EnrolmentStatusReasons
+                                .Any(esr => esr.StatusReasonCode == (int)StatusReasonType.Manual)))
+                )
                 .If(searchOptions.IsLinkedPaperEnrolment == true, q => q
                     .Where(e => _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
