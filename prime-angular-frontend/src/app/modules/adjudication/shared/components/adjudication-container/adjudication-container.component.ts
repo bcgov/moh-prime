@@ -37,7 +37,7 @@ import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
+import { EnrolmentStatusFilterEnum, PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
 import { DateOfBirthComponent } from '@shared/components/dialogs/content/date-of-birth/date-of-birth.component';
 
 @Component({
@@ -509,7 +509,8 @@ export class AdjudicationContainerComponent implements OnInit {
     renewalDateEnd?: string
   }): Observable<PaginatedList<EnrolleeListViewModel>> {
     // Transform the "statuses" for (un)linked paper enrollees into their own query string
-    var isLinkedPaperEnrolment = null;
+    let isLinkedPaperEnrolment = null;
+    let isRenewedManualEnrolment = null;
     if (+status === PaperStatusEnum.UNLINKED_PAPER_ENROLMENT) {
       isLinkedPaperEnrolment = false;
       status = null;
@@ -518,8 +519,12 @@ export class AdjudicationContainerComponent implements OnInit {
       isLinkedPaperEnrolment = true;
       status = null;
     }
+    else if (+status === EnrolmentStatusFilterEnum.RENEWED_ENROLMENT) {
+      isRenewedManualEnrolment = true;
+      status = null;
+    }
 
-    return this.adjudicationResource.getEnrollees({ statusCode: status, isLinkedPaperEnrolment, ...rest })
+    return this.adjudicationResource.getEnrollees({ statusCode: status, isLinkedPaperEnrolment, isRenewedManualEnrolment, ...rest })
       .pipe(
         tap(() => this.showSearchFilter = true)
       );

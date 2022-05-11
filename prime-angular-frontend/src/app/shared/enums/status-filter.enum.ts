@@ -5,4 +5,8 @@ export enum PaperStatusEnum {
   LINKED_PAPER_ENROLMENT = 43
 }
 
-export type StatusFilterEnum = EnrolmentStatusEnum | PaperStatusEnum;
+export enum EnrolmentStatusFilterEnum {
+  RENEWED_ENROLMENT = 420
+}
+
+export type StatusFilterEnum = EnrolmentStatusEnum | PaperStatusEnum | EnrolmentStatusFilterEnum;
