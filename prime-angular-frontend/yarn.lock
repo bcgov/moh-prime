@@ -160,6 +160,11 @@
   dependencies:
     "@nrwl/devkit" "12.6.0"
 
+"@angular-eslint/bundled-angular-compiler@12.7.0":
+  version "12.7.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/bundled-angular-compiler/-/bundled-angular-compiler-12.7.0.tgz#e32ad1f98bf5c16dde22941e10fd014df7a1d5f2"
+  integrity sha512-n7nUSIK+bl2DQXIPRyts/xVTw94Mk0rRNd2WBCL9ni27XKOhKtTdP7tLpD+nAiuY4BTTJr7/yTzPWCCRDQgWZg==
+
 "@angular-eslint/eslint-plugin-template@12.4.1":
   version "12.4.1"
   resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin-template/-/eslint-plugin-template-12.4.1.tgz#7107db958995758c397431ef03b1316f0c800536"
@@ -185,12 +190,12 @@
   dependencies:
     "@typescript-eslint/experimental-utils" "4.28.2"
 
-"@angular-eslint/eslint-plugin@12.5.0":
-  version "12.5.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-12.5.0.tgz#cb4eca50338bf41398bd62796c1068b937ff53a1"
-  integrity sha512-BugzzvgghcaxHMvUFQBdu6dwB167CwiTxjIBT9KxIYYm0IY3RUKiyVQDdSs4tcwZqsyWNWuiju4ZfGPNHGjcWw==
+"@angular-eslint/eslint-plugin@12.7.0":
+  version "12.7.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-12.7.0.tgz#fefc40d2ba8f562e04fa038e0583d128cbf6f12e"
+  integrity sha512-TTTimCddON6TdGw3NDglgWqnrP2VLFiAA+FJAg/iiCKKVI+XOddtpDXmeHmas8cHIJXJH1WNxrae394DpThiOA==
   dependencies:
-    "@angular-eslint/utils" "12.5.0"
+    "@angular-eslint/utils" "12.7.0"
     "@typescript-eslint/experimental-utils" "4.28.2"
 
 "@angular-eslint/schematics@12.4.1":
@@ -211,11 +216,12 @@
   dependencies:
     eslint-scope "^5.1.0"
 
-"@angular-eslint/utils@12.5.0":
-  version "12.5.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/utils/-/utils-12.5.0.tgz#9e1164de3ceffc1b79d24bd5e5788d6bb63bc905"
-  integrity sha512-h3ayDMxndrWRwX4sSe3Xs4QpGz+wIa6cAYtDKGu3H9HPlEacQCkKkTPCDy1d+993iL+9XynWIKuNCK9pX9YHgA==
+"@angular-eslint/utils@12.7.0":
+  version "12.7.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/utils/-/utils-12.7.0.tgz#84c80857af1b29ccd71e325e107471a1fadf4e7b"
+  integrity sha512-1yyRxtxXg6VoyU8wUDcaZEdN7oDE0pRRCUZsQBGungPSv5PQt4nlv+9ZnjJ93rVMEoGztHD2CBWeoRtNlqvg4A==
   dependencies:
+    "@angular-eslint/bundled-angular-compiler" "12.7.0"
     "@typescript-eslint/experimental-utils" "4.28.2"
 
 "@angular/animations@^12.2.1":
@@ -2063,12 +2069,7 @@ acorn-walk@^7.1.1:
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-7.1.1.tgz#345f0dffad5c735e7373d2fec9a1023e6a44b83e"
   integrity sha512-wdlPY2tm/9XBr7QkKlq0WQVgiuGTX6YWPyRyBviSoScBuLfTVQhvwg6wJ369GJ/1nPfTLMfnrFIfjqVg6d+jQQ==
 
-acorn@^7.1.1:
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.1.1.tgz#e35668de0b402f359de515c5482a1ab9f89a69bf"
-  integrity sha512-add7dgA5ppRPxCFJoAGfMDi7PIBXq1RtGo7BhbLaxwrXPOmw8gq48Y9ozT01hUKy9byMjlR20EJhu5zlkErEkg==
-
-acorn@^7.4.0:
+acorn@^7.1.1, acorn@^7.4.0:
   version "7.4.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
@@ -3716,12 +3717,7 @@ ejs@^2.6.1:
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.7.4.tgz#48661287573dcc53e366c7a1ae52c3a120eec9ba"
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
 
-ejs@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.0.1.tgz#30c8f6ee9948502cc32e85c37a3f8b39b5a614a5"
-  integrity sha512-cuIMtJwxvzumSAkqaaoGY/L6Fc/t6YvoP9/VIaK0V/CyqKLEQ8sqODmYfy/cjXEdZ9+OOL8TecbJu+1RsofGDw==
-
-ejs@^3.1.5:
+ejs@^3.0.1, ejs@^3.1.5:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.6.tgz#5bfd0a0689743bb5268b3550cceeebbc1702822a"
   integrity sha512-9lt9Zse4hPucPkoP7FHDF0LQAlGyF9JVpnClFLFH3aSSbxmyoqINRpp/9wePWJTUl4KOQwRL72Iw3InHPDkoGw==
@@ -5878,7 +5874,7 @@ lodash.uniqby@4.5.0:
     lodash._baseiteratee "~4.7.0"
     lodash._baseuniq "~4.6.0"
 
-lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.21:
+lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -9203,10 +9199,10 @@ webdriver-manager@^12.1.7:
     semver "^5.3.0"
     xml2js "^0.4.17"
 
-webpack-bundle-analyzer@^3.6.1:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.6.1.tgz#bdb637c2304424f2fbff9a950c7be42a839ae73b"
-  integrity sha512-Nfd8HDwfSx1xBwC+P8QMGvHAOITxNBSvu/J/mCJvOwv+G4VWkU7zir9SSenTtyCi0LnVtmsc7G5SZo1uV+bxRw==
+webpack-bundle-analyzer@^3.9.0:
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.9.0.tgz#f6f94db108fb574e415ad313de41a2707d33ef3c"
+  integrity sha512-Ob8amZfCm3rMB1ScjQVlbYYUEJyEjdEtQ92jqiFUYt5VkEeO2v5UMbv49P/gnmCZm3A6yaFQzCBvpZqN4MUsdA==
   dependencies:
     acorn "^7.1.1"
     acorn-walk "^7.1.1"
@@ -9217,7 +9213,7 @@ webpack-bundle-analyzer@^3.6.1:
     express "^4.16.3"
     filesize "^3.6.1"
     gzip-size "^5.0.0"
-    lodash "^4.17.15"
+    lodash "^4.17.19"
     mkdirp "^0.5.1"
     opener "^1.5.1"
     ws "^6.0.0"
