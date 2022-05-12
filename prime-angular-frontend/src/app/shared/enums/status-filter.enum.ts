@@ -6,7 +6,7 @@ export enum PaperStatusEnum {
 }
 
 export enum EnrolmentStatusFilterEnum {
-  RENEWED_ENROLMENT = 420
+  RENEWED_ENROLMENT = 44
 }
 
 export type StatusFilterEnum = EnrolmentStatusEnum | PaperStatusEnum | EnrolmentStatusFilterEnum;
