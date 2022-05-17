@@ -26,6 +26,7 @@ namespace Prime.Services
                         .ThenInclude(org => org.CareSetting)
                 .Include(t => t.Enrollee)
                     .ThenInclude(e => e.Agreements)
+                        .ThenInclude(a => a.AgreementVersion)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)

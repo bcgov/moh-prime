@@ -31,6 +31,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
 
 @Component({
@@ -138,7 +139,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
   }
 
-  public hasErrors() {
+  public hasErrors(): boolean {
     return (this.enrolmentErrors) ? Object.values(this.enrolmentErrors).some(value => value) : false;
   }
 
@@ -215,7 +216,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
    */
   private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
     return {
-      certificate: !enrolment.certifications?.length,
       certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length,
       deviceProvider: enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
         && !enrolment.deviceProviderIdentifier,
@@ -226,6 +226,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       missingHealthAuthorityCareSetting: enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
         && !enrolment.enrolleeHealthAuthorities?.some(ha => ha.healthAuthorityCode),
       expiredCertification: enrolment.certifications.some(cert => moment(cert.renewalDate).isBefore(moment())),
+      requiresLicenceUpdate: enrolment.certifications.some((cert: CollegeCertification) =>
+        !this.configService.licenses.some(l => l.code === cert.licenseCode && l.collegeLicenses.some(cl => cl.collegeCode === cert.collegeCode)))
     };
   }
 
