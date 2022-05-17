@@ -109,11 +109,15 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.formState.form.markAsPristine();
 
     const certifications = this.formState.json.certifications;
+    const unlistedCertifications = this.formState.json.unlistedCertifications;
     const deviceProviderIdentifier = this.formState.json.deviceProviderIdentifier;
     const oboSites = this.removeOboSites(this.enrollee.oboSites);
 
     return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, certifications)
       .pipe(
+        exhaustMap(() =>
+          this.paperEnrolmentResource.updateUnlistedCertifications(this.enrollee.id, unlistedCertifications)
+        ),
         exhaustMap(() =>
           this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, deviceProviderIdentifier)
         ),
