@@ -65,6 +65,8 @@ namespace Prime.Models
 
         public ICollection<Certification> Certifications { get; set; }
 
+        public ICollection<UnlistedCertification> UnlistedCertifications { get; set; }
+
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
         public string DeviceProviderIdentifier { get; set; }
