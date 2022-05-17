@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20220516224909_NursingLicenceDetailsRollforwardImReg")]
-    partial class NursingLicenceDetailsRollforwardImReg
+    [Migration("20220517223550_NursingLicenceDetailRollForwardImReg")]
+    partial class NursingLicenceDetailRollForwardImReg
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -7049,7 +7049,7 @@ namespace Prime.Migrations
                             LicenseCode = 48,
                             LicensedToProvideCare = true,
                             Manual = true,
-                            NamedInImReg = true,
+                            NamedInImReg = false,
                             Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
