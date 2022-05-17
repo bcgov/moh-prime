@@ -145,6 +145,27 @@ namespace Prime.Controllers
             return Ok();
         }
 
+        // PUT: api/enrollees/5/paper-submissions/unlisted-certifications
+        /// <summary>
+        /// Updates a Paper Submission's Certifications.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/unlisted-certifications", Name = nameof(UpdateEnrolleePaperSubmissionUnlistedCertifications))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionUnlistedCertifications(int enrolleeId, ICollection<PaperEnrolleeUnlistedCertificationViewModel> payload)
+        {
+            if (!await _enrolleePaperSubmissionService.PaperSubmissionIsUpdateableAsync(enrolleeId))
+            {
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
+            }
+
+            await _enrolleePaperSubmissionService.UpdateUnlistedCertificationsAsync(enrolleeId, payload);
+            return Ok();
+        }
+
         // PUT: api/enrollees/5/paper-submissions/demographics
         /// <summary>
         /// Updates a Paper Submission's demographic information.

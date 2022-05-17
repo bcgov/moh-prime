@@ -194,6 +194,15 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateUnlistedCertificationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeUnlistedCertificationViewModel> viewModels)
+        {
+            var newCerts = _mapper.Map<IEnumerable<UnlistedCertification>>(viewModels);
+
+            await ReplaceCollection(enrolleeId, newCerts);
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdateSelfDeclarationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> viewModels)
         {
             var newDeclarations = _mapper.Map<IEnumerable<SelfDeclaration>>(viewModels);
