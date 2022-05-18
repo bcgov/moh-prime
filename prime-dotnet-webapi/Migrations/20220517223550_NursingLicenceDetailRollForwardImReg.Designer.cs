@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220517223550_NursingLicenceDetailRollForwardImReg")]
+    partial class NursingLicenceDetailRollForwardImReg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1407,6 +1409,31 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            CollegeCode = 7,
+                            LicenseCode = 70
+                        },
+                        new
+                        {
+                            CollegeCode = 14,
+                            LicenseCode = 71
+                        },
+                        new
+                        {
+                            CollegeCode = 14,
+                            LicenseCode = 72
+                        },
+                        new
+                        {
+                            CollegeCode = 14,
+                            LicenseCode = 73
+                        },
+                        new
+                        {
+                            CollegeCode = 14,
+                            LicenseCode = 74
+                        },
+                        new
+                        {
                             CollegeCode = 4,
                             LicenseCode = 64
                         },
@@ -1418,11 +1445,6 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 6,
-                            LicenseCode = 64
-                        },
-                        new
-                        {
-                            CollegeCode = 7,
                             LicenseCode = 64
                         },
                         new
@@ -1453,11 +1475,6 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 13,
-                            LicenseCode = 64
-                        },
-                        new
-                        {
-                            CollegeCode = 14,
                             LicenseCode = 64
                         },
                         new
@@ -5462,6 +5479,36 @@ namespace Prime.Migrations
                             Code = 69,
                             Name = "Student Midwife",
                             Weight = 32
+                        },
+                        new
+                        {
+                            Code = 70,
+                            Name = "Practicing Dentist",
+                            Weight = 1
+                        },
+                        new
+                        {
+                            Code = 71,
+                            Name = "Therapeutic Optometrist",
+                            Weight = 1
+                        },
+                        new
+                        {
+                            Code = 72,
+                            Name = "Non-Therapeutic Optometrist",
+                            Weight = 2
+                        },
+                        new
+                        {
+                            Code = 73,
+                            Name = "Non-Practicing Optometrist",
+                            Weight = 3
+                        },
+                        new
+                        {
+                            Code = 74,
+                            Name = "Limited Optometrist",
+                            Weight = 4
                         },
                         new
                         {
@@ -11763,6 +11810,15 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.ToTable("Credential");
+                });
+
+            modelBuilder.Entity("Prime.Models.AdditionalAddress", b =>
+                {
+                    b.HasBaseType("Prime.Models.Address");
+
+                    b.ToTable("Address");
+
+                    b.HasDiscriminator().HasValue(4);
                 });
 
             modelBuilder.Entity("Prime.Models.MailingAddress", b =>
