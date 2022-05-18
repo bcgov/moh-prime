@@ -9,6 +9,7 @@ namespace Prime.Configuration.Database
     {
         public static readonly DateTime ImRegUpdate1Date = new(2022, 2, 1, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime ImRegUpdateTempRollforwardDate = new(2022, 5, 1, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime June1st2022Cohort = new(2022, 6, 1, 8, 0, 0, DateTimeKind.Utc);
 
 
         public override IEnumerable<LicenseDetail> SeedData
@@ -87,7 +88,16 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 63, LicenseCode = 63, Prefix = "98", Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = true,                                                 EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 69, LicenseCode = 69, Prefix = "98", Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = true,                                                 EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Nursing IMReg February 1st Updates
+                    // Dental Surgeons
+                    new LicenseDetail { Id = 89, LicenseCode = 70, Prefix = "95", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Optometrists
+                    new LicenseDetail { Id = 90, LicenseCode = 71, Prefix = "94", Manual = false, Validate = true, NamedInImReg = true,   LicensedToProvideCare = true, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 91, LicenseCode = 72, Prefix = "94", Manual = false, Validate = true, NamedInImReg = false,  LicensedToProvideCare = true, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 92, LicenseCode = 73, Prefix = "94", Manual = false, Validate = true, NamedInImReg = false,  LicensedToProvideCare = true, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 93, LicenseCode = 74, Prefix = "94", Manual = false, Validate = true, NamedInImReg = false,  LicensedToProvideCare = true, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // February 1st, 2022 Nursing IMReg February 1st Updates
                     new LicenseDetail { Id = 73, LicenseCode = 32, Prefix = "R9", Manual = false, Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,  PrescriberIdType = PrescriberIdType.Optional, EffectiveDate = ImRegUpdate1Date, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 74, LicenseCode = 33, Prefix = "R9", Manual = true,  Validate = false, NamedInImReg = true,  LicensedToProvideCare = true,                                                 EffectiveDate = ImRegUpdate1Date, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 75, LicenseCode = 34, Prefix = "R9", Manual = true,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = false,                                                EffectiveDate = ImRegUpdate1Date, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -105,7 +115,7 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 87, LicenseCode = 62, Prefix = "98", Manual = false, Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,  PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = ImRegUpdate1Date, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 88, LicenseCode = 63, Prefix = "98", Manual = true,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = false,                                                EffectiveDate = ImRegUpdate1Date, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Nursing IMReg May 1st Updates Rolling Back due to not all nurses being assigned PharmanNet Id Yet, Will Roll forward by coherts
+                    // May 1st, 2022 Nursing ImReg Updates Rolling Back due to not all nurses being assigned PharmanNet Id Yet, Will Roll forward by coherts
                     new LicenseDetail { Id = 94,  LicenseCode = 32, Prefix = "R9", Manual = false,  Validate = true,  NamedInImReg = false, LicensedToProvideCare = true,  PrescriberIdType = PrescriberIdType.Optional, EffectiveDate = ImRegUpdateTempRollforwardDate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 95,  LicenseCode = 33, Prefix = "R9", Manual = false,  Validate = false, NamedInImReg = false, LicensedToProvideCare = true,                                                EffectiveDate = ImRegUpdateTempRollforwardDate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 96,  LicenseCode = 34, Prefix = "R9", Manual = true,   Validate = false, NamedInImReg = false, LicensedToProvideCare = false,                                               EffectiveDate = ImRegUpdateTempRollforwardDate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -124,13 +134,20 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 109, LicenseCode = 62, Prefix = "98", Manual = false,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,                                                EffectiveDate = ImRegUpdateTempRollforwardDate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 110, LicenseCode = 48, Prefix = "96", Manual = true,   Validate = false, NamedInImReg = false, LicensedToProvideCare = true,                                                EffectiveDate = ImRegUpdateTempRollforwardDate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Dental Surgeons
-                    new LicenseDetail { Id = 89, LicenseCode = 70, Prefix = "95", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    // Optometrists
-                    new LicenseDetail { Id = 90, LicenseCode = 71, Prefix = "94", Manual = false, Validate = true, NamedInImReg = true,   LicensedToProvideCare = true, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new LicenseDetail { Id = 91, LicenseCode = 72, Prefix = "94", Manual = false, Validate = true, NamedInImReg = false,  LicensedToProvideCare = true, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new LicenseDetail { Id = 92, LicenseCode = 73, Prefix = "94", Manual = false, Validate = true, NamedInImReg = false,  LicensedToProvideCare = true, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new LicenseDetail { Id = 93, LicenseCode = 74, Prefix = "94", Manual = false, Validate = true, NamedInImReg = false,  LicensedToProvideCare = true, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    //June 1st, 2022 Onboarding Podiatrists, Dental Surgeons, and Naturopaths
+                    new LicenseDetail { Id = 111, LicenseCode = 59, Prefix = "93", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 112, LicenseCode = 65, Prefix = "93", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 113, LicenseCode = 66, Prefix = "93", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 114, LicenseCode = 67, Prefix = "93", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 115, LicenseCode = 70, Prefix = "95", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 116, LicenseCode = 75, Prefix = "95", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 117, LicenseCode = 76, Prefix = "95", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 118, LicenseCode = 77, Prefix = "95", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 119, LicenseCode = 78, Prefix = "97", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 120, LicenseCode = 79, Prefix = "97", Manual = false, Validate = true, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 121, LicenseCode = 80, Prefix = "97", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 122, LicenseCode = 81, Prefix = "97", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = June1st2022Cohort, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
                     // All other colleges are assigned the "Not Displayed"Type
                     new LicenseDetail { Id = 64, LicenseCode = 64, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = SEEDING_DATE.DateTime.ToUniversalTime(), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
