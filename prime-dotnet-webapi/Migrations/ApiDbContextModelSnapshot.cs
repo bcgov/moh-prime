@@ -11503,13 +11503,13 @@ namespace Prime.Migrations
                     b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UnlistedCollegeCode")
+                    b.Property<int?>("UnlistedCollegeCode")
                         .HasColumnType("integer");
 
                     b.Property<string>("UnlistedCollegeName")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("UnlistedRenewalDate")
+                    b.Property<DateTimeOffset?>("UnlistedRenewalDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
