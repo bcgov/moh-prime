@@ -74,7 +74,10 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     this.formInstance = this.fb.group({
       certifications: this.fb.array([]),
       deviceProviderIdentifier: [null, []],
-      unlistedCertifications: this.fb.array([])
+      unlistedCertifications: this.fb.array([]),
+      // unlistedCollegeName: ['', []],
+      // unlistedCollegeLicence: ['', []],
+      // unlistedRenewalDate: ['', []]
     });
   }
 
