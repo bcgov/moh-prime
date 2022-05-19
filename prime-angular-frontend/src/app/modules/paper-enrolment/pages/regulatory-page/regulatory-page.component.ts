@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -74,20 +74,9 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   protected createFormInstance(): void {
     this.formState = new RegulatoryFormState(this.fb, this.configService);
-      this.form = this.fb.group({
-        unlistedCertifications: this.fb.array([])
-      });
   }
 
   protected initForm(): void {
-    this.hasUnlistedCertification = !!(this.formState.unlistedCertifications.controls.values);
-    this.toggleUnlistedCertificationsValidators(
-      this.hasUnlistedCertification,
-      this.formState.unlistedCertifications
-    )
-      // this.formState.unlistedCertifications.controls[0]['controls'].unlistedCollegeName,
-      // this.formState.unlistedCertifications.controls[0]['controls'].unlistedCollegeCode,
-      // this.formState.unlistedCertifications.controls[0]['controls'].unlistedRenewalDate)
     // Always have at least one certification ready for
     // the enrollee to fill out
     if (!this.formState.certifications.length) {

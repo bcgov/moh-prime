@@ -27,8 +27,8 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("", Name = nameof(CreateLog))]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ApiResultResponse<int>>> CreateLog(ClientLogViewModel log)
+        [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> CreateLog(ClientLogViewModel log)
         {
             var logId = 0;
             try
