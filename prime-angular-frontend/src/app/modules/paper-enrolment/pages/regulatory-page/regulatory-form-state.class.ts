@@ -50,7 +50,6 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     }
   }
 
-
   public patchValue({ certifications, deviceProviderIdentifier, unlistedCertifications }: RegulatoryForm): void {
 
     if (!this.formInstance || !Array.isArray(certifications) || !Array.isArray(unlistedCertifications)) {
@@ -137,5 +136,4 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
       this.addEmptyCollegeCertification();
     }
   }
-
 }

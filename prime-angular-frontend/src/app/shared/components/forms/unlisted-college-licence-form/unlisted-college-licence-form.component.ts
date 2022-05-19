@@ -3,10 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import moment from 'moment';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { RegulatoryFormState } from '@paper-enrolment/pages/regulatory-page/regulatory-form-state.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 @Component({
   selector: 'app-unlisted-college-licence-form',
@@ -74,7 +74,6 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
         FormControlValidators.requiredLength(5)
       ]);
       this.formUtilsService.setValidators(this.unlistedRenewalDate, [Validators.required]);
-
   }
 
   private removeValidations(): void {
