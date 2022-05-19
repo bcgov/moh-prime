@@ -170,17 +170,4 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
       ])
       : this.formUtilsService.resetAndClearValidators(this.formState.deviceProviderIdentifier);
   }
-
-  // private toggleUnlistedCertificationsValidator(hasUnlistedCertification: boolean): void {
-  //   // this.hasUnlistedCertification
-  //   //   ? this.formUtilsService.setValidators(this.formState.unlistedCertifications, [
-  //   //     FormControlValidators.requiredLength(5),
-  //   //     FormControlValidators.numeric
-  //   //   ])
-  //   //   : this.formUtilsService.resetAndClearValidators(this.formState.unlistedCertifications);
-  //   // this.formState.unlistedCertifications.addValidators()
-  //   if (!hasUnlistedCertification) {
-  //     // this.formUtilsService.resetAndClearValidators()
-  //   }
-  // }
 }
