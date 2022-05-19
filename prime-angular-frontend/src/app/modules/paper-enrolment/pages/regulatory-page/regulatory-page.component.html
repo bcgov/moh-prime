@@ -82,7 +82,7 @@
                                                  [index]="i"
                                                  [total]="formState.unlistedCertifications.controls.length"
                                                  [formState]="formState"
-                                                 (validate)="hasUnlistedCertification"
+                                                 [validate]="hasUnlistedCertification"
                                                  (remove)="formState.removeUnlistedCertification($event)">
 
               </app-unlisted-college-licence-form>

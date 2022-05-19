@@ -2,8 +2,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { ConfigService } from '@config/config.service';
 import { RegulatoryFormState as BaseRegulatoryPageFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { RegulatoryForm } from './regulatory-form.model';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { RegulatoryForm } from './regulatory-form.model';
 
 export class RegulatoryFormState extends BaseRegulatoryPageFormState {
 
@@ -24,37 +24,9 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     this.addCollegeCertification();
   }
 
-  // public unlistedCertifications: FormArray;
-
-  // public constructor() {
-  //   super();
-  //   this.unlistedCertifications = this.fb.group({
-  //     unlistedCollegeName: ['', []],
-  //     unlistedCollegeLicence: ['', []],
-  //     unlistedRenewalDate: ['', []]
-  //   })
-  // }
-
   public get unlistedCertifications(): FormArray {
     return this.formInstance.get('unlistedCertifications') as FormArray;
   }
-//   public unlistedCertifications = new FormArray([
-//     new FormControl(),
-//     new FormControl()
-//  ]);
-
-
-  // public get unlistedCollegeName(): FormControl {
-  //   return this.form.get('unlistedCollegeName') as FormControl;
-  // }
-
-  // public get unlistedCollegeLicence(): FormControl {
-  //   return this.form.get('unlistedCollegeLicence') as FormControl;
-  // }
-
-  // public get unlistedRenewalDate(): FormControl {
-  //   return this.form.get('unlistedRenewalDate') as FormControl;
-  // }
 
   public get json(): RegulatoryForm {
     if (!this.formInstance) {
@@ -92,21 +64,11 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     }
 
     if (unlistedCertifications.length) {
-      unlistedCertifications.forEach(() => this.addUnlistedCertification());
+      unlistedCertifications.forEach((u: UnlistedCertification) => this.addUnlistedCertification(u));
     }
 
     this.formInstance.patchValue({ certifications, deviceProviderIdentifier, unlistedCertifications });
   }
-
-  // public buildForm(): void {
-  //   this.formInstance = this.fb.group({
-  //     certifications: this.fb.array([]),
-  //     deviceProviderIdentifier: [null, []],
-  //     unlistedCollegeName: ['', []],
-  //     unlistedCollegeLicence: ['', []],
-  //     unlistedRenewalDate: [null, []]
-  //   });
-  // }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
@@ -124,14 +86,14 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     })
   }
 
-  public addUnlistedCertification(): void {
+  public addUnlistedCertification(unlistedCertification?: UnlistedCertification): void {
     const unlistedCert = this.buildUnlistedCollegeCertificationForm();
+    unlistedCert.patchValue({ ...unlistedCertification });
     this.unlistedCertifications.push(unlistedCert);
   }
 
   public addEmptyUnlistedCollegeCertification(): void {
     this.addUnlistedCertification();
-    // this.buildUnlistedCollegeCertificationForm();
   }
 
   /**

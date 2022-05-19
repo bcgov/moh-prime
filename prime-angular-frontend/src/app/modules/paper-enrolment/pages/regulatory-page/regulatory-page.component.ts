@@ -47,7 +47,13 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public onUnlistedCertification({ checked }: ToggleContentChange) {
-    this.toggleUnlistedCertificationsValidator(checked);
+    if (!checked) {
+      this.hasUnlistedCertification = false;
+      this.formState.json.unlistedCertifications = [];
+    } else {
+      this.hasUnlistedCertification = true;
+      this.formState.addEmptyUnlistedCollegeCertification();
+    }
   }
 
   public onBack(): void {
@@ -76,10 +82,6 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     if (!this.formState.certifications.length) {
       this.formState.addEmptyCollegeCertification();
     }
-    // if (!this.formState.unlistedCertifications.length && this.hasUnlistedCertification) {
-      this.formState.addEmptyUnlistedCollegeCertification();
-      console.log(this.formState.unlistedCertifications.controls);
-    // }
   }
 
   protected patchForm(): Observable<void> {
@@ -169,16 +171,16 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
       : this.formUtilsService.resetAndClearValidators(this.formState.deviceProviderIdentifier);
   }
 
-  private toggleUnlistedCertificationsValidator(hasUnlistedCertification: boolean): void {
-    // this.hasUnlistedCertification
-    //   ? this.formUtilsService.setValidators(this.formState.unlistedCertifications, [
-    //     FormControlValidators.requiredLength(5),
-    //     FormControlValidators.numeric
-    //   ])
-    //   : this.formUtilsService.resetAndClearValidators(this.formState.unlistedCertifications);
-    // this.formState.unlistedCertifications.addValidators()
-    if (!hasUnlistedCertification) {
-      // this.formUtilsService.resetAndClearValidators()
-    }
-  }
+  // private toggleUnlistedCertificationsValidator(hasUnlistedCertification: boolean): void {
+  //   // this.hasUnlistedCertification
+  //   //   ? this.formUtilsService.setValidators(this.formState.unlistedCertifications, [
+  //   //     FormControlValidators.requiredLength(5),
+  //   //     FormControlValidators.numeric
+  //   //   ])
+  //   //   : this.formUtilsService.resetAndClearValidators(this.formState.unlistedCertifications);
+  //   // this.formState.unlistedCertifications.addValidators()
+  //   if (!hasUnlistedCertification) {
+  //     // this.formUtilsService.resetAndClearValidators()
+  //   }
+  // }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import moment from 'moment';
@@ -13,15 +13,14 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
   templateUrl: './unlisted-college-licence-form.component.html',
   styleUrls: ['./unlisted-college-licence-form.component.scss']
 })
-export class UnlistedCollegeLicenceFormComponent implements OnInit {
+export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
   @Input() public form: FormGroup;
   @Input() public formState: RegulatoryFormState;
   @Input() public index: number;
   @Input() public total: number;
-  @Input() public validate: boolean = false;
+  @Input() public validate: boolean;
   @Input() public formControlNames: string[];
   @Output() public remove: EventEmitter<number>;
-  // public formState: RegulatoryFormState;
   public minRenewalDate: moment.Moment;
 
   constructor(
@@ -30,6 +29,7 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit {
   ) {
     this.remove = new EventEmitter<number>();
     this.minRenewalDate = moment();
+    this.validate = false;
   }
 
   public get isMobile() {
@@ -52,14 +52,21 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit {
     this.remove.emit(this.index)
   }
 
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (this.form && changes && !this.validate) {
+      this.removeValidations();
+    }
+  }
+
   public ngOnInit(): void {
-    this.setUnlistedCollegeCertificationValidators();
-    // this.setUnlistedCollegeCertifications(this.unlistedCollegeCode.value);
+    if (this.validate) {
+      this.setUnlistedCollegeCertificationValidators()
+    } else {
+      this.removeValidations();
+    }
   }
 
   private setUnlistedCollegeCertificationValidators(): void {
-    if (this.validate) {
-
       this.formUtilsService.setValidators(this.unlistedCollegeName, [Validators.required]);
       this.formUtilsService.setValidators(this.unlistedCollegeCode, [
         Validators.required,
@@ -67,22 +74,13 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit {
         FormControlValidators.requiredLength(5)
       ]);
       this.formUtilsService.setValidators(this.unlistedRenewalDate, [Validators.required]);
-    } else {
-      this.removeValidations();
-    }
+
   }
 
-  // private setUnlistedCollegeCertifications(unlistedCollegeCode: number): void {
-  //   if (unlistedCollegeCode) {
-  //     this.removeValidations();
-  //     return;
-  //   }
-  // }
-
   private removeValidations(): void {
+    this.formState.form.markAsPristine();
     this.formUtilsService.setValidators(this.unlistedCollegeName, []);
     this.formUtilsService.setValidators(this.unlistedCollegeCode, []);
     this.formUtilsService.setValidators(this.unlistedRenewalDate, []);
   }
-
 }
