@@ -123,6 +123,13 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
           this.removeCertification(index);
         }
       });
+      this.unlistedCertifications.controls
+      .forEach((control: FormGroup, index: number) => {
+        // Remove if college code is "None" or the group is invalid
+        if (!control.get('unlistedCollegeCode').value || control.invalid) {
+          this.removeUnlistedCertification(index);
+        }
+      });
 
     // Always have a single cerfication available, and it prevents
     // the page from jumping too much when routing
