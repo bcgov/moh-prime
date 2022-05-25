@@ -86,6 +86,7 @@ namespace Prime
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
         public DbSet<Credential> Credentials { get; set; }
         public DbSet<OrganizationClaim> OrganizationClaims { get; set; }
+        public DbSet<SiteClaim> SiteClaims { get; set; }
         public DbSet<IndividualDeviceProvider> IndividualDeviceProviders { get; set; }
 
         // Health Authorities

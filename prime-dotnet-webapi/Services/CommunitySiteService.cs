@@ -458,5 +458,29 @@ namespace Prime.Services
                 .Include(s => s.Adjudicator)
                 .Include(s => s.SiteStatuses);
         }
+
+        public async Task<CommunitySite> GetCommunitySiteAsync(string pec)
+        {
+            return await _context.CommunitySites
+                .Where(s => s.PEC == pec)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task UpdateOrganizationAsync(int siteId, int organizationId)
+        {
+            var currentSite = await GetSiteAsync(siteId);
+            currentSite.OrganizationId = organizationId;
+
+            await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, " Community Site Organization Updated");
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                _logger.LogError($"DbUpdateConcurrencyException when attempting to update Site {siteId}. Message: {ex.Message}");
+            }
+        }
     }
 }

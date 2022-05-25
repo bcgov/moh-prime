@@ -24,5 +24,7 @@ namespace Prime.Services
         Task<bool> SiteExistsAsync(int siteId);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId);
         Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId);
+        Task<CommunitySite> GetCommunitySiteAsync(string pec);
+        Task UpdateOrganizationAsync(int siteId, int organizationId);
     }
 }
