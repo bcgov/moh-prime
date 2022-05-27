@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Configuration.Auth;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
 
@@ -14,9 +14,9 @@ namespace Prime.Controllers
 {
 
     [Produces("application/json")]
-    [Route("api/sites")]
+    [Route("api/Sites")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
+    //[Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class SiteClaimsController : PrimeControllerBase
     {
 
@@ -51,23 +51,16 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
         public async Task<ActionResult> ClaimSite(SiteClaimViewModel siteClaim)
         {
-            var party = await _partyService.GetPartyAsync(siteClaim.PartyId, PartyType.SigningAuthority);
-            if (party == null)
+            var signingAuthority = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId(), PartyType.SigningAuthority);
+            if (signingAuthority == null)
             {
-                return BadRequest("Could not claim a site, the passed in SigningAuthority does not exist.");
+                return NotFound($"Signing authority not found with id {User.GetPrimeUserId()}");
             }
 
-            if (party.UserId != User.GetPrimeUserId())
+            var organizations = await _organizationService.GetOrganizationsByPartyIdAsync(signingAuthority.Id);
+            if (!organizations.Any())
             {
-                return BadRequest("Could not claim a site, the passed in party does not match current user.");
-            }
-
-            // TODO: Verify user logged in has an organization: check party.id matches an organization.SigningAuthorityId,
-            // return organization Id
-            var currentOrganizationId = await _organizationService.GetOrganizationBySigningAuthority(party.Id);
-            if (currentOrganizationId.HasValue)
-            {
-                return BadRequest("Could not claim a site, the passed in party does not match an organization signing authority.");
+                return BadRequest("Could not claim a site, authenticated user does not match to an organization signing authority.");
             }
 
             var communitySite = await _communitySiteService.GetCommunitySiteAsync(siteClaim.PEC);
@@ -82,7 +75,8 @@ namespace Prime.Controllers
                 return BadRequest("Could not claim a site which has already been claimed.");
             }
 
-            await _siteClaimService.CreateCommunitySiteClaimAsync(siteClaim, communitySite, currentOrganizationId.GetValueOrDefault());
+            await _siteClaimService.CreateCommunitySiteClaimAsync(siteClaim, communitySite,
+            organizations.First().Id, signingAuthority.Id);
 
             return NoContent();
         }
@@ -106,9 +100,9 @@ namespace Prime.Controllers
             return Ok(claim);
         }
 
-        // POST: api/Organizations/5/claims/1/approve
+        // POST: api/Sites/5/claims/1/approve
         /// <summary>
-        /// Approve claim for an existing Organization.
+        /// Approve a site claim.
         /// </summary>
         [HttpPost("{siteId}/claims/{claimId}/approve", Name = nameof(ApproveSiteClaim))]
         [Authorize(Roles = Roles.EditSite)]
@@ -132,16 +126,25 @@ namespace Prime.Controllers
             await _siteClaimService.UpdateSiteOrganizationAsync(siteClaim);
 
             // TODO: remove existing unsigned OrgAgreements for OLD organization that reflect that site
-            // await _organizationService.RemoveUnsignedOrganizationAgreementsAsync(organizationId);
+            // Check for agreements of type pharmacy if the site is of care setting pharmacy and remove unsigned agreements of that type if that is
+            // the only site of that care setting (could search first for sites of that care setting first, then remove agreements of that type)
+            // do this for both care setting "Community Pharmacy" -> CommunityPharmacyOrgAgreement
+            // and care setting "Private Community Health Practice" -> CommunityPracticeOrgAgreement
+            //await _organizationService.RemoveUnsignedOrganizationAgreementsAsync(organizationId);
 
             // TODO: call the following for the NEW organization
-            // await _organizationService.FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(organizationId);
+            // Step 1: Check that the user has already signed relevant (matches claimed site) org agreement matching that care setting/agreement type,
+            // has been signed, check that expiry date or accepted date is not null
+            // Step 2: Where signing is required, flag pendingTransfer on org
+            //await _organizationService.FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(organizationId);
 
             await _siteClaimService.DeleteClaimAsync(siteClaim.Id);
 
             // TODO: handle notification
-            // await _businessEventService.CreateSiteEventAsync(siteId, $"Site Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
-            // await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
+            //await _businessEventService.CreateSiteEventAsync(siteId, $"Site Claim (Site ID/PEC provided: {siteClaim.ProvidedSiteId}, Reason: {siteClaim.Details}) approved.");
+
+            // TODO: create template to site claim, based on org claim
+            //await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
 
             return NoContent();
         }

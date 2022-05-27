@@ -88,6 +88,7 @@ namespace Prime
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISentryErrorReporter, SentryErrorReporter>();
             services.AddScoped<ISiteService, SiteService>();
+            services.AddScoped<ISiteClaimService, SiteClaimService>();
             services.AddScoped<ISoapService, SoapService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<ISubmissionService, SubmissionService>();

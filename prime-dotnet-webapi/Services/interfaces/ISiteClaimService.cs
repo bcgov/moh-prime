@@ -10,7 +10,7 @@ namespace Prime.Services
     {
         Task<SiteClaim> GetSiteClaimBySiteIdAsync(int siteId);
 
-        Task<int> CreateCommunitySiteClaimAsync(SiteClaimViewModel claimSite, CommunitySite communitySite, int newOrganizationId);
+        Task<int> CreateCommunitySiteClaimAsync(SiteClaimViewModel claimSite, CommunitySite communitySite, int newOrganizationId, int newSigningAuthorityId);
 
         Task<SiteClaim> GetSiteClaimAsync(int claimId);
 

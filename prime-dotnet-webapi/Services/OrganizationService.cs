@@ -384,13 +384,5 @@ namespace Prime.Services
             _context.RemoveRange(pendingAgreements);
             await _context.SaveChangesAsync();
         }
-
-        public async Task<int?> GetOrganizationBySigningAuthority(int signingAuthorityId)
-        {
-            return await _context.Organizations
-                .Where(o => o.SigningAuthorityId == signingAuthorityId)
-                .Select(o => o.Id)
-                .SingleOrDefaultAsync();
-        }
     }
 }

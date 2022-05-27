@@ -34,13 +34,14 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(oc => oc.SiteId == siteId);
         }
 
-        public async Task<int> CreateCommunitySiteClaimAsync(SiteClaimViewModel siteClaimVm, CommunitySite communitySite, int newOrganizationId)
+        public async Task<int> CreateCommunitySiteClaimAsync(SiteClaimViewModel siteClaimVm, CommunitySite communitySite,
+        int newOrganizationId, int newSigningAuthorityId)
         {
             var siteClaim = new SiteClaim
             {
                 SiteId = communitySite.Id,
                 NewOrganizationId = newOrganizationId,
-                NewSigningAuthorityId = siteClaimVm.PartyId,
+                NewSigningAuthorityId = newSigningAuthorityId,
                 ProvidedSiteId = siteClaimVm.PEC,
                 Details = siteClaimVm.ClaimDetail
             };
