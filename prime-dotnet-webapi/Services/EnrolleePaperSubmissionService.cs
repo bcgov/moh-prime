@@ -14,6 +14,7 @@ using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.ViewModels.PaperEnrollees;
+using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
 {
@@ -201,6 +202,14 @@ namespace Prime.Services
             await ReplaceCollection(enrolleeId, newCerts);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<PaperEnrolleeUnlistedCertificationViewModel>> GetUnlistedCertificationsAsync(int enrolleeId)
+        {
+            return await _context.Set<UnlistedCertification>()
+                .Where(uc => uc.EnrolleeId == enrolleeId)
+                .ProjectTo<PaperEnrolleeUnlistedCertificationViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task UpdateSelfDeclarationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> viewModels)

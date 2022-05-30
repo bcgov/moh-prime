@@ -13,7 +13,8 @@ namespace Prime.ViewModels.Profiles
             CreateMap<PaperEnrolleeCertificationViewModel, Certification>();
             CreateMap<PaperEnrolleeSelfDeclarationViewModel, SelfDeclaration>();
             CreateMap<PaperEnrolleeOboSiteViewModel, OboSite>();
-            CreateMap<PaperEnrolleeUnlistedCertificationViewModel, UnlistedCertification>();
+            CreateMap<PaperEnrolleeUnlistedCertificationViewModel, UnlistedCertification>().ReverseMap();
+            CreateMap<UnlistedCertification, PaperEnrolleeUnlistedCertificationViewModel>();
         }
     }
 }
