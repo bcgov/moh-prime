@@ -73,6 +73,40 @@ import { RegulatoryForm } from './regulatory-form.model';
         None
       </app-enrollee-property>
     </app-page-section>
+
+    <app-page-section>
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Other College Licence Information</ng-container>
+
+        <button *ngIf="showEditRedirect"
+                mat-icon-button
+                matTooltip="Edit College Licences"
+                (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </app-page-subheader>
+
+      <ng-container *ngFor="let unlistedCertification of regulatory?.unlistedCertifications; let i = index;">
+
+        <app-enrollee-property title="College Name"
+          [makeBold]="true">
+          {{ unlistedCertification.unlistedCollegeName | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="College Code"
+          [makeBold]="true">
+          {{ unlistedCertification.unlistedCollegeCode | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Renewal Date"
+          [makeBold]="true">
+          {{ unlistedCertification.unlistedRenewalDate | formatDate | default }}
+        </app-enrollee-property>
+
+      </ng-container>
+
+    </app-page-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
   changeDetection: ChangeDetectionStrategy.OnPush
