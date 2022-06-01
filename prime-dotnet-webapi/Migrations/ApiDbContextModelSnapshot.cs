@@ -16,7 +16,7 @@ namespace Prime.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.14")
+                .HasAnnotation("ProductVersion", "5.0.16")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
@@ -1407,6 +1407,66 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            CollegeCode = 7,
+                            LicenseCode = 70
+                        },
+                        new
+                        {
+                            CollegeCode = 7,
+                            LicenseCode = 75
+                        },
+                        new
+                        {
+                            CollegeCode = 7,
+                            LicenseCode = 76
+                        },
+                        new
+                        {
+                            CollegeCode = 7,
+                            LicenseCode = 77
+                        },
+                        new
+                        {
+                            CollegeCode = 11,
+                            LicenseCode = 78
+                        },
+                        new
+                        {
+                            CollegeCode = 11,
+                            LicenseCode = 79
+                        },
+                        new
+                        {
+                            CollegeCode = 11,
+                            LicenseCode = 80
+                        },
+                        new
+                        {
+                            CollegeCode = 11,
+                            LicenseCode = 81
+                        },
+                        new
+                        {
+                            CollegeCode = 14,
+                            LicenseCode = 71
+                        },
+                        new
+                        {
+                            CollegeCode = 14,
+                            LicenseCode = 72
+                        },
+                        new
+                        {
+                            CollegeCode = 14,
+                            LicenseCode = 73
+                        },
+                        new
+                        {
+                            CollegeCode = 14,
+                            LicenseCode = 74
+                        },
+                        new
+                        {
                             CollegeCode = 4,
                             LicenseCode = 64
                         },
@@ -1418,11 +1478,6 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 6,
-                            LicenseCode = 64
-                        },
-                        new
-                        {
-                            CollegeCode = 7,
                             LicenseCode = 64
                         },
                         new
@@ -1442,22 +1497,12 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            CollegeCode = 11,
-                            LicenseCode = 64
-                        },
-                        new
-                        {
                             CollegeCode = 12,
                             LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 13,
-                            LicenseCode = 64
-                        },
-                        new
-                        {
-                            CollegeCode = 14,
                             LicenseCode = 64
                         },
                         new
@@ -5238,7 +5283,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 59,
-                            Name = "Podiatric Surgeon",
+                            Name = "Full - Podiatric Surgeon",
                             Weight = 25
                         },
                         new
@@ -5462,6 +5507,78 @@ namespace Prime.Migrations
                             Code = 69,
                             Name = "Student Midwife",
                             Weight = 32
+                        },
+                        new
+                        {
+                            Code = 70,
+                            Name = "Full Registrations",
+                            Weight = 1
+                        },
+                        new
+                        {
+                            Code = 75,
+                            Name = "Restricted to Specialty",
+                            Weight = 2
+                        },
+                        new
+                        {
+                            Code = 76,
+                            Name = "Academic",
+                            Weight = 3
+                        },
+                        new
+                        {
+                            Code = 77,
+                            Name = "Academic (Grand-parented)",
+                            Weight = 4
+                        },
+                        new
+                        {
+                            Code = 78,
+                            Name = "Full",
+                            Weight = 1
+                        },
+                        new
+                        {
+                            Code = 79,
+                            Name = "Non-practicing",
+                            Weight = 2
+                        },
+                        new
+                        {
+                            Code = 80,
+                            Name = "Temporary",
+                            Weight = 3
+                        },
+                        new
+                        {
+                            Code = 81,
+                            Name = "Student",
+                            Weight = 4
+                        },
+                        new
+                        {
+                            Code = 71,
+                            Name = "Therapeutic Optometrist",
+                            Weight = 1
+                        },
+                        new
+                        {
+                            Code = 72,
+                            Name = "Non-Therapeutic Optometrist",
+                            Weight = 2
+                        },
+                        new
+                        {
+                            Code = 73,
+                            Name = "Non-Practicing Optometrist",
+                            Weight = 3
+                        },
+                        new
+                        {
+                            Code = 74,
+                            Name = "Limited Optometrist",
+                            Weight = 4
                         },
                         new
                         {
@@ -6505,6 +6622,81 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Id = 89,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 70,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "95",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 90,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 71,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 91,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 72,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 92,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 73,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 93,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 74,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
                             Id = 73,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -7010,10 +7202,70 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 89,
+                            Id = 111,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 59,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "93",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 112,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 65,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "93",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 113,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 66,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "93",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 114,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 67,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "93",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 115,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 70,
                             LicensedToProvideCare = true,
                             Manual = false,
@@ -7025,60 +7277,105 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 90,
+                            Id = 116,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 71,
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 75,
                             LicensedToProvideCare = true,
                             Manual = false,
                             NamedInImReg = true,
-                            Prefix = "94",
+                            Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
                         },
                         new
                         {
-                            Id = 91,
+                            Id = 117,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 72,
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 76,
                             LicensedToProvideCare = true,
                             Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "94",
+                            NamedInImReg = true,
+                            Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
                         },
                         new
                         {
-                            Id = 92,
+                            Id = 118,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 73,
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 77,
                             LicensedToProvideCare = true,
                             Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "94",
+                            NamedInImReg = true,
+                            Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
                         },
                         new
                         {
-                            Id = 93,
+                            Id = 119,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 74,
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 78,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 120,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 79,
+                            LicensedToProvideCare = false,
+                            Manual = false,
                             NamedInImReg = false,
-                            Prefix = "94",
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 121,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 80,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 122,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2022, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 81,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
@@ -11763,6 +12060,15 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.ToTable("Credential");
+                });
+
+            modelBuilder.Entity("Prime.Models.AdditionalAddress", b =>
+                {
+                    b.HasBaseType("Prime.Models.Address");
+
+                    b.ToTable("Address");
+
+                    b.HasDiscriminator().HasValue(4);
                 });
 
             modelBuilder.Entity("Prime.Models.MailingAddress", b =>

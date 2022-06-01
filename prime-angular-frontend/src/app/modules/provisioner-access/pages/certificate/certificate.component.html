@@ -27,6 +27,11 @@
         {{ fullName }}
       </app-enrollee-property>
 
+      <app-enrollee-property title="User Type"
+                             [makeBold]="true">
+        {{ userType }}
+      </app-enrollee-property>
+
     </div>
 
     <ng-container *ngFor="let careSetting of certificate.careSettings">

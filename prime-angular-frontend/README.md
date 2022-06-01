@@ -36,6 +36,24 @@ git clone https://github.com/bcgov/moh-prime
 
 ## Building and Running
 
+### Dependancies
+
+Load project dependancies and dev dependancies and cli tools
+
+Check the version of @angular/cli used in the package.json and use the version found there below
+
+```bash
+npm install -g @angular/cli@12.2.17
+```
+
+```bash
+npm install -g yarn
+```
+
+```bash
+yarn install
+```
+
 ### Client
 
 To build, run, and open the Angular application in the default browser at http://localhost:4200 for development go to the PRIME project repository in the terminal and type:

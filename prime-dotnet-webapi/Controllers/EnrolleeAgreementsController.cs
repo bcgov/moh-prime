@@ -270,5 +270,31 @@ namespace Prime.Controllers
 
             return Ok(isOboToRuChange);
         }
+
+        // GET: api/enrollees/5/agreements/current/agreement-group
+        /// <summary>
+        ///     Gets the agreement group for enrollees current agreement, null if no current agreement
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/agreements/current/agreement-group", Name = nameof(GetCurrentAgreementGroupForAnEnrollee))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<AgreementGroup?>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetCurrentAgreementGroupForAnEnrollee(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var agreementGroup = await _enrolleeAgreementService.GetCurrentAgreementGroupForAnEnrolleeAsync(enrolleeId);
+
+            return Ok(agreementGroup);
+        }
     }
 }

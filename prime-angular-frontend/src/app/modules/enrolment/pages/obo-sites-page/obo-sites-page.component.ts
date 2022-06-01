@@ -180,8 +180,9 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   }
 
   protected initForm() {
+    const forcedPatch: boolean = true;
     // Initialize listeners before patching
-    this.patchForm().subscribe(() => {
+    this.patchForm(forcedPatch).subscribe(() => {
       // Add at least one site for each careSetting selected by enrollee
       this.careSettings.forEach(({ careSettingCode }) => {
         switch (careSettingCode) {

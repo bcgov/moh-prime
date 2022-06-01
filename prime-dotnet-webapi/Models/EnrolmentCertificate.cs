@@ -17,6 +17,7 @@ namespace Prime.Models
         public string GPID { get; set; }
         public DateTimeOffset? ExpiryDate { get; set; }
         public IEnumerable<CareSetting> CareSettings { get; set; }
+        public AgreementGroup? Group { get; set; }
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
@@ -29,7 +30,11 @@ namespace Prime.Models
                 PreferredLastName = enrollee.PreferredLastName,
                 GPID = enrollee.GPID,
                 ExpiryDate = enrollee.ExpiryDate,
-                CareSettings = enrollee.EnrolleeCareSettings.Select(org => org.CareSetting)
+                CareSettings = enrollee.EnrolleeCareSettings.Select(org => org.CareSetting),
+                Group = enrollee.Agreements.OrderByDescending(a => a.CreatedDate)
+                    .Where(a => a.AcceptedDate != null)
+                    .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? AgreementGroup.OnBehalfOf : AgreementGroup.RegulatedUser)
+                    .FirstOrDefault()
             };
         }
     }
