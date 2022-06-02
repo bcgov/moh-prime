@@ -25,5 +25,6 @@ namespace Prime.Services
         Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId);
         Task SendEnrolleeUnsignedToaReminderEmails();
         Task SendEnrolleeAbsenceNotificationEmailAsync(int enrolleeId, EnrolleeAbsenceViewModel absence, string email);
+        Task SendSiteClaimApprovalNotificationAsync(SiteClaim siteClaim);
     }
 }

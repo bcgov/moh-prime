@@ -31,7 +31,7 @@ namespace Prime.Services
         public async Task<SiteClaim> GetSiteClaimBySiteIdAsync(int siteId)
         {
             return await _context.SiteClaims
-                .SingleOrDefaultAsync(oc => oc.SiteId == siteId);
+                .SingleOrDefaultAsync(sc => sc.SiteId == siteId);
         }
 
         public async Task<int> CreateCommunitySiteClaimAsync(SiteClaimViewModel siteClaimVm, CommunitySite communitySite,
@@ -57,6 +57,7 @@ namespace Prime.Services
         public async Task<SiteClaim> GetSiteClaimAsync(int claimId)
         {
             return await _context.SiteClaims
+                .Include(sc => sc.NewSigningAuthority)
                 .SingleOrDefaultAsync(sc => sc.Id == claimId);
         }
 
@@ -75,6 +76,7 @@ namespace Prime.Services
             }
 
             _context.SiteClaims.Remove(claim);
+
             await _context.SaveChangesAsync();
         }
     }

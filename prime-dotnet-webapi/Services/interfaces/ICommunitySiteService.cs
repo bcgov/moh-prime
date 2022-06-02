@@ -26,5 +26,7 @@ namespace Prime.Services
         Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId);
         Task<CommunitySite> GetCommunitySiteAsync(string pec);
         Task UpdateOrganizationAsync(int siteId, int organizationId);
+        Task RemoveUnsignedOrganizationAgreementsAsync(CommunitySite communitySite, int organizationId);
+        Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(CommunitySite communitySite);
     }
 }

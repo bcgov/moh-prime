@@ -26,5 +26,6 @@ namespace Prime.Services.EmailInternal
         Task<Email> RenderPaperEnrolleeSubmissionEmail(string enrolleeEmail, PaperEnrolleeSubmissionEmailViewModel viewModel);
         Task<Email> RenderUnsignedToaEmailAsync(string enrolleeEmail, EnrolleeUnsignedToaEmailViewModel viewModel);
         Task<Email> RenderEnrolleeAbsenceNotificationEmailAsync(string email, EnrolleeAbsenceNotificationEmailViewModel viewModel);
+        Task<Email> RenderSiteClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, SiteClaimApprovalNotificationViewModel viewModel);
     }
 }

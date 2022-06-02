@@ -302,6 +302,22 @@ namespace Prime.Services
             await Send(email);
         }
 
+        public async Task SendSiteClaimApprovalNotificationAsync(SiteClaim siteClaim)
+        {
+            var newSigningAuthorityEmail = await _context.Parties
+                .Where(p => p.Id == siteClaim.NewSigningAuthorityId)
+                .Select(p => p.Email)
+                .SingleAsync();
+
+            var viewModel = new SiteClaimApprovalNotificationViewModel
+            {
+                Pec = siteClaim.ProvidedSiteId,
+            };
+
+            var email = await _emailRenderingService.RenderSiteClaimApprovalNotificationEmailAsync(newSigningAuthorityEmail, viewModel);
+            await Send(email);
+        }
+
         public async Task<int> UpdateEmailLogStatuses(int limit)
         {
             Expression<Func<EmailLog, bool>> predicate = log =>

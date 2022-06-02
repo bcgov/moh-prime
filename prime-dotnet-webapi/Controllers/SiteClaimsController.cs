@@ -16,27 +16,32 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/Sites")]
     [ApiController]
-    //[Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class SiteClaimsController : PrimeControllerBase
     {
 
         private readonly IOrganizationService _organizationService;
         private readonly IPartyService _partyService;
         private readonly ICommunitySiteService _communitySiteService;
-
         private readonly ISiteClaimService _siteClaimService;
+        private readonly IBusinessEventService _businessEventService;
+        private readonly IEmailService _emailService;
 
         public SiteClaimsController(
             IOrganizationService organizationService,
             IPartyService partyService,
             ICommunitySiteService communitySiteService,
-            ISiteClaimService siteClaimService
+            ISiteClaimService siteClaimService,
+            IBusinessEventService businessEventService,
+            IEmailService emailService
         )
         {
             _organizationService = organizationService;
             _partyService = partyService;
             _communitySiteService = communitySiteService;
             _siteClaimService = siteClaimService;
+            _businessEventService = businessEventService;
+            _emailService = emailService;
         }
 
 
@@ -123,28 +128,28 @@ namespace Prime.Controllers
                 return BadRequest("Could not claim a site, the passed in party does not match current user.");
             }
 
+            var communitySite = await _communitySiteService.GetSiteAsync(siteId);
+            var oldOrganizationId = communitySite.OrganizationId;
+
             await _siteClaimService.UpdateSiteOrganizationAsync(siteClaim);
 
-            // TODO: remove existing unsigned OrgAgreements for OLD organization that reflect that site
+            // Remove existing unsigned OrgAgreements for OLD organization that reflect that site
             // Check for agreements of type pharmacy if the site is of care setting pharmacy and remove unsigned agreements of that type if that is
             // the only site of that care setting (could search first for sites of that care setting first, then remove agreements of that type)
-            // do this for both care setting "Community Pharmacy" -> CommunityPharmacyOrgAgreement
-            // and care setting "Private Community Health Practice" -> CommunityPracticeOrgAgreement
-            //await _organizationService.RemoveUnsignedOrganizationAgreementsAsync(organizationId);
+            // do this for both care setting "Community Pharmacy" -> AgreementType.CommunityPharmacyOrgAgreement
+            // and care setting "Private Community Health Practice" -> AgreementType.CommunityPracticeOrgAgreement
+            await _communitySiteService.RemoveUnsignedOrganizationAgreementsAsync(communitySite, oldOrganizationId);
 
-            // TODO: call the following for the NEW organization
             // Step 1: Check that the user has already signed relevant (matches claimed site) org agreement matching that care setting/agreement type,
             // has been signed, check that expiry date or accepted date is not null
             // Step 2: Where signing is required, flag pendingTransfer on org
-            //await _organizationService.FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(organizationId);
+            await _communitySiteService.FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(communitySite);
 
             await _siteClaimService.DeleteClaimAsync(siteClaim.Id);
 
-            // TODO: handle notification
-            //await _businessEventService.CreateSiteEventAsync(siteId, $"Site Claim (Site ID/PEC provided: {siteClaim.ProvidedSiteId}, Reason: {siteClaim.Details}) approved.");
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site Claim (Site ID/PEC provided: {siteClaim.ProvidedSiteId}, Reason: {siteClaim.Details}) approved.");
 
-            // TODO: create template to site claim, based on org claim
-            //await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
+            await _emailService.SendSiteClaimApprovalNotificationAsync(siteClaim);
 
             return NoContent();
         }

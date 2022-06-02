@@ -20,6 +20,7 @@ namespace Prime.Models
         SiteActiveBeforeRegistrationSubmission = 16,
         PaperEnrolleeSubmission = 17,
         EnrolleeUnsignedToa = 18,
-        EnrolleeAbsenceNotification = 19
+        EnrolleeAbsenceNotification = 19,
+        SiteClaimApprovalNotification = 20,
     }
 }

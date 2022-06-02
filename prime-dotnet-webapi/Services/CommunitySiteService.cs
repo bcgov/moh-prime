@@ -482,5 +482,36 @@ namespace Prime.Services
                 _logger.LogError($"DbUpdateConcurrencyException when attempting to update Site {siteId}. Message: {ex.Message}");
             }
         }
+
+        public async Task RemoveUnsignedOrganizationAgreementsAsync(CommunitySite communitySite, int organizationId)
+        {
+            // Delete all non-accepted agreements
+            var pendingAgreements = await _context.Agreements
+                .Where(a => a.OrganizationId == organizationId && a.AcceptedDate == null
+                && ((a.AgreementVersion.AgreementType == AgreementType.CommunityPharmacyOrgAgreement && communitySite.CareSetting.Code == 3) ||
+                (a.AgreementVersion.AgreementType == AgreementType.CommunityPracticeOrgAgreement && communitySite.CareSetting.Code == 2)))
+                .ToListAsync();
+
+            _context.RemoveRange(pendingAgreements);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(CommunitySite communitySite)
+        {
+            var organization = await _context.Organizations
+                .SingleAsync(o => o.Id == communitySite.OrganizationId);
+
+            var agreementSigned = await _context.Agreements
+                .AnyAsync(a => a.OrganizationId == communitySite.OrganizationId && (a.AcceptedDate != null || a.ExpiryDate != null)
+                && ((a.AgreementVersion.AgreementType == AgreementType.CommunityPharmacyOrgAgreement && communitySite.CareSetting.Code == 3) ||
+                (a.AgreementVersion.AgreementType == AgreementType.CommunityPracticeOrgAgreement && communitySite.CareSetting.Code == 2)));
+
+            if (!agreementSigned)
+            {
+                organization.PendingTransfer = true;
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
