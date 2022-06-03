@@ -79,10 +79,19 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 63, CollegeLicenseGroupingCode = 5 },
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 69, CollegeLicenseGroupingCode = 5 },
 
-                    // Dental Surgeons
+                    // College of Dental Surgeons of BC
                     new CollegeLicense { CollegeCode = 7,  LicenseCode = 70 },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 75 },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 76 },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 77 },
 
-                    // Optometrists
+                    // College of Naturopathic Physicians of BC
+                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 78 },
+                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 79 },
+                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 80 },
+                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 81 },
+
+                    // College of Optometrists of BC
                     new CollegeLicense { CollegeCode = 14,  LicenseCode = 71 },
                     new CollegeLicense { CollegeCode = 14,  LicenseCode = 72 },
                     new CollegeLicense { CollegeCode = 14,  LicenseCode = 73 },
@@ -95,7 +104,6 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 8,  LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 9,  LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 10, LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 11, LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 12, LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 13, LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 15, LicenseCode = 64 },
