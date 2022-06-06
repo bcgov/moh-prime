@@ -35,7 +35,7 @@ namespace Prime.Configuration.Database
                     new License { Code = 18, Weight = 22, Name = "Emergency - Family"                                  },
                     new License { Code = 19, Weight = 23, Name = "Emergency - Specialty"                               },
                     new License { Code = 21, Weight = 24, Name = "Temporarily Inactive"                                },
-                    new License { Code = 59, Weight = 25, Name = "Podiatric Surgeon"                                   },
+                    new License { Code = 59, Weight = 25, Name = "Full - Podiatric Surgeon"                                   },
                     new License { Code = 65, Weight = 26, Name = "Educational - Podiatric Surgeon Student (Elective)"  },
                     new License { Code = 66, Weight = 27, Name = "Educational - Podiatric Surgeon Resident (Elective)" },
                     new License { Code = 67, Weight = 28, Name = "Conditional - Podiatric Surgeon Disciplined"         },
@@ -77,6 +77,24 @@ namespace Prime.Configuration.Database
                     new License { Code = 62, Weight = 30, Name = "Temporary Midwife (Emergency)"                          },
                     new License { Code = 63, Weight = 31, Name = "Non-Practising Midwife"                                 },
                     new License { Code = 69, Weight = 32, Name = "Student Midwife"                                        },
+
+                    // Dental Surgeons
+                    new License { Code = 70, Weight = 1, Name = "Full Registrations" },
+                    new License { Code = 75, Weight = 2, Name = "Restricted to Specialty" },
+                    new License { Code = 76, Weight = 3, Name = "Academic" },
+                    new License { Code = 77, Weight = 4, Name = "Academic (Grand-parented)" },
+
+                    // Naturopaths
+                    new License { Code = 78, Weight = 1, Name = "Full" },
+                    new License { Code = 79, Weight = 2, Name = "Non-practicing" },
+                    new License { Code = 80, Weight = 3, Name = "Temporary" },
+                    new License { Code = 81, Weight = 4, Name = "Student" },
+
+                    // Optometrists
+                    new License { Code = 71, Weight = 1, Name = "Therapeutic Optometrist" },
+                    new License { Code = 72, Weight = 2, Name = "Non-Therapeutic Optometrist" },
+                    new License { Code = 73, Weight = 3, Name = "Non-Practicing Optometrist" },
+                    new License { Code = 74, Weight = 4, Name = "Limited Optometrist" },
 
                     // All other colleges are assigned the "Not Displayed" Type
                     new License { Code = 64, Weight = 1, Name = "Not Displayed" },

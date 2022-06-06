@@ -7,7 +7,7 @@ import { debounceTime } from 'rxjs/operators';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { LocalStorageService } from '@core/services/local-storage.service';
-import { PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
+import { EnrolmentStatusFilterEnum, PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
 
 @Component({
   selector: 'app-search-form',
@@ -38,7 +38,8 @@ export class SearchFormComponent implements OnInit {
     // MacGyver paper enrollee filter into the status filter
     const linkedPaperStatus = new Config<number>(PaperStatusEnum.LINKED_PAPER_ENROLMENT, 'Claimed Manual (Paper) Enrollees');
     const unlinkedPaperStatus = new Config<number>(PaperStatusEnum.UNLINKED_PAPER_ENROLMENT, 'Unclaimed Manual (Paper) Enrollees');
-    this.statuses.push(linkedPaperStatus, unlinkedPaperStatus);
+    const renewalEnrolmentStatus = new Config<number>(EnrolmentStatusFilterEnum.RENEWED_ENROLMENT, 'Previous Manual Review');
+    this.statuses.push(linkedPaperStatus, unlinkedPaperStatus, renewalEnrolmentStatus);
 
     this.search = new EventEmitter<string>();
     this.filter = new EventEmitter<StatusFilterEnum>();

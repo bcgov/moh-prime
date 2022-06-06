@@ -19,5 +19,6 @@ namespace Prime.Services
         /// if cannot be automatically determined which agreement would be assigned OR enrollee does yet have an agreement
         /// </summary>
         Task<bool> IsOboToRuAgreementTypeChangeAsync(int enrolleeId);
+        Task<AgreementGroup?> GetCurrentAgreementGroupForAnEnrolleeAsync(int enrolleeId);
     }
 }

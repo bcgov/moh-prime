@@ -74,6 +74,10 @@
                 added to a patient’s chart). Access to PharmaNet is granted through PRIME according to legislation and
                 Ministry of Health policy.
               </p>
+              <p *ngIf="currentAgreementGroup"
+                 class="font-weight-bold">
+                {{getAgreementDescription()}}
+              </p>
             </ng-container>
 
           </app-alert>

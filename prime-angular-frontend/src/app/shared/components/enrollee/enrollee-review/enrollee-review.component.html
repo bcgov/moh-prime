@@ -208,7 +208,9 @@
       {{ certification.collegeCode | configCode: 'colleges' | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Licence Class">
+    <app-enrollee-property [hasError]="enrolmentErrors?.requiresLicenceUpdate"
+                           errorMessage="Licence class requires update."
+                           title="Licence Class">
       {{ certification.licenseCode | configCode: 'licenses' | default }}
     </app-enrollee-property>
 
@@ -236,7 +238,7 @@
 
   <app-enrollee-property *ngIf="!hasCertification"
                          title="College Certification"
-                         [hasError]="enrolmentErrors?.certificateOrOboSite && enrolmentErrors?.certificate"
+                         [hasError]="enrolmentErrors?.certificateOrOboSite"
                          errorMessage="Must have a college certificate or job site information"
                          [makeBold]="true">
     None
@@ -316,9 +318,9 @@
                            title="Job Sites"
                            [hasError]="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite"
                            errorMessage="Must have a {{
-                             enrolmentErrors?.certificate && enrolmentErrors?.deviceProvider
+                            !hasCertification && enrolmentErrors?.deviceProvider
                              ? 'college certificate and a device provider ID'
-                             : enrolmentErrors?.certificate
+                             : !hasCertification
                                 ? 'college certificate'
                                 : 'device provider ID'
                             }} or job site information"
