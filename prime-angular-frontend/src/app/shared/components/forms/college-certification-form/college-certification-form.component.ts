@@ -68,7 +68,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.licenses = this.configService.licenses;
     this.practices = this.configService.practices;
     this.nurseGroups = this.configService.collegeLicenseGroupings;
-    this.minRenewalDate = moment();
+    this.minRenewalDate = (this.enrolmentService.isProfileComplete) ? null : moment();
     this.condensed = false;
     this.defaultOption = true;
   }
@@ -138,6 +138,10 @@ export class CollegeCertificationFormComponent implements OnInit {
     return CollegeCertification.hasPractice(this.collegeCode.value, this.licenseCode.value);
   }
 
+  public showLicenceClass(): boolean {
+    return this.filteredLicenses.some(l => l.name !== 'Not Displayed');
+  }
+
   /**
    * @description
    * Handle changes to prescriber opt-in/out, but will only ever
@@ -181,7 +185,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       this.nurseCategory.valueChanges
         .pipe(
           startWith(initialNursingCategory),
-          tap(_ => this.clearNursingCategoryValidators()),
+          tap((collegeLicenseGroupingCode: number | null) => (collegeLicenseGroupingCode) ? this.clearNursingCategoryValidators() : null),
           exhaustMap((collegeLicenseGroupingCode: number | null) =>
             (collegeLicenseGroupingCode)
               ? of(collegeLicenseGroupingCode)
@@ -235,7 +239,11 @@ export class CollegeCertificationFormComponent implements OnInit {
   private setCollegeCertificationValidators() {
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
     const licenseNumberValidators = [Validators.required];
-    if (this.collegeCode.value === CollegeLicenceClassEnum.CPSBC || this.collegeCode.value === CollegeLicenceClassEnum.CPBC) {
+    if (this.collegeCode.value === CollegeLicenceClassEnum.CPSBC
+      || this.collegeCode.value === CollegeLicenceClassEnum.CPBC
+      || this.collegeCode.value === CollegeLicenceClassEnum.CDSBC
+      || this.collegeCode.value === CollegeLicenceClassEnum.OptometryBC
+    ) {
       licenseNumberValidators.push(FormControlValidators.numeric, FormControlValidators.requiredLength(5));
     } else {
       licenseNumberValidators.push(FormControlValidators.alphanumeric);

@@ -43,6 +43,25 @@ import { DemographicForm } from './demographic-form.model';
                       [showIfEmpty]="true"
                       (route)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)"></app-address-view>
 
+    <ng-container *ngIf="demographic?.additionalAddresses?.length">
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Additional Addresses</ng-container>
+        <button mat-icon-button
+                matTooltip="Edit Additional Addresses"
+                (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </app-page-subheader>
+
+      <ng-container *ngFor="let additionalAddress of demographic?.additionalAddresses; let index = index">
+        <app-page-subheader>
+          <ng-container appPageSubheaderSummary>
+            <strong> Address: {{ index + 1 }}</strong>
+          </ng-container>
+        </app-page-subheader>
+        <app-address-view [address]="additionalAddress"></app-address-view>
+      </ng-container>
+    </ng-container>
     <app-page-section>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Contact Information</ng-container>

@@ -1,5 +1,6 @@
 using AutoMapper;
 
+using System.Collections.Generic;
 using Prime.Models;
 
 namespace Prime.ViewModels.Profiles
@@ -16,10 +17,12 @@ namespace Prime.ViewModels.Profiles
             CreateMap<AddressViewModel, PhysicalAddress>();
             CreateMap<AddressViewModel, MailingAddress>();
             CreateMap<AddressViewModel, VerifiedAddress>();
+            CreateMap<AddressViewModel, AdditionalAddress>();
 
             CreateMap<PhysicalAddress, AddressViewModel>();
             CreateMap<MailingAddress, AddressViewModel>();
             CreateMap<VerifiedAddress, AddressViewModel>();
+            CreateMap<AdditionalAddress, AddressViewModel>();
         }
     }
 }

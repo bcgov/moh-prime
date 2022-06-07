@@ -47,4 +47,13 @@ describe('EnrolleeMaintenancePageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('testing onBack()', () => {
+    it('should call routeUtis with \'../\'', () => {
+      const spyOnRouteRelativeTo = spyOn((component as any).routeUtils, 'routeRelativeTo');
+
+      component.onBack();
+      expect(spyOnRouteRelativeTo).toHaveBeenCalledOnceWith(['../']);
+    });
+  });
 });

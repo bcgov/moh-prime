@@ -6,7 +6,8 @@
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <div class="mb-4">
-    <app-expiry-alert [expiryDates]="enrolment?.expiryDate">
+    <app-expiry-alert *ngIf="currentStatus !== EnrolmentStatus.REQUIRES_TOA"
+                      [expiryDates]="enrolment?.expiryDate">
       <ng-container #alertTitle
                     class="alert-title">
         Your enrolment requires renewal
@@ -16,6 +17,22 @@
         Renew your enrolment by {{ enrolment?.expiryDate | formatDate | default }} to maintain your access to PharmaNet.
       </ng-container>
     </app-expiry-alert>
+
+    <app-alert *ngIf="enrolment?.expiryDate && currentStatus === EnrolmentStatus.REQUIRES_TOA"
+               type="warning"
+               icon="warning">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Pending Terms of Access
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        You must accept the user terms of access to complete your renewal. Please use the link below to go to the Terms
+        of Access.
+        <br/>
+        <a [routerLink]="" (click)="routeTo(EnrolmentRoutes.PENDING_ACCESS_TERM)">Terms of Access</a>
+      </ng-container>
+    </app-alert>
 
     <app-alert *ngIf="enrolleeAbsence"
                type="danger"
@@ -148,7 +165,7 @@
     Request Remote Access
   </button>
 
-  <app-alert *ngIf="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite || enrolmentErrors?.missingPharmaNetId"
+  <app-alert *ngIf="hasErrors()"
              type="danger"
              icon="error">
     <ng-container #alertContent
@@ -194,8 +211,9 @@
                        (route)="routeTo($event)"></app-enrollee-review>
 
   <div class="footer mb-4">
-    <app-alert *ngIf="enrolment && currentStatus !== EnrolmentStatus.EDITABLE"
-               type="danger"
+
+    <app-alert *ngIf="enrolment && currentStatus === EnrolmentStatus.UNDER_REVIEW"
+               type="warning"
                icon="warning">
       <ng-container #alertContent
                     class="alert-content">
@@ -205,6 +223,18 @@
         or
         <app-prime-support-email></app-prime-support-email>
         .
+      </ng-container>
+    </app-alert>
+
+    <app-alert *ngIf="enrolment && currentStatus === EnrolmentStatus.REQUIRES_TOA"
+               type="warning"
+               icon="warning">
+      <ng-container #alertContent
+                    class="alert-content">
+        You must accept the user terms of access to complete your renewal. Please use the link below to go to the Terms
+        of Access.
+        <br>
+        <a [routerLink]="" (click)="routeTo(EnrolmentRoutes.PENDING_ACCESS_TERM)">Terms of Access</a>
       </ng-container>
     </app-alert>
 

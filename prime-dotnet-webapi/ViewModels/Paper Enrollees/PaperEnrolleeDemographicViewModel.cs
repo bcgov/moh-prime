@@ -1,6 +1,6 @@
 using System;
 using FluentValidation;
-
+using System.Collections.Generic;
 namespace Prime.ViewModels.PaperEnrollees
 {
     public class PaperEnrolleeDemographicViewModel
@@ -14,6 +14,8 @@ namespace Prime.ViewModels.PaperEnrollees
         public DateTime DateOfBirth { get; set; }
 
         public AddressViewModel PhysicalAddress { get; set; }
+
+        public ICollection<AddressViewModel> AdditionalAddresses { get; set; }
 
         public string Email { get; set; }
 

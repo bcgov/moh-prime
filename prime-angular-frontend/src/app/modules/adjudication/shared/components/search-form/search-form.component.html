@@ -10,7 +10,7 @@
 
     <mat-form-field *ngIf="!hideStatus"
                     class="filter">
-      <mat-label>Filter By Status</mat-label>
+      <mat-label>Filter By</mat-label>
       <mat-select formControlName="statusCode">
         <mat-option value="">All</mat-option>
         <mat-option *ngFor="let status of statuses"

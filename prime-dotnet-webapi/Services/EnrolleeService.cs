@@ -126,7 +126,7 @@ namespace Prime.Services
             return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
-        public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
+        public async Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
             searchOptions ??= new EnrolleeSearchOptions();
 
@@ -144,7 +144,7 @@ namespace Prime.Services
                     && !_context.EnrolleeLinkedEnrolments
                         .Any(link => link.PaperEnrolleeId == e.Id));
 
-            return await _context.Enrollees
+            var query = _context.Enrollees
                 .AsNoTracking()
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(e => e.FirstName,
@@ -159,6 +159,12 @@ namespace Prime.Services
                 .If(searchOptions.StatusCode.HasValue, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
                 )
+                .If(searchOptions.IsRenewedManualEnrolment == true, q => q
+                    .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview
+                        && e.EnrolmentStatuses
+                            .Any(es => es.EnrolmentStatusReasons
+                                .Any(esr => esr.StatusReasonCode == (int)StatusReasonType.Manual)))
+                )
                 .If(searchOptions.IsLinkedPaperEnrolment == true, q => q
                     .Where(e => _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
@@ -166,10 +172,38 @@ namespace Prime.Services
                     .Where(e => e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
                         && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id))
                 )
+                .If(!string.IsNullOrWhiteSpace(searchOptions.AssignedTo), q => q
+                    .Where(e => e.Adjudicator.IDIR == searchOptions.AssignedTo)
+                )
+                .If(searchOptions.RenewalDateRangeStart.HasValue && searchOptions.RenewalDateRangeEnd.HasValue, q => q
+                    .Where(e => e.ExpiryDate != null
+                        && e.ExpiryDate >= searchOptions.RenewalDateRangeStart
+                        && e.ExpiryDate <= searchOptions.RenewalDateRangeEnd
+                    )
+                )
+                .If(searchOptions.AppliedDateRangeStart.HasValue && searchOptions.AppliedDateRangeEnd.HasValue, q => q
+                    .Where(e => e.AppliedDate != null
+                        && e.AppliedDate >= searchOptions.AppliedDateRangeStart
+                        && e.AppliedDate <= searchOptions.AppliedDateRangeEnd
+                    )
+                )
+                // By default postgres treats NULL values as infinitely large, where as angular material table sort does the opposite.
+                // Added the first OrderBy to maintain NULL being infinitely small.
+                .If(!string.IsNullOrWhiteSpace(searchOptions.SortOrder), q =>
+                        searchOptions.SortOrder switch
+                        {
+                            "renewalDate_asc" => q.OrderByDescending(e => e.ExpiryDate.HasValue).ThenBy(e => e.ExpiryDate).ThenBy(e => e.Id),
+                            "renewalDate_desc" => q.OrderBy(e => e.ExpiryDate.HasValue).ThenByDescending(e => e.ExpiryDate).ThenBy(e => e.Id),
+                            "appliedDate_asc" => q.OrderByDescending(e => e.AppliedDate.HasValue).ThenBy(e => e.AppliedDate).ThenBy(e => e.Id),
+                            "appliedDate_desc" => q.OrderBy(e => e.AppliedDate.HasValue).ThenByDescending(e => e.AppliedDate).ThenBy(e => e.Id),
+                            "displayId_desc" => q.OrderByDescending(e => e.Id),
+                            _ => q.OrderBy(e => e.Id),
+                        }
+                )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
-                .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
-                .OrderBy(e => e.Id)
-                .ToListAsync();
+                .DecompileAsync();
+
+            return await PaginatedList<EnrolleeListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
         }
 
         public async Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId)

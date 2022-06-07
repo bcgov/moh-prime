@@ -1,4 +1,5 @@
 import { Config } from '@config/config.model';
+import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 
 export interface EnrolmentCertificate {
   // TODO duplicate of EnrolleeProfile
@@ -10,4 +11,5 @@ export interface EnrolmentCertificate {
   gpid: string;
   careSettings: Config<number>[];
   expiryDate: string;
+  group: AgreementTypeGroup;
 }
