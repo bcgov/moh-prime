@@ -45,6 +45,12 @@ volumes:
 
 ### Installation
 
+dotnet-ef: Downloading the command line tool for use with migrations and database updates
+
+```bash
+dotnet tool install --global dotnet-ef --version 5.0.16
+```
+
 ### Creating Migration
 
 [.Net Core EF Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli)
@@ -71,6 +77,12 @@ Using the same command, but passing in a target migration you can rollback to a 
 
 ```bash
 dotnet ef database update <MigrationName>
+```
+
+Using the remove command, you can delete the latest migration and remove it from the context
+
+```bash
+dotnet ef database remove
 ```
 
 Note: you will have to bring down your api if you are running it in debug mode to run updates.
