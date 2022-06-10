@@ -148,7 +148,7 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public hasErrors(): boolean {
-    return Object.values(this.siteErrors).some(val => val);
+    return this.siteErrors ? Object.values(this.siteErrors).some(val => val) : false;
   }
 
   public ngOnInit(): void {
