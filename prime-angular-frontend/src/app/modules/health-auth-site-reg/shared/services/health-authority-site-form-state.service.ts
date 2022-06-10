@@ -179,4 +179,16 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
       status
     };
   }
+
+  /**
+   * @description
+   * Rather than changing the implementation at the AbstractFormStateService-level (a high-risk change),
+   * override the behavior at the HealthAuthoritySiteFormStateService-level.
+   */
+  public get isValidSubmission(): boolean {
+    return this.forms
+      .reduce((valid: boolean, form: AbstractControl) =>
+        // A disabled form is also considered valid for form submission purposes
+        valid && (form.valid || form.disabled), true);
+  }
 }
