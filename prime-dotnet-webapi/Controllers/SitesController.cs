@@ -901,7 +901,10 @@ namespace Prime.Controllers
 
                 var remoteUsersToNotify = communitySite.RemoteUsers.Where(ru => !ru.Notified);
                 await _emailService.SendRemoteUserNotificationsAsync(communitySite, remoteUsersToNotify);
-                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site remote user notification");
+                if (remoteUsersToNotify.Any())
+                {
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site remote user notification(s)");
+                }
                 await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
             }
             else

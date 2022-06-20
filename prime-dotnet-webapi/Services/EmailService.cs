@@ -148,6 +148,7 @@ namespace Prime.Services
                 PrimeUrl = PrimeConfiguration.Current.FrontendUrl
             };
 
+            // This code assumes that there is nothing remote user-specific in the email body
             var email = await _emailRenderingService.RenderRemoteUserNotificationEmailAsync(recipients.First(), viewModel);
             await Send(email);
 
