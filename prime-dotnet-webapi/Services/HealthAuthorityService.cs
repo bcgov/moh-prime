@@ -118,48 +118,63 @@ namespace Prime.Services
 
         public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<IContactViewModel> contacts) where T : HealthAuthorityContact, new()
         {
-            var oldContacts = await _context.HealthAuthorityContacts
-                .Include(c => c.Contact.PhysicalAddress)
-                .Where(c => c.HealthAuthorityOrganizationId == healthAuthorityId)
-                .OfType<T>()
-                .Select(c => c.Contact)
-                .ToListAsync();
-
-            // Should cascade into the HealthAuthorityContact XRef table. We have to save here to drop the Contacts before the Addresses.
-            _context.Contacts.RemoveRange(oldContacts);
-            await _context.SaveChangesAsync();
-
-            _context.Addresses.RemoveRange(oldContacts.Select(c => c.PhysicalAddress).Where(a => a != null));
-
-            IEnumerable<T> newContacts;
-            if (contacts is IEnumerable<TechnicalSupportContactViewModel>)
+            foreach (var contact in contacts)
             {
-                newContacts = (IEnumerable<T>)contacts.Select(contact =>
+                var existingContact = await _context.HealthAuthorityContacts
+                    .Include(c => c.Contact.PhysicalAddress)
+                    .Where(c => c.HealthAuthorityOrganizationId == healthAuthorityId)
+                    .Where(c => c.Id == contact.Id)
+                    .OfType<T>()
+                    .Select(c => c)
+                    .SingleOrDefaultAsync();
+                if (existingContact != null)
                 {
-                    contact.Id = 0;
-                    var healthAuthorityTechnicalSupport = new HealthAuthorityTechnicalSupport
+                    // To workaround the error "The property 'Contact.Id' is part of a key and so cannot be modified or marked as modified."
+                    var concreteInstanceId = contact.Id;
+                    contact.Id = existingContact.Contact.Id;
+                    _context.Entry(existingContact.Contact).CurrentValues.SetValues(contact);
+                    if (existingContact.Contact.PhysicalAddress != null)
                     {
-                        HealthAuthorityOrganizationId = healthAuthorityId,
-                        Contact = _mapper.Map<Contact>(contact)
-                    };
-                    healthAuthorityTechnicalSupport.VendorsSupported = MapToVendorsSupported(healthAuthorityTechnicalSupport, (TechnicalSupportContactViewModel)contact, _context.HealthAuthorityVendors);
-                    return healthAuthorityTechnicalSupport;
-                });
-            }
-            else
-            {
-                newContacts = contacts.Select(contact =>
+                        _context.Entry(existingContact.Contact.PhysicalAddress).CurrentValues.SetValues(contact.PhysicalAddress);
+                    }
+                    else if (contact.PhysicalAddress != null)
+                    {
+                        // Didn't have an address before but do now
+                        existingContact.Contact.PhysicalAddress = _mapper.Map<PhysicalAddress>(contact.PhysicalAddress);
+                    }
+                    if (contact is TechnicalSupportContactViewModel)
+                    {
+                        var oldAssociations = await _context.HealthAuthorityTechnicalSupportVendors
+                            .Where(tsv => tsv.HealthAuthorityTechnicalSupportId == concreteInstanceId)
+                            .ToListAsync();
+                        _context.HealthAuthorityTechnicalSupportVendors.RemoveRange(oldAssociations);
+                        (existingContact as HealthAuthorityTechnicalSupport).VendorsSupported = MapToVendorsSupported(existingContact as HealthAuthorityTechnicalSupport, (TechnicalSupportContactViewModel)contact, _context.HealthAuthorityVendors);
+                    }
+                }
+                else
                 {
-                    contact.Id = 0;
-                    return new T
+                    HealthAuthorityContact newContact = null;
+                    if (contact is TechnicalSupportContactViewModel)
                     {
-                        HealthAuthorityOrganizationId = healthAuthorityId,
-                        Contact = _mapper.Map<Contact>(contact)
-                    };
-                });
+                        var healthAuthorityTechnicalSupport = new HealthAuthorityTechnicalSupport
+                        {
+                            HealthAuthorityOrganizationId = healthAuthorityId,
+                            Contact = _mapper.Map<Contact>(contact)
+                        };
+                        healthAuthorityTechnicalSupport.VendorsSupported = MapToVendorsSupported(healthAuthorityTechnicalSupport, (TechnicalSupportContactViewModel)contact, _context.HealthAuthorityVendors);
+                        newContact = healthAuthorityTechnicalSupport;
+                    }
+                    else
+                    {
+                        newContact = new T
+                        {
+                            HealthAuthorityOrganizationId = healthAuthorityId,
+                            Contact = _mapper.Map<Contact>(contact)
+                        };
+                    }
+                    _context.HealthAuthorityContacts.Add(newContact);
+                }
             }
-
-            _context.HealthAuthorityContacts.AddRange(newContacts);
             await _context.SaveChangesAsync();
         }
 
