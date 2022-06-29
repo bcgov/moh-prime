@@ -188,7 +188,7 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
   public get isValidSubmission(): boolean {
     return this.forms
       .reduce((valid: boolean, form: AbstractControl) =>
-        // A disabled form is also considered valid for form submission purposes
-        valid && (form.valid || form.disabled), true);
+        // A disabled form (without errors) is also considered valid for form submission purposes
+        valid && (form.valid || (form.disabled && form.errors === null)), true);
   }
 }
