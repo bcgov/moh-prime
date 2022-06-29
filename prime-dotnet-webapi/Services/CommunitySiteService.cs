@@ -450,7 +450,7 @@ namespace Prime.Services
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.TechnicalSupport)
                     .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.BusinessHours)
+                .Include(s => s.BusinessHours.OrderBy(bh => bh.Day))
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserCertification)
                 .Include(s => s.BusinessLicences)
