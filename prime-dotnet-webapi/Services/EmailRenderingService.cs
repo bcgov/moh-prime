@@ -110,6 +110,19 @@ namespace Prime.Services.EmailInternal
             );
         }
 
+        public async Task<Email> RenderForcedRenewalEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
+        {
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "PRIME Renewal Required",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.ForcedRenewalNotification, viewModel)
+            );
+        }
+
         public async Task<Email> RenderSiteApprovedHibcEmailAsync(SiteApprovalEmailViewModel viewModel, int siteId)
         {
             return new Email
