@@ -51,7 +51,7 @@ namespace Prime.Controllers
         /// Gets all of the enrollees.
         /// </summary>
         [HttpGet(Name = nameof(GetEnrollees))]
-        [Authorize(Roles = Roles.ViewEnrollee)]
+        [Authorize(Roles = Roles.ViewEnrollee + "," + Roles.ViewPaperEnrolmentsOnly)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
