@@ -323,7 +323,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     ) {
       this.formUtilsService.setValidators(this.practitionerId, [
         Validators.required,
-        FormControlValidators.numeric,
+        FormControlValidators.alphanumeric,
         FormControlValidators.requiredLength(5)
       ]);
     }
