@@ -52,7 +52,9 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
       this.formState.json.unlistedCertifications = [];
     } else {
       this.hasUnlistedCertification = true;
-      this.formState.addEmptyUnlistedCollegeCertification();
+      if (!this.formState.unlistedCertifications.length) {
+        this.formState.addEmptyUnlistedCollegeCertification();
+      }
     }
   }
 
