@@ -72,6 +72,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   public ngOnDestroy(): void {
     this.formState.removeIncompleteCertifications(true);
+    this.formState.removeIncompleteUnlistedCertifications();
   }
 
   protected createFormInstance(): void {
