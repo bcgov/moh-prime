@@ -20,7 +20,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee + "," + Roles.ViewPaperEnrolmentsOnly)]
     public class EnrolleesController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
