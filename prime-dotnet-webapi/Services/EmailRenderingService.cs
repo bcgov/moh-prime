@@ -99,6 +99,8 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderForcedRenewalPassedEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
+
             return new Email
             (
                 from: PrimeEmail,
