@@ -97,6 +97,17 @@ namespace Prime.Services.EmailInternal
             );
         }
 
+        public async Task<Email> RenderForcedRenewalPassedEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "Your PRIME Renewal Date Has Passed",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.ForcedRenewalPassedNotification, viewModel)
+            );
+        }
+
         public async Task<Email> RenderRenewalRequiredEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
             viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
