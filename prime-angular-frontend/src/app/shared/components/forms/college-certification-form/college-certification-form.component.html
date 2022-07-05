@@ -172,13 +172,13 @@
                        formControlName="practitionerId"
                        maxlength="5">
                 <mat-error *ngIf="practitionerId.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="practitionerId.hasError('numeric') || practitionerId.hasError('length')">
-                  Must contain only 5 numeric characters
+                <mat-error *ngIf="practitionerId.hasError('alphanumeric') || practitionerId.hasError('length')">
+                  Must contain only 5 alphanumeric characters
                 </mat-error>
               </mat-form-field>
 
               <ng-container appContextualContent>
-                Your PharmaNet ID is a 5-digit number assigned to you by the BCCNM, to allow you to prescribe.
+                Your PharmaNet ID is a 5-character identifier assigned to you by the BCCNM, to allow you to prescribe.
               </ng-container>
             </app-form-icon-group>
 
