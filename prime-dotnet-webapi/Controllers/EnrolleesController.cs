@@ -150,6 +150,12 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
+            // Forbid viewing non-Paper Enrolments if only have `ViewPaperEnrolmentsOnly` role
+            // TODO: Refactor logic of detecting Paper Enrolment
+            if (User.IsInRole(Roles.ViewPaperEnrolmentsOnly) && (!enrollee.GPID.Contains(Enrollee.PaperGpidPrefix)))
+            {
+                return Forbid();
+            }
 
             if (User.IsAdministrant())
             {
