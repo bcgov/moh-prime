@@ -58,7 +58,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
             var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
-            var paginatedList = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+            var paginatedList = await _enrolleeService.GetEnrolleesAsync(searchOptions, User);
 
             foreach (var enrollee in paginatedList)
             {
