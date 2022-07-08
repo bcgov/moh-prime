@@ -19,6 +19,21 @@ namespace Prime.Models
         public IEnumerable<CareSetting> CareSettings { get; set; }
         public AgreementGroup? Group { get; set; }
 
+        /// <summary>
+        /// Identify which college at a high-level, e.g. BC College of Nurses and Midwives (BCCNM)
+        /// </summary>
+        public int CollegeCode { get; set; }
+        /// <summary>
+        /// Also known as College Prefix
+        /// </summary>
+        public string CollegeId { get; set; }
+        public int LicenseCode { get; set; }
+        public string CollegeLicenseNumber { get; set; }
+        public string PharmaNetId { get; set; }
+
+
+
+
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
             return new EnrolmentCertificate
@@ -34,7 +49,9 @@ namespace Prime.Models
                 Group = enrollee.Agreements.OrderByDescending(a => a.CreatedDate)
                     .Where(a => a.AcceptedDate != null)
                     .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? AgreementGroup.OnBehalfOf : AgreementGroup.RegulatedUser)
-                    .FirstOrDefault()
+                    .FirstOrDefault(),
+                CollegeLicenseNumber = enrollee.Certifications.First().LicenseNumber,
+                PharmaNetId = enrollee.Certifications.First().PractitionerId,
             };
         }
     }
