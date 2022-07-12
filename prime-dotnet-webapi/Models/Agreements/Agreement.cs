@@ -7,6 +7,12 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
+    public enum ExpiryReasonType
+    {
+        AnniversaryRenewalRequired = 1,
+        ForcedRenewal = 2,
+    };
+
     [Table("Agreement")]
     public class Agreement : BaseAuditable, IValidatableObject
     {
@@ -45,6 +51,8 @@ namespace Prime.Models
         public DateTimeOffset? AcceptedDate { get; set; }
 
         public DateTimeOffset? ExpiryDate { get; set; }
+
+        public ExpiryReasonType? ExpiryReason { get; set; }
 
         public SignedAgreementDocument SignedAgreement { get; set; }
 
