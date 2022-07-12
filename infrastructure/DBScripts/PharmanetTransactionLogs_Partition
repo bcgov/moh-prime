@@ -36,6 +36,10 @@ BEGIN;
 	CREATE INDEX IF NOT EXISTS "IX_PharmanetTransactionLog_TransactionId" 	ON public."PharmanetTransactionLog" USING btree ("TransactionId");
 	CREATE INDEX IF NOT EXISTS "IX_PharmanetTransactionLog_TxDateTime" 		ON public."PharmanetTransactionLog" USING btree ("TxDateTime");
 	CREATE INDEX IF NOT EXISTS "IX_PharmanetTransactionLog_UserId" 			ON public."PharmanetTransactionLog" USING btree ("UserId");
+  
+  GRANT INSERT, SELECT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER
+  ON "PharmanetTransactionLog" 
+  TO prime_user;
 	
 	DO $$ -- PLPGSQL annonymous code block
 
