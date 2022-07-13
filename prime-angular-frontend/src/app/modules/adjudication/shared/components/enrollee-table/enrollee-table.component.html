@@ -291,17 +291,20 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.BANNERS])">
+                (click)="onRoute([AdjudicationRoutes.BANNERS])"
+                [disabled]="!(Role.MAINTENANCE | inRole)">
           <mat-icon>bookmark</mat-icon>
           <span>Enrolment Banners</span>
         </button>
         <button mat-menu-item
-                (click)="onSendBulkEmail()">
+                (click)="onSendBulkEmail()"
+                [disabled]="!(Role.VIEW_ENROLLEE | inRole)">
           <mat-icon>email</mat-icon>
           <span>Send Email</span>
         </button>
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.MAINTENANCE])">
+                (click)="onRoute([AdjudicationRoutes.MAINTENANCE])"
+                [disabled]="!(Role.VIEW_ENROLLEE | inRole) && !(Role.VIEW_SITE | inRole)">
           <mat-icon>build</mat-icon>
           <span>Maintenance</span>
         </button>

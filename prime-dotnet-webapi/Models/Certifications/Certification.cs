@@ -34,9 +34,9 @@ namespace Prime.Models
         public string LicenseNumber { get; set; }
 
         /// <summary>
-        /// 5-digit numeric number that the PharmaNet College API expects
+        /// 5 alphanumeric characters that the PharmaNet College API expects
         /// </summary>
-        [RegularExpression(@"([0-9]{5})", ErrorMessage = "Practitioner ID should be 5 numeric characters")]
+        [RegularExpression(@"([a-zA-Z0-9]{5})", ErrorMessage = "Practitioner ID should be 5 alphanumeric characters")]
         public string PractitionerId { get; set; }
 
         public DateTimeOffset RenewalDate { get; set; }
