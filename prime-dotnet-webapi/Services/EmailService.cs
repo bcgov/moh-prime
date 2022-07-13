@@ -232,7 +232,8 @@ namespace Prime.Services
                     e.FirstName,
                     e.LastName,
                     e.Email,
-                    e.ExpiryDate
+                    e.ExpiryDate,
+                    e.ExpiryReason
                 })
                 .DecompileAsync()
                 .ToListAsync();
@@ -243,12 +244,28 @@ namespace Prime.Services
 
                 if (reminderEmailsIntervals.Contains(expiryDays))
                 {
-                    var email = await _emailRenderingService.RenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    Email email = null;
+                    if (enrollee.ExpiryReason != ExpiryReasonType.ForcedRenewal)
+                    {
+                        email = await _emailRenderingService.RenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    }
+                    else
+                    {
+                        email = await _emailRenderingService.RenderForcedRenewalEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    }
                     await Send(email);
                 }
                 if (expiryDays == -1)
                 {
-                    var email = await _emailRenderingService.RenderRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    Email email = null;
+                    if (enrollee.ExpiryReason != ExpiryReasonType.ForcedRenewal)
+                    {
+                        email = await _emailRenderingService.RenderRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    }
+                    else
+                    {
+                        email = await _emailRenderingService.RenderForcedRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    }
                     await Send(email);
                 }
             }

@@ -126,7 +126,7 @@ namespace Prime.Services
             return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
-        public async Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
+        public async Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null, ClaimsPrincipal user = null)
         {
             searchOptions ??= new EnrolleeSearchOptions();
 
@@ -199,6 +199,13 @@ namespace Prime.Services
                             "displayId_desc" => q.OrderByDescending(e => e.Id),
                             _ => q.OrderBy(e => e.Id),
                         }
+                )
+                // If not in role of `ViewEnrollee`, filter/restrict to Claimed and Unclaimed Paper Enrolments
+                // (same as logic above)
+                .If(user != null && !user.IsInRole(Roles.ViewEnrollee), q => q
+                    .Where(e => _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id) ||
+                                (e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
+                                    && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id)))
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
                 .DecompileAsync();
