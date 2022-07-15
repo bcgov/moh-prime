@@ -10,7 +10,10 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { SiteRegistrationTableComponent } from './site-registration-table.component';
+import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
 describe('SiteRegistrationTableComponent', () => {
   let component: SiteRegistrationTableComponent;
@@ -32,6 +35,9 @@ describe('SiteRegistrationTableComponent', () => {
         ReactiveFormsModule,
         BrowserAnimationsModule
       ],
+      declarations: [
+        InRolePipe
+      ],
       providers: [
         KeycloakService,
         {
@@ -41,6 +47,10 @@ describe('SiteRegistrationTableComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute
+        },
+        {
+          provide: PermissionService,
+          useClass: MockPermissionService
         }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

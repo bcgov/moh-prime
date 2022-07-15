@@ -11,7 +11,10 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { EnrolleeTableComponent } from './enrollee-table.component';
+import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
 describe('EnrolleeTableComponent', () => {
   let component: EnrolleeTableComponent;
@@ -26,7 +29,7 @@ describe('EnrolleeTableComponent', () => {
         BrowserAnimationsModule
       ],
       declarations: [
-        EnrolleeTableComponent
+        InRolePipe
       ],
       providers: [
         KeycloakService,
@@ -37,6 +40,10 @@ describe('EnrolleeTableComponent', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
+        },
+        {
+          provide: PermissionService,
+          useClass: MockPermissionService
         }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
