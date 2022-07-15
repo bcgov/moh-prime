@@ -15,6 +15,7 @@ export class LicenseMaintenanceConfig {
   prefix: string;
   namedInImReg?: boolean;
   licensedToProvideCare?: boolean;
+  allowRequestRemoteAccess?: boolean;
   manual?: boolean;
   validate?: boolean;
   prescriberIdType?: PrescriberIdTypeEnum;
@@ -43,6 +44,7 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
       'prefix',
       'namedInImReg',
       'licensedToProvideCare',
+      'allowRequestRemoteAccess',
       'manual',
       'validate',
       'prescriberIdType'

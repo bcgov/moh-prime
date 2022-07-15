@@ -69,10 +69,7 @@ export class EnrolmentService implements IEnrolmentService {
    * - Licences "Named in IM Reg" or "Licensed to Provide Care"
    */
   public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
-    const isCollegeOfPharmacists = certifications
-      .some(cert => cert.collegeCode === CollegeLicenceClassEnum.CPBC);
-
-    if (isCollegeOfPharmacists || !this.hasAllowedRemoteAccessCareSetting(careSettings)) {
+    if (!this.hasAllowedRemoteAccessCareSetting(careSettings)) {
       return false;
     }
 
@@ -90,7 +87,7 @@ export class EnrolmentService implements IEnrolmentService {
   }
 
   public hasAllowedRemoteAccessLicences(licenceConfig: LicenseConfig): boolean {
-    return (licenceConfig.licensedToProvideCare && licenceConfig.namedInImReg);
+    return (licenceConfig.allowRequestRemoteAccess);
   }
 
   public shouldShowCollegePrefix(licenseCode: number): boolean {
