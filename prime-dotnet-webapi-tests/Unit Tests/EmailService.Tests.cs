@@ -37,7 +37,8 @@ namespace PrimeTests.UnitTests
                 new Agreement
                 {
                     AcceptedDate = DateTimeOffset.Now,
-                    ExpiryDate = DateTimeOffset.Now.AddDays(daysUntilExpiry)
+                    ExpiryDate = DateTimeOffset.Now.AddDays(daysUntilExpiry),
+                    ExpiryReason = ExpiryReasonType.AnniversaryRenewalRequired
                 }
             };
             TestDb.SaveChanges();

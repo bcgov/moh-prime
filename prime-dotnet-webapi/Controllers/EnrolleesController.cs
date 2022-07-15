@@ -20,7 +20,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee + "," + Roles.ViewPaperEnrolmentsOnly)]
     public class EnrolleesController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -51,14 +51,14 @@ namespace Prime.Controllers
         /// Gets all of the enrollees.
         /// </summary>
         [HttpGet(Name = nameof(GetEnrollees))]
-        [Authorize(Roles = Roles.ViewEnrollee)]
+        [Authorize(Roles = Roles.ViewEnrollee + "," + Roles.ViewPaperEnrolmentsOnly)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
             var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
-            var paginatedList = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+            var paginatedList = await _enrolleeService.GetEnrolleesAsync(searchOptions, User);
 
             foreach (var enrollee in paginatedList)
             {
@@ -147,6 +147,12 @@ namespace Prime.Controllers
                 return NotFound($"Enrollee not found with ID {enrolleeId}");
             }
             if (!enrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+            // Forbid viewing non-Paper Enrolments if only have `ViewPaperEnrolmentsOnly` role
+            // TODO: Refactor logic of detecting Paper Enrolment
+            if (User.IsInRole(Roles.ViewPaperEnrolmentsOnly) && (!enrollee.GPID.Contains(Enrollee.PaperGpidPrefix)))
             {
                 return Forbid();
             }
