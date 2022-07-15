@@ -275,9 +275,9 @@ namespace Prime.Models
                 var expiryReasonType = Agreements
                     .OrderByDescending(at => at.CreatedDate)
                     .Where(at => at.AcceptedDate.HasValue)
-                    .Select(at => (ExpiryReasonType)at.ExpiryReason)
+                    .Select(at => at.ExpiryReason)
                     .FirstOrDefault();
-                return expiryReasonType != 0 ? expiryReasonType : ExpiryReasonType.AnniversaryRenewalRequired;
+                return expiryReasonType != null ? (ExpiryReasonType)expiryReasonType : ExpiryReasonType.AnniversaryRenewalRequired;
             }
         }
 
