@@ -58,6 +58,13 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     }
   }
 
+  public removeUnlistedCertification(index: number): void {
+    this.formState.unlistedCertifications.removeAt(index);
+    if (!this.formState.unlistedCertifications.length) {
+      this.hasUnlistedCertification = false;
+    }
+  }
+
   public onBack(): void {
     const backRoutePath = (this.enrollee.profileCompleted)
       ? PaperEnrolmentRoutes.OVERVIEW
@@ -69,9 +76,9 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.createFormInstance();
     this.patchForm().subscribe(() => {
       this.initForm();
-      if (this.formState.json.unlistedCertifications) {
+      if (this.formState.json.unlistedCertifications.length > 0) {
         this.hasUnlistedCertification = true;
-      };
+      }
     });
   }
 
@@ -141,12 +148,13 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   protected afterSubmitIsSuccessful(): void {
     const collegeCertifications = this.formState.collegeCertifications;
+    const unlistedCertifications = this.formState.unlistedCertifications.value;
     const isDeviceProviderWithNoIdentifier = this.isDeviceProvider && !this.formState.deviceProviderIdentifier.value;
 
     // Force obo sites to always be checked regardless of the profile being
     // completed so validations are applied prior to overview pushing the
     // responsibility of validation to obo sites
-    const nextRoutePath = (!collegeCertifications.length || isDeviceProviderWithNoIdentifier)
+    const nextRoutePath = (!collegeCertifications.length || !unlistedCertifications.length || isDeviceProviderWithNoIdentifier)
       ? PaperEnrolmentRoutes.OBO_SITES
       : (this.enrollee.profileCompleted)
         ? PaperEnrolmentRoutes.OVERVIEW
