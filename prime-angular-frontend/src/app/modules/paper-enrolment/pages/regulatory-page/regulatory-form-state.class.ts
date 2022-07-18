@@ -133,7 +133,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
   public removeIncompleteUnlistedCertifications(): void {
     this.unlistedCertifications.controls
     .forEach((control: FormGroup, index: number) => {
-      // Remove if college code is "None" or the group is invalid
+      // Remove if college code is null or the group is invalid
       if (!control.get('unlistedCollegeCode').value || control.invalid) {
         this.removeUnlistedCertification(index);
       }

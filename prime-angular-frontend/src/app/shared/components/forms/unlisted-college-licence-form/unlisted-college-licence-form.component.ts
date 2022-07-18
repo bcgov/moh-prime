@@ -49,7 +49,7 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
   }
 
   public removeUnlistedCertification(): void {
-    this.remove.emit(this.index)
+    this.remove.emit(this.index);
   }
 
   public ngOnChanges(changes: SimpleChanges): void {

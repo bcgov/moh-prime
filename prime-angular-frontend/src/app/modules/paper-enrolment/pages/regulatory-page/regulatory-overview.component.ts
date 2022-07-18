@@ -87,24 +87,31 @@ import { RegulatoryForm } from './regulatory-form.model';
         </button>
       </app-page-subheader>
 
-      <ng-container *ngFor="let unlistedCertification of regulatory?.unlistedCertifications; let i = index;">
 
-        <app-enrollee-property title="College Name"
-          [makeBold]="true">
-          {{ unlistedCertification.unlistedCollegeName | default }}
-        </app-enrollee-property>
-
-        <app-enrollee-property title="College Code"
-          [makeBold]="true">
-          {{ unlistedCertification.unlistedCollegeCode | default }}
-        </app-enrollee-property>
-
-        <app-enrollee-property title="Renewal Date"
-          [makeBold]="true">
-          {{ unlistedCertification.unlistedRenewalDate | formatDate | default }}
-        </app-enrollee-property>
-
+      <ng-container *ngIf="!regulatory?.unlistedCertifications?.length; else unlistedCerts">
+        No unlisted certifications entered.
       </ng-container>
+
+      <ng-template #unlistedCerts>
+        <ng-container *ngFor="let unlistedCertification of regulatory?.unlistedCertifications; let i = index;">
+
+          <app-enrollee-property title="College Name"
+            [makeBold]="true">
+            {{ unlistedCertification.unlistedCollegeName | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="College Code"
+            [makeBold]="true">
+            {{ unlistedCertification.unlistedCollegeCode | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Renewal Date"
+            [makeBold]="true">
+            {{ unlistedCertification.unlistedRenewalDate | formatDate | default }}
+          </app-enrollee-property>
+
+        </ng-container>
+      </ng-template>
 
     </app-page-section>
   `,
