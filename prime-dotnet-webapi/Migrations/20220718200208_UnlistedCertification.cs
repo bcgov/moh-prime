@@ -16,7 +16,7 @@ namespace Prime.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     EnrolleeId = table.Column<int>(type: "integer", nullable: false),
                     UnlistedCollegeName = table.Column<string>(type: "text", nullable: true),
-                    UnlistedCollegeCode = table.Column<int>(type: "integer", nullable: true),
+                    UnlistedCollegeCode = table.Column<string>(type: "text", nullable: true),
                     UnlistedRenewalDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedTimeStamp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),

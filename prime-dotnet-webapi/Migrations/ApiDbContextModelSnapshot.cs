@@ -11780,8 +11780,8 @@ namespace Prime.Migrations
                     b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("UnlistedCollegeCode")
-                        .HasColumnType("integer");
+                    b.Property<string>("UnlistedCollegeCode")
+                        .HasColumnType("text");
 
                     b.Property<string>("UnlistedCollegeName")
                         .HasColumnType("text");
