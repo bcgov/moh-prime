@@ -67,7 +67,12 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm().subscribe(() => this.initForm());
+    this.patchForm().subscribe(() => {
+      this.initForm();
+      if (this.formState.json.unlistedCertifications) {
+        this.hasUnlistedCertification = true;
+      };
+    });
   }
 
   public ngOnDestroy(): void {
