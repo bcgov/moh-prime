@@ -70,8 +70,7 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
       this.formUtilsService.setValidators(this.unlistedCollegeName, [Validators.required]);
       this.formUtilsService.setValidators(this.unlistedCollegeCode, [
         Validators.required,
-        FormControlValidators.numeric,
-        FormControlValidators.requiredLength(5)
+        FormControlValidators.alphanumeric
       ]);
       this.formUtilsService.setValidators(this.unlistedRenewalDate, [Validators.required]);
   }

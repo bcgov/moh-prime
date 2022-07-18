@@ -9,7 +9,8 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="College Name"
-                 formControlName="unlistedCollegeName">
+                 formControlName="unlistedCollegeName"
+                 maxlength="100">
           <mat-error *ngIf="unlistedCollegeName.errors?.['required']">Required</mat-error>
         </mat-form-field>
 
@@ -21,10 +22,11 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="College Code"
-                 formControlName="unlistedCollegeCode">
+                 formControlName="unlistedCollegeCode"
+                 maxlength="30">
           <mat-error *ngIf="unlistedCollegeCode.hasError('required')">Required</mat-error>
-          <mat-error *ngIf="unlistedCollegeCode.hasError('numeric') || unlistedCollegeCode.hasError('length')">
-            Must contain only 5 numeric characters
+          <mat-error *ngIf="unlistedCollegeCode.hasError('alphanumeric')">
+            Must contain only alphanumeric characters
           </mat-error>
         </mat-form-field>
 
