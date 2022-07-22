@@ -100,7 +100,7 @@ import { RegulatoryForm } from './regulatory-form.model';
             {{ unlistedCertification.unlistedCollegeName | default }}
           </app-enrollee-property>
 
-          <app-enrollee-property title="College Code"
+          <app-enrollee-property title="College Licence"
             [makeBold]="true">
             {{ unlistedCertification.unlistedCollegeCode | default }}
           </app-enrollee-property>
