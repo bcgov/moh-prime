@@ -4,8 +4,8 @@ namespace Prime.ViewModels.PaperEnrollees
 {
     public class PaperEnrolleeUnlistedCertificationViewModel
     {
-        public string UnlistedCollegeName { get; set; }
-        public string UnlistedCollegeCode { get; set; }
-        public DateTimeOffset UnlistedRenewalDate { get; set; }
+        public string CollegeName { get; set; }
+        public string CollegeCode { get; set; }
+        public DateTimeOffset RenewalDate { get; set; }
     }
 }

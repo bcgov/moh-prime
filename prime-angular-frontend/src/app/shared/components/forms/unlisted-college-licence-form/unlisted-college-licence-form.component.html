@@ -9,9 +9,9 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="College Name"
-                 formControlName="unlistedCollegeName"
+                 formControlName="collegeName"
                  maxlength="50">
-          <mat-error *ngIf="unlistedCollegeName.errors?.['required']">Required</mat-error>
+          <mat-error *ngIf="collegeName.errors?.['required']">Required</mat-error>
         </mat-form-field>
 
       </div>
@@ -22,10 +22,10 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="College Licence"
-                 formControlName="unlistedCollegeCode"
+                 formControlName="collegeCode"
                  maxlength="7">
-          <mat-error *ngIf="unlistedCollegeCode.hasError('required')">Required</mat-error>
-          <mat-error *ngIf="unlistedCollegeCode.hasError('alphanumeric')">
+          <mat-error *ngIf="collegeCode.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="collegeCode.hasError('alphanumeric')">
             Must contain only alphanumeric characters
           </mat-error>
         </mat-form-field>
@@ -40,7 +40,7 @@
                  placeholder="Next Renewal Date"
                  [min]="minRenewalDate"
                  [matDatepicker]="picker"
-                 formControlName="unlistedRenewalDate"
+                 formControlName="renewalDate"
                  readonly
                  (click)="picker.open()">
           <mat-datepicker-toggle matSuffix
@@ -48,7 +48,7 @@
           <mat-datepicker #picker
                           startView="multi-year"
                           [touchUi]="isMobile"></mat-datepicker>
-          <mat-error *ngIf="unlistedRenewalDate.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error>
         </mat-form-field>
 
       </div>

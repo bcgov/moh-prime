@@ -97,17 +97,17 @@ import { RegulatoryForm } from './regulatory-form.model';
 
           <app-enrollee-property title="College Name"
             [makeBold]="true">
-            {{ unlistedCertification.unlistedCollegeName | default }}
+            {{ unlistedCertification.collegeName | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="College Licence"
             [makeBold]="true">
-            {{ unlistedCertification.unlistedCollegeCode | default }}
+            {{ unlistedCertification.collegeCode | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="Renewal Date"
             [makeBold]="true">
-            {{ unlistedCertification.unlistedRenewalDate | formatDate | default }}
+            {{ unlistedCertification.renewalDate | formatDate | default }}
           </app-enrollee-property>
 
         </ng-container>

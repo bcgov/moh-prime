@@ -1,5 +1,5 @@
 export interface UnlistedCertification {
-  unlistedCollegeName: string;
-  unlistedCollegeLicence: string;
-  unlistedRenewalDate: string;
+  collegeName: string;
+  collegeLicence: string;
+  renewalDate: string;
 }
