@@ -11764,44 +11764,6 @@ namespace Prime.Migrations
                     b.ToTable("Submission");
                 });
 
-            modelBuilder.Entity("Prime.Models.UnlistedCertification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UnlistedCollegeCode")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UnlistedCollegeName")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset?>("UnlistedRenewalDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.ToTable("UnlistedCertification");
-                });
-
             modelBuilder.Entity("Prime.Models.Vendor", b =>
                 {
                     b.Property<int>("Code")
@@ -13376,17 +13338,6 @@ namespace Prime.Migrations
                     b.Navigation("Enrollee");
                 });
 
-            modelBuilder.Entity("Prime.Models.UnlistedCertification", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany("UnlistedCertifications")
-                        .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Enrollee");
-                });
-
             modelBuilder.Entity("Prime.Models.Vendor", b =>
                 {
                     b.HasOne("Prime.Models.CareSetting", "CareSetting")
@@ -13615,8 +13566,6 @@ namespace Prime.Migrations
                     b.Navigation("SelfDeclarations");
 
                     b.Navigation("Submissions");
-
-                    b.Navigation("UnlistedCertifications");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
