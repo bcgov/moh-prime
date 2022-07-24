@@ -18,19 +18,7 @@ namespace Prime.Models
         public DateTimeOffset? ExpiryDate { get; set; }
         public IEnumerable<CareSetting> CareSettings { get; set; }
         public AgreementGroup? Group { get; set; }
-
-        /// <summary>
-        /// Identify which college at a high-level, e.g. BC College of Nurses and Midwives (BCCNM)
-        /// </summary>
-        public int CollegeCode { get; set; }
-        /// <summary>
-        /// Also known as College Prefix
-        /// </summary>
-        public string CollegeId { get; set; }
-        public int LicenseCode { get; set; }
-        public string CollegeLicenseNumber { get; set; }
-        public string PharmaNetId { get; set; }
-
+        public IEnumerable<EnrolleeCertDto> Certifications { get; set; }
 
 
 
@@ -50,9 +38,32 @@ namespace Prime.Models
                     .Where(a => a.AcceptedDate != null)
                     .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? AgreementGroup.OnBehalfOf : AgreementGroup.RegulatedUser)
                     .FirstOrDefault(),
-                CollegeLicenseNumber = enrollee.Certifications.First().LicenseNumber,
-                PharmaNetId = enrollee.Certifications.First().PractitionerId,
+                Certifications = enrollee.Certifications.Select(cert =>
+                    new EnrolleeCertDto
+                    {
+                        CollegeCode = cert.CollegeCode,
+                        CollegeId = cert.License.CurrentLicenseDetail.Prefix,
+                        LicenseCode = cert.LicenseCode,
+                        CollegeLicenseNumber = cert.LicenseNumber,
+                        PharmaNetId = cert.PractitionerId
+                    })
             };
         }
+    }
+
+
+    public class EnrolleeCertDto
+    {
+        /// <summary>
+        /// Identify which college at a high-level, e.g. BC College of Nurses and Midwives (BCCNM)
+        /// </summary>
+        public int CollegeCode { get; set; }
+        /// <summary>
+        /// Also known as College Prefix
+        /// </summary>
+        public string CollegeId { get; set; }
+        public int LicenseCode { get; set; }
+        public string CollegeLicenseNumber { get; set; }
+        public string PharmaNetId { get; set; }
     }
 }
