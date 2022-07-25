@@ -41,6 +41,7 @@ export class LicenseConfig extends Config<number> implements IWeightedConfig {
   collegeLicenses: CollegeLicenseConfig[];
   licensedToProvideCare: boolean;
   namedInImReg: boolean;
+  allowRequestRemoteAccess: boolean;
   weight: number;
   validate: boolean;
   manual: boolean;

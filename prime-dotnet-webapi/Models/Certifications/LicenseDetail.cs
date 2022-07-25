@@ -28,5 +28,7 @@ namespace Prime.Models
         public bool LicensedToProvideCare { get; set; }
 
         public PrescriberIdType? PrescriberIdType { get; set; }
+
+        public bool AllowRequestRemoteAccess { get; set; }
     }
 }
