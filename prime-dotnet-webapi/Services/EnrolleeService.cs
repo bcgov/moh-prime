@@ -919,7 +919,23 @@ namespace Prime.Services
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
-                    RenewalDate = e.ExpiryDate
+                    RenewalDate = e.ExpiryDate,
+                    // TODO: Refactor code from `EnrolmentCertificate` class
+                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
+                        .Where(a => a.AcceptedDate != null)
+                        .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? "On-behalf-of User" : "Independent User")
+                        .FirstOrDefault(),
+                    Certifications = e.Certifications.Select(cert =>
+                        new EnrolleeCertDto
+                        {
+                            CollegeCode = cert.CollegeCode,
+                            CollegeName = _context.CollegeLookup.Where(c => c.Code == cert.CollegeCode).Select(c => c.Name).FirstOrDefault(),
+                            CollegeId = cert.License.CurrentLicenseDetail.Prefix,
+                            LicenseCode = cert.LicenseCode,
+                            LicenseName = _context.LicenseLookup.Where(l => l.Code == cert.LicenseCode).Select(l => l.Name).FirstOrDefault(),
+                            CollegeLicenseNumber = cert.LicenseNumber,
+                            PharmaNetId = cert.PractitionerId
+                        })
                 })
                 .DecompileAsync()
                 .ToListAsync();
