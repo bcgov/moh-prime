@@ -64,9 +64,8 @@ export class EnrolmentService implements IEnrolmentService {
    * Determine whether an enrollee can request remote access.
    *
    * Remote access rules:
-   * - No College of Pharmacist can request remote access
-   * - No Community Pharmacist care setting
-   * - Licences "Named in IM Reg" or "Licensed to Provide Care"
+   * - Private Community Health Practice care setting only
+   * - Licences has "AllowRequestRemoteAccess" flag set
    */
   public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
     if (!this.hasAllowedRemoteAccessCareSetting(careSettings)) {
