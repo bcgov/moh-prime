@@ -44,10 +44,10 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
       'prefix',
       'namedInImReg',
       'licensedToProvideCare',
-      'allowRequestRemoteAccess',
       'manual',
       'validate',
-      'prescriberIdType'
+      'prescriberIdType',
+      'allowRequestRemoteAccess'
     ];
     this.dataSource = new MatTableDataSource<LicenseMaintenanceConfig>([]);
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
