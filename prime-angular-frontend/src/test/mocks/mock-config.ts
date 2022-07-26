@@ -566,6 +566,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Full - Family',
           'collegeLicenses': [
@@ -584,6 +585,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Full - Specialty',
           'collegeLicenses': [
@@ -602,6 +604,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Special',
           'collegeLicenses': [
@@ -620,6 +623,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Osteopathic',
           'collegeLicenses': [
@@ -638,6 +642,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Provisional - Family',
           'collegeLicenses': [
@@ -656,6 +661,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Provisional - Specialty',
           'collegeLicenses': [
@@ -674,6 +680,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Academic',
           'collegeLicenses': [
@@ -692,6 +699,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Conditional - Practice Limitations',
           'collegeLicenses': [
@@ -710,6 +718,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Conditional - Practice Setting',
           'collegeLicenses': [
@@ -728,6 +737,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Conditional - Disciplined',
           'collegeLicenses': [
@@ -746,6 +756,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Educational - Medical Student',
           'collegeLicenses': [
@@ -764,6 +775,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Resident',
           'collegeLicenses': [
@@ -782,6 +794,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Resident Elective',
           'collegeLicenses': [
@@ -800,6 +813,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Fellow',
           'collegeLicenses': [
@@ -818,6 +832,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Trainee',
           'collegeLicenses': [
@@ -836,6 +851,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Clinical Observership',
           'collegeLicenses': [
@@ -854,6 +870,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Visitor',
           'collegeLicenses': [
@@ -872,6 +889,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Emergency - Family',
           'collegeLicenses': [
@@ -890,6 +908,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Emergency - Specialty',
           'collegeLicenses': [
@@ -908,6 +927,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Retired - Life ',
           'collegeLicenses': [
@@ -926,6 +946,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporarily Inactive',
           'collegeLicenses': [
@@ -944,6 +965,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Surgical Assistant',
           'collegeLicenses': [
@@ -962,6 +984,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Administrative',
           'collegeLicenses': [
@@ -980,6 +1003,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Assessment',
           'collegeLicenses': [
@@ -998,6 +1022,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Full Pharmacist',
           'collegeLicenses': [
@@ -1016,6 +1041,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Limited Pharmacist',
           'collegeLicenses': [
@@ -1034,6 +1060,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Temporary Pharmacist',
           'collegeLicenses': [
@@ -1052,6 +1079,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Student Pharmacist',
           'collegeLicenses': [
@@ -1070,6 +1098,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Pharmacy Technician',
           'collegeLicenses': [
@@ -1088,6 +1117,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Pharmacist',
           'collegeLicenses': [
@@ -1106,6 +1136,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Pharmacy Technician',
           'collegeLicenses': [
@@ -1124,6 +1155,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Practicing Registered Nurse',
           'collegeLicenses': [
@@ -1142,6 +1174,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Registered Nurse',
           'collegeLicenses': [
@@ -1160,6 +1193,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Registered Nurse',
           'collegeLicenses': [
@@ -1178,6 +1212,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Practicing Licensed Graduate Nurse',
           'collegeLicenses': [
@@ -1196,6 +1231,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Licensed Graduate Nurse',
           'collegeLicenses': [
@@ -1214,6 +1250,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Licensed Graduate Nurse',
           'collegeLicenses': [
@@ -1232,6 +1269,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Temporary Registered Nurse (Emergency)',
           'collegeLicenses': [
@@ -1250,6 +1288,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Employed Student Nurse',
           'collegeLicenses': [
@@ -1268,6 +1307,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Practicing Registered Psychiatric Nurse',
           'collegeLicenses': [
@@ -1286,6 +1326,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Registered Psychiatric Nurse',
           'collegeLicenses': [
@@ -1304,6 +1345,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Registered Psychiatric Nurse',
           'collegeLicenses': [
@@ -1322,6 +1364,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Temporary Registered Psychiatric Nurse (Emergency)',
           'collegeLicenses': [
@@ -1340,6 +1383,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Employed Student Psychiatric Nurse',
           'collegeLicenses': [
@@ -1358,6 +1402,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': 2,
           'name': 'Practicing Nurse Practitioner',
           'collegeLicenses': [
@@ -1376,6 +1421,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Provisional Nurse Practitioner',
           'collegeLicenses': [
@@ -1394,6 +1440,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Nurse Practitioner',
           'collegeLicenses': [
@@ -1412,6 +1459,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': 2,
           'name': 'Temporary Nurse Practitioner (Emergency)',
           'collegeLicenses': [
@@ -1430,6 +1478,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Practicing Licensed Practical Nurse',
           'collegeLicenses': [
@@ -1448,6 +1497,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Licensed Practical Nurse',
           'collegeLicenses': [
@@ -1466,6 +1516,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Licensed Practical Nurse',
           'collegeLicenses': [
@@ -1484,6 +1535,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporary Licensed Practical Nurse (Emergency)',
           'collegeLicenses': [
@@ -1502,6 +1554,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Podiatric Surgeon',
           'collegeLicenses': [
@@ -1520,6 +1573,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Practising Midwife',
           'collegeLicenses': [
@@ -1538,6 +1592,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Midwife',
           'collegeLicenses': [
@@ -1556,6 +1611,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporary Midwife (Emergency)',
           'collegeLicenses': [
@@ -1574,6 +1630,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practising Midwife',
           'collegeLicenses': [
@@ -1592,6 +1649,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Not Displayed',
           'collegeLicenses': [
@@ -1680,6 +1738,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Educational - Podiatric Surgeon Student (Elective)',
           'collegeLicenses': [
@@ -1698,6 +1757,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Educational - Podiatric Surgeon Resident (Elective)',
           'collegeLicenses': [
@@ -1716,6 +1776,7 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Conditional - Podiatric Surgeon Disciplined',
           'collegeLicenses': [
@@ -1734,6 +1795,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporary Pharmacy Technician',
           'collegeLicenses': [
@@ -1752,6 +1814,7 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Student Midwife',
           'collegeLicenses': [

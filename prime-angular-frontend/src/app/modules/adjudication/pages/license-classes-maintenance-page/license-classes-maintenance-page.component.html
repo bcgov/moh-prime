@@ -121,6 +121,20 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="allowRequestRemoteAccess">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header pl-3">
+        ARRA
+      </th>
+      <td mat-cell
+          class="pl-3"
+          *matCellDef="let row;">
+        {{ row.allowRequestRemoteAccess }}
+      </td>
+    </ng-container>
+
     <tr mat-header-row
         *matHeaderRowDef="columns; sticky: true"></tr>
     <tr mat-row
