@@ -154,7 +154,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     // Force obo sites to always be checked regardless of the profile being
     // completed so validations are applied prior to overview pushing the
     // responsibility of validation to obo sites
-    const nextRoutePath = ((!collegeCertifications.length && !unlistedCertifications.length) || isDeviceProviderWithNoIdentifier)
+    const nextRoutePath = (!collegeCertifications.length && !unlistedCertifications.length || isDeviceProviderWithNoIdentifier)
       ? PaperEnrolmentRoutes.OBO_SITES
       : (this.enrollee.profileCompleted)
         ? PaperEnrolmentRoutes.OVERVIEW
