@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220725215549_RemoteAccessChange")]
+    partial class RemoteAccessChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -12269,44 +12271,6 @@ namespace Prime.Migrations
                     b.ToTable("Submission");
                 });
 
-            modelBuilder.Entity("Prime.Models.UnlistedCertification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("CollegeCode")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CollegeName")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset?>("RenewalDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.ToTable("UnlistedCertification");
-                });
-
             modelBuilder.Entity("Prime.Models.Vendor", b =>
                 {
                     b.Property<int>("Code")
@@ -13881,17 +13845,6 @@ namespace Prime.Migrations
                     b.Navigation("Enrollee");
                 });
 
-            modelBuilder.Entity("Prime.Models.UnlistedCertification", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany("UnlistedCertifications")
-                        .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Enrollee");
-                });
-
             modelBuilder.Entity("Prime.Models.Vendor", b =>
                 {
                     b.HasOne("Prime.Models.CareSetting", "CareSetting")
@@ -14120,8 +14073,6 @@ namespace Prime.Migrations
                     b.Navigation("SelfDeclarations");
 
                     b.Navigation("Submissions");
-
-                    b.Navigation("UnlistedCertifications");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
