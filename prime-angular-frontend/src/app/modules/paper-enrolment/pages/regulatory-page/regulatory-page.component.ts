@@ -133,7 +133,9 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, certifications)
       .pipe(
         exhaustMap(() =>
-          this.paperEnrolmentResource.updateUnlistedCertifications(this.enrollee.id, unlistedCertifications)
+        (this.hasUnlistedCertification)
+        ? this.paperEnrolmentResource.updateUnlistedCertifications(this.enrollee.id, unlistedCertifications)
+        : of(null)
         ),
         exhaustMap(() =>
           this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, deviceProviderIdentifier)
@@ -147,6 +149,10 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected afterSubmitIsSuccessful(): void {
+    if (!this.hasUnlistedCertification) {
+      this.formState.unlistedCertifications.clear();
+    }
+
     const collegeCertifications = this.formState.collegeCertifications;
     const unlistedCertifications = this.formState.unlistedCertifications.value;
     const isDeviceProviderWithNoIdentifier = this.isDeviceProvider && !this.formState.deviceProviderIdentifier.value;
