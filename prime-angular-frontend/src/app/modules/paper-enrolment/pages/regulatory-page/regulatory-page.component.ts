@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -25,7 +25,7 @@ import { ToggleContentChange } from '@shared/components/toggle-content/toggle-co
   templateUrl: './regulatory-page.component.html',
   styleUrls: ['./regulatory-page.component.scss']
 })
-export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
+export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: RegulatoryFormState;
   public routeUtils: RouteUtils;
   public enrollee: HttpEnrollee;
@@ -82,11 +82,6 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     });
   }
 
-  public ngOnDestroy(): void {
-    this.formState.removeIncompleteCertifications(true);
-    this.formState.removeIncompleteUnlistedCertifications();
-  }
-
   protected createFormInstance(): void {
     this.formState = new RegulatoryFormState(this.fb, this.configService);
   }
@@ -123,6 +118,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   protected performSubmission(): Observable<number> {
     this.formState.removeIncompleteCertifications(true);
+    this.formState.removeIncompleteUnlistedCertifications();
     this.formState.form.markAsPristine();
 
     const certifications = this.formState.json.certifications;
@@ -133,9 +129,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, certifications)
       .pipe(
         exhaustMap(() =>
-        (this.hasUnlistedCertification)
-        ? this.paperEnrolmentResource.updateUnlistedCertifications(this.enrollee.id, unlistedCertifications)
-        : of(null)
+          this.paperEnrolmentResource.updateUnlistedCertifications(this.enrollee.id, unlistedCertifications)
         ),
         exhaustMap(() =>
           this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, deviceProviderIdentifier)

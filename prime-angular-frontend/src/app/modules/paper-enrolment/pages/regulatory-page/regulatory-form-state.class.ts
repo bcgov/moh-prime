@@ -57,6 +57,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     }
 
     this.removeCollegeCertifications();
+    this.removeUnlistedCertifications();
 
     if (certifications.length) {
       certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
@@ -67,6 +68,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     }
 
     this.formInstance.patchValue({ certifications, deviceProviderIdentifier, unlistedCertifications });
+    this.unlistedCertifications.patchValue(unlistedCertifications);
   }
 
   public buildForm(): void {
@@ -138,6 +140,10 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
         this.removeUnlistedCertification(index);
       }
     });
+  }
+
+  public removeUnlistedCertifications() {
+    this.unlistedCertifications.clear();
   }
 
 }
