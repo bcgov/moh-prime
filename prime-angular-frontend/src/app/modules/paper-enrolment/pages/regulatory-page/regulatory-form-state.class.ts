@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ConfigService } from '@config/config.service';
 import { RegulatoryFormState as BaseRegulatoryPageFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
@@ -5,6 +6,9 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 import { RegulatoryForm } from './regulatory-form.model';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class RegulatoryFormState extends BaseRegulatoryPageFormState {
 
   public constructor(
@@ -134,12 +138,12 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
 
   public removeIncompleteUnlistedCertifications(): void {
     this.unlistedCertifications.controls
-    .forEach((control: FormGroup, index: number) => {
-      // Remove if college code is null or the group is invalid
-      if (!control.get('collegeCode').value || control.invalid) {
-        this.removeUnlistedCertification(index);
-      }
-    });
+      .forEach((control: FormGroup, index: number) => {
+        // Remove if college code is null or the group is invalid
+        if (!control.get('collegeCode').value || control.invalid) {
+          this.removeUnlistedCertification(index);
+        }
+      });
   }
 
   public removeUnlistedCertifications() {

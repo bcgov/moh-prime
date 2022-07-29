@@ -37,7 +37,7 @@ describe('UnlistedCollegeLicenceFormComponent', () => {
         ReactiveFormsModule,
         MatDatepickerModule
       ],
-      declarations: [ UnlistedCollegeLicenceFormComponent ],
+      declarations: [UnlistedCollegeLicenceFormComponent],
       providers: [
         {
           provide: APP_CONFIG,
@@ -56,7 +56,7 @@ describe('UnlistedCollegeLicenceFormComponent', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(inject(
@@ -66,6 +66,7 @@ describe('UnlistedCollegeLicenceFormComponent', () => {
     ) => {
       fixture = TestBed.createComponent(UnlistedCollegeLicenceFormComponent);
       component = fixture.componentInstance;
+      component.formState = regulatoryFormState;
       component.form = regulatoryFormState.buildUnlistedCollegeCertificationForm();
       fixture.detectChanges();
     }));
