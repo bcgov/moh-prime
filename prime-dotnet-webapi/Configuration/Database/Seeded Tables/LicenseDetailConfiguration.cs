@@ -11,6 +11,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime ImRegUpdateTempRollforwardDate = new(2022, 5, 1, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime June1st2022Cohort = new(2022, 6, 1, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime July15th2022 = new(2022, 7, 15, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime Aug1st2022 = new(2022, 8, 1, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -176,6 +177,13 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id =  144, LicenseCode = 62, Prefix = "98", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = July15th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                     new LicenseDetail { Id =  145, LicenseCode = 66, Prefix = "93", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = July15th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                     new LicenseDetail { Id =  146, LicenseCode = 67, Prefix = "93", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = July15th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+
+                    //August 1st enrolment logic change
+                    new LicenseDetail { Id =  147, LicenseCode = 41, Prefix = "Y9", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false,  EffectiveDate = Aug1st2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id =  148, LicenseCode = 42, Prefix = "Y9", Manual = true, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false,  EffectiveDate = Aug1st2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id =  149, LicenseCode = 43, Prefix = "Y9", Manual = true, Validate = true,  LicensedToProvideCare = false, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false,  EffectiveDate = Aug1st2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id =  150, LicenseCode = 45, Prefix = "Y9", Manual = true, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false,  EffectiveDate = Aug1st2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id =  151, LicenseCode = 46, Prefix = "Y9", Manual = true, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false,  EffectiveDate = Aug1st2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                 };
             }
         }
