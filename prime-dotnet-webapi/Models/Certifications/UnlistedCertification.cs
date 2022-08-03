@@ -13,7 +13,7 @@ namespace Prime.Models
         [JsonIgnore]
         public int EnrolleeId { get; set; }
         public string CollegeName { get; set; }
-        public string CollegeCode { get; set; }
+        public string LicenceNumber { get; set; }
         public DateTimeOffset? RenewalDate { get; set; }
         public Enrollee Enrollee { get; set; }
     }
