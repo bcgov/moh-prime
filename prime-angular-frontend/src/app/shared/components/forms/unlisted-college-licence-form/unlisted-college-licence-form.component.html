@@ -22,10 +22,10 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="College Licence"
-                 formControlName="collegeCode"
+                 formControlName="licenceNumber"
                  maxlength="7">
-          <mat-error *ngIf="collegeCode.hasError('required')">Required</mat-error>
-          <mat-error *ngIf="collegeCode.hasError('alphanumeric')">
+          <mat-error *ngIf="licenceNumber.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="licenceNumber.hasError('alphanumeric')">
             Must contain only alphanumeric characters
           </mat-error>
         </mat-form-field>

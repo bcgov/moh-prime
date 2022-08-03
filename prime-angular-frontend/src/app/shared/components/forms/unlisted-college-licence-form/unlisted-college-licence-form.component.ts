@@ -40,8 +40,8 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
     return this.form.get('collegeName') as FormControl;
   }
 
-  public get collegeCode(): FormControl {
-    return this.form.get('collegeCode') as FormControl;
+  public get licenceNumber(): FormControl {
+    return this.form.get('licenceNumber') as FormControl;
   }
 
   public get renewalDate(): FormControl {
@@ -68,7 +68,7 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
 
   private setUnlistedCollegeCertificationValidators(): void {
     this.formUtilsService.setValidators(this.collegeName, [Validators.required]);
-    this.formUtilsService.setValidators(this.collegeCode, [
+    this.formUtilsService.setValidators(this.licenceNumber, [
       Validators.required,
       FormControlValidators.alphanumeric
     ]);
@@ -78,7 +78,7 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
   private removeValidations(): void {
     this.form.markAsPristine();
     this.formUtilsService.setValidators(this.collegeName, []);
-    this.formUtilsService.setValidators(this.collegeCode, []);
+    this.formUtilsService.setValidators(this.licenceNumber, []);
     this.formUtilsService.setValidators(this.renewalDate, []);
   }
 }

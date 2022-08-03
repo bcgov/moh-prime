@@ -86,7 +86,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
   public buildUnlistedCollegeCertificationForm(): FormGroup {
     return this.fb.group({
       collegeName: ['', []],
-      collegeCode: ['', []],
+      licenceNumber: ['', []],
       renewalDate: ['', []]
     })
   }
@@ -140,7 +140,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     this.unlistedCertifications.controls
       .forEach((control: FormGroup, index: number) => {
         // Remove if college code is null or the group is invalid
-        if (!control.get('collegeCode').value || control.invalid) {
+        if (!control.get('licenceNumber').value || control.invalid) {
           this.removeUnlistedCertification(index);
         }
       });

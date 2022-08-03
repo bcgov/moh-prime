@@ -102,7 +102,7 @@ import { RegulatoryForm } from './regulatory-form.model';
 
           <app-enrollee-property title="College Licence"
             [makeBold]="true">
-            {{ unlistedCertification.collegeCode | default }}
+            {{ unlistedCertification.licenceNumber | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="Renewal Date"
