@@ -16,6 +16,6 @@ namespace Prime.Models.Api
         /// </summary>
         public string AccessType { get; set; }
 
-        public IEnumerable<EnrolleeCertDto> Certifications { get; set; }
+        public IEnumerable<EnrolleeCertDto> Licences { get; set; }
     }
 }
