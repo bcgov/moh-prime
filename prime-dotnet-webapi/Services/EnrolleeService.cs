@@ -915,6 +915,8 @@ namespace Prime.Services
             return await _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                // Filter out enrollees that haven't got a signed TOA
+                .Where(e => e.CurrentAgreementId != null)
                 .Select(e => new HpdidLookup
                 {
                     Gpid = e.GPID,
@@ -925,7 +927,7 @@ namespace Prime.Services
                         .Where(a => a.AcceptedDate != null)
                         .Select(a => TranslateToAccessType(a.AgreementVersion.AgreementType))
                         .FirstOrDefault(),
-                    Certifications = e.Certifications.Select(cert =>
+                    Licences = e.Certifications.Select(cert =>
                         new EnrolleeCertDto
                         {
                             // TODO: Retrieve from cert.Prefix in future?
