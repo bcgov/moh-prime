@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220725215549_RemoteAccessChange")]
+    partial class RemoteAccessChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -7921,91 +7923,6 @@ namespace Prime.Migrations
                             Manual = false,
                             NamedInImReg = true,
                             Prefix = "93",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 147,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 8, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 41,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "Y9",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 148,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 8, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 42,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "Y9",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 149,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 8, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 43,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "Y9",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 150,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 8, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 45,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "Y9",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 151,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 8, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 46,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "Y9",
-                            PrescriberIdType = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
