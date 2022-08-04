@@ -30,5 +30,7 @@ namespace Prime.Models
         public PrescriberIdType? PrescriberIdType { get; set; }
 
         public bool AllowRequestRemoteAccess { get; set; }
+
+        public string NotPrescPrefix { get; set; }
     }
 }

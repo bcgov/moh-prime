@@ -1153,5 +1153,15 @@ namespace Prime.Services
             enrollee.DateOfBirth = dateOfBirth;
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateCretificationPrefix(int cretId, string prefix)
+        {
+            var certification = await _context.Certifications.SingleAsync(c => c.Id == cretId);
+            if (certification != null)
+            {
+                certification.Prefix = prefix;
+            }
+            await _context.SaveChangesAsync();
+        }
     }
 }
