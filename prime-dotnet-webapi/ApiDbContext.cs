@@ -124,7 +124,6 @@ namespace Prime
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
         public DbSet<EnrolleeLinkedEnrolment> EnrolleeLinkedEnrolments { get; set; }
 
-
         public override int SaveChanges()
         {
             ApplyAudits();
