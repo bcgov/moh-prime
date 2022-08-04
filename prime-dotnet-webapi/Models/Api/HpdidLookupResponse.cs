@@ -12,7 +12,7 @@ namespace Prime.Models.Api
         public DateTimeOffset? RenewalDate { get; set; }
 
         /// <summary>
-        /// "Independent User" or "On-behalf-of User" or <c>null</c> if no TOA has been assigned yet
+        /// Something like "Independent User" or "On-behalf-of User", or <c>null</c> if no TOA has been assigned yet
         /// </summary>
         public string AccessType { get; set; }
 
