@@ -932,7 +932,7 @@ namespace Prime.Services
                         {
                             // TODO: Retrieve from cert.Prefix in future?
                             PractRefId = cert.License.CurrentLicenseDetail.Prefix,
-                            CollegeLicenseNumber = cert.LicenseNumber,
+                            CollegeLicenceNumber = cert.LicenseNumber,
                             PharmaNetId = cert.PractitionerId
                         })
                 })

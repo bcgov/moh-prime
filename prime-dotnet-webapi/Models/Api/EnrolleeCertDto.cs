@@ -7,7 +7,7 @@ namespace Prime.Models.Api
         /// </summary>
         public string PractRefId { get; set; }
 
-        public string CollegeLicenseNumber { get; set; }
+        public string CollegeLicenceNumber { get; set; }
         public string PharmaNetId { get; set; }
     }
 }
