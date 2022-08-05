@@ -124,12 +124,6 @@ namespace Prime
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
         public DbSet<EnrolleeLinkedEnrolment> EnrolleeLinkedEnrolments { get; set; }
 
-        // Lookups
-        // TODO: Alternative?
-        public DbSet<College> CollegeLookup { get; set; }
-        public DbSet<License> LicenseLookup { get; set; }
-
-
         public override int SaveChanges()
         {
             ApplyAudits();

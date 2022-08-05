@@ -22,7 +22,7 @@ namespace Prime.Models.Api
         /// </summary>
         public string LicenseName { get; set; }
 
-        public string CollegeLicenseNumber { get; set; }
+        public string CollegeLicenceNumber { get; set; }
         public string PharmaNetId { get; set; }
     }
 }

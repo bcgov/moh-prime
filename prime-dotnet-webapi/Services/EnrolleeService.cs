@@ -928,12 +928,8 @@ namespace Prime.Services
                     Certifications = e.Certifications.Select(cert =>
                         new EnrolleeCertDto
                         {
-                            CollegeCode = cert.CollegeCode,
-                            CollegeName = _context.CollegeLookup.Where(c => c.Code == cert.CollegeCode).Select(c => c.Name).FirstOrDefault(),
                             CollegeId = cert.License.CurrentLicenseDetail.Prefix,
-                            LicenseCode = cert.LicenseCode,
-                            LicenseName = _context.LicenseLookup.Where(l => l.Code == cert.LicenseCode).Select(l => l.Name).FirstOrDefault(),
-                            CollegeLicenseNumber = cert.LicenseNumber,
+                            CollegeLicenceNumber = cert.LicenseNumber,
                             PharmaNetId = cert.PractitionerId
                         })
                 })
