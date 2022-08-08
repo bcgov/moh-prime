@@ -915,6 +915,8 @@ namespace Prime.Services
             return await _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                // Filter out enrollees that haven't got a signed TOA
+                .Where(e => e.CurrentAgreementId != null)
                 .Select(e => new HpdidLookup
                 {
                     Gpid = e.GPID,
@@ -923,18 +925,42 @@ namespace Prime.Services
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
                         .Where(a => a.AcceptedDate != null)
-                        .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? "On-behalf-of User" : "Independent User")
+                        .Select(a => TranslateToAccessType(a.AgreementVersion.AgreementType))
                         .FirstOrDefault(),
-                    Certifications = e.Certifications.Select(cert =>
+                    Licences = e.Certifications.Select(cert =>
                         new EnrolleeCertDto
                         {
-                            CollegeId = cert.License.CurrentLicenseDetail.Prefix,
+                            // TODO: Retrieve from cert.Prefix in future?
+                            PractRefId = cert.License.CurrentLicenseDetail.Prefix,
                             CollegeLicenceNumber = cert.LicenseNumber,
                             PharmaNetId = cert.PractitionerId
                         })
                 })
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        /// <summary>
+        /// Translate the Agreement Type into terms/words provisioner can understand
+        /// </summary>
+        private static string TranslateToAccessType(AgreementType agreementType)
+        {
+            switch (agreementType)
+            {
+                case AgreementType.CommunityPharmacistTOA:
+                    return "Independent User – Pharmacy";
+                case AgreementType.RegulatedUserTOA:
+                    return "Independent User - with OBOs";
+                case AgreementType.OboTOA:
+                    return "On-behalf-of User";
+                case AgreementType.PharmacyOboTOA:
+                    return "On-behalf-of User – Pharmacy";
+                // TODO: TBD
+                // case AgreementType.PharmacyTechnicianTOA:
+                //     break;
+                default:
+                    return "N/A";
+            }
         }
 
         public async Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)
