@@ -5,11 +5,11 @@
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
-  <ng-container *ngIf="currentPage > 0; else preamble">
+  <!-- <ng-container *ngIf="currentPage > 0; else preamble"> -->
     <ng-container *ngIf="identityProvider === IdentityProviderEnum.BCSC; else uploadTOA">
       <app-access-term [accessTerms]="accessTerm"></app-access-term>
     </ng-container>
-  </ng-container>
+  <!-- </ng-container> -->
 
   <ng-template #uploadTOA>
     <ng-container>
@@ -61,7 +61,7 @@
 
   </ng-template>
 
-  <div *ngIf="hasReadAgreement && identityProvider === IdentityProviderEnum.BCSC"
+  <div *ngIf="!hasReadAgreement && identityProvider === IdentityProviderEnum.BCSC"
        class="footer my-3 pb-2">
     <mat-checkbox class="mr-4"
                   [formControl]="agreed">
@@ -69,7 +69,7 @@
     </mat-checkbox>
   </div>
 
-  <div *ngIf="!hasReadAgreement"
+  <!-- <div *ngIf="!hasReadAgreement"
        class="row">
     <div class="col text-right">
 
@@ -80,10 +80,10 @@
       </button>
 
     </div>
-  </div>
+  </div> -->
 
   <ng-container *ngIf="identityProvider === IdentityProviderEnum.BCSC; else saveUpload">
-    <div *ngIf="hasReadAgreement"
+    <div *ngIf="!hasReadAgreement"
          class="row">
       <div class="col-12 text-md-right">
 

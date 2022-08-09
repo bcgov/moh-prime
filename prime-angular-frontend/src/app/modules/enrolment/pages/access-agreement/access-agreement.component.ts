@@ -85,6 +85,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   }
 
   public onSubmit(isAcceptingToa: boolean = false) {
+    this.hasReadAgreement = this.agreed.value;
+
     if (this.hasReadAgreement) {
       const status = (isAcceptingToa)
         ? { verb: 'Accept', adjective: 'accepted' }
