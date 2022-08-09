@@ -89,7 +89,7 @@ import { RegulatoryForm } from './regulatory-form.model';
 
 
       <ng-container *ngIf="!regulatory?.unlistedCertifications?.length; else unlistedCerts">
-        No unlisted certifications entered.
+        No additional licence information entered
       </ng-container>
 
       <ng-template #unlistedCerts>
