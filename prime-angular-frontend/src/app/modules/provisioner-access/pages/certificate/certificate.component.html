@@ -34,11 +34,6 @@
     <ng-container *ngFor="let licence of certificate.licences">
       <app-enrollee-property title="Licence"
                              [makeBold]="true">
-        <app-enrollee-property *ngIf="licence.pharmaNetId !== null"
-                               title="PharmaNet ID"
-                               [makeBold]="true">
-          {{ licence.pharmaNetId }}
-        </app-enrollee-property>
         <app-enrollee-property title="College ID"
                                [makeBold]="true">
           {{ licence.practRefId }}
@@ -49,6 +44,11 @@
                                 'Licence Number from College'"
                                [makeBold]="true">
           {{ licence.collegeLicenceNumber }}
+        </app-enrollee-property>
+        <app-enrollee-property *ngIf="licence.pharmaNetId !== null"
+                               title="PharmaNet ID"
+                               [makeBold]="true">
+          {{ licence.pharmaNetId }}
         </app-enrollee-property>
       </app-enrollee-property>
     </ng-container>
