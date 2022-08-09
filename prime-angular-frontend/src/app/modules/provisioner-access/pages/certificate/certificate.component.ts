@@ -60,7 +60,6 @@ export class CertificateComponent implements OnInit {
       .getCertificate(this.route.snapshot.params.tokenId)
       .subscribe(
         (certificate: EnrolmentCertificate) => {
-          console.log(certificate);
           this.certificate = certificate;
           this.expiryDate = moment(this.certificate.expiryDate).isAfter(moment.now())
             ? moment(this.certificate.expiryDate).format('MMMM Do, YYYY') : null;
