@@ -31,6 +31,6 @@ namespace Prime.Models
 
         public bool AllowRequestRemoteAccess { get; set; }
 
-        public string NotPrescPrefix { get; set; }
+        public string NonPrescribingPrefix { get; set; }
     }
 }

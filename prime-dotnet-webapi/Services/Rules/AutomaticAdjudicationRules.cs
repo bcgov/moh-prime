@@ -103,20 +103,20 @@ namespace Prime.Services.Rules
                     continue;
                 }
 
-                if (record == null && cert.NotPrescPrefix != null)
+                if (record == null && cert.NonPrescribingPrefix != null)
                 {
                     try
                     {
-                        record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NotPrescPrefix, cert.LicenseNumber);
+                        record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NonPrescribingPrefix, cert.LicenseNumber);
                         if (record != null)
                         {
-                            cert.Prefix = cert.NotPrescPrefix;
+                            cert.Prefix = cert.NonPrescribingPrefix;
                         }
                     }
                     catch (PharmanetCollegeApiException)
                     {
-                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.NotPrescPrefix}-{cert.LicenseNumber}");
-                        await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NotPrescPrefix, cert.LicenseNumber, "An error occurred calling the Pharmanet API.");
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.NonPrescribingPrefix}-{cert.LicenseNumber}");
+                        await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "An error occurred calling the Pharmanet API.");
                         passed = false;
                         continue;
                     }
@@ -124,7 +124,7 @@ namespace Prime.Services.Rules
 
                 if (record != null)
                 {
-                    await _enrolleeService.UpdateCretificationPrefix(cert.Id, cert.Prefix);
+                    await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
                 }
 
                 if (record == null)
@@ -160,7 +160,7 @@ namespace Prime.Services.Rules
         {
             public int Id { get; set; }
             public string Prefix { get; set; }
-            public string NotPrescPrefix { get; set; }
+            public string NonPrescribingPrefix { get; set; }
             public string LicenseNumber { get; set; }
             public override string ToString()
             {
@@ -177,7 +177,7 @@ namespace Prime.Services.Rules
             {
                 Id = c.Id,
                 Prefix = c.License.CurrentLicenseDetail.Prefix,
-                NotPrescPrefix = c.License.CurrentLicenseDetail.NotPrescPrefix,
+                NonPrescribingPrefix = c.License.CurrentLicenseDetail.NonPrescribingPrefix,
                 LicenseNumber = c.License.CurrentLicenseDetail.PrescriberIdType.HasValue
                     ? c.PractitionerId
                     : c.LicenseNumber,

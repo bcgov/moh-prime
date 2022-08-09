@@ -1154,7 +1154,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCretificationPrefix(int cretId, string prefix)
+        public async Task UpdateCertificationPrefix(int cretId, string prefix)
         {
             var certification = await _context.Certifications.SingleAsync(c => c.Id == cretId);
             if (certification != null)
