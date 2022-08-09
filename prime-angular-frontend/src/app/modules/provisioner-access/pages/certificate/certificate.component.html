@@ -5,11 +5,11 @@
   <ng-container *ngIf="certificate; else noCertificate">
 
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
+      <ng-container appPageSubheaderTitle>Global PharmaNet ID</ng-container>
     </app-page-subheader>
 
     <p class="mb-3">
-      The user's PharmaNet ID number (GPID) is:
+      The user's Global PharmaNet ID number (GPID) is:
     </p>
 
     <p class="font-weight-bold mb-5">
@@ -21,18 +21,37 @@
     </app-page-subheader>
 
     <div class="mb-4">
-
       <app-enrollee-property title="Name"
                              [makeBold]="true">
         {{ fullName }}
       </app-enrollee-property>
-
-      <app-enrollee-property title="User Type"
+      <app-enrollee-property title="Access Type"
                              [makeBold]="true">
         {{ userType }}
       </app-enrollee-property>
-
     </div>
+
+    <ng-container *ngFor="let licence of certificate.licences">
+      <app-enrollee-property title="Licence"
+                             [makeBold]="true">
+        <app-enrollee-property *ngIf="licence.pharmaNetId !== null"
+                               title="PharmaNet ID"
+                               [makeBold]="true">
+          {{ licence.pharmaNetId }}
+        </app-enrollee-property>
+        <app-enrollee-property title="College ID"
+                               [makeBold]="true">
+          {{ licence.practRefId }}
+        </app-enrollee-property>
+        <app-enrollee-property [title]="licence.collegeCode === CollegeLicenceClassEnum.CPSBC ? 'CPSID Number' :
+                                (licence.collegeCode === CollegeLicenceClassEnum.CDSBC
+                                || licence.collegeCode === CollegeLicenceClassEnum.OptometryBC) ? 'Registration Number' :
+                                'Licence Number from College'"
+                               [makeBold]="true">
+          {{ licence.collegeLicenceNumber }}
+        </app-enrollee-property>
+      </app-enrollee-property>
+    </ng-container>
 
     <ng-container *ngFor="let careSetting of certificate.careSettings">
 

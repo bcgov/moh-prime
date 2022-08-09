@@ -9,4 +9,9 @@ namespace Prime.Models.Api
         public string CollegeLicenceNumber { get; set; }
         public string PharmaNetId { get; set; }
     }
+
+    public class EnrolleeCertExtDto : EnrolleeCertDto
+    {
+        public int CollegeCode { get; set; }
+    }
 }

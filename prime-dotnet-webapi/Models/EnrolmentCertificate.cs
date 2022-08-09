@@ -21,8 +21,7 @@ namespace Prime.Models
         public IEnumerable<CareSetting> CareSettings { get; set; }
         public AgreementGroup? Group { get; set; }
         public IEnumerable<EnrolleeCertDto> Licences { get; set; }
-
-
+        public string AccessType { get; set; }
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
@@ -41,12 +40,17 @@ namespace Prime.Models
                     .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? AgreementGroup.OnBehalfOf : AgreementGroup.RegulatedUser)
                     .FirstOrDefault(),
                 Licences = enrollee.Certifications.Select(cert =>
-                    new EnrolleeCertDto
+                    new EnrolleeCertExtDto
                     {
-                        CollegeId = cert.License.CurrentLicenseDetail.Prefix,
+                        PractRefId = cert.License.CurrentLicenseDetail.Prefix,
                         CollegeLicenceNumber = cert.LicenseNumber,
-                        PharmaNetId = cert.PractitionerId
-                    })
+                        PharmaNetId = cert.PractitionerId,
+                        CollegeCode = cert.CollegeCode,
+                    }),
+                AccessType = enrollee.Agreements.OrderByDescending(a => a.CreatedDate)
+                    .Where(a => a.AcceptedDate != null)
+                    .Select(a => a.AgreementVersion.AccessType)
+                    .FirstOrDefault(),
             };
         }
     }
