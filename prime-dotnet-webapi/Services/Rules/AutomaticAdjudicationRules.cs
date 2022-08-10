@@ -103,6 +103,7 @@ namespace Prime.Services.Rules
                     continue;
                 }
 
+                //After validating with prescriber prefix and no hit, try to validate with non-prescriber prefix
                 if (record == null && cert.NonPrescribingPrefix != null)
                 {
                     try
@@ -110,6 +111,7 @@ namespace Prime.Services.Rules
                         record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NonPrescribingPrefix, cert.LicenseNumber);
                         if (record != null)
                         {
+                            //if got a hit, overwrite the prefix and store it in DB
                             cert.Prefix = cert.NonPrescribingPrefix;
                         }
                     }
