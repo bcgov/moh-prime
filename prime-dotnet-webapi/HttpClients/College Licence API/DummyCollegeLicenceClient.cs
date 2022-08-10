@@ -33,7 +33,7 @@ namespace Prime.HttpClients
                 _ => null,
             };
 
-            if (info == null)
+            if (info == null || licencePrefix == "Y9")
             {
                 return Task.FromResult<PharmanetCollegeRecord>(null);
             }
