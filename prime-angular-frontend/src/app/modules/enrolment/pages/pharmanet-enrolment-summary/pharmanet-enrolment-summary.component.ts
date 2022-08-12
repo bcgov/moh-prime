@@ -279,7 +279,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Private Community Health Practices',
             settingCode: careSetting.careSettingCode,
             formControl: this.communityHealthEmails,
-            subheaderContent: `Enter the email of the PharmaNet administrator in your workplace. If you work at more than one workplace, include the email addresses for each PharmaNet administrator, separated by a comma.`
+            subheaderContent: `Enter the email of the PharmaNet administrator in your workplace. If you work at more than one clinic, make sure you include every PharmaNet Administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
@@ -288,7 +288,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Community Pharmacies',
             settingCode: careSetting.careSettingCode,
             formControl: this.pharmacistEmails,
-            subheaderContent: `Enter the email of the PharmaNet administrator in your workplace. If you work at more than one workplace, include the email addresses for each PharmaNet administrator, separated by a comma.`
+            subheaderContent: `Enter the email of the PharmaNet administrator in your workplace. If you work at more than one clinic, make sure you include every PharmaNet Administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {
@@ -297,7 +297,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Health Authorities',
             settingCode: careSetting.careSettingCode,
             formControl: this.healthAuthorityEmails,
-            subheaderContent: `Enter the email of the PharmaNet administrator in your workplace. If you work at more than one workplace, include the email addresses for each PharmaNet administrator, separated by a comma.`
+            subheaderContent: `Enter the email of the PharmaNet administrator in your workplace. If you work at more than one clinic, make sure you include every PharmaNet Administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
         case CareSettingEnum.DEVICE_PROVIDER: {
@@ -306,7 +306,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Device Providers',
             settingCode: careSetting.careSettingCode,
             formControl: this.deviceProviderEmails,
-            subheaderContent: `Enter the email of the PharmaNet administrator in your workplace. If you work at more than one workplace, include the email addresses for each PharmaNet administrator, separated by a comma.`
+            subheaderContent: `Enter the email of the PharmaNet administrator in your workplace. If you work at more than one clinic, make sure you include every PharmaNet Administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
       }
