@@ -19,7 +19,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee + "," + Roles.ViewPaperEnrolmentsOnly)]
     public class EnrolleesExtendedController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -50,7 +50,7 @@ namespace Prime.Controllers
         /// Gets adjacent next and previous enrollee IDs for a given enrolleeId
         /// </summary>
         [HttpGet("{enrolleeId}/adjacent", Name = nameof(GetAdjacentEnrolleeId))]
-        [Authorize(Roles = Roles.ViewEnrollee)]
+        [Authorize(Roles = Roles.ViewEnrollee + "," + Roles.ViewPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNavigation>), StatusCodes.Status200OK)]
@@ -254,7 +254,6 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudicator-idir", Name = nameof(GetAdjudicatorIdir))]
-        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

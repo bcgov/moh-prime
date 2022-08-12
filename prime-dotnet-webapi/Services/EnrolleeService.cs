@@ -126,7 +126,7 @@ namespace Prime.Services
             return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
-        public async Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
+        public async Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null, ClaimsPrincipal user = null)
         {
             searchOptions ??= new EnrolleeSearchOptions();
 
@@ -199,6 +199,13 @@ namespace Prime.Services
                             "displayId_desc" => q.OrderByDescending(e => e.Id),
                             _ => q.OrderBy(e => e.Id),
                         }
+                )
+                // If not in role of `ViewEnrollee`, filter/restrict to Claimed and Unclaimed Paper Enrolments
+                // (same as logic above)
+                .If(user != null && !user.IsInRole(Roles.ViewEnrollee), q => q
+                    .Where(e => _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id) ||
+                                (e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
+                                    && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id)))
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
                 .DecompileAsync();
@@ -908,14 +915,52 @@ namespace Prime.Services
             return await _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                // Filter out enrollees that haven't got a signed TOA
+                .Where(e => e.CurrentAgreementId != null)
                 .Select(e => new HpdidLookup
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
-                    RenewalDate = e.ExpiryDate
+                    RenewalDate = e.ExpiryDate,
+                    // TODO: Refactor code from `EnrolmentCertificate` class
+                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
+                        .Where(a => a.AcceptedDate != null)
+                        .Select(a => TranslateToAccessType(a.AgreementVersion.AgreementType))
+                        .FirstOrDefault(),
+                    Licences = e.Certifications.Select(cert =>
+                        new EnrolleeCertDto
+                        {
+                            // TODO: Retrieve from cert.Prefix in future?
+                            PractRefId = cert.License.CurrentLicenseDetail.Prefix,
+                            CollegeLicenceNumber = cert.LicenseNumber,
+                            PharmaNetId = cert.PractitionerId
+                        })
                 })
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        /// <summary>
+        /// Translate the Agreement Type into terms/words provisioner can understand
+        /// </summary>
+        private static string TranslateToAccessType(AgreementType agreementType)
+        {
+            switch (agreementType)
+            {
+                case AgreementType.CommunityPharmacistTOA:
+                    return "Independent User – Pharmacy";
+                case AgreementType.RegulatedUserTOA:
+                    return "Independent User - with OBOs";
+                case AgreementType.OboTOA:
+                    return "On-behalf-of User";
+                case AgreementType.PharmacyOboTOA:
+                    return "On-behalf-of User – Pharmacy";
+                // TODO: TBD
+                // case AgreementType.PharmacyTechnicianTOA:
+                //     break;
+                default:
+                    return "N/A";
+            }
         }
 
         public async Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)
