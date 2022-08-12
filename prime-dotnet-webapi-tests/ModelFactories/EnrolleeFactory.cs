@@ -62,6 +62,7 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.Submissions);
             Ignore(x => x.EnrolleeToPaperLink);
             Ignore(x => x.PaperToEnrolleeLink);
+            Ignore(x => x.UnlistedCertifications);
 
             RuleSet("status.submitted", (set) =>
             {

@@ -26,6 +26,7 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 
 import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
 import { CareSettingForm } from '@paper-enrolment/pages/care-setting-page/care-setting-form.model';
+import { UnlistedCertification } from '../models/unlisted-certification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,8 @@ export class PaperEnrolmentResource {
         .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
       certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
         .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+      unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrolleeId}/unlisted-certifications`)
+        .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
       enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
         .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
       oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`)
@@ -130,6 +133,18 @@ export class PaperEnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Paper Enrolment device provider ID could not be updated');
           this.logger.error('[Core] PaperEnrolmentResource::updateDeviceProvider error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateUnlistedCertifications(enrolleeId: number, unlistedCertifications: UnlistedCertification[]): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/unlisted-certifications`, unlistedCertifications)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment unlisted certifications could not be updated');
+          this.logger.error('[Core] PaperEnrolmentResource::updateUnlistedCertifications error has occurred: ', error);
           throw error;
         })
       );

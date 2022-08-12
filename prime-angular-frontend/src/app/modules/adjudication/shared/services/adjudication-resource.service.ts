@@ -43,6 +43,7 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteNotification } from '../models/site-notification.model';
+import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 
 
 @Injectable({
@@ -90,6 +91,8 @@ export class AdjudicationResource {
         .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
       certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
         .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+      unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrolleeId}/unlisted-certifications`)
+        .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
       enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
         .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
       oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`)
@@ -661,6 +664,10 @@ export class AdjudicationResource {
 
     if (!enrollee.certifications) {
       enrollee.certifications = [];
+    }
+
+    if (!enrollee.unlistedCertifications) {
+      enrollee.unlistedCertifications = [];
     }
 
     if (!enrollee.oboSites) {
