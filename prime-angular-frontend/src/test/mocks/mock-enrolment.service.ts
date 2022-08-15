@@ -44,6 +44,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       approvedDate: null,
       expiryDate: null,
       certifications: [],
+      unlistedCertifications: [],
       enrolleeRemoteUsers: [],
       remoteAccessSites: [],
       remoteAccessLocations: [],

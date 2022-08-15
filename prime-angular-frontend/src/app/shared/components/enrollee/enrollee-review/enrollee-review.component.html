@@ -247,6 +247,46 @@
 </app-page-section>
 
 <app-page-section>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Other College Licence Information</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit College Licences"
+            (click)="onRoute(EnrolmentRoutes.REGULATORY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <ng-container *ngIf="!enrolment?.unlistedCertifications?.length; else unlistedCerts">
+    No additional licence information entered
+  </ng-container>
+
+  <ng-template #unlistedCerts>
+    <ng-container *ngFor="let unlistedCertification of unlistedCertifications; let i = index;">
+
+      <app-enrollee-property title="College Name"
+        [makeBold]="true">
+        {{ unlistedCertification.collegeName | default }}
+      </app-enrollee-property>
+
+      <app-enrollee-property title="College Licence"
+        [makeBold]="true">
+        {{ unlistedCertification.licenceNumber | default }}
+      </app-enrollee-property>
+
+      <app-enrollee-property title="Renewal Date"
+        [makeBold]="true">
+        {{ unlistedCertification.renewalDate | formatDate | default }}
+      </app-enrollee-property>
+
+    </ng-container>
+  </ng-template>
+
+</app-page-section>
+
+<app-page-section>
   <ng-container
                 *ngIf="enrolment.oboSites?.length || enrolment.jobs?.length || (enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite);">
     <app-page-subheader>
