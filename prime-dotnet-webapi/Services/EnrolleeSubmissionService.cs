@@ -65,6 +65,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
                         .ThenInclude(l => l.LicenseDetails)
+                .Include(e => e.UnlistedCertifications)
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)

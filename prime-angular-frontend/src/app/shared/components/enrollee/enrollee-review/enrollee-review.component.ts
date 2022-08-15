@@ -14,6 +14,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -73,7 +74,17 @@ export class EnrolleeReviewComponent {
 
   public get certifications(): CollegeCertification[] {
     return (this.hasCertification)
-      ? this.enrolment.certifications
+    ? this.enrolment.certifications
+    : [];
+  }
+
+  public get hasUnlistedCertification(): boolean {
+    return (this.enrolment && !!this.enrolment.unlistedCertifications.length);
+  }
+
+  public get unlistedCertifications(): UnlistedCertification[] {
+    return (this.hasUnlistedCertification)
+      ? this.enrolment.unlistedCertifications
       : [];
   }
 
