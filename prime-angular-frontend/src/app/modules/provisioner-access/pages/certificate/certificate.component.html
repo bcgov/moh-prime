@@ -9,7 +9,7 @@
     </app-page-subheader>
 
     <p class="mb-3">
-      The user's Global PharmaNet ID number (GPID) is:
+      The user's Global PharmaNet ID (GPID) is:
     </p>
 
     <p class="font-weight-bold mb-5">
@@ -36,10 +36,11 @@
                              [makeBold]="true">
         <app-enrollee-property title="College ID"
                                [makeBold]="true">
-          {{ licence.practRefId }}
+          {{ licence.practRefId === '' ? '-' : licence.practRefId }}
         </app-enrollee-property>
         <app-enrollee-property [title]="licence.collegeCode === CollegeLicenceClassEnum.CPSBC ? 'CPSID Number' :
                                 (licence.collegeCode === CollegeLicenceClassEnum.CDSBC
+                                || licence.collegeCode === CollegeLicenceClassEnum.CPBC
                                 || licence.collegeCode === CollegeLicenceClassEnum.OptometryBC) ? 'Registration Number' :
                                 'Licence Number from College'"
                                [makeBold]="true">
