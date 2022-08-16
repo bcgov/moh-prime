@@ -940,32 +940,6 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        /// <summary>
-        /// Translate the Agreement Type into terms/words provisioner can understand
-        /// </summary>
-        ///
-        /*
-        public string TranslateToAccessType(AgreementType agreementType)
-        {
-            switch (agreementType)
-            {
-                case AgreementType.CommunityPharmacistTOA:
-                    return "Independent User – Pharmacy";
-                case AgreementType.RegulatedUserTOA:
-                    return "Independent User - with OBOs";
-                case AgreementType.OboTOA:
-                    return "On-behalf-of User";
-                case AgreementType.PharmacyOboTOA:
-                    return "On-behalf-of User – Pharmacy";
-                // TODO: TBD
-                // case AgreementType.PharmacyTechnicianTOA:
-                //     break;
-                default:
-                    return "N/A";
-            }
-        }
-        */
-
         public async Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)
         {
             var enrollee = await _context.Enrollees

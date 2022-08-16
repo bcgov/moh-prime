@@ -1,10 +1,6 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Prime.Configuration.Database;
-using DelegateDecompiler;
 
 namespace Prime.Models
 {
@@ -21,6 +17,9 @@ namespace Prime.Models
         public DateTimeOffset EffectiveDate { get; set; }
 
         [NotMapped]
+        /// <summary>
+        /// Translate the Agreement Type into terms/words provisioner can understand
+        /// </summary>
         public string AccessType
         {
             get
