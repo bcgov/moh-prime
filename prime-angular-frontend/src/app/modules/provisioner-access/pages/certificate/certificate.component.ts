@@ -9,6 +9,7 @@ import { EnrolmentCertificate } from '../../shared/models/enrolment-certificate.
 import { ProvisionerAccessResource } from '../../shared/services/provisioner-access-resource.service';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
 @Component({
   selector: 'app-certificate',
@@ -19,6 +20,8 @@ export class CertificateComponent implements OnInit {
   public busy: Subscription;
   public certificate: EnrolmentCertificate;
   public expiryDate: string;
+
+  public CollegeLicenceClassEnum = CollegeLicenceClassEnum;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,7 +52,7 @@ export class CertificateComponent implements OnInit {
   }
 
   public get userType(): string {
-    return !this.certificate.group ? '-' : this.certificate.group === AgreementTypeGroup.ON_BEHALF_OF ? 'On behalf of user' : "Independent user";
+    return this.certificate.accessType;
   }
 
   public ngOnInit() {

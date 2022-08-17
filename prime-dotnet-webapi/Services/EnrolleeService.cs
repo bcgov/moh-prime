@@ -925,7 +925,7 @@ namespace Prime.Services
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
                         .Where(a => a.AcceptedDate != null)
-                        .Select(a => TranslateToAccessType(a.AgreementVersion.AgreementType))
+                        .Select(a => a.AgreementVersion.AccessType)
                         .FirstOrDefault(),
                     Licences = e.Certifications.Select(cert =>
                         new EnrolleeCertDto
@@ -938,29 +938,6 @@ namespace Prime.Services
                 })
                 .DecompileAsync()
                 .ToListAsync();
-        }
-
-        /// <summary>
-        /// Translate the Agreement Type into terms/words provisioner can understand
-        /// </summary>
-        private static string TranslateToAccessType(AgreementType agreementType)
-        {
-            switch (agreementType)
-            {
-                case AgreementType.CommunityPharmacistTOA:
-                    return "Independent User – Pharmacy";
-                case AgreementType.RegulatedUserTOA:
-                    return "Independent User - with OBOs";
-                case AgreementType.OboTOA:
-                    return "On-behalf-of User";
-                case AgreementType.PharmacyOboTOA:
-                    return "On-behalf-of User – Pharmacy";
-                // TODO: TBD
-                // case AgreementType.PharmacyTechnicianTOA:
-                //     break;
-                default:
-                    return "N/A";
-            }
         }
 
         public async Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)
