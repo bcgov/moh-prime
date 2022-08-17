@@ -931,7 +931,7 @@ namespace Prime.Services
                         new EnrolleeCertDto
                         {
                             // TODO: Retrieve from cert.Prefix in future?
-                            PractRefId = cert.License.CurrentLicenseDetail.Prefix,
+                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
                             CollegeLicenceNumber = cert.LicenseNumber,
                             PharmaNetId = cert.PractitionerId
                         })
