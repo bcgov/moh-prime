@@ -15,7 +15,6 @@ namespace Prime.Models.Api
         /// Something like "Independent User" or "On-behalf-of User", or <c>null</c> if no TOA has been assigned yet
         /// </summary>
         public string AccessType { get; set; }
-
         public IEnumerable<EnrolleeCertDto> Licences { get; set; }
     }
 }

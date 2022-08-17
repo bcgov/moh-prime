@@ -6,8 +6,12 @@ namespace Prime.Models.Api
         /// Also known as College Prefix
         /// </summary>
         public string PractRefId { get; set; }
-
         public string CollegeLicenceNumber { get; set; }
         public string PharmaNetId { get; set; }
+    }
+
+    public class EnrolleeCertExtDto : EnrolleeCertDto
+    {
+        public int CollegeCode { get; set; }
     }
 }
