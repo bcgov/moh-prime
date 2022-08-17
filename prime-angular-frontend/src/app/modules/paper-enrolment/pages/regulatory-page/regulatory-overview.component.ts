@@ -73,6 +73,47 @@ import { RegulatoryForm } from './regulatory-form.model';
         None
       </app-enrollee-property>
     </app-page-section>
+
+    <app-page-section>
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Other College Licence Information</ng-container>
+
+        <button *ngIf="showEditRedirect"
+                mat-icon-button
+                matTooltip="Edit College Licences"
+                (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </app-page-subheader>
+
+
+      <ng-container *ngIf="!regulatory?.unlistedCertifications?.length; else unlistedCerts">
+        No additional licence information entered
+      </ng-container>
+
+      <ng-template #unlistedCerts>
+        <ng-container *ngFor="let unlistedCertification of regulatory?.unlistedCertifications; let i = index;">
+
+          <app-enrollee-property title="College Name"
+            [makeBold]="true">
+            {{ unlistedCertification.collegeName | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="College Licence"
+            [makeBold]="true">
+            {{ unlistedCertification.licenceNumber | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Renewal Date"
+            [makeBold]="true">
+            {{ unlistedCertification.renewalDate | formatDate | default }}
+          </app-enrollee-property>
+
+        </ng-container>
+      </ng-template>
+
+    </app-page-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
   changeDetection: ChangeDetectionStrategy.OnPush
