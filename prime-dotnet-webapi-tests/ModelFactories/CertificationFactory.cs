@@ -22,6 +22,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.CollegeCode, (f, x) => x.College.Code);
             RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode)).Code);
             RuleFor(x => x.PracticeCode, (f, x) => f.PickRandom(PracticeLookup.AllowedFor(x.CollegeCode))?.Code);
+            RuleFor(x => x.Prefix, f => "");
 
             Ignore(x => x.License);
             Ignore(x => x.Practice);

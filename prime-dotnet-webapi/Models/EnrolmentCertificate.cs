@@ -42,7 +42,7 @@ namespace Prime.Models
                 Licences = enrollee.Certifications.Select(cert =>
                     new EnrolleeCertExtDto
                     {
-                        PractRefId = cert.License.CurrentLicenseDetail.Prefix,
+                        PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
                         CollegeLicenceNumber = cert.LicenseNumber,
                         PharmaNetId = cert.PractitionerId,
                         CollegeCode = cert.CollegeCode,
