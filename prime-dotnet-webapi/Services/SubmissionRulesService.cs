@@ -13,6 +13,7 @@ namespace Prime.Services
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly ICollegeLicenceClient _collegeLicenceClient;
+        private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
 
         public SubmissionRulesService(
@@ -20,11 +21,13 @@ namespace Prime.Services
             ILogger<SubmissionRulesService> logger,
             IBusinessEventService businessEventService,
             ICollegeLicenceClient collegeLicenceClient,
+            IEnrolleeService enrolleeService,
             IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
             _collegeLicenceClient = collegeLicenceClient;
+            _enrolleeService = enrolleeService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
 
             _logger.LogDebug($"Going to use {_collegeLicenceClient.GetType().Name} in PharmanetValidationRule");
@@ -41,7 +44,7 @@ namespace Prime.Services
                 new SelfDeclarationRule(),
                 new AddressRule(),
                 new VerifiedAddressRule(),
-                new PharmanetValidationRule(_collegeLicenceClient, _businessEventService),
+                new PharmanetValidationRule(_collegeLicenceClient, _businessEventService, _enrolleeService),
                 new DeviceProviderRule(),
                 new LicenceClassRule(),
                 new AlwaysManualRule(),

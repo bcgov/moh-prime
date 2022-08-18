@@ -14,7 +14,7 @@ using PrimeTests.ModelFactories;
 
 namespace PrimeTests.UnitTests
 {
-    public class AutomaticAdjudicationRulesTests
+    public class AutomaticAdjudicationRulesTests : InMemoryDbTest
     {
         private void UpdateCertifications(Enrollee enrollee, int certCount = 0, bool manual = false)
         {
@@ -223,7 +223,7 @@ namespace PrimeTests.UnitTests
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateCertifications(enrollee, apiModes.Length);
-            var rule = new PharmanetValidationRule(new CollegeLicenceClientMock(enrollee, apiModes), A.Fake<IBusinessEventService>());
+            var rule = new PharmanetValidationRule(new CollegeLicenceClientMock(enrollee, apiModes), A.Fake<IBusinessEventService>(), A.Fake<IEnrolleeService>());
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasons);
