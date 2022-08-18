@@ -181,8 +181,8 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
       jobTitle: [null, [Validators.required]],
       physicalAddress: this.formUtilsService.buildAddressForm({
         areRequired: [],
-        exclude: ['street', 'city', 'postal', 'street2'],
-        useDefaults: ['countryCode', 'provinceCode'],
+        exclude: ['street', 'city', 'postal', 'street2', 'provinceCode'],
+        useDefaults: ['countryCode'],
         areDisabled: ['countryCode']
       })
     });
