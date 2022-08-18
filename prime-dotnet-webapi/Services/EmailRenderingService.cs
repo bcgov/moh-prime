@@ -118,7 +118,7 @@ namespace Prime.Services.EmailInternal
             (
                 from: PrimeEmail,
                 to: recipientEmail,
-                subject: "PRIME Renewal Required",
+                subject: "Renew Your PRIME Enrolment",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeRenewalRequired, viewModel)
             );
         }
