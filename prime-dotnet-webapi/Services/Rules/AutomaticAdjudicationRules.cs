@@ -69,13 +69,16 @@ namespace Prime.Services.Rules
     {
         private readonly ICollegeLicenceClient _collegeLicenceClient;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IEnrolleeService _enrolleeService;
 
         public PharmanetValidationRule(
             ICollegeLicenceClient collegeLicenceClient,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IEnrolleeService enrolleeService)
         {
             _collegeLicenceClient = collegeLicenceClient;
             _businessEventService = businessEventService;
+            _enrolleeService = enrolleeService;
         }
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
@@ -98,6 +101,33 @@ namespace Prime.Services.Rules
                     passed = false;
                     continue;
                 }
+
+                //After validating with prescriber prefix and no hit, try to validate with non-prescriber prefix
+                if (record == null && cert.NonPrescribingPrefix != null)
+                {
+                    try
+                    {
+                        record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NonPrescribingPrefix, cert.LicenseNumber);
+                        if (record != null)
+                        {
+                            //if got a hit, overwrite the prefix and store it in DB
+                            cert.Prefix = cert.NonPrescribingPrefix;
+                        }
+                    }
+                    catch (PharmanetCollegeApiException)
+                    {
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.NonPrescribingPrefix}-{cert.LicenseNumber}");
+                        await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "An error occurred calling the Pharmanet API.");
+                        passed = false;
+                        continue;
+                    }
+                }
+
+                if (record != null)
+                {
+                    await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
+                }
+
                 if (record == null)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, cert.ToString());
@@ -129,7 +159,9 @@ namespace Prime.Services.Rules
 
         private class CertificationDto
         {
+            public int Id { get; set; }
             public string Prefix { get; set; }
+            public string NonPrescribingPrefix { get; set; }
             public string LicenseNumber { get; set; }
             public override string ToString()
             {
@@ -144,7 +176,9 @@ namespace Prime.Services.Rules
                 && !(c.License.CurrentLicenseDetail.PrescriberIdType == PrescriberIdType.Optional && c.PractitionerId == null)
             ).Select(c => new CertificationDto
             {
+                Id = c.Id,
                 Prefix = c.License.CurrentLicenseDetail.Prefix,
+                NonPrescribingPrefix = c.License.CurrentLicenseDetail.NonPrescribingPrefix,
                 LicenseNumber = c.License.CurrentLicenseDetail.PrescriberIdType.HasValue
                     ? c.PractitionerId
                     : c.LicenseNumber,
