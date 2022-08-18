@@ -263,7 +263,12 @@ const routes: Routes = [
                     data: { title: 'Organization Agreement Maintenance' }
                   },
                 ]
-              }
+              },
+              {
+                path: AdjudicationRoutes.LICENSE_CLASSES,
+                component: LicenseClassesMaintenancePageComponent,
+                data: { title: 'Licence Classes' }
+              },
             ]
           },
           {
