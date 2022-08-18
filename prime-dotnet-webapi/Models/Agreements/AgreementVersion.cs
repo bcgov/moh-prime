@@ -16,10 +16,10 @@ namespace Prime.Models
 
         public DateTimeOffset EffectiveDate { get; set; }
 
-        [NotMapped]
         /// <summary>
         /// Translate the Agreement Type into terms/words provisioner can understand
         /// </summary>
+        [NotMapped]
         public string AccessType
         {
             get

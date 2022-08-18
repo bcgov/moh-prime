@@ -68,5 +68,6 @@ namespace Prime.Services
         Task DeleteFutureEnrolleeAbsenceAsync(int enrolleeId, int absenceId);
         Task<string> GetAdjudicatorIdirForEnrolleeAsync(int enrolleeId);
         Task UpdateDateOfBirthAsync(int enrolleeId, DateTime dateOfBirth);
+        Task UpdateCertificationPrefix(int cretId, string prefix);
     }
 }
