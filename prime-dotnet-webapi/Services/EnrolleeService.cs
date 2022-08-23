@@ -915,11 +915,26 @@ namespace Prime.Services
             return await _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                // Filter out enrollees that haven't got a signed TOA
+                .Where(e => e.CurrentAgreementId != null)
                 .Select(e => new HpdidLookup
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
-                    RenewalDate = e.ExpiryDate
+                    RenewalDate = e.ExpiryDate,
+                    // TODO: Refactor code from `EnrolmentCertificate` class
+                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
+                        .Where(a => a.AcceptedDate != null)
+                        .Select(a => a.AgreementVersion.AccessType)
+                        .FirstOrDefault(),
+                    Licences = e.Certifications.Select(cert =>
+                        new EnrolleeCertDto
+                        {
+                            // TODO: Retrieve from cert.Prefix in future?
+                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                            CollegeLicenceNumber = cert.LicenseNumber,
+                            PharmaNetId = cert.PractitionerId
+                        })
                 })
                 .DecompileAsync()
                 .ToListAsync();
@@ -1151,6 +1166,16 @@ namespace Prime.Services
         {
             var enrollee = await _context.Enrollees.SingleAsync(e => e.Id == enrolleeId);
             enrollee.DateOfBirth = dateOfBirth;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateCertificationPrefix(int cretId, string prefix)
+        {
+            var certification = await _context.Certifications.SingleAsync(c => c.Id == cretId);
+            if (certification != null)
+            {
+                certification.Prefix = prefix;
+            }
             await _context.SaveChangesAsync();
         }
     }
