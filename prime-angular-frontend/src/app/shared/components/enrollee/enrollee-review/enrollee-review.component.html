@@ -267,17 +267,17 @@
     <ng-container *ngFor="let unlistedCertification of unlistedCertifications; let i = index;">
 
       <app-enrollee-property title="College Name"
-        [makeBold]="true">
+                             [makeBold]="true">
         {{ unlistedCertification.collegeName | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="College Licence"
-        [makeBold]="true">
+                             [makeBold]="true">
         {{ unlistedCertification.licenceNumber | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Renewal Date"
-        [makeBold]="true">
+                             [makeBold]="true">
         {{ unlistedCertification.renewalDate | formatDate | default }}
       </app-enrollee-property>
 
@@ -330,7 +330,11 @@
               {{ site.jobTitle | default }}
             </app-enrollee-property>
 
-            <app-enrollee-property title="Site Address"
+            <app-enrollee-property *ngIf="site.physicalAddress?.street !== null &&
+                                      site.physicalAddress?.city !== null &&
+                                      site.physicalAddress?.provinceCode !== null &&
+                                      site.physicalAddress?.postal !== null"
+                                   title="Site Address"
                                    [makeBold]="true">
               <app-enrollee-property title="Street">
                 {{ site.physicalAddress?.street | default }}
