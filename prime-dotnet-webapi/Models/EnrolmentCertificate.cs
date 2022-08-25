@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 using System.ComponentModel.DataAnnotations.Schema;
 
+using Prime.Models.Api;
+
 namespace Prime.Models
 {
     [NotMapped]
@@ -18,6 +20,8 @@ namespace Prime.Models
         public DateTimeOffset? ExpiryDate { get; set; }
         public IEnumerable<CareSetting> CareSettings { get; set; }
         public AgreementGroup? Group { get; set; }
+        public IEnumerable<EnrolleeCertDto> Licences { get; set; }
+        public string AccessType { get; set; }
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
@@ -34,7 +38,19 @@ namespace Prime.Models
                 Group = enrollee.Agreements.OrderByDescending(a => a.CreatedDate)
                     .Where(a => a.AcceptedDate != null)
                     .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? AgreementGroup.OnBehalfOf : AgreementGroup.RegulatedUser)
-                    .FirstOrDefault()
+                    .FirstOrDefault(),
+                Licences = enrollee.Certifications.Select(cert =>
+                    new EnrolleeCertExtDto
+                    {
+                        PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                        CollegeLicenceNumber = cert.LicenseNumber,
+                        PharmaNetId = cert.PractitionerId,
+                        CollegeCode = cert.CollegeCode,
+                    }),
+                AccessType = enrollee.Agreements.OrderByDescending(a => a.CreatedDate)
+                    .Where(a => a.AcceptedDate != null)
+                    .Select(a => a.AgreementVersion.AccessType)
+                    .FirstOrDefault(),
             };
         }
     }

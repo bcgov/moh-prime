@@ -1,0 +1,58 @@
+
+<ng-container [formGroup]="form">
+
+  <app-form-icon-group [show]="total >= 1"
+    (event)="removeUnlistedCertification()">
+    <div class="row">
+      <div class="col">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="College Name"
+                 formControlName="collegeName"
+                 maxlength="50">
+          <mat-error *ngIf="collegeName.errors?.['required']">Required</mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 pl-5">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="College Licence"
+                 formControlName="licenceNumber"
+                 maxlength="7">
+          <mat-error *ngIf="licenceNumber.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="licenceNumber.hasError('alphanumeric')">
+            Must contain only alphanumeric characters
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 pl-5">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Next Renewal Date"
+                 [min]="minRenewalDate"
+                 [matDatepicker]="picker"
+                 formControlName="renewalDate"
+                 readonly
+                 (click)="picker.open()">
+          <mat-datepicker-toggle matSuffix
+                                 [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker
+                          startView="multi-year"
+                          [touchUi]="isMobile"></mat-datepicker>
+          <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+</app-form-icon-group>
+
+</ng-container>
