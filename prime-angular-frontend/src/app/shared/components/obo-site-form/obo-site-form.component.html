@@ -12,7 +12,6 @@
             <input matInput
                    placeholder="Site Name"
                    formControlName="siteName">
-            <mat-error>Required</mat-error>
           </mat-form-field>
 
         </div>
@@ -55,7 +54,7 @@
 
       <app-address-form [form]="site.get('physicalAddress')"
                         [formControlNames]="formControlNames"
-                        [inBc]="true"></app-address-form>
+                        [inBc]="false"></app-address-form>
 
     </section>
   </app-form-icon-group>
