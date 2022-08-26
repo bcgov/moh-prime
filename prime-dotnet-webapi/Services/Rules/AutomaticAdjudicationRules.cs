@@ -86,6 +86,7 @@ namespace Prime.Services.Rules
             var certifications = MapCertifications(enrollee);
 
             bool passed = true;
+            string testedPharmaNetIds;
 
             foreach (var cert in certifications)
             {
@@ -93,6 +94,7 @@ namespace Prime.Services.Rules
                 try
                 {
                     record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.Prefix, cert.LicenseNumber);
+                    testedPharmaNetIds = cert.ToString();
                 }
                 catch (PharmanetCollegeApiException)
                 {
@@ -111,6 +113,7 @@ namespace Prime.Services.Rules
                         try
                         {
                             record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NonPrescribingPrefix, cert.LicenseNumber);
+                            testedPharmaNetIds += $", {cert.NonPrescribingPrefix}-{cert.LicenseNumber}";
                             if (record != null)
                             {
                                 //if got a hit, overwrite the prefix and store it in DB
@@ -133,7 +136,7 @@ namespace Prime.Services.Rules
 
                 if (record == null)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, cert.ToString());
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, testedPharmaNetIds);
                     passed = false;
                     continue;
                 }
