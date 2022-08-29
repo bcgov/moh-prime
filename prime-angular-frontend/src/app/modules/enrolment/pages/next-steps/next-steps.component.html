@@ -3,7 +3,7 @@
   <app-enrollee-page [busy]="busy">
 
     <app-page-header>
-      {{getTitle()}}
+      {{ title }}
     </app-page-header>
 
     <app-enrolment-progress-indicator *ngIf="initialEnrolment"
@@ -35,22 +35,6 @@
                           [ngTemplateOutletContext]="careSettingConfigs">
             </ng-container>
 
-            <!-- <section>
-              <h6 class="mb-0">
-                For your reference your GPID is:
-              </h6>
-
-              {{ GPID }}
-
-              <button mat-icon-button
-                      type="button"
-                      aria-label="Copy your GPID"
-                      matTooltip="Copy your GPID"
-                      [cdkCopyToClipboard]="GPID"
-                      (cdkCopyToClipboardCopied)="onCopy()">
-                <mat-icon>content_paste</mat-icon>
-              </button>
-            </section> -->
           </ng-container>
         </div>
 
@@ -94,24 +78,6 @@
               PharmaNet. It protects your information and patient information. If you ever need your GPID, you can sign
               in to PRIME to access it.
             </ng-container>
-            <!-- <ng-container appInfographicContent>
-              <section>
-                <h6 class="mb-0">
-                  For your reference your GPID is:
-                </h6>
-
-                {{ GPID }}
-
-                <button mat-icon-button
-                        type="button"
-                        aria-label="Copy your GPID to clipboard"
-                        matTooltip="Copy your GPID to clipboard"
-                        [cdkCopyToClipboard]="GPID"
-                        (cdkCopyToClipboardCopied)="onCopy()">
-                  <mat-icon>content_paste</mat-icon>
-                </button>
-              </section>
-            </ng-container> -->
 
           </div>
         </ng-container>
@@ -154,51 +120,9 @@
             <ng-container [ngTemplateOutlet]="emailGroup"
                           [ngTemplateOutletContext]="careSettingConfigs">
             </ng-container>
-
-            <!-- <section>
-              <h6 class="mb-0">
-                For your reference your Global PharmaNet ID (GPID) is:
-              </h6>
-
-              {{ GPID }}
-
-              <button mat-icon-button
-                      type="button"
-                      aria-label="Copy your GPID to clipboard"
-                      matTooltip="Copy your GPID to clipboard"
-                      [cdkCopyToClipboard]="GPID"
-                      (cdkCopyToClipboardCopied)="onCopy()">
-                <mat-icon>content_paste</mat-icon>
-              </button>
-            </section> -->
           </ng-container>
         </div>
       </ng-template>
-
-      <!-- <div *ngIf="!initialEnrolment || !complete"
-                       imageName="moa"
-                       class="col-12">
-        <ng-container appInfographicHeader>
-          Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up
-        </ng-container>
-      </div> -->
-
-      <!-- <div *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
-                       imageName="approval"
-                       class="col-12">
-        <ng-container appInfographicHeader>
-          Access your verified credential (optional)
-        </ng-container>
-        <ng-container appInfographicDescription>
-          <button mat-flat-button
-                  type="button"
-                  color="primary"
-                  *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
-                  (click)="openQR($event)">
-            Verified Credential
-          </button>
-        </ng-container>
-      </div> -->
     </div>
 
     <ng-template #emailGroup>
@@ -248,23 +172,12 @@
             </mat-form-field>
 
           </div>
-          <!-- <div class="col-sm-4 col-xl-3">
-
-            <button mat-flat-button
-                    type="button"
-                    color="primary"
-                    class="w-100 mb-4"
-                    (click)="sendProvisionerAccessLinkTo(settingCode)">
-              Send
-            </button>
-
-          </div> -->
         </div>
         <div class="row">
           <button mat-button
                 type="button"
                 color="primary"
-                (click)="setShowEmail(settingCode, true, formControl)">
+                (click)="addVendorEmail(settingCode)">
           <mat-icon>add</mat-icon>
             Add email of PharmaNet administrator
           </button>
@@ -287,7 +200,7 @@
 
       </form>
 
-      <ng-container *ngIf="!isEmailVisible(settingCode)">
+      <!-- <ng-container *ngIf="!isEmailVisible(settingCode)">
         <p class="mb-4 text-green">
           Email sent to: {{ formControl.value }}
           <br>
@@ -301,24 +214,8 @@
           <mat-icon>add</mat-icon>
           Add {{ setting }}
         </button>
-      </ng-container>
+      </ng-container> -->
     </ng-template>
-<!--
-    <ng-template #concise
-                 let-provisioner="provisioner">
-      <p class="mb-4">
-        Your PharmaNet approval notification will be sent to {{ provisioner }}.
-      </p>
-    </ng-template>
-
-    <ng-template #verbose
-                 let-provisioner="provisioner">
-      <p class="mb-4">
-        Provide the email address of the person in your organization who is responsible for contacting
-        {{ provisioner }} to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple
-        emails addresses. Do not enter your own email as you will be copied on the communication.
-      </p>
-    </ng-template> -->
 
   </app-enrollee-page>
 
