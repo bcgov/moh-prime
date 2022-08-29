@@ -34,6 +34,7 @@ import { RemoteAccessComponent } from './pages/remote-access/remote-access.compo
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 import { PaperEnrolleeReturneesPageComponent } from './pages/paper-enrollee-returnees-page/paper-enrollee-returnees-page.component';
 import { AbsenceManagementPageComponent } from './pages/absence-management-page/absence-management-page.component';
+import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
 const routes: Routes = [
   {
@@ -169,6 +170,11 @@ const routes: Routes = [
         path: EnrolmentRoutes.PENDING_ACCESS_TERM,
         component: AccessAgreementComponent,
         data: { title: 'Terms of Access' }
+      },
+      {
+        path: EnrolmentRoutes.NEXT_STEPS,
+        component: NextStepsComponent,
+        data: { title: 'Next Steps to get PharmaNet' }
       },
       //
       // Enrollee history and PharmaNet:
