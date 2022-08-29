@@ -10,6 +10,7 @@ import { SelfDeclarationForm } from './self-declaration-form.model';
   selector: 'app-self-declaration-overview',
   template: `
     <app-enrollee-self-declarations *ngIf="selfDeclarations?.selfDeclarations"
+                                    [showRedirect]="true"
                                     [enrolment]="selfDeclarations">
       <button mat-icon-button
               matTooltip="Edit Self-Declaration"
