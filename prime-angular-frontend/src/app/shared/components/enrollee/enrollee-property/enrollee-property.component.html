@@ -12,7 +12,7 @@
                 matTooltipPosition="after"
                 color="warn">error</mat-icon>
     </button>
-    <span class="error-text d-flex" *ngIf="hasError && showError">
+    <span *ngIf="hasError && showError" class="error-text d-flex">
       <mat-icon class="mr-1" color="warn">error</mat-icon>
       {{ errorMessage }}
     </span>
