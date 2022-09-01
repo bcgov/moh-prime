@@ -190,8 +190,7 @@ export class FormControlValidators {
  * @description
  * Checks a form control string value is representing a future date.
  */
-  public static mustBeFuture(control: AbstractControl): ValidationErrors | null {
-    // Not checking the control value on purpose!
+  public static mustBeFutureDate(control: AbstractControl): ValidationErrors | null {
     return (control.value && moment(control.value) && moment(control.value) > moment())
       ? null
       : { future: true };
