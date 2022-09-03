@@ -156,7 +156,6 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
   }
 
   private addNonHealthAuthorityOboSite(site: FormGroup, sites: FormArray) {
-    this.formUtilsService.setValidators(site.get('siteName') as FormControl, [Validators.required]);
     sites.push(site);
   }
 
@@ -181,10 +180,10 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
       facilityName: [null, []],
       jobTitle: [null, [Validators.required]],
       physicalAddress: this.formUtilsService.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        exclude: ['street2'],
-        useDefaults: ['provinceCode', 'countryCode'],
-        areDisabled: ['provinceCode', 'countryCode']
+        areRequired: [],
+        exclude: ['street', 'city', 'postal', 'street2', 'provinceCode'],
+        useDefaults: ['countryCode'],
+        areDisabled: ['countryCode']
       })
     });
   }
