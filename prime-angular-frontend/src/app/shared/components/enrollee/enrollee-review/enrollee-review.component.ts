@@ -15,6 +15,8 @@ import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.mo
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
+import { Enrollee } from '@shared/models/enrollee.model';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -142,4 +144,9 @@ export class EnrolleeReviewComponent {
     event?.preventDefault();
     this.route.emit(routePath);
   }
+
+  public isPaperEnrollee(enrollee: Enrollee): boolean {
+    return (enrollee?.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX));
+  }
+
 }
