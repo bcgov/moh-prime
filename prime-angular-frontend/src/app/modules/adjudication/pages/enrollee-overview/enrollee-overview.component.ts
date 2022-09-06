@@ -13,7 +13,6 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -25,6 +24,7 @@ import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-e
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -48,6 +48,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     protected adjudicationResource: AdjudicationResource,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentService: EnrolmentService,
     permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService,
@@ -114,7 +115,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
             map((plrInfo: PlrInfo[]) => this.plrInfo = plrInfo),
             catchError(_ => of([])))),
         exhaustMap(() =>
-          this.isPaperEnrollee(this.enrollee) ?
+          this.enrolmentService.isPaperEnrollee(this.enrollee) ?
             this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id) :
             of(null))
       ).subscribe((documents: EnrolleeAdjudicationDocument[]) => this.documents = documents);
@@ -171,9 +172,5 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       careSettings: enrollee.enrolleeCareSettings,
       ...remainder
     };
-  }
-
-  private isPaperEnrollee(enrollee: Enrollee): boolean {
-    return (enrollee?.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX));
   }
 }
