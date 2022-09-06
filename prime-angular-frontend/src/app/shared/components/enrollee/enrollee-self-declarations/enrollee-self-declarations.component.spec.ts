@@ -11,6 +11,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { EnrolleeSelfDeclarationsComponent } from './enrollee-self-declarations.component';
 
@@ -21,6 +22,7 @@ describe('EnrolleeSelfDeclarationsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
+        RouterTestingModule,
         HttpClientTestingModule,
         NgxMaterialModule
       ],
