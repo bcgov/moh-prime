@@ -30,6 +30,10 @@ import { UploadForm } from './upload-form.model';
                              title="File(s)">
         <app-document-attachments [documents]="documents"></app-document-attachments>
       </app-enrollee-property>
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.UPLOAD)">Edit Upload Information
+      </button>
     </app-page-section>
   `,
   styles: [
