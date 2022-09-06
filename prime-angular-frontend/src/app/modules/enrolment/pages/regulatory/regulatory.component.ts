@@ -22,7 +22,6 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 import { RegulatoryFormState } from './regulatory-form-state';
-import moment from 'moment';
 
 @Component({
   selector: 'app-regulatory',
@@ -121,7 +120,6 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     // Check if there is validation error, mark as touched to show the error message
     this.formState.certifications.controls.forEach((c: FormGroup) => {
       Object.keys(c.controls).forEach(key => {
-        console.log(key);
         if (c.get(key).errors) {
           c.get(key).markAsTouched();
         }
