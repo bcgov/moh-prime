@@ -21,10 +21,10 @@ import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-enrollee-overview',

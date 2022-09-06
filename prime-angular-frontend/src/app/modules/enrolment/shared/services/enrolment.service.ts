@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
+import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { ConfigService } from '@config/config.service';
 import { LicenseConfig } from '@config/config.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
+import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { Enrollee } from '@shared/models/enrollee.model';
-import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 
 export interface IEnrolmentService {
   enrolment$: BehaviorSubject<Enrolment>;
