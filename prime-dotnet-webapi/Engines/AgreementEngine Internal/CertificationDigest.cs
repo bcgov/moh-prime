@@ -47,7 +47,7 @@ namespace Prime.Engines.AgreementEngineInternal
             }
             else
             {
-                return new OtherCollege(regulated);
+                return new OtherCollege(regulated, cert);
             }
         }
     }
@@ -138,10 +138,12 @@ namespace Prime.Engines.AgreementEngineInternal
     public class OtherCollege : ICertificationDigest
     {
         private bool Regulated { get; set; }
+        private CertificationDto Certification { get; set; }
 
-        public OtherCollege(bool regulated)
+        public OtherCollege(bool regulated, CertificationDto certification)
         {
             Regulated = regulated;
+            Certification = certification;
         }
 
         public AgreementType? ResolveWith(SettingsDigest settings)
@@ -154,7 +156,14 @@ namespace Prime.Engines.AgreementEngineInternal
 
             if (Regulated)
             {
-                return AgreementType.RegulatedUserTOA;
+                if (!Certification.License.LicenseDetails.First().PrescriberIdType.HasValue || Certification.PractitionerId != null)
+                {
+                    return AgreementType.RegulatedUserTOA;
+                }
+                else
+                {
+                    return AgreementType.OboTOA;
+                }
             }
             else
             {
