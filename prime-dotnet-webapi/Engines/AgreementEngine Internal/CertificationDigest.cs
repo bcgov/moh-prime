@@ -156,7 +156,7 @@ namespace Prime.Engines.AgreementEngineInternal
 
             if (Regulated)
             {
-                if (!Certification.License.LicenseDetails.First().PrescriberIdType.HasValue || Certification.PractitionerId != null)
+                if (!Certification.License.CurrentLicenseDetail.PrescriberIdType.HasValue || Certification.PractitionerId != null)
                 {
                     return AgreementType.RegulatedUserTOA;
                 }
