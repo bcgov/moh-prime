@@ -4,7 +4,7 @@
 
     <span>{{ title }}</span>
 
-    <button *ngIf="hasError"
+    <button *ngIf="hasError && !showError"
             mat-icon-button
             type="button"
             [disabled]="true">
@@ -12,6 +12,10 @@
                 matTooltipPosition="after"
                 color="warn">error</mat-icon>
     </button>
+    <span *ngIf="hasError && showError" class="error-text d-flex">
+      <mat-icon class="mr-1" color="warn">error</mat-icon>
+      {{ errorMessage }}
+    </span>
   </div>
   <div class="ml-4 property-value">
     <ng-content></ng-content>

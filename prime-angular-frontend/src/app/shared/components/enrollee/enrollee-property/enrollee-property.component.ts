@@ -10,6 +10,7 @@ export class EnrolleePropertyComponent implements OnInit {
   @Input() public makeBold: boolean;
   @Input() public hasError: boolean;
   @Input() public errorMessage: string;
+  @Input() public showError: boolean;
 
   constructor() { }
 

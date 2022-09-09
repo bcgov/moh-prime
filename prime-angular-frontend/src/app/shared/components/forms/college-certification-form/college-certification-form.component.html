@@ -108,6 +108,7 @@
                               startView="multi-year"
                               [touchUi]="isMobile"></mat-datepicker>
               <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="renewalDate.hasError('future')">Must be in the future</mat-error>
             </mat-form-field>
 
           </div>

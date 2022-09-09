@@ -77,7 +77,10 @@ import { OboSitesForm } from './obo-sites-form.model';
           </ng-container>
         </ng-container>
       </ng-container>
-
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.OBO_SITES)">Edit Job Site Information
+      </button>
     </app-page-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
