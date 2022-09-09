@@ -196,11 +196,10 @@ export class EnrolmentResource {
   // ---
 
   public sendProvisionerAccessLink(
-    emails: string = null, enrolleeId: number, careSettingCode: number
+    emails: string[] = [], enrolleeId: number, careSettingCode: number
   ): Observable<EnrolmentCertificateAccessToken> {
-    const payload = { data: emails };
     return this.apiResource
-      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link/${careSettingCode}`, payload)
+      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link/${careSettingCode}`, emails)
       .pipe(
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),

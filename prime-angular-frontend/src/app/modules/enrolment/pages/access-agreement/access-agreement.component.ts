@@ -133,7 +133,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
       this.utilsService.scrollTop();
       this.currentPage++;
 
-      this.onPageChange({ atEnd: true });
+      this.onPageChange({ atEnd: false });
     }
   }
 

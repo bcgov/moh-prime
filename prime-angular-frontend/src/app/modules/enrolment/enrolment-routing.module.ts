@@ -174,7 +174,7 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.NEXT_STEPS,
         component: NextStepsComponent,
-        data: { title: 'Next Steps to get PharmaNet' }
+        data: { title: 'Next Steps' }
       },
       //
       // Enrollee history and PharmaNet:
@@ -187,7 +187,7 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
         component: PharmanetEnrolmentSummaryComponent,
-        data: { title: 'Share GPID/Approval' }
+        data: { title: 'Enrolment Summary' }
       },
       {
         path: EnrolmentRoutes.ABSENCE_MANAGEMENT,

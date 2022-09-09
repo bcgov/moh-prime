@@ -31,9 +31,9 @@
               return to PRIME later to enter the email(s).
             </p>
 
-            <ng-container [ngTemplateOutlet]="emailGroup"
+            <!-- <ng-container [ngTemplateOutlet]="emailGroup"
                           [ngTemplateOutletContext]="careSettingConfigs">
-            </ng-container>
+            </ng-container> -->
 
           </ng-container>
         </div>
@@ -82,6 +82,41 @@
           </div>
         </ng-container>
 
+          <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
+            <div class="col-12">
+              <ng-container [ngTemplateOutlet]="settingEmail"
+                            [ngTemplateOutletContext]="careSettingConfig">
+              </ng-container>
+            </div>
+          </ng-container>
+
+
+        <form [formGroup]="formState.form">
+          <div class="col col-sm-10 py-3" formArrayName="emails">
+            <ng-container *ngFor="let email of formState.emails.controls; let i = index;"
+                          [formGroupName]="i">
+              <app-email-form [form]="email"
+                              [index]="i"
+                              [formState]="formState"
+                              (remove)="removeEmail($event)">
+              </app-email-form>
+            </ng-container>
+            <button mat-button
+                    type="button"
+                    color="primary"
+                    (click)="formState.addEmptyEmailInput()">
+              <mat-icon>add</mat-icon>
+              Add email of PharmaNet administrator
+            </button>
+          </div>
+          <!-- <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
+            <ng-container [ngTemplateOutlet]="settingEmail"
+                          [ngTemplateOutletContext]="careSettingConfig">
+            </ng-container>
+          </ng-container> -->
+        </form>
+
+
       </ng-container>
 
       <ng-template #renewalConfirmation>
@@ -117,24 +152,43 @@
               Note: You cannot access PharmaNet without completing this step.
             </p>
 
-            <ng-container [ngTemplateOutlet]="emailGroup"
+            <!-- <ng-container [ngTemplateOutlet]="emailGroup"
                           [ngTemplateOutletContext]="careSettingConfigs">
-            </ng-container>
+            </ng-container> -->
           </ng-container>
         </div>
       </ng-template>
     </div>
 
     <ng-template #emailGroup>
-      <form [formGroup]="form">
+      <form [formGroup]="formState.form">
+        <div class="col col-sm-10 py-3" formArrayName="emails">
 
-        <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
+          <ng-container *ngFor="let email of formState.emails.controls; let i = index;"
+                        [formGroupName]="i">
+            <app-email-form [form]="email"
+                            [index]="i"
+                            [formState]="formState"
+                            (remove)="removeEmail($event)">
+            </app-email-form>
+          </ng-container>
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="formState.addEmptyEmailInput()">
+            <mat-icon>add</mat-icon>
+            Add email of PharmaNet administrator
+          </button>
+
+        </div>
+
+        <!-- <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
 
           <ng-container [ngTemplateOutlet]="settingEmail"
                         [ngTemplateOutletContext]="careSettingConfig">
           </ng-container>
 
-        </ng-container>
+        </ng-container> -->
       </form>
     </ng-template>
 
@@ -154,7 +208,40 @@
         </ng-container>
       </app-page-subheader>
 
-      <form [formGroup]="form">
+      <div class="col pt-2 text-right">
+        <button mat-flat-button
+                type="button"
+                color="primary"
+                (click)="sendProvisionerAccessLinkTo(settingCode)">
+                Send Email
+        </button>
+    </div>
+  </ng-template>
+
+      <!-- <form [formGroup]="formState.form">
+        <div class="col col-sm-10 py-3" formArrayName="emails">
+
+          <ng-container *ngFor="let email of formState.emails.controls; let i = index;"
+                        [formGroupName]="i">
+            <app-email-form [form]="email"
+                            [index]="i"
+                            [formState]="formState"
+                            (remove)="removeEmail($event)">
+            </app-email-form>
+          </ng-container>
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="formState.addEmptyEmailInput()">
+            <mat-icon>add</mat-icon>
+            Add email of PharmaNet administrator
+          </button>
+
+        </div>
+      </form> -->
+
+
+      <!-- <form [formGroup]="form">
 
         <div class="row"
              [hidden]="!isEmailVisible(settingCode)">
@@ -198,7 +285,7 @@
         </div>
 
 
-      </form>
+      </form> -->
 
       <!-- <ng-container *ngIf="!isEmailVisible(settingCode)">
         <p class="mb-4 text-green">
@@ -215,7 +302,6 @@
           Add {{ setting }}
         </button>
       </ng-container> -->
-    </ng-template>
 
   </app-enrollee-page>
 

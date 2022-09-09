@@ -85,10 +85,12 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        public async Task<ActionResult> SendProvisionerLink(int enrolleeId, int careSettingCode, FromBodyText providedEmails)
+        public async Task<ActionResult> SendProvisionerLink(int enrolleeId, int careSettingCode, [FromBody] string[] providedEmails)
         {
-            var emails = Email.ParseCommaSeparatedEmails(providedEmails);
-            if (!emails.Any())
+            // var emails = Email.ParseCommaSeparatedEmails(providedEmails);
+            var allEmailsValid = providedEmails.All(e => Email.IsValidEmail(e));
+
+            if (!allEmailsValid)
             {
                 return BadRequest("The email(s) provided are not valid.");
             }
@@ -113,8 +115,8 @@ namespace Prime.Controllers
 
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
 
-            await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
-            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
+            await _emailService.SendProvisionerLinkAsync(providedEmails, createdToken, careSettingCode);
+            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", providedEmails)}");
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),

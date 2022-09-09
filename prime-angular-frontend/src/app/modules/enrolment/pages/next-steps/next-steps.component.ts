@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { ConfigService } from '@config/config.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ToastService } from '@core/services/toast.service';
@@ -12,6 +13,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -21,6 +23,7 @@ import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
+import { NextStepsFormState } from './next-steps-form-state';
 
 @Component({
   selector: 'app-next-steps',
@@ -28,9 +31,11 @@ import { exhaustMap } from 'rxjs/operators';
   styleUrls: ['./next-steps.component.scss']
 })
 export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnInit {
-  public form: FormGroup;
+  public vendorForm: FormGroup;
+  public formState: NextStepsFormState;
   public title: string;
   public enrolment: Enrolment;
+  public hasReadAgreement: boolean;
 
   public CareSettingEnum = CareSettingEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
@@ -56,6 +61,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
+    private changeDetectorRef: ChangeDetectorRef,
     private fb: FormBuilder,
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
@@ -65,6 +71,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService,
+    private configService: ConfigService,
   ) {
     super(
       route,
@@ -83,8 +90,9 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     this.showPharmacist = true;
     this.showHealthAuthority = true;
     this.showDeviceProvider = true;
-    this.title = 'Next Steps to Get PharmaNet';
-    this.form = this.buildVendorEmailGroup();
+    this.title = 'Next Steps To Get PharmaNet';
+    this.vendorForm = this.buildVendorEmailGroup();
+    this.careSettingConfigs = [];
   }
 
   public get careSettings() {
@@ -92,19 +100,19 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
   }
 
   public get communityHealthEmails(): FormControl {
-    return this.form.get('communityHealthEmails') as FormControl;
+    return this.vendorForm.get('communityHealthEmails') as FormControl;
   }
 
   public get pharmacistEmails(): FormControl {
-    return this.form.get('pharmacistEmails') as FormControl;
+    return this.vendorForm.get('pharmacistEmails') as FormControl;
   }
 
   public get healthAuthorityEmails(): FormControl {
-    return this.form.get('healthAuthorityEmails') as FormControl;
+    return this.vendorForm.get('healthAuthorityEmails') as FormControl;
   }
 
   public get deviceProviderEmails(): FormControl {
-    return this.form.get('deviceProviderEmails') as FormControl;
+    return this.vendorForm.get('deviceProviderEmails') as FormControl;
   }
 
   public getAgreementDescription() {
@@ -138,7 +146,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     }
   }
 
-  public sendProvisionerAccessLink(emails: string = null, formControl: FormControl = null, careSettingCode) {
+  public sendProvisionerAccessLink(emails: string[] = [], formControl: FormControl = null, careSettingCode) {
     const data: DialogOptions = {
       title: 'Confirm Email',
       message: `Are you sure you want to send your Approval Notification?`,
@@ -158,8 +166,10 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
       )
       .subscribe(() => {
         this.toastService.openSuccessToast('Email was successfully sent');
-        // this.setShowEmail(careSettingCode, false);
+        this.router.navigate([EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
+          { relativeTo: this.route.parent, queryParams: { initialEnrolment: this.isInitialEnrolment } });
       });
+      this.onPageChange({ atEnd: true });
   }
 
   public sendProvisionerAccessLinkTo(careSettingCode: number) {
@@ -186,23 +196,45 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
 
     if (!formControl) { return; }
 
-    const emails = formControl.value?.split(',').map((email: string) => email.trim()).join(',') || null;
+    // const emails = formControl.value?.split(',').map((email: string) => email.trim()).join(',') || null;
+    // const emails = formControl.value?.map(email => email);
+    const emails = this.formState.emails.value.map(email => email.email);
+
+    this.sendProvisionerAccessLink(emails, formControl, careSettingCode);
 
     (formControl.valid)
       ? this.sendProvisionerAccessLink(emails, formControl, careSettingCode)
       : formControl.markAllAsTouched();
   }
 
-  public addVendorEmail(careSettingCode: number): void {
-    // const emails = this.emailForm.get('emails') as FormArray
-    // emails.push(this.createEmailFormGroup());
-  console.log("CLICK", careSettingCode);
+  public removeEmail(index: number): void {
+    this.formState.removeEmail(index);
+  }
+
+  // public onNextPage() {
+  //   if (!this.hasReadAgreement) {
+  //     // this.utilsService.scrollTop();
+  //     this.onPageChange({ atEnd: true });
+  //   }
+  // }
+
+  public onPageChange(agreement: { atEnd: boolean }) {
+    if (agreement.atEnd) {
+      this.hasReadAgreement = agreement.atEnd;
+      this.changeDetectorRef.detectChanges();
+    }
   }
 
   public ngOnInit(): void {
+
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.initialEnrolment = this.route.snapshot.queryParams?.initialEnrolment === 'true';
+    this.createFormInstance();
+    this.patchForm().subscribe(() => this.initForm());
+
+    this.enrolmentResource.getCurrentAgreementGroupForAnEnrollee(this.enrolment.id)
+    .subscribe((group: AgreementTypeGroup) => this.currentAgreementGroup = group)
 
     this.careSettingConfigs = this.careSettings.map(careSetting => {
       switch (careSetting.careSettingCode) {
@@ -246,9 +278,15 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     });
   }
 
-  protected initForm() { }
+  protected initForm() {
+    if (!this.formState.emails.length) {
+      this.formState.addEmptyEmailInput();
+    }
+   }
 
-  protected createFormInstance() { }
+  protected createFormInstance(): void {
+    this.formState = new NextStepsFormState(this.fb, this.configService);
+  }
 
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
@@ -261,10 +299,10 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
 
   private buildVendorEmailGroup(): FormGroup {
     return this.fb.group({
-      communityHealthEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      pharmacistEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      healthAuthorityEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      deviceProviderEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      communityHealthEmails: [null, [Validators.required]],
+      pharmacistEmails: [null, [Validators.required]],
+      healthAuthorityEmails: [null, [Validators.required]],
+      deviceProviderEmails: [null, [Validators.required]],
     });
   }
 

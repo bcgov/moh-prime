@@ -192,7 +192,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       : formControl.markAllAsTouched();
   }
 
-  public sendProvisionerAccessLink(emails: string = null, formControl: FormControl = null, careSettingCode) {
+  public sendProvisionerAccessLink(emails: string[] = [], formControl: FormControl = null, careSettingCode) {
     const data: DialogOptions = {
       title: 'Confirm Email',
       message: `Are you sure you want to send your Approval Notification?`,
