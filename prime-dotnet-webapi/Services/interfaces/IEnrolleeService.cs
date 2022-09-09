@@ -69,5 +69,6 @@ namespace Prime.Services
         Task<string> GetAdjudicatorIdirForEnrolleeAsync(int enrolleeId);
         Task UpdateDateOfBirthAsync(int enrolleeId, DateTime dateOfBirth);
         Task UpdateCertificationPrefix(int cretId, string prefix);
+        Task<IEnumerable<string>> FilterToUpdatedAsync(IEnumerable<string> hpdids, DateTimeOffset updatedSince);
     }
 }
