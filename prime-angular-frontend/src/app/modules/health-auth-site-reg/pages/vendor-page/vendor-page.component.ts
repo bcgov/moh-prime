@@ -51,10 +51,6 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
   }
 
   public onBack(): void {
-    //(this.isCompleted)
-    //  ? this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW)
-    //  : this.routeUtils.routeTo(HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.SITE_MANAGEMENT));
-
     const backRoutePath = this.isCompleted
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;
@@ -93,33 +89,6 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
       this.hasNoVendorError = true;
     }
   }
-
-  /*
-  protected submissionRequest(): Observable<unknown> {
-    const { haid, sid } = this.route.snapshot.params;
-    const healthAuthoritySite = this.healthAuthoritySiteFormStateService.json;
-
-    return (+sid)
-      ? this.healthAuthoritySiteResource
-        .updateHealthAuthoritySite(+haid, +sid, healthAuthoritySite.forUpdate())
-        .pipe(map(() => +sid))
-      : this.healthAuthoritySiteResource
-        .createHealthAuthoritySite(+haid, healthAuthoritySite.forCreate(this.authorizedUserService.authorizedUser.id))
-        .pipe(
-          map((site: HealthAuthoritySite) => {
-            this.routeUtils.replaceState([
-              HealthAuthSiteRegRoutes.MODULE_PATH,
-              HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
-              +haid,
-              HealthAuthSiteRegRoutes.SITES,
-              site.id,
-              HealthAuthSiteRegRoutes.VENDOR
-            ]);
-            return site.id;
-          })
-        );
-  }
-  */
 
   protected afterSubmitIsSuccessful(): void {
     const nextRoutePath = (this.isCompleted)
