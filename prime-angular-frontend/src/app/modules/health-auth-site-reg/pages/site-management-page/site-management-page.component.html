@@ -47,7 +47,7 @@
                       [properties]="[
                             { key: 'Site Name', value: healthAuthoritySite?.siteName },
                             { key: 'Site ID', value: healthAuthoritySite?.pec },
-                            { key: 'Vendor', value: healthAuthoritySite?.healthAuthorityVendor.vendorCode | configCode : 'vendors' }
+                            { key: 'Vendor', value: healthAuthoritySite?.healthAuthorityVendor?.vendorCode | configCode : 'vendors' }
                       ]">
       <ng-container *ngIf="healthAuthoritySite.isIncomplete()"
                     [ngTemplateOutlet]="notification"

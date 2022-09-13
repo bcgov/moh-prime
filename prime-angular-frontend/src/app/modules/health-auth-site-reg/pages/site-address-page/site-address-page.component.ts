@@ -54,7 +54,7 @@ export class SiteAddressPageComponent extends AbstractHealthAuthoritySiteRegistr
   public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;
+      : HealthAuthSiteRegRoutes.SITE_INFORMATION;
 
     this.routeUtils.routeRelativeTo(backRoutePath);
   }

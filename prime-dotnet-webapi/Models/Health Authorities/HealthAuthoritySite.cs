@@ -17,7 +17,7 @@ namespace Prime.Models
         [JsonIgnore]
         public HealthAuthorityOrganization HealthAuthorityOrganization { get; set; }
 
-        public int HealthAuthorityVendorId { get; set; }
+        public int? HealthAuthorityVendorId { get; set; }
 
         [JsonIgnore]
         public HealthAuthorityVendor HealthAuthorityVendor { get; set; }
