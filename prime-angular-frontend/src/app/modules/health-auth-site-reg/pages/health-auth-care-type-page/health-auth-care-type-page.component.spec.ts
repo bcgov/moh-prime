@@ -87,7 +87,7 @@ describe('HealthAuthCareTypePageComponent', () => {
   });
 
   describe('testing onBack() with an incomplete profile', () => {
-    it('should call routeToRelativePath with HealthAuthSiteRegRoutes.SITE_INFORMATION', () => {
+    it('should call routeTo with HealthAuthSiteRegRoutes.SITE_MANAGEMENT', () => {
       component.isCompleted = false;
 
       component.onBack();

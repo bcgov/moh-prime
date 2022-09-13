@@ -85,11 +85,11 @@ describe('VendorPageComponent', () => {
   });
 
   describe('testing onBack() with an incomplete profile', () => {
-    it('should call routeToRelativePath with HealthAuthSiteRegRoutes.SITE_INFORMATION', () => {
+    it('should call routeToRelativePath with HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE', () => {
       component.isCompleted = false;
 
       component.onBack();
-      expect(spyOnRouteRelativeTo).toHaveBeenCalledWith(HealthAuthSiteRegRoutes.SITE_INFORMATION);
+      expect(spyOnRouteRelativeTo).toHaveBeenCalledWith(HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE);
     });
   });
 });

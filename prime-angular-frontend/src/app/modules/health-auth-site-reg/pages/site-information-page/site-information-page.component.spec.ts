@@ -82,7 +82,7 @@ describe('SiteInformationPageComponent', () => {
   });
 
   describe('testing onBack() with an incomplete profile', () => {
-    it('should call routeToRelativePath with HealthAuthSiteRegRoutes.SITE_INFORMATION', () => {
+    it('should call routeToRelativePath with HealthAuthSiteRegRoutes.VENDOR', () => {
       component.isCompleted = false;
 
       component.onBack();
