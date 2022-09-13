@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220906234559_SetPractIdToMandatorySept6th2022")]
+    partial class SetPractIdToMandatorySept6th2022
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -13717,7 +13719,7 @@ namespace Prime.Migrations
                     b.Property<int?>("HealthAuthorityTechnicalSupportId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("HealthAuthorityVendorId")
+                    b.Property<int>("HealthAuthorityVendorId")
                         .HasColumnType("integer");
 
                     b.Property<int>("SecurityGroupCode")
@@ -14983,7 +14985,9 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityVendor", "HealthAuthorityVendor")
                         .WithMany()
-                        .HasForeignKey("HealthAuthorityVendorId");
+                        .HasForeignKey("HealthAuthorityVendorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Site", null)
                         .WithOne()

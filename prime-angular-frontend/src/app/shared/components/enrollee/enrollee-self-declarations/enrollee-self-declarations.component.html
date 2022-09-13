@@ -33,4 +33,9 @@
 
   </div>
 
+  <button *ngIf="showRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(redirectRoutePath)">Edit Self-Declaration
+  </button>
 </section>
