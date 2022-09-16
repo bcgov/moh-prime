@@ -154,6 +154,31 @@ namespace Prime.Controllers
             return Ok(result);
         }
 
+        // POST: api/provisioner-access/updated-gpids
+        /// <summary>
+        /// Returns all the HPDIDs from the given list of HPDIDs that have an AcceptedDate since the given date/time.
+        /// Requires a valid direct access grant token.  Input parameters should be passed in request body, x-www-form-urlencoded.
+        /// HTTP POST rather than GET due to potentially large number of HPDIDs and to be compatible with most HTTP clients.
+        /// </summary>
+        [HttpPost("updated-gpids", Name = nameof(GetUpdatedGpids))]
+        [Authorize(Roles = Roles.ExternalHpdidAccess)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<string>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetUpdatedGpids([FromForm] string[] hpdids, [FromForm] DateTimeOffset updatedSince)
+        {
+            if (DateTimeOffset.MinValue.Equals(updatedSince))
+            {
+                return BadRequest($"{nameof(updatedSince)} parameter is required");
+            }
+            else
+            {
+                var result = await _enrolleeService.FilterToUpdatedAsync(hpdids, updatedSince);
+
+                return Ok(result);
+            }
+        }
+
         // POST: api/provisioner-access/gpids/123456789/validate
         /// <summary>
         /// Validates the supplied information against the enrollee record with the given GPID. Requires a valid direct access grant token.

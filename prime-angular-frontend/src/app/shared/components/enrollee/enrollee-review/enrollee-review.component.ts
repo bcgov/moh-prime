@@ -142,4 +142,9 @@ export class EnrolleeReviewComponent {
     event?.preventDefault();
     this.route.emit(routePath);
   }
+
+  public isPaperEnrollee(enrollee): boolean {
+    return this.enrolmentService.isPaperEnrollee(enrollee);
+  }
+
 }

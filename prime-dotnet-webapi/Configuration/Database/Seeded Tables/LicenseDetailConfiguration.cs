@@ -14,6 +14,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime Aug1st2022 = new(2022, 8, 1, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime LicenceClassUpdateAug5th2022 = new(2022, 8, 5, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime EnableNonPrescriberPrefixAug10th2022 = new(2022, 8, 10, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime SetPractIdToMandatorySept6th2022 = new(2022, 9, 6, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -235,6 +236,18 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id =  192, LicenseCode = 45, Prefix = "Y9", Manual = true, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Optional, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "YX", EffectiveDate = EnableNonPrescriberPrefixAug10th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                     new LicenseDetail { Id =  193, LicenseCode = 46, Prefix = "Y9", Manual = false, Validate = false,  LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "YX", EffectiveDate = EnableNonPrescriberPrefixAug10th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
 
+                    // 2022-09-06 PractId should be Optional -> Mandatory for RPNs, NPs, and Midwives.  For these licence classes, Validate PractId
+                    new LicenseDetail { Id =  194, LicenseCode = 41, Prefix = "Y9", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "YX", EffectiveDate = SetPractIdToMandatorySept6th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id =  195, LicenseCode = 42, Prefix = "Y9", Manual = true, Validate = true,  LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "YX", EffectiveDate = SetPractIdToMandatorySept6th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id =  196, LicenseCode = 45, Prefix = "Y9", Manual = true, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "YX", EffectiveDate = SetPractIdToMandatorySept6th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+
+                    new LicenseDetail { Id =  197, LicenseCode = 47, Prefix = "96", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = true, NonPrescribingPrefix = "NX", EffectiveDate = SetPractIdToMandatorySept6th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id =  198, LicenseCode = 48, Prefix = "96", Manual = true, Validate = true,  LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = true, NonPrescribingPrefix = "NX", EffectiveDate = SetPractIdToMandatorySept6th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id =  199, LicenseCode = 51, Prefix = "96", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = true, NonPrescribingPrefix = "NX", EffectiveDate = SetPractIdToMandatorySept6th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+
+                    new LicenseDetail { Id = 200, LicenseCode = 60, Prefix = "98", NamedInImReg = true, LicensedToProvideCare = true, Manual = false, Validate = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = true, EffectiveDate = SetPractIdToMandatorySept6th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 201, LicenseCode = 61, Prefix = "98", NamedInImReg = false, LicensedToProvideCare = true, Manual = false, Validate = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = true, EffectiveDate = SetPractIdToMandatorySept6th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 202, LicenseCode = 62, Prefix = "98", NamedInImReg = true, LicensedToProvideCare = true, Manual = false, Validate = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = true, EffectiveDate = SetPractIdToMandatorySept6th2022, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                  };
             }
         }
