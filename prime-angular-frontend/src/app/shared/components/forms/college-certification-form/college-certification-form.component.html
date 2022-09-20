@@ -171,7 +171,9 @@
                 <input matInput
                        placeholder="PharmaNet ID"
                        formControlName="practitionerId"
-                       maxlength="5">
+                       class="uppercase"
+                       maxlength="5"
+                       (change)="onPractiionerIdChange($event)">
                 <mat-error *ngIf="practitionerId.hasError('required')">Required</mat-error>
                 <mat-error *ngIf="practitionerId.hasError('alphanumeric') || practitionerId.hasError('length')">
                   Must contain only 5 alphanumeric characters

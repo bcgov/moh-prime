@@ -153,6 +153,10 @@ export class CollegeCertificationFormComponent implements OnInit {
       : this.resetPractitionerIdStateAndValidators();
   }
 
+  public onPractiionerIdChange(event: any): void {
+    this.practitionerId.patchValue(event.target.value.toUpperCase());
+  }
+
   // TODO decouple default and condensed modes in controller and template
   public ngOnInit() {
     if (this.condensed) {
