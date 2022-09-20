@@ -283,6 +283,14 @@ namespace Prime.Services
                 enrollee.GivenNames = $"{updateModel.PreferredFirstName} {updateModel.PreferredMiddleName}";
             }
 
+            foreach (var cert in updateModel.Certifications)
+            {
+                if (cert != null && cert.PractitionerId != null)
+                {
+                    cert.PractitionerId = cert.PractitionerId.ToUpper();
+                }
+            }
+
             UpdateAddress(enrollee, updateModel.PhysicalAddress);
             UpdateAddress(enrollee, updateModel.MailingAddress);
             UpdateAddress(enrollee, updateModel.VerifiedAddress);
