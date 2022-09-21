@@ -136,6 +136,19 @@ namespace Prime.Controllers
             return Ok(await _enrolleeService.GetActiveGpidAsync(User.GetPrimeUserId()));
         }
 
+        // GET: api/provisioner-access/gpid-detail
+        /// <summary>
+        /// Gets the GPID for the user. Only a valid token is required, no role is required.
+        /// </summary>
+        [HttpGet("gpid-detail", Name = nameof(GetGpidDetail))]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetGpidDetail()
+        {
+            return Ok(await _enrolleeService.GetActiveGpidDetailAsync(User.GetPrimeUserId()));
+        }
+
         // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222
         /// <summary>
         /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid direct access grant token.
