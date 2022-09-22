@@ -116,6 +116,15 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       .subscribe((couldRequestRemoteAccess: boolean) =>
         this.cannotRequestRemoteAccess = couldRequestRemoteAccess && !this.canRequestRemoteAccess()
       );
+
+    // Check if there is validation error, mark as touched to show the error message
+    this.formState.certifications.controls.forEach((c: FormGroup) => {
+      Object.keys(c.controls).forEach(key => {
+        if (c.get(key).errors) {
+          c.get(key).markAsTouched();
+        }
+      });
+    });
   }
 
   protected handleDeactivation(result: boolean): void {
@@ -167,7 +176,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.formState.certifications.controls
       .forEach((control: FormGroup, index: number) => {
         // Remove if college code is "None" or the group is invalid
-        if (!control.get('collegeCode').value || control.invalid) {
+        if (!control.get('collegeCode').value || (control.invalid && !this.enrolmentService.isProfileComplete)) {
           this.removeCertification(index);
         }
       });

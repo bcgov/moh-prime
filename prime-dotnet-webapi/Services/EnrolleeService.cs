@@ -1178,5 +1178,25 @@ namespace Prime.Services
             }
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<string>> FilterToUpdatedAsync(IEnumerable<string> hpdids, DateTimeOffset updatedSince)
+        {
+            hpdids.ThrowIfNull(nameof(hpdids));
+
+            hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
+
+            return await _context.Enrollees
+                .Where(e => hpdids.Contains(e.HPDID))
+                .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                // Filter out enrollees that haven't got a signed TOA
+                .Where(e => e.CurrentAgreementId != null)
+                .Where(e => ((DateTimeOffset)e.Agreements.OrderByDescending(a => a.CreatedDate)
+                                .Where(a => a.AcceptedDate != null)
+                                .Select(a => a.AcceptedDate)
+                                .FirstOrDefault()).CompareTo(updatedSince) > 0)
+                .Select(e => e.HPDID)
+                .DecompileAsync()
+                .ToListAsync();
+        }
     }
 }
