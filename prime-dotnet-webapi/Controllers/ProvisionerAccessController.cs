@@ -138,8 +138,10 @@ namespace Prime.Controllers
 
         // GET: api/provisioner-access/gpid-detail
         /// <summary>
-        /// Gets the GPID for the user. Only a valid token is required, no role is required.
+        /// Gets the GPID and detail info for the user. Only a valid token is required, no role is required.
         /// </summary>
+        ///
+        /*
         [HttpGet("gpid-detail", Name = nameof(GetGpidDetail))]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -148,6 +150,7 @@ namespace Prime.Controllers
         {
             return Ok(await _enrolleeService.GetActiveGpidDetailAsync(User.GetPrimeUserId()));
         }
+        */
 
         // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222
         /// <summary>
