@@ -233,7 +233,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.UNLOCK_PROFILE)
       )
       .subscribe(() => {
         this.updateEnrollee(enrolleeId);

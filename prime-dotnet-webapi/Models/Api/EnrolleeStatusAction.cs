@@ -9,6 +9,7 @@ namespace Prime.Models.Api
         LockProfile,
         DeclineProfile,
         RerunRules,
-        CancelToaAssignment
+        CancelToaAssignment,
+        UnlockedProfile,
     }
 }
