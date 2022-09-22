@@ -41,7 +41,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public currentAgreementGroup: AgreementTypeGroup;
 
   public initialEnrolment: boolean;
-  public complete: boolean;
+  public complete: boolean = true;
 
   public careSettingConfigs: {
     setting: string,
@@ -69,6 +69,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
     this.form = this.buildVendorEmailGroup();
     this.careSettingConfigs = [];
+    // this.complete = true;
   }
 
   public get enrollee() {
@@ -203,7 +204,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) => {
           if (result) {
-            this.complete = true;
+            // this.complete = true;
             return this.enrolmentResource.sendProvisionerAccessLink(emails, this.enrolment.id, careSettingCode);
           } else {
             return EMPTY;

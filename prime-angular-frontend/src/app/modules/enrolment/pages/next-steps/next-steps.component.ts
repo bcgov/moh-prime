@@ -167,7 +167,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
       .subscribe(() => {
         this.toastService.openSuccessToast('Email was successfully sent');
         this.router.navigate([EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
-          { relativeTo: this.route.parent, queryParams: { initialEnrolment: this.isInitialEnrolment } });
+          { relativeTo: this.route.parent, queryParams: { initialEnrolment: true } });
       });
       this.onPageChange({ atEnd: true });
   }

@@ -54,7 +54,7 @@
           </ng-container>
         </div>
 
-        <ng-container *ngIf="complete">
+        <ng-container>
 
           <app-alert type="success"
                      icon="check_circle_outline"
@@ -71,12 +71,6 @@
               <p class="font-weight-bold">
                 Your renewal date is: {{ enrolment.expiryDate | formatDate }}
               </p>
-              <p>
-                Access to PharmaNet is for professionals who care for patients as a key job duty. Your employer decides
-                whether you need direct access to PharmaNet (they may instead prefer you consult medication records
-                added to a patient’s chart). Access to PharmaNet is granted through PRIME according to legislation and
-                Ministry of Health policy.
-              </p>
               <p *ngIf="currentAgreementGroup"
                  class="font-weight-bold">
                 {{getAgreementDescription()}}
@@ -84,23 +78,35 @@
             </ng-container>
 
           </app-alert>
-          <div imageName="global"
-                           class="col-12">
-            <ng-container appInfographicHeader>
-              Global PharmaNet ID
+          <div class="col-12">
+            <ng-container appPageSubheaderSummary>
+              <p><strong>Your PharmaNet Access</strong></p>
             </ng-container>
-            <ng-container appInfographicDescription>
-              PRIME has assigned you a global PharmaNet ID (GPID). This will be attached to all of your transactions in
-              PharmaNet. It protects your information and patient information. If you ever need your GPID, you can sign
-              in to PRIME to access it.
+            <ng-container>
+              <p>
+                Access to PharmaNet is for professionals who care for patients as a key job duty. Your employer decides
+                whether you need direct access to PharmaNet (they may instead prefer you consult medication records
+                added to a patient's chart). Access to PharmaNet is granted through PRIME according to legislation and
+                Ministry of Health policy.
+              </p>
             </ng-container>
-            <!-- <ng-container appInfographicContent>
+            <ng-container appPageSubheaderSummary>
+              <p><strong>Global PharmaNet ID</strong></p>
+            </ng-container>
+            <ng-container>
+              <p>
+                  PRIME has assigned you a global PharmaNet ID (GPID). This will be attached to all of your transactions in
+                PharmaNet. It protects your information and patient information. If you ever need your GPID, you can sign
+                in to PRIME to access it.
+              </p>
+            </ng-container>
+            <ng-container>
               <section>
-                <h6 class="mb-0">
-                  For your reference your GPID is:
-                </h6>
+                <p>
+                  This is your GPID for your reference:
+                </p>
 
-                {{ GPID }}
+                <strong>{{ GPID }}</strong>
 
                 <button mat-icon-button
                         type="button"
@@ -111,7 +117,7 @@
                   <mat-icon>content_paste</mat-icon>
                 </button>
               </section>
-            </ng-container> -->
+            </ng-container>
 
           </div>
         </ng-container>
