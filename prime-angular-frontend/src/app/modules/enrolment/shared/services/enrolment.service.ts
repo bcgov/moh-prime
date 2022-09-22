@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
+import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { ConfigService } from '@config/config.service';
 import { LicenseConfig } from '@config/config.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
+import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
@@ -15,6 +16,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 export interface IEnrolmentService {
   enrolment$: BehaviorSubject<Enrolment>;
   enrolment: Enrolment;
+  enrollee: Enrollee;
   isInitialEnrolment: boolean;
   isProfileComplete: boolean;
 }
@@ -42,6 +44,10 @@ export class EnrolmentService implements IEnrolmentService {
   public get enrolment(): Enrolment {
     return this._enrolment.value;
   }
+
+  public get enrollee(): Enrollee {
+    return this._enrolment.value.enrollee;
+  };
 
   public get isMatchingPaperEnrollee(): boolean {
     return this._isMatchingPaperEnrollee;
@@ -105,5 +111,9 @@ export class EnrolmentService implements IEnrolmentService {
     return (prescriberIdTypes.length)
       ? prescriberIdTypes[0]
       : PrescriberIdTypeEnum.NA;
+  }
+
+  public isPaperEnrollee(enrollee: Enrollee): boolean {
+    return (enrollee?.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX));
   }
 }
