@@ -237,6 +237,10 @@ namespace Prime.Services
                     await CancelToaAssignmentAsync(enrollee);
                     break;
 
+                case EnrolleeStatusAction.UnlockedProfile:
+                    await UnlockProfileAsync(enrollee);
+                    break;
+
                 default:
                     throw new InvalidOperationException($"Action {action} is not recognized in {nameof(HandleEnrolleeStatusActionAsync)}");
             }
@@ -357,6 +361,13 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator cancelled TOA assignment");
+        }
+
+        private async Task UnlockProfileAsync(Enrollee enrollee)
+        {
+            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Unlocked");
+            await _context.SaveChangesAsync();
         }
 
         private async Task SetGpid(Enrollee enrollee)

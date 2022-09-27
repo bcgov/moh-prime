@@ -35,6 +35,11 @@ import { DemographicForm } from './demographic-form.model';
       <app-enrollee-property title="Date of Birth">
         {{ demographic?.dateOfBirth | formatDate }}
       </app-enrollee-property>
+
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">Edit Preferred Name
+      </button>
     </app-page-section>
 
     <app-address-view title="Physical Address"
@@ -80,6 +85,11 @@ import { DemographicForm } from './demographic-form.model';
       <app-enrollee-property title="Optional Extension Number">
         {{ demographic?.phoneExtension | default }}
       </app-enrollee-property>
+
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">Edit Contact Information
+      </button>
     </app-page-section>
 
     <app-page-section>
@@ -100,6 +110,11 @@ import { DemographicForm } from './demographic-form.model';
       <app-enrollee-property title="Optional SMS Phone Number">
         {{ demographic?.smsPhone | phone | default }}
       </app-enrollee-property>
+
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">Edit Notification Information
+      </button>
     </app-page-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
