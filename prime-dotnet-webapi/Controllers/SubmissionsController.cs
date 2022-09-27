@@ -215,6 +215,23 @@ namespace Prime.Controllers
             return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.RerunRules);
         }
 
+        // POST: api/enrollees/5/status-actions/unlock-profile
+        /// <summary>
+        /// Unlocks the Enrolle's profile.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/status-actions/unlock-profile", Name = nameof(UnlockProfile))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UnlockProfile(int enrolleeId)
+        {
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.UnlockedProfile);
+        }
+
         // POST: api/enrollees/rerun-rules
         /// <summary>
         /// Re-runs the automatic adjudication rules for all applicable Enrollees.

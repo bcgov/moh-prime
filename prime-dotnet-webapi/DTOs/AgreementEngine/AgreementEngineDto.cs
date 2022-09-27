@@ -14,6 +14,7 @@ namespace Prime.DTOs.AgreementEngine
     public class CertificationDto
     {
         public int CollegeCode { get; set; }
+        public string PractitionerId { get; set; }
 
         public License License { get; set; }
     }
