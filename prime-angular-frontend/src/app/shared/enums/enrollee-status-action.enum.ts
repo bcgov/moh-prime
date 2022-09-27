@@ -7,4 +7,5 @@ export enum EnrolleeStatusAction {
   LOCK_PROFILE = 'lock-profile',
   DECLINE_PROFILE = 'decline-profile',
   RERUN_RULES = 'rerun-rules',
+  UNLOCK_PROFILE = 'unlock-profile',
 }
