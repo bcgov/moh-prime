@@ -74,6 +74,15 @@
         "attributes": {}
       },
       {
+        "id": "4cbd18cf-bf8c-4f20-b925-ac8ccc3dc203",
+        "name": "paper_enrolment_only_edit",
+        "description": "Role permitting editing Paper Enrolments only (not BCSC enrolments)",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "834ab8a0-3de7-4a07-9175-32508a20a856",
         "name": "phsa_eforms_sat",
         "composite": false,
@@ -164,6 +173,15 @@
       {
         "id": "8f6415e5-3fc4-4ebc-a4b6-c89f52cf742a",
         "name": "site_view",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "806f191f-e7fb-4e3c-8ac7-c36c62febf28",
+        "name": "paper_enrolment_only_view",
+        "description": "Role permitting viewing Paper Enrolments only (not BCSC enrolments)",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -567,6 +585,19 @@
         "site_view",
         "enrollee_approve",
         "site_edit"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "d8b2700c-7d66-42b4-9fc7-e8578af73d3e",
+      "name": "Paper Enrolment Clerk",
+      "path": "/Paper Enrolment Clerk",
+      "attributes": {},
+      "realmRoles": [
+        "prime_administrant",
+        "paper_enrolment_only_edit",
+        "paper_enrolment_only_view"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -1205,7 +1236,10 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "*"
+        "https://www.eforms.healthbc.org/oauth2/authorize/*",
+        "https://www.eforms.phsaehealth.ca/appdash/keycloak.authorize",
+        "https://www.eforms.phsaehealth.ca/appdash/keycloak.authorize/*",
+        "https://www.eforms.healthbc.org/oauth2/authorize"
       ],
       "webOrigins": [
         "*"
@@ -1228,6 +1262,7 @@
         "saml.server.signature": "false",
         "saml.server.signature.keyinfo.ext": "false",
         "exclude.session.state.from.auth.response": "false",
+        "client_credentials.use_refresh_token": "false",
         "saml_force_name_id_format": "false",
         "saml.client.signature": "false",
         "tls.client.certificate.bound.access.tokens": "false",
@@ -1585,6 +1620,21 @@
           }
         },
         {
+          "id": "1c5c8b76-b41b-4e90-894b-523e5f1f31a9",
+          "name": "set sudience to prime-web-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.value": "prime-web-api",
+            "userinfo.token.claim": "false",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "aud",
+            "jsonType.label": "String"
+          }
+        },
+        {
           "id": "2617c0c7-3e98-46f4-9000-14a6f90724df",
           "name": "Client Host",
           "protocol": "openid-connect",
@@ -1601,15 +1651,9 @@
       ],
       "defaultClientScopes": [
         "web-origins",
-        "identity_provider",
-        "address",
-        "profile",
-        "roles",
-        "identity_assurance_level",
-        "email"
+        "roles"
       ],
       "optionalClientScopes": [
-        "offline_access",
         "microprofile-jwt"
       ]
     },

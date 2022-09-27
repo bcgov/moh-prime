@@ -14,6 +14,11 @@
 
   <ng-container *ngTemplateOutlet="(hasAddress) ? addressIf : addressElse"></ng-container>
 
+  <button *ngIf="showRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(redirectRoutePath)">Edit Address
+  </button>
 </section>
 
 <ng-template #addressIf>
@@ -44,5 +49,7 @@
 </ng-template>
 
 <ng-template #addressElse>
-  No address entered.
+  <div class="mb-2">
+    No address entered.
+  </div>
 </ng-template>

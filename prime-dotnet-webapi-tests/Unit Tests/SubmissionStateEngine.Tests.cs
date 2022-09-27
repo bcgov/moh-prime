@@ -91,7 +91,7 @@ namespace PrimeTests.UnitTests
             var status = EnrolmentStatus.FromType(StatusType.Locked, 0);
             var expectedAllowed = new[]
             {
-                EnrolleeStatusAction.EnableEditing,
+                EnrolleeStatusAction.UnlockedProfile,
                 EnrolleeStatusAction.DeclineProfile
             }.Contains(action);
 

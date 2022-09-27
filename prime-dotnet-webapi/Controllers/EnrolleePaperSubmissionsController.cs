@@ -44,7 +44,7 @@ namespace Prime.Controllers
         /// Creates a new Enrollee Paper Submission.
         /// </summary>
         [HttpPost("paper-submissions", Name = nameof(CreateEnrolleePaperSubmission))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -66,7 +66,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Agreement.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/agreement", Name = nameof(UpdateEnrolleePaperSubmissionAgreement))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -87,7 +87,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Care Settings.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/care-settings", Name = nameof(UpdateEnrolleePaperSubmissionCareSettings))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -108,7 +108,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Certifications.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/certifications", Name = nameof(UpdateEnrolleePaperSubmissionCertifications))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -129,7 +129,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Device Provider Informaion.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/device-provider", Name = nameof(UpdateEnrolleePaperSubmissionDeviceProvider))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -145,12 +145,58 @@ namespace Prime.Controllers
             return Ok();
         }
 
+        // PUT: api/enrollees/5/paper-submissions/unlisted-certifications
+        /// <summary>
+        /// Updates a Paper Submission's Certifications.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/unlisted-certifications", Name = nameof(UpdateEnrolleePaperSubmissionUnlistedCertifications))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionUnlistedCertifications(int enrolleeId, ICollection<PaperEnrolleeUnlistedCertificationViewModel> payload)
+        {
+            if (!await _enrolleePaperSubmissionService.PaperSubmissionIsUpdateableAsync(enrolleeId))
+            {
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
+            }
+
+            await _enrolleePaperSubmissionService.UpdateUnlistedCertificationsAsync(enrolleeId, payload);
+            return Ok();
+        }
+
+        // GET: api/enrollees/5/unlisted-certifications
+        /// <summary>
+        /// Gets an Enrollee's Unlisted Certifications.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/unlisted-certifications", Name = nameof(GetUnlistedCertifications))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<PaperEnrolleeUnlistedCertificationViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetUnlistedCertifications(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleePaperSubmissionService.GetUnlistedCertificationsAsync(enrolleeId));
+        }
+
         // PUT: api/enrollees/5/paper-submissions/demographics
         /// <summary>
         /// Updates a Paper Submission's demographic information.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/demographics", Name = nameof(UpdateEnrolleePaperSubmissionDemographics))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -172,7 +218,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's OBO Sites.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/obo-sites", Name = nameof(UpdateEnrolleePaperSubmissionOboSites))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -193,7 +239,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Self Declaration information.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/self-declarations", Name = nameof(UpdateEnrolleePaperSubmissionSelfDeclarations))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -214,7 +260,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Documents.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/documents", Name = nameof(UpdateEnrolleePaperSubmissionDocuments))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -237,7 +283,7 @@ namespace Prime.Controllers
         /// Sets the Paper Submission's profile as "completed", allowing frontend and backend behavioural changes.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/profile-completed", Name = nameof(SetEnrolleePaperSubmissionProfileCompleted))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -260,7 +306,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/paper-submissions/documents", Name = nameof(GetAdjudicationDocuments))]
-        [Authorize(Roles = Roles.ViewEnrollee)]
+        [Authorize(Roles = Roles.ViewEnrollee + "," + Roles.ViewPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
@@ -281,7 +327,7 @@ namespace Prime.Controllers
         /// Finalizes a Paper Submission.
         /// </summary>
         [HttpPost("{enrolleeId}/paper-submissions/finalize", Name = nameof(FinalizeEnrolleePaperSubmission))]
-        [Authorize(Roles = Roles.TriageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -326,7 +372,7 @@ namespace Prime.Controllers
         /// Cannot set a linked GPID on Paper Submissions or on Enrollees already linked to a Paper Submission.
         /// </summary>
         [HttpPut("{enrolleeId}/linked-gpid", Name = nameof(CreateOrUpdateLinkedGpid))]
-        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee + "," + Roles.EditPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -357,7 +403,7 @@ namespace Prime.Controllers
         /// Gets the linked GPID
         /// </summary>
         [HttpGet("{enrolleeId}/linked-gpid", Name = nameof(GetLinkedGpid))]
-        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee + "," + Roles.ViewPaperEnrolmentsOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

@@ -97,6 +97,19 @@ namespace Prime.Services.EmailInternal
             );
         }
 
+        public async Task<Email> RenderForcedRenewalPassedEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
+        {
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "Your PRIME Renewal Date Has Passed",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.ForcedRenewalPassedNotification, viewModel)
+            );
+        }
+
         public async Task<Email> RenderRenewalRequiredEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
             viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
@@ -105,8 +118,21 @@ namespace Prime.Services.EmailInternal
             (
                 from: PrimeEmail,
                 to: recipientEmail,
-                subject: "PRIME Renewal Required",
+                subject: "Renew Your PRIME Enrolment",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeRenewalRequired, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderForcedRenewalEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
+        {
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "PRIME Renewal Required",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.ForcedRenewalNotification, viewModel)
             );
         }
 

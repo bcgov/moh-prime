@@ -153,6 +153,10 @@ export class CollegeCertificationFormComponent implements OnInit {
       : this.resetPractitionerIdStateAndValidators();
   }
 
+  public onPractiionerIdChange(event: any): void {
+    this.practitionerId.patchValue(event.target.value.toUpperCase());
+  }
+
   // TODO decouple default and condensed modes in controller and template
   public ngOnInit() {
     if (this.condensed) {
@@ -251,7 +255,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.formUtilsService.setValidators(this.licenseNumber, licenseNumberValidators);
 
     if (!this.condensed) {
-      this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
+      this.formUtilsService.setValidators(this.renewalDate, [Validators.required, FormControlValidators.mustBeFutureDate]);
     }
   }
 
@@ -272,7 +276,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
 
     if (!this.condensed) {
-      this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
+      this.formUtilsService.setValidators(this.renewalDate, [Validators.required, FormControlValidators.mustBeFutureDate]);
     }
   }
 
@@ -323,7 +327,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     ) {
       this.formUtilsService.setValidators(this.practitionerId, [
         Validators.required,
-        FormControlValidators.numeric,
+        FormControlValidators.alphanumeric,
         FormControlValidators.requiredLength(5)
       ]);
     }

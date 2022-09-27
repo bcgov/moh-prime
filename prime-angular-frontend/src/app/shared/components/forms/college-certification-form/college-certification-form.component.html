@@ -108,6 +108,7 @@
                               startView="multi-year"
                               [touchUi]="isMobile"></mat-datepicker>
               <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="renewalDate.hasError('future')">Must be in the future</mat-error>
             </mat-form-field>
 
           </div>
@@ -170,15 +171,17 @@
                 <input matInput
                        placeholder="PharmaNet ID"
                        formControlName="practitionerId"
-                       maxlength="5">
+                       class="uppercase"
+                       maxlength="5"
+                       (change)="onPractiionerIdChange($event)">
                 <mat-error *ngIf="practitionerId.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="practitionerId.hasError('numeric') || practitionerId.hasError('length')">
-                  Must contain only 5 numeric characters
+                <mat-error *ngIf="practitionerId.hasError('alphanumeric') || practitionerId.hasError('length')">
+                  Must contain only 5 alphanumeric characters
                 </mat-error>
               </mat-form-field>
 
               <ng-container appContextualContent>
-                Your PharmaNet ID is a 5-digit number assigned to you by the BCCNM, to allow you to prescribe.
+                A 5-digit ID assigned by your college for PharmaNet access.
               </ng-container>
             </app-form-icon-group>
 

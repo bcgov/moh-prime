@@ -126,7 +126,7 @@ namespace Prime.Services
             return _mapper.Map<EnrolleeViewModel>(dto);
         }
 
-        public async Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
+        public async Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null, ClaimsPrincipal user = null)
         {
             searchOptions ??= new EnrolleeSearchOptions();
 
@@ -199,6 +199,13 @@ namespace Prime.Services
                             "displayId_desc" => q.OrderByDescending(e => e.Id),
                             _ => q.OrderBy(e => e.Id),
                         }
+                )
+                // If not in role of `ViewEnrollee`, filter/restrict to Claimed and Unclaimed Paper Enrolments
+                // (same as logic above)
+                .If(user != null && !user.IsInRole(Roles.ViewEnrollee), q => q
+                    .Where(e => _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id) ||
+                                (e.GPID.StartsWith(Enrollee.PaperGpidPrefix)
+                                    && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id)))
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
                 .DecompileAsync();
@@ -274,6 +281,14 @@ namespace Prime.Services
                 enrollee.FirstName = updateModel.PreferredFirstName;
                 enrollee.LastName = updateModel.PreferredLastName;
                 enrollee.GivenNames = $"{updateModel.PreferredFirstName} {updateModel.PreferredMiddleName}";
+            }
+
+            foreach (var cert in updateModel.Certifications)
+            {
+                if (cert != null && cert.PractitionerId != null)
+                {
+                    cert.PractitionerId = cert.PractitionerId.ToUpper();
+                }
             }
 
             UpdateAddress(enrollee, updateModel.PhysicalAddress);
@@ -908,11 +923,26 @@ namespace Prime.Services
             return await _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                // Filter out enrollees that haven't got a signed TOA
+                .Where(e => e.CurrentAgreementId != null)
                 .Select(e => new HpdidLookup
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
-                    RenewalDate = e.ExpiryDate
+                    RenewalDate = e.ExpiryDate,
+                    // TODO: Refactor code from `EnrolmentCertificate` class
+                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
+                        .Where(a => a.AcceptedDate != null)
+                        .Select(a => a.AgreementVersion.AccessType)
+                        .FirstOrDefault(),
+                    Licences = e.Certifications.Select(cert =>
+                        new EnrolleeCertDto
+                        {
+                            // TODO: Retrieve from cert.Prefix in future?
+                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                            CollegeLicenceNumber = cert.LicenseNumber,
+                            PharmaNetId = cert.PractitionerId
+                        })
                 })
                 .DecompileAsync()
                 .ToListAsync();
@@ -1145,6 +1175,36 @@ namespace Prime.Services
             var enrollee = await _context.Enrollees.SingleAsync(e => e.Id == enrolleeId);
             enrollee.DateOfBirth = dateOfBirth;
             await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateCertificationPrefix(int cretId, string prefix)
+        {
+            var certification = await _context.Certifications.SingleAsync(c => c.Id == cretId);
+            if (certification != null)
+            {
+                certification.Prefix = prefix;
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<string>> FilterToUpdatedAsync(IEnumerable<string> hpdids, DateTimeOffset updatedSince)
+        {
+            hpdids.ThrowIfNull(nameof(hpdids));
+
+            hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
+
+            return await _context.Enrollees
+                .Where(e => hpdids.Contains(e.HPDID))
+                .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                // Filter out enrollees that haven't got a signed TOA
+                .Where(e => e.CurrentAgreementId != null)
+                .Where(e => ((DateTimeOffset)e.Agreements.OrderByDescending(a => a.CreatedDate)
+                                .Where(a => a.AcceptedDate != null)
+                                .Select(a => a.AcceptedDate)
+                                .FirstOrDefault()).CompareTo(updatedSince) > 0)
+                .Select(e => e.HPDID)
+                .DecompileAsync()
+                .ToListAsync();
         }
     }
 }

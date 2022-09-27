@@ -21,6 +21,8 @@ namespace Prime.ViewModels
 
         public bool LicensedToProvideCare { get; set; }
 
+        public bool AllowRequestRemoteAccess { get; set; }
+
         public PrescriberIdType? PrescriberIdType { get; set; }
 
         public ICollection<CollegeLicense> CollegeLicenses { get; set; }

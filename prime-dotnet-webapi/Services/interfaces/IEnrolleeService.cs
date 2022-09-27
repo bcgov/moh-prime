@@ -19,7 +19,7 @@ namespace Prime.Services
         Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
         Task<string> GetActiveGpidAsync(Guid userId);
         Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId);
-        Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
+        Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null, ClaimsPrincipal user = null);
         Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId);
         Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
@@ -68,5 +68,7 @@ namespace Prime.Services
         Task DeleteFutureEnrolleeAbsenceAsync(int enrolleeId, int absenceId);
         Task<string> GetAdjudicatorIdirForEnrolleeAsync(int enrolleeId);
         Task UpdateDateOfBirthAsync(int enrolleeId, DateTime dateOfBirth);
+        Task UpdateCertificationPrefix(int cretId, string prefix);
+        Task<IEnumerable<string>> FilterToUpdatedAsync(IEnumerable<string> hpdids, DateTimeOffset updatedSince);
     }
 }

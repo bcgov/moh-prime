@@ -43,6 +43,9 @@ namespace Prime.Configuration.Auth
         public const string ViewSite = "site_view";
         public const string EditSite = "site_edit";
         public const string PrimeMaintenance = "prime_maintenance";
+        public const string ViewPaperEnrolmentsOnly = "paper_enrolment_only_view";
+        public const string EditPaperEnrolmentsOnly = "paper_enrolment_only_edit";
+
 
         // Business value role that doesn't represent a permission
         public const string PrimeAdministrant = "prime_administrant";

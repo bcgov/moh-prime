@@ -65,6 +65,8 @@ namespace Prime.Models
 
         public ICollection<Certification> Certifications { get; set; }
 
+        public ICollection<UnlistedCertification> UnlistedCertifications { get; set; }
+
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
         public string DeviceProviderIdentifier { get; set; }
@@ -260,6 +262,25 @@ namespace Prime.Models
                 .Where(at => at.AcceptedDate.HasValue)
                 .Select(at => (DateTimeOffset?)at.ExpiryDate)
                 .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// The expiry reason of the Enrollee's most recently accepted Agreement,
+        /// defaulting to ExpiryReasonType.AnniversaryRenewalRequired if not known.
+        /// </summary>
+        [NotMapped]
+        [Computed]
+        public ExpiryReasonType ExpiryReason
+        {
+            get
+            {
+                var expiryReasonType = Agreements
+                    .OrderByDescending(at => at.CreatedDate)
+                    .Where(at => at.AcceptedDate.HasValue)
+                    .Select(at => at.ExpiryReason)
+                    .FirstOrDefault();
+                return expiryReasonType != null ? (ExpiryReasonType)expiryReasonType : ExpiryReasonType.AnniversaryRenewalRequired;
+            }
         }
 
         [NotMapped]

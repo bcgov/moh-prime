@@ -25,6 +25,10 @@ import { RegulatoryForm } from './regulatory-form.model';
                             [makeBold]="true">
         {{ regulatory?.deviceProviderIdentifier | default }}
       </app-enrollee-property>
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">Edit Device Provider ID
+      </button>
     </app-page-section>
 
     <app-page-section>
@@ -32,7 +36,7 @@ import { RegulatoryForm } from './regulatory-form.model';
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
 
         <button mat-icon-button
-                matTooltip="Edit college licences"
+                matTooltip="Edit College Licences"
                 (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">
           <mat-icon>edit</mat-icon>
         </button>
@@ -70,8 +74,61 @@ import { RegulatoryForm } from './regulatory-form.model';
       <app-enrollee-property *ngIf="!regulatory?.certifications?.length"
                              title="College Certification"
                              [makeBold]="true">
-        None
+        <div class="mb-2">
+          None
+        </div>
       </app-enrollee-property>
+
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">Edit College Licences
+      </button>
+    </app-page-section>
+
+    <app-page-section>
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Other College Licence Information</ng-container>
+
+        <button mat-icon-button
+                matTooltip="Edit Other College Licences"
+                (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </app-page-subheader>
+
+
+      <ng-container *ngIf="!regulatory?.unlistedCertifications?.length; else unlistedCerts">
+        <div class="mb-2">
+          No additional licence information entered
+        </div>
+      </ng-container>
+
+      <ng-template #unlistedCerts>
+        <ng-container *ngFor="let unlistedCertification of regulatory?.unlistedCertifications; let i = index;">
+
+          <app-enrollee-property title="College Name"
+            [makeBold]="true">
+            {{ unlistedCertification.collegeName | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="College Licence"
+            [makeBold]="true">
+            {{ unlistedCertification.licenceNumber | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Renewal Date"
+            [makeBold]="true">
+            {{ unlistedCertification.renewalDate | formatDate | default }}
+          </app-enrollee-property>
+
+        </ng-container>
+      </ng-template>
+
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">Edit Other College Licences
+      </button>
     </app-page-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],

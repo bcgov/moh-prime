@@ -150,7 +150,9 @@
     </ng-template>
   </app-overview-section>
 
-  <app-overview-section title="Site Address"
+  <app-overview-section *ngIf="site?.physicalAddress?.street !== null && site?.physicalAddress?.city !== null &&
+                          site?.physicalAddress?.provinceCode !== null && site?.physicalAddress?.postal !== null"
+                        title="Site Address"
                         [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
                         [editRoute]="SiteRoutes.SITE_ADDRESS"
                         (route)="onRouteRelative($event)">

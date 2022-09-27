@@ -16,6 +16,7 @@ import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.mo
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { Job } from '@enrolment/shared/models/job.model';
+import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -25,6 +26,7 @@ export interface HttpEnrollee extends Enrollee {
   expiryDate?: string;
   certifications: CollegeCertification[];
   deviceProviderIdentifier: string;
+  unlistedCertifications: UnlistedCertification[];
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
@@ -80,6 +82,7 @@ export interface Enrolment {
   expiryDate?: string;
   certifications: CollegeCertification[];
   deviceProviderIdentifier: string;
+  unlistedCertifications: UnlistedCertification[];
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
