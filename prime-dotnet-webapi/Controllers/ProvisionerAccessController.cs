@@ -143,7 +143,7 @@ namespace Prime.Controllers
         [HttpGet("gpid-detail", Name = nameof(GetGpidDetail))]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<HpdidLookup>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetGpidDetail()
         {
             return Ok(await _enrolleeService.GetActiveGpidDetailAsync(User.GetPrimeUserId()));
