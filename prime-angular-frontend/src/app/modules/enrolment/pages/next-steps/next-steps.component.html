@@ -7,15 +7,15 @@
     </app-page-header>
 
     <app-enrolment-progress-indicator *ngIf="initialEnrolment"
-    [inProgress]="initialEnrolment"></app-enrolment-progress-indicator>
+                                      [inProgress]="initialEnrolment"></app-enrolment-progress-indicator>
 
 
     <div class="row">
 
       <ng-container *ngIf="initialEnrolment; else renewalConfirmation">
         <div *ngIf="!complete"
-                         imageName="notification"
-                         class="col-12">
+             imageName="notification"
+             class="col-12">
           <ng-container appPageSubheaderSummary>
             <p><strong>Share your approval with your PharmaNet administrator</strong></p>
           </ng-container>
@@ -82,22 +82,24 @@
           </div>
         </ng-container> -->
 
-          <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
-            <div class="col-12">
-              <ng-container [ngTemplateOutlet]="settingEmail"
-                            [ngTemplateOutletContext]="careSettingConfig">
-              </ng-container>
-            </div>
-          </ng-container>
+        <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
+          <div class="col-12">
+            <ng-container [ngTemplateOutlet]="settingEmail"
+                          [ngTemplateOutletContext]="careSettingConfig">
+            </ng-container>
+          </div>
+        </ng-container>
 
 
         <form [formGroup]="formState.form">
-          <div class="col col-sm-10 py-3" formArrayName="emails">
+          <div class="col col-sm-10 py-3"
+               formArrayName="emails">
             <ng-container *ngFor="let email of formState.emails.controls; let i = index;"
                           [formGroupName]="i">
               <app-email-form [form]="email"
                               [index]="i"
                               [formState]="formState"
+                              [validate]="true"
                               (remove)="removeEmail($event)">
               </app-email-form>
             </ng-container>
@@ -121,7 +123,7 @@
 
       <ng-template #renewalConfirmation>
         <div imageName="notification"
-                         class="col-12">
+             class="col-12">
           <ng-container appInfographicHeader>
             Share your approval with your PharmaNet administrator
           </ng-container>
@@ -162,13 +164,15 @@
 
     <ng-template #emailGroup>
       <form [formGroup]="formState.form">
-        <div class="col col-sm-10 py-3" formArrayName="emails">
+        <div class="col col-sm-10 py-3"
+             formArrayName="emails">
 
           <ng-container *ngFor="let email of formState.emails.controls; let i = index;"
                         [formGroupName]="i">
             <app-email-form [form]="email"
                             [index]="i"
                             [formState]="formState"
+                            [validate]="true"
                             (remove)="removeEmail($event)">
             </app-email-form>
           </ng-container>
@@ -213,12 +217,12 @@
                 type="button"
                 color="primary"
                 (click)="sendProvisionerAccessLinkTo(settingCode)">
-                Send Email
+          Send Email
         </button>
-    </div>
-  </ng-template>
+      </div>
+    </ng-template>
 
-      <!-- <form [formGroup]="formState.form">
+    <!-- <form [formGroup]="formState.form">
         <div class="col col-sm-10 py-3" formArrayName="emails">
 
           <ng-container *ngFor="let email of formState.emails.controls; let i = index;"
@@ -241,7 +245,7 @@
       </form> -->
 
 
-      <!-- <form [formGroup]="form">
+    <!-- <form [formGroup]="form">
 
         <div class="row"
              [hidden]="!isEmailVisible(settingCode)">
@@ -287,7 +291,7 @@
 
       </form> -->
 
-      <!-- <ng-container *ngIf="!isEmailVisible(settingCode)">
+    <!-- <ng-container *ngIf="!isEmailVisible(settingCode)">
         <p class="mb-4 text-green">
           Email sent to: {{ formControl.value }}
           <br>
