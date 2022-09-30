@@ -20,6 +20,8 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
 import { Role } from '@auth/shared/enum/role.enum';
+import { PharmanetEnrolmentSummaryFormState } from './pharmanet-enrolment-summary-form-state';
+import { ConfigService } from '@config/config.service';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
@@ -27,8 +29,9 @@ import { Role } from '@auth/shared/enum/role.enum';
   styleUrls: ['./pharmanet-enrolment-summary.component.scss']
 })
 export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implements OnInit {
-  public form: FormGroup;
   public enrolment: Enrolment;
+  public vendorForm: FormGroup;
+  public formState: PharmanetEnrolmentSummaryFormState;
 
   public CareSettingEnum = CareSettingEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
@@ -41,7 +44,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public currentAgreementGroup: AgreementTypeGroup;
 
   public initialEnrolment: boolean;
-  public complete: boolean = true;
+  public complete: boolean;
 
   public careSettingConfigs: {
     setting: string,
@@ -59,7 +62,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private dialog: MatDialog,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private configService: ConfigService
   ) {
     super(route, router);
     this.showCommunityHealth = true;
@@ -67,9 +71,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.showHealthAuthority = true;
     this.showDeviceProvider = true;
 
-    this.form = this.buildVendorEmailGroup();
+    this.vendorForm = this.buildVendorEmailGroup();
     this.careSettingConfigs = [];
-    // this.complete = true;
+    this.complete = true;
   }
 
   public get enrollee() {
@@ -91,19 +95,19 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public get communityHealthEmails(): FormControl {
-    return this.form.get('communityHealthEmails') as FormControl;
+    return this.vendorForm.get('communityHealthEmails') as FormControl;
   }
 
   public get pharmacistEmails(): FormControl {
-    return this.form.get('pharmacistEmails') as FormControl;
+    return this.vendorForm.get('pharmacistEmails') as FormControl;
   }
 
   public get healthAuthorityEmails(): FormControl {
-    return this.form.get('healthAuthorityEmails') as FormControl;
+    return this.vendorForm.get('healthAuthorityEmails') as FormControl;
   }
 
   public get deviceProviderEmails(): FormControl {
-    return this.form.get('deviceProviderEmails') as FormControl;
+    return this.vendorForm.get('deviceProviderEmails') as FormControl;
   }
 
   public get GPID(): string {
@@ -186,7 +190,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
     if (!formControl) { return; }
 
-    const emails = formControl.value?.split(',').map((email: string) => email.trim()).join(',') || null;
+    const emails = this.formState.emails.value.map(email => email.email);
+
+    this.sendProvisionerAccessLink(emails, formControl, careSettingCode);
 
     (formControl.valid)
       ? this.sendProvisionerAccessLink(emails, formControl, careSettingCode)
@@ -264,8 +270,13 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     }
   }
 
+  public removeEmail(index: number): void {
+    this.formState.removeEmail(index);
+  }
+
   public ngOnInit(): void {
     this.enrolment = this.enrolmentService.enrolment;
+    this.createFormInstance();
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.initialEnrolment = this.route.snapshot.queryParams?.initialEnrolment === 'true';
 
@@ -312,6 +323,10 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         }
       }
     });
+  }
+
+  protected createFormInstance(): void {
+    this.formState = new PharmanetEnrolmentSummaryFormState(this.fb, this.configService);
   }
 
   private buildVendorEmailGroup(): FormGroup {

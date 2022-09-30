@@ -31,9 +31,35 @@
               return to PRIME later to enter the email(s).
             </p>
 
-            <ng-container [ngTemplateOutlet]="emailGroup"
-                          [ngTemplateOutletContext]="careSettingConfigs">
+            <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
+              <div class="col-12">
+                <ng-container [ngTemplateOutlet]="settingEmail"
+                              [ngTemplateOutletContext]="careSettingConfig">
+                </ng-container>
+              </div>
             </ng-container>
+
+            <form [formGroup]="formState.form">
+              <div class="col col-sm-10 py-3"
+                   formArrayName="emails">
+                <ng-container *ngFor="let email of formState.emails.controls; let i = index;"
+                              [formGroupName]="i">
+                  <app-email-form [form]="email"
+                                  [index]="i"
+                                  [formState]="formState"
+                                  [validate]="true"
+                                  (remove)="removeEmail($event)">
+                  </app-email-form>
+                </ng-container>
+                <button mat-button
+                        type="button"
+                        color="primary"
+                        (click)="formState.addEmptyEmailInput()">
+                  <mat-icon>add</mat-icon>
+                  Add email of PharmaNet administrator
+                </button>
+              </div>
+            </form>
 
             <!-- <section>
               <h6 class="mb-0">
@@ -154,9 +180,38 @@
               Note: You cannot access PharmaNet without completing this step.
             </p>
 
-            <ng-container [ngTemplateOutlet]="emailGroup"
-                          [ngTemplateOutletContext]="careSettingConfigs">
+            <form [formGroup]="formState.form">
+              <div class="col col-sm-10 py-3"
+                   formArrayName="emails">
+                <ng-container *ngFor="let email of formState.emails.controls; let i = index;"
+                              [formGroupName]="i">
+                  <app-email-form [form]="email"
+                                  [index]="i"
+                                  [formState]="formState"
+                                  [validate]="true"
+                                  (remove)="removeEmail($event)">
+                  </app-email-form>
+                </ng-container>
+                <button mat-button
+                        type="button"
+                        color="primary"
+                        (click)="formState.addEmptyEmailInput()">
+                  <mat-icon>add</mat-icon>
+                  Add email of PharmaNet administrator
+                </button>
+              </div>
+
+            </form>
+            <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
+              <div class="col-12">
+                <ng-container [ngTemplateOutlet]="settingEmail">
+                </ng-container>
+              </div>
             </ng-container>
+
+            <!-- <ng-container [ngTemplateOutlet]="emailGroup"
+                          [ngTemplateOutletContext]="careSettingConfigs">
+            </ng-container> -->
 
             <!-- <section>
               <h6 class="mb-0">
@@ -177,6 +232,7 @@
           </ng-container>
         </div>
       </ng-template>
+
 
       <!-- <div *ngIf="!initialEnrolment || !complete"
                        imageName="moa"
@@ -204,7 +260,7 @@
       </div> -->
     </div>
 
-    <ng-template #emailGroup>
+    <!-- <ng-template #emailGroup>
       <form [formGroup]="form">
 
         <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
@@ -215,8 +271,7 @@
 
         </ng-container>
       </form>
-    </ng-template>
-
+    </ng-template> -->
     <ng-template #settingEmail
                  let-setting="setting"
                  let-settingPlural="settingPlural"
@@ -233,78 +288,14 @@
         </ng-container>
       </app-page-subheader>
 
-      <form [formGroup]="form">
-
-        <div class="row"
-             [hidden]="!isEmailVisible(settingCode)">
-          <div class="col-sm-8 col-xl-7">
-
-            <mat-form-field class="w-100 mb-3">
-              <input matInput
-                     placeholder="Email"
-                     [formControl]="formControl">
-              <mat-error *ngIf="formControl.hasError('required')">Required</mat-error>
-              <mat-error *ngIf="formControl.hasError('emails') && !formControl.hasError('trim')">Must be a valid
-                email address(es)</mat-error>
-              <mat-error *ngIf="formControl.hasError('emails') && formControl.hasError('trim')">Contains invalid
-                space character(s)</mat-error>
-            </mat-form-field>
-
-          </div>
-          <!-- <div class="col-sm-4 col-xl-3">
-
-            <button mat-flat-button
-                    type="button"
-                    color="primary"
-                    class="w-100 mb-4"
-                    (click)="sendProvisionerAccessLinkTo(settingCode)">
-              Send
-            </button>
-
-          </div> -->
-        </div>
-        <div class="row">
-          <button mat-button
+      <div class="col pt-2 text-right">
+        <button mat-flat-button
                 type="button"
                 color="primary"
-                (click)="setShowEmail(settingCode, true, formControl)">
-          <mat-icon>add</mat-icon>
-            Add email of PharmaNet administrator
-          </button>
-        </div>
-        <div class="row"
-        [hidden]="!isEmailVisible(settingCode)">
-
-          <div class="col pt-2 text-right">
-
-            <button mat-flat-button
-                    type="button"
-                    color="primary"
-                    (click)="sendProvisionerAccessLinkTo(settingCode)">
-              Send Email
-            </button>
-
-          </div>
-        </div>
-
-
-      </form>
-
-      <ng-container *ngIf="!isEmailVisible(settingCode)">
-        <p class="mb-4 text-green">
-          Email sent to: {{ formControl.value }}
-          <br>
-              If you work in multiple {{ settingPlural }} you will need to notify them all.
-        </p>
-        <button mat-button
-                type="button"
-                color="primary"
-                class="mb-3"
-                (click)="setShowEmail(settingCode, true, formControl)">
-          <mat-icon>add</mat-icon>
-          Add {{ setting }}
+                (click)="sendProvisionerAccessLinkTo(settingCode)">
+          Send Email
         </button>
-      </ng-container>
+      </div>
     </ng-template>
 <!--
     <ng-template #concise
