@@ -31,56 +31,8 @@
               return to PRIME later to enter the email(s).
             </p>
 
-            <!-- <ng-container [ngTemplateOutlet]="emailGroup"
-                          [ngTemplateOutletContext]="careSettingConfigs">
-            </ng-container> -->
-
           </ng-container>
         </div>
-
-        <!-- <ng-container *ngIf="complete">
-
-          <app-alert type="success"
-                     icon="check_circle_outline"
-                     class="mb-5 col-12">
-            <ng-container #alertTitle
-                          class="alert-title">
-              Your enrolment in PRIME is complete
-            </ng-container>
-            <ng-container #alertContent
-                          class="alert-content">
-              <p>
-                You will need to renew your enrolment once a year, you will get an email reminding of your renewal date.
-              </p>
-              <p class="font-weight-bold">
-                Your renewal date is: {{ enrolment.expiryDate | formatDate }}
-              </p>
-              <p>
-                Access to PharmaNet is for professionals who care for patients as a key job duty. Your employer decides
-                whether you need direct access to PharmaNet (they may instead prefer you consult medication records
-                added to a patient’s chart). Access to PharmaNet is granted through PRIME according to legislation and
-                Ministry of Health policy.
-              </p>
-              <p *ngIf="currentAgreementGroup"
-                 class="font-weight-bold">
-                {{getAgreementDescription()}}
-              </p>
-            </ng-container>
-
-          </app-alert>
-          <div imageName="global"
-                           class="col-12">
-            <ng-container appInfographicHeader>
-              Global PharmaNet ID
-            </ng-container>
-            <ng-container appInfographicDescription>
-              PRIME has assigned you a global PharmaNet ID (GPID). This will be attached to all of your transactions in
-              PharmaNet. It protects your information and patient information. If you ever need your GPID, you can sign
-              in to PRIME to access it.
-            </ng-container>
-
-          </div>
-        </ng-container> -->
 
         <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
           <div class="col-12">
@@ -111,11 +63,7 @@
               Add email of PharmaNet administrator
             </button>
           </div>
-          <!-- <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
-            <ng-container [ngTemplateOutlet]="settingEmail"
-                          [ngTemplateOutletContext]="careSettingConfig">
-            </ng-container>
-          </ng-container> -->
+
         </form>
 
 
@@ -154,9 +102,6 @@
               Note: You cannot access PharmaNet without completing this step.
             </p>
 
-            <!-- <ng-container [ngTemplateOutlet]="emailGroup"
-                          [ngTemplateOutletContext]="careSettingConfigs">
-            </ng-container> -->
           </ng-container>
         </div>
       </ng-template>
@@ -186,13 +131,6 @@
 
         </div>
 
-        <!-- <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
-
-          <ng-container [ngTemplateOutlet]="settingEmail"
-                        [ngTemplateOutletContext]="careSettingConfig">
-          </ng-container>
-
-        </ng-container> -->
       </form>
     </ng-template>
 
@@ -221,91 +159,6 @@
         </button>
       </div>
     </ng-template>
-
-    <!-- <form [formGroup]="formState.form">
-        <div class="col col-sm-10 py-3" formArrayName="emails">
-
-          <ng-container *ngFor="let email of formState.emails.controls; let i = index;"
-                        [formGroupName]="i">
-            <app-email-form [form]="email"
-                            [index]="i"
-                            [formState]="formState"
-                            (remove)="removeEmail($event)">
-            </app-email-form>
-          </ng-container>
-          <button mat-button
-                  type="button"
-                  color="primary"
-                  (click)="formState.addEmptyEmailInput()">
-            <mat-icon>add</mat-icon>
-            Add email of PharmaNet administrator
-          </button>
-
-        </div>
-      </form> -->
-
-
-    <!-- <form [formGroup]="form">
-
-        <div class="row"
-             [hidden]="!isEmailVisible(settingCode)">
-          <div class="col-sm-8 col-xl-7">
-
-            <mat-form-field class="w-100 mb-3">
-              <input matInput
-                     placeholder="Email"
-                     [formControl]="formControl">
-              <mat-error *ngIf="formControl.hasError('required')">Required</mat-error>
-              <mat-error *ngIf="formControl.hasError('emails') && !formControl.hasError('trim')">Must be a valid
-                email address(es)</mat-error>
-              <mat-error *ngIf="formControl.hasError('emails') && formControl.hasError('trim')">Contains invalid
-                space character(s)</mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-        <div class="row">
-          <button mat-button
-                type="button"
-                color="primary"
-                (click)="addVendorEmail(settingCode)">
-          <mat-icon>add</mat-icon>
-            Add email of PharmaNet administrator
-          </button>
-        </div>
-        <div class="row"
-        [hidden]="!isEmailVisible(settingCode)">
-
-          <div class="col pt-2 text-right">
-
-            <button mat-flat-button
-                    type="button"
-                    color="primary"
-                    (click)="sendProvisionerAccessLinkTo(settingCode)">
-              Send Email
-            </button>
-
-          </div>
-        </div>
-
-
-      </form> -->
-
-    <!-- <ng-container *ngIf="!isEmailVisible(settingCode)">
-        <p class="mb-4 text-green">
-          Email sent to: {{ formControl.value }}
-          <br>
-              If you work in multiple {{ settingPlural }} you will need to notify them all.
-        </p>
-        <button mat-button
-                type="button"
-                color="primary"
-                class="mb-3"
-                (click)="setShowEmail(settingCode, true, formControl)">
-          <mat-icon>add</mat-icon>
-          Add {{ setting }}
-        </button>
-      </ng-container> -->
 
   </app-enrollee-page>
 

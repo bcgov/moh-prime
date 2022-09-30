@@ -61,22 +61,6 @@
               </div>
             </form>
 
-            <!-- <section>
-              <h6 class="mb-0">
-                For your reference your GPID is:
-              </h6>
-
-              {{ GPID }}
-
-              <button mat-icon-button
-                      type="button"
-                      aria-label="Copy your GPID"
-                      matTooltip="Copy your GPID"
-                      [cdkCopyToClipboard]="GPID"
-                      (cdkCopyToClipboardCopied)="onCopy()">
-                <mat-icon>content_paste</mat-icon>
-              </button>
-            </section> -->
           </ng-container>
         </div>
 
@@ -209,42 +193,13 @@
               </div>
             </ng-container>
 
-            <!-- <ng-container [ngTemplateOutlet]="emailGroup"
-                          [ngTemplateOutletContext]="careSettingConfigs">
-            </ng-container> -->
-
-            <!-- <section>
-              <h6 class="mb-0">
-                For your reference your Global PharmaNet ID (GPID) is:
-              </h6>
-
-              {{ GPID }}
-
-              <button mat-icon-button
-                      type="button"
-                      aria-label="Copy your GPID to clipboard"
-                      matTooltip="Copy your GPID to clipboard"
-                      [cdkCopyToClipboard]="GPID"
-                      (cdkCopyToClipboardCopied)="onCopy()">
-                <mat-icon>content_paste</mat-icon>
-              </button>
-            </section> -->
           </ng-container>
         </div>
       </ng-template>
 
-
-      <!-- <div *ngIf="!initialEnrolment || !complete"
-                       imageName="moa"
-                       class="col-12">
-        <ng-container appInfographicHeader>
-          Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up
-        </ng-container>
-      </div> -->
-
-      <!-- <div *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
+      <div *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
                        imageName="approval"
-                       class="col-12">
+                       class="vc">
         <ng-container appInfographicHeader>
           Access your verified credential (optional)
         </ng-container>
@@ -257,21 +212,9 @@
             Verified Credential
           </button>
         </ng-container>
-      </div> -->
+      </div>
     </div>
 
-    <!-- <ng-template #emailGroup>
-      <form [formGroup]="form">
-
-        <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
-
-          <ng-container [ngTemplateOutlet]="settingEmail"
-                        [ngTemplateOutletContext]="careSettingConfig">
-          </ng-container>
-
-        </ng-container>
-      </form>
-    </ng-template> -->
     <ng-template #settingEmail
                  let-setting="setting"
                  let-settingPlural="settingPlural"
@@ -297,22 +240,6 @@
         </button>
       </div>
     </ng-template>
-<!--
-    <ng-template #concise
-                 let-provisioner="provisioner">
-      <p class="mb-4">
-        Your PharmaNet approval notification will be sent to {{ provisioner }}.
-      </p>
-    </ng-template>
-
-    <ng-template #verbose
-                 let-provisioner="provisioner">
-      <p class="mb-4">
-        Provide the email address of the person in your organization who is responsible for contacting
-        {{ provisioner }} to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple
-        emails addresses. Do not enter your own email as you will be copied on the communication.
-      </p>
-    </ng-template> -->
 
   </app-enrollee-page>
 
