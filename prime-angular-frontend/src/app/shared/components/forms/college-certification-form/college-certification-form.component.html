@@ -77,7 +77,7 @@
                    [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.CPBC
                     || collegeCode.value === CollegeLicenceClassEnum.CDSBC
                     || collegeCode.value === CollegeLicenceClassEnum.OptometryBC)
-                    ? 'Registration Number' : 'Licence Number from College'"
+                    ? 'Registration Number' : 'Registration ID'"
                    formControlName="licenseNumber">
             <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
             <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">
@@ -160,7 +160,8 @@
             <mat-slide-toggle class="mr-4"
                               [checked]="practitionerId.value"
                               (change)="onPrescribing($event)">
-              Do you have a PharmaNet ID issued by the College?
+              Do you have a {{(collegeCode.value === CollegeLicenceClassEnum.BCCNM) ?
+              "PharmaNet ID/Prescriber ID":"PharmaNet ID"}} issued by the College?
             </mat-slide-toggle>
           </div>
 
@@ -169,7 +170,7 @@
             <app-form-icon-group>
               <mat-form-field class="w-100">
                 <input matInput
-                       placeholder="PharmaNet ID"
+                       [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.BCCNM) ?  'PharmaNet ID/Prescriber ID' : 'PharmaNet ID'"
                        formControlName="practitionerId"
                        class="uppercase"
                        maxlength="5"
@@ -181,7 +182,7 @@
               </mat-form-field>
 
               <ng-container appContextualContent>
-                A 5-digit ID assigned by your college for PharmaNet access.
+                Five digit (either all numeric or alpha-numeric) assigned by the college
               </ng-container>
             </app-form-icon-group>
 
