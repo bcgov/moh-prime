@@ -2,7 +2,9 @@ import * as faker from 'faker';
 
 import { BehaviorSubject } from 'rxjs';
 
+import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { Address } from '@lib/models/address.model';
+import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -44,6 +46,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       approvedDate: null,
       expiryDate: null,
       certifications: [],
+      unlistedCertifications: [],
       enrolleeRemoteUsers: [],
       remoteAccessSites: [],
       remoteAccessLocations: [],
@@ -143,6 +146,10 @@ export class MockEnrolmentService implements IEnrolmentService {
     return this._enrolment.value;
   }
 
+  public get enrollee(): Enrollee {
+    return this._enrolment.value.enrollee;
+  };
+
   public get isInitialEnrolment(): boolean {
     return !!this.enrolment.expiryDate;
   }
@@ -157,5 +164,9 @@ export class MockEnrolmentService implements IEnrolmentService {
 
   public get isPotentialPaperEnrollee(): boolean {
     return this._isPotentialPaperEnrollee;
+  }
+
+  public isPaperEnrollee(enrollee: Enrollee): boolean {
+    return (enrollee?.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX));
   }
 }

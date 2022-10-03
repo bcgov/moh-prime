@@ -283,6 +283,14 @@ namespace Prime.Services
                 enrollee.GivenNames = $"{updateModel.PreferredFirstName} {updateModel.PreferredMiddleName}";
             }
 
+            foreach (var cert in updateModel.Certifications)
+            {
+                if (cert != null && cert.PractitionerId != null)
+                {
+                    cert.PractitionerId = cert.PractitionerId.ToUpper();
+                }
+            }
+
             UpdateAddress(enrollee, updateModel.PhysicalAddress);
             UpdateAddress(enrollee, updateModel.MailingAddress);
             UpdateAddress(enrollee, updateModel.VerifiedAddress);
@@ -925,42 +933,19 @@ namespace Prime.Services
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
                         .Where(a => a.AcceptedDate != null)
-                        .Select(a => TranslateToAccessType(a.AgreementVersion.AgreementType))
+                        .Select(a => a.AgreementVersion.AccessType)
                         .FirstOrDefault(),
                     Licences = e.Certifications.Select(cert =>
                         new EnrolleeCertDto
                         {
                             // TODO: Retrieve from cert.Prefix in future?
-                            PractRefId = cert.License.CurrentLicenseDetail.Prefix,
+                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
                             CollegeLicenceNumber = cert.LicenseNumber,
                             PharmaNetId = cert.PractitionerId
                         })
                 })
                 .DecompileAsync()
                 .ToListAsync();
-        }
-
-        /// <summary>
-        /// Translate the Agreement Type into terms/words provisioner can understand
-        /// </summary>
-        private static string TranslateToAccessType(AgreementType agreementType)
-        {
-            switch (agreementType)
-            {
-                case AgreementType.CommunityPharmacistTOA:
-                    return "Independent User – Pharmacy";
-                case AgreementType.RegulatedUserTOA:
-                    return "Independent User - with OBOs";
-                case AgreementType.OboTOA:
-                    return "On-behalf-of User";
-                case AgreementType.PharmacyOboTOA:
-                    return "On-behalf-of User – Pharmacy";
-                // TODO: TBD
-                // case AgreementType.PharmacyTechnicianTOA:
-                //     break;
-                default:
-                    return "N/A";
-            }
         }
 
         public async Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)
@@ -1190,6 +1175,36 @@ namespace Prime.Services
             var enrollee = await _context.Enrollees.SingleAsync(e => e.Id == enrolleeId);
             enrollee.DateOfBirth = dateOfBirth;
             await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateCertificationPrefix(int cretId, string prefix)
+        {
+            var certification = await _context.Certifications.SingleAsync(c => c.Id == cretId);
+            if (certification != null)
+            {
+                certification.Prefix = prefix;
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<string>> FilterToUpdatedAsync(IEnumerable<string> hpdids, DateTimeOffset updatedSince)
+        {
+            hpdids.ThrowIfNull(nameof(hpdids));
+
+            hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
+
+            return await _context.Enrollees
+                .Where(e => hpdids.Contains(e.HPDID))
+                .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                // Filter out enrollees that haven't got a signed TOA
+                .Where(e => e.CurrentAgreementId != null)
+                .Where(e => ((DateTimeOffset)e.Agreements.OrderByDescending(a => a.CreatedDate)
+                                .Where(a => a.AcceptedDate != null)
+                                .Select(a => a.AcceptedDate)
+                                .FirstOrDefault()).CompareTo(updatedSince) > 0)
+                .Select(e => e.HPDID)
+                .DecompileAsync()
+                .ToListAsync();
         }
     }
 }

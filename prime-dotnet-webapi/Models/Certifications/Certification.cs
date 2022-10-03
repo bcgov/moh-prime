@@ -45,5 +45,7 @@ namespace Prime.Models
 
         [JsonIgnore]
         public Practice Practice { get; set; }
+
+        public string Prefix { get; set; }
     }
 }

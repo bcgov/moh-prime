@@ -67,7 +67,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   public onBack(): void {
     const backRoutePath = (this.enrollee.profileCompleted)
       ? PaperEnrolmentRoutes.OVERVIEW
-      : (this.enrollee?.certifications?.length)
+      : (this.enrollee?.certifications?.length || this.enrollee?.unlistedCertifications?.length)
         ? PaperEnrolmentRoutes.REGULATORY
         : PaperEnrolmentRoutes.OBO_SITES;
     this.routeUtils.routeRelativeTo([backRoutePath]);

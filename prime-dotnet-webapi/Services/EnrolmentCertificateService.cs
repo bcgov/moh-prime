@@ -27,6 +27,10 @@ namespace Prime.Services
                 .Include(t => t.Enrollee)
                     .ThenInclude(e => e.Agreements)
                         .ThenInclude(a => a.AgreementVersion)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.Certifications)
+                        .ThenInclude(c => c.License)
+                            .ThenInclude(l => l.LicenseDetails)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)

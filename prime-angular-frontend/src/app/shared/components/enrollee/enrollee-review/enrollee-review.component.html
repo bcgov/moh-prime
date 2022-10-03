@@ -31,9 +31,16 @@
   </ng-container>
 
   <ng-template #noPreferredName>
-    No preferred name entered.
+    <div class="mb-2">
+      No preferred name entered.
+    </div>
   </ng-template>
 
+  <button *ngIf="showEditRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(demographicRoutePath)">Edit Preferred Name
+  </button>
 </app-page-section>
 
 <app-address-view title="Verified Address"
@@ -67,6 +74,7 @@
     <app-address-view [address]="additionalAddress"></app-address-view>
   </ng-container>
 </ng-container>
+
 <app-page-section>
 
   <app-page-subheader>
@@ -87,6 +95,12 @@
   <app-enrollee-property title="Optional Extension Number">
     {{ enrollee?.phoneExtension | default }}
   </app-enrollee-property>
+
+  <button *ngIf="showEditRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(demographicRoutePath)">Edit Contact Information
+  </button>
 
 </app-page-section>
 
@@ -111,6 +125,12 @@
     {{ enrollee?.smsPhone | phone | default }}
   </app-enrollee-property>
 
+  <button *ngIf="showEditRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(demographicRoutePath)">Edit Notification Information
+  </button>
+
 </app-page-section>
 
 <app-page-section>
@@ -124,9 +144,14 @@
             (click)="onRoute(EnrolmentRoutes.CARE_SETTING)">
       <mat-icon>edit</mat-icon>
     </button>
+
   </app-page-subheader>
 
-  <ng-container *ngFor="let careSetting of enrolment.careSettings">
+  <ng-container *ngFor="
+            let
+            careSetting
+            of
+            enrolment.careSettings">
 
     <app-enrollee-property title="Care Setting"
                            [hasError]="enrolmentErrors?.missingHealthAuthorityCareSetting && careSetting.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
@@ -142,6 +167,12 @@
                          [makeBold]="true">
     None
   </app-enrollee-property>
+
+  <button *ngIf="showEditRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(EnrolmentRoutes.CARE_SETTING)">Edit Care Setting
+  </button>
 
 </app-page-section>
 
@@ -165,6 +196,12 @@
     </app-enrollee-property>
   </ng-container>
 
+  <button *ngIf="showEditRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(EnrolmentRoutes.CARE_SETTING)">Edit Health Authority
+  </button>
+
 </app-page-section>
 
 <app-page-section>
@@ -186,6 +223,13 @@
                          [makeBold]="true">
     {{ enrolment.deviceProviderIdentifier | default }}
   </app-enrollee-property>
+
+  <button *ngIf="showEditRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(EnrolmentRoutes.REGULATORY)">Edit Device Provider ID
+  </button>
+
 </app-page-section>
 
 <app-page-section>
@@ -226,7 +270,8 @@
 
     <app-enrollee-property [hasError]="enrolmentErrors?.expiredCertification"
                            errorMessage="Renewal date must be in the future."
-                           title="Renewal Date">
+                           title="Renewal Date"
+                           [showError]="true">
       {{ certification.renewalDate | formatDate | default }}
     </app-enrollee-property>
 
@@ -244,6 +289,58 @@
     None
   </app-enrollee-property>
 
+  <button *ngIf="showEditRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(EnrolmentRoutes.REGULATORY)">Edit College Licence Information
+  </button>
+</app-page-section>
+
+<app-page-section *ngIf="isPaperEnrollee(enrollee)">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Other College Licence Information</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit College Licences"
+            (click)="onRoute(EnrolmentRoutes.REGULATORY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <ng-container *ngIf="!enrolment?.unlistedCertifications?.length; else unlistedCerts">
+    <div class="mb-2">
+      No additional licence information entered
+    </div>
+  </ng-container>
+
+  <ng-template #unlistedCerts>
+    <ng-container *ngFor="let unlistedCertification of unlistedCertifications; let i = index;">
+
+      <app-enrollee-property title="College Name"
+                             [makeBold]="true">
+        {{ unlistedCertification.collegeName | default }}
+      </app-enrollee-property>
+
+      <app-enrollee-property title="College Licence"
+                             [makeBold]="true">
+        {{ unlistedCertification.licenceNumber | default }}
+      </app-enrollee-property>
+
+      <app-enrollee-property title="Renewal Date"
+                             [makeBold]="true">
+        {{ unlistedCertification.renewalDate | formatDate | default }}
+      </app-enrollee-property>
+
+    </ng-container>
+  </ng-template>
+
+  <button *ngIf="showEditRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(EnrolmentRoutes.REGULATORY)">Edit Other College Licence Information
+  </button>
 </app-page-section>
 
 <app-page-section>
@@ -290,7 +387,11 @@
               {{ site.jobTitle | default }}
             </app-enrollee-property>
 
-            <app-enrollee-property title="Site Address"
+            <app-enrollee-property *ngIf="site.physicalAddress?.street !== null &&
+                                      site.physicalAddress?.city !== null &&
+                                      site.physicalAddress?.provinceCode !== null &&
+                                      site.physicalAddress?.postal !== null"
+                                   title="Site Address"
                                    [makeBold]="true">
               <app-enrollee-property title="Street">
                 {{ site.physicalAddress?.street | default }}
@@ -338,6 +439,18 @@
     </ng-container>
   </ng-template>
 
+  <button *ngIf="showEditRedirect && (
+          enrolment.oboSites?.length
+          ||
+          enrolment.jobs?.length
+          ||
+          (enrolmentErrors?.certificateOrOboSite
+          ||
+          enrolmentErrors?.deviceProviderOrOboSite))"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(EnrolmentRoutes.OBO_SITES)">Edit Job Site Information
+  </button>
 </app-page-section>
 
 <app-page-section *ngIf="isRequestingRemoteAccess">
@@ -416,9 +529,16 @@
 
   </ng-container>
 
+  <button *ngIf="showEditRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(EnrolmentRoutes.REMOTE_ACCESS)">Edit Remote Access
+  </button>
 </app-page-section>
 
-<app-enrollee-self-declarations [enrolment]="enrolment">
+<app-enrollee-self-declarations [enrolment]="enrolment"
+                                [showRedirect]="showEditRedirect"
+                                (route)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">
   <button *ngIf="showEditRedirect"
           mat-icon-button
           matTooltip="Edit Self-Declaration"

@@ -52,7 +52,9 @@ import { OboSitesForm } from './obo-sites-form.model';
                 {{ oboSite.jobTitle | default }}
               </app-enrollee-property>
 
-              <app-enrollee-property title="Site Address"
+              <app-enrollee-property *ngIf="oboSite.physicalAddress?.street !== null && oboSite.physicalAddress?.city !== null &&
+                                     oboSite.physicalAddress?.provinceCode !== null && oboSite.physicalAddress?.postal !== null"
+                                     title="Site Address"
                                      [makeBold]="true">
                 <app-enrollee-property title="Street">
                   {{ oboSite.physicalAddress?.street | default }}
@@ -75,7 +77,10 @@ import { OboSitesForm } from './obo-sites-form.model';
           </ng-container>
         </ng-container>
       </ng-container>
-
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.OBO_SITES)">Edit Job Site Information
+      </button>
     </app-page-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],

@@ -8,8 +8,8 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 import { EnrolmentRegulatoryForm } from './enrolment-regulatory-form.model';
 export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryForm> {
   public constructor(
-    private fb: FormBuilder,
-    private configService: ConfigService
+    protected fb: FormBuilder,
+    protected configService: ConfigService
   ) {
     super();
     this.buildForm();

@@ -81,6 +81,7 @@ import { AddressAutocompleteComponent } from '@shared/components/address-autocom
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
 import { AccessCodeFormComponent } from '@shared/components/forms/access-code-form/access-code-form.component';
 import { ContactInformationFormComponent } from '@shared/components/forms/contact-information-form/contact-information-form.component';
+import { UnlistedCollegeLicenceFormComponent } from '@shared/components/forms/unlisted-college-licence-form/unlisted-college-licence-form.component';
 import {
   EnrolleeSelfDeclarationsComponent
 } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
@@ -230,7 +231,8 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     VendorOverviewComponent,
     SiteInformationOverviewComponent,
     HealthAuthSiteOverviewContainerComponent,
-    DateOfBirthComponent
+    DateOfBirthComponent,
+    UnlistedCollegeLicenceFormComponent
   ],
   imports: [
     CommonModule,
@@ -339,7 +341,8 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     SiteAddressOverviewComponent,
     VendorOverviewComponent,
     SiteInformationOverviewComponent,
-    HealthAuthSiteOverviewContainerComponent
+    HealthAuthSiteOverviewContainerComponent,
+    UnlistedCollegeLicenceFormComponent
   ],
   providers: [
     FullnamePipe,
