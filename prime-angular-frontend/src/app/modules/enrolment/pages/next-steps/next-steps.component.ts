@@ -169,7 +169,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
         this.router.navigate([EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
           { relativeTo: this.route.parent, queryParams: { initialEnrolment: true } });
       });
-      this.onPageChange({ atEnd: true });
+    this.onPageChange({ atEnd: true });
   }
 
   public sendProvisionerAccessLinkTo(careSettingCode: number) {
@@ -196,8 +196,6 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
 
     if (!formControl) { return; }
 
-    // const emails = formControl.value?.split(',').map((email: string) => email.trim()).join(',') || null;
-    // const emails = formControl.value?.map(email => email);
     const emails = this.formState.emails.value.map(email => email.email);
 
     this.sendProvisionerAccessLink(emails, formControl, careSettingCode);
@@ -210,13 +208,6 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
   public removeEmail(index: number): void {
     this.formState.removeEmail(index);
   }
-
-  // public onNextPage() {
-  //   if (!this.hasReadAgreement) {
-  //     // this.utilsService.scrollTop();
-  //     this.onPageChange({ atEnd: true });
-  //   }
-  // }
 
   public onPageChange(agreement: { atEnd: boolean }) {
     if (agreement.atEnd) {
@@ -234,7 +225,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     this.patchForm().subscribe(() => this.initForm());
 
     this.enrolmentResource.getCurrentAgreementGroupForAnEnrollee(this.enrolment.id)
-    .subscribe((group: AgreementTypeGroup) => this.currentAgreementGroup = group)
+      .subscribe((group: AgreementTypeGroup) => this.currentAgreementGroup = group)
 
     this.careSettingConfigs = this.careSettings.map(careSetting => {
       switch (careSetting.careSettingCode) {
@@ -282,7 +273,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     if (!this.formState.emails.length) {
       this.formState.addEmptyEmailInput();
     }
-   }
+  }
 
   protected createFormInstance(): void {
     this.formState = new NextStepsFormState(this.fb, this.configService);

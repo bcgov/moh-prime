@@ -1,6 +1,5 @@
 <ng-container [formGroup]="form">
-  <app-form-icon-group
-    (event)="removeEmailInput()">
+  <app-form-icon-group (event)="removeEmailInput()">
     <div class="row">
       <div class="col">
 
@@ -10,9 +9,9 @@
                  formControlName="email"
                  maxlength="50">
           <mat-error *ngIf="email.errors?.['required']">Required</mat-error>
+          <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
         </mat-form-field>
-
       </div>
     </div>
-    </app-form-icon-group>
+  </app-form-icon-group>
 </ng-container>

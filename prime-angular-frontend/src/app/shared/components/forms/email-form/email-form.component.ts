@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ViewportService } from '@core/services/viewport.service';
-import { NextStepsFormState } from '@paper-enrolment/pages/next-steps-page/next-steps-form-state.class';
-import moment from 'moment';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
+import { NextStepsFormState } from '@paper-enrolment/pages/next-steps-page/next-steps-form-state.class';
 @Component({
   selector: 'app-email-form',
   templateUrl: './email-form.component.html',
@@ -44,7 +45,7 @@ export class EmailFormComponent implements OnInit {
   }
 
   private setEmailValidators(): void {
-    this.formUtilsService.setValidators(this.email, [Validators.required, Validators.email])
+    this.formUtilsService.setValidators(this.email, [Validators.required, FormControlValidators.email])
   }
 
 }
