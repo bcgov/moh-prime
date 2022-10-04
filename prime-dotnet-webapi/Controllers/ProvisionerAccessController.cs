@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ namespace Prime.Controllers
     [ApiController]
     public class ProvisionerAccessController : PrimeControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentCertificateService _certificateService;
         private readonly IEmailService _emailService;
@@ -28,12 +30,14 @@ namespace Prime.Controllers
             IEnrolleeService enrolleeService,
             IEnrolmentCertificateService enrolmentCertificateService,
             IEmailService emailService,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IMapper mapper)
         {
             _enrolleeService = enrolleeService;
             _certificateService = enrolmentCertificateService;
             _emailService = emailService;
             _businessEventService = businessEventService;
+            _mapper = mapper;
         }
 
         // GET: api/provisioner-access/certificate/{guid}
@@ -143,10 +147,16 @@ namespace Prime.Controllers
         [HttpGet("gpid-detail", Name = nameof(GetGpidDetail))]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<HpdidLookup>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeLookup>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetGpidDetail()
         {
-            return Ok(await _enrolleeService.GetActiveGpidDetailAsync(User.GetPrimeUserId()));
+            var result = new EnrolleeLookup();
+            var enrollee = await _enrolleeService.GetActiveGpidDetailAsync(User.GetPrimeUserId());
+            if (enrollee != null)
+            {
+                return Ok(_mapper.Map(enrollee, result));
+            }
+            return Ok(enrollee);
         }
 
         // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222
