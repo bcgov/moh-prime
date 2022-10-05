@@ -5,9 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Prime.Models.Api
 {
     [NotMapped]
-    public class HpdidLookup
+    public class HpdidLookup : EnrolleeLookup
     {
         public string Hpdid { get; set; }
+    }
+
+    [NotMapped]
+    public class EnrolleeLookup
+    {
         public string Gpid { get; set; }
         public DateTimeOffset? RenewalDate { get; set; }
 
