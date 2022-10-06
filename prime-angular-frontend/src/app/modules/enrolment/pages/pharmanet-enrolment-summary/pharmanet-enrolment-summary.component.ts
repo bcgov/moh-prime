@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { exhaustMap } from 'rxjs/operators';
@@ -20,7 +20,6 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
 import { Role } from '@auth/shared/enum/role.enum';
-import { PharmanetEnrolmentSummaryFormState } from './pharmanet-enrolment-summary-form-state';
 import { ConfigService } from '@config/config.service';
 
 @Component({
@@ -30,8 +29,7 @@ import { ConfigService } from '@config/config.service';
 })
 export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
-  public vendorForm: FormGroup;
-  public formState: PharmanetEnrolmentSummaryFormState;
+  public emailForm: FormGroup;
 
   public CareSettingEnum = CareSettingEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
@@ -50,7 +48,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     setting: string,
     settingPlural: string,
     settingCode: number,
-    formControl: FormControl,
+    formArray: FormArray,
+    formArrayName: string,
     subheaderContent: string;
   }[];
 
@@ -71,7 +70,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.showHealthAuthority = true;
     this.showDeviceProvider = true;
 
-    this.vendorForm = this.buildVendorEmailGroup();
     this.careSettingConfigs = [];
     this.complete = true;
   }
@@ -94,20 +92,20 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       : null;
   }
 
-  public get communityHealthEmails(): FormControl {
-    return this.vendorForm.get('communityHealthEmails') as FormControl;
+  public get communityHealthEmails(): FormArray {
+    return this.emailForm.get('communityHealthEmails') as FormArray;
   }
 
-  public get pharmacistEmails(): FormControl {
-    return this.vendorForm.get('pharmacistEmails') as FormControl;
+  public get pharmacistEmails(): FormArray {
+    return this.emailForm.get('pharmacistEmails') as FormArray;
   }
 
-  public get healthAuthorityEmails(): FormControl {
-    return this.vendorForm.get('healthAuthorityEmails') as FormControl;
+  public get healthAuthorityEmails(): FormArray {
+    return this.emailForm.get('healthAuthorityEmails') as FormArray;
   }
 
-  public get deviceProviderEmails(): FormControl {
-    return this.vendorForm.get('deviceProviderEmails') as FormControl;
+  public get deviceProviderEmails(): FormArray {
+    return this.emailForm.get('deviceProviderEmails') as FormArray;
   }
 
   public get GPID(): string {
@@ -142,64 +140,25 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     }
   }
 
-  public isEmailVisible(careSettingCode: number): boolean {
-    switch (careSettingCode) {
-      case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        return this.showCommunityHealth;
-      }
-      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
-        return this.showPharmacist;
-      }
-      case this.CareSettingEnum.HEALTH_AUTHORITY: {
-        return this.showHealthAuthority;
-      }
-      case this.CareSettingEnum.DEVICE_PROVIDER: {
-        return this.showDeviceProvider;
-      }
-      default: {
-        return false;
-      }
-    }
-  }
-
   public getTokenUrl(tokenId: string): string {
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public sendProvisionerAccessLinkTo(careSettingCode: number) {
-    let formControl: FormControl;
+  public sendProvisionerAccessLinkTo() {
+    let valid = true;
+    this.careSettingConfigs.forEach((config) => {
+      valid = valid && config.formArray.valid;
+      if (!config.formArray.valid) {
+        config.formArray.markAllAsTouched();
+      }
+    });
 
-    switch (careSettingCode) {
-      case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        formControl = this.communityHealthEmails;
-        break;
-      }
-      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
-        formControl = this.pharmacistEmails;
-        break;
-      }
-      case this.CareSettingEnum.HEALTH_AUTHORITY: {
-        formControl = this.healthAuthorityEmails;
-        break;
-      }
-      case this.CareSettingEnum.DEVICE_PROVIDER: {
-        formControl = this.deviceProviderEmails;
-        break;
-      }
+    if (valid) {
+      this.sendProvisionerAccessLink();
     }
-
-    if (!formControl) { return; }
-
-    const emails = this.formState.emails.value.map(email => email.email);
-
-    this.sendProvisionerAccessLink(emails, formControl, careSettingCode);
-
-    (formControl.valid)
-      ? this.sendProvisionerAccessLink(emails, formControl, careSettingCode)
-      : formControl.markAllAsTouched();
   }
 
-  public sendProvisionerAccessLink(emails: string[] = [], formControl: FormControl = null, careSettingCode) {
+  public sendProvisionerAccessLink() {
     const data: DialogOptions = {
       title: 'Confirm Email',
       message: `Are you sure you want to send your Approval Notification?`,
@@ -210,19 +169,30 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) => {
           if (result) {
-            // this.complete = true;
-            return this.enrolmentResource.sendProvisionerAccessLink(emails, this.enrolment.id, careSettingCode);
+            let emailPairs = this.careSettingConfigs.map((config) => {
+              return {
+                emails: config.formArray.value.map(email => email.email),
+                careSettingCode: config.settingCode,
+              };
+            })
+
+            return this.enrolmentResource.sendProvisionerAccessLink(emailPairs, this.enrolment.id);
           } else {
             return EMPTY;
           }
         })
       )
       .subscribe(() => {
-        this.toastService.openSuccessToast('Email was successfully sent');
-        this.setShowEmail(careSettingCode, false);
+        let emails = new Array<string>();
+        this.careSettingConfigs.forEach((config) => {
+          emails.push(config.formArray.value.map(email => email.email));
+        });
+        this.toastService.openSuccessToast(`Email was successfully sent to ${emails.join(", ")}`);
+        this.emailForm.reset();
       });
   }
 
+  //No long in used at the moment.
   public openQR(event: Event): void {
     event.preventDefault();
 
@@ -270,8 +240,38 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     }
   }
 
-  public removeEmail(index: number): void {
-    this.formState.removeEmail(index);
+  public GetEmailsGroup(careSettingCode: number) {
+    let formArray: FormArray;
+
+    switch (careSettingCode) {
+      case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+        formArray = this.communityHealthEmails;
+        break;
+      }
+      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
+        formArray = this.pharmacistEmails;
+        break;
+      }
+      case this.CareSettingEnum.HEALTH_AUTHORITY: {
+        formArray = this.healthAuthorityEmails;
+        break;
+      }
+      case this.CareSettingEnum.DEVICE_PROVIDER: {
+        formArray = this.deviceProviderEmails;
+        break;
+      }
+    }
+    return formArray;
+  }
+
+  public addEmptyEmailInput(settingCode: number) {
+    let emailsArray = this.GetEmailsGroup(settingCode);
+    this.addEmail(emailsArray);
+  }
+
+  public removeEmail(settingCode: number, index: number): void {
+    let emailsArray = this.GetEmailsGroup(settingCode);
+    emailsArray.removeAt(index);
   }
 
   public ngOnInit(): void {
@@ -290,7 +290,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             setting: 'Private Community Health Practice',
             settingPlural: 'Private Community Health Practices',
             settingCode: careSetting.careSettingCode,
-            formControl: this.communityHealthEmails,
+            formArray: this.communityHealthEmails,
+            formArrayName: 'communityHealthEmails',
             subheaderContent: `Send your approval to your private community health practice's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
@@ -299,7 +300,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             setting: 'Community Pharmacy',
             settingPlural: 'Community Pharmacies',
             settingCode: careSetting.careSettingCode,
-            formControl: this.pharmacistEmails,
+            formArray: this.pharmacistEmails,
+            formArrayName: 'pharmacistEmails',
             subheaderContent: `Send your approval to your community pharmacy's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
@@ -308,7 +310,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             setting: 'Health Authority',
             settingPlural: 'Health Authorities',
             settingCode: careSetting.careSettingCode,
-            formControl: this.healthAuthorityEmails,
+            formArray: this.healthAuthorityEmails,
+            formArrayName: 'healthAuthorityEmails',
             subheaderContent: `Send your approval to your health authority's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
@@ -317,7 +320,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             setting: 'Device Provider',
             settingPlural: 'Device Providers',
             settingCode: careSetting.careSettingCode,
-            formControl: this.deviceProviderEmails,
+            formArray: this.deviceProviderEmails,
+            formArrayName: 'deviceProviderEmails',
             subheaderContent: `Send your approval to your device provider's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
@@ -325,16 +329,34 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     });
   }
 
-  protected createFormInstance(): void {
-    this.formState = new PharmanetEnrolmentSummaryFormState(this.fb, this.configService);
+  protected addEmail(emailsGroup: FormArray, email?: string): void {
+    const emailForm = this.fb.group({
+      email: ['', []]
+    });
+    emailForm.patchValue({ email });
+    emailsGroup.push(emailForm);
   }
 
-  private buildVendorEmailGroup(): FormGroup {
+  protected createFormInstance(): void {
+    this.emailForm = this.buildEmailGroup();
+    this.initForm();
+  }
+
+  protected initForm() {
+    if (!this.communityHealthEmails.length) {
+      this.addEmail(this.communityHealthEmails);
+      this.addEmail(this.pharmacistEmails);
+      this.addEmail(this.healthAuthorityEmails);
+      this.addEmail(this.deviceProviderEmails);
+    }
+  }
+
+  private buildEmailGroup(): FormGroup {
     return this.fb.group({
-      communityHealthEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      pharmacistEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      healthAuthorityEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      deviceProviderEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      communityHealthEmails: this.fb.array([], [Validators.required]),
+      pharmacistEmails: this.fb.array([], [Validators.required]),
+      healthAuthorityEmails: this.fb.array([], [Validators.required]),
+      deviceProviderEmails: this.fb.array([], [Validators.required]),
     });
   }
 }

@@ -31,6 +31,7 @@ import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { EmailPair } from '@shared/models/email-pair.model';
 
 @Injectable({
   providedIn: 'root'
@@ -196,10 +197,10 @@ export class EnrolmentResource {
   // ---
 
   public sendProvisionerAccessLink(
-    emails: string[] = [], enrolleeId: number, careSettingCode: number
+    emailPairs: EmailPair[] = [], enrolleeId: number
   ): Observable<EnrolmentCertificateAccessToken> {
     return this.apiResource
-      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link/${careSettingCode}`, emails)
+      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link`, emailPairs)
       .pipe(
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),

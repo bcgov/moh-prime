@@ -28,41 +28,67 @@
             </ng-container>
           </app-page-subheader>
         </div>
+      </ng-container>
 
-        <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
-          <div class="col-12">
-            <ng-container [ngTemplateOutlet]="settingEmail"
-                          [ngTemplateOutletContext]="careSettingConfig">
-            </ng-container>
-          </div>
-        </ng-container>
+      <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
+        <div class="col-12 mb-4">
+          <ng-container [ngTemplateOutlet]="settingEmail"
+                        [ngTemplateOutletContext]="careSettingConfig">
+          </ng-container>
+        </div>
+      </ng-container>
 
-        <form [formGroup]="formState.form">
-          <div class="row ml-1">
+      <div *ngIf="careSettingConfigs.length > 0"
+           class="col col-sm-12 pt-2 text-right">
+        <button mat-flat-button
+                type="button"
+                color="primary"
+                (click)="sendProvisionerAccessLinkTo()">
+          Send Email
+        </button>
+      </div>
+
+      <ng-template #settingEmail
+                   let-setting="setting"
+                   let-settingPlural="settingPlural"
+                   let-settingCode="settingCode"
+                   let-formArray="formArray"
+                   let-formArrayName="formArrayName"
+                   let-subheaderContent="subheaderContent">
+        <app-page-subheader [divider]="false">
+          <ng-container appPageSubheaderTitle>{{ setting }}</ng-container>
+          <ng-container appPageSubheaderSummary>
+            {{ subheaderContent }}
+          </ng-container>
+        </app-page-subheader>
+
+        <form [formGroup]="form">
+          <div class="row">
             <div class="col col-sm-8"
-                 formArrayName="emails">
-              <ng-container *ngFor="let email of formState.emails.controls; let i = index;"
+                 [formArrayName]="formArrayName">
+              <ng-container *ngFor="let email of formArray.controls; let i = index;"
                             [formGroupName]="i">
                 <app-email-form [form]="email"
                                 [index]="i"
-                                [formState]="formState"
                                 [validate]="true"
-                                (remove)="removeEmail($event)">
+                                (remove)="removeEmail(settingCode, $event)">
                 </app-email-form>
               </ng-container>
+            </div>
+
+            <div class="col col-sm-12">
               <button mat-button
                       type="button"
                       color="primary"
-                      (click)="formState.addEmptyEmailInput()">
+                      (click)="addEmptyEmailInput(settingCode)">
                 <mat-icon>add</mat-icon>
                 Add email of PharmaNet administrator
               </button>
             </div>
-
           </div>
         </form>
 
-      </ng-container>
+      </ng-template>
 
       <ng-template #renewalConfirmation>
         <div imageName="notification"
@@ -93,38 +119,14 @@
               access.
             </p>
 
-            <p class="mb-4">
+            <p class="mb-4 font-italic">
               Note: You cannot access PharmaNet without completing this step.
             </p>
 
           </ng-container>
         </div>
       </ng-template>
+
     </div>
-
-    <ng-template #settingEmail
-                 let-setting="setting"
-                 let-settingPlural="settingPlural"
-                 let-settingCode="settingCode"
-                 let-formControl="formControl"
-                 let-subheaderContent="subheaderContent">
-      <app-page-subheader [divider]="false">
-        <ng-container appPageSubheaderTitle>{{ setting }}</ng-container>
-        <ng-container appPageSubheaderSummary>
-          {{ subheaderContent }}
-        </ng-container>
-      </app-page-subheader>
-
-      <div class="col pt-2 text-right">
-        <button mat-flat-button
-                type="button"
-                color="primary"
-                (click)="sendProvisionerAccessLinkTo(settingCode)">
-          Send Email
-        </button>
-      </div>
-    </ng-template>
-
   </app-enrollee-page>
-
 </div>

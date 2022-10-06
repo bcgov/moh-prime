@@ -77,18 +77,21 @@ namespace Prime.Controllers
         /// then sends the link to a recipient by email based on Care Setting Code.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="careSettingCode"></param>
         /// <param name="providedEmails"></param>
-        [HttpPost("/api/enrollees/{enrolleeId}/provisioner-access/send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
+        [HttpPost("/api/enrollees/{enrolleeId}/provisioner-access/send-link", Name = nameof(SendProvisionerLink))]
         [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.TriageEnrollee)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        public async Task<ActionResult> SendProvisionerLink(int enrolleeId, int careSettingCode, [FromBody] string[] providedEmails)
+        public async Task<ActionResult> SendProvisionerLink(int enrolleeId, [FromBody] EmailPair[] providedEmails)
         {
             // var emails = Email.ParseCommaSeparatedEmails(providedEmails);
-            var allEmailsValid = providedEmails.All(e => Email.IsValidEmail(e));
+            var allEmailsValid = true;
+            foreach (var emailPair in providedEmails)
+            {
+                allEmailsValid = allEmailsValid && emailPair.Emails.All(ee => Email.IsValidEmail(ee));
+            }
 
             if (!allEmailsValid)
             {
@@ -114,9 +117,11 @@ namespace Prime.Controllers
             }
 
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
-
-            await _emailService.SendProvisionerLinkAsync(providedEmails, createdToken, careSettingCode);
-            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", providedEmails)}");
+            foreach (var emailPair in providedEmails)
+            {
+                await _emailService.SendProvisionerLinkAsync(emailPair.Emails, createdToken, emailPair.CareSettingCode);
+                await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emailPair.Emails)}");
+            }
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),
