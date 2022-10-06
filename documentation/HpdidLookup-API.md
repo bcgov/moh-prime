@@ -35,6 +35,8 @@ curl --location --request GET 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/p
 --header 'Authorization: Bearer eyTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT'
 ```
 
+There is a limit to the number of HPDIDs accepted in a single call:  10 (subject to change depending on performance testing results).  If too many HPDIDs are provided, a HTTP status code of 400 (Bad Request) is returned.
+
 The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement.  Details of enrollees that haven't signed a TOA are filtered out from the API's response.  E.g.
 
 ```
@@ -49,7 +51,8 @@ The response will contain the GPID associated with each enrollee that has signed
                 {
                     "practRefId": "91",
                     "collegeLicenseNumber": "00002",
-                    "pharmaNetId": null
+                    "pharmaNetId": null,
+                    "redacted": false
                 }
             ]
         }
@@ -57,3 +60,31 @@ The response will contain the GPID associated with each enrollee that has signed
 }
 ```
 
+Due to privacy issues, in the very rare cases that a PRIME enrollee has more than one licence, for each licence, the licence-related information would be blanked-out and a licence-level Boolean field `redacted` would be set to `true`, e.g.
+
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
+            "renewalDate": "2023-08-03T14:35:09.670054-06:00",
+            "accessType": "Independent User - with OBOs",
+            "licences": [
+                {
+                    "practRefId": null,
+                    "collegeLicenseNumber": null,
+                    "pharmaNetId": null,
+                    "redacted": true
+                },
+                {
+                    "practRefId": null,
+                    "collegeLicenseNumber": null,
+                    "pharmaNetId": null,
+                    "redacted": true
+                }
+            ]
+        }
+    ]
+}
+```

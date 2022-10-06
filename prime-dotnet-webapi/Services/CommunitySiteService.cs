@@ -68,7 +68,37 @@ namespace Prime.Services
                 .OrderBy(s => s.DisplayId).ThenByDescending(s => s.SubmittedDate.HasValue).ThenBy(s => s.SubmittedDate)
                 .DecompileAsync();
 
-            return await PaginatedList<CommunitySiteAdminListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
+            var paginatedList = await PaginatedList<CommunitySiteAdminListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
+            GroupSitesToOrgVisually(paginatedList);
+            return paginatedList;
+        }
+
+        /// <summary>
+        /// Visually group sites to their organizations by reducing the redundant information which is obscuring
+        /// </summary>
+        private static void GroupSitesToOrgVisually(PaginatedList<CommunitySiteAdminListViewModel> paginatedList)
+        {
+            int currentOrgId = int.MinValue;
+            foreach (var orgSiteViewModel in paginatedList)
+            {
+                if (currentOrgId != int.MinValue)
+                {
+                    if (orgSiteViewModel.OrganizationId == currentOrgId)
+                    {
+                        // Remove redundant clutter
+                        orgSiteViewModel.OrganizationName = String.Empty;
+                        orgSiteViewModel.SigningAuthorityName = String.Empty;
+                    }
+                    else
+                    {
+                        currentOrgId = orgSiteViewModel.OrganizationId;
+                    }
+                }
+                else
+                {
+                    currentOrgId = orgSiteViewModel.OrganizationId;
+                }
+            }
         }
 
         public async Task<CommunitySite> GetSiteAsync(int siteId)

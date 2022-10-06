@@ -18,6 +18,7 @@ namespace Prime.Services
         Task<EnrolleeStub> GetEnrolleeStubAsync(Guid userId);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
         Task<string> GetActiveGpidAsync(Guid userId);
+        Task<HpdidLookup> GetActiveGpidDetailAsync(Guid userId);
         Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId);
         Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null, ClaimsPrincipal user = null);
         Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId);
