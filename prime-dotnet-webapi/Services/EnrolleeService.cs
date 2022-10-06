@@ -93,6 +93,39 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Gets the GPID and other details of an Enrollee.
+        /// Returns null if no Enrollee exists with the given UserId or if the Enrollee is in the 'Declined' status
+        /// </summary>
+        /// <param name="userId"></param>
+        public async Task<HpdidLookup> GetActiveGpidDetailAsync(Guid userId)
+        {
+            return await _context.Enrollees
+                .Where(enrollee => enrollee.UserId == userId
+                    && enrollee.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Select(e => new HpdidLookup
+                {
+                    Gpid = e.GPID,
+                    Hpdid = e.HPDID,
+                    RenewalDate = e.ExpiryDate,
+                    // TODO: Refactor code from `EnrolmentCertificate` class
+                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
+                                        .Where(a => a.AcceptedDate != null)
+                                        .Select(a => a.AgreementVersion.AccessType)
+                                        .FirstOrDefault(),
+                    Licences = e.Certifications.Select(cert =>
+                        new EnrolleeCertDto
+                        {
+                            // TODO: Retrieve from cert.Prefix in future?
+                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                            CollegeLicenceNumber = cert.LicenseNumber,
+                            PharmaNetId = cert.PractitionerId
+                        })
+                })
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId)
         {
             var newestAgreementIds = _context.AgreementVersions

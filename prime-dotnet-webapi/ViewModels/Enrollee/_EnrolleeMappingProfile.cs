@@ -4,6 +4,7 @@ using System;
 
 using Prime.DTOs.AgreementEngine;
 using Prime.Models;
+using Prime.Models.Api;
 namespace Prime.ViewModels.Profiles
 {
     public class EnrolleeMappingProfile : Profile
@@ -75,6 +76,8 @@ namespace Prime.ViewModels.Profiles
             CreateMap<License, LicenseViewModel>()
                 .IncludeMembers(l => l.CurrentLicenseDetail);
             CreateMap<LicenseDetail, LicenseViewModel>();
+
+            CreateMap<HpdidLookup, EnrolleeLookup>();
         }
     }
 }
