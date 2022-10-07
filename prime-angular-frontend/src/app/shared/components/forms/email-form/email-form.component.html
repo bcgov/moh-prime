@@ -1,5 +1,6 @@
 <ng-container [formGroup]="form">
-  <app-form-icon-group (event)="removeEmailInput()">
+  <app-form-icon-group (event)="removeEmailInput()"
+                       [show]="showRemoveButton">
     <div class="row"
          testing>
       <div class="col">

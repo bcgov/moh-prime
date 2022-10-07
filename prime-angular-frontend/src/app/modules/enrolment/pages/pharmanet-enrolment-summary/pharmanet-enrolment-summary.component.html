@@ -183,6 +183,7 @@
               <app-email-form [form]="email"
                               [index]="i"
                               [validate]="true"
+                              [showRemoveButton]="i>0"
                               (remove)="removeEmail(settingCode, $event)">
               </app-email-form>
             </ng-container>

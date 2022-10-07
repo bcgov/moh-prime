@@ -15,6 +15,7 @@ export class EmailFormComponent implements OnInit {
 
   @Input() public form: FormGroup;
   @Input() public formState: NextStepsFormState;
+  @Input() public showRemoveButton: boolean = true;
   @Input() public index: number;
   @Input() public validate: boolean = false;
   @Output() public remove: EventEmitter<number>;

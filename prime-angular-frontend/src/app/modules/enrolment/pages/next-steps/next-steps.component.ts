@@ -30,8 +30,6 @@ import { exhaustMap } from 'rxjs/operators';
   styleUrls: ['./next-steps.component.scss']
 })
 export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnInit {
-  //public vendorForm: FormGroup;
-  //public formState: NextStepsFormState;
   public title: string;
   public enrolment: Enrolment;
   public hasReadAgreement: boolean;
