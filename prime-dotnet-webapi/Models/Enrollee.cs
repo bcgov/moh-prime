@@ -22,7 +22,7 @@ namespace Prime.Models
         }
 
         public const int DISPLAY_OFFSET = 1000;
-        public const string PaperGpidPrefix = "NOBCSC";
+        public const string PaperGpidPrefix = "NABCSC";
 
         [Key]
         public int Id { get; set; }
