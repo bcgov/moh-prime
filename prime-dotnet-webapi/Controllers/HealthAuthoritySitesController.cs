@@ -268,7 +268,7 @@ namespace Prime.Controllers
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
 
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
-            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent health authority site registration submission");
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Notified of health authority site registration submission");
 
             return NoContent();
         }

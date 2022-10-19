@@ -81,7 +81,7 @@ namespace Prime.Services.EmailInternal
             (
                 from: PrimeEmail,
                 to: new[] { MohEmail, PrimeSupportEmail },
-                subject: "Remote Practitioners Added",
+                subject: "Remote Practitioners Changed",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.RemoteUserUpdatedNotification, viewModel)
             );
         }
