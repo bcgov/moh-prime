@@ -154,7 +154,7 @@ namespace Prime.Services
                     .Where(site => site.Id == siteId)
                     .Select(site => site.AuthorizedUser.PartyId)
                     .SingleAsync(),
-                _ => throw new NotImplementedException($"Unknown Site Type in {nameof(CreateSiteEventAsync)}: {site.GetType()}")
+                _ => throw new NotImplementedException($"Unknown Site Type in {nameof(CreateSiteEmailEventAsync)}: {site.GetType()}")
             };
 
             return await CreateSiteEmailEventAsync(siteId, partyId, description);
