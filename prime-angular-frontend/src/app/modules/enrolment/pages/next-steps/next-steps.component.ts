@@ -24,6 +24,10 @@ import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
+
+/**
+ * TODO: https://bcgovmoh.atlassian.net/browse/PRIME-2325 (Refactor common code in both PharmanetEnrolmentSummaryComponent and NextStepsComponent)
+ */
 @Component({
   selector: 'app-next-steps',
   templateUrl: './next-steps.component.html',

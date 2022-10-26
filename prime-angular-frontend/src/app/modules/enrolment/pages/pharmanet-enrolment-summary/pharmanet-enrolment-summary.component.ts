@@ -22,6 +22,9 @@ import { ImageComponent } from '@shared/components/dialogs/content/image/image.c
 import { Role } from '@auth/shared/enum/role.enum';
 import { ConfigService } from '@config/config.service';
 
+/**
+ * TODO: https://bcgovmoh.atlassian.net/browse/PRIME-2325 (Refactor common code in both PharmanetEnrolmentSummaryComponent and NextStepsComponent)
+ */
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
   templateUrl: './pharmanet-enrolment-summary.component.html',
