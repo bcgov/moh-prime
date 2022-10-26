@@ -26,6 +26,9 @@ namespace Prime.Controllers
         private readonly IEmailService _emailService;
         private readonly IBusinessEventService _businessEventService;
 
+        private const int _hpdidLimit_GetUpdatedGpids = 1000;
+        private const int _hpdidLimit_HpdidLookup = 10;
+
         public ProvisionerAccessController(
             IEnrolleeService enrolleeService,
             IEnrolmentCertificateService enrolmentCertificateService,
@@ -170,9 +173,16 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HpdidLookup>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> HpdidLookup([FromQuery] string[] hpdids)
         {
-            var result = await _enrolleeService.HpdidLookupAsync(hpdids);
+            if (hpdids != null && hpdids.Length > _hpdidLimit_HpdidLookup)
+            {
+                return BadRequest($"number of {nameof(hpdids)} should not exceed {_hpdidLimit_HpdidLookup}");
+            }
+            else
+            {
+                var result = await _enrolleeService.HpdidLookupAsync(hpdids);
 
-            return Ok(result);
+                return Ok(result);
+            }
         }
 
         // POST: api/provisioner-access/updated-gpids
@@ -191,6 +201,10 @@ namespace Prime.Controllers
             if (DateTimeOffset.MinValue.Equals(updatedSince))
             {
                 return BadRequest($"{nameof(updatedSince)} parameter is required");
+            }
+            else if (hpdids != null && hpdids.Length > _hpdidLimit_GetUpdatedGpids)
+            {
+                return BadRequest($"number of {nameof(hpdids)} should not exceed {_hpdidLimit_GetUpdatedGpids}");
             }
             else
             {
