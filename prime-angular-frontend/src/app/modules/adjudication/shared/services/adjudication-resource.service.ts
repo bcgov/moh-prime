@@ -44,6 +44,7 @@ import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.mo
 import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteNotification } from '../models/site-notification.model';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 
 @Injectable({
@@ -745,7 +746,8 @@ export class AdjudicationResource {
         if (profileSnapshot[key]) {
           profileSnapshot.selfDeclarations.push({
             selfDeclarationDetails: profileSnapshot[`${key}Details`],
-            selfDeclarationTypeCode: index + 1
+            selfDeclarationTypeCode: index + 1,
+            answered: true,
           });
         }
 
@@ -765,6 +767,21 @@ export class AdjudicationResource {
         });
       });
       delete profileSnapshot[`enrolleeOrganizationTypes`];
+    }
+
+    // set answered property
+    if (profileSnapshot.selfDeclarations) {
+      profileSnapshot.selfDeclarations.forEach(sd => {
+        sd.answered = !!sd.id;
+      });
+    }
+
+    // add unanswered self declaration questions
+    for (let sd in SelfDeclarationTypeEnum) {
+      if (!isNaN(Number(sd)) && !profileSnapshot.selfDeclarations.find(s => s.selfDeclarationTypeCode === Number(sd))) {
+        let unansweredSelfDeclaration = new SelfDeclaration(Number(sd), null, null, null, false, null, null);
+        profileSnapshot.selfDeclarations.push(unansweredSelfDeclaration);
+      }
     }
   }
 }

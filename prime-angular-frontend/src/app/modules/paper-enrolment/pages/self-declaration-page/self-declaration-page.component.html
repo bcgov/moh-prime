@@ -26,7 +26,7 @@
 
     <app-page-section>
       <p class="question">
-        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION] }}
+        {{ selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_CONVICTION) }}
       </p>
 
       <mat-radio-group formControlName="hasConviction">
@@ -89,7 +89,7 @@
 
     <app-page-section>
       <p class="question">
-        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED] }}
+        {{ selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED) }}
       </p>
 
       <mat-radio-group formControlName="hasRegistrationSuspended">
@@ -150,7 +150,7 @@
 
     <app-page-section>
       <p class="question">
-        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION] }}
+        {{ selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION) }}
       </p>
 
       <mat-radio-group formControlName="hasDisciplinaryAction">
@@ -208,7 +208,7 @@
 
     <app-page-section>
       <p class="question">
-        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED] }}
+        {{ selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED) }}
       </p>
 
       <mat-radio-group formControlName="hasPharmaNetSuspended">

@@ -31,6 +31,7 @@ import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.model';
 
 @Injectable({
   providedIn: 'root'
@@ -189,6 +190,20 @@ export class EnrolmentResource {
           throw error;
         })
       );
+  }
+
+  public getSelfDeclarationVersion(targetDate: string): Observable<SelfDeclarationVersion[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ targetDate });
+    return this.apiResource.get<SelfDeclarationVersion[]>(`lookups/self-declaration-question`, params)
+      .pipe(
+        map((response: ApiHttpResponse<SelfDeclarationVersion[]>) => response.result),
+        tap((selfDeclarationVersions: SelfDeclarationVersion[]) => this.logger.info('SELF_DECLARATION_VERSION', selfDeclarationVersions)),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getSelfDeclarationVersion error has occurred: ', error);
+          // release to allow the application to render
+          return of(null);
+        })
+      )
   }
 
   // ---
@@ -624,13 +639,14 @@ export class EnrolmentResource {
         email,
         smsPhone,
         phone,
-        phoneExtension
+        phoneExtension,
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
       careSettings: enrollee.enrolleeCareSettings,
       enrolleeRemoteUsers: enrollee.enrolleeRemoteUsers,
       remoteAccessSites: enrollee.remoteAccessSites,
+      selfDeclarationCompleteDate: enrollee.selfDeclarationCompleteDate,
       ...remainder
     };
   }

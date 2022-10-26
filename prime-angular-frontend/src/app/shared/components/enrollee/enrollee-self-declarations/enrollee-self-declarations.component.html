@@ -11,7 +11,7 @@
   <div *ngFor="let selfDeclarationComposite of selfDeclarationComposites"
        class="mb-3">
 
-    <app-enrollee-property [title]="selfDeclarationComposite.selfDeclarationQuestion"
+    <app-enrollee-property [safeTitle]="selfDeclarationComposite.selfDeclarationQuestion"
                            [makeBold]="false">
       {{ selfDeclarationComposite.selfDeclaration?.answered | yesNo: true }}
     </app-enrollee-property>

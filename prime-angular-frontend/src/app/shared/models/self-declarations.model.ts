@@ -5,6 +5,7 @@ export class SelfDeclaration {
     public documentGuids?: string[],
     public enrolleeId?: number,
     public answered?: boolean,
-    public id?: number
+    public id?: number,
+    public selfDeclarationVersionId?: number
   ) { }
 }

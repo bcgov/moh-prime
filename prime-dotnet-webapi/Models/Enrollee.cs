@@ -126,6 +126,8 @@ namespace Prime.Models
 
         public EnrolleeLinkedEnrolment PaperToEnrolleeLink { get; set; }
 
+        public DateTimeOffset? SelfDeclarationCompleteDate { get; set; }
+
         [NotMapped]
         [Computed]
         public PhysicalAddress PhysicalAddress

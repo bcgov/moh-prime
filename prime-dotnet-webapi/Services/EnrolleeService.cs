@@ -156,7 +156,18 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             dto.UserProvidedGpid = linkedGpid;
-            return _mapper.Map<EnrolleeViewModel>(dto);
+            var viewModel = _mapper.Map<EnrolleeViewModel>(dto);
+
+            // get the latest self declaration effective date and compare the last complete date
+            var mostEffectiveDate = await _context.Set<SelfDeclarationVersion>()
+                .Where(v => v.EffectiveDate < DateTime.Today)
+                .Select(v => v.EffectiveDate)
+                .MaxAsync();
+
+            // flag the enrollee to redo the self declaration if new self declaration is available
+            viewModel.RequireRedoSelfDeclaration = mostEffectiveDate > viewModel.SelfDeclarationCompleteDate;
+
+            return viewModel;
         }
 
         public async Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null, ClaimsPrincipal user = null)
@@ -344,6 +355,8 @@ namespace Prime.Services
             if (profileCompleted)
             {
                 enrollee.ProfileCompleted = true;
+                // since self declaration is the last step, setting the complete date with profile completed flag
+                enrollee.SelfDeclarationCompleteDate = DateTimeOffset.Now;
             }
 
             // This is the temporary way we are adding self declaration documents until this gets refactored.
@@ -677,6 +690,7 @@ namespace Prime.Services
                 .ProjectTo<SelfDeclarationViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
+
             var unAnswered = Enum.GetValues(typeof(SelfDeclarationTypeCode))
                 .Cast<int>()
                 .Except(answered.Select(a => a.SelfDeclarationTypeCode))
@@ -686,7 +700,8 @@ namespace Prime.Services
                     SelfDeclarationTypeCode = code
                 });
 
-            return answered.Concat(unAnswered);
+            var result = answered.Concat(unAnswered);
+            return result;
         }
 
         public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId, bool includeHidden = true)

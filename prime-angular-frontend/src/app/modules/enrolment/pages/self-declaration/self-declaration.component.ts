@@ -3,13 +3,13 @@ import { Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
@@ -19,6 +19,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-self-declaration',
@@ -30,7 +31,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   public hasAttemptedFormSubmission: boolean;
   public showUnansweredQuestionsError: boolean;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
-  public selfDeclarationQuestions = selfDeclarationQuestions;
+  public selfDeclarationQuestions = new Map<number, string>();
+  public selfDeclarationVersions: SelfDeclarationVersion[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -43,7 +45,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    protected authService: AuthService
+    protected authService: AuthService,
   ) {
     super(
       route,
@@ -153,6 +155,15 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected initForm() {
+    if (this.selfDeclarationQuestions.keys.length === 0) {
+      this.busy = this.enrolmentResource.getSelfDeclarationVersion(this.enrolment.selfDeclarationCompleteDate ?? moment().format()).subscribe((versions) => {
+        this.selfDeclarationVersions = versions;
+        versions.forEach(v => {
+          this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);
+        });
+      });
+    }
+
     this.hasConviction.valueChanges
       .subscribe((value: boolean) => {
         this.toggleSelfDeclarationValidators(value, this.hasConvictionDetails);

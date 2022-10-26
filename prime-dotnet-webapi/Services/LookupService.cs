@@ -3,6 +3,8 @@ using AutoMapper.QueryableExtensions;
 using DelegateDecompiler.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,6 +24,18 @@ namespace Prime.Services
             : base(context, logger)
         {
             _mapper = mapper;
+        }
+
+        public async Task<List<SelfDeclarationVersion>> GetSelfDeclarationVersion(DateTimeOffset targetDate)
+        {
+            return await _context.Set<SelfDeclarationType>()
+                .AsNoTracking()
+                .Select(t => _context.Set<SelfDeclarationVersion>()
+                    .Where(av => av.EffectiveDate <= targetDate)
+                    .Where(av => av.SelfDeclarationTypeCode == t.Code)
+                    .OrderByDescending(av => av.EffectiveDate)
+                    .First())
+                .ToListAsync();
         }
 
         public async Task<int> GetCareSettingCountAsync()

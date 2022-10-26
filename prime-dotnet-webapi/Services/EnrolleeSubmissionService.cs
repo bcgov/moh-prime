@@ -88,6 +88,40 @@ namespace Prime.Services
                 .Include(e => e.Agreements)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
+            var selfDeclarationQuestions = await _context.Set<SelfDeclarationType>()
+                .AsNoTracking()
+                .Select(t => _context.Set<SelfDeclarationVersion>()
+                    .Where(av => av.EffectiveDate <= enrollee.SelfDeclarationCompleteDate)
+                    .Where(av => av.SelfDeclarationTypeCode == t.Code)
+                    .OrderByDescending(av => av.EffectiveDate)
+                    .First())
+                .ToListAsync();
+
+            // set the self declaration version Id and add unanswered items
+            // *** answered Yes will have self declaration ID set
+            // *** answered No will NOT have self declaration ID
+            foreach (var sd in selfDeclarationQuestions)
+            {
+                if (enrollee.SelfDeclarations == null)
+                {
+                    enrollee.SelfDeclarations = new List<SelfDeclaration>();
+                }
+
+                var answered = enrollee.SelfDeclarations.FirstOrDefault(s => s.SelfDeclarationTypeCode == sd.SelfDeclarationTypeCode);
+                if (answered != null)
+                {
+                    answered.SelfDeclarationVersionId = sd.Id;
+                }
+                else
+                {
+                    enrollee.SelfDeclarations.Add(new SelfDeclaration()
+                    {
+                        SelfDeclarationVersionId = sd.Id,
+                        SelfDeclarationTypeCode = sd.SelfDeclarationTypeCode,
+                    });
+                }
+            }
+
             var enrolleeSubmission = new Submission
             {
                 EnrolleeId = enrolleeId,
@@ -106,6 +140,7 @@ namespace Prime.Services
                 var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
                 enrolleeSubmission.AgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
             }
+
 
             _context.Submissions.Add(enrolleeSubmission);
 
