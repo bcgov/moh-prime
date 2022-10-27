@@ -7,7 +7,7 @@ namespace Prime.Engines
     public static class Gpid
     {
         public const int Length = 20;
-        public const string CharacterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
+        public const string CharacterSet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789?!@#$%*";
 
         public static string NewGpid()
         {
