@@ -1,4 +1,4 @@
-export interface EmailPair {
+export interface EmailsForCareSetting {
   emails: string[];
   careSettingCode: number;
 }

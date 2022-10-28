@@ -20,7 +20,6 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
 import { Role } from '@auth/shared/enum/role.enum';
-import { ConfigService } from '@config/config.service';
 
 /**
  * TODO: https://bcgovmoh.atlassian.net/browse/PRIME-2325 (Refactor common code in both PharmanetEnrolmentSummaryComponent and NextStepsComponent)
@@ -65,7 +64,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     private enrolmentService: EnrolmentService,
     private dialog: MatDialog,
     private toastService: ToastService,
-    private configService: ConfigService
   ) {
     super(route, router);
     this.showCommunityHealth = true;
@@ -243,7 +241,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     }
   }
 
-  public GetEmailsGroup(careSettingCode: number) {
+  public getEmailsGroup(careSettingCode: number): FormArray {
     let formArray: FormArray;
 
     switch (careSettingCode) {
@@ -268,12 +266,12 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public addEmptyEmailInput(settingCode: number) {
-    let emailsArray = this.GetEmailsGroup(settingCode);
+    let emailsArray = this.getEmailsGroup(settingCode);
     this.addEmail(emailsArray);
   }
 
   public removeEmail(settingCode: number, index: number): void {
-    let emailsArray = this.GetEmailsGroup(settingCode);
+    let emailsArray = this.getEmailsGroup(settingCode);
     emailsArray.removeAt(index);
   }
 

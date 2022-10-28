@@ -3,7 +3,6 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { ConfigModule } from '@config/config.module';
 import { ConfigService } from '@config/config.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -14,8 +13,6 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
@@ -73,7 +70,6 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService,
-    private configService: ConfigService,
   ) {
     super(
       route,
