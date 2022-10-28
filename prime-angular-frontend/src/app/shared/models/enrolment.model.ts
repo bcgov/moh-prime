@@ -35,6 +35,7 @@ export interface HttpEnrollee extends Enrollee {
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
   selfDeclarationCompleteDate: string;
+  requireRedoSelfDeclaration: boolean;
   identificationDocuments: IdentificationDocument[];
   enrolleeCareSettings: CareSetting[];
   enrolleeHealthAuthorities: EnrolleeHealthAuthority[];
@@ -102,6 +103,7 @@ export interface Enrolment {
   assignedTOAType: number;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
+  requireRedoSelfDeclaration: boolean;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice

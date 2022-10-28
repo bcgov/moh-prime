@@ -51,6 +51,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public careSettingsForm: FormGroup;
   public accessAgreementForm: FormGroup;
 
+  public selfDeclarationCompleteDate: string;
+
   private identityProvider: IdentityProviderEnum;
   private enrolleeId: number;
   private userId: string;
@@ -215,13 +217,16 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       remoteAccessSites,
       remoteAccessLocations,
       selfDeclarations,
-      profileCompleted
+      profileCompleted,
+      requireRedoSelfDeclaration,
     } = enrolment;
     this.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
     this.patchOboSitesForm(oboSites);
     this.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
     this.patchRemoteAccessLocationsForm(remoteAccessLocations);
-    this.patchSelfDeclarations({ profileCompleted, selfDeclarations });
+    if (!requireRedoSelfDeclaration) {
+      this.patchSelfDeclarations({ profileCompleted, selfDeclarations });
+    }
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly
@@ -557,9 +562,10 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   }
 
   public patchSelfDeclarations(
-    { selfDeclarations, profileCompleted }: { selfDeclarations: SelfDeclaration[], profileCompleted: boolean }
+    { selfDeclarations, profileCompleted }:
+      { selfDeclarations: SelfDeclaration[], profileCompleted: boolean }
   ): void {
-    const defaultValue = (profileCompleted) ? false : null;
+    const defaultValue = profileCompleted ? false : null;
     const selfDeclarationsTypes = {
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,

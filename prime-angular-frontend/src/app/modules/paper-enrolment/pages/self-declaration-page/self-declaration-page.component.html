@@ -11,6 +11,30 @@
       <ng-container appPageSubheaderTitle>Self-Declaration</ng-container>
       <ng-container appPageSubheaderSummary>
         Enter the enrollee's responses to the self-declaration questions as they indicated them on the form.
+        <br/>
+        <br/>
+        In these Self Declaration Questions, “unlawful or improper action” means any of the following actions taken by
+        you or a by a person for which you were responsible:
+        <ol ngClass="itemList">
+          <li>
+            unlawful or improper access to personal information;
+          </li>
+          <li>
+            unlawful or improper collection, retention, use or disclosure of personal information.
+          </li>
+        </ol>
+        “Improper” actions include actions:
+        <ol ngClass="itemList"
+            start="3">
+          <li>
+            that are contrary to the published privacy policies of the organization responsible for the personal
+            information; or
+          </li>
+          <li>
+            that the individual the information is about would reasonably consider to be an improper use of their
+            personal information in the circumstances.
+          </li>
+        </ol>
       </ng-container>
     </app-page-subheader>
 
@@ -25,9 +49,9 @@
     </ng-container>
 
     <app-page-section>
-      <p class="question">
-        {{ selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_CONVICTION) }}
-      </p>
+      <div class="question"
+           [innerHtml]="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_CONVICTION) | safe: 'html'">
+      </div>
 
       <mat-radio-group formControlName="hasConviction">
         <mat-radio-button class="mr-4"
@@ -44,20 +68,20 @@
           <p class="mb-1">Provide these details:</p>
           <ol class="mb-0 pl-3">
             <li class="small">
-              Describe the events that resulted in the order or conviction, including when the events occurred
+              Describe the events that resulted in the order or conviction, including when the events occurred.
             </li>
             <li class="small">
               Provide the name and address of the organization where the events took place that resulted in the order or
-              conviction
+              conviction.
             </li>
             <li class="small">
-              Provide the name of the entity that issued the order or conviction
+              Provide the name of the entity that issued the order or conviction.
             </li>
             <li class="small">
-              Describe the penalty imposed as a result of the order or conviction (e.g., fine, imprisonment)
+              Describe the penalty imposed as a result of the order or conviction (e.g., fine, imprisonment).
             </li>
             <li class="small mb-2">
-              Provide the date of the order or conviction
+              Provide the date of the order or conviction.
             </li>
 
             <mat-form-field class="w-100">
@@ -71,7 +95,7 @@
 
             <li *ngIf="allowUploads"
                 class="small mb-2">
-              Attach documents related to this self-declaration.
+              Attach a copy of the order or conviction.
             </li>
 
             <app-document-upload *ngIf="allowUploads"
@@ -88,9 +112,9 @@
     </app-page-section>
 
     <app-page-section>
-      <p class="question">
-        {{ selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED) }}
-      </p>
+      <div class="question"
+           [innerHtml]="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED) | safe: 'html'">
+      </div>
 
       <mat-radio-group formControlName="hasRegistrationSuspended">
         <mat-radio-button class="mr-4"
@@ -108,19 +132,21 @@
           <ol class="mb-0 pl-3">
             <li class="small">
               Describe the events that resulted in limits, conditions or prohibitions being imposed, including when the
-              events occurred
+              events occurred.
             </li>
             <li class="small">
-              Provide the name and address of the organization where the events took place
+              Provide the name and address of the organization where the events that resulted in the limits, conditions
+              or prohibitions being imposed took place.
             </li>
             <li class="small">
-              Provide the name of the organization that imposed limits, conditions or prohibitions
+              Provide the name of the governing body of a health profession that imposed limits, conditions or
+              prohibitions.
             </li>
             <li class="small">
-              Describe the limits, conditions or prohibitions imposed
+              Describe the limits, conditions or prohibitions imposed.
             </li>
             <li class="small mb-2">
-              Provide the date that the limits, conditions or prohibitions were imposed and, if applicable, removed
+              Provide the date that the limits, conditions or prohibitions were imposed and, if applicable, removed.
             </li>
 
             <mat-form-field class="w-100">
@@ -134,7 +160,7 @@
 
             <li *ngIf="allowUploads"
                 class="small mb-2">
-              Attach documents related to this self-declaration.
+              Provide a copy of supporting documentation (e.g., the consent order).
             </li>
 
             <app-document-upload *ngIf="allowUploads"
@@ -149,9 +175,9 @@
     </app-page-section>
 
     <app-page-section>
-      <p class="question">
-        {{ selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION) }}
-      </p>
+      <div class="question"
+           [innerHtml]="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION) | safe: 'html'">
+      </div>
 
       <mat-radio-group formControlName="hasDisciplinaryAction">
         <mat-radio-button class="mr-4"
@@ -169,16 +195,16 @@
           <ol class="mb-0 pl-3">
             <li class="small">
               Describe the events that resulted in the suspension or cancellation of your access, including when the
-              events occurred
+              events occurred.
             </li>
             <li class="small">
-              Provide the name and address of the organization that issued the suspension or cancellation of access
+              Provide the name and address of the organization that issued the suspension or cancellation of access.
             </li>
             <li class="small">
-              Describe the suspension or cancellation imposed
+              Describe the suspension or cancellation imposed.
             </li>
             <li class="small mb-2">
-              Provide the date that the suspension or cancellation of access was imposed and, if applicable, removed
+              Provide the date that the suspension or cancellation of access was imposed and, if applicable, removed.
             </li>
 
             <mat-form-field class="w-100">
@@ -192,7 +218,7 @@
 
             <li *ngIf="allowUploads"
                 class="small mb-2">
-              Attach documents related to this self-declaration.
+              Provide a copy of supporting documentation, if any (e.g., a letter or email from the organization)
             </li>
 
             <app-document-upload *ngIf="allowUploads"
@@ -207,9 +233,9 @@
     </app-page-section>
 
     <app-page-section>
-      <p class="question">
-        {{ selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED) }}
-      </p>
+      <div class="question"
+           [innerHtml]="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED) | safe: 'html'">
+      </div>
 
       <mat-radio-group formControlName="hasPharmaNetSuspended">
         <mat-radio-button class="mr-4"
@@ -226,16 +252,16 @@
           <p class="mb-1">Provide these details:</p>
           <ol class="mb-0 pl-3">
             <li class="small">
-              Describe the events that resulted in the discipline or termination, including when the events occurred
+              Describe the events that resulted in the discipline or termination, including when the events occurred.
             </li>
             <li class="small">
-              Provide the name and address of the organization that issued the discipline or termination
+              Provide the name and address of the organization that issued the discipline or termination.
             </li>
             <li class="small">
-              Describe the discipline imposed
+              Describe the discipline imposed.
             </li>
             <li class="small mb-2">
-              Provide the date that the discipline or termination was imposed and, if applicable, removed
+              Provide the date that the discipline or termination was imposed and, if applicable, removed.
             </li>
 
             <mat-form-field class="w-100">
@@ -249,7 +275,7 @@
 
             <li *ngIf="allowUploads"
                 class="small mb-2">
-              Attach documents related to this self-declaration.
+              Provide a copy of supporting documentation, if any (e.g., a letter or email from the organization)
             </li>
 
             <app-document-upload *ngIf="allowUploads"

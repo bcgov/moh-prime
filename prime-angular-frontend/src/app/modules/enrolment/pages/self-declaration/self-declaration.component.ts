@@ -102,6 +102,10 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onSubmit() {
+    if (!this.isInitialEnrolment) {
+      this.enrolmentFormStateService.selfDeclarationCompleteDate = moment().format();
+    }
+
     const hasBeenThroughTheWizard = true;
     this.hasAttemptedFormSubmission = true;
     super.onSubmit(hasBeenThroughTheWizard);
@@ -156,7 +160,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   protected initForm() {
     if (this.selfDeclarationQuestions.keys.length === 0) {
-      this.busy = this.enrolmentResource.getSelfDeclarationVersion(this.enrolment.selfDeclarationCompleteDate ?? moment().format()).subscribe((versions) => {
+      this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().format()).subscribe((versions) => {
         this.selfDeclarationVersions = versions;
         versions.forEach(v => {
           this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);

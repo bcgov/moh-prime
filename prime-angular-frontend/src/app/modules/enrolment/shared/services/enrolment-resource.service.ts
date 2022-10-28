@@ -647,6 +647,7 @@ export class EnrolmentResource {
       enrolleeRemoteUsers: enrollee.enrolleeRemoteUsers,
       remoteAccessSites: enrollee.remoteAccessSites,
       selfDeclarationCompleteDate: enrollee.selfDeclarationCompleteDate,
+      requireRedoSelfDeclaration: enrollee.requireRedoSelfDeclaration,
       ...remainder
     };
   }

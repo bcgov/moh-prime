@@ -67,15 +67,19 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
   }
 
   public ngOnInit(): void {
-    if (this.selfDeclarationQuestions.keys.length === 0) {
-      this.enrolmentResource.getSelfDeclarationVersion(this.enrolment.selfDeclarationCompleteDate ?
-        moment(this.enrolment.selfDeclarationCompleteDate).format() : moment().format()).subscribe((versions) => {
+    if (this.selfDeclarationQuestions.size === 0) {
+      let targetDate = this.enrolment.selfDeclarationCompleteDate ?
+        this.enrolment.selfDeclarationCompleteDate : this.enrolment.currentStatus.statusDate;
+      this.enrolmentResource.getSelfDeclarationVersion(moment(targetDate).format()).subscribe({
+        next: (versions) => {
           versions.forEach(v => {
             this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);
           });
+        }, complete: () => {
           // re-construct the composites
           this.selfDeclarationComposites = this.createSelfDeclarationComposites();
-        });
+        }
+      });
     }
   }
 

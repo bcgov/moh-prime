@@ -161,10 +161,18 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           if (this.enrolmentFormStateService.isPatched) {
             // Replace enrolment with the version from the form for the user
             // to review, but maintain a subset of immutable properties
-            const { selfDeclarationDocuments } = enrolment;
+            const { selfDeclarationDocuments,
+              selfDeclarationCompleteDate,
+              requireRedoSelfDeclaration } = enrolment;
+
+            const stateSelfDeclarationCompleteDate = this.enrolmentFormStateService.selfDeclarationCompleteDate;
+
             enrolment = {
               ...this.enrolmentFormStateService.json,
-              selfDeclarationDocuments
+              selfDeclarationDocuments,
+              selfDeclarationCompleteDate: stateSelfDeclarationCompleteDate && selfDeclarationCompleteDate < stateSelfDeclarationCompleteDate ?
+                stateSelfDeclarationCompleteDate : selfDeclarationCompleteDate,
+              requireRedoSelfDeclaration: !stateSelfDeclarationCompleteDate && requireRedoSelfDeclaration,
             };
           }
 
@@ -227,7 +235,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         && !enrolment.enrolleeHealthAuthorities?.some(ha => ha.healthAuthorityCode),
       expiredCertification: enrolment.certifications.some(cert => moment(cert.renewalDate).isBefore(moment())),
       requiresLicenceUpdate: enrolment.certifications.some((cert: CollegeCertification) =>
-        !this.configService.licenses.some(l => l.code === cert.licenseCode && l.collegeLicenses.some(cl => cl.collegeCode === cert.collegeCode)))
+        !this.configService.licenses.some(l => l.code === cert.licenseCode && l.collegeLicenses.some(cl => cl.collegeCode === cert.collegeCode))),
+      requireRedoSelfDeclaration: enrolment.requireRedoSelfDeclaration,
     };
   }
 

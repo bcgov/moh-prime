@@ -165,7 +165,8 @@ namespace Prime.Services
                 .MaxAsync();
 
             // flag the enrollee to redo the self declaration if new self declaration is available
-            viewModel.RequireRedoSelfDeclaration = mostEffectiveDate > viewModel.SelfDeclarationCompleteDate;
+            viewModel.RequireRedoSelfDeclaration = viewModel.SelfDeclarationCompleteDate.HasValue &&
+                mostEffectiveDate > viewModel.SelfDeclarationCompleteDate.Value;
 
             return viewModel;
         }
@@ -317,6 +318,8 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarationDocuments)
                 .SingleAsync(e => e.Id == enrolleeId);
 
+            var currentSelfDeclarationDate = enrollee.SelfDeclarationCompleteDate;
+
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
             // TODO currently doesn't update the date of birth
@@ -355,7 +358,12 @@ namespace Prime.Services
             if (profileCompleted)
             {
                 enrollee.ProfileCompleted = true;
-                // since self declaration is the last step, setting the complete date with profile completed flag
+            }
+
+            // since self declaration is the last step, setting the complete date with profile completed flag
+            // or self declaration has been set previously, then refresh it with now
+            if (profileCompleted || currentSelfDeclarationDate.HasValue)
+            {
                 enrollee.SelfDeclarationCompleteDate = DateTimeOffset.Now;
             }
 
