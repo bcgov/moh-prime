@@ -54,6 +54,10 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
     this.route = new EventEmitter<void>();
   }
 
+  public isAdjudication(): boolean {
+    return this.router.url.includes('adjudication');
+  }
+
   public downloadSelfDeclarationDocument(documentId: number): void {
     this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrolment.id, documentId)
       .subscribe((token: string) => this.utilsService.downloadToken(token));
@@ -70,16 +74,14 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
     if (this.selfDeclarationQuestions.size === 0) {
       let targetDate = this.enrolment.selfDeclarationCompleteDate ?
         this.enrolment.selfDeclarationCompleteDate : this.enrolment.currentStatus.statusDate;
-      this.enrolmentResource.getSelfDeclarationVersion(moment(targetDate).format()).subscribe({
-        next: (versions) => {
+      this.enrolmentResource.getSelfDeclarationVersion(moment(targetDate).format()).subscribe(
+        (versions) => {
           versions.forEach(v => {
             this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);
           });
-        }, complete: () => {
           // re-construct the composites
           this.selfDeclarationComposites = this.createSelfDeclarationComposites();
-        }
-      });
+        });
     }
   }
 

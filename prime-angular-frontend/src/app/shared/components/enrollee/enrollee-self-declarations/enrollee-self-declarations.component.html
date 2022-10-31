@@ -8,7 +8,7 @@
                 ngProjectAs="[mat-icon-button]"></ng-content>
   </app-page-subheader>
 
-  <app-alert *ngIf="this.enrolment.requireRedoSelfDeclaration"
+  <app-alert *ngIf="this.enrolment.requireRedoSelfDeclaration && !isAdjudication()"
              type="danger"
              icon="error">
     <ng-container #alertContent
