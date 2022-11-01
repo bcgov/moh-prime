@@ -91,7 +91,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        public async Task<ActionResult> SendProvisionerLink(int enrolleeId, [FromBody] EmailPair[] providedEmails)
+        public async Task<ActionResult> SendProvisionerLink(int enrolleeId, [FromBody] EmailsForCareSetting[] providedEmails)
         {
             var allEmailsValid = true;
             foreach (var emailPair in providedEmails)

@@ -31,7 +31,7 @@ import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
-import { EmailsForCareSetting } from '@shared/models/email-pair.model';
+import { EmailsForCareSetting } from '@shared/models/email-for-care-setting.model';
 
 @Injectable({
   providedIn: 'root'

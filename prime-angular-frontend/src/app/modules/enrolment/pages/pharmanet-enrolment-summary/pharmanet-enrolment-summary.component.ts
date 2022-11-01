@@ -331,12 +331,12 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     });
   }
 
-  protected addEmail(emailsGroup: FormArray, email?: string): void {
+  protected addEmail(emailsArray: FormArray, email?: string): void {
     const emailForm = this.fb.group({
       email: ['', []]
     });
     emailForm.patchValue({ email });
-    emailsGroup.push(emailForm);
+    emailsArray.push(emailForm);
   }
 
   protected createFormInstance(): void {

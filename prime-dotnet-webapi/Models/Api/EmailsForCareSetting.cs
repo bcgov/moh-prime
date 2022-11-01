@@ -1,6 +1,6 @@
 namespace Prime.Models.Api
 {
-    public class EmailPair
+    public class EmailsForCareSetting
     {
         public string[] Emails { get; set; }
         public int CareSettingCode { get; set; }
