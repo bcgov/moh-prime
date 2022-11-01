@@ -150,6 +150,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.careSettingConfigs.forEach((config) => {
       valid = valid && config.formArray.valid;
       if (!config.formArray.valid) {
+        // trigger UI vaildation warning
         config.formArray.markAllAsTouched();
       }
     });
