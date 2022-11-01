@@ -9,7 +9,7 @@
                  placeholder="Email"
                  formControlName="email"
                  maxlength="50">
-          <mat-error *ngIf="email.errors?.['required']">Required</mat-error>
+          <mat-error *ngIf="email.hasError('required')">Required</mat-error>
           <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
         </mat-form-field>
       </div>

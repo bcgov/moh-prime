@@ -93,7 +93,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         public async Task<ActionResult> SendProvisionerLink(int enrolleeId, [FromBody] EmailPair[] providedEmails)
         {
-            // var emails = Email.ParseCommaSeparatedEmails(providedEmails);
             var allEmailsValid = true;
             foreach (var emailPair in providedEmails)
             {
