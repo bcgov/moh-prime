@@ -31,6 +31,9 @@ namespace Prime.Services
                     .ThenInclude(e => e.Certifications)
                         .ThenInclude(c => c.License)
                             .ThenInclude(l => l.LicenseDetails)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.Certifications)
+                        .ThenInclude(c => c.College)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)
