@@ -240,6 +240,7 @@ namespace Prime.Services
                 .DecompileAsync()
                 .ToListAsync();
 
+            var emailedEnrolleeIds = new List<int>();
             foreach (var enrollee in enrollees)
             {
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
@@ -256,6 +257,7 @@ namespace Prime.Services
                         email = await _emailRenderingService.RenderForcedRenewalEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
                     }
                     await Send(email);
+                    emailedEnrolleeIds.Add(enrollee.Id);
                 }
                 if (expiryDays == -1)
                 {
@@ -269,10 +271,11 @@ namespace Prime.Services
                         email = await _emailRenderingService.RenderForcedRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
                     }
                     await Send(email);
+                    emailedEnrolleeIds.Add(enrollee.Id);
                 }
             }
 
-            return enrollees.Select(e => e.Id);
+            return emailedEnrolleeIds.AsEnumerable();
         }
 
         public async Task<IEnumerable<int>> SendEnrolleeUnsignedToaReminderEmails()
@@ -290,6 +293,7 @@ namespace Prime.Services
                 .DecompileAsync()
                 .ToListAsync();
 
+            var emailedEnrolleeIds = new List<int>();
             foreach (var enrollee in enrollees)
             {
                 // Approved/became RequiresToa more than 5 days ago
@@ -297,10 +301,11 @@ namespace Prime.Services
                 {
                     var email = await _emailRenderingService.RenderUnsignedToaEmailAsync(enrollee.Email, new EnrolleeUnsignedToaEmailViewModel(enrollee.FirstName, enrollee.LastName));
                     await Send(email);
+                    emailedEnrolleeIds.Add(enrollee.Id);
                 }
             }
 
-            return enrollees.Select(e => e.Id);
+            return emailedEnrolleeIds.AsEnumerable();
         }
 
         public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
