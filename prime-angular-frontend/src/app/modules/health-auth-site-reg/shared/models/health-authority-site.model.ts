@@ -94,7 +94,7 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
       throw Error('Authorized user identifier was not provided');
     }
     if (!healthAuthorityCareTypeId) {
-      throw Error('Health authority vendor identifier was not provided');
+      throw Error('Health Authority Care Type was not provided');
     }
 
     return {
