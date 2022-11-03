@@ -83,7 +83,7 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
   protected submissionRequest(): Observable<unknown> {
     const { haid, sid } = this.route.snapshot.params;
     const healthAuthoritySite = this.healthAuthoritySiteFormStateService.json;
-    console.log("testing");
+
     return (+sid)
       ? this.healthAuthoritySiteResource
         .updateHealthAuthoritySite(+haid, +sid, healthAuthoritySite.forUpdate())
