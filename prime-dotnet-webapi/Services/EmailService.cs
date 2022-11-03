@@ -55,7 +55,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendProvisionerLinkAsync(IEnumerable<string> emails, EnrolmentCertificateAccessToken token, int careSettingCode)
+        public async Task SendProvisionerLinkAsync(string[] emails, EnrolmentCertificateAccessToken token, int careSettingCode)
         {
             var enrolleeDto = await _context.Enrollees
                 .Where(e => e.Id == token.EnrolleeId)

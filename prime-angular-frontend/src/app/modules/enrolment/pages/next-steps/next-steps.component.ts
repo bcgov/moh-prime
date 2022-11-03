@@ -1,41 +1,42 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-
-import { exhaustMap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-
-import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { ConfigService } from '@config/config.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { ToastService } from '@core/services/toast.service';
+import { UtilsService } from '@core/services/utils.service';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
-import { Enrolment } from '@shared/models/enrolment.model';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
-import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
-import { Role } from '@auth/shared/enum/role.enum';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { EMPTY } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 /**
  * TODO: https://bcgovmoh.atlassian.net/browse/PRIME-2325 (Refactor common code in both PharmanetEnrolmentSummaryComponent and NextStepsComponent)
  */
 @Component({
-  selector: 'app-pharmanet-enrolment-summary',
-  templateUrl: './pharmanet-enrolment-summary.component.html',
-  styleUrls: ['./pharmanet-enrolment-summary.component.scss']
+  selector: 'app-next-steps',
+  templateUrl: './next-steps.component.html',
+  styleUrls: ['./next-steps.component.scss']
 })
-export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implements OnInit {
+export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnInit {
+  public title: string;
   public enrolment: Enrolment;
-  public emailForm: FormGroup;
+  public hasReadAgreement: boolean;
 
   public CareSettingEnum = CareSettingEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
-  public Role = Role;
 
   public showCommunityHealth: boolean;
   public showPharmacist: boolean;
@@ -55,108 +56,90 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     subheaderContent: string;
   }[];
 
-  constructor(
+  public constructor(
     protected route: ActivatedRoute,
     protected router: Router,
-    @Inject(APP_CONFIG) private config: AppConfig,
+    protected dialog: MatDialog,
+    private changeDetectorRef: ChangeDetectorRef,
     private fb: FormBuilder,
-    private enrolmentResource: EnrolmentResource,
-    private enrolmentService: EnrolmentService,
-    private dialog: MatDialog,
-    private toastService: ToastService,
+    protected enrolmentService: EnrolmentService,
+    protected enrolmentResource: EnrolmentResource,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
+    protected toastService: ToastService,
+    protected logger: ConsoleLoggerService,
+    protected utilService: UtilsService,
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService,
   ) {
-    super(route, router);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService,
+      authService
+    );
     this.showCommunityHealth = true;
     this.showPharmacist = true;
     this.showHealthAuthority = true;
     this.showDeviceProvider = true;
-
+    this.title = 'Next Steps To Get PharmaNet';
     this.careSettingConfigs = [];
-    this.complete = true;
-  }
-
-  public get enrollee() {
-    return (this.enrolment) ? this.enrolment.enrollee : null;
-  }
-
-  public get mailingAddress() {
-    return (this.enrollee) ? this.enrollee.mailingAddress : null;
   }
 
   public get careSettings() {
     return (this.enrolment) ? this.enrolment.careSettings : null;
   }
 
-  public get enrolmentCertificateNote() {
-    return (this.enrolment.enrolmentCertificateNote)
-      ? this.enrolment.enrolmentCertificateNote.note
-      : null;
-  }
-
   public get communityHealthEmails(): FormArray {
-    return this.emailForm.get('communityHealthEmails') as FormArray;
+    return this.form.get('communityHealthEmails') as FormArray;
   }
 
   public get pharmacistEmails(): FormArray {
-    return this.emailForm.get('pharmacistEmails') as FormArray;
+    return this.form.get('pharmacistEmails') as FormArray;
   }
 
   public get healthAuthorityEmails(): FormArray {
-    return this.emailForm.get('healthAuthorityEmails') as FormArray;
+    return this.form.get('healthAuthorityEmails') as FormArray;
   }
 
   public get deviceProviderEmails(): FormArray {
-    return this.emailForm.get('deviceProviderEmails') as FormArray;
+    return this.form.get('deviceProviderEmails') as FormArray;
   }
 
-  public get GPID(): string {
-    return this.enrollee.gpid;
-  }
-
-  public onCopy() {
-    this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
-  }
-
-  public setShowEmail(careSettingCode: number, show: boolean, formControl: FormControl = null) {
-    if (formControl) {
-      formControl.reset();
+  public getAgreementDescription() {
+    switch (this.currentAgreementGroup) {
+      case AgreementTypeGroup.ON_BEHALF_OF:
+        return 'You are an on behalf of user';
+      case AgreementTypeGroup.REGULATED_USER:
+        return 'You are an independant user';
+      default:
+        return '';
     }
+  }
+
+  public isEmailVisible(careSettingCode: number): boolean {
     switch (careSettingCode) {
       case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        this.showCommunityHealth = show;
-        break;
+        return this.showCommunityHealth;
       }
       case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
-        this.showPharmacist = show;
-        break;
+        return this.showPharmacist;
       }
       case this.CareSettingEnum.HEALTH_AUTHORITY: {
-        this.showHealthAuthority = show;
-        break;
+        return this.showHealthAuthority;
       }
       case this.CareSettingEnum.DEVICE_PROVIDER: {
-        this.showDeviceProvider = show;
-        break;
+        return this.showDeviceProvider;
       }
-    }
-  }
-
-  public getTokenUrl(tokenId: string): string {
-    return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
-  }
-
-  public sendProvisionerAccessLinkTo() {
-    let valid = true;
-    this.careSettingConfigs.forEach((config) => {
-      valid = valid && config.formArray.valid;
-      if (!config.formArray.valid) {
-        // trigger UI vaildation warning
-        config.formArray.markAllAsTouched();
+      default: {
+        return false;
       }
-    });
-
-    if (valid) {
-      this.sendProvisionerAccessLink();
     }
   }
 
@@ -171,6 +154,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) => {
           if (result) {
+            this.complete = true;
+
             let emailPairs = this.careSettingConfigs.map((config) => {
               return {
                 emails: config.formArray.value.map(email => email.email),
@@ -185,64 +170,14 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         })
       )
       .subscribe(() => {
-        let emails = new Array<string>();
-        this.careSettingConfigs.forEach((config) => {
-          emails.push(config.formArray.value.map(email => email.email));
-        });
-        this.toastService.openSuccessToast(`Email was successfully sent to ${emails.join(", ")}`);
-        this.emailForm.reset();
+        this.toastService.openSuccessToast('Email was successfully sent');
+        this.router.navigate([EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
+          { relativeTo: this.route.parent, queryParams: { initialEnrolment: this.initialEnrolment } });
       });
+    this.onPageChange({ atEnd: true });
   }
 
-  //No long in used at the moment.
-  public openQR(event: Event): void {
-    event.preventDefault();
-
-    this.enrolmentResource.getQrCode(this.enrolment.id)
-      .subscribe((qrCode: string) => {
-        var data = qrCode
-          ? { base64Image: qrCode }
-          : null;
-        var message = qrCode
-          ? 'Scan this QR code to receive an invitation to your verifiable credential that can be stored in your digital wallet.'
-          : 'No credential invitation found.';
-
-        const options: DialogOptions = {
-          title: 'Verified Credential',
-          message,
-          actionHide: true,
-          cancelText: 'Close',
-          data,
-          component: ImageComponent
-        };
-
-        this.busy = this.dialog.open(ConfirmDialogComponent, { data: options })
-          .afterClosed()
-          .subscribe();
-      });
-  }
-
-  public getTitle() {
-    if (!this.initialEnrolment) {
-      return 'Share my Global PharmaNet ID (GPID)';
-    } else if (this.complete) {
-      return 'PRIME Enrolment Complete';
-    }
-    return 'Next Steps to Get PharmaNet';
-  }
-
-  public getAgreementDescription() {
-    switch (this.currentAgreementGroup) {
-      case AgreementTypeGroup.ON_BEHALF_OF:
-        return 'You are an on behalf of user';
-      case AgreementTypeGroup.REGULATED_USER:
-        return 'You are an independant user';
-      default:
-        return '';
-    }
-  }
-
-  public getEmailsGroup(careSettingCode: number): FormArray {
+  public GetEmailsGroup(careSettingCode: number) {
     let formArray: FormArray;
 
     switch (careSettingCode) {
@@ -266,21 +201,34 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return formArray;
   }
 
-  public addEmptyEmailInput(settingCode: number) {
-    let emailsArray = this.getEmailsGroup(settingCode);
-    this.addEmail(emailsArray);
+  public sendProvisionerAccessLinkTo() {
+    let valid = true;
+    this.careSettingConfigs.forEach((config) => {
+      valid = valid && config.formArray.valid;
+      if (!config.formArray.valid) {
+        config.formArray.markAllAsTouched();
+      }
+    });
+
+    if (valid) {
+      this.sendProvisionerAccessLink();
+    }
   }
 
-  public removeEmail(settingCode: number, index: number): void {
-    let emailsArray = this.getEmailsGroup(settingCode);
-    emailsArray.removeAt(index);
+  public onPageChange(agreement: { atEnd: boolean }) {
+    if (agreement.atEnd) {
+      this.hasReadAgreement = agreement.atEnd;
+      this.changeDetectorRef.detectChanges();
+    }
   }
 
   public ngOnInit(): void {
+
     this.enrolment = this.enrolmentService.enrolment;
-    this.createFormInstance();
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.initialEnrolment = this.route.snapshot.queryParams?.initialEnrolment === 'true';
+    this.createFormInstance();
+    this.patchForm().subscribe(() => this.initForm());
 
     this.enrolmentResource.getCurrentAgreementGroupForAnEnrollee(this.enrolment.id)
       .subscribe((group: AgreementTypeGroup) => this.currentAgreementGroup = group)
@@ -331,17 +279,14 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     });
   }
 
-  protected addEmail(emailsArray: FormArray, email?: string): void {
-    const emailForm = this.fb.group({
-      email: ['', []]
-    });
-    emailForm.patchValue({ email });
-    emailsArray.push(emailForm);
+  public addEmptyEmailInput(settingCode: number) {
+    let emailsArray = this.GetEmailsGroup(settingCode);
+    this.addEmail(emailsArray);
   }
 
-  protected createFormInstance(): void {
-    this.emailForm = this.buildEmailGroup();
-    this.initForm();
+  public removeEmail(settingCode: number, index: number): void {
+    let emailsArray = this.GetEmailsGroup(settingCode);
+    emailsArray.removeAt(index);
   }
 
   protected initForm() {
@@ -351,6 +296,27 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       this.addEmail(this.healthAuthorityEmails);
       this.addEmail(this.deviceProviderEmails);
     }
+  }
+
+  protected createFormInstance(): void {
+    this.form = this.buildEmailGroup();
+  }
+
+  protected nextRouteAfterSubmit() {
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY;
+    }
+
+    super.nextRouteAfterSubmit(nextRoutePath);
+  }
+
+  protected addEmail(emailsArray: FormArray, email?: string): void {
+    const emailForm = this.fb.group({
+      email: ['', []]
+    });
+    emailForm.patchValue({ email });
+    emailsArray.push(emailForm);
   }
 
   private buildEmailGroup(): FormGroup {
