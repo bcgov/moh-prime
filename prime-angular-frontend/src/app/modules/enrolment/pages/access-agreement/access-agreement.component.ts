@@ -85,6 +85,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   }
 
   public onSubmit(isAcceptingToa: boolean = false) {
+    this.hasReadAgreement = this.agreed.value;
+
     if (this.hasReadAgreement) {
       const status = (isAcceptingToa)
         ? { verb: 'Accept', adjective: 'accepted' }
@@ -111,7 +113,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         )
         .subscribe(() => {
           this.toastService.openSuccessToast(`Terms of Access has been ${status.adjective}`);
-          this.router.navigate([EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
+          this.router.navigate([EnrolmentRoutes.NEXT_STEPS],
             { relativeTo: this.route.parent, queryParams: { initialEnrolment: this.isInitialEnrolment } });
         });
     }
@@ -131,7 +133,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
       this.utilsService.scrollTop();
       this.currentPage++;
 
-      this.onPageChange({ atEnd: true });
+      this.onPageChange({ atEnd: false });
     }
   }
 

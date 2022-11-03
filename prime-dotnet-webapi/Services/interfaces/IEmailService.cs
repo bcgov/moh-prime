@@ -8,7 +8,7 @@ namespace Prime.Services
     public interface IEmailService
     {
         Task SendBusinessLicenceUploadedAsync(CommunitySite site);
-        Task SendProvisionerLinkAsync(IEnumerable<string> recipientEmails, EnrolmentCertificateAccessToken token, int careSettingCode);
+        Task SendProvisionerLinkAsync(string[] recipientEmails, EnrolmentCertificateAccessToken token, int careSettingCode);
         Task SendReminderEmailAsync(int enrolleeId);
         Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers);
         Task SendRemoteUsersUpdatedAsync(CommunitySite site);

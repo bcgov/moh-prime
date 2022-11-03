@@ -33,7 +33,7 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderProvisionerLinkEmailAsync(IEnumerable<string> recipientEmails, string cc, CareSettingType careSetting, ProvisionerAccessEmailViewModel viewModel)
+        public async Task<Email> RenderProvisionerLinkEmailAsync(string[] recipientEmails, string cc, CareSettingType careSetting, ProvisionerAccessEmailViewModel viewModel)
         {
             var emailTemplateType = careSetting switch
             {
