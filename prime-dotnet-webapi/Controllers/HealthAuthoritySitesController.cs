@@ -21,18 +21,21 @@ namespace Prime.Controllers
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
         private readonly IEmailService _emailService;
+        private readonly IBusinessEventService _businessEventService;
         private readonly IHealthAuthorityService _healthAuthorityService;
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly ISiteService _siteService;
 
         public HealthAuthoritySitesController(
             IEmailService emailService,
+            IBusinessEventService businessEventService,
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
             ISiteService siteService
         )
         {
             _emailService = emailService;
+            _businessEventService = businessEventService;
             _healthAuthorityService = healthAuthorityService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
             _siteService = siteService;
@@ -264,7 +267,9 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Notified of health authority site registration submission");
 
             return NoContent();
         }
