@@ -10,7 +10,7 @@ namespace Prime.Services.EmailInternal
     public interface IEmailRenderingService
     {
         Task<Email> RenderBusinessLicenceUploadedEmailAsync(string recipientEmail, LinkedEmailViewModel viewModel);
-        Task<Email> RenderProvisionerLinkEmailAsync(IEnumerable<string> recipientEmails, string cc, CareSettingType careSetting, ProvisionerAccessEmailViewModel viewModel);
+        Task<Email> RenderProvisionerLinkEmailAsync(string[] recipientEmails, string cc, CareSettingType careSetting, ProvisionerAccessEmailViewModel viewModel);
         Task<Email> RenderReminderEmailAsync(string recipientEmail, LinkedEmailViewModel viewModel);
         Task<Email> RenderRemoteUserNotificationEmailAsync(string recipientEmail, RemoteUserNotificationEmailViewModel viewModel);
         Task<Email> RenderRemoteUsersUpdatedEmailAsync(RemoteUsersUpdatedEmailViewModel viewModel);

@@ -126,6 +126,7 @@ import { AdministratorOverviewComponent } from '@health-auth/pages/administrator
 import { TechnicalSupportOverviewComponent } from '@health-auth/pages/technical-support-page/technical-support-overview.component';
 import { HealthAuthCareTypeOverviewComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-overview.component';
 import { HealthAuthSiteOverviewContainerComponent } from './components/health-auth-site-overview-container/health-auth-site-overview-container.component';
+import { EmailFormComponent } from './components/forms/email-form/email-form.component';
 
 @NgModule({
   declarations: [
@@ -232,7 +233,8 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     SiteInformationOverviewComponent,
     HealthAuthSiteOverviewContainerComponent,
     DateOfBirthComponent,
-    UnlistedCollegeLicenceFormComponent
+    UnlistedCollegeLicenceFormComponent,
+    EmailFormComponent
   ],
   imports: [
     CommonModule,
@@ -342,7 +344,8 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     VendorOverviewComponent,
     SiteInformationOverviewComponent,
     HealthAuthSiteOverviewContainerComponent,
-    UnlistedCollegeLicenceFormComponent
+    UnlistedCollegeLicenceFormComponent,
+    EmailFormComponent
   ],
   providers: [
     FullnamePipe,

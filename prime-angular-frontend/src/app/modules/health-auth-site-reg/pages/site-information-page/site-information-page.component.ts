@@ -78,7 +78,7 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
   protected afterSubmitIsSuccessful(): void {
     const nextRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;
+      : HealthAuthSiteRegRoutes.SITE_ADDRESS;
 
     this.routeUtils.routeRelativeTo(nextRoutePath);
   }

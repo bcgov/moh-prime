@@ -32,6 +32,7 @@ describe('HealthAuthCareTypePageComponent', () => {
   let component: HealthAuthCareTypePageComponent;
   let fixture: ComponentFixture<HealthAuthCareTypePageComponent>;
   let spyOnRouteRelativeTo;
+  let spyOnRouteTo;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -69,6 +70,7 @@ describe('HealthAuthCareTypePageComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     spyOnRouteRelativeTo = spyOn(component.routeUtils, 'routeRelativeTo');
+    spyOnRouteTo = spyOn(component.routeUtils, 'routeTo');
   });
 
   it('should create', () => {
@@ -85,11 +87,11 @@ describe('HealthAuthCareTypePageComponent', () => {
   });
 
   describe('testing onBack() with an incomplete profile', () => {
-    it('should call routeToRelativePath with HealthAuthSiteRegRoutes.SITE_INFORMATION', () => {
+    it('should call routeTo with HealthAuthSiteRegRoutes.SITE_MANAGEMENT', () => {
       component.isCompleted = false;
 
       component.onBack();
-      expect(spyOnRouteRelativeTo).toHaveBeenCalledWith(HealthAuthSiteRegRoutes.SITE_INFORMATION);
+      expect(spyOnRouteTo).toHaveBeenCalledWith(HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.SITE_MANAGEMENT));
     });
   });
 });

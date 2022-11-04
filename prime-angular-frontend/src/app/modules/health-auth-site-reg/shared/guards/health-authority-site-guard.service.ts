@@ -85,7 +85,7 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
       : this.navigate(routePath, this.createSiteRoutePath({ haid, sid },
         (healthAuthoritySite.completed)
           ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-          : HealthAuthSiteRegRoutes.VENDOR
+          : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE
       ));
   }
 
@@ -125,7 +125,7 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
    */
   private manageNoHealthAuthoritySite(routePath: string, { haid }: Params): boolean {
     const sid = 0;
-    const newSiteRoutePath = this.createSiteRoutePath({ haid, sid }, HealthAuthSiteRegRoutes.VENDOR);
+    const newSiteRoutePath = this.createSiteRoutePath({ haid, sid }, HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE);
 
     if (routePath.includes(newSiteRoutePath.join('/'))) {
       return true;

@@ -1,10 +1,10 @@
 <ng-container *ngIf="healthAuthoritySite">
+  <app-health-auth-care-type-overview [healthAuthCareType]="healthAuthoritySite"
+                                      [showEditRedirect]="isIncomplete"></app-health-auth-care-type-overview>
   <app-vendor-overview [vendor]="healthAuthoritySite"
                        [showEditRedirect]="isIncomplete"></app-vendor-overview>
   <app-site-information-overview [siteInformation]="healthAuthoritySite"
                                  [showEditRedirect]="isIncomplete"></app-site-information-overview>
-  <app-health-auth-care-type-overview [healthAuthCareType]="healthAuthoritySite"
-                                      [showEditRedirect]="isIncomplete"></app-health-auth-care-type-overview>
   <app-site-address-overview [siteAddress]="healthAuthoritySite"
                              [showEditRedirect]="isIncomplete"></app-site-address-overview>
   <app-hours-operation-overview [hoursOperation]="healthAuthoritySite"

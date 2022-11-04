@@ -18,11 +18,16 @@ namespace Prime.Controllers
     {
         private readonly IEmailService _emailService;
         private readonly IEmailTemplateService _emailTemplateService;
+        private readonly IBusinessEventService _businessEventService;
 
-        public EmailsController(IEmailService emailService, IEmailTemplateService emailTemplateService)
+        public EmailsController(
+            IEmailService emailService,
+            IEmailTemplateService emailTemplateService,
+            IBusinessEventService businessEventService)
         {
             _emailService = emailService;
             _emailTemplateService = emailTemplateService;
+            _businessEventService = businessEventService;
         }
 
         // POST: api/Emails/management/statuses
@@ -53,7 +58,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendEnrolleeRenewalEmails()
         {
-            await _emailService.SendEnrolleeRenewalEmails();
+            var enrolleesEmailed = await _emailService.SendEnrolleeRenewalEmails();
+            foreach (var enrolleeId in enrolleesEmailed)
+            {
+                await _businessEventService.CreateEmailEventAsync(enrolleeId, "Notified enrollee to renew");
+            }
 
             return NoContent();
         }
@@ -69,7 +78,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendEnrolleeUnsignedToaReminderEmails()
         {
-            await _emailService.SendEnrolleeUnsignedToaReminderEmails();
+            var enrolleesEmailed = await _emailService.SendEnrolleeUnsignedToaReminderEmails();
+            foreach (var enrolleeId in enrolleesEmailed)
+            {
+                await _businessEventService.CreateEmailEventAsync(enrolleeId, "Notified enrollee to sign TOA");
+            }
 
             return NoContent();
         }
