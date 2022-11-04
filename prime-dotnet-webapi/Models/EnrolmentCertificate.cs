@@ -46,7 +46,6 @@ namespace Prime.Models
                         CollegeLicenceNumber = cert.LicenseNumber,
                         PharmaNetId = cert.PractitionerId,
                         CollegeCode = cert.CollegeCode,
-                        CollegeName = cert.College.Name,
                     }),
                 AccessType = enrollee.Agreements.OrderByDescending(a => a.CreatedDate)
                     .Where(a => a.AcceptedDate != null)
