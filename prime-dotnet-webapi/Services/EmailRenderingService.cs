@@ -33,7 +33,7 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderProvisionerLinkEmailAsync(IEnumerable<string> recipientEmails, string cc, CareSettingType careSetting, ProvisionerAccessEmailViewModel viewModel)
+        public async Task<Email> RenderProvisionerLinkEmailAsync(string[] recipientEmails, string cc, CareSettingType careSetting, ProvisionerAccessEmailViewModel viewModel)
         {
             var emailTemplateType = careSetting switch
             {
@@ -81,7 +81,7 @@ namespace Prime.Services.EmailInternal
             (
                 from: PrimeEmail,
                 to: new[] { MohEmail, PrimeSupportEmail },
-                subject: "Remote Practitioners Added",
+                subject: "Remote Practitioners Changed",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.RemoteUserUpdatedNotification, viewModel)
             );
         }

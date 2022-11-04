@@ -28,6 +28,7 @@ export class EnrolmentRoutes {
   public static CHANGES_SAVED = 'changes-saved';
   public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
   public static PENDING_ACCESS_TERM = 'pending-access-term';
+  public static NEXT_STEPS = 'next-steps';
   public static ACCESS_LOCKED = 'access-locked';
   public static ACCESS_DECLINED = 'access-declined';
   // Enrollee history and PharmaNet:
@@ -82,7 +83,8 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.SUBMISSION_CONFIRMATION,
       EnrolmentRoutes.ACCESS_LOCKED,
       // ACCESS_TERM is synonymous with adjudicator manual/automatic APPROVED
-      EnrolmentRoutes.PENDING_ACCESS_TERM
+      EnrolmentRoutes.PENDING_ACCESS_TERM,
+      EnrolmentRoutes.NEXT_STEPS
     ];
   }
 

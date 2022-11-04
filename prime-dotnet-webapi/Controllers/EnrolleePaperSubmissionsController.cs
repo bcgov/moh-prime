@@ -340,7 +340,9 @@ namespace Prime.Controllers
             }
 
             await _enrolleePaperSubmissionService.FinalizeSubmissionAsync(enrolleeId);
+
             await _emailService.SendPaperEnrolmentSubmissionEmailAsync(enrolleeId);
+            await _businessEventService.CreateEmailEventAsync(enrolleeId, "Paper enrollee notified of submission");
 
             return Ok();
         }

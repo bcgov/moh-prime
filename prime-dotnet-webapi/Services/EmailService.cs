@@ -55,7 +55,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendProvisionerLinkAsync(IEnumerable<string> emails, EnrolmentCertificateAccessToken token, int careSettingCode)
+        public async Task SendProvisionerLinkAsync(string[] emails, EnrolmentCertificateAccessToken token, int careSettingCode)
         {
             var enrolleeDto = await _context.Enrollees
                 .Where(e => e.Id == token.EnrolleeId)
@@ -148,6 +148,7 @@ namespace Prime.Services
                 PrimeUrl = PrimeConfiguration.Current.FrontendUrl
             };
 
+            // This code assumes that there is nothing remote user-specific in the email body
             var email = await _emailRenderingService.RenderRemoteUserNotificationEmailAsync(recipients.First(), viewModel);
             await Send(email);
 
@@ -216,7 +217,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendEnrolleeRenewalEmails()
+        public async Task<IEnumerable<int>> SendEnrolleeRenewalEmails()
         {
             var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
 
@@ -229,6 +230,7 @@ namespace Prime.Services
                         && (ea.EndTimestamp >= now || ea.EndTimestamp == null)))
                 .Select(e => new
                 {
+                    e.Id,
                     e.FirstName,
                     e.LastName,
                     e.Email,
@@ -238,6 +240,7 @@ namespace Prime.Services
                 .DecompileAsync()
                 .ToListAsync();
 
+            var emailedEnrolleeIds = new List<int>();
             foreach (var enrollee in enrollees)
             {
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
@@ -254,6 +257,7 @@ namespace Prime.Services
                         email = await _emailRenderingService.RenderForcedRenewalEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
                     }
                     await Send(email);
+                    emailedEnrolleeIds.Add(enrollee.Id);
                 }
                 if (expiryDays == -1)
                 {
@@ -267,17 +271,20 @@ namespace Prime.Services
                         email = await _emailRenderingService.RenderForcedRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
                     }
                     await Send(email);
+                    emailedEnrolleeIds.Add(enrollee.Id);
                 }
             }
+
+            return emailedEnrolleeIds.AsEnumerable();
         }
 
-
-        public async Task SendEnrolleeUnsignedToaReminderEmails()
+        public async Task<IEnumerable<int>> SendEnrolleeUnsignedToaReminderEmails()
         {
             var enrollees = await _context.Enrollees
                 .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa)
                 .Select(e => new
                 {
+                    e.Id,
                     e.FirstName,
                     e.LastName,
                     e.Email,
@@ -286,6 +293,7 @@ namespace Prime.Services
                 .DecompileAsync()
                 .ToListAsync();
 
+            var emailedEnrolleeIds = new List<int>();
             foreach (var enrollee in enrollees)
             {
                 // Approved/became RequiresToa more than 5 days ago
@@ -293,8 +301,11 @@ namespace Prime.Services
                 {
                     var email = await _emailRenderingService.RenderUnsignedToaEmailAsync(enrollee.Email, new EnrolleeUnsignedToaEmailViewModel(enrollee.FirstName, enrollee.LastName));
                     await Send(email);
+                    emailedEnrolleeIds.Add(enrollee.Id);
                 }
             }
+
+            return emailedEnrolleeIds.AsEnumerable();
         }
 
         public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
