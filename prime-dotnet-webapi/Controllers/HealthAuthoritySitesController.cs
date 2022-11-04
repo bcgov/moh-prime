@@ -63,10 +63,6 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            if (!await _healthAuthorityService.VendorExistsOnHealthAuthorityAsync(healthAuthorityId, payload.HealthAuthorityVendorId))
-            {
-                return NotFound($"Health Authority Vendor not found with id {payload.HealthAuthorityVendorId}");
-            }
 
             var createdSite = await _healthAuthoritySiteService.CreateSiteAsync(healthAuthorityId, payload);
 
@@ -189,6 +185,11 @@ namespace Prime.Controllers
             if (!await _healthAuthoritySiteService.SiteIsEditableAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"No Editable Health Authority Site found with id {siteId}");
+            }
+            if (updateModel.HealthAuthorityVendorId.HasValue &&
+                !await _healthAuthorityService.VendorExistsOnHealthAuthorityAsync(healthAuthorityId, updateModel.HealthAuthorityVendorId.Value))
+            {
+                return NotFound($"Health Authority Vendor not found with id {updateModel.HealthAuthorityVendorId}");
             }
             if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, updateModel))
             {
