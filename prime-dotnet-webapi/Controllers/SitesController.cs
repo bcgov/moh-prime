@@ -368,6 +368,7 @@ namespace Prime.Controllers
             await _siteService.SubmitRegistrationAsync(siteId);
 
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site registration submission notification");
 
             return Ok();
         }
@@ -528,6 +529,7 @@ namespace Prime.Controllers
             if (site.SubmittedDate != null)
             {
                 await _emailService.SendSiteRegistrationSubmissionAsync(siteId, businessLicenceId, (CareSettingType)site.CareSettingCode);
+                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site registration submission notification");
             }
 
             // Send an notifying email to the adjudicator
@@ -538,6 +540,7 @@ namespace Prime.Controllers
                 && !string.IsNullOrEmpty(site.BusinessLicence.DeferredLicenceReason))
             {
                 await _emailService.SendBusinessLicenceUploadedAsync(site);
+                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent business licence upload notification");
             }
 
             return Ok(document);
@@ -813,6 +816,7 @@ namespace Prime.Controllers
 
             var site = await _communitySiteService.GetSiteAsync(siteId);
             await _emailService.SendRemoteUsersUpdatedAsync(site);
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent remote user update notification");
             return NoContent();
         }
 
@@ -837,6 +841,7 @@ namespace Prime.Controllers
             }
 
             await _emailService.SendSiteReviewedNotificationAsync(siteId, note);
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site reviewed notification");
             return NoContent();
         }
 
@@ -882,16 +887,24 @@ namespace Prime.Controllers
                 if (communitySite.ActiveBeforeRegistration)
                 {
                     await _emailService.SendSiteActiveBeforeRegistrationAsync(siteId, communitySite.Organization.SigningAuthority.Email);
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site active before registration notification");
                 }
                 else
                 {
                     await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(communitySite);
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved PharmaNet administrator notification");
                     await _emailService.SendSiteApprovedSigningAuthorityAsync(communitySite);
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved signing authority notification");
                 }
                 await _emailService.SendSiteApprovedHIBCAsync(communitySite);
+                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved HIBC notification");
 
                 var remoteUsersToNotify = communitySite.RemoteUsers.Where(ru => !ru.Notified);
                 await _emailService.SendRemoteUserNotificationsAsync(communitySite, remoteUsersToNotify);
+                if (remoteUsersToNotify.Any())
+                {
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site remote user notification(s)");
+                }
                 await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
             }
             else

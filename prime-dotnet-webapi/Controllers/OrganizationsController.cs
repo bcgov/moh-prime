@@ -208,6 +208,7 @@ namespace Prime.Controllers
                 await _partyService.RemovePartyEnrolmentAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
                 await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
                 await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
+                await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, "Sent organization claim approval notification");
             }
 
             return NoContent();

@@ -21,18 +21,21 @@ namespace Prime.Controllers
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
         private readonly IEmailService _emailService;
+        private readonly IBusinessEventService _businessEventService;
         private readonly IHealthAuthorityService _healthAuthorityService;
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly ISiteService _siteService;
 
         public HealthAuthoritySitesController(
             IEmailService emailService,
+            IBusinessEventService businessEventService,
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
             ISiteService siteService
         )
         {
             _emailService = emailService;
+            _businessEventService = businessEventService;
             _healthAuthorityService = healthAuthorityService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
             _siteService = siteService;
@@ -59,10 +62,6 @@ namespace Prime.Controllers
             if (!await _healthAuthorityService.AuthorizedUserExistsOnHealthAuthorityAsync(healthAuthorityId, payload.AuthorizedUserId))
             {
                 return Forbid();
-            }
-            if (!await _healthAuthorityService.VendorExistsOnHealthAuthorityAsync(healthAuthorityId, payload.HealthAuthorityVendorId))
-            {
-                return NotFound($"Health Authority Vendor not found with id {payload.HealthAuthorityVendorId}");
             }
 
             var createdSite = await _healthAuthoritySiteService.CreateSiteAsync(healthAuthorityId, payload);
@@ -187,6 +186,11 @@ namespace Prime.Controllers
             {
                 return NotFound($"No Editable Health Authority Site found with id {siteId}");
             }
+            if (updateModel.HealthAuthorityVendorId.HasValue &&
+                !await _healthAuthorityService.VendorExistsOnHealthAuthorityAsync(healthAuthorityId, updateModel.HealthAuthorityVendorId.Value))
+            {
+                return NotFound($"Health Authority Vendor not found with id {updateModel.HealthAuthorityVendorId}");
+            }
             if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, updateModel))
             {
                 return BadRequest();
@@ -263,7 +267,9 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Notified of health authority site registration submission");
 
             return NoContent();
         }
