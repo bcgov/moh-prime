@@ -299,12 +299,15 @@ namespace Prime.Services
             }
         }
 
-        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid)
+        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid, string filename = "")
         {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SignedOrgAgreements);
-            if (string.IsNullOrWhiteSpace(filename))
+            if (filename == "")
             {
-                return null;
+                filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SignedOrgAgreements);
+                if (string.IsNullOrWhiteSpace(filename))
+                {
+                    return null;
+                }
             }
 
             var signedAgreement = new SignedAgreementDocument

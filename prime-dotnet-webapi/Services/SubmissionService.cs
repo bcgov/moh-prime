@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 using DelegateDecompiler.EntityFrameworkCore;
 
 using Prime.Engines;
+using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.Services.Razor;
 using Prime.ViewModels;
 
 namespace Prime.Services
@@ -25,6 +28,9 @@ namespace Prime.Services
         private readonly IPrivilegeService _privilegeService;
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IVerifiableCredentialService _verifiableCredentialService;
+        private readonly IRazorConverterService _razorConverterService;
+        private readonly IPdfService _pdfService;
+        private readonly IDocumentManagerClient _documentManagerClient;
 
         public SubmissionService(
             ApiDbContext context,
@@ -38,7 +44,10 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             IPrivilegeService privilegeService,
             ISubmissionRulesService submissionRulesService,
-            IVerifiableCredentialService verifiableCredentialService)
+            IVerifiableCredentialService verifiableCredentialService,
+            IRazorConverterService razorConverterService,
+            IPdfService pdfService,
+            IDocumentManagerClient documentManagerClient)
             : base(context, logger)
         {
             _agreementService = agreementService;
@@ -51,6 +60,9 @@ namespace Prime.Services
             _privilegeService = privilegeService;
             _submissionRulesService = submissionRulesService;
             _verifiableCredentialService = verifiableCredentialService;
+            _razorConverterService = razorConverterService;
+            _pdfService = pdfService;
+            _documentManagerClient = documentManagerClient;
         }
 
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile)
@@ -137,6 +149,7 @@ namespace Prime.Services
                     .ThenInclude(cer => cer.College)
                 .Include(e => e.Certifications)
                     .ThenInclude(l => l.License)
+                .Include(e => e.Agreements)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (!EnrolleeStatusStateEngine.AllowableAction(action, enrollee.CurrentStatus))
@@ -280,6 +293,20 @@ namespace Prime.Services
                     }
                 }
                 else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                var pendingAgreementId = enrollee.Agreements.OrderByDescending(a => a.CreatedDate).Select(a => a.Id).First();
+                Agreement agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrollee.Id, pendingAgreementId, true);
+                var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.PdfNoSignature, agreement);
+                var pdfbinary = _pdfService.Generate(html);
+                var filename = "Terms-Of-Access.pdf";
+                var documentGuid = await _documentManagerClient.SendFileAsync(new System.IO.MemoryStream(pdfbinary), filename, DestinationFolders.SignedOrgAgreements);
+                var agreementDocument = await _agreementService.AddSignedAgreementDocumentAsync(agreement.Id, documentGuid, filename);
+                if (agreementDocument == null)
                 {
                     return false;
                 }
