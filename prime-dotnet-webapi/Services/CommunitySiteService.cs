@@ -18,6 +18,7 @@ namespace Prime.Services
     public class CommunitySiteService : BaseService, ICommunitySiteService
     {
         private readonly IBusinessEventService _businessEventService;
+        private readonly IEmailService _emailService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
 
@@ -25,11 +26,13 @@ namespace Prime.Services
             ApiDbContext context,
             ILogger<CommunitySiteService> logger,
             IBusinessEventService businessEventService,
+            IEmailService emailService,
             IDocumentManagerClient documentClient,
             IMapper mapper)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
+            _emailService = emailService;
             _documentClient = documentClient;
             _mapper = mapper;
         }
@@ -153,7 +156,7 @@ namespace Prime.Services
             UpdateAddress(currentSite, updatedSite);
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
-            UpdateRemoteUsers(currentSite, updatedSite.RemoteUsers);
+            var remoteUsersUpdated = UpdateRemoteUsers(currentSite, updatedSite.RemoteUsers);
             await UpdateIndividualDeviceProviders(siteId, updatedSite.IndividualDeviceProviders);
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
@@ -161,6 +164,13 @@ namespace Prime.Services
             try
             {
                 await _context.SaveChangesAsync();
+                if (remoteUsersUpdated)
+                {
+                    var site = await GetSiteAsync(siteId);
+                    // Send HIBC an email when remote users are updated for a submitted site
+                    await _emailService.SendRemoteUsersUpdatedAsync(site);
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent remote user(s) updated notification");
+                }
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -254,11 +264,14 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateRemoteUsers(Site current, IEnumerable<SiteRemoteUserUpdateModel> updateRemoteUsers)
+        /// <summary>
+        /// Returns whether there were any changes to the site's remote users
+        /// </summary>
+        private bool UpdateRemoteUsers(Site current, IEnumerable<SiteRemoteUserUpdateModel> updateRemoteUsers)
         {
             if (updateRemoteUsers == null)
             {
-                return;
+                return false;
             }
 
             // All RemoteUserCertifications will be dropped and re-added, so we must set all incoming PKs/FKs to 0
@@ -269,12 +282,17 @@ namespace Prime.Services
                 cert.RemoteUserId = 0;
             }
 
+            bool remoteUsersUpdated = false;
+
             var existingUsers = current.RemoteUsers.ToDictionary(x => x.Id, x => x);
 
             foreach (var updatedUser in updateRemoteUsers)
             {
                 if (existingUsers.TryGetValue(updatedUser.Id, out var existing))
                 {
+                    // Only considered an update if incoming and existing aren't equal
+                    remoteUsersUpdated ^= !updatedUser.Equals(existing);
+
                     existingUsers.Remove(updatedUser.Id);
 
                     updatedUser.SiteId = current.Id;
@@ -291,10 +309,16 @@ namespace Prime.Services
                     newRemoteUser.Id = 0;
                     newRemoteUser.SiteId = current.Id;
                     _context.RemoteUsers.Add(newRemoteUser);
+
+                    remoteUsersUpdated ^= true;
                 }
             }
 
+            // If there are still existingUsers, this means they were deleted in the latest update, and therefore a change
+            remoteUsersUpdated ^= (existingUsers.Count > 0);
             _context.RemoteUsers.RemoveRange(existingUsers.Values);
+
+            return remoteUsersUpdated;
         }
 
         private void UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated)

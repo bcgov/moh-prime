@@ -218,7 +218,7 @@ namespace Prime.Services
 
             if (await _context.HealthAuthoritySites
                     .AnyAsync(has => has.HealthAuthorityOrganizationId == healthAuthorityId
-                    && results.Dropped.Select(d => d.Id).Contains(has.HealthAuthorityVendorId)))
+                    && has.HealthAuthorityVendorId.HasValue && results.Dropped.Select(d => d.Id).Contains(has.HealthAuthorityVendorId.Value)))
             {
                 return false;
             }
@@ -286,7 +286,7 @@ namespace Prime.Services
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId
-                    && has.HealthAuthorityVendorId == healthAuthorityVendorId)
+                    && has.HealthAuthorityVendorId.HasValue && has.HealthAuthorityVendorId.Value == healthAuthorityVendorId)
                 .Select(has => has.Id)
                 .ToListAsync();
         }

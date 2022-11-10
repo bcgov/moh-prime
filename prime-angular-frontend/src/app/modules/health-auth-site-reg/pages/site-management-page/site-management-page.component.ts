@@ -48,13 +48,13 @@ export class SiteManagementPageComponent implements OnInit {
     // Health authority ID and code are synonymous
     const healthAuthorityId = this.authorizedUserService.authorizedUser.healthAuthorityCode;
     // Site created on submission of first page
-    this.redirectTo(healthAuthorityId, 0, HealthAuthSiteRegRoutes.VENDOR);
+    this.redirectTo(healthAuthorityId, 0, HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE);
   }
 
   public viewSite(healthAuthorityId: number, healthAuthoritySite: HealthAuthoritySite): void {
     const pagePath = (healthAuthoritySite.completed)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.VENDOR;
+      : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;
     this.redirectTo(healthAuthorityId, healthAuthoritySite.id, pagePath);
   }
 

@@ -1,4 +1,4 @@
 export interface HealthAuthoritySiteCreate {
   authorizedUserId: number;
-  healthAuthorityVendorId: number;
+  healthAuthorityCareTypeId: number;
 }

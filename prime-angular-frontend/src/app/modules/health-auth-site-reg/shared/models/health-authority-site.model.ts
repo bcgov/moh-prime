@@ -89,17 +89,17 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
    * creating a new site.
    */
   public forCreate(authorizedUserId: number): HealthAuthoritySiteCreate {
-    const healthAuthorityVendorId = this.healthAuthorityVendor?.id;
+    const healthAuthorityCareTypeId = this.healthAuthorityCareType?.id;
     if (!authorizedUserId) {
       throw Error('Authorized user identifier was not provided');
     }
-    if (!healthAuthorityVendorId) {
-      throw Error('Health authority vendor identifier was not provided');
+    if (!healthAuthorityCareTypeId) {
+      throw Error('Health Authority Care Type was not provided');
     }
 
     return {
       authorizedUserId,
-      healthAuthorityVendorId
+      healthAuthorityCareTypeId
     };
   }
 

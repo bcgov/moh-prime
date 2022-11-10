@@ -167,20 +167,6 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     this.hasNoRemoteUserError = true;
   }
 
-  protected submissionRequest(): NoContent {
-    const payload = this.siteFormStateService.json;
-    const site = this.siteService.site;
-
-    return this.siteResource.updateSite(payload)
-      .pipe(
-        exhaustMap(() =>
-          (site.submittedDate)
-            ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
-            : of(noop())
-        )
-      );
-  }
-
   protected afterSubmitIsSuccessful(): void {
     const routePath = (!this.isCompleted)
       ? SiteRoutes.ADMINISTRATOR
