@@ -299,12 +299,14 @@ namespace Prime.Services
             }
             else
             {
+                // for regular enrollee, get the pending agreement, create the PDF and store it in document manager
                 var pendingAgreementId = enrollee.Agreements.OrderByDescending(a => a.CreatedDate).Select(a => a.Id).First();
                 Agreement agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrollee.Id, pendingAgreementId, true);
                 var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.PdfNoSignature, agreement);
                 var pdfbinary = _pdfService.Generate(html);
                 var filename = "Terms-Of-Access.pdf";
                 var documentGuid = await _documentManagerClient.SendFileAsync(new System.IO.MemoryStream(pdfbinary), filename, DestinationFolders.SignedOrgAgreements);
+
                 var agreementDocument = await _agreementService.AddSignedAgreementDocumentAsync(agreement.Id, documentGuid, filename);
                 if (agreementDocument == null)
                 {
