@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20221117040014_OrganizationAgreementUpdate")]
+    [Migration("20221117042022_OrganizationAgreementUpdate")]
     partial class OrganizationAgreementUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
