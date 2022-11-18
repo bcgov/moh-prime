@@ -68,7 +68,7 @@ namespace Prime.Services
 
         public async Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid, string filename = "")
         {
-            if (filename == null)
+            if (filename == "")
             {
                 filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SignedAgreements);
                 if (string.IsNullOrWhiteSpace(filename))
