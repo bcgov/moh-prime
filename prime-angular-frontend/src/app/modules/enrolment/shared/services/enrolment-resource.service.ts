@@ -32,6 +32,7 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.model';
+import { EmailsForCareSetting } from '@shared/models/email-for-care-setting.model';
 
 @Injectable({
   providedIn: 'root'
@@ -211,11 +212,10 @@ export class EnrolmentResource {
   // ---
 
   public sendProvisionerAccessLink(
-    emails: string = null, enrolleeId: number, careSettingCode: number
+    emailPairs: EmailsForCareSetting[] = [], enrolleeId: number
   ): Observable<EnrolmentCertificateAccessToken> {
-    const payload = { data: emails };
     return this.apiResource
-      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link/${careSettingCode}`, payload)
+      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link`, emailPairs)
       .pipe(
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
@@ -499,6 +499,18 @@ export class EnrolmentResource {
           this.logger.error('[Enrolment] EnrolmentResource::getCurrentEnrolleeAbsence error has occurred: ', error);
           throw error;
         })
+      );
+  }
+
+  public getAcceptedTermsOfAccessToken(enrolleeId: number): Observable<string> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/agreement`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee terms of access could not be downloaded.');
+          this.logger.error('[Enrolment] EnrolmentResource::getAcceptedTermsOfAccessToken error has occurred: ', error);
+          throw error;
+        }),
       );
   }
 

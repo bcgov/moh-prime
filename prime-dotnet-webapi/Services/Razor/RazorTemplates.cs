@@ -32,6 +32,7 @@ namespace Prime.Services.Razor
         {
             public static readonly RazorTemplate<Agreement> Base = new RazorTemplate<Agreement>("/Views/Agreements/Agreement.cshtml");
             public static readonly RazorTemplate<Agreement> Pdf = new RazorTemplate<Agreement>("/Views/Agreements/AgreementPdf.cshtml");
+            public static readonly RazorTemplate<Agreement> PdfNoSignature = new RazorTemplate<Agreement>("/Views/Agreements/AgreementPdfNoSignature.cshtml");
         }
 
         public static class OrgAgreements

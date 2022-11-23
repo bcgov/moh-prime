@@ -4,16 +4,12 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
@@ -55,9 +51,11 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
   }
 
   public onBack(): void {
-    (this.isCompleted)
-      ? this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW)
-      : this.routeUtils.routeTo(HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.SITE_MANAGEMENT));
+    const backRoutePath = this.isCompleted
+      ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
+      : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;
+
+    this.routeUtils.routeRelativeTo(backRoutePath);
   }
 
   public ngOnInit(): void {
@@ -71,9 +69,9 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
 
   protected patchForm(): void {
     const healthAuthId = +this.route.snapshot.params.haid;
-    if (!healthAuthId) {
-      // Don't throw an error as new registrations are created in this view
-      return;
+    const healthAuthSiteId = +this.route.snapshot.params.sid;
+    if (!healthAuthId || !healthAuthSiteId) {
+      throw new Error('No health authority site ID was provided');
     }
 
     const site = this.healthAuthoritySiteService.site;
@@ -92,37 +90,10 @@ export class VendorPageComponent extends AbstractHealthAuthoritySiteRegistration
     }
   }
 
-  protected submissionRequest(): Observable<unknown> {
-    const { haid, sid } = this.route.snapshot.params;
-    const healthAuthoritySite = this.healthAuthoritySiteFormStateService.json;
-
-    return (+sid)
-      ? this.healthAuthoritySiteResource
-        .updateHealthAuthoritySite(+haid, +sid, healthAuthoritySite.forUpdate())
-        .pipe(map(() => +sid))
-      : this.healthAuthoritySiteResource
-        .createHealthAuthoritySite(+haid, healthAuthoritySite.forCreate(this.authorizedUserService.authorizedUser.id))
-        .pipe(
-          map((site: HealthAuthoritySite) => {
-            this.routeUtils.replaceState([
-              HealthAuthSiteRegRoutes.MODULE_PATH,
-              HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
-              +haid,
-              HealthAuthSiteRegRoutes.SITES,
-              site.id,
-              HealthAuthSiteRegRoutes.VENDOR
-            ]);
-            return site.id;
-          })
-        );
-  }
-
-  protected afterSubmitIsSuccessful(healthAuthSiteId: number): void {
+  protected afterSubmitIsSuccessful(): void {
     const nextRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      // Must go up a route-level and down with newly minted site ID
-      // to override the replaced route state during submission
-      : ['../', healthAuthSiteId, HealthAuthSiteRegRoutes.SITE_INFORMATION];
+      : HealthAuthSiteRegRoutes.SITE_INFORMATION;
 
     this.routeUtils.routeRelativeTo(nextRoutePath);
   }

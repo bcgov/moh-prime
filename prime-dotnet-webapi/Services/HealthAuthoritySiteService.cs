@@ -60,7 +60,7 @@ namespace Prime.Services
             var site = new HealthAuthoritySite
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
-                HealthAuthorityVendorId = createModel.HealthAuthorityVendorId,
+                HealthAuthorityCareTypeId = createModel.HealthAuthorityCareTypeId,
                 AuthorizedUserId = createModel.AuthorizedUserId,
                 CareSettingCode = (int)CareSettingType.HealthAuthority
             };
