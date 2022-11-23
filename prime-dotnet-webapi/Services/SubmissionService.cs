@@ -305,6 +305,7 @@ namespace Prime.Services
                 var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.PdfNoSignature, agreement);
                 var pdfbinary = _pdfService.Generate(html);
                 var filename = "Terms-Of-Access.pdf";
+                //TODO: currently storing TOA in signed_org_agreements for now. it should be changed to TOA specific folder
                 var documentGuid = await _documentManagerClient.SendFileAsync(new System.IO.MemoryStream(pdfbinary), filename, DestinationFolders.SignedOrgAgreements);
 
                 var agreementDocument = await _agreementService.AddSignedAgreementDocumentAsync(agreement.Id, documentGuid, filename);
