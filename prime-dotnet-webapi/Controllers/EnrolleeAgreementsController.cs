@@ -24,6 +24,7 @@ namespace Prime.Controllers
         private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IDocumentService _documentService;
 
         private readonly IPdfService _pdfService;
 
@@ -33,6 +34,7 @@ namespace Prime.Controllers
             IEnrolleeSubmissionService enrolleeSubmissionService,
             IRazorConverterService razorConverterService,
             IBusinessEventService businessEventService,
+            IDocumentService documentService,
             IPdfService pdfService)
         {
             _enrolleeService = enrolleeService;
@@ -40,6 +42,7 @@ namespace Prime.Controllers
             _enrolleeSubmissionService = enrolleeSubmissionService;
             _razorConverterService = razorConverterService;
             _businessEventService = businessEventService;
+            _documentService = documentService;
             _pdfService = pdfService;
         }
 
@@ -74,6 +77,40 @@ namespace Prime.Controllers
             }
 
             return Ok(agreements);
+        }
+
+        // GET: api/enrollees/5/agreement
+        /// <summary>
+        /// Get the enrollee's current accepted agreement in PDF.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/agreement", Name = nameof(GetEnrolleeAcceptedAgreement))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Agreement>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrolleeAcceptedAgreement(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            Agreement agreement = await _enrolleeAgreementService.GetCurrentAgreementAsync(enrolleeId);
+
+            if (agreement == null)
+            {
+                return NotFound($"Agreement not found on enrollee with id {enrolleeId}");
+            }
+
+            var token = await _documentService.GetDownloadTokenForSignedAgreementDocument(agreement.Id);
+
+            return Ok(token);
         }
 
         // GET: api/enrollees/5/cards
