@@ -9,13 +9,10 @@ import { SiteResource } from '@core/resources/site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
-import { VendorFormState } from '@health-auth/pages/vendor-page/vendor-form-state.class';
 import { SiteInformationFormState } from '@health-auth/pages/site-information-page/site-information-form-state.class';
 import { HealthAuthCareTypeFormState } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-form-state.class';
-import { SiteAddressFormState } from '@health-auth/pages/site-address-page/site-address-form-state.class';
 import { HoursOperationFormState } from '@health-auth/pages/hours-operation-page/hours-operation-form-state.class';
 import { AdministratorFormState } from '@health-auth/pages/administrator-page/administrator-form-state.class';
-import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-page/technical-support-form-state.class';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 
 /**
@@ -31,13 +28,10 @@ import { HealthAuthorityService } from '@health-auth/shared/services/health-auth
   providedIn: 'root'
 })
 export class HealthAuthoritySiteFormStateService extends AbstractFormStateService<HealthAuthoritySite> {
-  public vendorFormState: VendorFormState;
   public siteInformationFormState: SiteInformationFormState;
   public healthAuthCareTypeFormState: HealthAuthCareTypeFormState;
-  public siteAddressFormState: SiteAddressFormState;
   public hoursOperationFormState: HoursOperationFormState;
   public administratorFormState: AdministratorFormState;
-  public technicalSupportFormState: TechnicalSupportFormState;
 
   /**
    * @description
@@ -87,23 +81,17 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
    * Convert reactive form abstract controls into JSON.
    */
   public get json(): HealthAuthoritySite {
-    const vendorFormState = this.vendorFormState.json;
     const siteInformationFormState = this.siteInformationFormState.json;
     const healthAuthCareTypeFormState = this.healthAuthCareTypeFormState.json;
-    const siteAddressFormState = this.siteAddressFormState.json;
     const hoursOperationFormState = this.hoursOperationFormState.json;
     const administratorFormState = this.administratorFormState.json;
-    const technicalSupportFormState = this.technicalSupportFormState.json;
 
     return HealthAuthoritySite.toHealthAuthoritySite({
       ...this.healthAuthoritySiteReference,
-      ...vendorFormState,
       ...siteInformationFormState,
       ...healthAuthCareTypeFormState,
-      ...siteAddressFormState,
       ...hoursOperationFormState,
       ...administratorFormState,
-      ...technicalSupportFormState
     });
   }
 
@@ -113,13 +101,10 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
    */
   public get forms(): AbstractControl[] {
     return [
-      this.vendorFormState.form,
       this.siteInformationFormState.form,
       this.healthAuthCareTypeFormState.form,
-      this.siteAddressFormState.form,
       this.hoursOperationFormState.form,
       this.administratorFormState.form,
-      this.technicalSupportFormState.form
     ];
   }
 
@@ -129,13 +114,10 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
    * clear previous form data from the service.
    */
   protected buildForms(): void {
-    this.vendorFormState = new VendorFormState(this.fb, this.healthAuthorityService);
-    this.siteInformationFormState = new SiteInformationFormState(this.fb, this.siteResource);
+    this.siteInformationFormState = new SiteInformationFormState(this.fb, this.formUtilsService);
     this.healthAuthCareTypeFormState = new HealthAuthCareTypeFormState(this.fb, this.healthAuthorityService);
-    this.siteAddressFormState = new SiteAddressFormState(this.fb, this.formUtilsService);
     this.hoursOperationFormState = new HoursOperationFormState(this.fb);
     this.administratorFormState = new AdministratorFormState(this.fb);
-    this.technicalSupportFormState = new TechnicalSupportFormState(this.fb);
   }
 
   /**
@@ -146,14 +128,10 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     if (!healthAuthoritySite) {
       return;
     }
-
-    this.vendorFormState.patchValue(healthAuthoritySite);
     this.siteInformationFormState.patchValue(healthAuthoritySite, healthAuthoritySite.id);
     this.healthAuthCareTypeFormState.patchValue(healthAuthoritySite);
-    this.siteAddressFormState.patchValue(healthAuthoritySite);
     this.hoursOperationFormState.patchValue(healthAuthoritySite);
     this.administratorFormState.patchValue(healthAuthoritySite);
-    this.technicalSupportFormState.patchValue(healthAuthoritySite);
   }
 
   /**

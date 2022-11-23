@@ -31,6 +31,11 @@ export class AddressViewComponent implements OnInit {
   @Input() public showRedirect: boolean;
   /**
    * @description
+   * Show the edit button at the bottom
+   */
+  @Input() public showEditRedirect: boolean;
+  /**
+   * @description
    * Route path for redirection.
    */
   @Input() public redirectRoutePath: string | string[];

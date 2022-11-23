@@ -86,7 +86,7 @@ describe('SiteInformationPageComponent', () => {
       component.isCompleted = false;
 
       component.onBack();
-      expect(spyOnRouteRelativeTo).toHaveBeenCalledWith(HealthAuthSiteRegRoutes.VENDOR);
+      expect(spyOnRouteRelativeTo).toHaveBeenCalledWith(HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE);
     });
   });
 });

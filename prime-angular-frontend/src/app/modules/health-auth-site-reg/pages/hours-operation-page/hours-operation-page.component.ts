@@ -125,7 +125,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
   public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.SITE_ADDRESS;
+      : HealthAuthSiteRegRoutes.SITE_INFORMATION;
 
     this.routeUtils.routeRelativeTo(backRoutePath);
   }
