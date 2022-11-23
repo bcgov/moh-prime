@@ -8,6 +8,10 @@ export interface Agreement {
   expiryDate: string;
 }
 
+export interface SignedAgreement {
+  id: number;
+}
+
 export interface AgreementViewModel extends Agreement {
   agreementType: AgreementType;
   signedAgreementDocumentGuid: string;
@@ -15,6 +19,7 @@ export interface AgreementViewModel extends Agreement {
 
 export interface EnrolleeAgreement extends Agreement {
   enrolleeId: number;
+  signedAgreement: SignedAgreement;
 }
 
 export interface EnrolleeAgreementViewModel extends EnrolleeAgreement, AgreementViewModel { }
