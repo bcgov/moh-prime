@@ -487,6 +487,18 @@ export class EnrolmentResource {
       );
   }
 
+  public getAcceptedTermsOfAccessToken(enrolleeId: number): Observable<string> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/agreement`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee terms of access could not be downloaded.');
+          this.logger.error('[Enrolment] EnrolmentResource::getAcceptedTermsOfAccessToken error has occurred: ', error);
+          throw error;
+        }),
+      );
+  }
+
   // ---
   // Enrollee and Enrolment Adapters
   // ---

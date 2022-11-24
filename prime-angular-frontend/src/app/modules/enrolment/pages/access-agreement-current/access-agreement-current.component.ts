@@ -6,6 +6,7 @@ import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-access-agreement-current',
@@ -19,6 +20,7 @@ export class AccessAgreementCurrentComponent implements OnInit {
   constructor(
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
+    private utilsService: UtilsService,
   ) { }
 
   public ngOnInit(): void {
@@ -29,5 +31,13 @@ export class AccessAgreementCurrentComponent implements OnInit {
     const enrolleeId = this.enrolmentService.enrolment.id;
     this.busy = this.enrolmentResource.getLatestAccessTerm(enrolleeId, true)
       .subscribe((accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm);
+  }
+
+  public onDownload() {
+    this.enrolmentResource
+      .getAcceptedTermsOfAccessToken(this.enrolmentService.enrolment.id)
+      .subscribe((token: string) => {
+        this.utilsService.downloadToken(token);
+      });
   }
 }

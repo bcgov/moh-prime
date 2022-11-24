@@ -11,6 +11,8 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.Controllers
 {
@@ -30,6 +32,7 @@ namespace Prime.Controllers
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
         private readonly IPartyService _partyService;
+        private readonly IDocumentManagerClient _documentManagerClient;
 
 
         public OrganizationsController(
@@ -42,7 +45,8 @@ namespace Prime.Controllers
             IOrganizationClaimService organizationClaimService,
             IOrganizationService organizationService,
             ISiteService siteService,
-            IPartyService partyService)
+            IPartyService partyService,
+            IDocumentManagerClient documentManagerClient)
         {
             _adminService = adminService;
             _businessEventService = businessEventService;
@@ -54,6 +58,7 @@ namespace Prime.Controllers
             _organizationService = organizationService;
             _siteService = siteService;
             _partyService = partyService;
+            _documentManagerClient = documentManagerClient;
         }
 
         // GET: api/Organizations/5
@@ -485,6 +490,22 @@ namespace Prime.Controllers
             if (organization.PendingTransfer && await _organizationService.IsOrganizationTransferCompleteAsync(organizationId))
             {
                 await _organizationService.FinalizeTransferAsync(organizationId);
+            }
+
+
+            if (!organizationAgreementGuid.HasValue)
+            {
+                var filename = "Organization-Agreement.pdf";
+                // get the agreement
+                var agreement = await _organizationAgreementService.GetOrgAgreementAsync(organizationId, agreementId, true);
+                // store it into document manager
+                var documentGuid = await _documentManagerClient.SendFileAsync(new System.IO.MemoryStream(Convert.FromBase64String(agreement.AgreementContent)), filename, DestinationFolders.SignedOrgAgreements);
+                // add a record in signed organization agreement table, treat it as uploaded agreement
+                var signedAgreement = await _organizationService.AddSignedAgreementAsync(organizationId, agreementId, documentGuid, filename);
+                if (signedAgreement == null)
+                {
+                    return BadRequest("Signed Organization Agreement could not be created; network error or upload is already submitted");
+                }
             }
 
             return NoContent();
