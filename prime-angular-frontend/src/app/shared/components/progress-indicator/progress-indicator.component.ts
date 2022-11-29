@@ -1,9 +1,17 @@
+import { CompileTemplateMetadata } from '@angular/compiler';
 import { Component, OnInit, Input, TemplateRef, OnChanges, SimpleChanges } from '@angular/core';
 
 export interface IProgressIndicator {
   inProgress: boolean;
   currentRoute: string;
   routes: string[];
+}
+
+export interface ProgressStep {
+  step: string;
+  route: string;
+  isCurrent: boolean;
+  completed: boolean;
 }
 
 /**
@@ -56,9 +64,14 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
   @Input() public template: TemplateRef<any>;
   /**
    * @description
-   * Acts as an override to display nothing under the progress
-   * indicator, which becomes a glorified divider.
+   * To use Step style progress bar
    */
+  @Input() public steps: ProgressStep[];
+  /**
+  * @description
+  * Acts as an override to display nothing under the progress
+  * indicator, which becomes a glorified divider.
+  */
   @Input() public noContent: boolean;
   /**
    * @description
@@ -67,7 +80,7 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
    * follow an order of precedence of none, template, message,
    * and percent (default).
    */
-  public mode: 'none' | 'template' | 'message' | 'percent';
+  public mode: 'none' | 'template' | 'message' | 'percent' | 'step';
   /**
    * @description
    * Calculated percent complete.
@@ -120,11 +133,26 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
     this.mode = (this.noContent) ? 'none'
       : (this.template) ? 'template'
         : (this.message) ? 'message'
-          : 'percent'; // Default
+          : (this.steps) ? 'step'
+            : 'percent'; // Default
 
     // Update the percent complete on any changes to
     // the input bindings
-    this.updatePercentComplete();
+    if (this.mode === 'percent') {
+      this.updatePercentComplete();
+    }
+    if (this.mode === 'step') {
+      let stepComplete = true;
+      this.steps = this.steps.map(s => {
+        // set isCurrent to true only if in progress.
+        s.isCurrent = s.route === this.currentRoute; //&& this.inProgress;
+        if (s.isCurrent && this.inProgress) {
+          stepComplete = false;
+        }
+        s.completed = stepComplete;
+        return s;
+      });
+    }
   }
 
   private updatePercentComplete() {

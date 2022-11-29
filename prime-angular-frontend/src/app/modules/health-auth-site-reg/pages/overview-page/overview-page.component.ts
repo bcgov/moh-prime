@@ -42,6 +42,7 @@ export class OverviewPageComponent implements OnInit {
   public showEditRedirect: boolean;
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
+  public isCompleted: boolean;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(
@@ -140,6 +141,8 @@ export class OverviewPageComponent implements OnInit {
     // NOTE: Initializes the form state service for workflow
     // updates when not already patched and contains changes
     this.healthAuthoritySiteFormStateService.setForm(healthAuthoritySite);
+
+    this.isCompleted = healthAuthoritySite?.completed;
   }
 
   private nextRoute(): void {
