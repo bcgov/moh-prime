@@ -37,12 +37,8 @@ namespace Prime.Services.Razor
 
         public static class OrgAgreements
         {
-            public static readonly RazorTemplate<OrgAgreementRazorViewModel> CommunityPharmacy = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/CommunityPharmacyOrganizationAgreement.cshtml");
-            public static readonly RazorTemplate<OrgAgreementRazorViewModel> CommunityPharmacyPdf = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/CommunityPharmacyOrganizationAgreementPdf.cshtml");
-            public static readonly RazorTemplate<OrgAgreementRazorViewModel> CommunityPractice = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/CommunityPracticeOrganizationAgreement.cshtml");
-            public static readonly RazorTemplate<OrgAgreementRazorViewModel> CommunityPracticePdf = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/CommunityPracticeOrganizationAgreementPdf.cshtml");
-            public static readonly RazorTemplate<OrgAgreementRazorViewModel> DeviceProvider = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/DeviceProviderOrganizationAgreement.cshtml");
-            public static readonly RazorTemplate<OrgAgreementRazorViewModel> DeviceProviderPdf = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/DeviceProviderOrganizationAgreementPdf.cshtml");
+            public static readonly RazorTemplate<OrgAgreementRazorViewModel> Base = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/OrganizationAgreement.cshtml");
+            public static readonly RazorTemplate<OrgAgreementRazorViewModel> Pdf = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/OrganizationAgreementPdf.cshtml");
         }
 
         public static class Emails
