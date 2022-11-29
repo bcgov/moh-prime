@@ -91,10 +91,10 @@ namespace Prime.Services
 
             // Pull content from database
             var agreementVersion = await GetAgreementVersionByType(type);
-            var stringAry = agreementVersion.Text.Split("{{signature_block}}");
+            var agreementVersionText = agreementVersion.Text.Split("{{signature_block}}");
 
-            var agreementContent = stringAry[0].Replace("{{organization_name}}", orgName);
-            var scheduleContent = stringAry[1];
+            var agreementContent = agreementVersionText[0].Replace("{{organization_name}}", orgName);
+            var scheduleContent = agreementVersionText[1];
 
             var viewModel = new OrgAgreementRazorViewModel(displayDate, withSignature, agreementContent, scheduleContent);
 
