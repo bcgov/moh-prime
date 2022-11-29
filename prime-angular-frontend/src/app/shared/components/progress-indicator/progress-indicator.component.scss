@@ -2,6 +2,13 @@
   width: 750px;
 }
 
+@media (max-width: 950px) {
+  .stepIndicator {
+    display: none;
+    ;
+  }
+}
+
 .step {
   position: relative;
   float: left;
