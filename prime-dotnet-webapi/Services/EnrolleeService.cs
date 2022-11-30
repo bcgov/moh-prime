@@ -160,7 +160,7 @@ namespace Prime.Services
 
             // get the latest self declaration effective date and compare the last complete date
             var mostEffectiveDate = await _context.Set<SelfDeclarationVersion>()
-                .Where(v => v.EffectiveDate < DateTime.Today)
+                .Where(v => v.EffectiveDate <= DateTime.UtcNow)
                 .Select(v => v.EffectiveDate)
                 .MaxAsync();
 

@@ -98,8 +98,8 @@ namespace Prime.Services
                 .ToListAsync();
 
             // set the self declaration version Id and add unanswered items
-            // *** answered Yes will have self declaration ID set
-            // *** answered No will NOT have self declaration ID
+            // *** answered Yes - it should have self declaration ID set
+            // *** answered No - it should NOT have self declaration ID
             foreach (var sd in selfDeclarationQuestions)
             {
                 if (enrollee.SelfDeclarations == null)
