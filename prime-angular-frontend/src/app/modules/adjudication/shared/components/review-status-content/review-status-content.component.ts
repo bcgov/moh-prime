@@ -91,7 +91,9 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
 
   public ngOnInit(): void {
     if (this.questions.keys.length === 0) {
-      this.enrolmentResource.getSelfDeclarationVersion(this.enrollee?.selfDeclarationCompleteDate ?? moment().format()).subscribe((versions) => {
+      let targetDate = this.enrollee?.selfDeclarationCompleteDate ? moment(this.enrollee?.selfDeclarationCompleteDate).format()
+        : moment().format();
+      this.enrolmentResource.getSelfDeclarationVersion(targetDate).subscribe((versions) => {
         versions.forEach(v => {
           this.questions.set(v.selfDeclarationTypeCode, v.text);
         });
