@@ -200,7 +200,7 @@ namespace Prime.Services
             var result = new List<string>();
             if (updated.PhysicalAddress == null)
             {
-                return null;
+                return result;
             }
 
             if (current.PhysicalAddress == null)
@@ -212,7 +212,7 @@ namespace Prime.Services
             {
                 var fromAddressStr = AddressToString(current.PhysicalAddress);
                 var toAddressStr = AddressToString(updated.PhysicalAddress);
-                if (fromAddressStr.Equals(toAddressStr))
+                if (!fromAddressStr.Equals(toAddressStr))
                 {
                     result.Add($"Physical Address changed from {Environment.NewLine}   {fromAddressStr}{Environment.NewLine}  to{Environment.NewLine}   {toAddressStr}.");
                 }
