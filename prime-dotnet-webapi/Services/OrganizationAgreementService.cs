@@ -83,22 +83,22 @@ namespace Prime.Services
 
         public async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf, bool withSignature)
         {
-            var template = (type, forPdf) switch
-            {
-                (AgreementType.CommunityPharmacyOrgAgreement, false) => RazorTemplates.OrgAgreements.CommunityPharmacy,
-                (AgreementType.CommunityPharmacyOrgAgreement, true) => RazorTemplates.OrgAgreements.CommunityPharmacyPdf,
-                (AgreementType.CommunityPracticeOrgAgreement, false) => RazorTemplates.OrgAgreements.CommunityPractice,
-                (AgreementType.CommunityPracticeOrgAgreement, true) => RazorTemplates.OrgAgreements.CommunityPracticePdf,
-                (AgreementType.DeviceProviderOrgAgreement, false) => RazorTemplates.OrgAgreements.DeviceProvider,
-                (AgreementType.DeviceProviderOrgAgreement, true) => RazorTemplates.OrgAgreements.DeviceProviderPdf,
-                _ => throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}")
-            };
+            var template = forPdf ? RazorTemplates.OrgAgreements.Pdf : RazorTemplates.OrgAgreements.Base;
 
             var displayDate = acceptedDate ?? DateTimeOffset.Now;
             // Converting to BC time here since we aren't localizing this time in the web client
             displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
 
-            return await _razorConverterService.RenderTemplateToStringAsync(template, new OrgAgreementRazorViewModel(orgName, displayDate, withSignature));
+            // Pull content from database
+            var agreementVersion = await GetAgreementVersionByType(type);
+            var agreementVersionText = agreementVersion.Text.Split("{{signature_block}}");
+
+            var agreementContent = agreementVersionText[0].Replace("{{organization_name}}", orgName);
+            var scheduleContent = agreementVersionText[1];
+
+            var viewModel = new OrgAgreementRazorViewModel(displayDate, withSignature, agreementContent, scheduleContent);
+
+            return await _razorConverterService.RenderTemplateToStringAsync(template, viewModel);
         }
 
         /// <summary>
@@ -121,6 +121,17 @@ namespace Prime.Services
                 .Where(o => o.Id == organizationId)
                 .Select(o => o.Name)
                 .SingleAsync();
+        }
+
+        private async Task<AgreementVersion> GetAgreementVersionByType(AgreementType type)
+        {
+            var agreementVersion = await _context.AgreementVersions
+                .AsNoTracking()
+                .Where(av => av.AgreementType == type)
+                .OrderByDescending(av => av.EffectiveDate)
+                .FirstOrDefaultAsync();
+
+            return agreementVersion;
         }
     }
 }
