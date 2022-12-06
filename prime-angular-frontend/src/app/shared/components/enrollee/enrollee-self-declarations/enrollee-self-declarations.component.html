@@ -13,9 +13,35 @@
              icon="error">
     <ng-container #alertContent
                   class="alert-content">
-      Self Declaration has been updated. Please answer the updated self declaration.
+      Self Declaration has been updated. Please answer the updated questions.
     </ng-container>
   </app-alert>
+
+  <div *ngIf="this.showDescription"
+       class="mb-4">
+    In these Self Declaration Questions, “unlawful or improper action” means any of the following actions taken by
+    you or a by a person for which you were responsible:
+    <ol ngClass="itemList">
+      <li>
+        unlawful or improper access to personal information;
+      </li>
+      <li>
+        unlawful or improper collection, retention, use or disclosure of personal information.
+      </li>
+    </ol>
+    “Improper” actions include actions:
+    <ol ngClass="itemList"
+        start="3">
+      <li>
+        that are contrary to the published privacy policies of the organization responsible for the personal
+        information; or
+      </li>
+      <li>
+        that the individual the information is about would reasonably consider to be an improper use of their
+        personal information in the circumstances.
+      </li>
+    </ol>
+  </div>
 
   <div *ngFor="let selfDeclarationComposite of selfDeclarationComposites"
        class="mb-3">

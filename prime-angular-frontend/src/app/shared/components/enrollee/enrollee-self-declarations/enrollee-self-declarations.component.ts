@@ -34,8 +34,13 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
   @Input() public showRedirect: boolean;
   /**
    * @description
-   * Route path for redirection.
+   * Show the description.
    */
+  @Input() public showDescription: boolean;
+  /**
+  * @description
+  * Route path for redirection.
+  */
   @Input() public redirectRoutePath: string | string[];
   /**
    * @description
