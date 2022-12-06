@@ -1,8 +1,3 @@
-@using Prime.ViewModels.Agreements
-@model OrgAgreementRazorViewModel
-
-@await Html.PartialAsync("~/Views/Partials/_AgreementDate.cshtml")
-
 <h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>
 
 <p>
@@ -10,7 +5,7 @@
 </p>
 
 <p>
-  HER MAJESTY THE QUEEN IN RIGHT OF THE PROVINCE OF BRITISH COLUMBIA, as represented by the Minister of Health
+  HIS MAJESTY THE KING IN RIGHT OF THE PROVINCE OF BRITISH COLUMBIA, as represented by the Minister of Health
   (the &quot;Province&quot;).
 </p>
 
@@ -19,7 +14,7 @@
 </p>
 
 <p>
-  @Model.OrganizationName (&quot;Organization&quot;)
+  {{organization_name}} (&quot;Organization&quot;)
 </p>
 
 <p>
@@ -586,10 +581,7 @@
   </li>
 </ol>
 
-@if (@Model.WithSignature)
-{
-  @await Html.PartialAsync("~/Views/Partials/_OrgAgreementSignature.cshtml")
-}
+{{signature_block}}
 
 <p class="text-center break-before">
   <strong>SCHEDULE A – SPECIFIC PRIVACY AND SECURITY MEASURES</strong>
