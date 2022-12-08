@@ -165,8 +165,8 @@ namespace Prime.Services
                 .MaxAsync();
 
             // flag the enrollee to redo the self declaration if new self declaration is available
-            viewModel.RequireRedoSelfDeclaration = viewModel.SelfDeclarationCompleteDate.HasValue &&
-                mostEffectiveDate > viewModel.SelfDeclarationCompleteDate.Value;
+            viewModel.RequireRedoSelfDeclaration = viewModel.SelfDeclarationCompletedDate.HasValue &&
+                mostEffectiveDate > viewModel.SelfDeclarationCompletedDate.Value;
 
             return viewModel;
         }
@@ -318,7 +318,7 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarationDocuments)
                 .SingleAsync(e => e.Id == enrolleeId);
 
-            var currentSelfDeclarationDate = enrollee.SelfDeclarationCompleteDate;
+            var currentSelfDeclarationDate = enrollee.SelfDeclarationCompletedDate;
 
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
@@ -364,7 +364,7 @@ namespace Prime.Services
             // or self declaration has been set previously, then refresh it with now
             if (profileCompleted || currentSelfDeclarationDate.HasValue)
             {
-                enrollee.SelfDeclarationCompleteDate = DateTimeOffset.Now;
+                enrollee.SelfDeclarationCompletedDate = DateTimeOffset.Now;
             }
 
             // This is the temporary way we are adding self declaration documents until this gets refactored.

@@ -77,8 +77,8 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
 
   public ngOnInit(): void {
     if (this.selfDeclarationQuestions.size === 0) {
-      let targetDate = this.enrolment.selfDeclarationCompleteDate ?
-        this.enrolment.selfDeclarationCompleteDate : this.enrolment.currentStatus.statusDate;
+      let targetDate = this.enrolment.selfDeclarationCompletedDate ?
+        this.enrolment.selfDeclarationCompletedDate : this.enrolment.currentStatus.statusDate;
       this.enrolmentResource.getSelfDeclarationVersion(moment(targetDate).format()).subscribe(
         (versions) => {
           versions.forEach(v => {

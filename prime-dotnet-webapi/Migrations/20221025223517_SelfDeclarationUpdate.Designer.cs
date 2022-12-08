@@ -3843,7 +3843,7 @@ namespace Prime.Migrations
                     b.Property<bool>("ProfileCompleted")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTimeOffset?>("SelfDeclarationCompleteDate")
+                    b.Property<DateTimeOffset?>("SelfDeclarationCompletedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SmsPhone")

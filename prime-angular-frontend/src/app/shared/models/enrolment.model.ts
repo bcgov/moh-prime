@@ -34,7 +34,7 @@ export interface HttpEnrollee extends Enrollee {
   remoteAccessLocations: RemoteAccessLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
-  selfDeclarationCompleteDate: string;
+  selfDeclarationCompletedDate: string;
   requireRedoSelfDeclaration: boolean;
   identificationDocuments: IdentificationDocument[];
   enrolleeCareSettings: CareSetting[];
@@ -92,7 +92,7 @@ export interface Enrolment {
   remoteAccessLocations: RemoteAccessLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
-  selfDeclarationCompleteDate: string;
+  selfDeclarationCompletedDate: string;
   identificationDocuments: IdentificationDocument[];
   careSettings: CareSetting[];
   enrolleeHealthAuthorities: EnrolleeHealthAuthority[];

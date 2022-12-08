@@ -51,7 +51,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public careSettingsForm: FormGroup;
   public accessAgreementForm: FormGroup;
 
-  public selfDeclarationCompleteDate: string;
+  public selfDeclarationCompletedDate: string;
 
   private identityProvider: IdentityProviderEnum;
   private enrolleeId: number;

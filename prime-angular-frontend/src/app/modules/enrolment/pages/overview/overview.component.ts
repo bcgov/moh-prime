@@ -162,17 +162,17 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
             // Replace enrolment with the version from the form for the user
             // to review, but maintain a subset of immutable properties
             const { selfDeclarationDocuments,
-              selfDeclarationCompleteDate,
+              selfDeclarationCompletedDate,
               requireRedoSelfDeclaration } = enrolment;
 
-            const stateSelfDeclarationCompleteDate = this.enrolmentFormStateService.selfDeclarationCompleteDate;
+            const stateSelfDeclarationCompletedDate = this.enrolmentFormStateService.selfDeclarationCompletedDate;
 
             enrolment = {
               ...this.enrolmentFormStateService.json,
               selfDeclarationDocuments,
-              selfDeclarationCompleteDate: stateSelfDeclarationCompleteDate && selfDeclarationCompleteDate < stateSelfDeclarationCompleteDate ?
-                stateSelfDeclarationCompleteDate : selfDeclarationCompleteDate,
-              requireRedoSelfDeclaration: !stateSelfDeclarationCompleteDate && requireRedoSelfDeclaration,
+              selfDeclarationCompletedDate: stateSelfDeclarationCompletedDate && selfDeclarationCompletedDate < stateSelfDeclarationCompletedDate ?
+                stateSelfDeclarationCompletedDate : selfDeclarationCompletedDate,
+              requireRedoSelfDeclaration: !stateSelfDeclarationCompletedDate && requireRedoSelfDeclaration,
             };
           }
 

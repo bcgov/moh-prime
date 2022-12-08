@@ -103,7 +103,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   public onSubmit() {
     if (!this.isInitialEnrolment) {
-      this.enrolmentFormStateService.selfDeclarationCompleteDate = moment().format();
+      this.enrolmentFormStateService.selfDeclarationCompletedDate = moment().format();
     }
 
     const hasBeenThroughTheWizard = true;

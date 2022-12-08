@@ -15,7 +15,7 @@ namespace Prime.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "SelfDeclarationCompleteDate",
+                name: "SelfDeclarationCompletedDate",
                 table: "Enrollee",
                 type: "timestamp with time zone",
                 nullable: true);
@@ -85,11 +85,11 @@ namespace Prime.Migrations
                 WHERE ""SelfDeclarationVersionId"" is null;
             ");
 
-            //PRIME-2301 populate the SelfDeclarationCompleteDate from existing agreement record for existing record
+            //PRIME-2301 populate the SelfDeclarationCompletedDate from existing agreement record for existing record
             migrationBuilder.Sql(@"
                 UPDATE ""Enrollee"" e
-                SET ""SelfDeclarationCompleteDate"" = (select max(a.""AcceptedDate"") from ""Agreement"" a where a.""EnrolleeId"" = e.""Id"")
-                WHERE ""SelfDeclarationCompleteDate"" is null;
+                SET ""SelfDeclarationCompletedDate"" = (select max(a.""AcceptedDate"") from ""Agreement"" a where a.""EnrolleeId"" = e.""Id"")
+                WHERE ""SelfDeclarationCompletedDate"" is null;
             ");
         }
 
@@ -111,7 +111,7 @@ namespace Prime.Migrations
                 table: "SelfDeclaration");
 
             migrationBuilder.DropColumn(
-                name: "SelfDeclarationCompleteDate",
+                name: "SelfDeclarationCompletedDate",
                 table: "Enrollee");
         }
     }

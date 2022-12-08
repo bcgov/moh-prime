@@ -64,7 +64,7 @@ namespace Prime.ViewModels
 
         public DateTimeOffset? ExpiryDate { get; set; }
 
-        public DateTimeOffset? SelfDeclarationCompleteDate { get; set; }
+        public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
 
         public int DisplayId { get; set; }
 
