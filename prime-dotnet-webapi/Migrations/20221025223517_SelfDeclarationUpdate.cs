@@ -77,6 +77,20 @@ namespace Prime.Migrations
                 principalTable: "SelfDeclarationVersion",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
+
+            //PRIME-2301 populate the SelfDeclarationVersionId for the existing record
+            migrationBuilder.Sql(@"
+                UPDATE public.""SelfDeclaration""
+                SET ""SelfDeclarationVersionId"" = ""SelfDeclarationTypeCode""
+                WHERE ""SelfDeclarationVersionId"" is null;
+            ");
+
+            //PRIME-2301 populate the SelfDeclarationCompleteDate from existing agreement record for existing record
+            migrationBuilder.Sql(@"
+                UPDATE ""Enrollee"" e
+                SET ""SelfDeclarationCompleteDate"" = (select max(a.""AcceptedDate"") from ""Agreement"" a where a.""EnrolleeId"" = e.""Id"")
+                WHERE ""SelfDeclarationCompleteDate"" is null;
+            ");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
