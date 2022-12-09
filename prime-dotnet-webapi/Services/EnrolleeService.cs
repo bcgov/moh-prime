@@ -709,6 +709,7 @@ namespace Prime.Services
                 });
 
             var result = answered.Concat(unAnswered);
+            result = result.OrderBy(a => a.SelfDeclarationTypeCode);
             return result;
         }
 
