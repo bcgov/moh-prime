@@ -17,7 +17,7 @@
     </ng-container>
   </app-alert>
 
-  <div *ngIf="this.showDescription"
+  <div *ngIf="this.showDescription && !this.enrolment.requireRedoSelfDeclaration"
        class="mb-4">
     In these Self Declaration Questions, “unlawful or improper action” means any of the following actions taken
     <u>by you</u> or a <u>by a person for which you were responsible:</u>
