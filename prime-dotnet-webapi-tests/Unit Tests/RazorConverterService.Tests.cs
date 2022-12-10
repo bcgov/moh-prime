@@ -84,12 +84,13 @@ namespace PrimeTests.UnitTests
         public async void TestRender_OrgAgreement(RazorTemplate<OrgAgreementRazorViewModel> template)
         {
             var service = CreateService();
-            var model = new OrgAgreementRazorViewModel("My Cool Site", DateTimeOffset.Now, false);
+            var model = new OrgAgreementRazorViewModel(DateTimeOffset.Now, false, "AgreementContent", "ScheduleContent");
 
             var html = await service.RenderTemplateToStringAsync(template, model);
 
             Assert.NotNull(html);
-            Assert.Contains(model.OrganizationName, html);
+            Assert.Contains(model.AgreementContent, html);
+            Assert.Contains(model.ScheduleContent, html);
             Assert.Contains(model.AcceptedDate.Day.ToString(), html);
         }
 
@@ -203,10 +204,8 @@ namespace PrimeTests.UnitTests
 
         public static IEnumerable<object[]> OrgAgreementTemplates()
         {
-            yield return new[] { RazorTemplates.OrgAgreements.CommunityPharmacy };
-            yield return new[] { RazorTemplates.OrgAgreements.CommunityPharmacyPdf };
-            yield return new[] { RazorTemplates.OrgAgreements.CommunityPractice };
-            yield return new[] { RazorTemplates.OrgAgreements.CommunityPracticePdf };
+            yield return new[] { RazorTemplates.OrgAgreements.Base };
+            yield return new[] { RazorTemplates.OrgAgreements.Pdf };
         }
 
         public static IEnumerable<object[]> LinkedEmailTemplates()
