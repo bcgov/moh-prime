@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import {MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -36,6 +37,10 @@ export class SiteInformationFormComponent implements OnInit {
 
   public get pec(): FormControl {
     return this.form.get('pec') as FormControl;
+  }
+
+  public onSiteIDChange(event: MatSlideToggleChange): void {
+    console.log(event)
   }
 
   public isCommunityPharmacy() {
