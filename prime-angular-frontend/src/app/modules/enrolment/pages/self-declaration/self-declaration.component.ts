@@ -146,6 +146,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
           : EnrolmentRoutes.REGULATORY;
     }
 
+    this.enrolmentFormStateService.reset();
+
     this.routeTo(backRoutePath);
   }
 
