@@ -1,0 +1,70 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+namespace Prime.Migrations
+{
+    public partial class MultipleEmailContentUpdateNov30th2022 : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.UpdateData(
+                table: "EmailTemplate",
+                keyColumn: "Id",
+                keyValue: 2,
+                columns: new[] { "ModifiedDate", "Template", "UpdatedTimeStamp" },
+                values: new object[] { new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "<style> .underline { text-decoration: underline; } .list-item-mb { margin-bottom: 0.75rem; } </style>To: PharmaNet administrator (person responsible for coordinating PharmaNet access):<br><br>@Model.EnrolleeFullName has been approved for access to PharmaNet.<br><br><strong> To set up their access, you must forward this notification and the information below to <span class=\"underline\">whoever sets up PharmaNet user accounts. This is usually your PharmaNet software vendor but can also be someone like an IT department or authorized individual</span>. </strong><br><br><ol><li class=\"list-item-mb\"> Name of the community health practice: </li><li class=\"list-item-mb\"> Practice address: </li><li class=\"list-item-mb\"> PharmaNet site ID, if you have it:</li><li class=\"list-item-mb\"> If @Model.EnrolleeFullName accesses PharmaNet on behalf of another user, please ensure your PharmaNet software vendor knows who the other users are, and those users enrol in PRIME.<br><br></li></ol> Your software vendor can find @Model.EnrolleeFullName's details by following this link: <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <strong>This link will expire in 10 days.</strong><br><br>Thank you,<br><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>", new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)) });
+
+            migrationBuilder.UpdateData(
+                table: "EmailTemplate",
+                keyColumn: "Id",
+                keyValue: 8,
+                columns: new[] { "ModifiedDate", "Template", "UpdatedTimeStamp" },
+                values: new object[] { new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "@{ var renewalDate = Model.RenewalDate.Date.ToShortDateString(); } <p>Dear @Model.EnrolleeName,</p><p>It is time to renew your PRIME enrolment. If you still need PharmaNet to care for patients, you must ensure that your PRIME profile is current by reviewing and updating every year. To renew, log in to your PRIME profile, update your information as needed, and read and sign the terms of access.</p><p>Please renew by @renewalDate.</p><ol><li>Log in to PRIME <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.</li><li>Click <b>Renew or Update Information</b> (top of screen).</li><li>On the PRIME Profile screen, review your information.<ol style='list-style-type:lower-alpha;'><li>Select the edit button to revise sections that are out of date. Click <strong>Continue</strong> at the bottom of updated screens to save changes.</li><li>Once changes are saved, <strong>certify and submit</strong> at the bottom of the PRIME Profile page.</li></ol></li><li>If instructed to go on, click <b>Continue</b></li><li>Most renewals will be approved automatically. If you are notified that your renewal is approved, go to the next page to review and accept the PharmaNet user terms of access. This step completes renewal. Note that the terms of access may have changed, so please read carefully.</li><p>In some cases, renewals are sent for review. If your renewal is sent for review, you will either be contacted by the PRIME Support team, or you will be notified to log in to PRIME to complete the remaining steps.</p><li>You will next be prompted to share your renewal approval with the person or team in your workplace who sets up PharmaNet accounts. You do this by entering their email address(es) and sending. <strong>Only share the renewal approval if:</strong><ol style='list-style-type:lower-alpha;'><li>You changed workplaces or care setting (new clinic, health authority, etc.) since you last updated your account, or you did not share the approval notification with your PharmaNet administrator earlier, and/or</li><li>You previously enrolled as an RN, RPN, LPN or midwife, and have since been issued a PharmaNet ID by BCCNM. Your access type may have changed, and the people in your workplace who set up PharmaNet access need to know this.</li></ol></li></ol><p>Thank you for renewing your PRIME enrolment,</p><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>", new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)) });
+
+            migrationBuilder.UpdateData(
+                table: "EmailTemplate",
+                keyColumn: "Id",
+                keyValue: 10,
+                columns: new[] { "ModifiedDate", "Template", "UpdatedTimeStamp" },
+                values: new object[] { new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Dear @Model.EnrolleeName,<br /><br /><p>Your PRIME renewal is overdue.</p><p><strong>Once a year, you must ensure that your PRIME profile is current.</strong> If you still need access to PharmaNet to care for patients, renew your PRIME enrolment now by logging in to PRIME at <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>. Update your information as needed, submit, and then read and sign the terms of access.</p><p>You may also wish to confirm that your email accepts messages from PRIME, particularly if they are going to your email junk folder (e.g., the previous notices to renew).</p><br>Thank you,<br><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>", new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)) });
+
+            migrationBuilder.UpdateData(
+                table: "EmailTemplate",
+                keyColumn: "Id",
+                keyValue: 18,
+                columns: new[] { "ModifiedDate", "Template", "UpdatedTimeStamp" },
+                values: new object[] { new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "Dear @Model.EnrolleeName, <br> <br><p>Your PharmaNet Terms of Access must be accepted in PRIME before your enrolment is complete. Please log in to PRIME and accept your terms of access now.</p><p>You can access PRIME here <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.  If you are not directed to the user terms of access page, you can reach it by selecting Terms of Access from the menu on the left-hand side of the PRIME Profile page.</p><br>Thank you,<br><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>", new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)) });
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.UpdateData(
+                table: "EmailTemplate",
+                keyColumn: "Id",
+                keyValue: 2,
+                columns: new[] { "ModifiedDate", "Template", "UpdatedTimeStamp" },
+                values: new object[] { new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), "<style> .underline { text-decoration: underline; } .list-item-mb { margin-bottom: 0.75rem; } </style>To: Clinic Manager (person responsible for coordinating PharmaNet access):<br><br>@Model.EnrolleeFullName has been approved for Private Community Health Practice Access to PharmaNet.<br><br> <strong> To set up their access, you must forward this PRIME Enrolment Confirmation and the information specified below to your <span class=\"underline\">PharmaNet Software Vendor</span>. </strong> <br><br> <ol> <li class=\"list-item-mb\"> Name of medical clinic: </li> <li class=\"list-item-mb\"> Clinic address: </li> <li class=\"list-item-mb\"> Pharmacy equivalency code (PEC): <i>This is your PharmaNet site ID; ask your vendor if you don’t know it:</i> </li> <li class=\"list-item-mb\"> For <strong> physicians, pharmacists, and nurse practitioners:</strong> <br><br> College name and College ID of this user <em>(leave blank if this user is not a physician, pharmacist or nurse practitioner)</em> </li> <li class=\"list-item-mb\"> For users who work <strong>On Behalf Of</strong> a physician, pharmacist, or nurse practitioner: <br><br> College name(s) and College ID(s) of the physicians, pharmacists or nurse practitioners who this user will access PharmaNet on behalf of: <em>(leave this blank if this user is a pharmacist, nurse practitioner or physician)</em> </li> </ol> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br> <strong>This link will expire after @Model.ExpiresInDays days.</strong> <br><br> Thank you,<br><br> PRIME<br><br> 1-844-397-7463<br><br> <a href='mailto:PRIMEsupport@gov.bc.ca' target='_top'>PRIMEsupport@gov.bc.ca</a>", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)) });
+
+            migrationBuilder.UpdateData(
+                table: "EmailTemplate",
+                keyColumn: "Id",
+                keyValue: 8,
+                columns: new[] { "ModifiedDate", "Template", "UpdatedTimeStamp" },
+                values: new object[] { new DateTimeOffset(new DateTime(2022, 8, 17, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), "@{ var renewalDate = Model.RenewalDate.Date.ToShortDateString(); } <p>Dear @Model.EnrolleeName,</p><p>It is a requirement, to retain access to PharmaNet, that your PRIME information remains current. PharmaNet users must renew their PRIME enrolment every year.</p><p>To continue to use PharmaNet, please renew your enrolment information by @renewalDate. This can be done quickly:</p><ol><li>Log in to PRIME <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.</li><li>Click <b>Renew or Update Information</b> (top of screen).</li><li>On the PRIME Profile screen, review your information.<ol style='list-style-type:lower-alpha;'><li>Use the pencil icon to the right to edit sections that are out of date. Click <b>Continue</b> at the bottom of updated screens to save changes.</li><li>Once changes are saved, <b>certify and submit</b> at the bottom of the PRIME Profile page.</li></ol></li><li>If instructed to go on, click <b>Continue</b></li><li>Most renewals will be approved automatically*. If you are notified that your renewal is approved, go to the next page to review and accept the PharmaNet user terms of access. This step completes renewal. Note that the terms of access may have changed, so please read carefully.</li><li>You will next be prompted to share your renewal approval with the person or team in your workplace who setsup PharmaNet accounts. You do this by entering their email address(es). <b>Only share the renewal approval if:</b><ol style='list-style-type:lower-alpha;'><li>You changed workplaces or care setting (new clinic, health authority, etc.) since you last updated your account, oryou updated your account previously and at that time did not share the approval notification with your PharmaNet administrator, and/or</li><li>You previously enrolled as an RN, RPN, LPN or midwife, and have since been issued a PharmaNet ID by BCCNM. Your access type may have changed, and the people in your workplace who set up PharmaNet access need to know this</li></ol></li></ol><p>If your renewal is sent for review, you will be notified when you can complete the remaining steps.</p><p>Thank you for renewing your PRIME enrolment,</p><p>PRIME Support</p><p>1-844-397-7463</p>", new DateTimeOffset(new DateTime(2022, 8, 17, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)) });
+
+            migrationBuilder.UpdateData(
+                table: "EmailTemplate",
+                keyColumn: "Id",
+                keyValue: 10,
+                columns: new[] { "ModifiedDate", "Template", "UpdatedTimeStamp" },
+                values: new object[] { new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), "Dear @Model.EnrolleeName,<br> <br>You did not renew your PRIME enrolment in time. PRIME will instruct your PharmaNet software vendor to de-activate your account. You may not use PharmaNet without being enrolled in PRIME. Any access will be recorded as unauthorized.<br> <br><strong>You can re-enrol in PRIME</strong> if you need PharmaNet to care for patients.<br> <br>Thank you,<br> <br>PRIME Support <br>1-844-397-7463<br> <br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)) });
+
+            migrationBuilder.UpdateData(
+                table: "EmailTemplate",
+                keyColumn: "Id",
+                keyValue: 18,
+                columns: new[] { "ModifiedDate", "Template", "UpdatedTimeStamp" },
+                values: new object[] { new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), "Dear @Model.EnrolleeName, <br> <br> Your PharmaNet Terms of Access must be accepted in PRIME before your PRIME enrolment is complete. Please log in to PRIME and accept your Terms of Access now. You can access PRIME here <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>. <br> <br> Thank you.", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)) });
+        }
+    }
+}
