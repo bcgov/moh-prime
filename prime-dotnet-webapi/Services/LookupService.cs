@@ -35,6 +35,7 @@ namespace Prime.Services
                     .Where(av => av.SelfDeclarationTypeCode == t.Code)
                     .OrderByDescending(av => av.EffectiveDate)
                     .First())
+                .OrderBy(av => av.SelfDeclarationTypeCode)
                 .ToListAsync();
         }
 

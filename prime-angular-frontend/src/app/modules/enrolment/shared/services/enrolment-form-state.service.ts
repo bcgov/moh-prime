@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl, FormControl } from '@angular/forms';
 
+import moment from 'moment';
+
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -19,6 +21,7 @@ import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 // TODO business models to shared or lib so there's no dependencies between feature modules
 import { Site } from '@registration/shared/models/site.model';
 
@@ -62,6 +65,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
     protected formUtilsService: FormUtilsService,
+    protected enrolmentResource: EnrolmentResource,
     private authService: AuthService,
     private configService: ConfigService
   ) {
@@ -255,6 +259,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
     };
 
+
     return Object.keys(selfDeclarationsTypes)
       .reduce((sds: SelfDeclaration[], sd: string) => {
         sds.push(
@@ -263,7 +268,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
             selfDeclarationsFormData[`${sd}Details`],
             selfDeclarationsFormData[`${sd}DocumentGuids`],
             this.enrolleeId,
-            selfDeclarationsFormData[sd]
+            selfDeclarationsFormData[sd],
+            //version.id
           )
         );
         return sds;
