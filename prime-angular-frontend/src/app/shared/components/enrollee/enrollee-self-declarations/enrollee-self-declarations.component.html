@@ -19,28 +19,7 @@
 
   <div *ngIf="this.showDescription && !this.enrolment.requireRedoSelfDeclaration"
        class="mb-4">
-    In these Self Declaration Questions, “unlawful or improper action” means any of the following actions taken
-    <u>by you</u> or a <u>by a person for which you were responsible:</u>
-    <ol ngClass="itemList">
-      <li>
-        unlawful or improper <u>access to personal information;</u>
-      </li>
-      <li>
-        unlawful or improper <u>collection, retention, use or disclosure of personal information.</u>
-      </li>
-    </ol>
-    “<u>Improper</u>” actions include actions:
-    <ol ngClass="itemList"
-        start="3">
-      <li>
-        that are contrary to the published privacy policies of the organization responsible for the personal
-        information; or
-      </li>
-      <li>
-        that the individual the information is about would reasonably consider to be an improper use of their
-        personal information in the circumstances.
-      </li>
-    </ol>
+    <app-self-declaration-term></app-self-declaration-term>
   </div>
 
   <div *ngFor="let selfDeclarationComposite of selfDeclarationComposites"
