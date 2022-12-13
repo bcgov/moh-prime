@@ -343,7 +343,6 @@ namespace Prime.Services
             UpdateAddress(enrollee, updateModel.VerifiedAddress);
             ReplaceExistingItems(enrollee.Certifications, updateModel.Certifications, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
-            ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
 
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
@@ -367,6 +366,9 @@ namespace Prime.Services
                 enrollee.SelfDeclarationCompletedDate = DateTimeOffset.Now;
             }
 
+            await PopulateSelfDeclarationVersion(updateModel, enrollee.SelfDeclarationCompletedDate.Value);
+            ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
+
             // This is the temporary way we are adding self declaration documents until this gets refactored.
             await CreateSelfDeclarationDocuments(enrolleeId, updateModel.SelfDeclarations, enrollee.SelfDeclarationDocuments);
 
@@ -377,6 +379,24 @@ namespace Prime.Services
             catch (DbUpdateConcurrencyException)
             {
                 return 0;
+            }
+        }
+
+        private async Task PopulateSelfDeclarationVersion(EnrolleeUpdateModel model, DateTimeOffset selfDeclarationCompleteDate)
+        {
+            var versions = await _context.Set<SelfDeclarationType>()
+                .AsNoTracking()
+                .Select(t => _context.Set<SelfDeclarationVersion>()
+                    .Where(av => av.EffectiveDate <= selfDeclarationCompleteDate)
+                    .Where(av => av.SelfDeclarationTypeCode == t.Code)
+                    .OrderByDescending(av => av.EffectiveDate)
+                    .First())
+                .OrderBy(av => av.SelfDeclarationTypeCode)
+                .ToListAsync();
+
+            foreach (var sd in model.SelfDeclarations)
+            {
+                sd.SelfDeclarationVersionId = versions.First(v => v.SelfDeclarationTypeCode == sd.SelfDeclarationTypeCode).Id;
             }
         }
 

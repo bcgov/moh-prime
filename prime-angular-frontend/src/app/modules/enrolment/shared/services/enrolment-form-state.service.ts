@@ -269,7 +269,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
             selfDeclarationsFormData[`${sd}DocumentGuids`],
             this.enrolleeId,
             selfDeclarationsFormData[sd],
-            //version.id
           )
         );
         return sds;
