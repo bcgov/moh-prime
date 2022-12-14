@@ -12766,6 +12766,9 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("SortingNumber")
+                        .HasColumnType("integer");
+
                     b.HasKey("Code");
 
                     b.ToTable("SelfDeclarationTypeLookup");
@@ -12774,22 +12777,26 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
-                            Name = "Has Conviction"
+                            Name = "Has Conviction",
+                            SortingNumber = 1
                         },
                         new
                         {
                             Code = 2,
-                            Name = "Has Registration Suspended"
+                            Name = "Has Registration Suspended",
+                            SortingNumber = 2
                         },
                         new
                         {
                             Code = 3,
-                            Name = "Has Disciplinary Action"
+                            Name = "Has Disciplinary Action",
+                            SortingNumber = 4
                         },
                         new
                         {
                             Code = 4,
-                            Name = "Has PharmaNet Suspended"
+                            Name = "Has PharmaNet Suspended",
+                            SortingNumber = 3
                         });
                 });
 
@@ -12835,7 +12842,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 1,
-                            Text = "Are you, or have you ever been, subject to any limits, conditions or prohibitions imposed as a result of disciplinary actions taken by a governing body of a health profession in any jurisdiction, that involved improper access to, collection, use, or disclosure or retention of personal information?",
+                            Text = "Are you, or have you ever been, the subject of an order or a conviction under legislation in any jurisdiction for a matter that involved improper access to, collection, use, or disclosure or retention of personal information?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -12846,7 +12853,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 2,
-                            Text = "Are you, or have you ever been, the subject of an order or a conviction under legislation in any jurisdiction for a matter that involved improper access to, collection, use, or disclosure or retention of personal information?",
+                            Text = "Are you, or have you ever been, subject to any limits, conditions or prohibitions imposed as a result of disciplinary actions taken by a governing body of a health profession in any jurisdiction, that involved improper access to, collection, use, or disclosure or retention of personal information?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -12879,7 +12886,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 1,
-                            Text = "Have you ever been the subject of an order or conviction in British Columbia or any other jurisdiction for a matter involving an “unlawful or improper action”?",
+                            Text = "Have you ever been the subject of <u>an order</u> or <u>conviction</u> in British Columbia or any other jurisdiction <u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -12890,7 +12897,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 2,
-                            Text = "Are you, or have you ever been, subject to the imposition, whether by order or with consent, of prohibitions, limits or conditions on your practice of a health profession: <ol style='list-style-type: lower-alpha;' class='mb-0'><li>in British Columbia, under the Health Professions Act or the Pharmacy Operations and Drug Scheduling Act, or</li><li>in any other jurisdiction, by a body that regulates a health profession in that jurisdiction</li></ol>for a matter involving an “unlawful or improper action”?",
+                            Text = "Are you, or have you ever been, subject to the imposition, whether by order or with consent, of <u>prohibitions, limits or conditions on your practice of a health profession:</u> <ol style='list-style-type: lower-alpha;' class='mb-0'><li>in British Columbia, under the Health Professions Act or the Pharmacy Operations and Drug Scheduling Act, or</li><li>in any other jurisdiction, by a body that regulates a health profession in that jurisdiction</li></ol><u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -12901,7 +12908,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 3,
-                            Text = "Has your access to PharmaNet or any other health information system, whether or not electronic and whether or not in British Columbia or another jurisdiction, been suspended or cancelled for a matter involving an “unlawful or improper action”?",
+                            Text = "Has an employer ever disciplined you, or terminated your employment, for <u>a matter involving an “unlawful or improper action”</u>?  Has a contract for your services ever been terminated <u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -12912,7 +12919,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 4,
-                            Text = "Has an employer ever disciplined you, or terminated your employment, for a matter involving an “unlawful or improper action”?  Has a contract for your services ever been terminated for a matter involving an “unlawful or improper action”?",
+                            Text = "Has your access to <u>PharmaNet</u> or <u>any other health information system</u>, whether or not electronic and whether or not in British Columbia or another jurisdiction, been suspended or cancelled <u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });

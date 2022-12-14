@@ -391,7 +391,7 @@ namespace Prime.Services
                     .Where(av => av.SelfDeclarationTypeCode == t.Code)
                     .OrderByDescending(av => av.EffectiveDate)
                     .First())
-                .OrderBy(av => av.SelfDeclarationTypeCode)
+                .OrderBy(av => av.SelfDeclarationType.SortingNumber)
                 .ToListAsync();
 
             foreach (var sd in model.SelfDeclarations)
@@ -718,18 +718,18 @@ namespace Prime.Services
                 .ProjectTo<SelfDeclarationViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-
-            var unAnswered = Enum.GetValues(typeof(SelfDeclarationTypeCode))
-                .Cast<int>()
-                .Except(answered.Select(a => a.SelfDeclarationTypeCode))
-                .Select(code => new SelfDeclarationViewModel
+            var answeredCodes = answered.Select(a => a.SelfDeclarationTypeCode);
+            var unAnswered = await _context.Set<SelfDeclarationType>()
+                .Where(t => !answeredCodes.Contains(t.Code))
+                .Select(t => new SelfDeclarationViewModel
                 {
                     EnrolleeId = enrolleeId,
-                    SelfDeclarationTypeCode = code
-                });
+                    SelfDeclarationTypeCode = t.Code,
+                    SortingNumber = t.SortingNumber,
+                }).ToListAsync();
 
             var result = answered.Concat(unAnswered);
-            result = result.OrderBy(a => a.SelfDeclarationTypeCode);
+            result = result.OrderBy(a => a.SortingNumber);
             return result;
         }
 

@@ -735,8 +735,8 @@ export class AdjudicationResource {
     const selfDeclarations = {
       hasConviction: 'Has Conviction',
       hasRegistrationSuspended: 'Has Registration Suspended',
+      hasPharmaNetSuspended: 'Has PharmaNet Suspended',
       hasDisciplinaryAction: 'Has Disciplinary Action',
-      hasPharmaNetSuspended: 'Has PharmaNet Suspended'
     };
     const keys = Object.keys(selfDeclarations);
 
@@ -776,10 +776,17 @@ export class AdjudicationResource {
       });
     }
 
+    // create an ordered list of self declaratoin types
+    let orderedSelfDeclarationType = [
+      Number(SelfDeclarationTypeEnum.HAS_CONVICTION),
+      Number(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED),
+      Number(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED),
+      Number(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION)];
+
     // add unanswered self declaration questions
-    for (let sd in SelfDeclarationTypeEnum) {
-      if (!isNaN(Number(sd)) && !profileSnapshot.selfDeclarations.find(s => s.selfDeclarationTypeCode === Number(sd))) {
-        let unansweredSelfDeclaration = new SelfDeclaration(Number(sd), null, null, null, false, null, null);
+    for (var i = 0; i < 4; i++) {
+      if (!isNaN(orderedSelfDeclarationType[i]) && !profileSnapshot.selfDeclarations.find(s => s.selfDeclarationTypeCode === orderedSelfDeclarationType[i])) {
+        let unansweredSelfDeclaration = new SelfDeclaration(orderedSelfDeclarationType[i], null, null, null, false, null, null);
         profileSnapshot.selfDeclarations.push(unansweredSelfDeclaration);
       }
     }

@@ -90,6 +90,7 @@ namespace Prime.Services
 
             var selfDeclarationQuestions = await _context.Set<SelfDeclarationType>()
                 .AsNoTracking()
+                .OrderBy(sdt => sdt.SortingNumber)
                 .Select(t => _context.Set<SelfDeclarationVersion>()
                     .Where(av => av.EffectiveDate <= enrollee.SelfDeclarationCompletedDate)
                     .Where(av => av.SelfDeclarationTypeCode == t.Code)
