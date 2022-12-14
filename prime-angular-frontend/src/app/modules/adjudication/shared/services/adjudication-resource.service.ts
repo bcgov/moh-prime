@@ -783,12 +783,16 @@ export class AdjudicationResource {
       Number(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED),
       Number(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION)];
 
-    // add unanswered self declaration questions
+    // add unanswered self declaration questions and order the questions
+    let orderedSelfDeclarations = [];
     for (var i = 0; i < 4; i++) {
       if (!isNaN(orderedSelfDeclarationType[i]) && !profileSnapshot.selfDeclarations.find(s => s.selfDeclarationTypeCode === orderedSelfDeclarationType[i])) {
         let unansweredSelfDeclaration = new SelfDeclaration(orderedSelfDeclarationType[i], null, null, null, false, null, null);
-        profileSnapshot.selfDeclarations.push(unansweredSelfDeclaration);
+        orderedSelfDeclarations.push(unansweredSelfDeclaration);
+      } else {
+        orderedSelfDeclarations.push(profileSnapshot.selfDeclarations.find(s => s.selfDeclarationTypeCode === orderedSelfDeclarationType[i]));
       }
     }
+    profileSnapshot.selfDeclarations = orderedSelfDeclarations;
   }
 }
