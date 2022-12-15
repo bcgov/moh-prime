@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20221214005723_SelfDeclarationUpdate")]
+    [Migration("20221214225642_SelfDeclarationUpdate")]
     partial class SelfDeclarationUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -12790,13 +12790,13 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 3,
+                            Code = 4,
                             Name = "Has Disciplinary Action",
                             SortingNumber = 4
                         },
                         new
                         {
-                            Code = 4,
+                            Code = 3,
                             Name = "Has PharmaNet Suspended",
                             SortingNumber = 3
                         });
@@ -12865,7 +12865,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 3,
+                            SelfDeclarationTypeCode = 4,
                             Text = "Have you ever been disciplined or fired by an employer, or had a contract for your services terminated, for a matter that involved improper access to, collection, use, or disclosure or retention of personal information?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -12876,7 +12876,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 4,
+                            SelfDeclarationTypeCode = 3,
                             Text = "Have you ever had your access to PharmaNet or any other health information system, whether or not electronic,  an electronic health record system, electronic medical record system, pharmacy or laboratory record system, or any similar health information system, in any jurisdiction, suspended or cancelled for a matter that involved improper access to, collection, use, or disclosure or retention of personal information?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -12909,7 +12909,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 3,
+                            SelfDeclarationTypeCode = 4,
                             Text = "Has an employer ever disciplined you, or terminated your employment, for <u>a matter involving an “unlawful or improper action”</u>?  Has a contract for your services ever been terminated <u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -12920,7 +12920,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 4,
+                            SelfDeclarationTypeCode = 3,
                             Text = "Has your access to <u>PharmaNet</u> or <u>any other health information system</u>, whether or not electronic and whether or not in British Columbia or another jurisdiction, been suspended or cancelled <u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")

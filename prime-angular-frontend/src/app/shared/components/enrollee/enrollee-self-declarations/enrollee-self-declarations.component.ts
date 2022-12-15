@@ -91,15 +91,16 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
   }
 
   private createSelfDeclarationComposites() {
-    return this.enrolment.selfDeclarations
-      .sort((sd) => sd.sortingNumber)
+    let newSelfDeclarations = this.enrolment.selfDeclarations
       .map((selfDeclaration: SelfDeclaration) => {
         const selfDeclarationTypeCode = selfDeclaration.selfDeclarationTypeCode;
         const selfDeclarationDocuments = this.enrolment.selfDeclarationDocuments
           ?.filter(d => d.selfDeclarationTypeCode === selfDeclarationTypeCode) ?? [];
 
         return this.createSelfDeclarationComposite(selfDeclarationTypeCode, selfDeclaration, selfDeclarationDocuments);
+
       });
+    return newSelfDeclarations.sort((a, b) => a.selfDeclarationTypeCode - b.selfDeclarationTypeCode);
   }
 
   private createSelfDeclarationComposite(

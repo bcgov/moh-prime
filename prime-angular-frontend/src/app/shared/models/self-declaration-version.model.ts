@@ -3,6 +3,6 @@ export class SelfDeclarationVersion {
     public id: number,
     public text: string,
     public selfDeclarationTypeCode: number,
-    public effectiveDate: string,
+    public effectiveDate: string
   ) { }
 }
