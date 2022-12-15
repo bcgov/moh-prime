@@ -97,6 +97,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
         versions.forEach(v => {
           this.questions.set(v.selfDeclarationTypeCode, v.text);
         });
+        this.reasons = this.generateReasons(this.enrollee);
       });
     }
   }
@@ -201,7 +202,8 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   }
 
   private getDocumentsForSelfDeclaration(reviewStatus: EnrolleeReviewStatus, code: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
-    return reviewStatus.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
+    return reviewStatus && reviewStatus.selfDeclarationDocuments ?
+      reviewStatus.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code) : [];
   }
 
   private parsePotentialMatchIds(reason: Reason): Reason {
