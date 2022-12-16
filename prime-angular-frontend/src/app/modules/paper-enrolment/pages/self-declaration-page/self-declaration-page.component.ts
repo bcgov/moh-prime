@@ -5,8 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { map } from 'rxjs/operators';
 
-import moment from 'moment';
-
+import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
@@ -18,7 +17,6 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { SelfDeclarationFormState } from './self-declaration-form-state.class';
 
 @Component({
@@ -34,7 +32,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   public hasAttemptedFormSubmission: boolean;
   public showUnansweredQuestionsError: boolean;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
-  public selfDeclarationQuestions = new Map<number, string>();
+  public selfDeclarationQuestions = selfDeclarationQuestions;
   public routeUtils: RouteUtils;
 
   constructor(
@@ -42,7 +40,6 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
-    protected enrolmentResource: EnrolmentResource,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     router: Router
@@ -102,14 +99,6 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected initForm(): void {
-    if (this.selfDeclarationQuestions.keys.length === 0) {
-      this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().format()).subscribe((versions) => {
-        versions.forEach(v => {
-          this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);
-        });
-      });
-    }
-
     this.formState.hasConviction.valueChanges
       .subscribe((value: boolean) => {
         this.toggleSelfDeclarationValidators(value, this.formState.hasConvictionDetails);

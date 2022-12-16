@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Configuration.Auth;
-using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.HttpClients;
@@ -51,19 +48,6 @@ namespace Prime.Controllers
         public async Task<ActionResult> LicenceCodeTest([FromQuery] string collegePrefix, [FromQuery] string licenceNumber)
         {
             var record = await _collegeLicenceClient.GetCollegeRecordAsync(collegePrefix, licenceNumber);
-
-            return Ok(record);
-        }
-
-        // Get /api/lookups/self-declaration-question
-        /// <summary>
-        /// For self-declaration component
-        /// </summary>
-        [HttpGet("self-declaration-question", Name = nameof(SelfDeclarationQuestions))]
-        [ProducesResponseType(typeof(ApiResultResponse<List<SelfDeclarationVersion>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> SelfDeclarationQuestions(DateTimeOffset targetDate)
-        {
-            var record = await _lookupService.GetSelfDeclarationVersion(targetDate);
 
             return Ok(record);
         }

@@ -216,10 +216,6 @@ namespace Prime.Services
         {
             var newDeclarations = _mapper.Map<IEnumerable<SelfDeclaration>>(viewModels);
 
-            //update self declaration completed date
-            var enrollee = await _context.Enrollees.Where(e => e.Id == enrolleeId).FirstOrDefaultAsync();
-            enrollee.SelfDeclarationCompletedDate = DateTimeOffset.Now;
-
             await ReplaceCollection(enrolleeId, newDeclarations);
 
             await _context.SaveChangesAsync();

@@ -14,8 +14,6 @@ namespace Prime.Models
         [Required]
         public string Name { get; set; }
 
-        public int SortingNumber { get; set; }
-
         [JsonIgnore]
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 

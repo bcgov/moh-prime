@@ -21,7 +21,7 @@ import { SelfDeclarationForm } from './self-declaration-form.model';
     </app-enrollee-self-declarations>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelfDeclarationOverviewComponent extends AbstractOverview {
   @Input() public selfDeclarations: SelfDeclarationForm;

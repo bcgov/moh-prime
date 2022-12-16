@@ -538,7 +538,6 @@
 
 <app-enrollee-self-declarations [enrolment]="enrolment"
                                 [showRedirect]="showEditRedirect"
-                                [showDescription]="!admin"
                                 (route)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">
   <button *ngIf="showEditRedirect"
           mat-icon-button

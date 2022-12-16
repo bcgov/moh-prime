@@ -3929,9 +3929,6 @@ namespace Prime.Migrations
                     b.Property<bool>("ProfileCompleted")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTimeOffset?>("SelfDeclarationCompletedDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("SmsPhone")
                         .HasColumnType("text");
 
@@ -12689,9 +12686,6 @@ namespace Prime.Migrations
                     b.Property<int>("SelfDeclarationTypeCode")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("SelfDeclarationVersionId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -12703,8 +12697,6 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.HasIndex("SelfDeclarationTypeCode");
-
-                    b.HasIndex("SelfDeclarationVersionId");
 
                     b.ToTable("SelfDeclaration");
                 });
@@ -12766,9 +12758,6 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("SortingNumber")
-                        .HasColumnType("integer");
-
                     b.HasKey("Code");
 
                     b.ToTable("SelfDeclarationTypeLookup");
@@ -12777,151 +12766,22 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
-                            Name = "Has Conviction",
-                            SortingNumber = 1
+                            Name = "Has Conviction"
                         },
                         new
                         {
                             Code = 2,
-                            Name = "Has Registration Suspended",
-                            SortingNumber = 2
-                        },
-                        new
-                        {
-                            Code = 4,
-                            Name = "Has Disciplinary Action",
-                            SortingNumber = 4
+                            Name = "Has Registration Suspended"
                         },
                         new
                         {
                             Code = 3,
-                            Name = "Has PharmaNet Suspended",
-                            SortingNumber = 3
-                        });
-                });
-
-            modelBuilder.Entity("Prime.Models.SelfDeclarationVersion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("EffectiveDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("SelfDeclarationTypeCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SelfDeclarationTypeCode");
-
-                    b.ToTable("SelfDeclarationVersion");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 1,
-                            Text = "Are you, or have you ever been, the subject of an order or a conviction under legislation in any jurisdiction for a matter that involved improper access to, collection, use, or disclosure or retention of personal information?",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                            Name = "Has Disciplinary Action"
                         },
                         new
                         {
-                            Id = 2,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 2,
-                            Text = "Are you, or have you ever been, subject to any limits, conditions or prohibitions imposed as a result of disciplinary actions taken by a governing body of a health profession in any jurisdiction, that involved improper access to, collection, use, or disclosure or retention of personal information?",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 4,
-                            Text = "Have you ever been disciplined or fired by an employer, or had a contract for your services terminated, for a matter that involved improper access to, collection, use, or disclosure or retention of personal information?",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 3,
-                            Text = "Have you ever had your access to PharmaNet or any other health information system, whether or not electronic,  an electronic health record system, electronic medical record system, pharmacy or laboratory record system, or any similar health information system, in any jurisdiction, suspended or cancelled for a matter that involved improper access to, collection, use, or disclosure or retention of personal information?",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 1,
-                            Text = "Have you ever been the subject of <u>an order</u> or <u>conviction</u> in British Columbia or any other jurisdiction <u>for a matter involving an “unlawful or improper action”</u>?",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 2,
-                            Text = "Are you, or have you ever been, subject to the imposition, whether by order or with consent, of <u>prohibitions, limits or conditions on your practice of a health profession:</u> <ol style='list-style-type: lower-alpha;' class='mb-0'><li>in British Columbia, under the Health Professions Act or the Pharmacy Operations and Drug Scheduling Act, or</li><li>in any other jurisdiction, by a body that regulates a health profession in that jurisdiction</li></ol><u>for a matter involving an “unlawful or improper action”</u>?",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 4,
-                            Text = "Has an employer ever disciplined you, or terminated your employment, for <u>a matter involving an “unlawful or improper action”</u>?  Has a contract for your services ever been terminated <u>for a matter involving an “unlawful or improper action”</u>?",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 3,
-                            Text = "Has your access to <u>PharmaNet</u> or <u>any other health information system</u>, whether or not electronic and whether or not in British Columbia or another jurisdiction, been suspended or cancelled <u>for a matter involving an “unlawful or improper action”</u>?",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                            Code = 4,
+                            Name = "Has PharmaNet Suspended"
                         });
                 });
 
@@ -14903,15 +14763,9 @@ namespace Prime.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Prime.Models.SelfDeclarationVersion", "SelfDeclarationVersion")
-                        .WithMany()
-                        .HasForeignKey("SelfDeclarationVersionId");
-
                     b.Navigation("Enrollee");
 
                     b.Navigation("SelfDeclarationType");
-
-                    b.Navigation("SelfDeclarationVersion");
                 });
 
             modelBuilder.Entity("Prime.Models.SelfDeclarationDocument", b =>
@@ -14929,17 +14783,6 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.Navigation("Enrollee");
-
-                    b.Navigation("SelfDeclarationType");
-                });
-
-            modelBuilder.Entity("Prime.Models.SelfDeclarationVersion", b =>
-                {
-                    b.HasOne("Prime.Models.SelfDeclarationType", "SelfDeclarationType")
-                        .WithMany()
-                        .HasForeignKey("SelfDeclarationTypeCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("SelfDeclarationType");
                 });

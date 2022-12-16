@@ -11,7 +11,5 @@ namespace Prime.ViewModels
         public int SelfDeclarationTypeCode { get; set; }
         public string SelfDeclarationDetails { get; set; }
         public IEnumerable<Guid> DocumentGuids { get; set; }
-        public int? SelfDeclarationVersionId { get; set; }
-        public int SortingNumber { get; set; }
     }
 }

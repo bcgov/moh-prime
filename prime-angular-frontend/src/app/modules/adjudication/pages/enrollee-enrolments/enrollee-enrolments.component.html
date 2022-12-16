@@ -34,7 +34,7 @@
     <ng-container [ngTemplateOutlet]="card"
                   [ngTemplateOutletContext]="{
                     isCurrent: first && !isUnderAdjudication(enrollee),
-                    submittedDate: enrolmentCard.submissionCreatedDate,
+                    submittedDate: enrollee?.appliedDate,
                     acceptedDate: enrolmentCard.agreementAcceptedDate,
                     remoteAccess: enrolmentCard.requestedRemoteAccess,
                     enrolmentRoute: [enrolmentCard.agreementId, AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT],

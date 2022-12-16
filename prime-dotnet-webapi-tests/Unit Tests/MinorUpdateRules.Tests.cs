@@ -306,7 +306,6 @@ namespace PrimeTests.UnitTests
                 typeof(string),
                 typeof(bool?),
                 typeof(bool),
-                typeof(DateTimeOffset?),
                 typeof(VerifiedAddress),
                 typeof(PhysicalAddress),
                 typeof(MailingAddress),

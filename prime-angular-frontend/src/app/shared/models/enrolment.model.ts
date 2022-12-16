@@ -34,8 +34,6 @@ export interface HttpEnrollee extends Enrollee {
   remoteAccessLocations: RemoteAccessLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
-  selfDeclarationCompletedDate: string;
-  requireRedoSelfDeclaration: boolean;
   identificationDocuments: IdentificationDocument[];
   enrolleeCareSettings: CareSetting[];
   enrolleeHealthAuthorities: EnrolleeHealthAuthority[];
@@ -92,7 +90,6 @@ export interface Enrolment {
   remoteAccessLocations: RemoteAccessLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
-  selfDeclarationCompletedDate: string;
   identificationDocuments: IdentificationDocument[];
   careSettings: CareSetting[];
   enrolleeHealthAuthorities: EnrolleeHealthAuthority[];
@@ -103,7 +100,6 @@ export interface Enrolment {
   assignedTOAType: number;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
-  requireRedoSelfDeclaration: boolean;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice

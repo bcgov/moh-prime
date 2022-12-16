@@ -9,7 +9,6 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { SelfDeclarationPageComponent } from './self-declaration-page.component';
-import { SafePipe } from '@shared/pipes/safe.pipe';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
@@ -32,7 +31,7 @@ describe('SelfDeclarationPageComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        declarations: [SelfDeclarationPageComponent, SafePipe],
+        declarations: [SelfDeclarationPageComponent],
         imports: [
           HttpClientTestingModule,
           NgxBusyModule,
@@ -40,7 +39,7 @@ describe('SelfDeclarationPageComponent', () => {
           NgxMaterialModule,
           ReactiveFormsModule,
           RouterTestingModule,
-          MatTooltipModule,
+          MatTooltipModule
         ],
         providers: [
           {
@@ -63,7 +62,7 @@ describe('SelfDeclarationPageComponent', () => {
             provide: ActivatedRoute,
             useValue: mockActivatedRoute
           },
-          KeycloakService,
+          KeycloakService
         ],
         schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }

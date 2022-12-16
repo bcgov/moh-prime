@@ -58,8 +58,6 @@ namespace Prime.ViewModels
 
         public DateTimeOffset? AppliedDate { get; set; }
 
-        public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
-
         public DateTimeOffset? ApprovedDate { get; set; }
 
         public DateTimeOffset? ExpiryDate { get; set; }

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl, FormControl } from '@angular/forms';
 
-import moment from 'moment';
-
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -21,7 +19,6 @@ import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 // TODO business models to shared or lib so there's no dependencies between feature modules
 import { Site } from '@registration/shared/models/site.model';
 
@@ -54,8 +51,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public careSettingsForm: FormGroup;
   public accessAgreementForm: FormGroup;
 
-  public selfDeclarationCompletedDate: string;
-
   private identityProvider: IdentityProviderEnum;
   private enrolleeId: number;
   private userId: string;
@@ -65,7 +60,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
     protected formUtilsService: FormUtilsService,
-    protected enrolmentResource: EnrolmentResource,
     private authService: AuthService,
     private configService: ConfigService
   ) {
@@ -221,16 +215,13 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       remoteAccessSites,
       remoteAccessLocations,
       selfDeclarations,
-      profileCompleted,
-      requireRedoSelfDeclaration,
+      profileCompleted
     } = enrolment;
     this.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
     this.patchOboSitesForm(oboSites);
     this.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
     this.patchRemoteAccessLocationsForm(remoteAccessLocations);
-    if (!requireRedoSelfDeclaration) {
-      this.patchSelfDeclarations({ profileCompleted, selfDeclarations });
-    }
+    this.patchSelfDeclarations({ profileCompleted, selfDeclarations });
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly
@@ -259,7 +250,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
     };
 
-
     return Object.keys(selfDeclarationsTypes)
       .reduce((sds: SelfDeclaration[], sd: string) => {
         sds.push(
@@ -268,7 +258,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
             selfDeclarationsFormData[`${sd}Details`],
             selfDeclarationsFormData[`${sd}DocumentGuids`],
             this.enrolleeId,
-            selfDeclarationsFormData[sd],
+            selfDeclarationsFormData[sd]
           )
         );
         return sds;
@@ -567,10 +557,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   }
 
   public patchSelfDeclarations(
-    { selfDeclarations, profileCompleted }:
-      { selfDeclarations: SelfDeclaration[], profileCompleted: boolean }
+    { selfDeclarations, profileCompleted }: { selfDeclarations: SelfDeclaration[], profileCompleted: boolean }
   ): void {
-    const defaultValue = profileCompleted ? false : null;
+    const defaultValue = (profileCompleted) ? false : null;
     const selfDeclarationsTypes = {
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,

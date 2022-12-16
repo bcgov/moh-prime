@@ -62,9 +62,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<CommunitySite, RemoteAccessSiteViewModel.SiteViewModel>();
             CreateMap<SiteVendor, RemoteAccessSiteViewModel.VendorViewModel>();
             CreateMap<SelfDeclaration, SelfDeclarationViewModel>()
-                .ForMember(dest => dest.Answered, opt => opt.MapFrom(src => true))
-                .ForMember(dest => dest.SortingNumber, opt => opt.MapFrom(src => src.SelfDeclarationType.SortingNumber));
-
+                .ForMember(dest => dest.Answered, opt => opt.MapFrom(src => true));
             CreateMap<RemoteAccessSiteUpdateModel, RemoteAccessSite>();
             CreateMap<SelfDeclarationDocument, SelfDeclarationDocumentViewModel>();
 
