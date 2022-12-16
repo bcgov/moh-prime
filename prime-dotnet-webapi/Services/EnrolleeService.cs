@@ -156,7 +156,19 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             dto.UserProvidedGpid = linkedGpid;
-            return _mapper.Map<EnrolleeViewModel>(dto);
+            var viewModel = _mapper.Map<EnrolleeViewModel>(dto);
+
+            // get the latest self declaration effective date and compare the last complete date
+            var mostEffectiveDate = await _context.Set<SelfDeclarationVersion>()
+                .Where(v => v.EffectiveDate <= DateTime.UtcNow)
+                .Select(v => v.EffectiveDate)
+                .MaxAsync();
+
+            // flag the enrollee to redo the self declaration if new self declaration is available
+            viewModel.RequireRedoSelfDeclaration = viewModel.SelfDeclarationCompletedDate.HasValue &&
+                mostEffectiveDate > viewModel.SelfDeclarationCompletedDate.Value;
+
+            return viewModel;
         }
 
         public async Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null, ClaimsPrincipal user = null)
@@ -306,6 +318,8 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarationDocuments)
                 .SingleAsync(e => e.Id == enrolleeId);
 
+            var currentSelfDeclarationDate = enrollee.SelfDeclarationCompletedDate;
+
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
             // TODO currently doesn't update the date of birth
@@ -329,7 +343,6 @@ namespace Prime.Services
             UpdateAddress(enrollee, updateModel.VerifiedAddress);
             ReplaceExistingItems(enrollee.Certifications, updateModel.Certifications, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
-            ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
 
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
@@ -346,6 +359,21 @@ namespace Prime.Services
                 enrollee.ProfileCompleted = true;
             }
 
+            // since self declaration is the last step, setting the complete date with profile completed flag
+            // or self declaration has been set previously, then refresh it with now
+            if (profileCompleted || currentSelfDeclarationDate.HasValue)
+            {
+                enrollee.SelfDeclarationCompletedDate = DateTimeOffset.Now;
+            }
+
+            if (enrollee.SelfDeclarationCompletedDate.HasValue)
+            {
+                await PopulateSelfDeclarationVersion(updateModel, enrollee.SelfDeclarationCompletedDate.Value);
+            }
+
+
+            ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
+
             // This is the temporary way we are adding self declaration documents until this gets refactored.
             await CreateSelfDeclarationDocuments(enrolleeId, updateModel.SelfDeclarations, enrollee.SelfDeclarationDocuments);
 
@@ -356,6 +384,24 @@ namespace Prime.Services
             catch (DbUpdateConcurrencyException)
             {
                 return 0;
+            }
+        }
+
+        private async Task PopulateSelfDeclarationVersion(EnrolleeUpdateModel model, DateTimeOffset selfDeclarationCompleteDate)
+        {
+            var versions = await _context.Set<SelfDeclarationType>()
+                .AsNoTracking()
+                .Select(t => _context.Set<SelfDeclarationVersion>()
+                    .Where(av => av.EffectiveDate <= selfDeclarationCompleteDate)
+                    .Where(av => av.SelfDeclarationTypeCode == t.Code)
+                    .OrderByDescending(av => av.EffectiveDate)
+                    .First())
+                .OrderBy(av => av.SelfDeclarationType.SortingNumber)
+                .ToListAsync();
+
+            foreach (var sd in model.SelfDeclarations)
+            {
+                sd.SelfDeclarationVersionId = versions.First(v => v.SelfDeclarationTypeCode == sd.SelfDeclarationTypeCode).Id;
             }
         }
 
@@ -677,16 +723,19 @@ namespace Prime.Services
                 .ProjectTo<SelfDeclarationViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            var unAnswered = Enum.GetValues(typeof(SelfDeclarationTypeCode))
-                .Cast<int>()
-                .Except(answered.Select(a => a.SelfDeclarationTypeCode))
-                .Select(code => new SelfDeclarationViewModel
+            var answeredCodes = answered.Select(a => a.SelfDeclarationTypeCode);
+            var unAnswered = await _context.Set<SelfDeclarationType>()
+                .Where(t => !answeredCodes.Contains(t.Code))
+                .Select(t => new SelfDeclarationViewModel
                 {
                     EnrolleeId = enrolleeId,
-                    SelfDeclarationTypeCode = code
-                });
+                    SelfDeclarationTypeCode = t.Code,
+                    SortingNumber = t.SortingNumber,
+                }).ToListAsync();
 
-            return answered.Concat(unAnswered);
+            var result = answered.Concat(unAnswered);
+            result = result.OrderBy(a => a.SortingNumber);
+            return result;
         }
 
         public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId, bool includeHidden = true)
