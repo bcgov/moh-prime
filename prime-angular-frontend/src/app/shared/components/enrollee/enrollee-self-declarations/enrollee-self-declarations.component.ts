@@ -1,14 +1,17 @@
-import { EventEmitter, Component, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { EventEmitter, Component, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { Router } from '@angular/router';
 
-import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { EnumUtils } from '@lib/utils/enum-utils.class';
+
+import moment from 'moment';
+
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.model';
 
 interface SelfDeclarationComposite {
   selfDeclarationTypeCode: SelfDeclarationTypeEnum;
@@ -22,7 +25,7 @@ interface SelfDeclarationComposite {
   templateUrl: './enrollee-self-declarations.component.html',
   styleUrls: ['./enrollee-self-declarations.component.scss']
 })
-export class EnrolleeSelfDeclarationsComponent implements OnChanges {
+export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
   @Input() public enrolment: Enrolment;
   /**
    * @description
@@ -31,8 +34,13 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges {
   @Input() public showRedirect: boolean;
   /**
    * @description
-   * Route path for redirection.
+   * Show the description.
    */
+  @Input() public showDescription: boolean;
+  /**
+  * @description
+  * Route path for redirection.
+  */
   @Input() public redirectRoutePath: string | string[];
   /**
    * @description
@@ -41,6 +49,7 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges {
   @Output() public route: EventEmitter<void>;
 
   public selfDeclarationComposites: SelfDeclarationComposite[];
+  public selfDeclarationQuestions = new Map<number, string>();
 
   constructor(
     private enrolmentResource: EnrolmentResource,
@@ -48,6 +57,10 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges {
     private router: Router
   ) {
     this.route = new EventEmitter<void>();
+  }
+
+  public isAdjudication(): boolean {
+    return this.router.url.includes('adjudication');
   }
 
   public downloadSelfDeclarationDocument(documentId: number): void {
@@ -62,16 +75,32 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges {
       : [];
   }
 
+  public ngOnInit(): void {
+    if (this.selfDeclarationQuestions.size === 0) {
+      let targetDate = this.enrolment.selfDeclarationCompletedDate ?
+        this.enrolment.selfDeclarationCompletedDate : this.enrolment.currentStatus.statusDate;
+      this.enrolmentResource.getSelfDeclarationVersion(moment(targetDate).format()).subscribe(
+        (versions) => {
+          versions.forEach(v => {
+            this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);
+          });
+          // re-construct the composites
+          this.selfDeclarationComposites = this.createSelfDeclarationComposites();
+        });
+    }
+  }
+
   private createSelfDeclarationComposites() {
-    return this.enrolment.selfDeclarations
+    let newSelfDeclarations = this.enrolment.selfDeclarations
       .map((selfDeclaration: SelfDeclaration) => {
         const selfDeclarationTypeCode = selfDeclaration.selfDeclarationTypeCode;
         const selfDeclarationDocuments = this.enrolment.selfDeclarationDocuments
           ?.filter(d => d.selfDeclarationTypeCode === selfDeclarationTypeCode) ?? [];
 
         return this.createSelfDeclarationComposite(selfDeclarationTypeCode, selfDeclaration, selfDeclarationDocuments);
-      })
-      .sort((a, b) => a.selfDeclarationTypeCode - b.selfDeclarationTypeCode);
+
+      });
+    return newSelfDeclarations.sort((a, b) => a.selfDeclarationTypeCode - b.selfDeclarationTypeCode);
   }
 
   private createSelfDeclarationComposite(
@@ -81,7 +110,7 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges {
   ) {
     return {
       selfDeclarationTypeCode,
-      selfDeclarationQuestion: selfDeclarationQuestions[selfDeclarationTypeCode],
+      selfDeclarationQuestion: this.selfDeclarationQuestions.get(selfDeclarationTypeCode),
       selfDeclaration,
       selfDeclarationDocuments
     };
