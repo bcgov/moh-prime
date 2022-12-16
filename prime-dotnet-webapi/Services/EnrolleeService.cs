@@ -366,7 +366,12 @@ namespace Prime.Services
                 enrollee.SelfDeclarationCompletedDate = DateTimeOffset.Now;
             }
 
-            await PopulateSelfDeclarationVersion(updateModel, enrollee.SelfDeclarationCompletedDate.Value);
+            if (enrollee.SelfDeclarationCompletedDate.HasValue)
+            {
+                await PopulateSelfDeclarationVersion(updateModel, enrollee.SelfDeclarationCompletedDate.Value);
+            }
+
+
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
 
             // This is the temporary way we are adding self declaration documents until this gets refactored.
