@@ -20,5 +20,13 @@ namespace Prime.ViewModels
                 return Submission.RequestedRemoteAccess;
             }
         }
+
+        public DateTimeOffset? SubmissionCreatedDate
+        {
+            get
+            {
+                return Submission.CreatedDate;
+            }
+        }
     }
 }
