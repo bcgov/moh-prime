@@ -44,6 +44,7 @@ import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.mo
 import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteNotification } from '../models/site-notification.model';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 
 @Injectable({
@@ -734,8 +735,8 @@ export class AdjudicationResource {
     const selfDeclarations = {
       hasConviction: 'Has Conviction',
       hasRegistrationSuspended: 'Has Registration Suspended',
+      hasPharmaNetSuspended: 'Has PharmaNet Suspended',
       hasDisciplinaryAction: 'Has Disciplinary Action',
-      hasPharmaNetSuspended: 'Has PharmaNet Suspended'
     };
     const keys = Object.keys(selfDeclarations);
 
@@ -745,7 +746,8 @@ export class AdjudicationResource {
         if (profileSnapshot[key]) {
           profileSnapshot.selfDeclarations.push({
             selfDeclarationDetails: profileSnapshot[`${key}Details`],
-            selfDeclarationTypeCode: index + 1
+            selfDeclarationTypeCode: index + 1,
+            answered: true,
           });
         }
 
@@ -766,5 +768,31 @@ export class AdjudicationResource {
       });
       delete profileSnapshot[`enrolleeOrganizationTypes`];
     }
+
+    // set answered property
+    if (profileSnapshot.selfDeclarations) {
+      profileSnapshot.selfDeclarations.forEach(sd => {
+        sd.answered = !!sd.id;
+      });
+    }
+
+    // create an ordered list of self declaratoin types
+    let orderedSelfDeclarationType = [
+      Number(SelfDeclarationTypeEnum.HAS_CONVICTION),
+      Number(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED),
+      Number(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED),
+      Number(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION)];
+
+    // add unanswered self declaration questions and order the questions
+    let orderedSelfDeclarations = [];
+    for (var i = 0; i < 4; i++) {
+      if (!isNaN(orderedSelfDeclarationType[i]) && !profileSnapshot.selfDeclarations.find(s => s.selfDeclarationTypeCode === orderedSelfDeclarationType[i])) {
+        let unansweredSelfDeclaration = new SelfDeclaration(orderedSelfDeclarationType[i], null, null, null, false, null, null);
+        orderedSelfDeclarations.push(unansweredSelfDeclaration);
+      } else {
+        orderedSelfDeclarations.push(profileSnapshot.selfDeclarations.find(s => s.selfDeclarationTypeCode === orderedSelfDeclarationType[i]));
+      }
+    }
+    profileSnapshot.selfDeclarations = orderedSelfDeclarations;
   }
 }

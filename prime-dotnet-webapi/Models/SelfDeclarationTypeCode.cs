@@ -4,7 +4,7 @@ namespace Prime.Models
     {
         Conviction = 1,
         RegistrationSuspended = 2,
-        DisciplinaryAction = 3,
-        PharmaNetSuspended = 4
+        PharmaNetSuspended = 3,
+        DisciplinaryAction = 4,
     }
 }
