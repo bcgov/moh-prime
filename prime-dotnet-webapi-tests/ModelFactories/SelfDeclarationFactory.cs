@@ -16,9 +16,11 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.EnrolleeId, f => owner.Id);
             RuleFor(x => x.SelfDeclarationDetails, f => f.Lorem.Paragraphs(2));
             RuleFor(x => x.SelfDeclarationTypeCode, f => f.PickRandom(SelfDeclarationTypeLookup.All).Code);
+            RuleFor(x => x.SelfDeclarationVersionId, f => f.PickRandom(SelfDeclarationTypeLookup.All).Code);
 
             Ignore(x => x.SelfDeclarationType);
             Ignore(x => x.DocumentGuids);
+            Ignore(x => x.SelfDeclarationVersion);
         }
     }
 }

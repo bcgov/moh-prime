@@ -61,32 +61,67 @@ namespace Prime.Services
             var enrollee = await _context.Enrollees
                 .AsNoTracking()
                 .Include(e => e.Addresses)
-                    .ThenInclude(ea => ea.Address)
+                    .ThenInclude(ea => ea.Address).AsSplitQuery()
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
-                        .ThenInclude(l => l.LicenseDetails)
+                        .ThenInclude(l => l.LicenseDetails).AsSplitQuery()
                 .Include(e => e.UnlistedCertifications)
                 .Include(e => e.OboSites)
-                    .ThenInclude(s => s.PhysicalAddress)
+                    .ThenInclude(s => s.PhysicalAddress).AsSplitQuery()
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeHealthAuthorities)
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessSites)
                     .ThenInclude(ras => ras.Site)
-                        .ThenInclude(ras => ras.PhysicalAddress)
+                        .ThenInclude(ras => ras.PhysicalAddress).AsSplitQuery()
                 .Include(r => r.RemoteAccessLocations)
-                    .ThenInclude(rul => rul.PhysicalAddress)
+                    .ThenInclude(rul => rul.PhysicalAddress).AsSplitQuery()
                 .Include(e => e.EnrolmentStatuses)
-                    .ThenInclude(es => es.Status)
+                    .ThenInclude(es => es.Status).AsSplitQuery()
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.EnrolmentStatusReasons)
-                        .ThenInclude(esr => esr.StatusReason)
+                        .ThenInclude(esr => esr.StatusReason).AsSplitQuery()
                 .Include(e => e.AccessAgreementNote)
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.IdentificationDocuments)
-                .Include(e => e.Agreements)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+                .Include(e => e.Agreements).AsSplitQuery()
+                .FirstOrDefaultAsync(e => e.Id == enrolleeId);
+
+            var selfDeclarationQuestions = await _context.Set<SelfDeclarationType>()
+                .AsNoTracking()
+                .OrderBy(sdt => sdt.SortingNumber)
+                .Select(t => _context.Set<SelfDeclarationVersion>()
+                    .Where(av => av.EffectiveDate <= enrollee.SelfDeclarationCompletedDate)
+                    .Where(av => av.SelfDeclarationTypeCode == t.Code)
+                    .OrderByDescending(av => av.EffectiveDate)
+                    .First())
+                .ToListAsync();
+
+            // set the self declaration version Id and add unanswered items
+            // *** answered Yes - it should have self declaration ID set
+            // *** answered No - it should NOT have self declaration ID
+            foreach (var sd in selfDeclarationQuestions)
+            {
+                if (enrollee.SelfDeclarations == null)
+                {
+                    enrollee.SelfDeclarations = new List<SelfDeclaration>();
+                }
+
+                var answered = enrollee.SelfDeclarations.FirstOrDefault(s => s.SelfDeclarationTypeCode == sd.SelfDeclarationTypeCode);
+                if (answered != null)
+                {
+                    answered.SelfDeclarationVersionId = sd.Id;
+                }
+                else
+                {
+                    enrollee.SelfDeclarations.Add(new SelfDeclaration()
+                    {
+                        SelfDeclarationVersionId = sd.Id,
+                        SelfDeclarationTypeCode = sd.SelfDeclarationTypeCode,
+                    });
+                }
+            }
 
             var enrolleeSubmission = new Submission
             {
@@ -106,6 +141,7 @@ namespace Prime.Services
                 var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
                 enrolleeSubmission.AgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
             }
+
 
             _context.Submissions.Add(enrolleeSubmission);
 
