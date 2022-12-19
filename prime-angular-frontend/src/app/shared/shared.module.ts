@@ -116,6 +116,7 @@ import { DocumentAttachmentsComponent } from '@shared/components/document-attach
 import { DocumentAttachmentComponent } from '@shared/components/document-attachment/document-attachment.component';
 import { PartyTypePipe } from '@phsa/shared/pipes/party-type.pipe';
 import { DateOfBirthComponent } from './components/dialogs/content/date-of-birth/date-of-birth.component';
+import { SelfDeclarationTermComponent } from './components/enrollee/self-declaration-term/self-declaration-term.component';
 
 // Shared health authority components
 import { SiteInformationOverviewComponent } from '@health-auth/pages/site-information-page/site-information-overview.component';
@@ -234,7 +235,8 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     HealthAuthSiteOverviewContainerComponent,
     DateOfBirthComponent,
     UnlistedCollegeLicenceFormComponent,
-    EmailFormComponent
+    EmailFormComponent,
+    SelfDeclarationTermComponent
   ],
   imports: [
     CommonModule,
@@ -345,7 +347,8 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     SiteInformationOverviewComponent,
     HealthAuthSiteOverviewContainerComponent,
     UnlistedCollegeLicenceFormComponent,
-    EmailFormComponent
+    EmailFormComponent,
+    SelfDeclarationTermComponent,
   ],
   providers: [
     FullnamePipe,

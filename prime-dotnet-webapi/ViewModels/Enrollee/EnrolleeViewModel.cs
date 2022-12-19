@@ -50,6 +50,8 @@ namespace Prime.ViewModels
 
         public bool ProfileCompleted { get; set; }
 
+        public bool RequireRedoSelfDeclaration { get; set; }
+
         public bool AlwaysManual { get; set; }
 
         public EnrolmentStatusViewModel CurrentStatus { get; set; }
@@ -61,6 +63,8 @@ namespace Prime.ViewModels
         public DateTimeOffset? ApprovedDate { get; set; }
 
         public DateTimeOffset? ExpiryDate { get; set; }
+
+        public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
 
         public int DisplayId { get; set; }
 
