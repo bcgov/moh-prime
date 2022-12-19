@@ -220,6 +220,24 @@ namespace Prime.Services
             var enrollee = await _context.Enrollees.Where(e => e.Id == enrolleeId).FirstOrDefaultAsync();
             enrollee.SelfDeclarationCompletedDate = DateTimeOffset.Now;
 
+            if (newDeclarations.Any())
+            {
+                var versions = await _context.Set<SelfDeclarationType>()
+                    .AsNoTracking()
+                    .Select(t => _context.Set<SelfDeclarationVersion>()
+                        .Where(av => av.EffectiveDate <= enrollee.SelfDeclarationCompletedDate)
+                        .Where(av => av.SelfDeclarationTypeCode == t.Code)
+                        .OrderByDescending(av => av.EffectiveDate)
+                        .First())
+                    .OrderBy(av => av.SelfDeclarationType.SortingNumber)
+                    .ToListAsync();
+
+                foreach (var sd in newDeclarations)
+                {
+                    sd.SelfDeclarationVersionId = versions.First(v => v.SelfDeclarationTypeCode == sd.SelfDeclarationTypeCode).Id;
+                }
+            }
+
             await ReplaceCollection(enrolleeId, newDeclarations);
 
             await _context.SaveChangesAsync();
