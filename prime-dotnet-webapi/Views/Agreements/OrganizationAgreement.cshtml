@@ -1,0 +1,13 @@
+@using Prime.ViewModels.Agreements
+@model OrgAgreementRazorViewModel
+
+@await Html.PartialAsync("~/Views/Partials/_AgreementDate.cshtml")
+
+@Html.Raw(Model.AgreementContent)
+
+@if (@Model.WithSignature)
+{
+  @await Html.PartialAsync("~/Views/Partials/_OrgAgreementSignature.cshtml")
+}
+
+@Html.Raw(Model.ScheduleContent)

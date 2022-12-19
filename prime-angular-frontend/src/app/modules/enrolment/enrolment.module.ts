@@ -70,7 +70,7 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
     RemoteAccessAddressesComponent,
     PaperEnrolleeReturneesPageComponent,
     AbsenceManagementPageComponent,
-    NextStepsComponent
+    NextStepsComponent,
   ],
   imports: [
     SharedModule,

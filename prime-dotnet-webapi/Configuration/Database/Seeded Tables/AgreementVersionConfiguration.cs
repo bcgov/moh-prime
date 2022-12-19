@@ -10,6 +10,8 @@ namespace Prime.Configuration.Database
 {
     public class AgreementVersionConfiguration : SeededTable<AgreementVersion>
     {
+        public static readonly DateTime Nov17th2022AgreementUpdate = new(2022, 11, 17, 8, 0, 0, DateTimeKind.Utc);
+
         public override IEnumerable<AgreementVersion> SeedData
         {
             get
@@ -34,6 +36,15 @@ namespace Prime.Configuration.Database
                     new AgreementVersion { Id = 17, AgreementType = AgreementType.DeviceProviderOrgAgreement,    Text =  "device-provider-org-v1.html",         EffectiveDate = SEEDING_DATE,                                CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new AgreementVersion { Id = 18, AgreementType = AgreementType.PharmacyTechnicianTOA,         Text =  "pharmacy-tech-ru-no-obo-toa-v1.html", EffectiveDate = SEEDING_DATE,                                CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new AgreementVersion { Id = 19, AgreementType = AgreementType.PharmacyTechnicianTOA,         Text =  "pharmacy-tech-ru-no-obo-toa-v2.html", EffectiveDate = DateTimeOffset.Parse("2022-03-16 00:00:00"), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    new AgreementVersion { Id = 20, AgreementType = AgreementType.CommunityPharmacistTOA,        Text =  "com-pharm-terms-v4.html",             EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new AgreementVersion { Id = 21, AgreementType = AgreementType.OboTOA,                        Text =  "obo-access-terms-v6.html",            EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new AgreementVersion { Id = 22, AgreementType = AgreementType.PharmacyOboTOA,                Text =  "pharmacy-obo-toa-v2.html",            EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new AgreementVersion { Id = 23, AgreementType = AgreementType.PharmacyTechnicianTOA,         Text =  "pharmacy-tech-ru-no-obo-toa-v3.html", EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new AgreementVersion { Id = 24, AgreementType = AgreementType.RegulatedUserTOA,              Text =  "ru-access-terms-v6.html",             EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new AgreementVersion { Id = 25, AgreementType = AgreementType.CommunityPracticeOrgAgreement, Text =  "com-practice-org-v2.html",            EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new AgreementVersion { Id = 26, AgreementType = AgreementType.CommunityPharmacyOrgAgreement, Text =  "com-pharmacy-org-v2.html",            EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new AgreementVersion { Id = 27, AgreementType = AgreementType.DeviceProviderOrgAgreement,    Text =  "device-provider-org-v2.html",         EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }

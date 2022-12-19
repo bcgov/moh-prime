@@ -19,7 +19,11 @@ namespace Prime.Models
 
         public int SelfDeclarationTypeCode { get; set; }
 
+        public SelfDeclarationVersion SelfDeclarationVersion { get; set; }
+
         public SelfDeclarationType SelfDeclarationType { get; set; }
+
+        public int? SelfDeclarationVersionId { get; set; }
 
         public string SelfDeclarationDetails { get; set; }
 
