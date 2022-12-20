@@ -51,6 +51,7 @@ namespace Prime.Configuration.Environment
 
                 "CHES_ENABLED" => "ChesApi__Enabled",
                 "CHES_API_URL" => "ChesApi__Url",
+                "CHES_CLIENT_ID" => "ChesApi__ClientId",
                 "CHES_CLIENT_SECRET" => "ChesApi__ClientSecret",
                 "CHES_TOKEN_URL" => "ChesApi__TokenUrl",
 
