@@ -11,7 +11,7 @@ namespace Prime.Configuration.Database
     public class SelfDeclarationVersionConfiguration : SeededTable<SelfDeclarationVersion>
     {
         public static readonly DateTime InitialEffectiveDate = new(2020, 2, 1, 8, 0, 0, DateTimeKind.Utc);
-        public static readonly DateTime Dec2022EffectiveDate = new(2022, 12, 1, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime Dec2022EffectiveDate = new(2022, 12, 17, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<SelfDeclarationVersion> SeedData
         {
