@@ -81,6 +81,10 @@ namespace Prime.HttpClients.Mail
             try
             {
                 HttpResponseMessage response = await _client.GetAsync("health");
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError($"CHES Healthcheck returned {response.StatusCode}");
+                }
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)

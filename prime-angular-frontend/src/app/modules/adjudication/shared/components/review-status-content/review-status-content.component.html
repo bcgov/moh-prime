@@ -17,10 +17,9 @@
 
       <span class="mb-4 font-weight-bolder">{{ reason.name }}</span>
       <div class="mb-3">
-        <p *ngIf="reason.isSelfDeclaration"
-           class="pl-2">
-          {{ reason.question }}
-        </p>
+        <div *ngIf="reason.isSelfDeclaration"
+             class="pl-2 mb-3"
+             [innerHTML]="reason.question | safe: 'html'"></div>
 
         <div *ngIf="reason.note">
           <span *ngIf="reason.isSelfDeclaration"
@@ -96,10 +95,9 @@
                     {{ reason.name }}
                   </span>
                   <div class="mb-3">
-                    <p *ngIf="reason.isSelfDeclaration"
-                       class="pl-2">
-                      {{ reason.question }}
-                    </p>
+                    <div *ngIf="reason.isSelfDeclaration"
+                         class="pl-2 mb-3"
+                         [innerHTML]="reason.question | safe: 'html'"></div>
 
                     <div *ngIf="reason.note">
                       <span *ngIf="reason.isSelfDeclaration"
