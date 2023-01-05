@@ -10,10 +10,10 @@ namespace Prime.Models.HealthAuthorities
         [Key]
         public int Id { get; set; }
 
-        public int HealthAuthorityOrganizationId { get; set; }
+        public int HealthAuthorityCareTypeId { get; set; }
 
         [JsonIgnore]
-        public HealthAuthorityOrganization HealthAuthorityOrganization { get; set; }
+        public HealthAuthorityCareType HealthAuthorityCareType { get; set; }
 
         [Required]
         public int VendorCode { get; set; }

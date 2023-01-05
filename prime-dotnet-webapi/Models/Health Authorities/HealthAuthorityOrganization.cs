@@ -14,8 +14,6 @@ namespace Prime.Models.HealthAuthorities
 
         public ICollection<HealthAuthorityCareType> CareTypes { get; set; }
 
-        public ICollection<HealthAuthorityVendor> Vendors { get; set; }
-
         public PrivacyOffice PrivacyOffice { get; set; }
 
         public ICollection<HealthAuthorityPrivacyOfficer> PrivacyOfficers { get; set; }

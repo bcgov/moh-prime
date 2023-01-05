@@ -5,7 +5,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
     public class HealthAuthorityVendorViewModel
     {
         public int Id { get; set; }
-        public int HealthAuthorityOrganizationId { get; set; }
+        public int HealthAuthorityCareTypeId { get; set; }
         public int VendorCode { get; set; }
     }
 

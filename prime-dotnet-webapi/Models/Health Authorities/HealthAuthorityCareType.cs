@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,5 +18,7 @@ namespace Prime.Models.HealthAuthorities
 
         [Required]
         public string CareType { get; set; }
+
+        public ICollection<HealthAuthorityVendor> Vendors { get; set; }
     }
 }
