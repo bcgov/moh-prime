@@ -94,4 +94,8 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
 
     this.routeUtils.routeRelativeTo(nextRoutePath);
   }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.showAddressFields = true;
+  }
 }
