@@ -71,6 +71,11 @@ namespace Prime.Controllers
                 return BadRequest("Application can not be submitted when the current status is not 'Active'.");
             }
 
+            if (!await _enrolleeService.IsEnrolleeProfileCompleteAsync(enrolleeId))
+            {
+                return BadRequest("Enrollee profile is not completed.");
+            }
+
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);

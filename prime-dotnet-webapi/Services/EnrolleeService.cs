@@ -782,6 +782,15 @@ namespace Prime.Services
             return statusCodesToCheck.Contains(enrollee.CurrentStatus.GetStatusType());
         }
 
+        public async Task<bool> IsEnrolleeProfileCompleteAsync(int enrolleeId)
+        {
+            var enrollee = await _context.Enrollees
+                .AsNoTracking()
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            return enrollee.ProfileCompleted;
+        }
+
         public async Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId)
         {
             return await _context.EnrolleeNotes
