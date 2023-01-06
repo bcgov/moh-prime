@@ -110,6 +110,7 @@ namespace Prime
         public DbSet<SiteNotification> SiteNotifications { get; set; }
         public DbSet<AuthorizedUser> AuthorizedUsers { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
+        public DbSet<DoNotEmail> DoNotEmail { get; set;}
         public DbSet<Banner> Banners { get; set; }
 
         // Parties

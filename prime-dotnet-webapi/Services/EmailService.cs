@@ -28,6 +28,7 @@ namespace Prime.Services
         private readonly IEmailDocumentsService _emailDocumentService;
         private readonly IEmailRenderingService _emailRenderingService;
         private readonly ISmtpEmailClient _smtpEmailClient;
+        private readonly IBusinessEventService _businessEventService;
 
         public EmailService(
             ApiDbContext context,
@@ -35,6 +36,7 @@ namespace Prime.Services
             IChesClient chesClient,
             IEmailDocumentsService emailDocumentService,
             IEmailRenderingService emailRenderingService,
+            IBusinessEventService businessEventService,
             ISmtpEmailClient smtpEmailClient)
             : base(context, logger)
         {
@@ -42,6 +44,7 @@ namespace Prime.Services
             _emailDocumentService = emailDocumentService;
             _emailRenderingService = emailRenderingService;
             _smtpEmailClient = smtpEmailClient;
+            _businessEventService = businessEventService;
         }
 
         public async Task SendReminderEmailAsync(int enrolleeId)
@@ -390,6 +393,21 @@ namespace Prime.Services
 
         private async Task Send(Email email)
         {
+            var doNotEmail = await _context.DoNotEmail
+                .Where(e => email.To.Contains(e.Email))
+                .Select(e => new {
+                    e.Email,
+                    e.Id
+                })
+                .ToListAsync();
+
+            if (doNotEmail.Any() && doNotEmail != null) {
+                foreach(var e in doNotEmail) {
+                    await _businessEventService.CreateEmailEventAsync(e.Id, "Do not email enrollee");
+                }
+                return;
+            }
+                
             if (!PrimeConfiguration.IsProduction())
             {
                 email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
