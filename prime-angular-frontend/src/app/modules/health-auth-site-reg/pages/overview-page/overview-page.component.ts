@@ -142,7 +142,7 @@ export class OverviewPageComponent implements OnInit {
     // updates when not already patched and contains changes
     this.healthAuthoritySiteFormStateService.setForm(healthAuthoritySite);
 
-    this.isCompleted = healthAuthoritySite?.completed;
+    this.isCompleted = healthAuthoritySite?.submittedDate ? true : false;
   }
 
   private nextRoute(): void {
