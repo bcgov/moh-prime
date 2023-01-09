@@ -95,6 +95,15 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
     this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.healthAuthoritySiteFormStateService.patchSiteInfomrationForm(this.healthAuthoritySiteService.site);
+  }
+
   protected onSubmitFormIsInvalid(): void {
     this.showAddressFields = true;
   }

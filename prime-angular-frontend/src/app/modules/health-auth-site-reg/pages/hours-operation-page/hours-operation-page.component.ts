@@ -197,4 +197,13 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
       endTime.disable();
     }
   }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.healthAuthoritySiteFormStateService.patchHoursOperationForm(this.healthAuthoritySiteService.site);
+  }
 }
