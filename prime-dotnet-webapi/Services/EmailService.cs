@@ -401,7 +401,7 @@ namespace Prime.Services
                 })
                 .SingleOrDefaultAsync();
 
-            if (doNotEmail.Email != null) {
+            if (doNotEmail != null) {
                 await _businessEventService.CreateEmailEventAsync(doNotEmail.Id, "Do not email enrollee");
                 return;
             }
