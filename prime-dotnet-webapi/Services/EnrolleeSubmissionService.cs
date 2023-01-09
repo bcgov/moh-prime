@@ -18,16 +18,19 @@ namespace Prime.Services
     public class EnrolleeSubmissionService : BaseService, IEnrolleeSubmissionService
     {
         private readonly IEnrolleeService _enrolleeService;
+        private readonly ILookupService _lookupService;
         private readonly IMapper _mapper;
 
         public EnrolleeSubmissionService(
             ApiDbContext context,
             ILogger<EnrolleeSubmissionService> logger,
             IEnrolleeService enrolleeService,
+            ILookupService lookupService,
             IMapper mapper)
             : base(context, logger)
         {
             _enrolleeService = enrolleeService;
+            _lookupService = lookupService;
             _mapper = mapper;
         }
 
@@ -88,15 +91,7 @@ namespace Prime.Services
                 .Include(e => e.Agreements).AsSplitQuery()
                 .FirstOrDefaultAsync(e => e.Id == enrolleeId);
 
-            var selfDeclarationQuestions = await _context.Set<SelfDeclarationType>()
-                .AsNoTracking()
-                .OrderBy(sdt => sdt.SortingNumber)
-                .Select(t => _context.Set<SelfDeclarationVersion>()
-                    .Where(av => av.EffectiveDate <= enrollee.SelfDeclarationCompletedDate)
-                    .Where(av => av.SelfDeclarationTypeCode == t.Code)
-                    .OrderByDescending(av => av.EffectiveDate)
-                    .First())
-                .ToListAsync();
+            var selfDeclarationQuestions = await _lookupService.GetSelfDeclarationVersion(enrollee.SelfDeclarationCompletedDate);
 
             // set the self declaration version Id and add unanswered items
             // *** answered Yes - it should have self declaration ID set

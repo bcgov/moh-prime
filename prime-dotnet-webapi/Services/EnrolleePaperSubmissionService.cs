@@ -24,6 +24,7 @@ namespace Prime.Services
         private readonly IDocumentManagerClient _documentClient;
         private readonly IEnrolleeAgreementService _enrolleeAgreementService;
         private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
+        private readonly ILookupService _lookupService;
         private readonly IMapper _mapper;
 
         public EnrolleePaperSubmissionService(
@@ -33,6 +34,7 @@ namespace Prime.Services
             IDocumentManagerClient documentClient,
             IEnrolleeAgreementService enrolleeAgreementService,
             IEnrolleeSubmissionService enrolleeSubmissionService,
+            ILookupService lookupService,
             IMapper mapper)
             : base(context, logger)
         {
@@ -40,6 +42,7 @@ namespace Prime.Services
             _documentClient = documentClient;
             _enrolleeAgreementService = enrolleeAgreementService;
             _enrolleeSubmissionService = enrolleeSubmissionService;
+            _lookupService = lookupService;
             _mapper = mapper;
         }
 
@@ -222,15 +225,7 @@ namespace Prime.Services
 
             if (newDeclarations.Any())
             {
-                var versions = await _context.Set<SelfDeclarationType>()
-                    .AsNoTracking()
-                    .Select(t => _context.Set<SelfDeclarationVersion>()
-                        .Where(av => av.EffectiveDate <= enrollee.SelfDeclarationCompletedDate)
-                        .Where(av => av.SelfDeclarationTypeCode == t.Code)
-                        .OrderByDescending(av => av.EffectiveDate)
-                        .First())
-                    .OrderBy(av => av.SelfDeclarationType.SortingNumber)
-                    .ToListAsync();
+                var versions = await _lookupService.GetSelfDeclarationVersion(enrollee.SelfDeclarationCompletedDate);
 
                 foreach (var sd in newDeclarations)
                 {
