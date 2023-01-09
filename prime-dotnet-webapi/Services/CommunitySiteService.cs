@@ -157,14 +157,22 @@ namespace Prime.Services
             if (currentSite.SubmittedDate == null)
             {
                 var vendors = await GetVendorsAsync();
-                updateDetail.AddRange(UpdateVendors(currentSite, updatedSite, vendors));
+                UpdateVendors(currentSite, updatedSite, vendors);
             }
 
-            updateDetail.AddRange(UpdateAddress(currentSite, updatedSite));
-            updateDetail.AddRange(UpdateContacts(currentSite, updatedSite));
-            updateDetail.AddRange(UpdateBusinessHours(currentSite, updatedSite));
+            var addressUpdate = UpdateAddress(currentSite, updatedSite);
+            var contactsUpdate = UpdateContacts(currentSite, updatedSite);
+            var businessHoursUpdate = UpdateBusinessHours(currentSite, updatedSite);
             var updateRemoteUserResult = UpdateRemoteUsers(currentSite, updatedSite.RemoteUsers);
-            updateDetail.AddRange(updateRemoteUserResult);
+
+            if (currentSite.SubmittedDate != null)
+            {
+                updateDetail.AddRange(addressUpdate);
+                updateDetail.AddRange(contactsUpdate);
+                updateDetail.AddRange(businessHoursUpdate);
+                updateDetail.AddRange(updateRemoteUserResult);
+            }
+
             await UpdateIndividualDeviceProviders(siteId, updatedSite.IndividualDeviceProviders);
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, $"Site Updated {Environment.NewLine + "- "}{string.Join(Environment.NewLine + "- ", updateDetail.ToArray())}");
