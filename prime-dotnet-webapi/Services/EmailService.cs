@@ -394,17 +394,15 @@ namespace Prime.Services
         private async Task Send(Email email)
         {
             var doNotEmail = await _context.DoNotEmail
-                .Where(e => email.To.Contains(e.Email))
+                .Where(e => e.Email == email.To)
                 .Select(e => new {
                     e.Email,
                     e.Id
                 })
-                .ToListAsync();
+                .SingleOrDefaultAsync();
 
-            if (doNotEmail.Any() && doNotEmail != null) {
-                foreach(var e in doNotEmail) {
-                    await _businessEventService.CreateEmailEventAsync(e.Id, "Do not email enrollee");
-                }
+            if (doNotEmail.Email != null) {
+                await _businessEventService.CreateEmailEventAsync(doNotEmail.Id, "Do not email enrollee");
                 return;
             }
                 
