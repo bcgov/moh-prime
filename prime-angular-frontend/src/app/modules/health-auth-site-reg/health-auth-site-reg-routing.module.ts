@@ -17,11 +17,8 @@ import { AuthorizedUserDeclinedPageComponent } from '@health-auth/pages/authoriz
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
 import { HealthAuthCareTypePageComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-page.component';
 import { SiteInformationPageComponent } from '@health-auth/pages/site-information-page/site-information-page.component';
-import { VendorPageComponent } from '@health-auth/pages/vendor-page/vendor-page.component';
-import { SiteAddressPageComponent } from '@health-auth/pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from '@health-auth/pages/hours-operation-page/hours-operation-page.component';
 import { AdministratorPageComponent } from '@health-auth/pages/administrator-page/administrator-page.component';
-import { TechnicalSupportPageComponent } from '@health-auth/pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview-page.component';
 import { HealthAuthorityResolver } from '@health-auth/shared/resolvers/health-authority.resolver';
 
@@ -97,12 +94,6 @@ const routes: Routes = [
         },
         children: [
           {
-            path: HealthAuthSiteRegRoutes.VENDOR,
-            component: VendorPageComponent,
-            canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Vendor' }
-          },
-          {
             path: HealthAuthSiteRegRoutes.SITE_INFORMATION,
             component: SiteInformationPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
@@ -115,12 +106,6 @@ const routes: Routes = [
             data: { title: 'Health Authority Care Type' }
           },
           {
-            path: HealthAuthSiteRegRoutes.SITE_ADDRESS,
-            component: SiteAddressPageComponent,
-            canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Site Address' }
-          },
-          {
             path: HealthAuthSiteRegRoutes.HOURS_OPERATION,
             component: HoursOperationPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
@@ -130,13 +115,7 @@ const routes: Routes = [
             path: HealthAuthSiteRegRoutes.ADMINISTRATOR,
             component: AdministratorPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'PharmaNet Administrator' }
-          },
-          {
-            path: HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT,
-            component: TechnicalSupportPageComponent,
-            canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Technical Support' }
+            data: { title: 'PharmaNet Administrator & Technical Support' }
           },
           {
             path: HealthAuthSiteRegRoutes.SITE_OVERVIEW,
@@ -163,4 +142,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class HealthAuthSiteRegRoutingModule {}
+export class HealthAuthSiteRegRoutingModule { }

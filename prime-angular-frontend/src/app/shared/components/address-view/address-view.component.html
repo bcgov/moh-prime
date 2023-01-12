@@ -14,7 +14,7 @@
 
   <ng-container *ngTemplateOutlet="(hasAddress) ? addressIf : addressElse"></ng-container>
 
-  <button *ngIf="showRedirect"
+  <button *ngIf="showEditRedirect"
           mat-flat-button
           color="primary"
           (click)="onRoute(redirectRoutePath)">Edit Address
