@@ -402,7 +402,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             if (doNotEmail != null) {
-                await _businessEventService.CreateEmailEventAsync(doNotEmail.Id, "Do not email enrollee");
+                await _businessEventService.CreateEmailEventAsync((int?)null, "Do not email enrollee");
                 return;
             }
                 
