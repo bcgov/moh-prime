@@ -1,3 +1,4 @@
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import {Component, Input, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
@@ -55,6 +56,12 @@ export class SiteInformationFormComponent implements OnInit {
   protected initForm(): void {
     if (this.organizationId) {
       this.getDoingBusinessAs(this.organizationId);
+    }
+  }
+
+  public onToggleChange($event: MatSlideToggleChange) {
+    if (!$event.checked) {
+      this.form.patchValue({ pec : null });
     }
   }
 
