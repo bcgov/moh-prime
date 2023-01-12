@@ -99,4 +99,13 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
   protected afterSubmitIsSuccessful(): void {
     this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW);
   }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.healthAuthoritySiteFormStateService.patchAdmintratorForm(this.healthAuthoritySiteService.site);
+  }
 }

@@ -26,7 +26,7 @@ export class AddressViewComponent implements OnInit {
   @Input() public showIfEmpty: boolean;
   /**
    * @description
-   * Show the redirect icon.
+   * Show the redirect pencil icon
    */
   @Input() public showRedirect: boolean;
   /**

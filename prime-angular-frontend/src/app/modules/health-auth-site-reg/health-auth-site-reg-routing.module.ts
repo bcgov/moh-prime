@@ -103,7 +103,7 @@ const routes: Routes = [
             path: HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE,
             component: HealthAuthCareTypePageComponent,
             canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Health Authority Care Type & Vendor' }
+            data: { title: 'Health Authority Care Type' }
           },
           {
             path: HealthAuthSiteRegRoutes.HOURS_OPERATION,
