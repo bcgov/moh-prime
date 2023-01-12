@@ -20,6 +20,7 @@ import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/service
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { HealthAuthCareTypeFormState } from './health-auth-care-type-form-state.class';
+import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 
 @Component({
   selector: 'app-health-auth-care-type-page',
@@ -31,6 +32,8 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
   public title: string;
   public routeUtils: RouteUtils;
   public healthAuthorityCareTypes: HealthAuthorityCareType[];
+  public vendors: HealthAuthorityVendor[];
+  public hasNoVendorError: boolean;
   public isCompleted: boolean;
 
   constructor(
@@ -76,6 +79,7 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
 
     const site = this.healthAuthoritySiteService.site;
     this.healthAuthorityCareTypes = this.route.snapshot.data.healthAuthority?.careTypes ?? [];
+    this.vendors = this.route.snapshot.data.healthAuthority?.vendors ?? [];
     this.isCompleted = site?.completed;
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
@@ -110,8 +114,18 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       // Must go up a route-level and down with newly minted site ID
       // to override the replaced route state during submission
-      : ['../', healthAuthSiteId, HealthAuthSiteRegRoutes.VENDOR];
+      : ['../', healthAuthSiteId, HealthAuthSiteRegRoutes.SITE_INFORMATION];
 
     this.routeUtils.routeRelativeTo(nextRoutePath);
+  }
+
+  protected onSubmitFormIsValid(): void {
+    this.hasNoVendorError = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    if (!this.formState.healthAuthorityVendorId.value) {
+      this.hasNoVendorError = true;
+    }
   }
 }

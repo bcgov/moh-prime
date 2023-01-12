@@ -15,13 +15,10 @@ export class HealthAuthSiteRegRoutes {
 
   public static HEALTH_AUTHORITIES = 'health-authorities';
   public static SITES = 'sites';
-  public static VENDOR = 'vendor';
   public static SITE_INFORMATION = 'site-information';
   public static HEALTH_AUTH_CARE_TYPE = 'health-auth-care-type';
-  public static SITE_ADDRESS = 'site-address';
   public static HOURS_OPERATION = 'hours-operation';
   public static ADMINISTRATOR = 'administrator';
-  public static TECHNICAL_SUPPORT = 'technical-support';
   public static SITE_OVERVIEW = 'site-overview';
 
   public static routePath(route: string): string {
@@ -34,13 +31,10 @@ export class HealthAuthSiteRegRoutes {
    */
   public static siteRegistrationRouteOrder(): string[] {
     return [
-      this.VENDOR,
       this.SITE_INFORMATION,
       this.HEALTH_AUTH_CARE_TYPE,
-      this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.ADMINISTRATOR,
-      this.TECHNICAL_SUPPORT,
       this.SITE_OVERVIEW
     ];
   }
@@ -78,7 +72,6 @@ export class HealthAuthSiteRegRoutes {
   public static siteIsApprovedRoutes(): string[] {
     return [
       this.ADMINISTRATOR,
-      this.TECHNICAL_SUPPORT,
       this.SITE_OVERVIEW
     ];
   }
@@ -91,10 +84,8 @@ export class HealthAuthSiteRegRoutes {
     return [
       this.SITE_INFORMATION,
       this.HEALTH_AUTH_CARE_TYPE,
-      this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.ADMINISTRATOR,
-      this.TECHNICAL_SUPPORT,
       this.SITE_OVERVIEW
     ];
   }
