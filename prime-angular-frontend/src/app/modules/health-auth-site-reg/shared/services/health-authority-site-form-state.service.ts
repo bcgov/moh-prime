@@ -136,7 +136,7 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     this.markAsPristine();
   }
 
-  public patchSiteInfomrationForm(healthAuthoritySite: HealthAuthoritySite) {
+  public patchSiteInformationForm(healthAuthoritySite: HealthAuthoritySite) {
     this.siteInformationFormState.patchValue(healthAuthoritySite, healthAuthoritySite.id);
   }
 

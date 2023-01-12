@@ -101,7 +101,7 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
     }
 
     // Replace previous values on deactivation so updates are discarded
-    this.healthAuthoritySiteFormStateService.patchSiteInfomrationForm(this.healthAuthoritySiteService.site);
+    this.healthAuthoritySiteFormStateService.patchSiteInformationForm(this.healthAuthoritySiteService.site);
   }
 
   protected onSubmitFormIsInvalid(): void {
