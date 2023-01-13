@@ -35,6 +35,7 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
   public vendors: HealthAuthorityVendor[];
   public hasNoVendorError: boolean;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -81,6 +82,7 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
     this.healthAuthorityCareTypes = this.route.snapshot.data.healthAuthority?.careTypes ?? [];
     this.vendors = this.route.snapshot.data.healthAuthority?.vendors ?? [];
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
