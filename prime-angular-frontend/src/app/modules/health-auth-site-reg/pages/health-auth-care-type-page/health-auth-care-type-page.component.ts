@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigService } from '@config/config.service';
@@ -61,9 +61,18 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
       : this.routeUtils.routeTo(HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.SITE_MANAGEMENT));
   }
 
+  public hasSelectedCareType(): boolean {
+    return (this.healthAuthoritySiteFormStateService.healthAuthCareTypeFormState.healthAuthorityCareTypeId.value != null);
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
+
+    this.healthAuthoritySiteFormStateService.healthAuthCareTypeFormState.healthAuthorityCareTypeId.valueChanges
+      .subscribe(
+        val => console.log(`healthAuthorityCareTypeId changed ${val}`)
+      );
   }
 
   protected createFormInstance() {

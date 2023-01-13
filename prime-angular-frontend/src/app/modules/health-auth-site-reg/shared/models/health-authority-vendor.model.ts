@@ -1,5 +1,5 @@
 export interface HealthAuthorityVendor {
   id: number;
-  healthAuthorityOrganizationId: number;
+  healthAuthorityCareTypeId: number;
   vendorCode: number;
 }
