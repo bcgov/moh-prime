@@ -1,4 +1,3 @@
-import { CompileTemplateMetadata } from '@angular/compiler';
 import { Component, OnInit, Input, TemplateRef, OnChanges, SimpleChanges } from '@angular/core';
 
 export interface IProgressIndicator {
@@ -145,7 +144,7 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
       let stepComplete = true;
       this.steps = this.steps.map(s => {
         // set isCurrent to true only if in progress.
-        s.isCurrent = s.route === this.currentRoute; //&& this.inProgress;
+        s.isCurrent = s.route === this.currentRoute;
         if (s.isCurrent && this.inProgress) {
           stepComplete = false;
         }

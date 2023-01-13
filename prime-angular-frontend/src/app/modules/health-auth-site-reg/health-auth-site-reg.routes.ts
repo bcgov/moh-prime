@@ -23,7 +23,7 @@ export class HealthAuthSiteRegRoutes {
 
   public static STEP_CARE_TYPE = 'Care Type';
   public static STEP_SITE_INFORMATION = 'Site Details';
-  public static STEP_HOUR_OPERATION = 'Hours';
+  public static STEP_HOURS_OPERATION = 'Hours';
   public static STEP_SUPPORT = 'Support';
   public static STEP_OVERVIEW = 'Review';
   public static STEP_COMPLETE = 'Completed';
@@ -105,7 +105,7 @@ export class HealthAuthSiteRegRoutes {
     return [
       { route: this.HEALTH_AUTH_CARE_TYPE, step: this.STEP_CARE_TYPE },
       { route: this.SITE_INFORMATION, step: this.STEP_SITE_INFORMATION },
-      { route: this.HOURS_OPERATION, step: this.STEP_HOUR_OPERATION },
+      { route: this.HOURS_OPERATION, step: this.STEP_HOURS_OPERATION },
       { route: this.ADMINISTRATOR, step: this.STEP_SUPPORT },
       { route: this.SITE_OVERVIEW, step: this.STEP_OVERVIEW },
       { route: '', step: this.STEP_COMPLETE },
