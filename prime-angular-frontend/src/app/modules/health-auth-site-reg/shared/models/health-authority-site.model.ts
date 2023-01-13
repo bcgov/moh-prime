@@ -90,6 +90,7 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
    */
   public forCreate(authorizedUserId: number): HealthAuthoritySiteCreate {
     const healthAuthorityCareTypeId = this.healthAuthorityCareType?.id;
+    const healthAuthorityVendorId = this.healthAuthorityVendor?.id;
     if (!authorizedUserId) {
       throw Error('Authorized user identifier was not provided');
     }
@@ -99,7 +100,8 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
 
     return {
       authorizedUserId,
-      healthAuthorityCareTypeId
+      healthAuthorityCareTypeId,
+      healthAuthorityVendorId,
     };
   }
 

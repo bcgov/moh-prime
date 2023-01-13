@@ -38,6 +38,10 @@ export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCar
   }
 
   public patchValue(model: HealthAuthCareTypeForm): void {
+    if (!model) {
+      return;
+    }
+
     const healthAuthorityCareTypeId = model.healthAuthorityCareType?.id;
     const healthAuthorityVendorId = model.healthAuthorityVendor?.id;
     if (!this.formInstance || !healthAuthorityCareTypeId) {

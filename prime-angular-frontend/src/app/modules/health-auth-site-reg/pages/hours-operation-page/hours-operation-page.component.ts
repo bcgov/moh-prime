@@ -98,6 +98,8 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
       : group.patchValue(this.businessRegularHours);
 
     this.allowEditingHours(group, !change.checked);
+
+    group.markAsDirty();
   }
 
   public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
@@ -114,6 +116,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
         FormControlValidators.requiredLength(4)
       ]);
     }
+    group.markAsDirty();
   }
 
   public onSite247(change: MatCheckboxChange): void {
@@ -196,5 +199,14 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
       startTime.disable();
       endTime.disable();
     }
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.healthAuthoritySiteFormStateService.patchHoursOperationForm(this.healthAuthoritySiteService.site);
   }
 }

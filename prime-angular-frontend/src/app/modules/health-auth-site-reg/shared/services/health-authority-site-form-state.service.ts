@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -131,6 +131,25 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     this.siteInformationFormState.patchValue(healthAuthoritySite, healthAuthoritySite.id);
     this.healthAuthCareTypeFormState.patchValue(healthAuthoritySite);
     this.hoursOperationFormState.patchValue(healthAuthoritySite);
+    this.administratorFormState.patchValue(healthAuthoritySite);
+
+    this.markAsPristine();
+  }
+
+  public patchSiteInformationForm(healthAuthoritySite: HealthAuthoritySite) {
+    this.siteInformationFormState.patchValue(healthAuthoritySite, healthAuthoritySite.id);
+  }
+
+  public patchHoursOperationForm(healthAuthoritySite: HealthAuthoritySite) {
+    this.hoursOperationFormState.businessDays.controls.forEach((businessDay: FormGroup) => {
+      businessDay.get('startTime').reset();
+      businessDay.get('endTime').reset();
+    });
+    this.hoursOperationFormState.patchValue(healthAuthoritySite);
+  }
+
+  public patchAdmintratorForm(healthAuthoritySite: HealthAuthoritySite) {
+    this.administratorFormState = new AdministratorFormState(this.fb);
     this.administratorFormState.patchValue(healthAuthoritySite);
   }
 
