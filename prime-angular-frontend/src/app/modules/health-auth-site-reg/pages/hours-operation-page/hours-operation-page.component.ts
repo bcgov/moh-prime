@@ -39,6 +39,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public hasNoHours: boolean;
   public hasNoBusinessHoursError: boolean;
   public lessThanErrorStateMatcher: LessThanErrorStateMatcher;
@@ -152,6 +153,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
 
     const site = this.healthAuthoritySiteService.site;
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
 
     // TODO move this into form state, and perform individual, but expose for controller

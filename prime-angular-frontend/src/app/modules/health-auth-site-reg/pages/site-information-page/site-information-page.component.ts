@@ -28,6 +28,7 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
   public securityGroups: Config<number>[];
   public formControlNames: AddressLine[];
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public showAddressFields: boolean;
 
   constructor(
@@ -84,6 +85,7 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
       this.showAddressFields = true;
     }
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
