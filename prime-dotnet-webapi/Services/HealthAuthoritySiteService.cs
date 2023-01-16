@@ -61,6 +61,7 @@ namespace Prime.Services
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
                 HealthAuthorityCareTypeId = createModel.HealthAuthorityCareTypeId,
+                HealthAuthorityVendorId = createModel.healthAuthorityVendorId,
                 AuthorizedUserId = createModel.AuthorizedUserId,
                 CareSettingCode = (int)CareSettingType.HealthAuthority
             };
