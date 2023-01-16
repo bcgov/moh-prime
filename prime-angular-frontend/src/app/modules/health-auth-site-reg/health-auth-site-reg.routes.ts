@@ -15,14 +15,18 @@ export class HealthAuthSiteRegRoutes {
 
   public static HEALTH_AUTHORITIES = 'health-authorities';
   public static SITES = 'sites';
-  public static VENDOR = 'vendor';
   public static SITE_INFORMATION = 'site-information';
   public static HEALTH_AUTH_CARE_TYPE = 'health-auth-care-type';
-  public static SITE_ADDRESS = 'site-address';
   public static HOURS_OPERATION = 'hours-operation';
   public static ADMINISTRATOR = 'administrator';
-  public static TECHNICAL_SUPPORT = 'technical-support';
   public static SITE_OVERVIEW = 'site-overview';
+
+  public static STEP_CARE_TYPE = 'Care Type';
+  public static STEP_SITE_INFORMATION = 'Site Details';
+  public static STEP_HOURS_OPERATION = 'Hours';
+  public static STEP_SUPPORT = 'Support';
+  public static STEP_OVERVIEW = 'Review';
+  public static STEP_COMPLETE = 'Completed';
 
   public static routePath(route: string): string {
     return `/${HealthAuthSiteRegRoutes.MODULE_PATH}/${route}`;
@@ -34,13 +38,10 @@ export class HealthAuthSiteRegRoutes {
    */
   public static siteRegistrationRouteOrder(): string[] {
     return [
-      this.VENDOR,
-      this.SITE_INFORMATION,
       this.HEALTH_AUTH_CARE_TYPE,
-      this.SITE_ADDRESS,
+      this.SITE_INFORMATION,
       this.HOURS_OPERATION,
       this.ADMINISTRATOR,
-      this.TECHNICAL_SUPPORT,
       this.SITE_OVERVIEW
     ];
   }
@@ -78,7 +79,6 @@ export class HealthAuthSiteRegRoutes {
   public static siteIsApprovedRoutes(): string[] {
     return [
       this.ADMINISTRATOR,
-      this.TECHNICAL_SUPPORT,
       this.SITE_OVERVIEW
     ];
   }
@@ -91,11 +91,24 @@ export class HealthAuthSiteRegRoutes {
     return [
       this.SITE_INFORMATION,
       this.HEALTH_AUTH_CARE_TYPE,
-      this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.ADMINISTRATOR,
-      this.TECHNICAL_SUPPORT,
       this.SITE_OVERVIEW
+    ];
+  }
+
+  /**
+   * @description
+   * Mapping between routes and step text
+   */
+  public static siteSteps(): object[] {
+    return [
+      { route: this.HEALTH_AUTH_CARE_TYPE, step: this.STEP_CARE_TYPE },
+      { route: this.SITE_INFORMATION, step: this.STEP_SITE_INFORMATION },
+      { route: this.HOURS_OPERATION, step: this.STEP_HOURS_OPERATION },
+      { route: this.ADMINISTRATOR, step: this.STEP_SUPPORT },
+      { route: this.SITE_OVERVIEW, step: this.STEP_OVERVIEW },
+      { route: '', step: this.STEP_COMPLETE },
     ];
   }
 }

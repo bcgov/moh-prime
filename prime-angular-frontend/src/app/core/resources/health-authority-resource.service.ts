@@ -20,6 +20,7 @@ import { BaseDocument } from '@shared/components/document-upload/document-upload
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 import { ApiResourceUtilsService } from './api-resource-utils.service';
+import { BusinessDay } from '@lib/models/business-day.model';
 
 @Injectable({
   providedIn: 'root'
@@ -76,6 +77,13 @@ export class HealthAuthorityResource {
     return this.apiResource.get<HealthAuthoritySiteAdmin>(`health-authorities/${healthAuthorityId}/sites/${siteId}/admin-view`)
       .pipe(
         map((response: ApiHttpResponse<HealthAuthoritySiteAdmin>) => response.result),
+        // reformat the hours from API
+        map((healthAuthoritySite: HealthAuthoritySiteAdmin) => {
+          healthAuthoritySite.businessHours = healthAuthoritySite.businessHours.map((businessDay: BusinessDay) => {
+            return BusinessDay.asHoursAndMins(businessDay);
+          });
+          return healthAuthoritySite;
+        }),
         tap((healthAuthoritySite: HealthAuthoritySiteAdmin) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be retrieved');

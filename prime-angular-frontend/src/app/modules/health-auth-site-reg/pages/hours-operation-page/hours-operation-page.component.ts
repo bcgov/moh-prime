@@ -39,6 +39,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public hasNoHours: boolean;
   public hasNoBusinessHoursError: boolean;
   public lessThanErrorStateMatcher: LessThanErrorStateMatcher;
@@ -98,6 +99,8 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
       : group.patchValue(this.businessRegularHours);
 
     this.allowEditingHours(group, !change.checked);
+
+    group.markAsDirty();
   }
 
   public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
@@ -114,6 +117,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
         FormControlValidators.requiredLength(4)
       ]);
     }
+    group.markAsDirty();
   }
 
   public onSite247(change: MatCheckboxChange): void {
@@ -125,7 +129,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
   public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.SITE_ADDRESS;
+      : HealthAuthSiteRegRoutes.SITE_INFORMATION;
 
     this.routeUtils.routeRelativeTo(backRoutePath);
   }
@@ -149,6 +153,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
 
     const site = this.healthAuthoritySiteService.site;
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
 
     // TODO move this into form state, and perform individual, but expose for controller
@@ -196,5 +201,14 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
       startTime.disable();
       endTime.disable();
     }
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.healthAuthoritySiteFormStateService.patchHoursOperationForm(this.healthAuthoritySiteService.site);
   }
 }
