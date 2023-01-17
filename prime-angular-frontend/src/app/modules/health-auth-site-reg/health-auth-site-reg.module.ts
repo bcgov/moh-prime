@@ -15,11 +15,8 @@ import { AuthorizedUserDeclinedPageComponent } from './pages/authorized-user-dec
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
 import { HealthAuthCareTypePageComponent } from './pages/health-auth-care-type-page/health-auth-care-type-page.component';
 import { SiteInformationPageComponent } from './pages/site-information-page/site-information-page.component';
-import { VendorPageComponent } from './pages/vendor-page/vendor-page.component';
-import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
 import { AdministratorPageComponent } from './pages/administrator-page/administrator-page.component';
-import { TechnicalSupportPageComponent } from './pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 
 @NgModule({
@@ -32,13 +29,10 @@ import { OverviewPageComponent } from './pages/overview-page/overview-page.compo
     AuthorizedUserApprovedPageComponent,
     AuthorizedUserDeclinedPageComponent,
     SiteManagementPageComponent,
-    VendorPageComponent,
     SiteInformationPageComponent,
     HealthAuthCareTypePageComponent,
-    SiteAddressPageComponent,
     HoursOperationPageComponent,
     AdministratorPageComponent,
-    TechnicalSupportPageComponent,
     OverviewPageComponent
   ],
   imports: [

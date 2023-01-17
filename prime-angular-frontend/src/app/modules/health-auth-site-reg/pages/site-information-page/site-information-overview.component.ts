@@ -19,6 +19,13 @@ import { SiteInformationForm } from './site-information-form.model';
       <app-enrollee-property title="Site ID/PEC Code">
         {{ siteInformation?.pec | default }}
       </app-enrollee-property>
+
+      <app-address-view title="Site Address"
+                      [address]="siteInformation?.physicalAddress"
+                      [showRedirect]="showEditRedirect"
+                      [showIfEmpty]="true"
+                      (route)="onRoute(HealthAuthSiteRegRoutes.SITE_INFORMATION)">
+      </app-address-view>
     </app-overview-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
