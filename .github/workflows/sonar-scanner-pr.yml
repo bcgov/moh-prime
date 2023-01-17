@@ -31,7 +31,6 @@ jobs:
 
       - name: "Sconar Scan"
         run: |
-          cd prime-dotnet-backend
           dotnet tool install --global dotnet-sonarscanner
           dotnet sonarscanner begin /k:"webapi" /d:sonar.host.url="https://sonarqube-9c33a9-tools.apps.silver.devops.gov.bc.ca"  /d:sonar.login="${{secrets.SONAR_PRIME_BACKEND}}"
           dotnet build
@@ -56,6 +55,5 @@ jobs:
 
       - name: "Sonar Scan"
         run: |
-          cd prime-angular-frontend
           npm install -D sonarqube-scanner
           sonar-scanner -Dsonar.projectKey=frontend -Dsonar.sources=. -Dsonar.host.url=https://sonarqube-9c33a9-tools.apps.silver.devops.gov.bc.ca -Dsonar.login="${{secrets.SONAR_PRIME_BACFRONTEND}}"
