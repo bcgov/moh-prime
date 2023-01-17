@@ -16,9 +16,6 @@ on:
 jobs:
   sonar-scan-backend:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: prime-dotnet-backend
     environment: Development
     steps:
       - name: "Checkout the repo"
@@ -31,6 +28,7 @@ jobs:
 
       - name: "Sconar Scan"
         run: |
+          cd prime-dotnet-backend
           dotnet tool install --global dotnet-sonarscanner
           dotnet sonarscanner begin /k:"webapi" /d:sonar.host.url="https://sonarqube-9c33a9-tools.apps.silver.devops.gov.bc.ca"  /d:sonar.login="${{secrets.SONAR_PRIME_BACKEND}}"
           dotnet build
