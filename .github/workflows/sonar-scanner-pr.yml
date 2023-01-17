@@ -1,0 +1,61 @@
+name: Sonar Scan PR
+# Sonar scan PRIME frontend and backend
+on:
+  push:
+    branches-ignore: 
+      - 'develop'
+      - 'test'
+      - 'master'
+  workflow_dispatch:
+  pull_request:
+    branches-ignore:
+      - 'develop'
+      - 'test'
+      - 'master'
+
+jobs:
+  sonar-scan-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: prime-dotnet-backend
+    environment: Development
+    steps:
+      - name: "Checkout the repo"
+        uses: actions/checkout@v3
+      
+      - name: Set up Dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 5.0.x
+
+      - name: "Sconar Scan"
+        run: |
+          cd prime-dotnet-backend
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet sonarscanner begin /k:"webapi" /d:sonar.host.url="https://sonarqube-9c33a9-tools.apps.silver.devops.gov.bc.ca"  /d:sonar.login="${{secrets.SONAR_PRIME_BACKEND}}"
+          dotnet build
+          dotnet sonarscanner end /d:sonar.login="${{secrets.SONAR_PRIME_BACKEND}}"
+
+  sonar-scan-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: prime-angular-frontend
+    environment: Development
+    steps:
+      - name: "Checkout the repo"
+        uses: actions/checkout@v3
+      
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14.x'
+          cache: 'yarn'
+          cache-dependency-path: prime-angular-frontend/yarn.lock
+
+      - name: "Sonar Scan"
+        run: |
+          cd prime-angular-frontend
+          npm install -D sonarqube-scanner
+          sonar-scanner -Dsonar.projectKey=frontend -Dsonar.sources=. -Dsonar.host.url=https://sonarqube-9c33a9-tools.apps.silver.devops.gov.bc.ca -Dsonar.login="${{secrets.SONAR_PRIME_BACFRONTEND}}"
