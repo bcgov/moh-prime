@@ -4,10 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 
 import { BehaviorSubject } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
@@ -27,7 +29,9 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public pharmanetAdministrators: BehaviorSubject<{ id: number, fullName: string }[]>;
+  public technicalSupports: BehaviorSubject<{ id: number, fullName: string }[]>;
 
   constructor(
     protected dialog: MatDialog,
@@ -45,6 +49,7 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
     this.pharmanetAdministrators = new BehaviorSubject<{ id: number, fullName: string }[]>([]);
+    this.technicalSupports = new BehaviorSubject<{ id: number, fullName: string }[]>([]);
   }
 
   public onBack(): void {
@@ -76,12 +81,33 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
       .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
     this.pharmanetAdministrators.next(administrators);
 
+    const technicalSupportContacts = this.healthAuthorityService.healthAuthority.technicalSupports
+      .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
+    this.technicalSupports.next(technicalSupportContacts);
+
     const site = this.healthAuthoritySiteService.site;
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
+  protected submissionRequest(): NoContent {
+    const { haid, sid } = this.route.snapshot.params;
+
+    return super.submissionRequest()
+      .pipe(exhaustMap(() => this.healthAuthoritySiteResource.setHealthAuthoritySiteCompleted(haid, sid)));
+  }
+
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT);
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW);
+  }
+
+  protected handleDeactivation(result: boolean): void {
+    if (!result) {
+      return;
+    }
+
+    // Replace previous values on deactivation so updates are discarded
+    this.healthAuthoritySiteFormStateService.patchAdmintratorForm(this.healthAuthoritySiteService.site);
   }
 }
