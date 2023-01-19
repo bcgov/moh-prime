@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230112232612_DoNotEmailRemoveModifiedDate")]
-    partial class DoNotEmailRemoveModifiedDate
+    [Migration("20230119155438_AddDoNotEmail")]
+    partial class AddDoNotEmail
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
