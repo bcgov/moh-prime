@@ -31,7 +31,8 @@ export class AdministratorFormState extends AbstractFormState<AdministratorForm>
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      healthAuthorityPharmanetAdministratorId: [null, [Validators.required]]
+      healthAuthorityPharmanetAdministratorId: [null, [Validators.required]],
+      healthAuthorityTechnicalSupportId: [null, [Validators.required]]
     });
   }
 }
