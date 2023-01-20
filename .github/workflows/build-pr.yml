@@ -47,7 +47,7 @@ jobs:
           filterOutClosed: true
 
       - name: "Build, tag and push Document Manager image"
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         id: build-image
         with: 
           context:  document-manager/backend
@@ -98,7 +98,7 @@ jobs:
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
       - name: "Get current pull request"
-        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        uses: 8BitJonny/gh-get-current-pr@2.2.0
         id: PR
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -106,7 +106,7 @@ jobs:
 
       - name: "Build, tag and push .NET web API image"
         id: build-image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: prime-dotnet-webapi
           push: true
@@ -167,7 +167,7 @@ jobs:
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
 
       - name: "Get current pull request"
-        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        uses: 8BitJonny/gh-get-current-pr@2.2.0
         id: PR
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -194,7 +194,7 @@ jobs:
 
       - name: "Build, tag & push Angular frontend image"
         id: build-image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: prime-angular-frontend
           push: true
@@ -229,7 +229,7 @@ jobs:
           namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}}
 
       - name: "Get current pull request"
-        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        uses: 8BitJonny/gh-get-current-pr@2.2.0
         id: PR
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
