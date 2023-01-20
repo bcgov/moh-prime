@@ -1,0 +1,37 @@
+name: ZAP Scan PR
+# Sonar scan PRIME frontend and backend
+on:
+  push:
+    branches-ignore: 
+      - 'develop'
+      - 'test'
+      - 'master'
+  workflow_dispatch:
+  pull_request:
+    branches-ignore:
+      - 'develop'
+      - 'test'
+      - 'master'
+
+jobs:
+  zap-scan-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: prime-angular-frontend
+    environment: Development
+    steps:
+      - name: "Checkout the repo"
+        uses: actions/checkout@v3
+      
+      - name: "Get current pull request"
+        id: PR
+        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          filterOutClosed: true
+      
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.4.0
+        with:
+          target: 'https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca'
