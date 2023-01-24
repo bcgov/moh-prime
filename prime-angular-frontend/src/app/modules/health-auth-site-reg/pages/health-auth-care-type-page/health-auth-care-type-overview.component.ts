@@ -16,6 +16,9 @@ import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
       <app-enrollee-property title="Health Authority Care Type">
         {{ healthAuthCareType?.healthAuthorityCareType?.careType | default }}
       </app-enrollee-property>
+      <app-enrollee-property title="Vendor">
+        {{ healthAuthCareType?.healthAuthorityVendor.vendorCode | configCode: 'vendors' | default }}
+      </app-enrollee-property>
     </app-overview-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
