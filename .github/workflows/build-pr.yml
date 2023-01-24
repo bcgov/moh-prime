@@ -36,7 +36,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
-          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME_NEW}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD_NEW}}
 
       - name: "Get current pull request"
@@ -87,7 +87,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
-          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME_NEW}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD_NEW}}
 
       - name: "Login to RedHat container repository"
@@ -163,7 +163,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
-          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME_NEW}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD_NEW}}
 
       - name: "Get current pull request"
