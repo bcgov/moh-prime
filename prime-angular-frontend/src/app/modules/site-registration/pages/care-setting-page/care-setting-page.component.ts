@@ -34,12 +34,14 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public organization: string;
   public careSettingConfig: Config<number>[];
   public vendorConfig: VendorConfig[];
   public filteredVendorConfig: VendorConfig[];
   public hasNoVendorError: boolean;
   public SiteRoutes = SiteRoutes;
+  public siteSteps: object[];
 
   constructor(
     protected dialog: MatDialog,
@@ -93,6 +95,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
   }
@@ -104,6 +107,19 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
         startWith([null]),
         pairwise(),
         exhaustMap(([prevCareSettingCode, nextCareSettingCode]: [number, number]) => {
+
+          switch (nextCareSettingCode) {
+            case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
+              this.siteSteps = SiteRoutes.pchpSiteSteps();
+              break;
+            case CareSettingEnum.COMMUNITY_PHARMACIST:
+              this.siteSteps = SiteRoutes.pharmacySiteSteps();
+              break;
+            case CareSettingEnum.DEVICE_PROVIDER:
+              this.siteSteps = SiteRoutes.deviceProviderSiteSteps();
+              break;
+          }
+
           const deferredLicenceReason = this.siteFormStateService.businessLicenceFormState.deferredLicenceReason;
 
           const allowableDeferedCareSettings = [CareSettingEnum.COMMUNITY_PHARMACIST, CareSettingEnum.DEVICE_PROVIDER];

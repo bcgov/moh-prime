@@ -125,7 +125,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
     // User could already be a party which should be patched into
     // the form if they haven't created/claimed an organization
-    if(!this.organization && this.signingAuthorityService.signingAuthority) {
+    if (!this.organization && this.signingAuthorityService.signingAuthority) {
       this.formState.patchValue(this.signingAuthorityService.signingAuthority);
     } else {
       // Attempt to patch the form if not already patched
@@ -201,5 +201,9 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
   private setAddressValidator(addressLine: FormGroup): void {
     this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.hasPhysicalAddress = true;
   }
 }

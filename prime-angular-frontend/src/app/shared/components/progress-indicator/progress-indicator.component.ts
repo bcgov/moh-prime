@@ -8,7 +8,7 @@ export interface IProgressIndicator {
 
 export interface ProgressStep {
   step: string;
-  route: string;
+  routes: string[];
   isCurrent: boolean;
   completed: boolean;
 }
@@ -144,7 +144,7 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
       let stepComplete = true;
       this.steps = this.steps.map(s => {
         // set isCurrent to true only if in progress.
-        s.isCurrent = s.route === this.currentRoute;
+        s.isCurrent = s.routes.some(r => r === this.currentRoute);
         if (s.isCurrent && this.inProgress) {
           stepComplete = false;
         }
