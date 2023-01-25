@@ -269,8 +269,7 @@ namespace Prime.Services
                     || orgValues.Contains(siteValue.Value);
             }
 
-            return ValidateIfSpecified(org.VendorIds, site.HealthAuthorityVendorId)
-                && ValidateIfSpecified(org.CareTypeIds, site.HealthAuthorityCareTypeId)
+            return ValidateIfSpecified(org.CareTypeIds, site.HealthAuthorityCareTypeId)
                 && ValidateIfSpecified(org.PharmanetAdministratorIds, site.HealthAuthorityPharmanetAdministratorId)
                 && ValidateIfSpecified(org.TechnicalSupportIds, site.HealthAuthorityTechnicalSupportId);
         }
@@ -327,6 +326,16 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return doc;
+        }
+
+        public async Task<IEnumerable<int>> GetVendorsByCareTypeAsync(int healthAuthorityId, int healthAuthorityCareTypeId)
+        {
+            return await _context.HealthAuthorityVendors
+                .AsNoTracking()
+                .Where(hav => hav.HealthAuthorityCareType.HealthAuthorityOrganizationId == healthAuthorityId)
+                .Where(hav => hav.HealthAuthorityCareTypeId == healthAuthorityCareTypeId)
+                .Select(hav => hav.VendorCode)
+                .ToListAsync();
         }
 
         private static ICollection<HealthAuthorityTechnicalSupportVendor> MapToVendorsSupported(HealthAuthorityTechnicalSupport healthAuthorityTechnicalSupport, TechnicalSupportContactViewModel contact, DbSet<HealthAuthorityVendor> healthAuthorityVendors)

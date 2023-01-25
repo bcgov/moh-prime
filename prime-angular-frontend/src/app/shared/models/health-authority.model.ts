@@ -11,6 +11,7 @@ export interface HealthAuthority {
   id?: number;
   name: string;
   careTypes: HealthAuthorityCareType[];
+  // TODO: This should be removed as it will always be `undefined` but it will break compilation of several pages under `src/app/modules/adjudication/pages/health-authorities`
   vendors: HealthAuthorityVendor[];
   privacyOffice: PrivacyOffice;
   technicalSupports: HealthAuthorityTechnicalSupport[];

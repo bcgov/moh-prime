@@ -27,5 +27,6 @@ namespace Prime.Services
         Task<IEnumerable<int>> GetSitesByVendorAsync(int healthAuthorityId, int healthAuthorityVendorId);
         Task<IEnumerable<int>> GetSitesByCareTypeAsync(int healthAuthorityId, int healthAuthorityCareTypeId);
         Task<HealthAuthorityOrganizationAgreementDocument> AddOrReplaceBusinessLicenceDocumentAsync(int healthAuthorityId, Guid documentGuid);
+        Task<IEnumerable<int>> GetVendorsByCareTypeAsync(int healthAuthorityId, int healthAuthorityCareTypeId);
     }
 }
