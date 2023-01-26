@@ -4,6 +4,7 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
+import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 
 export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCareTypeForm> {
   public constructor(
@@ -31,9 +32,12 @@ export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCar
     const { healthAuthorityCareTypeId, healthAuthorityVendorId } = this.formInstance.getRawValue();
     const healthAuthorityCareType = this.healthAuthorityService.healthAuthority.careTypes
       .find(hact => hact.id === healthAuthorityCareTypeId);
-    const healthAuthorityVendor = this.healthAuthorityService.healthAuthority.vendors
-      .find(hav => hav.id === healthAuthorityVendorId);
-
+    const healthAuthorityVendor: HealthAuthorityVendor = {
+      healthAuthorityCareTypeId: healthAuthorityCareTypeId,
+      id: healthAuthorityVendorId,
+      // Not available at this point and not required downstream
+      vendorCode: null
+    };
     return { healthAuthorityCareType, healthAuthorityVendor };
   }
 

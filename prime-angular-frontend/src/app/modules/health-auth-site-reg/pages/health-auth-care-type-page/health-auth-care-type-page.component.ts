@@ -67,12 +67,22 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm();
 
-    this.healthAuthoritySiteFormStateService.healthAuthCareTypeFormState.healthAuthorityCareTypeId.valueChanges
-      .subscribe(
-        val => console.log(`healthAuthorityCareTypeId changed ${val}`)
-      );
+    // Add handler then ...
+    this.formState.healthAuthorityCareTypeId.valueChanges
+      .pipe(
+        map((selectedCareType: number) =>
+          this.healthAuthorityCareTypes.find((haCareType: HealthAuthorityCareType) => haCareType.id == selectedCareType).vendors
+        )
+      )
+      .subscribe((filteredVendors: HealthAuthorityVendor[]) => {
+        this.vendors = filteredVendors;
+        // Clear any vendor selection since changed care type
+        this.formState.healthAuthorityVendorId.patchValue(null);
+      });
+
+    // ... patch form (invoking handler)
+    this.patchForm();
   }
 
   protected createFormInstance() {
@@ -88,7 +98,6 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
 
     const site = this.healthAuthoritySiteService.site;
     this.healthAuthorityCareTypes = this.route.snapshot.data.healthAuthority?.careTypes ?? [];
-    this.vendors = this.route.snapshot.data.healthAuthority?.vendors ?? [];
     this.isCompleted = site?.completed;
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }

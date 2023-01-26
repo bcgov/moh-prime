@@ -199,6 +199,7 @@ namespace Prime.Services
             await UpdateContactsAsync<HealthAuthorityPrivacyOfficer>(healthAuthorityId, new ContactViewModel[] { privacyOffice.PrivacyOfficer });
         }
 
+        // TODO: This is very different after Vendors are associated with Care Type, not directly to Health Authority
         public async Task<bool> UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)
         {
             var existingVendors = await _context.HealthAuthorityVendors
