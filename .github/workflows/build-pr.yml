@@ -53,10 +53,10 @@ jobs:
           context:  document-manager/backend
           push: true
           file: document-manager/backend/openshift.dockerfile
-          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
+          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-3
           build-args: |
             BUILD_LOGLEVEL=2
-            SVC_NAME=pr-${{steps.PR.outputs.number}}
+            SVC_NAME=pr-3
           cache-from: type=local,src=/tmp/.docman-cache
           cache-to: type=local,dest=/tmp/.docman-cache-new,mode=max
 
@@ -111,19 +111,19 @@ jobs:
           context: prime-dotnet-webapi
           push: true
           file: prime-dotnet-webapi/openshift.dockerfile
-          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
+          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-3
           build-args:
             ASPNETCORE_ENVIRONMENT="Development"
             ASPNETCORE_HTTPS_PORT=5001
             ASPNETCORE_URLS="http://+:8080"
-            DB_CONNECTION_STRING="host=pr-${{steps.PR.outputs.number}}-postgres-db;port=5432;database=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}};username=${{secrets.PRIME_DB_USER}};password=${{secrets.PRIME_DB_PASSWORD}}"
-            DB_HOST=pr-${{steps.PR.outputs.number}}-postgres-db
+            DB_CONNECTION_STRING="host=pr-3-postgres-db;port=5432;database=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}};username=${{secrets.PRIME_DB_USER}};password=${{secrets.PRIME_DB_PASSWORD}}"
+            DB_HOST=pr-3-postgres-db
             DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME"
             PGPASSWORD=${{secrets.PRIME_DB_PASSWORD}}
             POSTGRESQL_ADMIN_PASSWORD=${{secrets.PRIME_DB_PASSWORD}}
             POSTGRESQL_DATABASE=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}}
             POSTGRESQL_USERNAME=${{secrets.PRIME_DB_USER}}
-            SVC_NAME="pr-${{steps.PR.outputs.number}}"
+            SVC_NAME="pr-3"
           cache-from: type=local,src=/tmp/.backend-cache
           cache-to: type=local,dest=/tmp/.backend-cache-new,mode=max
 
@@ -199,7 +199,7 @@ jobs:
           context: prime-angular-frontend
           push: true
           file: prime-angular-frontend/ci.dockerfile
-          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
+          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-3
           cache-from: type=local,src=/tmp/.frontend-cache
           cache-to: type=local,dest=/tmp/.frontend-cache-new,mode=max
 
