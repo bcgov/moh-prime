@@ -61,7 +61,7 @@ jobs:
       #     cache-to: type=local,dest=/tmp/.docman-cache-new,mode=max
 
       - name: "Exp. docker build"
-        run: docker build . --file document-manager/backend/openshift.dockerfile --tag prime-document-manager --build-arg BUILD_LOGLEVEL=2 --build-arg SVC_NAME=pr-3"
+        run: docker build . --file document-manager/backend/openshift.dockerfile --tag prime-document-manager --build-arg BUILD_LOGLEVEL=2 --build-arg SVC_NAME=pr-3
 
       - name: "Exp. docker tag and push"
         run: |
