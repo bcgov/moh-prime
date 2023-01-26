@@ -111,7 +111,7 @@ jobs:
           context: prime-dotnet-webapi
           push: true
           file: prime-dotnet-webapi/openshift.dockerfile
-          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-3
+          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-3,image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:latest
           build-args:
             ASPNETCORE_ENVIRONMENT="Development"
             ASPNETCORE_HTTPS_PORT=5001
