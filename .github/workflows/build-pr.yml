@@ -46,19 +46,27 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
 
-      - name: "Build, tag and push Document Manager image"
-        uses: docker/build-push-action@v3
-        id: build-image
-        with: 
-          context:  document-manager/backend
-          push: true
-          file: document-manager/backend/openshift.dockerfile
-          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:latest
-          build-args: |
-            BUILD_LOGLEVEL=2
-            SVC_NAME=pr-3
-          cache-from: type=local,src=/tmp/.docman-cache
-          cache-to: type=local,dest=/tmp/.docman-cache-new,mode=max
+      # - name: "Build, tag and push Document Manager image"
+      #   uses: docker/build-push-action@v3
+      #   id: build-image
+      #   with: 
+      #     context:  document-manager/backend
+      #     push: true
+      #     file: document-manager/backend/openshift.dockerfile
+      #     tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:latest
+      #     build-args: |
+      #       BUILD_LOGLEVEL=2
+      #       SVC_NAME=pr-3
+      #     cache-from: type=local,src=/tmp/.docman-cache
+      #     cache-to: type=local,dest=/tmp/.docman-cache-new,mode=max
+
+      - name: "Exp. docker build"
+        run: docker build . --file document-manager/backend/openshift.dockerfile --tag prime-document-manager --build-arg BUILD_LOGLEVEL=2 --build-arg SVC_NAME=pr-3"
+
+      - name: "Exp. docker tag and push"
+        run: |
+          docker tag prime-document-manager image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:latest
+          docker push image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:latest
 
       - name: Move cache
         run: |
