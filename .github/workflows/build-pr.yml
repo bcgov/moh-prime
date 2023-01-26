@@ -53,7 +53,7 @@ jobs:
           context:  document-manager/backend
           push: true
           file: document-manager/backend/openshift.dockerfile
-          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr3
+          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:latest
           build-args: |
             BUILD_LOGLEVEL=2
             SVC_NAME=pr-3
@@ -111,7 +111,7 @@ jobs:
           context: prime-dotnet-webapi
           push: true
           file: prime-dotnet-webapi/openshift.dockerfile
-          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr3
+          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:latest
           build-args:
             ASPNETCORE_ENVIRONMENT="Development"
             ASPNETCORE_HTTPS_PORT=5001
@@ -199,7 +199,7 @@ jobs:
           context: prime-angular-frontend
           push: true
           file: prime-angular-frontend/ci.dockerfile
-          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr3
+          tags: image-registry.apps.silver.devops.gov.bc.ca/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:latest
           cache-from: type=local,src=/tmp/.frontend-cache
           cache-to: type=local,dest=/tmp/.frontend-cache-new,mode=max
 
