@@ -29,6 +29,7 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public pharmanetAdministrators: BehaviorSubject<{ id: number, fullName: string }[]>;
   public technicalSupports: BehaviorSubject<{ id: number, fullName: string }[]>;
 
@@ -86,6 +87,7 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
 
     const site = this.healthAuthoritySiteService.site;
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
   }
 
