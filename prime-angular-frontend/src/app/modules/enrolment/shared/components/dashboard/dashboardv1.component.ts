@@ -148,7 +148,7 @@ export class DashboardV1Component implements OnInit {
     const hasAcceptedAtLeastOneToa = (enrolment)
       ? !!enrolment.expiryDate
       : false;
-    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa, enrolment.currentTOAStatus);
+    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa, enrolment?.currentTOAStatus);
     const currentRoute = this.router.url.slice(1).split('/')[1];
 
     const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatusEnum.UNDER_REVIEW)
@@ -202,7 +202,7 @@ export class DashboardV1Component implements OnInit {
                 EnrolmentStatusEnum.LOCKED,
                 EnrolmentStatusEnum.DECLINED
               ].includes(enrolmentStatus)
-            ) || enrolment.currentTOAStatus === ""
+            ) || enrolment?.currentTOAStatus === ""
           },
           {
             name: 'Absence Management',
