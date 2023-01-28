@@ -107,7 +107,7 @@ export const defaultCommunitySiteWorkflow = [
                 component: BusinessLicencePageComponent,
                 canActivate: [SiteGuard],
                 canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Site Business Licence' }
+                data: { title: 'Site Details' }
               },
               {
                 path: SiteRoutes.BUSINESS_LICENCE_RENEWAL,
