@@ -80,7 +80,8 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   public canDefer(): boolean {
     return [
       CareSettingEnum.COMMUNITY_PHARMACIST,
-      CareSettingEnum.DEVICE_PROVIDER
+      CareSettingEnum.DEVICE_PROVIDER,
+      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
     ].includes(this.siteService.site.careSettingCode);
   }
 
