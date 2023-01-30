@@ -394,7 +394,7 @@ namespace Prime.Services
         private async Task Send(Email email)
         {
             var doNotEmail = await _context.DoNotEmail
-                .Where(e => e.Email.Equals(string.Join(",", email.To)))
+                .Where(e => String.Equals(e.Email, String.Join(",", email.To), StringComparison.OrdinalIgnoreCase))
                 .Select(e => new {
                     e.Email,
                     e.Id
