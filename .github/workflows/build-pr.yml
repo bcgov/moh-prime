@@ -2,7 +2,7 @@ name: Build PR
 # Build all of the necessary components for the PRIME application from PullRequest branch. Images are then deployed to Dev environment via the prime-app-ephemeral-template.yml in the infrastructure folder
 on:
   push:
-    branches-ignore: 
+    branches-ignore:
       - 'develop'
       - 'test'
       - 'master'
@@ -19,13 +19,13 @@ jobs:
     environment: Development
     steps:
       - name: "Checkout the repo"
-        uses: actions/checkout@v2
-      
+        uses: actions/checkout@v3
+
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.docman-cache
           key: prime-docman-${{ github.sha }}
@@ -33,7 +33,7 @@ jobs:
             prime-docman-
 
       - name: "Login to OpenShift repository"
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
@@ -41,42 +41,36 @@ jobs:
 
       - name: "Get current pull request"
         id: PR
-        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        uses: 8BitJonny/gh-get-current-pr@2.2.0
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
 
-      - name: "Build, tag and push Document Manager image"
-        uses: docker/build-push-action@v2
-        id: build-image
-        with: 
-          context:  document-manager/backend
-          push: true
-          file: document-manager/backend/openshift.dockerfile
-          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
-          build-args: |
-            BUILD_LOGLEVEL=2
-            SVC_NAME=pr-${{steps.PR.outputs.number}}
-          cache-from: type=local,src=/tmp/.docman-cache
-          cache-to: type=local,dest=/tmp/.docman-cache-new,mode=max
-
-      - name: Move cache
+      - name: "Build Document Manager image"
         run: |
-          rm -rf /tmp/.docman-cache
-          mv /tmp/.docman-cache-new /tmp/.docman-cache
+          docker build document-manager/backend/ \
+          --file document-manager/backend/openshift.dockerfile \
+          --tag prime-document-manager \
+          --build-arg BUILD_LOGLEVEL=2 \
+          --build-arg SVC_NAME=pr-${{steps.PR.outputs.number}}
+
+      - name: "Docker tag and push Document Manager image"
+        run: |
+          docker tag prime-document-manager ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
+          docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
 
   build-backend:
     runs-on: ubuntu-20.04
     environment: Development
     steps:
       - name: "Checkout the repo"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.backend-cache
           key: prime-backend-${{ github.sha }}
@@ -84,53 +78,47 @@ jobs:
             prime-backend-
 
       - name: "Login to OpenShift repository"
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
 
       - name: "Login to RedHat container repository"
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ${{secrets.REDHAT_REGISTRY_URL}}
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
       - name: "Get current pull request"
-        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        uses: 8BitJonny/gh-get-current-pr@2.2.0
         id: PR
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
 
-      - name: "Build, tag and push .NET web API image"
-        id: build-image
-        uses: docker/build-push-action@v2
-        with:
-          context: prime-dotnet-webapi
-          push: true
-          file: prime-dotnet-webapi/openshift.dockerfile
-          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
-          build-args:
-            ASPNETCORE_ENVIRONMENT="Development"
-            ASPNETCORE_HTTPS_PORT=5001
-            ASPNETCORE_URLS="http://+:8080"
-            DB_CONNECTION_STRING="host=pr-${{steps.PR.outputs.number}}-postgres-db;port=5432;database=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}};username=${{secrets.PRIME_DB_USER}};password=${{secrets.PRIME_DB_PASSWORD}}"
-            DB_HOST=pr-${{steps.PR.outputs.number}}-postgres-db
-            DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME"
-            PGPASSWORD=${{secrets.PRIME_DB_PASSWORD}}
-            POSTGRESQL_ADMIN_PASSWORD=${{secrets.PRIME_DB_PASSWORD}}
-            POSTGRESQL_DATABASE=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}}
-            POSTGRESQL_USERNAME=${{secrets.PRIME_DB_USER}}
-            SVC_NAME="pr-${{steps.PR.outputs.number}}"
-          cache-from: type=local,src=/tmp/.backend-cache
-          cache-to: type=local,dest=/tmp/.backend-cache-new,mode=max
-
-      - name: Move cache
+      - name: "Build .NET web API image"
         run: |
-          rm -rf /tmp/.backend-cache
-          mv /tmp/.backend-cache-new /tmp/.backend-cache
+          docker build prime-dotnet-webapi/ \
+          --file prime-dotnet-webapi/openshift.dockerfile \
+          --tag prime-webapi-backend \
+          --build-arg BASPNETCORE_ENVIRONMENT="Development" \
+          --build-arg ASPNETCORE_HTTPS_PORT=5001 \
+          --build-arg ASPNETCORE_URLS="http://+:8080" \
+          --build-arg DB_CONNECTION_STRING="host=pr-${{steps.PR.outputs.number}}-postgres-db;port=5432;database=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}};username=${{secrets.PRIME_DB_USER}};password=${{secrets.PRIME_DB_PASSWORD}}" \
+          --build-arg DB_HOST=pr-${{steps.PR.outputs.number}}-postgres-db \
+          --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
+          --build-arg PGPASSWORD=${{secrets.PRIME_DB_PASSWORD}} \
+          --build-arg POSTGRESQL_ADMIN_PASSWORD=${{secrets.PRIME_DB_PASSWORD}} \
+          --build-arg POSTGRESQL_DATABASE=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}} \
+          --build-arg POSTGRESQL_USERNAME=${{secrets.PRIME_DB_USER}} \
+          --build-arg SVC_NAME="pr-${{steps.PR.outputs.number}}"
+
+      - name: "Docker tag and push .NET web API image"
+        run: |
+          docker tag prime-webapi-backend ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
+          docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
 
   build-frontend:
     runs-on: ubuntu-latest
@@ -140,7 +128,7 @@ jobs:
         working-directory: prime-angular-frontend
     steps:
       - name: "Checkout the repo"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - uses: actions/setup-node@v2
         with:
@@ -149,10 +137,10 @@ jobs:
           cache-dependency-path: prime-angular-frontend/yarn.lock
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: /tmp/.frontend-cache
           key: prime-frontend-${{ github.sha }}
@@ -160,21 +148,21 @@ jobs:
             prime-frontend-
 
       - name: "Login to OpenShift repository"
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
 
       - name: "Get current pull request"
-        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        uses: 8BitJonny/gh-get-current-pr@2.2.0
         id: PR
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
 
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: 'prime-angular-frontend/node_modules'
           key: npm-frontend-${{ hashFiles('yarn.lock') }}
@@ -192,21 +180,16 @@ jobs:
       - name: build frontend
         run: yarn run build
 
-      - name: "Build, tag & push Angular frontend image"
-        id: build-image
-        uses: docker/build-push-action@v2
-        with:
-          context: prime-angular-frontend
-          push: true
-          file: prime-angular-frontend/ci.dockerfile
-          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
-          cache-from: type=local,src=/tmp/.frontend-cache
-          cache-to: type=local,dest=/tmp/.frontend-cache-new,mode=max
-
-      - name: Move cache
+      - name: "Build Angular frontend image"
         run: |
-          rm -rf /tmp/.frontend-cache
-          mv /tmp/.frontend-cache-new /tmp/.frontend-cache
+          docker build . \
+          --file ci.dockerfile \
+          --tag prime-angular-frontend
+
+      - name: "Docker tag and push Angular frontend image"
+        run: |
+          docker tag prime-angular-frontend ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
+          docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
 
   apply-oc-template:
     runs-on: ubuntu-20.04
@@ -214,7 +197,7 @@ jobs:
     needs: [build-document-manager-backend,build-frontend,build-backend]
     steps:
       - name: "Use the OpenShift template"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install OC
         uses: redhat-actions/openshift-tools-installer@v1
@@ -229,7 +212,7 @@ jobs:
           namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}}
 
       - name: "Get current pull request"
-        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        uses: 8BitJonny/gh-get-current-pr@2.2.0
         id: PR
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
