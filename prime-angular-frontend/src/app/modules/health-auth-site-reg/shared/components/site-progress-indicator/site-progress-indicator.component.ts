@@ -16,6 +16,8 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   @Input() public message: string;
   @Input() public template: TemplateRef<any>;
   @Input() public noContent: boolean;
+  @Input() public steps: object[];
+
 
   public currentRoute: string;
   public routes: string[];
@@ -29,6 +31,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
     this.currentRoute = RouteUtils.currentRoutePath(this.router.url);
     this.routes = HealthAuthSiteRegRoutes.siteRegistrationRouteOrder();
     this.prefix = 'Registration';
+    this.steps = HealthAuthSiteRegRoutes.siteSteps();
   }
 
   public ngOnInit() { }
