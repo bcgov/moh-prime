@@ -1,3 +1,5 @@
+import { IStep } from '@shared/components/progress-indicator/progress-indicator.component';
+
 export class SiteRoutes {
   public static LOGIN_PAGE = 'site';
 
@@ -128,7 +130,7 @@ export class SiteRoutes {
     ];
   }
 
-  public static pharmacySiteSteps(): object[] {
+  public static pharmacySiteSteps(): IStep[] {
     return [
       { routes: [this.CARE_SETTING], step: this.STEP_CARE_TYPE },
       { routes: [this.BUSINESS_LICENCE], step: this.STEP_SITE_INFORMATION },
@@ -140,7 +142,7 @@ export class SiteRoutes {
     ];
   }
 
-  public static pchpSiteSteps(): object[] {
+  public static pchpSiteSteps(): IStep[] {
     return [
       { routes: [this.CARE_SETTING], step: this.STEP_CARE_TYPE },
       { routes: [this.BUSINESS_LICENCE], step: this.STEP_SITE_INFORMATION },
@@ -153,7 +155,7 @@ export class SiteRoutes {
     ];
   }
 
-  public static deviceProviderSiteSteps(): object[] {
+  public static deviceProviderSiteSteps(): IStep[] {
     return [
       { routes: [this.CARE_SETTING], step: this.STEP_CARE_TYPE },
       { routes: [this.BUSINESS_LICENCE], step: this.STEP_SITE_INFORMATION },

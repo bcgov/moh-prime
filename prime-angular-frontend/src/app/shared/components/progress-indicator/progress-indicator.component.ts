@@ -6,9 +6,12 @@ export interface IProgressIndicator {
   routes: string[];
 }
 
-export interface ProgressStep {
+export interface IStep {
   step: string;
   routes: string[];
+}
+
+export interface IProgressStep extends IStep {
   isCurrent: boolean;
   completed: boolean;
 }
@@ -65,7 +68,7 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
    * @description
    * To use Step style progress bar
    */
-  @Input() public steps: ProgressStep[];
+  @Input() public steps: IProgressStep[];
   /**
   * @description
   * Acts as an override to display nothing under the progress

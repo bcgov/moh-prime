@@ -1,3 +1,5 @@
+import { IStep } from '@shared/components/progress-indicator/progress-indicator.component';
+
 export class HealthAuthSiteRegRoutes {
   public static LOGIN_PAGE = 'health-authority';
 
@@ -101,7 +103,7 @@ export class HealthAuthSiteRegRoutes {
    * @description
    * Mapping between routes and step text
    */
-  public static siteSteps(): object[] {
+  public static siteSteps(): IStep[] {
     return [
       { routes: [this.HEALTH_AUTH_CARE_TYPE], step: this.STEP_CARE_TYPE },
       { routes: [this.SITE_INFORMATION], step: this.STEP_SITE_INFORMATION },
