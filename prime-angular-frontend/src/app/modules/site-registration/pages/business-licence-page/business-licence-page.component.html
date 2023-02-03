@@ -70,7 +70,7 @@
             <ng-container appPageSubheader2Title>Missing Business Licence</ng-container>
             <ng-container appPageSubheader2Summary>
               If your business does not yet have a business license, or if you are located in a municipality or region
-              that does not issue business licenses, , please describe below why your business does
+              that does not issue business licenses, please describe below why your business does
               not have a license. PRIME Support staff will contact you and assist you with determining the correct
               documents to upload. You may continue with your enrolment for now.
             </ng-container>
@@ -92,7 +92,8 @@
     </app-page-section>
 
     <app-page-section *ngIf="!deferredLicenceToggle?.checked">
-      <app-business-licence-expiry [form]="formState.form"></app-business-licence-expiry>
+      <app-business-licence-expiry [form]="formState.form"
+                                   [showExpiryDate]="showExpiryDate"></app-business-licence-expiry>
     </app-page-section>
 
     <app-site-information-form [form]="formState.form"
