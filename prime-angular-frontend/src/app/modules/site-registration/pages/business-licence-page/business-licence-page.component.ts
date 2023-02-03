@@ -132,7 +132,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     this.isSubmitted = site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
-    if (site.doingBusinessAs && !site.businessLicence.expiryDate) {
+    if (site.doingBusinessAs && site.businessLicence && site.businessLicence.expiryDate === null) {
       this.showExpiryDate = false;
     } else {
       this.showExpiryDate = true;
