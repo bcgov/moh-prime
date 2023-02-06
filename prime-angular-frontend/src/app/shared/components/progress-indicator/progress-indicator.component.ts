@@ -5,12 +5,16 @@ export interface IProgressIndicator {
   currentRoute: string;
   routes: string[];
 }
-
+/**
+ * Used to store the mapping between the display step and the route
+ */
 export interface IStep {
   step: string;
   routes: string[];
 }
-
+/**
+ * Used to store the status of each step
+ */
 export interface IProgressStep extends IStep {
   isCurrent: boolean;
   completed: boolean;
