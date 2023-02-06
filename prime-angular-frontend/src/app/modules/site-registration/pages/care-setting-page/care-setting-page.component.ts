@@ -22,6 +22,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { CareSettingPageFormState } from './care-setting-page-form-state.class';
 import { NoContent } from '@core/resources/abstract-resource';
+import { IStep } from '@shared/components/progress-indicator/progress-indicator.component';
 
 @UntilDestroy()
 @Component({
@@ -41,7 +42,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
   public filteredVendorConfig: VendorConfig[];
   public hasNoVendorError: boolean;
   public SiteRoutes = SiteRoutes;
-  public siteSteps: object[];
+  public siteSteps: IStep[];
 
   constructor(
     protected dialog: MatDialog,
