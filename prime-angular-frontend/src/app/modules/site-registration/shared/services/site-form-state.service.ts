@@ -10,7 +10,6 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
-import { SiteAddressPageFormState } from '@registration/pages/site-address-page/site-address-page-form-state.class';
 import { HoursOperationPageFormState } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
 import { AdministratorPageFormState } from '@registration/pages/administrator-page/administrator-page-form-state.class';
 import { PrivacyOfficerPageFormState } from '@registration/pages/privacy-officer-page/privacy-officer-page-form-state.class';
@@ -27,7 +26,6 @@ import { DeviceProviderPageFormState } from '@registration/pages/device-provider
 export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingPageFormState: CareSettingPageFormState;
   public businessLicenceFormState: BusinessLicenceFormState;
-  public siteAddressPageFormState: SiteAddressPageFormState;
   public hoursOperationPageFormState: HoursOperationPageFormState;
   public remoteUsersPageFormState: RemoteUsersPageFormState;
   public administratorPharmaNetFormState: AdministratorPageFormState;
@@ -85,8 +83,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { businessLicence, doingBusinessAs, pec, activeBeforeRegistration } = this.businessLicenceFormState.json;
-    const physicalAddress = this.siteAddressPageFormState.json;
+    const { businessLicence, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress } = this.businessLicenceFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
     const administratorPharmaNet = this.administratorPharmaNetFormState.json;
@@ -133,7 +130,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     return [
       this.careSettingPageFormState.form,
       this.businessLicenceFormState.form,
-      this.siteAddressPageFormState.form,
       this.hoursOperationPageFormState.form,
       this.remoteUsersPageFormState.form,
       this.administratorPharmaNetFormState.form,
@@ -231,8 +227,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   protected buildForms(): void {
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
-    this.businessLicenceFormState = new BusinessLicenceFormState(this.fb, this.siteResource);
-    this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
+    this.businessLicenceFormState = new BusinessLicenceFormState(this.fb, this.siteResource, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersPageFormState = new RemoteUsersPageFormState(this.fb);
     this.administratorPharmaNetFormState = new AdministratorPageFormState(this.fb, this.formUtilsService);
@@ -250,11 +245,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence, activeBeforeRegistration } = site;
+    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence, activeBeforeRegistration, physicalAddress } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence, activeBeforeRegistration }, id);
-    this.siteAddressPageFormState.patchValue(site?.physicalAddress);
+    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence, activeBeforeRegistration, physicalAddress }, id);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
     this.administratorPharmaNetFormState.patchValue(site?.administratorPharmaNet);

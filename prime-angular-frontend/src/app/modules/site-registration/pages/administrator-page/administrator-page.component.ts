@@ -28,6 +28,7 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public showAddressFields: boolean;
   public SiteRoutes = SiteRoutes;
 
@@ -89,6 +90,7 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
+    this.isSubmitted = this.site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(this.site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
   }
