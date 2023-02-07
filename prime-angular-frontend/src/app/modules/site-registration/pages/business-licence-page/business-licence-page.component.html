@@ -1,6 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isSubmitted"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="formState.form"
@@ -9,7 +9,7 @@
 
     <app-page-section>
       <app-page-subheader2>
-        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+        <ng-container appPageSubheader2Title>Site Business Licence</ng-container>
         <ng-container appPageSubheader2Summary>
           Scan and upload a single file of the business licence
         </ng-container>
@@ -87,6 +87,21 @@
     <app-site-information-form [form]="formState.form"
                                [organizationId]="site.organizationId"></app-site-information-form>
 
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Site Address</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Provide your site’s address as it appears on your business licence. If your organization has multiple physical
+          locations, you will be able to provide this information later.
+        </ng-container>
+      </app-page-subheader2>
+
+      <app-address-form [form]="formState.physicalAddress"
+                        [formControlNames]="formControlNames"
+                        [inBc]="true"
+                        [showManualButton]="true"
+                        [showAddressFields]="showAddressFields"></app-address-form>
+    </section>
   </form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
