@@ -2,7 +2,7 @@ import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
+import { IProgressIndicator, IStep } from '@shared/components/progress-indicator/progress-indicator.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -19,7 +19,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   @Input() public message: string;
   @Input() public template: TemplateRef<any>;
   @Input() public noContent: boolean;
-  @Input() public steps: object[];
+  @Input() public steps: IStep[];
 
   public currentRoute: string;
   public routes: string[];

@@ -204,6 +204,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   }
 
   protected onSubmitFormIsInvalid(): void {
+    // show required warning when the address is populated from BCSC and not entered
     this.hasPhysicalAddress = true;
   }
 }
