@@ -266,6 +266,7 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id =  215, LicenseCode = 53, Prefix = "L9", NamedInImReg = false, LicensedToProvideCare = true, Manual = false, Validate = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = SetPractIdToMandatoryFeb2nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id =  216, LicenseCode = 54, Prefix = "L9", NamedInImReg = true, LicensedToProvideCare = false, Manual = true, Validate = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = SetPractIdToMandatoryFeb2nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id =  217, LicenseCode = 55, Prefix = "L9", NamedInImReg = true, LicensedToProvideCare = true, Manual = false, Validate = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = SetPractIdToMandatoryFeb2nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  218, LicenseCode = 63, Prefix = "98", NamedInImReg = true, LicensedToProvideCare = false, Manual = true, Validate = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = SetPractIdToMandatoryFeb2nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                  };
             }
