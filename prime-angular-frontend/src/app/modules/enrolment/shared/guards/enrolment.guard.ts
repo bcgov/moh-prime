@@ -197,6 +197,10 @@ export class EnrolmentGuard extends BaseGuard {
       deniedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }
 
+    if (enrolment?.currentTOAStatus === "") {
+      deniedRoutes.push(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY)
+    }
+
     return (deniedRoutes.includes(route))
       // Prevent access to post enrolment/denied routes
       ? this.navigate(routePath, redirectionRoute)

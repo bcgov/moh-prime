@@ -19,6 +19,7 @@ import { BaseDocument, DocumentUploadComponent } from '@shared/components/docume
 import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
+import { AddressLine } from '@lib/models/address.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -40,6 +41,9 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   public uploadedFile: boolean;
   public hasNoBusinessLicenceError: boolean;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
+  public showAddressFields: boolean;
+  public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
   public site: Site;
 
@@ -64,6 +68,13 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
 
     this.businessLicenceDocuments = [];
     this.businessLicence = new BusinessLicence(this.siteService.site.id);
+
+    this.formControlNames = [
+      'street',
+      'city',
+      'provinceCode',
+      'postal'
+    ];
   }
 
   public canDefer(): boolean {
@@ -116,6 +127,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
   }
@@ -131,12 +143,14 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
 
   protected onSubmitFormIsValid(): void {
     this.hasNoBusinessLicenceError = false;
+    this.showAddressFields = true;
   }
 
   protected onSubmitFormIsInvalid(): void {
     if (!this.uploadedFile && !this.deferredLicenceToggle?.checked && !this.businessLicence?.businessLicenceDocument) {
       this.hasNoBusinessLicenceError = true;
     }
+    this.showAddressFields = true;
   }
 
   protected submissionRequest(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
@@ -155,32 +169,14 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       this.siteResource.updateSite(this.siteFormStateService.json)
     );
 
-    if (this.siteFormStateService.businessLicenceFormState.pec.value) {
-      return request$;
-    }
+    return request$;
 
-    const data: DialogOptions = {
-      title: 'Site ID',
-      message: `Provide a Site ID if you have one. If you do not have one, or do not know what it is, you may continue.`,
-      actionText: 'Continue'
-    };
-
-    return this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((confirmation: boolean) => {
-          if (confirmation) {
-            return request$;
-          }
-          return EMPTY;
-        })
-      );
   }
 
   protected afterSubmitIsSuccessful(): void {
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
-      : SiteRoutes.SITE_ADDRESS;
+      : SiteRoutes.HOURS_OPERATION;
 
     this.routeUtils.routeRelativeTo(routePath);
   }

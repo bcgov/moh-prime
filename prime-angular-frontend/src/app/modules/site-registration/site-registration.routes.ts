@@ -1,3 +1,5 @@
+import { IStep } from '@shared/components/progress-indicator/progress-indicator.component';
+
 export class SiteRoutes {
   public static LOGIN_PAGE = 'site';
 
@@ -22,7 +24,6 @@ export class SiteRoutes {
 
   public static CARE_SETTING = 'care-setting';
   public static BUSINESS_LICENCE = 'business-licence';
-  public static SITE_ADDRESS = 'site-address';
   public static HOURS_OPERATION = 'hours-operation';
   public static DEVICE_PROVIDER = 'device-provider';
   public static ADMINISTRATOR = 'site-administrator';
@@ -34,6 +35,16 @@ export class SiteRoutes {
   public static NEXT_STEPS = 'next-steps';
 
   public static BUSINESS_LICENCE_RENEWAL = 'business-licence-renewal';
+
+  public static STEP_CARE_TYPE = 'Care Setting';
+  public static STEP_SITE_INFORMATION = 'Site Details';
+  public static STEP_HOURS_OPERATION = 'Hours';
+  public static STEP_REMOTE_ACCESS = 'Remote Access';
+  public static STEP_DEVICE_PROVICER = 'Device Provider';
+  public static STEP_SUPPORT = 'Support';
+  public static STEP_ORG_AGREEMENT = 'Organization Agreement';
+  public static STEP_OVERVIEW = 'Review';
+  public static STEP_COMPLETE = 'Completed';
 
   /**
    * @description
@@ -77,7 +88,6 @@ export class SiteRoutes {
     return [
       this.CARE_SETTING,
       this.BUSINESS_LICENCE,
-      this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.DEVICE_PROVIDER,
       this.REMOTE_USERS,
@@ -93,7 +103,6 @@ export class SiteRoutes {
     return [
       this.CARE_SETTING,
       this.BUSINESS_LICENCE,
-      this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.REMOTE_USERS,
       this.REMOTE_USER, // Included since it's a child of remote_users
@@ -118,6 +127,44 @@ export class SiteRoutes {
       this.ORGANIZATION_SIGNING_AUTHORITY,
       this.ORGANIZATION_CLAIM,
       this.ORGANIZATION_CLAIM_CONFIRMATION
+    ];
+  }
+
+  public static pharmacySiteSteps(): IStep[] {
+    return [
+      { routes: [this.CARE_SETTING], step: this.STEP_CARE_TYPE },
+      { routes: [this.BUSINESS_LICENCE], step: this.STEP_SITE_INFORMATION },
+      { routes: [this.HOURS_OPERATION], step: this.STEP_HOURS_OPERATION },
+      { routes: [this.ADMINISTRATOR, this.PRIVACY_OFFICER, this.TECHNICAL_SUPPORT], step: this.STEP_SUPPORT },
+      { routes: [this.ORGANIZATION_AGREEMENT], step: this.STEP_ORG_AGREEMENT },
+      { routes: [this.SITE_REVIEW], step: this.STEP_OVERVIEW },
+      { routes: [''], step: this.STEP_COMPLETE },
+    ];
+  }
+
+  public static pchpSiteSteps(): IStep[] {
+    return [
+      { routes: [this.CARE_SETTING], step: this.STEP_CARE_TYPE },
+      { routes: [this.BUSINESS_LICENCE], step: this.STEP_SITE_INFORMATION },
+      { routes: [this.HOURS_OPERATION], step: this.STEP_HOURS_OPERATION },
+      { routes: [this.REMOTE_USERS], step: this.STEP_REMOTE_ACCESS },
+      { routes: [this.ADMINISTRATOR, this.PRIVACY_OFFICER, this.TECHNICAL_SUPPORT], step: this.STEP_SUPPORT },
+      { routes: [this.ORGANIZATION_AGREEMENT], step: this.STEP_ORG_AGREEMENT },
+      { routes: [this.SITE_REVIEW], step: this.STEP_OVERVIEW },
+      { routes: [''], step: this.STEP_COMPLETE },
+    ];
+  }
+
+  public static deviceProviderSiteSteps(): IStep[] {
+    return [
+      { routes: [this.CARE_SETTING], step: this.STEP_CARE_TYPE },
+      { routes: [this.BUSINESS_LICENCE], step: this.STEP_SITE_INFORMATION },
+      { routes: [this.HOURS_OPERATION], step: this.STEP_HOURS_OPERATION },
+      { routes: [this.DEVICE_PROVIDER], step: this.STEP_DEVICE_PROVICER },
+      { routes: [this.ADMINISTRATOR, this.PRIVACY_OFFICER, this.TECHNICAL_SUPPORT], step: this.STEP_SUPPORT },
+      { routes: [this.ORGANIZATION_AGREEMENT], step: this.STEP_ORG_AGREEMENT },
+      { routes: [this.SITE_REVIEW], step: this.STEP_OVERVIEW },
+      { routes: [''], step: this.STEP_COMPLETE },
     ];
   }
 }
