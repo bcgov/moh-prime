@@ -43,6 +43,7 @@ export class OverviewPageComponent implements OnInit {
   public routeUtils: RouteUtils;
   public siteErrors: ValidationErrors;
   public isBusinessLicenceUpdated: boolean;
+  public isCompleted: boolean;
 
   public SiteRoutes = SiteRoutes;
   public SiteStatusType = SiteStatusType;
@@ -173,6 +174,7 @@ export class OverviewPageComponent implements OnInit {
     this.isEditable = site.status === SiteStatusType.EDITABLE;
     // Submissions are allowed only if site is in editable state
     this.showSubmissionAction = this.isEditable;
+    this.isCompleted = site.submittedDate ? true : false;
 
     this.siteExpiryDate = (site.approvedDate)
       ? Site.getExpiryDate(site)

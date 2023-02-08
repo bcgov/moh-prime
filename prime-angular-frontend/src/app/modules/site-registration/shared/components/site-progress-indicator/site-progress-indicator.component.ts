@@ -2,10 +2,12 @@ import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
+import { IProgressIndicator, IStep } from '@shared/components/progress-indicator/progress-indicator.component';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-site-progress-indicator',
@@ -17,6 +19,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   @Input() public message: string;
   @Input() public template: TemplateRef<any>;
   @Input() public noContent: boolean;
+  @Input() public steps: IStep[];
 
   public currentRoute: string;
   public routes: string[];
@@ -26,7 +29,8 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
 
   constructor(
     private router: Router,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private siteService: SiteService,
   ) {
     this.currentRoute = RouteUtils.currentRoutePath(this.router.url);
 
@@ -36,7 +40,26 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
     this.prefix = 'Registration';
   }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+    if (this.siteService.site) {
+      if (this.siteService.site.careSettingCode) {
+        switch (this.siteService.site.careSettingCode) {
+          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
+            this.steps = SiteRoutes.pchpSiteSteps();
+            break;
+          case CareSettingEnum.DEVICE_PROVIDER:
+            this.steps = SiteRoutes.deviceProviderSiteSteps();
+            break;
+          case CareSettingEnum.COMMUNITY_PHARMACIST:
+            this.steps = SiteRoutes.pharmacySiteSteps();
+            break;
+        }
+      } else {
+        //default to Pharmacy site steps
+        this.steps = SiteRoutes.pharmacySiteSteps();
+      }
+    }
+  }
 
   private getWorkflowRoutePaths() {
     // Possible route paths within claim organization workflow, otherwise

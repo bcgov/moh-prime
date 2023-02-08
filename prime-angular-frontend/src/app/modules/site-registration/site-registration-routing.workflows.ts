@@ -17,7 +17,6 @@ import { SiteManagementPageComponent } from '@registration/pages/site-management
 import { CareSettingPageComponent } from '@registration/pages/care-setting-page/care-setting-page.component';
 import { BusinessLicencePageComponent } from '@registration/pages/business-licence-page/business-licence-page.component';
 import { BusinessLicenceRenewalPageComponent } from '@registration/pages/business-licence-renewal-page/business-licence-renewal-page.component';
-import { SiteAddressPageComponent } from '@registration/pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from '@registration/pages/hours-operation-page/hours-operation-page.component';
 import { DeviceProviderPageComponent } from '@registration/pages/device-provider-page/device-provider-page.component';
 import { RemoteUsersPageComponent } from '@registration/pages/remote-users-page/remote-users-page.component';
@@ -108,7 +107,7 @@ export const defaultCommunitySiteWorkflow = [
                 component: BusinessLicencePageComponent,
                 canActivate: [SiteGuard],
                 canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Site Business Licence' }
+                data: { title: 'Site Details' }
               },
               {
                 path: SiteRoutes.BUSINESS_LICENCE_RENEWAL,
@@ -116,13 +115,6 @@ export const defaultCommunitySiteWorkflow = [
                 canActivate: [SiteGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Site Business Licence' }
-              },
-              {
-                path: SiteRoutes.SITE_ADDRESS,
-                component: SiteAddressPageComponent,
-                canActivate: [SiteGuard],
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Site Address' }
               },
               {
                 path: SiteRoutes.HOURS_OPERATION,
