@@ -156,7 +156,7 @@
                           site?.physicalAddress?.provinceCode !== null && site?.physicalAddress?.postal !== null"
                         title="Site Address"
                         [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
-                        [editRoute]="SiteRoutes.SITE_ADDRESS"
+                        [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Address">
       {{ site?.physicalAddress?.street | default }}
