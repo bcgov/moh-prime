@@ -1,1 +1,2 @@
 *.sh text eol=lf
+prime-dotnet-webapi/Configuration/Database/Resources/*.html text eol=crlf
