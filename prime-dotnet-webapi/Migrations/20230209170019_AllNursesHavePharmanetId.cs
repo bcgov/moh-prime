@@ -7,10 +7,6 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropCheckConstraint(
-                name: "CHK_Agreement_EitherPartyOrEnrollee",
-                table: "Agreement");
-
             migrationBuilder.InsertData(
                 table: "LicenseDetail",
                 columns: new[] { "Id", "AllowRequestRemoteAccess", "CreatedTimeStamp", "CreatedUserId", "EffectiveDate", "LicenseCode", "LicensedToProvideCare", "Manual", "NamedInImReg", "NonPrescribingPrefix", "Prefix", "PrescriberIdType", "UpdatedTimeStamp", "UpdatedUserId", "Validate" },
@@ -33,19 +29,10 @@ namespace Prime.Migrations
                     { 217, false, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2023, 2, 2, 8, 0, 0, 0, DateTimeKind.Utc), 55, true, false, true, null, "L9", 2, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), false },
                     { 218, false, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2023, 2, 2, 8, 0, 0, 0, DateTimeKind.Utc), 63, false, true, true, null, "98", 2, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), false }
                 });
-
-            migrationBuilder.AddCheckConstraint(
-                name: "CHK_Agreement_EitherPartyOrEnrollee",
-                table: "Agreement",
-                sql: "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropCheckConstraint(
-                name: "CHK_Agreement_EitherPartyOrEnrollee",
-                table: "Agreement");
-
             migrationBuilder.DeleteData(
                 table: "LicenseDetail",
                 keyColumn: "Id",
@@ -125,11 +112,6 @@ namespace Prime.Migrations
                 table: "LicenseDetail",
                 keyColumn: "Id",
                 keyValue: 218);
-
-            migrationBuilder.AddCheckConstraint(
-                name: "CHK_Agreement_EitherPartyOrEnrollee",
-                table: "Agreement",
-                sql: "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\r\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
         }
     }
 }

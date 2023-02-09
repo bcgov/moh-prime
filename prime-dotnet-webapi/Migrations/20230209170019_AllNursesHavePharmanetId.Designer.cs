@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230208234852_AllNursesHavePharmanetId")]
+    [Migration("20230209170019_AllNursesHavePharmanetId")]
     partial class AllNursesHavePharmanetId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -222,7 +222,7 @@ namespace Prime.Migrations
 
                     b.HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth", "((\"OrganizationId\" is null) or (\"PartyId\" is not null))");
 
-                    b.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee", "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
+                    b.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee", "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\r\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
                 });
 
             modelBuilder.Entity("Prime.Models.AgreementVersion", b =>

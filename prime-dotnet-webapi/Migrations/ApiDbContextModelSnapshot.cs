@@ -220,7 +220,7 @@ namespace Prime.Migrations
 
                     b.HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth", "((\"OrganizationId\" is null) or (\"PartyId\" is not null))");
 
-                    b.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee", "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
+                    b.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee", "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\r\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
                 });
 
             modelBuilder.Entity("Prime.Models.AgreementVersion", b =>
