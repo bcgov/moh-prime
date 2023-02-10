@@ -169,8 +169,26 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       this.siteResource.updateSite(this.siteFormStateService.json)
     );
 
-    return request$;
+    if (this.siteFormStateService.businessLicenceFormState.pec.value) {
+      return request$;
+    }
 
+    const data: DialogOptions = {
+      title: 'Site ID',
+      message: `Provide a Site ID if you have one. If you do not have one, or do not know what it is, you may continue.`,
+      actionText: 'Continue'
+    };
+
+    return this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((confirmation: boolean) => {
+          if (confirmation) {
+            return request$;
+          }
+          return EMPTY;
+        })
+      );
   }
 
   protected afterSubmitIsSuccessful(): void {
