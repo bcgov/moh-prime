@@ -1,5 +1,4 @@
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import {Component, Input, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
@@ -27,7 +26,6 @@ export class SiteInformationFormComponent implements OnInit {
     private organizationResource: OrganizationResource,
     private orgBookResource: OrgBookResource,
     private siteService: SiteService,
-    private cdref: ChangeDetectorRef
   ) {
     this.doingBusinessAsNames = [];
   }
@@ -40,14 +38,9 @@ export class SiteInformationFormComponent implements OnInit {
     return this.form.get('pec') as FormControl;
   }
 
-  public AfterContentChecked() {
-    this.cdref.detectChanges();
-  }
-
   public isCommunityPharmacy() {
     return this.siteService.site?.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
   }
-  
 
   public ngOnInit(): void {
     this.initForm();
@@ -56,12 +49,6 @@ export class SiteInformationFormComponent implements OnInit {
   protected initForm(): void {
     if (this.organizationId) {
       this.getDoingBusinessAs(this.organizationId);
-    }
-  }
-
-  public onToggleChange($event: MatSlideToggleChange) {
-    if (!$event.checked) {
-      this.form.patchValue({ pec : null });
     }
   }
 
