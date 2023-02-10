@@ -132,7 +132,9 @@ export class DashboardV1Component implements OnInit {
 
     const user = await this.authService.getUser();
     // Identity providers don't all provide last name
-    this.username = `${user?.firstName} ${user.lastName ?? ''}`;
+    // On the other hand, BCSC mononym may only have last name
+    this.username = user?.firstName ? `${user.firstName} ${user.lastName ?? ''}`
+      : (user.lastName ?? '');
   }
 
   private getSideNavSections(): DashboardNavSectionV1[] {
