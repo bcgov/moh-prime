@@ -10,8 +10,9 @@ export class FullnamePipe implements PipeTransform {
     }
 
     const { firstName, lastName } = model;
-    return (firstName && lastName)
-      ? `${firstName} ${lastName}`
+    return (lastName)
+      ? (firstName) ? `${firstName} ${lastName}`
+        : lastName
       : '';
   }
 }

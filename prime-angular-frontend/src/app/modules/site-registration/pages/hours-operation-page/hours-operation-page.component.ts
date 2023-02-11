@@ -39,6 +39,7 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public hasNoHours: boolean;
   public hasNoBusinessHoursError: boolean;
   public lessThanErrorStateMatcher: LessThanErrorStateMatcher;
@@ -113,7 +114,7 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
 
   public onBack() {
     const nextRoute = (!this.isCompleted)
-      ? SiteRoutes.SITE_ADDRESS
+      ? SiteRoutes.BUSINESS_LICENCE
       : SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(nextRoute);
@@ -132,6 +133,7 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
 

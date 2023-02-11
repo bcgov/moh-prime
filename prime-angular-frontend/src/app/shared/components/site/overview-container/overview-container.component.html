@@ -10,6 +10,7 @@
   <app-address-view title="Physical Address"
                     [address]="organization?.signingAuthority.physicalAddress"
                     [showRedirect]="showEditRedirect"
+                    [showEditRedirect]="showEditRedirect"
                     [showIfEmpty]="true"
                     (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
   </app-address-view>
@@ -17,6 +18,7 @@
   <app-address-view title="Mailing Address"
                     [address]="organization?.signingAuthority.mailingAddress"
                     [showRedirect]="showEditRedirect"
+                    [showEditRedirect]="showEditRedirect"
                     [showIfEmpty]="true"
                     (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
   </app-address-view>
@@ -154,7 +156,7 @@
                           site?.physicalAddress?.provinceCode !== null && site?.physicalAddress?.postal !== null"
                         title="Site Address"
                         [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
-                        [editRoute]="SiteRoutes.SITE_ADDRESS"
+                        [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Address">
       {{ site?.physicalAddress?.street | default }}

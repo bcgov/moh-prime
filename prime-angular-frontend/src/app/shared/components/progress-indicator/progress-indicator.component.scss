@@ -1,0 +1,97 @@
+.stepIndicator {
+  width: 950px;
+}
+
+@media (max-width: 950px) {
+  .stepIndicator {
+    display: none;
+    ;
+  }
+}
+
+.step {
+  position: relative;
+  float: left;
+  height: 160px;
+  width: 114px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.point {
+  height: 20px;
+  width: 20px;
+  border-radius: 15px;
+  border: solid 2px #707070;
+  background-color: #FFFFFF;
+}
+
+.current .point {
+  background-color: #FBC016;
+}
+
+.complete .point {
+  background-color: #318440;
+}
+
+.current .step_text {
+  font-weight: bold;
+}
+
+.separator {
+  position: absolute;
+  left: 67px;
+  top: 80px;
+  height: 2px;
+  width: 120px;
+  background-color: #707070;
+}
+
+.step_text,
+.final_step_text {
+  position: absolute;
+  top: 110px;
+  width: 120px;
+  left: 0px;
+  text-align: center;
+  color: #707070;
+}
+
+.final_step_text {
+  top: 120px;
+  color: #CECECE;
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+.final_point {
+  height: 60px;
+  width: 60px;
+  background-color: #FFFFFF;
+  border-radius: 34px;
+  border: solid 4px #707070;
+}
+
+.complete .final_point {
+  background-color: #318440;
+  color: #FFFFFF;
+  border: solid 4px #707070;
+}
+
+.check {
+  position: absolute;
+  fill: #CECECE;
+  height: 35px;
+  width: 35px;
+  top: 63px;
+  left: 40px;
+}
+
+.complete .check {
+  fill: #FFFFFF;
+}
+
+.complete .final_step_text {
+  color: #318440;
+}

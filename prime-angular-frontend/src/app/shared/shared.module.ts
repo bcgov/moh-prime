@@ -120,11 +120,8 @@ import { SelfDeclarationTermComponent } from './components/enrollee/self-declara
 
 // Shared health authority components
 import { SiteInformationOverviewComponent } from '@health-auth/pages/site-information-page/site-information-overview.component';
-import { VendorOverviewComponent } from '@health-auth/pages/vendor-page/vendor-overview.component';
-import { SiteAddressOverviewComponent } from '@health-auth/pages/site-address-page/site-address-overview.component';
 import { HoursOperationOverviewComponent } from '@health-auth/pages/hours-operation-page/hours-operation-overview.component';
 import { AdministratorOverviewComponent } from '@health-auth/pages/administrator-page/administrator-overview.component';
-import { TechnicalSupportOverviewComponent } from '@health-auth/pages/technical-support-page/technical-support-overview.component';
 import { HealthAuthCareTypeOverviewComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-overview.component';
 import { HealthAuthSiteOverviewContainerComponent } from './components/health-auth-site-overview-container/health-auth-site-overview-container.component';
 import { EmailFormComponent } from './components/forms/email-form/email-form.component';
@@ -226,11 +223,8 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     DocumentAttachmentsComponent,
     DocumentAttachmentComponent,
     HealthAuthCareTypeOverviewComponent,
-    TechnicalSupportOverviewComponent,
     AdministratorOverviewComponent,
     HoursOperationOverviewComponent,
-    SiteAddressOverviewComponent,
-    VendorOverviewComponent,
     SiteInformationOverviewComponent,
     HealthAuthSiteOverviewContainerComponent,
     DateOfBirthComponent,
@@ -339,11 +333,8 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     DocumentAttachmentsComponent,
     DocumentAttachmentComponent,
     HealthAuthCareTypeOverviewComponent,
-    TechnicalSupportOverviewComponent,
     AdministratorOverviewComponent,
     HoursOperationOverviewComponent,
-    SiteAddressOverviewComponent,
-    VendorOverviewComponent,
     SiteInformationOverviewComponent,
     HealthAuthSiteOverviewContainerComponent,
     UnlistedCollegeLicenceFormComponent,

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
+import { IProgressIndicator, IStep } from '@shared/components/progress-indicator/progress-indicator.component';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
@@ -16,6 +16,8 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   @Input() public message: string;
   @Input() public template: TemplateRef<any>;
   @Input() public noContent: boolean;
+  @Input() public steps: IStep[];
+
 
   public currentRoute: string;
   public routes: string[];
@@ -29,6 +31,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
     this.currentRoute = RouteUtils.currentRoutePath(this.router.url);
     this.routes = HealthAuthSiteRegRoutes.siteRegistrationRouteOrder();
     this.prefix = 'Registration';
+    this.steps = HealthAuthSiteRegRoutes.siteSteps();
   }
 
   public ngOnInit() { }
