@@ -394,7 +394,7 @@ namespace Prime.Services
         private async Task Send(Email email)
         {
             var doNotEmail = await _context.DoNotEmail
-                .Where(e => String.Equals(e.Email, String.Join(",", email.To), StringComparison.OrdinalIgnoreCase))
+                .Where(e => e.Email.ToLower() == string.Join(",", email.To).ToLower())
                 .Select(e => new {
                     e.Email,
                     e.Id
@@ -402,7 +402,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             if (doNotEmail != null) {
-                await _businessEventService.CreateEmailEventAsync("Do not email enrollee");
+                await _businessEventService.CreateEmailEventAsync($"The address: {email.To} has been blocked as do-not-email" );
                 return;
             }
                 
