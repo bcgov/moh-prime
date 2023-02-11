@@ -131,9 +131,6 @@
       </ng-template>
     </ng-container>
 
-
-
-
     <ng-template #businessLicenceListView>
       <ng-container *ngFor="let businessLicence of site.businessLicences">
         <app-enrollee-property title="Expiry">
@@ -147,6 +144,9 @@
             <mat-icon class="mr-1">attachment</mat-icon>
             {{ businessLicence?.businessLicenceDocument?.filename | default }}
           </button>
+        </app-enrollee-property>
+        <app-enrollee-property title="Deferred Business Licence Reason">
+          {{ businessLicence.deferredLicenceReason | default }}
         </app-enrollee-property>
       </ng-container>
     </ng-template>

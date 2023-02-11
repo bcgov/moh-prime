@@ -43,6 +43,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   public isCompleted: boolean;
   public isSubmitted: boolean;
   public showAddressFields: boolean;
+  public showExpiryDate: boolean;
   public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
   public site: Site;
@@ -80,7 +81,8 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   public canDefer(): boolean {
     return [
       CareSettingEnum.COMMUNITY_PHARMACIST,
-      CareSettingEnum.DEVICE_PROVIDER
+      CareSettingEnum.DEVICE_PROVIDER,
+      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
     ].includes(this.siteService.site.careSettingCode);
   }
 
@@ -130,6 +132,11 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     this.isSubmitted = site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
+    if (site.doingBusinessAs && site.businessLicence && site.businessLicence.expiryDate === null) {
+      this.showExpiryDate = false;
+    } else {
+      this.showExpiryDate = true;
+    }
   }
 
   protected initForm(): void {
