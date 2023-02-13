@@ -9,9 +9,20 @@
 
     <app-page-section>
       <app-page-subheader2>
-        <ng-container appPageSubheader2Title>Site Business Licence</ng-container>
+        <ng-container appPageSubheader2Title>Municipal Site Business Licence and Other Document</ng-container>
         <ng-container appPageSubheader2Summary>
-          Scan and upload a single file of the business licence
+          Scan and upload a single file of the business licence.
+          If you don't have your business licence, provide other documentation as proof of business address, e.g.
+          <ol>
+            <li>
+              Screenshot of munipality website indicating business license is not issued
+            </li>
+            <li>
+              Facilities accredited under the CPSBC Diagnostic Accreditation Program or Non-Hospital Medical and
+              Surgical Facilities Accreditation Program may provide the certificate from CPSBC in lieu of a municipal
+              business license
+            </li>
+          </ol>
         </ng-container>
       </app-page-subheader2>
 
@@ -45,33 +56,29 @@
       </ng-container>
 
       <ng-container *ngIf="canDefer()">
-
         <mat-slide-toggle #deferredLicence
                           class="my-2 mb-3"
                           color="primary"
                           (change)="onDeferredLicenceChange($event)">
-          This Site does not have a business licence
+          I don't have a business licence
         </mat-slide-toggle>
-
+        <app-page-subheader2 *ngIf="deferredLicence?.checked">
+          <ng-container appPageSubheader2Summary>
+            If you do not have a business license yet or if you are located in a municipality or region that does not
+            issue business licenses, please share the reason in the text box below. PRIME Support will contact you to
+            assist in determining the correct documentation for upload. You may continue with your enrolment.
+          </ng-container>
+        </app-page-subheader2>
         <section *ngIf="deferredLicence?.checked"
                  class="mb-3">
-          <app-page-subheader2>
-            <ng-container appPageSubheader2Title>Missing Business Licence</ng-container>
-            <ng-container appPageSubheader2Summary>
-              If your business does not yet have a business license, or if you are located in a municipality or region
-              that does not issue business licenses, provide a description below detailing the reason your business does
-              not have a license. PRIME Support staff will contact you and assist you with determining the correct
-              documents to upload. You may continue with your enrolment for now.
-            </ng-container>
-          </app-page-subheader2>
-
           <div class="row">
             <div class="col">
               <mat-form-field class="w-100">
                 <textarea matInput
-                          rows="5"
-                          placeholder="Write here"
-                          formControlName="deferredLicenceReason"></textarea>
+                          rows="4"
+                          placeholder="Share the reason here (250 characters)"
+                          formControlName="deferredLicenceReason"
+                          maxlength="250"></textarea>
                 <mat-error>Required</mat-error>
               </mat-form-field>
             </div>
@@ -81,7 +88,8 @@
     </app-page-section>
 
     <app-page-section *ngIf="!deferredLicenceToggle?.checked">
-      <app-business-licence-expiry [form]="formState.form"></app-business-licence-expiry>
+      <app-business-licence-expiry [form]="formState.form"
+                                   [showExpiryDate]="showExpiryDate"></app-business-licence-expiry>
     </app-page-section>
 
     <app-site-information-form [form]="formState.form"

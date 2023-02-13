@@ -43,6 +43,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   public isCompleted: boolean;
   public isSubmitted: boolean;
   public showAddressFields: boolean;
+  public showExpiryDate: boolean;
   public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
   public site: Site;
@@ -80,7 +81,8 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   public canDefer(): boolean {
     return [
       CareSettingEnum.COMMUNITY_PHARMACIST,
-      CareSettingEnum.DEVICE_PROVIDER
+      CareSettingEnum.DEVICE_PROVIDER,
+      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
     ].includes(this.siteService.site.careSettingCode);
   }
 
@@ -130,6 +132,11 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     this.isSubmitted = site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
+    if (site.doingBusinessAs && site.businessLicence && site.businessLicence.expiryDate === null) {
+      this.showExpiryDate = false;
+    } else {
+      this.showExpiryDate = true;
+    }
   }
 
   protected initForm(): void {
@@ -169,8 +176,26 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       this.siteResource.updateSite(this.siteFormStateService.json)
     );
 
-    return request$;
+    if (this.siteFormStateService.businessLicenceFormState.pec.value) {
+      return request$;
+    }
 
+    const data: DialogOptions = {
+      title: 'Site ID',
+      message: `Provide a Site ID if you have one. If you do not have one, or do not know what it is, you may continue.`,
+      actionText: 'Continue'
+    };
+
+    return this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((confirmation: boolean) => {
+          if (confirmation) {
+            return request$;
+          }
+          return EMPTY;
+        })
+      );
   }
 
   protected afterSubmitIsSuccessful(): void {
