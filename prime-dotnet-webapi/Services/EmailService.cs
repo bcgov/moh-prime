@@ -402,7 +402,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             if (doNotEmail != null) {
-                await _businessEventService.CreateEmailEventAsync($"The address: {email.To} has been blocked as do-not-email" );
+                await _businessEventService.CreateEmailEventAsync($"The address {string.Join(",", email.To)} has been blocked as do-not-email" );
                 return;
             }
                 
