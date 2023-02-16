@@ -35,8 +35,8 @@
         <div *ngIf="!isLast">
           <div class="point"></div>
           <div class="separator"></div>
-          <div class="step_text">
-            {{ step.step }}
+          <div class="step_text"
+               [innerHTML]="step.step | safe: 'html'">
           </div>
         </div>
         <div *ngIf="isLast">

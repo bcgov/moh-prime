@@ -1,3 +1,5 @@
+import { IStep } from '@shared/components/progress-indicator/progress-indicator.component';
+
 export class EnrolmentRoutes {
   public static BCSC_LOGIN = 'info';
   public static BCEID_LOGIN = 'bceid';
@@ -39,6 +41,16 @@ export class EnrolmentRoutes {
   public static ACCESS_TERMS = 'access-terms';
   public static ENROLMENT = 'enrolment';
   public static ABSENCE_MANAGEMENT = 'absence-management';
+
+  // Step display text
+  public static SETP_CONTACT = 'Contact';
+  public static STEP_CARE_SETTING = 'Care Setting';
+  public static STEP_COLLEGE = 'College';
+  public static STEP_SELF_DECLARATION = 'Self-Declaration';
+  public static STEP_REVIEW = 'Review';
+  public static STEP_TOA = 'Term of Access';
+  public static STEP_ADMIN_EMAIL = 'Administrator Email';
+  public static STEP_COMPLETE = 'Completed';
 
   public static routePath(route: string): string {
     return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
@@ -103,6 +115,25 @@ export class EnrolmentRoutes {
     return [
       ...EnrolmentRoutes.enrolmentProfileRoutes(),
       ...EnrolmentRoutes.enrolmentEditableRoutes()
+    ];
+  }
+
+  public static enrolmentSteps(): IStep[] {
+    return [
+      { routes: [this.BCSC_DEMOGRAPHIC], step: this.SETP_CONTACT },
+      { routes: [this.CARE_SETTING], step: this.STEP_CARE_SETTING },
+      { routes: [this.REGULATORY, this.OBO_SITES, this.REMOTE_ACCESS], step: this.STEP_COLLEGE },
+      { routes: [this.SELF_DECLARATION], step: this.STEP_SELF_DECLARATION },
+      { routes: [this.OVERVIEW], step: this.STEP_REVIEW },
+      { routes: [this.SUBMISSION_CONFIRMATION], step: this.STEP_COMPLETE },
+    ];
+  }
+
+  public static toaSteps(): IStep[] {
+    return [
+      { routes: [this.PENDING_ACCESS_TERM], step: this.STEP_TOA },
+      { routes: [this.NEXT_STEPS], step: this.STEP_ADMIN_EMAIL },
+      { routes: [this.PHARMANET_ENROLMENT_SUMMARY], step: this.STEP_COMPLETE },
     ];
   }
 }

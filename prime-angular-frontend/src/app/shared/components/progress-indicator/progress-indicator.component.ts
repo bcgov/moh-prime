@@ -148,6 +148,7 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
       this.updatePercentComplete();
     }
     if (this.mode === 'step') {
+      this.percentComplete = 0;
       let stepComplete = true;
       this.steps = this.steps.map(s => {
         // set isCurrent to true only if in progress.

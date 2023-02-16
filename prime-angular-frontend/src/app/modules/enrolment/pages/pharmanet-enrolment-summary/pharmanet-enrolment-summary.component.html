@@ -7,7 +7,7 @@
     </app-page-header>
 
     <app-enrolment-progress-indicator *ngIf="initialEnrolment"
-                                      [inProgress]="initialEnrolment"></app-enrolment-progress-indicator>
+                                      [inProgress]="false"></app-enrolment-progress-indicator>
 
     <div class="row">
 
@@ -49,29 +49,19 @@
         </div>
 
         <ng-container>
-          <app-alert type="success"
-                     icon="check_circle_outline"
-                     class="mb-5 col-12">
-            <ng-container #alertTitle
-                          class="alert-title">
-              Your enrolment in PRIME is complete
-            </ng-container>
-            <ng-container #alertContent
-                          class="alert-content">
+          <div class="col-12">
+            <ng-container>
               <p>
                 You will need to renew your enrolment once a year, you will get an email reminding of your renewal date.
               </p>
+            </ng-container>
+            <ng-container>
               <p class="font-weight-bold">
                 Your renewal date is: {{ enrolment.expiryDate | formatDate }}
-              </p>
-              <p *ngIf="currentAgreementGroup"
-                 class="font-weight-bold">
+                <br/>
                 {{getAgreementDescription()}}
               </p>
             </ng-container>
-
-          </app-alert>
-          <div class="col-12">
             <ng-container appPageSubheaderSummary>
               <p><strong>Your PharmaNet Access</strong></p>
             </ng-container>
