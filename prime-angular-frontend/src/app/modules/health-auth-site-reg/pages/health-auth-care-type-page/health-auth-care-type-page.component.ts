@@ -95,7 +95,6 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
 
     const site = this.healthAuthoritySiteService.site;
     this.healthAuthorityCareTypes = this.route.snapshot.data.healthAuthority?.careTypes ?? [];
-    this.vendors = this.route.snapshot.data.healthAuthority?.vendors ?? [];
     this.isCompleted = site?.completed;
     this.isSubmitted = site?.submittedDate ? true : false;
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
