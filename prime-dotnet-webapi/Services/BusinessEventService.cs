@@ -39,6 +39,20 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        public async Task<BusinessEvent> CreateEmailEventAsync(string description)
+        {
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.Email, description);
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create email business event.");
+            }
+
+            return businessEvent;
+        }
+
         public async Task<BusinessEvent> CreateEmailEventAsync(int enrolleeId, string description)
         {
             var businessEvent = await CreateBusinessEvent(BusinessEventType.Email, enrolleeId, description);
@@ -248,6 +262,23 @@ namespace Prime.Services
             var businessEvent = new BusinessEvent
             {
                 EnrolleeId = enrolleeId,
+                AdminId = adminId,
+                BusinessEventTypeCode = BusinessEventTypeCode,
+                Description = description,
+                EventDate = DateTimeOffset.Now
+            };
+
+            return businessEvent;
+        }
+
+        private async Task<BusinessEvent> CreateBusinessEvent(int BusinessEventTypeCode, string description)
+        {
+            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
+            Admin admin = await _adminService.GetAdminAsync(userId);
+            int? adminId = admin?.Id;
+
+            var businessEvent = new BusinessEvent
+            {
                 AdminId = adminId,
                 BusinessEventTypeCode = BusinessEventTypeCode,
                 Description = description,
