@@ -3,12 +3,13 @@
   <app-page-header>Terms of Access</app-page-header>
 
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
-                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
+                                    [inProgress]="isInitialEnrolment"
+                                    [isCentered]="true"></app-enrolment-progress-indicator>
 
   <!-- <ng-container *ngIf="currentPage > 0; else preamble"> -->
-    <ng-container *ngIf="identityProvider === IdentityProviderEnum.BCSC; else uploadTOA">
-      <app-access-term [accessTerms]="accessTerm"></app-access-term>
-    </ng-container>
+  <ng-container *ngIf="identityProvider === IdentityProviderEnum.BCSC; else uploadTOA">
+    <app-access-term [accessTerms]="accessTerm"></app-access-term>
+  </ng-container>
   <!-- </ng-container> -->
 
   <ng-template #uploadTOA>

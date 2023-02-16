@@ -18,6 +18,7 @@ export class EnrolmentProgressIndicatorComponent implements OnInit, IProgressInd
   @Input() public template: TemplateRef<any>;
   @Input() public noContent: boolean;
   @Input() public steps: IStep[];
+  @Input() public isCentered: boolean;
 
   @Input() public currentRoute: string;
   // public currentRoute: string;
@@ -45,6 +46,7 @@ export class EnrolmentProgressIndicatorComponent implements OnInit, IProgressInd
       case EnrolmentRoutes.SELF_DECLARATION:
       case EnrolmentRoutes.OVERVIEW:
       case EnrolmentRoutes.SUBMISSION_CONFIRMATION:
+      case EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES:
         this.steps = EnrolmentRoutes.enrolmentSteps();
         break;
       case EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY:

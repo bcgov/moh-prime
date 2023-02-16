@@ -122,7 +122,7 @@ export class EnrolmentRoutes {
     return [
       { routes: [this.BCSC_DEMOGRAPHIC], step: this.SETP_CONTACT },
       { routes: [this.CARE_SETTING], step: this.STEP_CARE_SETTING },
-      { routes: [this.REGULATORY, this.OBO_SITES, this.REMOTE_ACCESS], step: this.STEP_COLLEGE },
+      { routes: [this.REGULATORY, this.OBO_SITES, this.REMOTE_ACCESS, this.REMOTE_ACCESS_ADDRESSES], step: this.STEP_COLLEGE },
       { routes: [this.SELF_DECLARATION], step: this.STEP_SELF_DECLARATION },
       { routes: [this.OVERVIEW], step: this.STEP_REVIEW },
       { routes: [this.SUBMISSION_CONFIRMATION], step: this.STEP_COMPLETE },

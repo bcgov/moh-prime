@@ -17,9 +17,10 @@
       {{ prefix }} {{ percentComplete }}% Completed
     </ng-container>
     <ng-container *ngSwitchCase="'step'">
-      <ng-container [ngTemplateOutlet]="stepTemplate"
-                    [ngTemplateOutletContext]="templateContext"></ng-container>
-
+      <div [ngClass]="{'stepWrapper-center':isCentered}">
+        <ng-container [ngTemplateOutlet]="stepTemplate"
+                      [ngTemplateOutletContext]="templateContext"></ng-container>
+      </div>
     </ng-container>
   </ng-container>
 </div>
@@ -28,7 +29,7 @@
              let-inProgress="inProgress"
              let-routes="routes"
              let-currentRoute="currentRoute">
-  <div class="row stepIndicator">
+  <div [ngClass]="{'row':true, 'stepIndicator':!isCentered, 'stepIndicator-center':isCentered}">
     <div *ngFor="let step of steps; last as isLast">
 
       <div [ngClass]="{'step' : true, 'current' : step.isCurrent, 'complete': step.completed }">
