@@ -36,19 +36,21 @@
             Do you have a Site ID for this location?
           </mat-slide-toggle>
           
-          <mat-form-field *ngIf="hasSiteID?.checked" class="w-100">
-            <mat-label>Site ID/PEC Code</mat-label>
+          <div *ngIf="hasSiteID?.checked">
+            <mat-form-field class="w-100">
+              <mat-label>Site ID/PEC Code</mat-label>
               <input matInput [formControl]="formState.pec" />
               <mat-error *ngIf="formState.pec.hasError('assignable')">
                 Site ID/PEC Code exists in another Health Authority
               </mat-error>
-          </mat-form-field>
-
-          <mat-checkbox formControlName="activeBeforeRegistration">
-            <div class="pl-3">
-              This site is already operational and submitting PharmaNet transactions.
-            </div>
-          </mat-checkbox>
+            </mat-form-field>
+          
+            <mat-checkbox formControlName="activeBeforeRegistration">
+              <div class="pl-3">
+                This site is already operational and submitting PharmaNet transactions.
+              </div>
+            </mat-checkbox>
+          </div>
 
         </div>
       </div>
