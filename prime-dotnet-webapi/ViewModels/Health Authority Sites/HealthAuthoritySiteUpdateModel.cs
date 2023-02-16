@@ -7,6 +7,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
     {
         public string SiteName { get; set; }
         public string PEC { get; set; }
+        public bool ActiveBeforeRegistration { get; set; }
         public int? SecurityGroupCode { get; set; }
         public AddressViewModel PhysicalAddress { get; set; }
         public int? HealthAuthorityVendorId { get; set; }

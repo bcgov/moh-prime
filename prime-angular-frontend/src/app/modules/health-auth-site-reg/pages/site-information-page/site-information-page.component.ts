@@ -92,7 +92,7 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
 
   public onToggleChange($event: MatSlideToggleChange) {
     if (!$event.checked) {
-      this.formState.patchValue({ pec: null, siteName: this.formState.siteName.value, securityGroupCode: this.formState.securityGroupCode.value, physicalAddress: this.formState.physicalAddress.value }, this.route.snapshot.params.sid);
+      this.formState.patchValue({...this.formState.json, pec: null  }, this.route.snapshot.params.sid);
     }
   }
 
