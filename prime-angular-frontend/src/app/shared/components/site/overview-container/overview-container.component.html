@@ -131,9 +131,6 @@
       </ng-template>
     </ng-container>
 
-
-
-
     <ng-template #businessLicenceListView>
       <ng-container *ngFor="let businessLicence of site.businessLicences">
         <app-enrollee-property title="Expiry">
@@ -148,6 +145,9 @@
             {{ businessLicence?.businessLicenceDocument?.filename | default }}
           </button>
         </app-enrollee-property>
+        <app-enrollee-property title="Deferred Business Licence Reason">
+          {{ businessLicence.deferredLicenceReason | default }}
+        </app-enrollee-property>
       </ng-container>
     </ng-template>
   </app-overview-section>
@@ -156,7 +156,7 @@
                           site?.physicalAddress?.provinceCode !== null && site?.physicalAddress?.postal !== null"
                         title="Site Address"
                         [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
-                        [editRoute]="SiteRoutes.SITE_ADDRESS"
+                        [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Address">
       {{ site?.physicalAddress?.street | default }}

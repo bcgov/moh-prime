@@ -6,6 +6,7 @@ namespace Prime.Services
     public interface IBusinessEventService
     {
         Task<BusinessEvent> CreateStatusChangeEventAsync(int enrolleeId, string description);
+        Task<BusinessEvent> CreateEmailEventAsync(string description);
         Task<BusinessEvent> CreateEmailEventAsync(int enrolleeId, string description);
         Task<BusinessEvent> CreateNoteEventAsync(int enrolleeId, string description);
         Task<BusinessEvent> CreateAdminActionEventAsync(int enrolleeId, string description);

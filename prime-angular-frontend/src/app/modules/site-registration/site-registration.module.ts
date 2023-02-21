@@ -18,7 +18,6 @@ import { OrganizationClaimedPageComponent } from './pages/organization-claimed-p
 import { OrganizationAgreementPageComponent } from './pages/organization-agreement-page/organization-agreement-page.component';
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
 import { BusinessLicencePageComponent } from './pages/business-licence-page/business-licence-page.component';
-import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
 import { AdministratorPageComponent } from './pages/administrator-page/administrator-page.component';
 import { PrivacyOfficerPageComponent } from './pages/privacy-officer-page/privacy-officer-page.component';
@@ -43,7 +42,6 @@ import { DeviceProviderPageComponent } from './pages/device-provider-page/device
     OrganizationAgreementPageComponent,
     CareSettingPageComponent,
     BusinessLicencePageComponent,
-    SiteAddressPageComponent,
     HoursOperationPageComponent,
     RemoteUsersPageComponent,
     RemoteUserPageComponent,

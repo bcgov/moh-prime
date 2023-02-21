@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
 
@@ -9,6 +9,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { BusinessLicenceForm } from './business-licence-form.model';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceForm> {
   private siteId: number;
@@ -17,7 +18,8 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
   public constructor(
     private fb: FormBuilder,
-    private siteResource: SiteResource
+    private siteResource: SiteResource,
+    private formUtilsService: FormUtilsService,
   ) {
     super();
     this.businessLicenceUpdated = false;
@@ -44,12 +46,16 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
     return this.formInstance.get('pec') as FormControl;
   }
 
+  public get physicalAddress(): FormGroup {
+    return this.formInstance.get('physicalAddress') as FormGroup;
+  }
+
   public get json(): BusinessLicenceForm {
     if (!this.formInstance) {
       return;
     }
 
-    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration } = this.formInstance.getRawValue();
+    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress } = this.formInstance.getRawValue();
 
     return {
       businessLicence: {
@@ -59,7 +65,8 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       },
       doingBusinessAs,
       pec,
-      activeBeforeRegistration
+      activeBeforeRegistration,
+      physicalAddress
     };
   }
 
@@ -78,7 +85,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
     this.siteId = siteId;
 
-    const { doingBusinessAs, pec, businessLicence } = model;
+    const { doingBusinessAs, pec, businessLicence, physicalAddress } = model;
     // Preserve the business licence for use when
     // creating JSON format from the form
     this.businessLicence = businessLicence;
@@ -86,7 +93,8 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
     this.formInstance.patchValue({
       ...businessLicence,
       doingBusinessAs,
-      pec
+      pec,
+      physicalAddress,
     });
   }
 
@@ -127,7 +135,13 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       activeBeforeRegistration: [
         false,
         []
-      ]
+      ],
+      physicalAddress: this.formUtilsService.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        areDisabled: ['provinceCode', 'countryCode'],
+        useDefaults: ['provinceCode', 'countryCode'],
+        exclude: ['street2']
+      })
     });
   }
 
