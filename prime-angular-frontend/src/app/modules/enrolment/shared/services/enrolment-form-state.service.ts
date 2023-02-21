@@ -614,9 +614,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * works, contains a FormArray. This nested FormArray contains a FormGroup for each facility that the enrollee works
    * at, in that Health Authority
    */
-  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormGroup, healthAuthorityCode: number) {
+  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormGroup, healthAuthorityCode?: number) {
     const facilityName = haSiteForm.get('facilityName') as FormControl;
     this.formUtilsService.setValidators(facilityName, [Validators.required]);
+    const healthAuthorityControl = haSiteForm.get('healthAuthorityCode') as FormControl;
+    this.formUtilsService.setValidators(healthAuthorityControl, [Validators.required]);
     let sitesOfHealthAuthority = healthAuthoritySites.get(String(healthAuthorityCode)) as FormArray;
     if (!sitesOfHealthAuthority) {
       sitesOfHealthAuthority = this.fb.array([]);

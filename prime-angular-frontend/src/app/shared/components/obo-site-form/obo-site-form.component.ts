@@ -16,6 +16,7 @@ export class OboSiteFormComponent implements OnInit {
   @Input() public last: boolean;
   @Input() public careSettingCode: number;
   @Input() public healthAuthorityName?: string;
+  @Input() public healthAuthorities?: Config<number>[];
   @Input() public jobNames: Config<number>[];
   @Input() public allowDefaultOption: boolean;
   @Input() public defaultOptionLabel: string;

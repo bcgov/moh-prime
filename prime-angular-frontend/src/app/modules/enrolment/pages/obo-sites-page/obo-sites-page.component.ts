@@ -27,6 +27,7 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 })
 export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public jobNames: Config<number>[];
+  public healthAuthorities: Config<number>[];
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
   public CareSettingEnum = CareSettingEnum;
@@ -64,6 +65,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.jobNames = this.configService.jobNames;
     this.allowDefaultOption = false;
     this.defaultOptionLabel = 'None';
+    this.healthAuthorities = this.configService.healthAuthorities;
   }
 
   public get oboSites(): FormArray {
@@ -96,6 +98,12 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
     }
     return careSettings;
+  }
+
+  public get enrolleeHealthAuthorities() {
+    return this.healthAuthorities.filter(a =>
+      this.enrolmentFormStateService.json?.enrolleeHealthAuthorities.find((aa) => aa.healthAuthorityCode === a.code)
+    );
   }
 
   public healthAuthoritySiteControl(healthAuthorityCode: string): AbstractControl[] {
@@ -155,14 +163,12 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
         const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
-        sitesOfHealthAuthority.removeAt(index);
+        if (sitesOfHealthAuthority) {
+          sitesOfHealthAuthority.removeAt(index);
+        }
         break;
       }
     }
-  }
-
-  public routeBackTo() {
-    this.routeTo(EnrolmentRoutes.REGULATORY);
   }
 
   public ngOnInit() {
@@ -208,11 +214,20 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
             break;
           }
           case CareSettingEnum.HEALTH_AUTHORITY: {
-            this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
-              if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
-                this.addOboSite(careSettingCode, ha.healthAuthorityCode);
+            //determine if necessary to add HA job site
+            if (this.oboSites?.length) {
+              if (this.oboSites?.length < this.enrolleeHealthAuthorities.length) {
+                for (let i = 0; i < (this.enrolleeHealthAuthorities.length - this.oboSites?.length); i++) {
+                  this.addOboSite(careSettingCode);
+                }
               }
-            });
+            } else {
+              this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
+                if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
+                  this.addOboSite(careSettingCode, ha.healthAuthorityCode);
+                }
+              });
+            }
             break;
           }
         }

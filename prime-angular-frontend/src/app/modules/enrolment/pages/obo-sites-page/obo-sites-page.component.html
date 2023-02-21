@@ -73,6 +73,7 @@
                                        [index]="index"
                                        [careSettingCode]="careSetting.careSettingCode"
                                        [healthAuthorityName]="+healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true"
+                                       [healthAuthorities]="enrolleeHealthAuthorities"
                                        [site]="site"
                                        [total]="healthAuthoritySiteControl(healthAuthorityCode).length"
                                        [last]="last"
@@ -132,7 +133,7 @@
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
-                   (back)="routeBackTo()"
-                   (continue)="onBack()"></app-page-footer>
+                   (back)="onBack(EnrolmentRoutes.REGULATORY)"
+                   (continue)="onBack(EnrolmentRoutes.OVERVIEW)"></app-page-footer>
 
 </app-enrollee-page>
