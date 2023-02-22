@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, Input, OnInit, AfterContentInit, ViewChild } from '@angular/core';
+import { Validators, FormGroup } from '@angular/forms';
+
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import moment from 'moment';
 
@@ -10,12 +12,29 @@ import moment from 'moment';
 })
 export class BusinessLicenceExpiryComponent implements OnInit {
   @Input() public form: FormGroup;
+  @Input() public showExpiryDate: boolean;
 
   public minExpiryDate: moment.Moment;
+
+  @ViewChild('expiryDateSlide') public expiryDateSlideToggle: MatSlideToggle;
 
   constructor() {
     this.minExpiryDate = moment();
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+  }
+
+  public onChange(event: MatSlideToggleChange): void {
+    this.showExpiryDate = !event.checked
+    let expiryDateControl = this.form.get('expiryDate');
+    if (event.checked) {
+      expiryDateControl.reset();
+      expiryDateControl.clearValidators();
+      expiryDateControl.updateValueAndValidity();
+    } else {
+      expiryDateControl.setValidators([Validators.required]);
+    }
+    this.form.markAsUntouched();
+  }
 }
