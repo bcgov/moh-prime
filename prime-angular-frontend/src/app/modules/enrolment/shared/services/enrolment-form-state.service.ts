@@ -391,7 +391,10 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
           break;
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {
-          this.addHealthAuthorityOboSite(site, healthAuthoritySites, s.healthAuthorityCode);
+          //create separate site to avoid validator transfered to oboSitesFormArray
+          const haSite = this.buildOboSiteForm();
+          haSite.patchValue(s);
+          this.addHealthAuthorityOboSite(haSite, healthAuthoritySites, s.healthAuthorityCode);
           break;
         }
       }

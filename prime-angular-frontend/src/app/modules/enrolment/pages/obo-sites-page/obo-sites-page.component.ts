@@ -9,8 +9,8 @@ import { ConfigService } from '@config/config.service';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { UtilsService } from '@core/services/utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -29,6 +29,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   public jobNames: Config<number>[];
   public healthAuthorities: Config<number>[];
   public allowDefaultOption: boolean;
+  public showHAError: boolean;
   public defaultOptionLabel: string;
   public CareSettingEnum = CareSettingEnum;
   public HealthAuthorityEnum = HealthAuthorityEnum;
@@ -181,6 +182,15 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.removeCareSettingSites();
   }
 
+  public onSubmit(): void {
+    this.showHAError = !this.validateHAOboSiteJob();
+    if (!this.showHAError) {
+      super.onSubmit();
+    } else {
+      this.utilService.scrollTop();
+    }
+  }
+
   protected createFormInstance() {
     this.form = this.enrolmentFormStateService.oboSitesForm;
   }
@@ -323,5 +333,26 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       sitesOfHealthAuthority.updateValueAndValidity();
       sitesOfHealthAuthority.clear();
     });
+  }
+
+  /**
+   * Check if each selected HA has at least one obo job site
+   * @returns true if pass
+   */
+  private validateHAOboSiteJob(): boolean {
+    let result = true;
+    if (this.careSettings.find((c) => c.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
+      if (this.enrolleeHealthAuthorities.length > 0) {
+        const oboJobSiteHAs = Object.values(this.healthAuthoritySites.controls).map((haControl: FormArray) => {
+          return haControl.at(0).get("healthAuthorityCode").value;
+        });
+        this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
+          if (!oboJobSiteHAs.find(o => o === ha.healthAuthorityCode)) {
+            result = false;
+          }
+        });
+      }
+    }
+    return result;
   }
 }
