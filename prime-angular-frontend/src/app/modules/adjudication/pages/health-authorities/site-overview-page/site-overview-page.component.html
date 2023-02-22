@@ -66,4 +66,38 @@
 
     </form>
   </app-page-section>
+
+  <app-page-section class="mb-5">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Enter Vendor</ng-container>
+    </app-page-subheader2>
+
+    <form (ngSubmit)="onSubmitVendor()"
+          [formGroup]="vendorForm"
+          novalidate>
+
+      <div class="row">
+        <div class="col-sm-12 col-lg-9 col-xl-5 pb-2">
+
+          <mat-form-field class="w-100">
+            <mat-select placeholder="Vendor" 
+                        formArrayName="vendors"
+                        (selectionChange)="onVendorChange($event.value)">
+              <mat-option *ngFor="let vend of healthAuthorityVendors"
+                          [value]="vend">{{ vend.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+        <div class="col-sm-12">
+
+          <button mat-flat-button
+                  color="primary">Save Vendor
+          </button>
+
+        </div>
+      </div>
+
+    </form>
+  </app-page-section>
 </ng-template>
