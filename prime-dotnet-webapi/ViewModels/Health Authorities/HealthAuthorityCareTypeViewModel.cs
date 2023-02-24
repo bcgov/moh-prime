@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FluentValidation;
 
 namespace Prime.ViewModels.HealthAuthoritySites
@@ -7,6 +8,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public int Id { get; set; }
         public int HealthAuthorityOrganizationId { get; set; }
         public string CareType { get; set; }
+        public IEnumerable<HealthAuthorityVendorViewModel> Vendors { get; set; }
     }
 
     public class HealthAuthorityCareTypeValidator : AbstractValidator<HealthAuthorityCareTypeViewModel>
