@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Address, AddressLine } from '@lib/models/address.model';
@@ -92,7 +93,10 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
 
   public onToggleChange($event: MatSlideToggleChange) {
     if (!$event.checked) {
-      this.formState.patchValue({...this.formState.json, pec: null  }, this.route.snapshot.params.sid);
+      this.formUtilsService.resetAndClearValidators(this.formState.pec);
+      this.formState.patchValue({ pec: null, siteName: this.formState.siteName.value, securityGroupCode: this.formState.securityGroupCode.value, physicalAddress: this.formState.physicalAddress.value }, this.route.snapshot.params.sid);
+    } else {
+      this.formUtilsService.setValidators(this.formState.pec, [Validators.required]);
     }
   }
 

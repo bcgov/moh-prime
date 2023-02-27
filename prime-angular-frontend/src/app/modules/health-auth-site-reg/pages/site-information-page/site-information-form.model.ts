@@ -1,4 +1,4 @@
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { Address } from '@lib/models/address.model';
 
-export interface SiteInformationForm extends Pick<HealthAuthoritySite, 'siteName' | 'pec' | 'activeBeforeRegistration' | 'securityGroupCode' | 'physicalAddress'> { }
+export interface SiteInformationForm extends Pick<HealthAuthoritySite, 'siteName' | 'pec' | 'securityGroupCode' | 'physicalAddress'> { }

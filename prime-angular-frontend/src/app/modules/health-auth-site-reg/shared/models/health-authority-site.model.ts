@@ -16,7 +16,6 @@ export interface HealthAuthoritySiteDto extends BaseHealthAuthoritySite {
   healthAuthorityCareType: HealthAuthorityCareType;
   siteName;
   pec: string;
-  activeBeforeRegistration: boolean;
   securityGroupCode: number;
   physicalAddress: Address;
   businessHours: BusinessDay[];
@@ -32,7 +31,6 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
     public healthAuthorityCareType: HealthAuthorityCareType,
     public siteName: string,
     public pec: string,
-    public activeBeforeRegistration: boolean,
     public securityGroupCode: number,
     public physicalAddress: Address,
     public businessHours: BusinessDay[],
@@ -49,7 +47,6 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
     this.healthAuthorityCareType = healthAuthorityCareType;
     this.siteName = siteName;
     this.pec = pec;
-    this.activeBeforeRegistration = activeBeforeRegistration;
     this.securityGroupCode = securityGroupCode;
     this.physicalAddress = physicalAddress;
     this.businessHours = businessHours;
@@ -74,7 +71,6 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
       healthAuthoritySite.healthAuthorityCareType,
       healthAuthoritySite.siteName,
       healthAuthoritySite.pec,
-      healthAuthoritySite.activeBeforeRegistration,
       healthAuthoritySite.securityGroupCode,
       healthAuthoritySite.physicalAddress,
       healthAuthoritySite.businessHours,
@@ -118,7 +114,6 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
     return {
       siteName: this.siteName,
       pec: this.pec,
-      activeBeforeRegistration: this.activeBeforeRegistration,
       securityGroupCode: this.securityGroupCode,
       physicalAddress: { ...this.physicalAddress },
       businessHours: [...this.businessHours],

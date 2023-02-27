@@ -53,7 +53,6 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     this.formInstance = this.fb.group({
       siteName: ['', [Validators.required]],
       pec: [null, []],
-      activeBeforeRegistration: [false, []],
       securityGroupCode: [null, [Validators.required]],
       physicalAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
