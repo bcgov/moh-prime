@@ -28,7 +28,6 @@ export class MockHealthAuthoritySiteService {
         healthAuthorityOrganizationId: faker.random.number(),
         careType: faker.random.words(1)
       },
-      activeBeforeRegistration: false,
       siteName: faker.random.words(2),
       pec: faker.random.number().toString(),
       securityGroupCode: faker.random.number(),
