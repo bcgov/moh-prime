@@ -67,7 +67,7 @@ export class FormControlValidators {
     const regExp = /^[a-z0-9._%'+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
     // Affixed spaces does not invalidate the entry, and should
     // be sanitized by on submission and by the server
-    const valid = (control.valid && regExp.test(control.value));
+    const valid = (control.valid && regExp.test(control.value.trim()));
     return (valid) ? null : { email: true, ...FormControlValidators.trim(control) };
   }
 
@@ -79,7 +79,7 @@ export class FormControlValidators {
   public static multipleEmails(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
     const regExp = /^([a-z0-9._%'+-]+@[a-z0-9.-]+\.[a-z]{2,})(,(\s)?[a-z0-9._%'+-]+@[a-z0-9.-]+\.[a-z]{2,})*$/i;
-    const valid = (control.valid && regExp.test(control.value));
+    const valid = (control.valid && regExp.test(control.value.trim()));
     return (valid) ? null : { emails: true, ...FormControlValidators.trim(control) };
   }
 
