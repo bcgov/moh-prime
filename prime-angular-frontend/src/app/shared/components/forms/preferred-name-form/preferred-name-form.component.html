@@ -10,6 +10,7 @@
                [placeholder]="control.label"
                [formControlName]="control.name">
         <mat-error>Required</mat-error>
+        <mat-error *ngIf="form.get('preferredLastName').hasError('lastName')">Please only use letters</mat-error>
       </mat-form-field>
 
     </div>

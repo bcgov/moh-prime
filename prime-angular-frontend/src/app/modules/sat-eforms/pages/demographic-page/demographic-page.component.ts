@@ -1,3 +1,4 @@
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -149,7 +150,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
       this.formUtilsService.resetAndClearValidators(preferredLastName);
     } else {
       this.formUtilsService.setValidators(preferredFirstName, [Validators.required]);
-      this.formUtilsService.setValidators(preferredLastName, [Validators.required]);
+      this.formUtilsService.setValidators(preferredLastName, [Validators.required, FormControlValidators.lastName]);
     }
   }
 

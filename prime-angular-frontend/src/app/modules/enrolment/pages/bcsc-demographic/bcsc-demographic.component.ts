@@ -24,6 +24,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 import { BcscDemographicFormState } from './bcsc-demographic-form-state.class';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 @Component({
   selector: 'app-bcsc-demographic',
@@ -161,7 +162,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       this.formUtilsService.resetAndClearValidators(preferredLastName);
     } else {
       this.formUtilsService.setValidators(preferredFirstName, [Validators.required]);
-      this.formUtilsService.setValidators(preferredLastName, [Validators.required]);
+      this.formUtilsService.setValidators(preferredLastName, [Validators.required, FormControlValidators.lastName]);
     }
   }
 
