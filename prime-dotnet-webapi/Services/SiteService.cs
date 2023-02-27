@@ -131,6 +131,20 @@ namespace Prime.Services
             await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
         }
 
+        public async Task UpdateVendor(int siteId, int vendorCode)
+        {
+            var healthAuthSite = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            var site = await _context.HealthAuthorityVendors
+                .SingleOrDefaultAsync(s => s.Id == healthAuthSite.HealthAuthorityVendorId);
+
+            site.VendorCode = vendorCode;
+
+            await _context.SaveChangesAsync();
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Vendor associated with site");
+        }
+
         public async Task DeleteSiteAsync(int siteId)
         {
             var site = await _context.Sites

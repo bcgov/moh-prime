@@ -1,6 +1,6 @@
-import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
-import { MatSelectChange } from '@angular/material/select';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { Component, OnInit } from '@angular/core';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -14,6 +14,9 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 import { VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface HealthAuthorityVendorMap extends VendorConfig {
   id?: number;
@@ -26,6 +29,7 @@ interface HealthAuthorityVendorMap extends VendorConfig {
 export class SiteOverviewPageComponent implements OnInit {
   public busy: Subscription;
   public site: HealthAuthoritySiteAdmin;
+  public healthAuthoritySite: HealthAuthoritySite;
   public form: FormGroup;
   public vendorForm: FormGroup;
   public healthAuthorityVendors: HealthAuthorityVendorMap[];
@@ -39,6 +43,7 @@ export class SiteOverviewPageComponent implements OnInit {
     private fb: FormBuilder,
     private configService: ConfigService,
     private siteResource: SiteResource,
+    private dialog: MatDialog,
   ) {
     this.refresh = new BehaviorSubject<boolean>(null);
     this.healthAuthorityVendors = this.configService.vendors
@@ -69,14 +74,29 @@ export class SiteOverviewPageComponent implements OnInit {
   public onSubmitVendor(): void {
 
     if (this.formUtilsService.checkValidity(this.vendorForm)) {
-      const haid = +this.route.snapshot.params.haid;
-      var vendorCodeList: number[] = [this.vendor.code];
-      this.busy = this.healthAuthorityResource.updateHealthAuthorityVendors(haid, vendorCodeList)
+      const siteId = +this.route.snapshot.params.sid;
+      const vendor = this.vendor;
+
+      const data: DialogOptions = {
+        title: 'Change Vendor',
+        message: "Are you sure you want to change this site's vendor?",
+        actionType: 'warn',
+        actionText: 'Change Vendor',
+        component: NoteComponent,
+      };
+
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .subscribe(rationale => {
+        console.log(rationale.output);
+
+        this.siteResource.updateVendor(siteId, vendor.code)
         .subscribe(() => {
           this.refresh.next(true);
-          this.site.healthAuthorityVendor.vendorCode = this.vendor.code;
-        })
-    }
+          this.site.healthAuthorityVendor.vendorCode = vendor.code;
+        });
+      });
+    }  
   }
 
   public onVendorChange(value: VendorConfig) {

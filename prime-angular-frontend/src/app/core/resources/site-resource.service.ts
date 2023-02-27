@@ -220,6 +220,20 @@ export class SiteResource {
       );
   }
 
+  public updateVendor(siteId: number, vendorCode: number): NoContent {
+    const payload = { data: vendorCode };
+    return this.apiResource.put<NoContent>(`sites/${siteId}/vendor`, payload)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Vendor has been updated')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Vendor could not be updated');
+          this.logger.error('[SiteRegistration] SiteResource::updateVendor error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public setSiteAdjudicator(siteId: number, adjudicatorId?: number): NoContent {
     const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
     return this.apiResource.put<NoContent>(`sites/${siteId}/adjudicator`, null, params)
