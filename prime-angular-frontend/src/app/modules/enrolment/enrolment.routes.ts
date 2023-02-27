@@ -45,7 +45,7 @@ export class EnrolmentRoutes {
   // Step display text
   public static SETP_CONTACT = 'Contact';
   public static STEP_CARE_SETTING = 'Care Setting';
-  public static STEP_COLLEGE = 'College';
+  public static STEP_COLLEGE = 'College /<br/>Job Info';
   public static STEP_SELF_DECLARATION = 'Self-Declaration';
   public static STEP_REVIEW = 'Review';
   public static STEP_TOA = 'Term of Access';
