@@ -1,5 +1,6 @@
 name: Build PR
 # Build all of the necessary components for the PRIME application from PullRequest branch. Images are then deployed to Dev environment via the prime-app-ephemeral-template.yml in the infrastructure folder
+# This should only run for PR tags with MOH-KC. This is the same build for pr, but uses the MOH keycloak links
 on:
   push:
     branches-ignore:
@@ -8,6 +9,7 @@ on:
       - 'master'
   workflow_dispatch:
   pull_request:
+    types: [ labeled ]
     branches-ignore:
       - 'develop'
       - 'test'
@@ -15,7 +17,7 @@ on:
 
 jobs:
   build-document-manager-backend:
-    if: ${{ github.event.label.name != 'MOH Keycloak' }}
+    if: ${{ github.event.label.name == 'MOH Keycloak' }}
     runs-on: ubuntu-20.04
     environment: Development
     steps:
@@ -61,7 +63,7 @@ jobs:
           docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
 
   build-backend:
-    if: ${{ github.event.label.name != 'MOH Keycloak' }}
+    if: ${{ github.event.label.name == 'MOH Keycloak' }}
     runs-on: ubuntu-20.04
     environment: Development
     steps:
@@ -123,7 +125,7 @@ jobs:
           docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
 
   build-frontend:
-    if: ${{ github.event.label.name != 'MOH Keycloak' }}
+    if: ${{ github.event.label.name == 'MOH Keycloak' }}
     runs-on: ubuntu-latest
     environment: Development
     defaults:
@@ -195,7 +197,7 @@ jobs:
           docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
 
   apply-oc-template:
-    if: ${{ github.event.label.name != 'MOH Keycloak' }}
+    if: ${{ github.event.label.name == 'MOH Keycloak' }}
     runs-on: ubuntu-20.04
     environment: Development
     needs: [build-document-manager-backend,build-frontend,build-backend]
