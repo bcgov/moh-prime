@@ -1,4 +1,4 @@
-name: Build PR
+name: Build PR - Moh Keycloak
 # Build all of the necessary components for the PRIME application from PullRequest branch. Images are then deployed to Dev environment via the prime-app-ephemeral-template.yml in the infrastructure folder
 # This should only run for PR tags with MOH-KC. This is the same build for pr, but uses the MOH keycloak links
 on:
