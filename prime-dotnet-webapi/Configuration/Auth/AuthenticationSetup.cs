@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -62,25 +63,24 @@ namespace Prime.Configuration.Auth
         }
 
         /// <summary>
-        /// Flattens the Realm Access claim, as Microsoft Identity Model doesn't support nested claims
+        /// Flattens the Resource Access claim, as Microsoft Identity Model doesn't support nested claims
         /// </summary>
         private static void FlattenRealmAccessRoles(ClaimsIdentity identity)
         {
-            var realmAccessClaim = identity.Claims
-                .SingleOrDefault(claim => claim.Type == Claims.RealmAccess)
+            var resourceAccessClaim = identity.Claims
+                .SingleOrDefault(claim => claim.Type == Claims.ResourceAccess)
+                ?.Value;
+            string authorizedParty = identity.Claims
+                .SingleOrDefault(claim => claim.Type == Claims.AuthorizedParty)
                 ?.Value;
 
-            if (realmAccessClaim != null)
+            if (resourceAccessClaim != null)
             {
-                var realmAccess = JsonConvert.DeserializeObject<RealmAccess>(realmAccessClaim);
-
-                identity.AddClaims(realmAccess.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
+                var clientsToRoles = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string[]>>>(resourceAccessClaim);
+                Dictionary<string, string[]> rolesToRolesList = clientsToRoles.GetValueOrDefault(authorizedParty);
+                string[] roles = rolesToRolesList.GetValueOrDefault("roles");
+                identity.AddClaims(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             }
-        }
-
-        private class RealmAccess
-        {
-            public string[] Roles { get; set; }
         }
     }
 }

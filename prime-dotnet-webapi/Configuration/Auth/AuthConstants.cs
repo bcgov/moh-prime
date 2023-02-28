@@ -21,9 +21,10 @@ namespace Prime.Configuration.Auth
         public const string Address = "address";
         public const string Birthdate = "birthdate";
         public const string Email = "email";
-        public const string RealmAccess = "realm_access";
+        public const string ResourceAccess = "resource_access";
         public const string AssuranceLevel = "identity_assurance_level";
         public const string IdentityProvider = "identity_provider";
+        public const string AuthorizedParty = "azp";
     }
 
     public static class FeatureFlags

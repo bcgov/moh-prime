@@ -27,8 +27,14 @@ export interface AccessTokenParsed extends KeycloakTokenParsed {
   jti: string;
   name: string;
   preferred_username: string;
+  // TODO: remove
   realm_access?: {
     roles: Role[]
+  };
+  resource_access?: {
+    client: {
+      roles: Role[]
+    }
   };
   scope: string;
   typ: 'Bearer';
