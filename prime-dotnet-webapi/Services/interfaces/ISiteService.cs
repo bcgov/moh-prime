@@ -16,7 +16,7 @@ namespace Prime.Services
         Task UpdateCompletedAsync(int siteId, bool completed);
         Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null);
         Task UpdatePecCode(int siteId, string pecCode);
-        Task UpdateVendor(int siteId, int vendorCode);
+        Task UpdateVendor(int siteId, int vendorCode, string rationale);
         Task DeleteSiteAsync(int siteId);
         Task<Site> ApproveSite(int siteId);
         Task<Site> DeclineSite(int siteId);

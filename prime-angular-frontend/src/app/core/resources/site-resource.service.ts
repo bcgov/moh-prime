@@ -220,8 +220,8 @@ export class SiteResource {
       );
   }
 
-  public updateVendor(siteId: number, vendorCode: number): NoContent {
-    const payload = { data: vendorCode };
+  public updateVendor(siteId: number, vendorCode: number, rationale: string): NoContent {
+    const payload = { vendorCode, rationale };
     return this.apiResource.put<NoContent>(`sites/${siteId}/vendor`, payload)
       .pipe(
         NoContentResponse,
@@ -229,6 +229,20 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Vendor could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updateVendor error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateVendorEvent(siteId: number, rationale: string): NoContent {
+    const payload = { data: rationale };
+    return this.apiResource.put<NoContent>(`sites/${siteId}/update-vendor-event`, payload)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been updated')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Vendor update event could not be created');
+          this.logger.error('[SiteRegistration] SiteResource::updateVendorRationale error has occurred: ', error);
           throw error;
         })
       );

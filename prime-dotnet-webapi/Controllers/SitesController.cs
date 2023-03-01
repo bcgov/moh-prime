@@ -757,12 +757,17 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        public class VendorObject {
+            public int vendorCode{get;set;}
+            public string rationale{get;set;}
+        }
+        
         // PUT: api/Sites/5/vendor
         /// <summary>
         /// Update the Vendor code.
         /// </summary>
         /// <param name="siteId"></param>
-        /// <param name="vendorCode"></param>
+        /// <param name="vendorObject"></param>
         [HttpPut("{siteId}/vendor", Name = nameof(UpdateVendor))]
         [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
@@ -770,18 +775,18 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateVendor(int siteId, FromBodyData<int> vendorCode)
+        public async Task<ActionResult> UpdateVendor(int siteId, VendorObject vendorObject)
         {
             if (!await _siteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            await _siteService.UpdateVendor(siteId, vendorCode.Data);
+            await _siteService.UpdateVendor(siteId, vendorObject.vendorCode, vendorObject.rationale);
 
             return NoContent();
         }
-
+        
         // Get: api/site/5/business-licences/5/document/token
         /// <summary>
         /// Gets a download token for the latest business licence on a site.

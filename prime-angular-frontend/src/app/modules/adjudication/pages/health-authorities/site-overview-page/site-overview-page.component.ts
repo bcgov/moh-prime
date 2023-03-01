@@ -88,13 +88,12 @@ export class SiteOverviewPageComponent implements OnInit {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe(rationale => {
-        console.log(rationale.output);
-
-        this.siteResource.updateVendor(siteId, vendor.code)
-        .subscribe(() => {
-          this.refresh.next(true);
-          this.site.healthAuthorityVendor.vendorCode = vendor.code;
-        });
+        this.siteResource.updateVendor(siteId, vendor.code, rationale)
+            .subscribe(() => {
+              this.refresh.next(true);
+              this.site.healthAuthorityVendor.vendorCode = vendor.code;
+            })
+        
       });
     }  
   }
