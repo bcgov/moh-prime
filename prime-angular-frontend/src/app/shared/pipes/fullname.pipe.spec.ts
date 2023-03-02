@@ -12,10 +12,10 @@ describe('FullnamePipe', () => {
     expect(result).toBe(`${value.firstName} ${value.lastName}`);
   });
 
-  it('should not concatenate first and last name when first name is missing', () => {
+  it('when first name is missing, last name should still be returned', () => {
     const value = { firstName: '', lastName: 'Rabbit' };
     const result = pipe.transform(value);
-    expect(result).toBe('');
+    expect(result).toBe('Rabbit');
   });
 
   it('should not concatenate first and last name when last name is missing', () => {

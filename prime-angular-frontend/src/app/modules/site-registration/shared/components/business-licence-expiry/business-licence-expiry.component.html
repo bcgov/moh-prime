@@ -2,11 +2,21 @@
   <app-page-subheader2>
     <ng-container appPageSubheader2Title>Business Licence Expiry Date</ng-container>
     <ng-container appPageSubheader2Summary>
-      Use the calendar option below to tell us when this business licence expires.
+      <mat-slide-toggle #expiryDateSlide
+                        class="my-2 mb-3"
+                        color="primary"
+                        [checked]="!showExpiryDate"
+                        (change)="onChange($event)">
+        This business licence doesn’t have an expiry date
+      </mat-slide-toggle>
+      <div *ngIf="showExpiryDate">
+        Use the calendar option below to tell us when this business licence expires.
+      </div>
     </ng-container>
   </app-page-subheader2>
 
-  <div class="row">
+  <div class="row"
+       *ngIf="showExpiryDate">
     <div class="col">
 
       <mat-form-field class="w-100">
