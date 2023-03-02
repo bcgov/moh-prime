@@ -100,7 +100,7 @@ namespace Prime.Services.Rules
                 catch (PharmanetCollegeApiException)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, cert.ToString());
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "An error occurred calling the Pharmanet API.");
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "An error occurred calling the PharmaNet API.");
                     passed = false;
                     continue;
                 }
@@ -108,12 +108,12 @@ namespace Prime.Services.Rules
                 //After validating with prescriber prefix and no hit, try to validate with non-prescriber prefix
                 if (record == null)
                 {
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "Record not found in Pharmanet.");
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "Record not found in PharmaNet.");
                 }
                 else
                 {
                     await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber,
-                        $"A record was found in Pharmanet with effective date {record.EffectiveDate:dd MMM yyy}.");
+                        $"A record was found in PharmaNet with effective date {record.EffectiveDate:dd MMM yyy}.");
                 }
 
                 //As long as the licence class has non prescribing prefix, fetch the college record
@@ -126,7 +126,7 @@ namespace Prime.Services.Rules
                         if (nonPrescripting != null)
                         {
                             await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber,
-                                $"A record was found in Pharmanet with effective date {nonPrescripting.EffectiveDate:dd MMM yyy}.");
+                                $"A record was found in PharmaNet with effective date {nonPrescripting.EffectiveDate:dd MMM yyy}.");
 
                             //if got a hit, check to see which college record has the most recent effective date
                             if (nonPrescripting.EffectiveDate > record.EffectiveDate)
