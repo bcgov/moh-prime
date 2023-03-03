@@ -149,8 +149,8 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
       this.formUtilsService.resetAndClearValidators(preferredFirstName);
       this.formUtilsService.resetAndClearValidators(preferredLastName);
     } else {
-      this.formUtilsService.setValidators(preferredFirstName, [Validators.required]);
-      this.formUtilsService.setValidators(preferredLastName, [Validators.required, FormControlValidators.lastName]);
+      this.formUtilsService.setValidators(preferredFirstName, [Validators.required, FormControlValidators.validName]);
+      this.formUtilsService.setValidators(preferredLastName, [Validators.required, FormControlValidators.validName]);
     }
   }
 
