@@ -24,15 +24,28 @@
 
       <div class="row">
         <div class="col">
+          
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Summary>
+              Site ID/PEC Code
+            </ng-container>
+          </app-page-subheader2>
 
-          <mat-form-field class="w-100">
-            <mat-label>Site ID/PEC Code</mat-label>
-            <input matInput
-                   [formControl]="formState.pec">
-            <mat-error *ngIf="formState.pec.hasError('assignable')">
-              Site ID/PEC Code exists in another Health Authority
-            </mat-error>
-          </mat-form-field>
+          <mat-slide-toggle #hasSiteID class="my-2 mb-3" color="primary" (change)="onToggleChange($event)"
+            [checked]="formState.pec.value">
+            Do you have a Site ID for this location?
+          </mat-slide-toggle>
+          
+          <div *ngIf="hasSiteID?.checked">
+            <mat-form-field class="w-100">
+              <mat-label></mat-label>
+              <input matInput [formControl]="formState.pec" />
+              <mat-error *ngIf="formState.pec.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="formState.pec.hasError('assignable')">
+                Site ID/PEC Code exists in another Health Authority
+              </mat-error>
+            </mat-form-field>
+          </div>
 
         </div>
       </div>
