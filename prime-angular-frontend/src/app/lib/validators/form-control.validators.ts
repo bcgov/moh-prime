@@ -234,7 +234,7 @@ export class FormControlValidators {
    */
     public static validName(control: AbstractControl): ValidationErrors | null {
       if (!control.value) { return null; }
-      const regExp = /^[a-z\d\-_\s]+$/i;
+      const regExp = /^[a-zA-Z]+[a-zA-Z\s\.\-\']*$/i;
       const valid = (control.valid && regExp.test(control.value));
       return (valid) ? null : { validName: true };
     }

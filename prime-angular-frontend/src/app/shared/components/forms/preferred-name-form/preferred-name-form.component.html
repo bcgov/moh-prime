@@ -10,9 +10,11 @@
         <input matInput
                [placeholder]="control.label"
                [formControlName]="control.name">
-        <mat-error>Required</mat-error>
-        <mat-error *ngIf="form.get('preferredLastName').hasError('validName')">Please only use letters</mat-error>
-        <mat-error *ngIf="form.get('preferredFirstName').hasError('validName')">Please only use letters</mat-error>
+        <mat-error *ngIf="control.name==='preferredFirstName' && form.get('preferredFirstName').hasError('required')">Required</mat-error>
+        <mat-error *ngIf="control.name==='preferredFirstName' && form.get('preferredFirstName').hasError('validName')">Please enter a valid name</mat-error>
+        <mat-error *ngIf="control.name==='preferredLastName' && form.get('preferredLastName').hasError('required')">Required</mat-error>
+        <mat-error *ngIf="control.name==='preferredLastName' && form.get('preferredLastName').hasError('validName')">Please enter a valid name</mat-error>
+        
 
       </mat-form-field>
 
