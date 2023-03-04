@@ -196,52 +196,60 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   }
 
   protected initForm() {
-    const forcedPatch: boolean = true;
-    // Initialize listeners before patching
-    this.patchForm(forcedPatch).subscribe(() => {
-      // Add at least one site for each careSetting selected by enrollee
-      this.careSettings.forEach(({ careSettingCode }) => {
-        switch (careSettingCode) {
-          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            this.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
-            if (!this.communityHealthSites.length) {
-              this.addOboSite(careSettingCode);
-            }
-            break;
-          }
-          case CareSettingEnum.COMMUNITY_PHARMACIST: {
-            this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
-            if (!this.communityPharmacySites.length) {
-              this.addOboSite(careSettingCode);
-            }
-            break;
-          }
-          case CareSettingEnum.DEVICE_PROVIDER: {
-            this.deviceProviderSites.setValidators([FormArrayValidators.atLeast(1)]);
-            if (!this.deviceProviderSites.length) {
-              this.addOboSite(careSettingCode);
-            }
-            break;
-          }
-          case CareSettingEnum.HEALTH_AUTHORITY: {
-            //determine if necessary to add HA job site
-            if (this.oboSites?.length) {
-              if (this.oboSites?.length < this.enrolleeHealthAuthorities.length) {
-                for (let i = 0; i < (this.enrolleeHealthAuthorities.length - this.oboSites?.length); i++) {
-                  this.addOboSite(careSettingCode);
-                }
-              }
-            } else {
-              this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
-                if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
-                  this.addOboSite(careSettingCode, ha.healthAuthorityCode);
-                }
-              });
-            }
-            break;
-          }
-        }
+    if (this.enrolmentService.isInitialEnrolment) {
+      this.patchForm(true).subscribe(() => {
+        this.setOboSites();
       });
+    } else {
+      //for renewal, pull the enrolment from enrolment service instead
+      this.enrolment = this.enrolmentService.enrolment;
+      this.setOboSites();
+    }
+  }
+
+  private setOboSites() {
+    // Add at least one site for each careSetting selected by enrollee
+    this.careSettings.forEach(({ careSettingCode }) => {
+      switch (careSettingCode) {
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+          this.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
+          if (!this.communityHealthSites.length) {
+            this.addOboSite(careSettingCode);
+          }
+          break;
+        }
+        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
+          if (!this.communityPharmacySites.length) {
+            this.addOboSite(careSettingCode);
+          }
+          break;
+        }
+        case CareSettingEnum.DEVICE_PROVIDER: {
+          this.deviceProviderSites.setValidators([FormArrayValidators.atLeast(1)]);
+          if (!this.deviceProviderSites.length) {
+            this.addOboSite(careSettingCode);
+          }
+          break;
+        }
+        case CareSettingEnum.HEALTH_AUTHORITY: {
+          //determine if necessary to add HA job site
+          if (this.oboSites?.length) {
+            if (this.oboSites?.length < this.enrolleeHealthAuthorities.length) {
+              for (let i = 0; i < (this.enrolleeHealthAuthorities.length - this.oboSites?.length); i++) {
+                this.addOboSite(careSettingCode);
+              }
+            }
+          } else {
+            this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
+              if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
+                this.addOboSite(careSettingCode, ha.healthAuthorityCode);
+              }
+            });
+          }
+          break;
+        }
+      }
     });
   }
 
