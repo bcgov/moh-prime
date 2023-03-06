@@ -103,7 +103,7 @@ objects:
             resources: {}
             envFrom:
               - configMapRef:
-                  name: keycloak
+                  name: keycloak-moh
             env:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${SVC_NAME}${URL_STUB}/api/docman
@@ -670,7 +670,7 @@ objects:
               - configMapRef:
                   name: dotnet-webapi-backend
               - configMapRef:
-                  name: keycloak
+                  name: keycloak-moh
               - configMapRef:
                   name: ldap
               - configMapRef:
@@ -829,7 +829,7 @@ objects:
             - name: JWT_OIDC_WELL_KNOWN_CONFIG
               valueFrom:
                 configMapKeyRef:
-                  name: keycloak
+                  name: keycloak-moh
                   key: JWT_WELL_KNOWN_CONFIG
             - name: SQLALCHEMY_DATABASE_URI
               value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
@@ -878,7 +878,7 @@ objects:
               - name: JWT_OIDC_WELL_KNOWN_CONFIG
                 valueFrom:
                   configMapKeyRef:
-                    name: keycloak
+                    name: keycloak-moh
                     key: JWT_WELL_KNOWN_CONFIG
               - name: SQLALCHEMY_DATABASE_URI
                 value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
