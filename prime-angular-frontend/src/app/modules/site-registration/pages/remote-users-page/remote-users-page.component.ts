@@ -32,6 +32,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public hasNoRemoteUserError: boolean;
   public hasNoEmailError: boolean;
   public lastRemoteUserRemoved: boolean;
@@ -110,6 +111,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
 
     // Inform the parent not to patch the form as there are outstanding changes
     // to the remote users that need to be persisted

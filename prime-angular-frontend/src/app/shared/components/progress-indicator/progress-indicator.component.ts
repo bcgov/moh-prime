@@ -5,10 +5,17 @@ export interface IProgressIndicator {
   currentRoute: string;
   routes: string[];
 }
-
-export interface ProgressStep {
+/**
+ * Used to store the mapping between the display step and the route
+ */
+export interface IStep {
   step: string;
-  route: string;
+  routes: string[];
+}
+/**
+ * Used to store the status of each step
+ */
+export interface IProgressStep extends IStep {
   isCurrent: boolean;
   completed: boolean;
 }
@@ -65,7 +72,7 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
    * @description
    * To use Step style progress bar
    */
-  @Input() public steps: ProgressStep[];
+  @Input() public steps: IProgressStep[];
   /**
   * @description
   * Acts as an override to display nothing under the progress
@@ -144,7 +151,7 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
       let stepComplete = true;
       this.steps = this.steps.map(s => {
         // set isCurrent to true only if in progress.
-        s.isCurrent = s.route === this.currentRoute;
+        s.isCurrent = s.routes.some(r => r === this.currentRoute);
         if (s.isCurrent && this.inProgress) {
           stepComplete = false;
         }

@@ -114,7 +114,7 @@ export class DashboardComponent implements OnInit {
     // Set the authenticated username for the application header
     this.authService.getUser$()
       .subscribe(({ firstName, lastName }: BcscUser) =>
-        this.username = `${firstName} ${lastName}`
+        this.username = (firstName ? `${firstName} ${lastName}` : lastName)
       );
 
     // Initialize the side navigation properties, and listen for

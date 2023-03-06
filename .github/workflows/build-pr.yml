@@ -105,7 +105,7 @@ jobs:
           docker build prime-dotnet-webapi/ \
           --file prime-dotnet-webapi/openshift.dockerfile \
           --tag prime-webapi-backend \
-          --build-arg BASPNETCORE_ENVIRONMENT="Development" \
+          --build-arg ASPNETCORE_ENVIRONMENT="Development" \
           --build-arg ASPNETCORE_HTTPS_PORT=5001 \
           --build-arg ASPNETCORE_URLS="http://+:8080" \
           --build-arg DB_CONNECTION_STRING="host=pr-${{steps.PR.outputs.number}}-postgres-db;port=5432;database=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}};username=${{secrets.PRIME_DB_USER}};password=${{secrets.PRIME_DB_PASSWORD}}" \
