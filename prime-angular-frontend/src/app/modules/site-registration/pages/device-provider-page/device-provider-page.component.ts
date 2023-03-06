@@ -36,6 +36,7 @@ export class DeviceProviderPageComponent extends AbstractCommunitySiteRegistrati
 
   public title: string;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public isEditing: boolean;
   public maxDateOfBirth: moment.Moment;
   public busy: Subscription;
@@ -121,6 +122,7 @@ export class DeviceProviderPageComponent extends AbstractCommunitySiteRegistrati
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
+    this.isSubmitted = this.site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(this.site, !this.hasBeenSubmitted);
     this.updateCardList(this.formState.json);
     this.isEditing = !this.formState.json.length;

@@ -58,10 +58,20 @@ namespace Prime.Services
 
         public async Task<HealthAuthorityViewModel> GetHealthAuthorityAsync(int id)
         {
-            return await _context.HealthAuthorities
+            HealthAuthorityViewModel healthAuthority = await _context.HealthAuthorities
                 .AsNoTracking()
                 .ProjectTo<HealthAuthorityViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(ha => ha.Id == id);
+            foreach (HealthAuthorityCareTypeViewModel careType in healthAuthority.CareTypes)
+            {
+                careType.Vendors = await _context.HealthAuthorityCareTypeToVendors
+                    .AsNoTracking()
+                    .Where(ct2v => ct2v.HealthAuthorityCareTypeId == careType.Id)
+                    .Select(ct2v => ct2v.HealthAuthorityVendor)
+                    .ProjectTo<HealthAuthorityVendorViewModel>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+            }
+            return healthAuthority;
         }
 
         // TODO: review this VM
