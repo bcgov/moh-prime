@@ -223,7 +223,7 @@ jobs:
           PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
           echo PR_NUMBER=$PR_NUMBER
-          oc process -f infrastructure/prime-app-ephemeral-template.yml \
+          oc process -f infrastructure/prime-app-ephemeral-template-moh-keycloak.yml \
             -p ASP_ENV=Development \
             -p FRONTEND_URL=pr-$PR_NUMBER \
             -p IMAGE_TAG=pr-$PR_NUMBER \
