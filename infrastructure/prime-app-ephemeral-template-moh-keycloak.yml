@@ -192,6 +192,13 @@ objects:
             "realm": "moh_applications",
             "clientId": "PRIME-APPLICATION-DEV"
           }
+        },
+        "mohKeycloakConfig": {
+          "config": {
+            "url": "",
+            "realm": "",
+            "clientId": ""
+          }
         }
       }
 
