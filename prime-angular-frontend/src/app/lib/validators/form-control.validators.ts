@@ -227,4 +227,15 @@ export class FormControlValidators {
       return valid ? null : { requiredIn: true };
     };
   }
+
+    /**
+   * @description
+   * Checks the form control value is letters.
+   */
+    public static validName(control: AbstractControl): ValidationErrors | null {
+      if (!control.value) { return null; }
+      const regExp = /^[a-zA-Z]+[a-zA-Z\s\.\-\']*$/i;
+      const valid = (control.valid && regExp.test(control.value));
+      return (valid) ? null : { validName: true };
+    }
 }
