@@ -43,7 +43,7 @@ export class EnrolmentRoutes {
   public static ABSENCE_MANAGEMENT = 'absence-management';
 
   // Step display text
-  public static SETP_CONTACT = 'Contact';
+  public static STEP_CONTACT = 'Contact';
   public static STEP_CARE_SETTING = 'Care Setting';
   public static STEP_COLLEGE = 'College /<br/>Job Info';
   public static STEP_SELF_DECLARATION = 'Self-Declaration';
@@ -120,7 +120,7 @@ export class EnrolmentRoutes {
 
   public static enrolmentSteps(): IStep[] {
     return [
-      { routes: [this.BCSC_DEMOGRAPHIC], step: this.SETP_CONTACT },
+      { routes: [this.BCSC_DEMOGRAPHIC], step: this.STEP_CONTACT },
       { routes: [this.CARE_SETTING], step: this.STEP_CARE_SETTING },
       { routes: [this.REGULATORY, this.OBO_SITES, this.REMOTE_ACCESS, this.REMOTE_ACCESS_ADDRESSES], step: this.STEP_COLLEGE },
       { routes: [this.SELF_DECLARATION], step: this.STEP_SELF_DECLARATION },

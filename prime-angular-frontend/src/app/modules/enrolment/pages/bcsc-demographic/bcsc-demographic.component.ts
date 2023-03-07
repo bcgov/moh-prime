@@ -13,7 +13,6 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
-import { IStep } from '@shared/components/progress-indicator/progress-indicator.component';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
