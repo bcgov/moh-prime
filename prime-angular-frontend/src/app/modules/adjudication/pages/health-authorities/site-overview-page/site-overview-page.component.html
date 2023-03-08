@@ -80,9 +80,8 @@
         <div class="col-sm-12 col-lg-9 col-xl-5 pb-2">
 
           <mat-form-field class="w-100">
-            <mat-select placeholder="Vendor" 
-                        formArrayName="vendors"
-                        (selectionChange)="onVendorChange($event.value)">
+            <mat-select placeholder="Vendor"
+                        formControlName="vendors">
               <mat-option *ngFor="let vend of healthAuthorityVendors"
                           [value]="vend">{{ vend.name }}</mat-option>
             </mat-select>
