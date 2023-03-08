@@ -74,6 +74,12 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
    */
   @Input() public steps: IProgressStep[];
   /**
+   * @description
+   * To indicate if the indicator needs to be centered
+   * Note: only used and tested for Step type yet
+   */
+  @Input() public isCentered: boolean;
+  /**
   * @description
   * Acts as an override to display nothing under the progress
   * indicator, which becomes a glorified divider.
@@ -148,6 +154,7 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
       this.updatePercentComplete();
     }
     if (this.mode === 'step') {
+      this.percentComplete = 0;
       let stepComplete = true;
       this.steps = this.steps.map(s => {
         // set isCurrent to true only if in progress.
