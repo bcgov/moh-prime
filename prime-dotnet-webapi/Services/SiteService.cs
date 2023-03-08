@@ -141,9 +141,9 @@ namespace Prime.Services
 
             site.VendorCode = vendorCode;
 
+            string rationaleEvent = $"Vendor associated with site.  Rationale: {rationale}";
             await _context.SaveChangesAsync();
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Vendor associated with site");
-            await _businessEventService.CreateSiteEventAsync(siteId, rationale);
+            await _businessEventService.CreateSiteEventAsync(siteId, rationaleEvent);
         }
 
         public async Task DeleteSiteAsync(int siteId)
