@@ -97,6 +97,7 @@ namespace Prime
         public DbSet<HealthAuthorityVendor> HealthAuthorityVendors { get; set; }
         public DbSet<PrivacyOffice> PrivacyOffices { get; set; }
         public DbSet<HealthAuthorityTechnicalSupportVendor> HealthAuthorityTechnicalSupportVendors { get; set; }
+        public DbSet<HealthAuthorityCareTypeToVendor> HealthAuthorityCareTypeToVendors { get; set; }
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
         public DbSet<IdentificationDocument> IdentificationDocuments { get; set; }
@@ -110,6 +111,7 @@ namespace Prime
         public DbSet<SiteNotification> SiteNotifications { get; set; }
         public DbSet<AuthorizedUser> AuthorizedUsers { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
+        public DbSet<DoNotEmail> DoNotEmail { get; set;}
         public DbSet<Banner> Banners { get; set; }
 
         // Parties

@@ -1,3 +1,4 @@
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -180,8 +181,8 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
       this.formUtilsService.resetAndClearValidators(preferredFirstName);
       this.formUtilsService.resetAndClearValidators(preferredLastName);
     } else {
-      this.formUtilsService.setValidators(preferredFirstName, [Validators.required]);
-      this.formUtilsService.setValidators(preferredLastName, [Validators.required]);
+      this.formUtilsService.setValidators(preferredFirstName, [Validators.required, FormControlValidators.validName]);
+      this.formUtilsService.setValidators(preferredLastName, [Validators.required, FormControlValidators.validName]);
     }
   }
 
