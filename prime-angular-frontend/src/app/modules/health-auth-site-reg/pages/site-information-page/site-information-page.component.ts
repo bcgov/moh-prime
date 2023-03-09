@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Address, AddressLine } from '@lib/models/address.model';
@@ -15,6 +16,7 @@ import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-
 import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/services/health-authority-site-form-state.service';
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { SiteInformationFormState } from './site-information-form-state.class';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-site-information-page',
@@ -87,6 +89,15 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
     this.isCompleted = site?.completed;
     this.isSubmitted = site?.submittedDate ? true : false;
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
+  }
+
+  public onToggleChange($event: MatSlideToggleChange) {
+    if (!$event.checked) {
+      this.formUtilsService.resetAndClearValidators(this.formState.pec);
+      this.formState.patchValue({ pec: null, siteName: this.formState.siteName.value, securityGroupCode: this.formState.securityGroupCode.value, physicalAddress: this.formState.physicalAddress.value }, this.route.snapshot.params.sid);
+    } else {
+      this.formUtilsService.setValidators(this.formState.pec, [Validators.required]);
+    }
   }
 
   protected afterSubmitIsSuccessful(): void {

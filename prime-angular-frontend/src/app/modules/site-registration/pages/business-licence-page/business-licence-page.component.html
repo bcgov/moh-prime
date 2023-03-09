@@ -13,16 +13,13 @@
         <ng-container appPageSubheader2Summary>
           Scan and upload a single file of the business licence.
           If you don't have your business licence, provide other documentation as proof of business address, e.g.
-          <ol>
-            <li>
-              Screenshot of munipality website indicating business license is not issued
-            </li>
+          <ul>
             <li>
               Facilities accredited under the CPSBC Diagnostic Accreditation Program or Non-Hospital Medical and
               Surgical Facilities Accreditation Program may provide the certificate from CPSBC in lieu of a municipal
               business license
             </li>
-          </ol>
+          </ul>
         </ng-container>
       </app-page-subheader2>
 
@@ -65,7 +62,8 @@
         <app-page-subheader2 *ngIf="deferredLicence?.checked">
           <ng-container appPageSubheader2Summary>
             If you do not have a business license yet or if you are located in a municipality or region that does not
-            issue business licenses, please share the reason in the text box below. PRIME Support will contact you to
+            issue business licenses, please add a screenshot of the municipality website indicating that a business
+            license is not issued, or share the reason in the text box below. PRIME Support will contact you to
             assist in determining the correct documentation for upload. You may continue with your enrolment.
           </ng-container>
         </app-page-subheader2>

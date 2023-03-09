@@ -112,7 +112,10 @@
             New business licence document has been uploaded for submission
           </ng-template>
         </app-enrollee-property>
-
+        <app-enrollee-property *ngIf="site.businessLicence.deferredLicenceReason"
+                               title="Deferred Business Licence Reason">
+          {{ site.businessLicence.deferredLicenceReason | default }}
+        </app-enrollee-property>
       </ng-container>
 
       <ng-template #deferredLicence>

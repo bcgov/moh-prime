@@ -211,7 +211,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       .subscribe((businessLicense: BusinessLicence) => {
         this.businessLicence = businessLicense ?? this.businessLicence;
 
-        if (businessLicense && !businessLicense.completed) {
+        if (businessLicense) {
           const canDefer = this.canDefer();
 
           // Business licence may exist, but the deferred licence toggle may be
@@ -243,9 +243,6 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     }
 
     this.formState.doingBusinessAs[enableOrDisable]();
-    (!this.businessLicence.deferredLicenceReason)
-      ? this.documentUpload.enable()
-      : this.documentUpload[enableOrDisable]();
   }
 
   private updateBusLicValidations(requiredControls: FormControl[], notRequiredControls: FormControl[]): void {
