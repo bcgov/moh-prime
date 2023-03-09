@@ -190,7 +190,7 @@ objects:
           "config": {
             "url": "https://common-logon-test.hlth.gov.bc.ca/auth",
             "realm": "moh_applications",
-            "clientId": "PRIME-APPLICATION-DEV"
+            "clientId": "PRIME-APPLICATION-LOCAL"
           }
         },
         "mohKeycloakConfig": {
