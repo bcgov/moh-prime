@@ -234,20 +234,6 @@ export class SiteResource {
       );
   }
 
-  public updateVendorEvent(siteId: number, rationale: string): NoContent {
-    const payload = { data: rationale };
-    return this.apiResource.put<NoContent>(`sites/${siteId}/update-vendor-event`, payload)
-      .pipe(
-        NoContentResponse,
-        tap(() => this.toastService.openSuccessToast('Site has been updated')),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Vendor update event could not be created');
-          this.logger.error('[SiteRegistration] SiteResource::updateVendorRationale error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
   public setSiteAdjudicator(siteId: number, adjudicatorId?: number): NoContent {
     const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
     return this.apiResource.put<NoContent>(`sites/${siteId}/adjudicator`, null, params)
