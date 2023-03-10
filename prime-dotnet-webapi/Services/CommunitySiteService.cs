@@ -164,7 +164,7 @@ namespace Prime.Services
             try
             {
                 await _context.SaveChangesAsync();
-                if (remoteUsersUpdated)
+                if (remoteUsersUpdated && currentSite.Completed)
                 {
                     var site = await GetSiteAsync(siteId);
                     // Send HIBC an email when remote users are updated for a submitted site
