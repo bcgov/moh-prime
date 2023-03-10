@@ -91,6 +91,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
 
   public ngOnInit(): void {
     if (this.questions.keys.length === 0) {
+      // convert time zone to utc format
       let targetDate = this.enrollee?.selfDeclarationCompletedDate ? moment(this.enrollee?.selfDeclarationCompletedDate).utc().format()
         : moment().utc().format();
       this.enrolmentResource.getSelfDeclarationVersion(targetDate).subscribe((versions) => {

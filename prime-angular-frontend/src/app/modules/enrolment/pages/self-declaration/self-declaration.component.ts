@@ -162,6 +162,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   protected initForm() {
     if (this.selfDeclarationQuestions.keys.length === 0) {
+      // convert time zone to utc format
       this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format()).subscribe((versions) => {
         this.selfDeclarationVersions = versions;
         versions.forEach(v => {

@@ -103,6 +103,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
 
   protected initForm(): void {
     if (this.selfDeclarationQuestions.keys.length === 0) {
+      // convert time zone to utc format
       this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format()).subscribe((versions) => {
         versions.forEach(v => {
           this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);
