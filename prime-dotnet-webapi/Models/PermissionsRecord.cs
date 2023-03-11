@@ -8,7 +8,7 @@ namespace Prime.Models
     /// </summary>
     public class PermissionsRecord
     {
-        public Guid UserId { get; set; }
+        public string Username { get; set; }
 
         public bool AccessableBy(ClaimsPrincipal user)
         {

@@ -126,6 +126,9 @@ namespace Prime.Models
 
         public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
 
+        // TODO: e.g.
+        public string Username { get; set; }
+
         [NotMapped]
         [Computed]
         public PhysicalAddress PhysicalAddress

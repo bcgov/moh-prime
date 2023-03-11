@@ -166,7 +166,7 @@ export class AuthService implements IAuthService {
 
     this.logger.info('TOKEN', token);
 
-    return token.sub;
+    return token.preferred_username;
   }
 
   private async checkAssuranceLevel(assuranceLevel: number): Promise<boolean> {
