@@ -126,7 +126,9 @@ namespace Prime.Models
 
         public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
 
-        // TODO: e.g.
+        /// <summary>
+        /// HPDID associated with BCSC, with suffix, e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc"
+        /// </summary>
         public string Username { get; set; }
 
         [NotMapped]
@@ -362,6 +364,10 @@ namespace Prime.Models
             if (Guid.Empty.Equals(UserId))
             {
                 yield return new ValidationResult($"UserId cannot be empty");
+            }
+            if (null == Username)
+            {
+                yield return new ValidationResult($"Username cannot be empty");
             }
         }
     }

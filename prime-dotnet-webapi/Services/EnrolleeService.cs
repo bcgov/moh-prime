@@ -46,11 +46,11 @@ namespace Prime.Services
                 .AnyAsync(e => e.Id == enrolleeId);
         }
 
-        public async Task<bool> UserIdExistsAsync(Guid userId)
+        public async Task<bool> UsernameExistsAsync(string username)
         {
             return await _context.Enrollees
                 .AsNoTracking()
-                .AnyAsync(e => e.UserId == userId);
+                .AnyAsync(e => e.Username == username);
         }
 
         public async Task<bool> GpidExistsAsync(string gpid)
@@ -60,12 +60,12 @@ namespace Prime.Services
                 .AnyAsync(e => e.GPID == gpid);
         }
 
-        public async Task<EnrolleeStub> GetEnrolleeStubAsync(Guid userId)
+        public async Task<EnrolleeStub> GetEnrolleeStubAsync(string username)
         {
             return await _context.Enrollees
                 .AsNoTracking()
-                .Where(e => e.UserId == userId)
-                .Select(e => new EnrolleeStub { Id = e.Id, UserId = e.UserId })
+                .Where(e => e.Username == username)
+                .Select(e => new EnrolleeStub { Id = e.Id, UserId = e.UserId, Username = e.Username })
                 .SingleOrDefaultAsync();
         }
 
@@ -74,19 +74,19 @@ namespace Prime.Services
             return await _context.Enrollees
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
-                .Select(e => new PermissionsRecord { UserId = e.UserId })
+                .Select(e => new PermissionsRecord { Username = e.Username })
                 .SingleOrDefaultAsync();
         }
 
         /// <summary>
         /// Gets the GPID for an Enrollee.
-        /// Returns null if no Enrollee exists with the given UserId or if the Enrollee is in the 'Declined' status
+        /// Returns null if no Enrollee exists with the given username or if the Enrollee is in the 'Declined' status
         /// </summary>
-        /// <param name="userId"></param>
-        public async Task<string> GetActiveGpidAsync(Guid userId)
+        /// <param name="username"></param>
+        public async Task<string> GetActiveGpidAsync(string username)
         {
             return await _context.Enrollees
-                .Where(enrollee => enrollee.UserId == userId
+                .Where(enrollee => enrollee.Username == username
                     && enrollee.CurrentStatus.StatusCode != (int)StatusType.Declined)
                 .Select(enrollee => enrollee.GPID)
                 .DecompileAsync()
@@ -95,13 +95,13 @@ namespace Prime.Services
 
         /// <summary>
         /// Gets the GPID and other details of an Enrollee.
-        /// Returns null if no Enrollee exists with the given UserId or if the Enrollee is in the 'Declined' status
+        /// Returns null if no Enrollee exists with the given username or if the Enrollee is in the 'Declined' status
         /// </summary>
-        /// <param name="userId"></param>
-        public async Task<HpdidLookup> GetActiveGpidDetailAsync(Guid userId)
+        /// <param name="username"></param>
+        public async Task<HpdidLookup> GetActiveGpidDetailAsync(string username)
         {
             return await _context.Enrollees
-                .Where(enrollee => enrollee.UserId == userId
+                .Where(enrollee => enrollee.Username == username
                     && enrollee.CurrentStatus.StatusCode != (int)StatusType.Declined)
                 .Select(e => new HpdidLookup
                 {
@@ -1141,7 +1141,7 @@ namespace Prime.Services
         public async Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user)
         {
             return await _context.EnrolleeNotes
-                .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.UserId == user.GetPrimeUserId())
+                .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.Username == user.GetPrimeUsername())
                 .Select(en => en.EnrolleeId)
                 .ToListAsync();
         }

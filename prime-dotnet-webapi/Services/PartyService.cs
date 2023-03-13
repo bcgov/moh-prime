@@ -34,12 +34,12 @@ namespace Prime.Services
                 .AnyAsync(p => p.Id == partyId);
         }
 
-        public async Task<bool> PartyExistsForUserIdAsync(Guid userId, PartyType? withType = null)
+        public async Task<bool> PartyExistsForUsernameAsync(string username, PartyType? withType = null)
         {
             return await _context.Parties
                 .AsNoTracking()
                 .If(withType.HasValue, q => q.WithPartyType(withType.Value))
-                .AnyAsync(p => p.UserId == userId);
+                .AnyAsync(p => p.Username == username);
         }
 
         public async Task<Party> GetPartyAsync(int partyId, PartyType? withType = null)
@@ -49,11 +49,11 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.Id == partyId);
         }
 
-        public async Task<Party> GetPartyForUserIdAsync(Guid userId, PartyType? withType = null)
+        public async Task<Party> GetPartyForUsernameAsync(string username, PartyType? withType = null)
         {
             return await GetBasePartyQuery()
                 .If(withType.HasValue, q => q.WithPartyType(withType.Value))
-                .SingleOrDefaultAsync(p => p.UserId == userId);
+                .SingleOrDefaultAsync(p => p.Username == username);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Prime.Services
         public async Task<int> CreateOrUpdatePartyAsync(IPartyChangeModel changeModel, ClaimsPrincipal user)
         {
             var currentParty = await GetBasePartyQuery()
-                .SingleOrDefaultAsync(p => p.UserId == user.GetPrimeUserId());
+                .SingleOrDefaultAsync(p => p.Username == user.GetPrimeUsername());
 
             if (currentParty == null)
             {

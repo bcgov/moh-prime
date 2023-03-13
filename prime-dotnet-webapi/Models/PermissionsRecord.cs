@@ -12,12 +12,12 @@ namespace Prime.Models
 
         public bool AccessableBy(ClaimsPrincipal user)
         {
-            return user.IsAdministrant() || MatchesUserIdOf(user);
+            return user.IsAdministrant() || MatchesUsernameOf(user);
         }
 
-        public bool MatchesUserIdOf(ClaimsPrincipal user)
+        public bool MatchesUsernameOf(ClaimsPrincipal user)
         {
-            return user.GetPrimeUserId().Equals(UserId);
+            return user.GetPrimeUsername().Equals(Username);
         }
     }
 }
