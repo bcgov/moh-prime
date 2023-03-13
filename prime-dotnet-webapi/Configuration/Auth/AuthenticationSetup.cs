@@ -55,6 +55,7 @@ namespace Prime.Configuration.Auth
                     && identity.IsAuthenticated)
             {
                 identity.AddClaim(new Claim(ClaimTypes.Name, accessToken.Subject));
+                identity.AddClaim(new Claim(ClaimTypes.Sid, (string)accessToken.Payload.GetValueOrDefault(Claims.PreferredUsername)));
 
                 FlattenRealmAccessRoles(identity);
             }

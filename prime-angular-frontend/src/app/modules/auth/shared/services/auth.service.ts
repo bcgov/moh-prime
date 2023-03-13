@@ -95,7 +95,7 @@ export class AuthService implements IAuthService {
       }
     } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
 
-    const userId = await this.getUserId();
+    const userId = await this.getUsername();  // Expecting e.g. gtcochh2vajdtodkby27kspv554dn4is@bcsc
     const claims = await this.getTokenAttribsByKey('preferred_username');
 
     const mapping = {
@@ -142,6 +142,7 @@ export class AuthService implements IAuthService {
 
     const userId = await this.getUserId();
     const claims = await this.getTokenAttribsByKey('preferred_username');
+    const username = await this.getUsername();
 
     const mapping = {
       preferred_username: 'idir'
@@ -153,6 +154,7 @@ export class AuthService implements IAuthService {
       firstName,
       lastName,
       email,
+      username,
       ...claims as { idir: string }
     } as Admin;
   }
@@ -167,6 +169,14 @@ export class AuthService implements IAuthService {
     this.logger.info('TOKEN', token);
 
     return token.sub;
+  }
+
+  private async getUsername(): Promise<string> {
+    const token = await this.accessTokenService.decodeToken();
+
+    this.logger.info('TOKEN', token);
+
+    return token.preferred_username;
   }
 
   private async checkAssuranceLevel(assuranceLevel: number): Promise<boolean> {
