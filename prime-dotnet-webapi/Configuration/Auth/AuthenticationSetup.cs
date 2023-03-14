@@ -58,6 +58,13 @@ namespace Prime.Configuration.Auth
                 identity.AddClaim(new Claim(ClaimTypes.Sid, (string)accessToken.Payload.GetValueOrDefault(Claims.PreferredUsername)));
 
                 FlattenRealmAccessRoles(identity);
+
+                // // Don't rely on mapper in KeyCloak to assign `prime_user` role
+                // var idp = accessToken.Payload.GetValueOrDefault(Claims.IdentityProvider);
+                // if (AuthConstants.BCServicesCard.Equals(idp))
+                // {
+                //     identity.AddClaim(new Claim(ClaimTypes.Role, Roles.PrimeEnrollee));
+                // }
             }
 
             return Task.CompletedTask;
