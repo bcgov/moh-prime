@@ -112,7 +112,10 @@
             New business licence document has been uploaded for submission
           </ng-template>
         </app-enrollee-property>
-
+        <app-enrollee-property *ngIf="site.businessLicence.deferredLicenceReason"
+                               title="Deferred Business Licence Reason">
+          {{ site.businessLicence.deferredLicenceReason | default }}
+        </app-enrollee-property>
       </ng-container>
 
       <ng-template #deferredLicence>
@@ -131,9 +134,6 @@
       </ng-template>
     </ng-container>
 
-
-
-
     <ng-template #businessLicenceListView>
       <ng-container *ngFor="let businessLicence of site.businessLicences">
         <app-enrollee-property title="Expiry">
@@ -147,6 +147,9 @@
             <mat-icon class="mr-1">attachment</mat-icon>
             {{ businessLicence?.businessLicenceDocument?.filename | default }}
           </button>
+        </app-enrollee-property>
+        <app-enrollee-property title="Deferred Business Licence Reason">
+          {{ businessLicence.deferredLicenceReason | default }}
         </app-enrollee-property>
       </ng-container>
     </ng-template>

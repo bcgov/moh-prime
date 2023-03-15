@@ -43,6 +43,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   public isCompleted: boolean;
   public isSubmitted: boolean;
   public showAddressFields: boolean;
+  public showExpiryDate: boolean;
   public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
   public site: Site;
@@ -80,7 +81,8 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   public canDefer(): boolean {
     return [
       CareSettingEnum.COMMUNITY_PHARMACIST,
-      CareSettingEnum.DEVICE_PROVIDER
+      CareSettingEnum.DEVICE_PROVIDER,
+      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
     ].includes(this.siteService.site.careSettingCode);
   }
 
@@ -130,6 +132,11 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     this.isSubmitted = site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
+    if (site.doingBusinessAs && site.businessLicence && site.businessLicence.expiryDate === null) {
+      this.showExpiryDate = false;
+    } else {
+      this.showExpiryDate = true;
+    }
   }
 
   protected initForm(): void {
@@ -204,7 +211,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       .subscribe((businessLicense: BusinessLicence) => {
         this.businessLicence = businessLicense ?? this.businessLicence;
 
-        if (businessLicense && !businessLicense.completed) {
+        if (businessLicense) {
           const canDefer = this.canDefer();
 
           // Business licence may exist, but the deferred licence toggle may be
@@ -236,9 +243,6 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     }
 
     this.formState.doingBusinessAs[enableOrDisable]();
-    (!this.businessLicence.deferredLicenceReason)
-      ? this.documentUpload.enable()
-      : this.documentUpload[enableOrDisable]();
   }
 
   private updateBusLicValidations(requiredControls: FormControl[], notRequiredControls: FormControl[]): void {
