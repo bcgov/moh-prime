@@ -42,15 +42,15 @@ namespace Prime.Migrations
 
             migrationBuilder.Sql(@"UPDATE ""Party""
                 SET ""Username"" = CONCAT(""HPDID"", '@bcsc')
-                WHERE ""HPDID"" IS NOT NULL");
+                WHERE ""HPDID"" IS NOT NULL;");
 
             migrationBuilder.Sql(@"UPDATE ""Enrollee""
                 SET ""Username"" = CONCAT(""HPDID"", '@bcsc')
                 WHERE ""HPDID"" IS NOT NULL
-                    AND ""GPID"" NOT LIKE 'NABCSC%' OR ""GPID"" IS NULL");
+                    AND ""GPID"" NOT LIKE 'NABCSC%' OR ""GPID"" IS NULL;");
 
             migrationBuilder.Sql(@"UPDATE ""Admin""
-                SET ""Username"" = ""IDIR""");
+                SET ""Username"" = ""IDIR"";");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
