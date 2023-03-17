@@ -21,7 +21,7 @@ namespace Prime.Controllers
             _partyService = partyService;
         }
 
-        // POST: api/SigningAuthority/UpdateHpdid
+        // POST: api/parties/signing-authorities/UpdateHpdid?limit=1
         /// <summary>
         /// Update party HPDID from keycloak - used to pre-conditioning database for MOH keycloak migration
         /// </summary>
