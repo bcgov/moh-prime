@@ -40,6 +40,9 @@ namespace Prime.HttpClients.KeycloakApiDefinitions
     public class UserRepresentation
     {
         public string Email { get; set; }
+
+        public string UserName { get; set; }
+
         public Dictionary<string, string[]> Attributes { get; set; }
 
         public void SetPhone(string phone)
