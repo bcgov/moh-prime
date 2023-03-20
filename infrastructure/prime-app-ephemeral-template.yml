@@ -652,8 +652,8 @@ objects:
               httpGet:
                 path: /api/healthcheck/startup
                 port: 8080
-              timeoutSeconds: 30
-              failureThreshold: 120
+              timeoutSeconds: 60
+              failureThreshold: 300
               periodSeconds: 35
             readinessProbe:
               httpGet:
