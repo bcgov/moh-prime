@@ -41,6 +41,8 @@ namespace Prime.ViewModels
 
         public string SmsPhone { get; set; }
 
+        public string Username { get; set; }
+
         // Properties always set by the backend from the JWT token (we cannot trust these properties from the frontend)
         [JsonIgnore]
         public int IdentityAssuranceLevel { get; set; }
@@ -50,7 +52,7 @@ namespace Prime.ViewModels
 
         public bool IsBcServicesCard()
         {
-            return IdentityProvider == AuthConstants.BCServicesCard;
+            return IdentityProvider == AuthConstants.BCServicesCardMoHIdp;
         }
 
         public bool IsUnder18()
@@ -67,6 +69,7 @@ namespace Prime.ViewModels
         public bool Validate(ClaimsPrincipal user)
         {
             return UserId == user.GetPrimeUserId()
+                && Username == user.GetPrimeUsername()
                 && HPDID == user.FindFirstValue(Claims.PreferredUsername)
                 && FirstName == user.FindFirstValue(Claims.GivenName)
                 && LastName == user.FindFirstValue(Claims.FamilyName)

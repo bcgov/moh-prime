@@ -4,6 +4,12 @@ namespace Prime.Configuration.Auth
     {
         public const string Audience = "prime-web-api";
         public const string BCServicesCard = "bcsc";
+
+        /// <summary>
+        /// TODO: Revisit how this constant is used
+        /// </summary>
+        public const string BCServicesCardMoHIdp = "bcsc_prime";
+
     }
 
     public static class Schemes

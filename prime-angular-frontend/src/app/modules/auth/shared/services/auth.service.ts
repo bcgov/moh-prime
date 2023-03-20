@@ -95,8 +95,9 @@ export class AuthService implements IAuthService {
       }
     } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
 
-    const userId = await this.getUsername();  // Expecting e.g. gtcochh2vajdtodkby27kspv554dn4is@bcsc
+    const userId = await this.getUserId();
     const claims = await this.getTokenAttribsByKey('preferred_username');
+    const username = await this.getUsername();  // Expecting e.g. gtcochh2vajdtodkby27kspv554dn4is@bcsc
 
     const mapping = {
       preferred_username: 'hpdid'
@@ -111,6 +112,7 @@ export class AuthService implements IAuthService {
 
     return {
       userId,
+      username,
       firstName,
       lastName,
       givenNames,
