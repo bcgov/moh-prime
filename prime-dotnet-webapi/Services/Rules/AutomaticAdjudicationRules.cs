@@ -121,19 +121,35 @@ namespace Prime.Services.Rules
                 {
                     try
                     {
-                        PharmanetCollegeRecord nonPrescripting = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NonPrescribingPrefix, cert.LicenseNumber);
+                        PharmanetCollegeRecord nonPrescribing = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NonPrescribingPrefix, cert.LicenseNumber);
                         testedPharmaNetIds += $", {cert.NonPrescribingPrefix}-{cert.LicenseNumber}";
-                        if (nonPrescripting != null)
+                        if (nonPrescribing != null)
                         {
                             await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber,
-                                $"A record was found in PharmaNet with effective date {nonPrescripting.EffectiveDate:dd MMM yyy}.");
+                                $"A record was found in PharmaNet with effective date {nonPrescribing.EffectiveDate:dd MMM yyy}.");
 
-                            //if got a hit, check to see which college record has the most recent effective date
-                            if (nonPrescripting.EffectiveDate > record.EffectiveDate)
+                            bool useNonPrescribing = false;
+
+                            if (record != null)
                             {
-                                //overwrite the prefix and store it in DB
+                                if ((record.Status != "P" && nonPrescribing.Status == "P") ||
+                                (record.Status == "P" && nonPrescribing.Status == "P" && nonPrescribing.EffectiveDate > record.EffectiveDate))
+                                {
+                                    //if non-prescrbing one is practing but other is not or
+                                    // both practing and non-prescribing has the most recent effective date
+                                    useNonPrescribing = true;
+                                }
+                            }
+                            else
+                            {
+                                // prescribing does not exist
+                                useNonPrescribing = true;
+                            }
+
+                            if (useNonPrescribing)
+                            {
                                 cert.Prefix = cert.NonPrescribingPrefix;
-                                record = nonPrescripting;
+                                record = nonPrescribing;
                             }
                         }
                         else
