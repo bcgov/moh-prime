@@ -11,11 +11,11 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/parties/signing-authorities")]
     [ApiController]
-    public class SigningAuthorityExtendedController : PrimeControllerBase
+    public class SigningAuthoritiesExtendedController : PrimeControllerBase
     {
         private readonly IPartyService _partyService;
 
-        public SigningAuthorityExtendedController(
+        public SigningAuthoritiesExtendedController(
             IPartyService partyService)
         {
             _partyService = partyService;
