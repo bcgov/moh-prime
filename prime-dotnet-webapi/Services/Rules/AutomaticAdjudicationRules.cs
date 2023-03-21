@@ -113,7 +113,7 @@ namespace Prime.Services.Rules
                 else
                 {
                     await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber,
-                        $"A record was found in PharmaNet with effective date {record.EffectiveDate:dd MMM yyy}.");
+                        $"A record was found in PharmaNet with effective date {record.EffectiveDate:dd MMM yyy} and status {record.Status}.");
                 }
 
                 //As long as the licence class has non prescribing prefix, fetch the college record
@@ -126,7 +126,7 @@ namespace Prime.Services.Rules
                         if (nonPrescribing != null)
                         {
                             await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber,
-                                $"A record was found in PharmaNet with effective date {nonPrescribing.EffectiveDate:dd MMM yyy}.");
+                                $"A record was found in PharmaNet with effective date {nonPrescribing.EffectiveDate:dd MMM yyy} and status {nonPrescribing.Status}.");
 
                             bool useNonPrescribing = false;
 
@@ -143,7 +143,10 @@ namespace Prime.Services.Rules
                             else
                             {
                                 // prescribing does not exist
-                                useNonPrescribing = true;
+                                if (nonPrescribing.Status == "P")
+                                {
+                                    useNonPrescribing = true;
+                                }
                             }
 
                             if (useNonPrescribing)
@@ -174,9 +177,12 @@ namespace Prime.Services.Rules
                 }
                 else
                 {
-                    //save the prefix
-                    await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "College record stored in PRIME.");
+                    if (record.Status == "P")
+                    {
+                        //save the prefix if the status = practicing
+                        await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
+                        await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "College record stored in PRIME.");
+                    }
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))
