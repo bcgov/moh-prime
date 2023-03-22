@@ -33,6 +33,7 @@ jobs:
         run: |
            oc adm prune deployments -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} --keep-complete=1 --confirm
 
+      # Commenting out until fix for this is determined. 
       # - name: "Delete PR database"
       #   run: |
       #     oc exec db-task-runner -- dropdb prime-pr-${{ github.event.number }}
