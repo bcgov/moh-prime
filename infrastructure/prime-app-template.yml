@@ -635,10 +635,10 @@ objects:
                 path: /api/healthcheck/startup
                 port: 8080
                 scheme: HTTP
-              timeoutSeconds: 30
+              timeoutSeconds: 60
               periodSeconds: 10
               successThreshold: 1
-              failureThreshold: 120
+              failureThreshold: 300
             readinessProbe:
               httpGet:
                 path: /api/healthcheck/readiness
