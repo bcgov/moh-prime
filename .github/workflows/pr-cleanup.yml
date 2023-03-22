@@ -29,13 +29,13 @@ jobs:
         run: |
           for pod in $(oc get pods | grep "Error\|Failed\|Completed\|ImagePullBackOff" | awk '{print $1}'); do oc delete pod -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} --grace-period=1 ${pod}; done
 
-      - name: "Cleanup old rcs"
+      - name: "Cleanup old Replication Controllers"
         run: |
-           oc adm prune deployments -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} --keep-complete=1
+           oc adm prune deployments -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} --keep-complete=1 --confirm
 
-      - name: "Delete PR database"
-        run: |
-          oc exec db-task-runner -- dropdb prime-pr-${{ github.event.number }}
+      # - name: "Delete PR database"
+      #   run: |
+      #     oc exec db-task-runner -- dropdb prime-pr-${{ github.event.number }}
 
       - name: "Cleanup Container Images"
         run: |
