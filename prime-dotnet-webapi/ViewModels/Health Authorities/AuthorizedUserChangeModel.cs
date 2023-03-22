@@ -104,7 +104,7 @@ namespace Prime.ViewModels.Parties
         public bool Validate(ClaimsPrincipal user)
         {
             return UserId == user.GetPrimeUserId()
-               && HPDID == user.FindFirstValue(Claims.PreferredUsername)
+               && HPDID == user.GetHpdid()
                && FirstName == user.FindFirstValue(Claims.GivenName)
                && LastName == user.FindFirstValue(Claims.FamilyName)
                && GivenNames == user.FindFirstValue(Claims.GivenNames)

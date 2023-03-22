@@ -122,5 +122,11 @@ namespace Prime
             var idp = user.FindFirstValue(Claims.IdentityProvider);
             return (AuthConstants.BCServicesCardMoHIdpAlias == idp) ? AuthConstants.BCServicesCard : idp;
         }
+
+        public static string GetHpdid(this ClaimsPrincipal user)
+        {
+            // e.g. from MoH KeyCloak   "bcsc_guid": "GTCOCHH2VAJDTODKBY27KSPV554DN4IS"
+            return user.FindFirstValue(Claims.BcscGuid)?.ToLower();
+        }
     }
 }

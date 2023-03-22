@@ -96,13 +96,14 @@ export class AuthService implements IAuthService {
     } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
 
     const userId = await this.getUserId();
-    const claims = await this.getTokenAttribsByKey('preferred_username');
+    const claims = await this.getTokenAttribsByKey('bcsc_guid');  // e.g. from MoH KeyCloak   "bcsc_guid": "GTCOCHH2VAJDTODKBY27KSPV554DN4IS"
     const username = await this.getUsername();  // Expecting e.g. gtcochh2vajdtodkby27kspv554dn4is@bcsc
 
     const mapping = {
-      preferred_username: 'hpdid'
+      bcsc_guid: 'hpdid'
     };
     ObjectUtils.keyMapping(claims, mapping);
+    claims['hpdid'] = claims['hpdid']?.toLowerCase();
 
     // BCSC does not guarantee an address
     const address = { countryCode, provinceCode, street, city, postal } as Address;

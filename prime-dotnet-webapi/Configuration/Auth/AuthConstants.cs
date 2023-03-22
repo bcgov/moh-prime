@@ -31,6 +31,7 @@ namespace Prime.Configuration.Auth
         public const string AssuranceLevel = "identity_assurance_level";
         public const string IdentityProvider = "identity_provider";
         public const string AuthorizedParty = "azp";
+        public const string BcscGuid = "bcsc_guid";
     }
 
     public static class FeatureFlags

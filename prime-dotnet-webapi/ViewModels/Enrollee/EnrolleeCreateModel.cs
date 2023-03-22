@@ -70,7 +70,7 @@ namespace Prime.ViewModels
         {
             return UserId == user.GetPrimeUserId()
                 && Username == user.GetPrimeUsername()
-                && HPDID == user.FindFirstValue(Claims.PreferredUsername)
+                && HPDID == user.GetHpdid()
                 && FirstName == user.FindFirstValue(Claims.GivenName)
                 && LastName == user.FindFirstValue(Claims.FamilyName)
                 && GivenNames == user.FindFirstValue(Claims.GivenNames)
