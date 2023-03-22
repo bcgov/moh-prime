@@ -66,7 +66,7 @@ namespace Prime.ViewModels
 
         public void SetPropertiesFromToken(ClaimsPrincipal user)
         {
-            IdentityProvider = user.FindFirstValue(Claims.IdentityProvider);
+            IdentityProvider = user.GetIdentityProvider();
             IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
         }
 

@@ -291,7 +291,7 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.IdentityProvider != AuthConstants.BCServicesCardMoHIdp)
+            if (enrollee.IdentityProvider != AuthConstants.BCServicesCard)
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.IdentityProvider, $"Method used: {enrollee.IdentityProvider}");
                 return Task.FromResult(false);

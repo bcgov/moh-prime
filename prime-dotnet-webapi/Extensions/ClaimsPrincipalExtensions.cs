@@ -112,5 +112,15 @@ namespace Prime
                 return null;
             }
         }
+
+        /// <summary>
+        /// If BCSC was used to authenticate, we want IdentityProvider to equal "bcsc"
+        /// regardless of the IDP alias in a particular instance of KeyCloak
+        /// </summary>
+        public static string GetIdentityProvider(this ClaimsPrincipal user)
+        {
+            var idp = user.FindFirstValue(Claims.IdentityProvider);
+            return (AuthConstants.BCServicesCardMoHIdpAlias == idp) ? AuthConstants.BCServicesCard : idp;
+        }
     }
 }

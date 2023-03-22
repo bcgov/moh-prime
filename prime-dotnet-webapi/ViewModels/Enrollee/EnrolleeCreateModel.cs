@@ -52,7 +52,7 @@ namespace Prime.ViewModels
 
         public bool IsBcServicesCard()
         {
-            return IdentityProvider == AuthConstants.BCServicesCardMoHIdp;
+            return IdentityProvider == AuthConstants.BCServicesCard;
         }
 
         public bool IsUnder18()
@@ -62,7 +62,7 @@ namespace Prime.ViewModels
 
         public void SetPropertiesFromToken(ClaimsPrincipal user)
         {
-            IdentityProvider = user.FindFirstValue(Claims.IdentityProvider);
+            IdentityProvider = user.GetIdentityProvider();
             IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
         }
 
