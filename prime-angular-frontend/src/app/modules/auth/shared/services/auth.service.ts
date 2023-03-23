@@ -56,9 +56,15 @@ export class AuthService implements IAuthService {
     return this.accessTokenService.isLoggedIn();
   }
 
+  /**
+   * @description
+   * If BCSC was used to authenticate, we want IdentityProvider to equal "bcsc"
+   * regardless of the IDP alias in a particular instance of KeyCloak
+   */
   public async identityProvider(): Promise<IdentityProviderEnum> {
     return await this.accessTokenService.decodeToken()
-      .then((token: AccessTokenParsed) => token.identity_provider);
+      .then((token: AccessTokenParsed) =>
+        (IdentityProviderEnum.BCSC_MOH === token.identity_provider ? IdentityProviderEnum.BCSC : token.identity_provider));
   }
 
   public identityProvider$(): Observable<IdentityProviderEnum> {
