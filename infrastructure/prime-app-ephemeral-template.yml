@@ -653,7 +653,7 @@ objects:
                 path: /api/healthcheck/startup
                 port: 8080
               timeoutSeconds: 60
-              failureThreshold: 300
+              failureThreshold: 120
               periodSeconds: 35
             readinessProbe:
               httpGet:

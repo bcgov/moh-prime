@@ -638,7 +638,7 @@ objects:
               timeoutSeconds: 60
               periodSeconds: 10
               successThreshold: 1
-              failureThreshold: 300
+              failureThreshold: 120
             readinessProbe:
               httpGet:
                 path: /api/healthcheck/readiness
