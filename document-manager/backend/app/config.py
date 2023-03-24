@@ -27,7 +27,7 @@ class Config(object):
     JSONIFY_PRETTYPRINT_REGULAR = False
 
     def JWT_ROLE_CALLBACK(jwt_dict):
-        return (jwt_dict['realm_access']['roles'])
+        return (jwt_dict['resource_access']['PRIME-APPLICATION-LOCAL']['roles'])
 
 
 class TestConfig(Config):
