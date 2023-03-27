@@ -214,7 +214,7 @@ namespace Prime.Services
             if (current.PhysicalAddress == null)
             {
                 current.PhysicalAddress = updated.PhysicalAddress;
-                result.Add($"Physcial Address '{AddressToString(updated.PhysicalAddress)}' is added.");
+                result.Add($"Physcial Address '{AddressToString(updated.PhysicalAddress)}' was added.");
             }
             else
             {
@@ -256,14 +256,14 @@ namespace Prime.Services
                 if (currentContact == null)
                 {
                     _context.Entry(current).Reference(contactType).CurrentValue = updatedContact;
-                    result.Add($"New {TranslateContactType(contactType)} is added.");
+                    result.Add($"New {TranslateContactType(contactType)} was added.");
                 }
                 else
                 {
                     var contactDiff = CompareContact(currentContact, updatedContact);
                     if (contactDiff != null)
                     {
-                        result.Add($"{TranslateContactType(contactType)} is updated.{contactDiff}");
+                        result.Add($"{TranslateContactType(contactType)} was updated.{contactDiff}");
                     }
                     _context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
 
@@ -414,7 +414,7 @@ namespace Prime.Services
                         updatedUser.RemoteUserCertification.RemoteUserId = updatedUser.Id;
                         _context.RemoteUserCertifications.Add(updatedUser.RemoteUserCertification);
 
-                        result.Add($"Remote user '{updatedUser.FirstName} {updatedUser.LastName}' is updated.");
+                        result.Add($"Remote user '{updatedUser.FirstName} {updatedUser.LastName}' was updated.");
                     }
                 }
                 else
@@ -424,13 +424,13 @@ namespace Prime.Services
                     newRemoteUser.SiteId = current.Id;
                     _context.RemoteUsers.Add(newRemoteUser);
 
-                    result.Add($"Remote user '{updatedUser.FirstName} {updatedUser.LastName}' is added.");
+                    result.Add($"Remote user '{updatedUser.FirstName} {updatedUser.LastName}' was added.");
                 }
             }
 
             foreach (var pendingToRemoveUser in existingUsers.Values)
             {
-                result.Add($"Remote user '{pendingToRemoveUser.FirstName} {pendingToRemoveUser.LastName}' ({pendingToRemoveUser.Email}) is removed.");
+                result.Add($"Remote user '{pendingToRemoveUser.FirstName} {pendingToRemoveUser.LastName}' ({pendingToRemoveUser.Email}) was removed.");
             }
             _context.RemoteUsers.RemoveRange(existingUsers.Values);
 
@@ -447,7 +447,7 @@ namespace Prime.Services
                     foreach (var vendor in current.SiteVendors)
                     {
                         var vendorName = vendors.Where(v => v.Code == vendor.VendorCode).Select(v => v.Name).First();
-                        result.Add($"{vendorName} is removed.");
+                        result.Add($"{vendorName} was removed.");
                         _context.Remove(vendor);
                     }
                 }
@@ -461,7 +461,7 @@ namespace Prime.Services
                     };
 
                     var vendorName = vendors.Where(v => v.Code == vendor.VendorCode).Select(v => v.Name).First();
-                    result.Add($"{vendorName} is added.");
+                    result.Add($"{vendorName} was added.");
                     _context.Entry(siteVendor).State = EntityState.Added;
                 }
             }
