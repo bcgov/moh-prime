@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 
 using Prime.HttpClients;
-using Prime.HttpClients.KeycloakApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels.Parties;
 
@@ -223,20 +222,29 @@ namespace Prime.Services
                 //for each party ID, get the party record
                 var party = await _context.Parties.Where(p => p.Id == pId).FirstOrDefaultAsync();
                 //get the user object from keycloak
-                var party_user = await _keycloakClient.GetUser(party.UserId);
+                var partyUser = await _keycloakClient.GetUser(party.UserId);
+                if (partyUser == null)
+                {
+                    _logger.LogError($"Party user ID '{party.UserId}' not found in keycloak.");
+                    continue;
+                }
                 //assign keycloak username to HPDID
-                party.HPDID = party_user.UserName;
+                party.HPDID = partyUser.UserName;
 
                 ++counter;
             }
 
-            try
+            if (counter > 0)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return -1;
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    _logger.LogError($"UpdatePartyHpdid failed to save.");
+                    return -1;
+                }
             }
 
             return counter;
