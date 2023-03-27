@@ -161,10 +161,6 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     }
   }
 
-  public routeBackTo() {
-    this.routeTo(EnrolmentRoutes.REGULATORY);
-  }
-
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
