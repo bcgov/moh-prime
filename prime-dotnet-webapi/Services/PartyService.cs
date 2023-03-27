@@ -240,9 +240,9 @@ namespace Prime.Services
                 {
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    _logger.LogError($"UpdatePartyHpdid failed to save.");
+                    _logger.LogError($"UpdatePartyHpdid failed to save. Error: {ex.Message}");
                     return -1;
                 }
             }
