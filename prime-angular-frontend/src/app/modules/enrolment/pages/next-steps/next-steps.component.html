@@ -7,7 +7,8 @@
     </app-page-header>
 
     <app-enrolment-progress-indicator *ngIf="initialEnrolment"
-                                      [inProgress]="initialEnrolment"></app-enrolment-progress-indicator>
+                                      [inProgress]="initialEnrolment"
+                                      [isCentered]="true"></app-enrolment-progress-indicator>
 
     <div class="row">
       <ng-container *ngIf="initialEnrolment; else renewalConfirmation">
