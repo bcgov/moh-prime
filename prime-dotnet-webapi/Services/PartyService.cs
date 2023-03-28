@@ -225,7 +225,7 @@ namespace Prime.Services
                 var partyUser = await _keycloakClient.GetUser(party.UserId);
                 if (partyUser == null)
                 {
-                    _logger.LogError($"Party user ID '{party.UserId}' not found in keycloak.");
+                    _logger.LogError($"Party user ID '{party.UserId}' not found in Keycloak.");
                     continue;
                 }
                 //assign keycloak username to HPDID
