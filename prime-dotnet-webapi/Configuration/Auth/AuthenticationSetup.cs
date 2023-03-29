@@ -78,14 +78,11 @@ namespace Prime.Configuration.Auth
             var resourceAccessClaim = identity.Claims
                 .SingleOrDefault(claim => claim.Type == Claims.ResourceAccess)
                 ?.Value;
-            string authorizedParty = identity.Claims
-                .SingleOrDefault(claim => claim.Type == Claims.AuthorizedParty)
-                ?.Value;
 
             if (resourceAccessClaim != null)
             {
                 var clientsToRoles = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string[]>>>(resourceAccessClaim);
-                Dictionary<string, string[]> rolesToRolesList = clientsToRoles.GetValueOrDefault(authorizedParty);
+                Dictionary<string, string[]> rolesToRolesList = clientsToRoles.GetValueOrDefault(PrimeConfiguration.Current.MohKeycloak.KeycloakClientId);
                 string[] roles = rolesToRolesList.GetValueOrDefault("roles");
                 identity.AddClaims(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             }
