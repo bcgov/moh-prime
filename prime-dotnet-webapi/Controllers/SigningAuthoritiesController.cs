@@ -35,19 +35,19 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets a SigningAuthority by user ID.
         /// </summary>
-        /// <param name="userId"></param>
-        [HttpGet("{userId:guid}", Name = nameof(GetSigningAuthorityByUserId))]
+        /// <param name="username"></param>
+        [HttpGet("{username}", Name = nameof(GetSigningAuthorityByUsername))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<SigningAuthorityChangeModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetSigningAuthorityByUserId(Guid userId)
+        public async Task<ActionResult> GetSigningAuthorityByUsername(string username)
         {
-            var signingAuthority = await _partyService.GetPartyForUserIdAsync(userId, PartyType.SigningAuthority);
+            var signingAuthority = await _partyService.GetPartyForUsernameAsync(username, PartyType.SigningAuthority);
             if (signingAuthority == null)
             {
-                return NotFound($"Signing authority not found with id {userId}");
+                return NotFound($"Signing authority not found with id {username}");
             }
 
             return Ok(signingAuthority);
@@ -129,24 +129,24 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets all of the Organizations for a signing authority by userId.
         /// </summary>
-        /// <param name="userId"></param>
-        [HttpGet("{userId}/organizations", Name = nameof(GetSigningAuthorityOrganizationsByUserId))]
+        /// <param name="username"></param>
+        [HttpGet("{username}/organizations", Name = nameof(GetSigningAuthorityOrganizationsByUsername))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetSigningAuthorityOrganizationsByUserId(Guid userId)
+        public async Task<ActionResult> GetSigningAuthorityOrganizationsByUsername(string username)
         {
-            if (userId != User.GetPrimeUserId())
+            if (username != User.GetPrimeUsername())
             {
                 return Forbid();
             }
 
-            if (!await _partyService.PartyExistsForUserIdAsync(userId, PartyType.SigningAuthority))
+            if (!await _partyService.PartyExistsForUsernameAsync(username, PartyType.SigningAuthority))
             {
-                return NotFound($"SigningAuthority not found with user id {userId}");
+                return NotFound($"SigningAuthority not found with username {username}");
             }
 
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+            var party = await _partyService.GetPartyForUsernameAsync(User.GetPrimeUsername());
             var organizations = (party != null)
                 ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
                 : Enumerable.Empty<OrganizationListViewModel>();

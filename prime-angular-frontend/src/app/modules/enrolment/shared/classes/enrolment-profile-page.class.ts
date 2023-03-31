@@ -302,12 +302,13 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
   protected getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
-        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
+        map(({ userId, username, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
             // Providing only the minimum required fields for creating an enrollee
             userId,
+            username,
             hpdid,
             firstName,
             lastName,

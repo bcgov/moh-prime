@@ -40,13 +40,13 @@ namespace Prime.Controllers
             {
                 return BadRequest("Could not create an admin, the passed in Admin cannot be null.");
             }
-            if (!admin.PermissionsRecord().MatchesUserIdOf(User))
+            if (!admin.PermissionsRecord().MatchesUsernameOf(User))
             {
                 return Forbid();
             }
 
             // Check to see if this userId is already an admin, if so, reject creating another
-            if (await _adminService.UserIdExistsAsync(admin.UserId))
+            if (await _adminService.UsernameExistsAsync(admin.Username))
             {
                 return Ok(admin);
             }
