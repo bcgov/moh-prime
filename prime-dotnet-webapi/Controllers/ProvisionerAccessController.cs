@@ -73,7 +73,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAccessTokens()
         {
-            var tokens = await _certificateService.GetCertificateAccessTokensForUserIdAsync(User.GetPrimeUserId());
+            var tokens = await _certificateService.GetCertificateAccessTokensForUsernameAsync(User.GetPrimeUsername());
 
             return Ok(tokens);
         }
@@ -146,7 +146,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetGpid()
         {
-            return Ok(await _enrolleeService.GetActiveGpidAsync(User.GetPrimeUserId()));
+            return Ok(await _enrolleeService.GetActiveGpidAsync(User.GetPrimeUsername()));
         }
 
         // GET: api/provisioner-access/gpid-detail
@@ -160,7 +160,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetGpidDetail()
         {
             var result = new EnrolleeLookup();
-            var enrollee = await _enrolleeService.GetActiveGpidDetailAsync(User.GetPrimeUserId());
+            var enrollee = await _enrolleeService.GetActiveGpidDetailAsync(User.GetPrimeUsername());
             if (enrollee != null)
             {
                 return Ok(_mapper.Map(enrollee, result));

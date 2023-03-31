@@ -52,7 +52,7 @@ export class AuthenticationGuard extends BaseGuard {
           ? IdentityProviderEnum.IDIR
           : (gisRoutes.includes(targetModule))
             ? IdentityProviderEnum.PHSA
-            : IdentityProviderEnum.BCSC;
+            : IdentityProviderEnum.BCSC_MOH;
 
         const options = {
           redirectUri,
