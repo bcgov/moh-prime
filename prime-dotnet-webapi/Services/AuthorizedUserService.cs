@@ -38,9 +38,9 @@ namespace Prime.Services
                 .AnyAsync(au => au.Id == authorizedUserId);
         }
 
-        public async Task<bool> AuthorizedUserExistsForUserIdAsync(Guid userId)
+        public async Task<bool> AuthorizedUserExistsForUsernameAsync(string username)
         {
-            return await _partyService.PartyExistsForUserIdAsync(userId, PartyType.AuthorizedUser);
+            return await _partyService.PartyExistsForUsernameAsync(username, PartyType.AuthorizedUser);
         }
 
         public async Task<AuthorizedUserViewModel> GetAuthorizedUserAsync(int authorizedUserId)
@@ -51,10 +51,10 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<AuthorizedUserViewModel> GetAuthorizedUserForUserIdAsync(Guid userId)
+        public async Task<AuthorizedUserViewModel> GetAuthorizedUserForUsernameAsync(string username)
         {
             return await GetBaseAuthorizedUserQuery()
-                .Where(au => au.Party.UserId == userId)
+                .Where(au => au.Party.Username == username)
                 .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
@@ -71,11 +71,12 @@ namespace Prime.Services
         public async Task<int> CreateOrUpdateAuthorizedUserAsync(AuthorizedUserChangeModel changeModel, ClaimsPrincipal user)
         {
             var authorizedUser = await GetBaseAuthorizedUserQuery()
-                .SingleOrDefaultAsync(au => au.Party.UserId == user.GetPrimeUserId());
+                .SingleOrDefaultAsync(au => au.Party.Username == user.GetPrimeUsername());
 
             if (authorizedUser == null)
             {
-                var party = await _partyService.GetPartyForUserIdAsync(changeModel.UserId) ?? new Party
+                // TODO: Ensure AuthorizedUserChangeModel.Username is populated
+                var party = await _partyService.GetPartyForUsernameAsync(changeModel.Username) ?? new Party
                 {
                     Addresses = new List<PartyAddress>()
                 };

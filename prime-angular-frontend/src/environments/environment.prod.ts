@@ -30,12 +30,14 @@ export const environment: AppEnvironment = {
   },
   keycloakConfig: {
     config: {
-      url: 'https://dev.oidc.gov.bc.ca/auth',
-      realm: 'v4mbqqas',
-      clientId: 'prime-application-local'
+      url: 'https://common-logon-test.hlth.gov.bc.ca/auth',
+      realm: 'moh_applications',
+      clientId: 'PRIME-APPLICATION-LOCAL'
     },
     initOptions: {
-      onLoad: 'check-sso'
+      onLoad: 'check-sso',
+      pkceMethod: 'S256',
+      checkLoginIframe: false
     },
     bearerExcludedUrls: ['/provisioner-access/certificate']
   },

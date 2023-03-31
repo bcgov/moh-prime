@@ -78,7 +78,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
       );
   }
 
-  protected performSubmission(): Observable<number> {
+  protected performSubmission(): Observable<void> {
     this.formState.form.markAsPristine();
 
     const payload = this.formState.json;

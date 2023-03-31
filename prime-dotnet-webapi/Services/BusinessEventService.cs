@@ -199,8 +199,8 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int partyId, string description)
         {
-            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
-            Admin admin = await _adminService.GetAdminAsync(userId);
+            var username = _httpContext.HttpContext.User.GetPrimeUsername();
+            Admin admin = await _adminService.GetAdminAsync(username);
             int? adminId = admin?.Id;
 
             var businessEvent = new BusinessEvent
@@ -255,8 +255,8 @@ namespace Prime.Services
 
         private async Task<BusinessEvent> CreateBusinessEvent(int BusinessEventTypeCode, int enrolleeId, string description)
         {
-            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
-            Admin admin = await _adminService.GetAdminAsync(userId);
+            var username = _httpContext.HttpContext.User.GetPrimeUsername();
+            Admin admin = await _adminService.GetAdminAsync(username);
             int? adminId = admin?.Id;
 
             var businessEvent = new BusinessEvent
@@ -273,8 +273,8 @@ namespace Prime.Services
 
         private async Task<BusinessEvent> CreateBusinessEvent(int BusinessEventTypeCode, string description)
         {
-            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
-            Admin admin = await _adminService.GetAdminAsync(userId);
+            var username = _httpContext.HttpContext.User.GetPrimeUsername();
+            Admin admin = await _adminService.GetAdminAsync(username);
             int? adminId = admin?.Id;
 
             var businessEvent = new BusinessEvent
@@ -290,8 +290,8 @@ namespace Prime.Services
 
         private async Task<BusinessEvent> CreateSiteBusinessEvent(int BusinessEventTypeCode, int siteId, int partyId, string description)
         {
-            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
-            Admin admin = await _adminService.GetAdminAsync(userId);
+            var username = _httpContext.HttpContext.User.GetPrimeUsername();
+            Admin admin = await _adminService.GetAdminAsync(username);
             int? adminId = admin?.Id;
 
             var businessEvent = new BusinessEvent
