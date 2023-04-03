@@ -45,7 +45,7 @@ export class EnrolmentGuard extends BaseGuard {
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
     return this.authService.getUser$()
       .pipe(
-        exhaustMap((user: BcscUser) => this.enrolmentResource.enrollee(user.userId)),
+        exhaustMap((user: BcscUser) => this.enrolmentResource.enrollee(user.username)),
         tap((enrolment: Enrolment) => {
           // Store the enrolment for access throughout enrolment, which will
           // allows be the most up-to-date enrolment (source of truth)
@@ -108,6 +108,7 @@ export class EnrolmentGuard extends BaseGuard {
       case IdentityProviderEnum.BCSC:
         return this.navigate(routePath, EnrolmentRoutes.BCSC_DEMOGRAPHIC);
       default:
+        this.logger.warn(`Unknown identityProvider:  ${identityProvider}`);
         return false; // Identity provider is unknown and routing cannot be determined
     }
   }

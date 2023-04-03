@@ -12,6 +12,9 @@ namespace Prime.Configuration.Database
                 .HasIndex(e => e.UserId)
                 .IsUnique();
             builder
+                .HasIndex(e => e.Username)
+                .IsUnique();
+            builder
                 .HasIndex(e => e.GPID)
                 .IsUnique();
             builder

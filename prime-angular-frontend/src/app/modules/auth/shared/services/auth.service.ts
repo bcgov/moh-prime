@@ -56,9 +56,15 @@ export class AuthService implements IAuthService {
     return this.accessTokenService.isLoggedIn();
   }
 
+  /**
+   * @description
+   * If BCSC was used to authenticate, we want IdentityProvider to equal "bcsc"
+   * regardless of the IDP alias in a particular instance of KeyCloak
+   */
   public async identityProvider(): Promise<IdentityProviderEnum> {
     return await this.accessTokenService.decodeToken()
-      .then((token: AccessTokenParsed) => token.identity_provider);
+      .then((token: AccessTokenParsed) =>
+        (IdentityProviderEnum.BCSC_MOH === token.identity_provider ? IdentityProviderEnum.BCSC : token.identity_provider));
   }
 
   public identityProvider$(): Observable<IdentityProviderEnum> {
@@ -96,12 +102,14 @@ export class AuthService implements IAuthService {
     } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
 
     const userId = await this.getUserId();
-    const claims = await this.getTokenAttribsByKey('preferred_username');
+    const claims = await this.getTokenAttribsByKey('bcsc_guid');  // e.g. from MoH KeyCloak   "bcsc_guid": "GTCOCHH2VAJDTODKBY27KSPV554DN4IS"
+    const username = await this.getUsername();  // Expecting e.g. gtcochh2vajdtodkby27kspv554dn4is@bcsc
 
     const mapping = {
-      preferred_username: 'hpdid'
+      bcsc_guid: 'hpdid'
     };
     ObjectUtils.keyMapping(claims, mapping);
+    claims['hpdid'] = claims['hpdid']?.toLowerCase();
 
     // BCSC does not guarantee an address
     const address = { countryCode, provinceCode, street, city, postal } as Address;
@@ -111,6 +119,7 @@ export class AuthService implements IAuthService {
 
     return {
       userId,
+      username,
       firstName,
       lastName,
       givenNames,
@@ -142,6 +151,7 @@ export class AuthService implements IAuthService {
 
     const userId = await this.getUserId();
     const claims = await this.getTokenAttribsByKey('preferred_username');
+    const username = await this.getUsername();
 
     const mapping = {
       preferred_username: 'idir'
@@ -153,6 +163,7 @@ export class AuthService implements IAuthService {
       firstName,
       lastName,
       email,
+      username,
       ...claims as { idir: string }
     } as Admin;
   }
@@ -167,6 +178,14 @@ export class AuthService implements IAuthService {
     this.logger.info('TOKEN', token);
 
     return token.sub;
+  }
+
+  private async getUsername(): Promise<string> {
+    const token = await this.accessTokenService.decodeToken();
+
+    this.logger.info('TOKEN', token);
+
+    return token.preferred_username;
   }
 
   private async checkAssuranceLevel(assuranceLevel: number): Promise<boolean> {
