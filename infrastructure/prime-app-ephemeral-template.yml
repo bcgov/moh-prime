@@ -188,10 +188,17 @@ objects:
         "documentManagerUrl": "https://${SVC_NAME}.pharmanetenrolment.gov.bc.ca/api/docman",
         "keycloakConfig": {
           "config": {
-            "url": "https://common-logon-dev.hlth.gov.bc.ca/auth",
+            "url": "https://common-logon-test.hlth.gov.bc.ca/auth",
             "realm": "moh_applications",
-            "clientId": "PRIME-WEBAPP-ENROLLMENT"
+            "clientId": "PRIME-APPLICATION-LOCAL"
           }
+        },
+        "mohKeycloakConfig": {
+          "config": {
+            "url": "",
+            "realm": "",
+            "clientId": ""
+          }      
         }
       }
 
