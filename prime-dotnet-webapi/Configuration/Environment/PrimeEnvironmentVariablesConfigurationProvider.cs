@@ -39,6 +39,7 @@ namespace Prime.Configuration.Environment
                 "MOH_KEYCLOAK_REALM_URL" => "MohKeycloak__RealmUrl",
                 "MOH_KEYCLOAK_ADMINISTRATION_URL" => "MohKeycloak__AdministrationUrl",
                 "MOH_KEYCLOAK_ADMINISTRATION_CLIENT_SECRET" => "MohKeycloak__AdministrationClientSecret",
+                "KEYCLOAK_CLIENT_ID" => "MohKeycloak__KeycloakClientId",
 
                 "MAIL_SERVER_URL" => "MailServer__Url",
                 "MAIL_SERVER_PORT" => "MailServer__Port",
