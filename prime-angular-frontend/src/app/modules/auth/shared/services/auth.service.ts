@@ -86,20 +86,18 @@ export class AuthService implements IAuthService {
   // TODO use this as a base method for all other types of users
   // TODO multiple return types through switch-case, and new up objects for narrowing
   public async getUser(forceReload?: boolean): Promise<BcscUser> {
-    const {
-      firstName,
-      lastName,
-      email: email = '',
-      attributes: {
-        birthdate: [dateOfBirth] = '',
-        country: [countryCode] = '',
-        region: [provinceCode] = '',
-        streetAddress: [street] = '',
-        locality: [city] = '',
-        postalCode: [postal] = '',
-        givenNames: [givenNames] = ''
-      }
-    } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
+    const token = await this.accessTokenService.decodeToken();
+
+    const firstName = token.given_name;
+    const lastName = token.family_name;
+    const email = '';
+    const dateOfBirth = token.birthdate;
+    const countryCode = token.address?.country;
+    const provinceCode = token.address?.region;
+    const street = token.address?.street_address;
+    const city = token.address?.locality;
+    const postal = token.address?.postal_code;
+    const givenNames = token.given_names;
 
     const userId = await this.getUserId();
     const claims = await this.getTokenAttribsByKey('bcsc_guid');  // e.g. from MoH KeyCloak   "bcsc_guid": "GTCOCHH2VAJDTODKBY27KSPV554DN4IS"
