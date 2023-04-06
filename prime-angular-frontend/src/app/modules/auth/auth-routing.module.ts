@@ -48,23 +48,25 @@ const routes: Routes = [
         loadChildren: () => import('@adjudication/shared/modules/admin-login-page/admin-login-page.module')
           .then(m => m.AdminLoginPageModule)
       },
-      {
-        path: PhsaEformsRoutes.LOGIN_PAGE,
-        canLoad: [AuthorizationRedirectGuard],
-        loadChildren: () => import('@phsa/shared/modules/phsa-eforms-login-page/phsa-eforms-login-page.module')
-          .then(m => m.PhsaEformsLoginPageModule)
-      },
-      {
-        path: SatEformsRoutes.LOGIN_PAGE,
-        loadChildren: () => import('@sat/shared/modules/sat-eforms-login-page/sat-eforms-login-page.module')
-          .then(m => m.SatEformsLoginPageModule)
-      },
-      {
-        path: GisEnrolmentRoutes.LOGIN_PAGE,
-        canLoad: [GisAuthorizationRedirectGuard],
-        loadChildren: () => import('@gis/shared/modules/gis-login/gis-login-page.module')
-          .then(m => m.GisLoginPageModule)
-      },
+      // Disable until can determine if obsolete
+      //
+      // {
+      //   path: PhsaEformsRoutes.LOGIN_PAGE,
+      //   canLoad: [AuthorizationRedirectGuard],
+      //   loadChildren: () => import('@phsa/shared/modules/phsa-eforms-login-page/phsa-eforms-login-page.module')
+      //     .then(m => m.PhsaEformsLoginPageModule)
+      // },
+      // {
+      //   path: SatEformsRoutes.LOGIN_PAGE,
+      //   loadChildren: () => import('@sat/shared/modules/sat-eforms-login-page/sat-eforms-login-page.module')
+      //     .then(m => m.SatEformsLoginPageModule)
+      // },
+      // {
+      //   path: GisEnrolmentRoutes.LOGIN_PAGE,
+      //   canLoad: [GisAuthorizationRedirectGuard],
+      //   loadChildren: () => import('@gis/shared/modules/gis-login/gis-login-page.module')
+      //     .then(m => m.GisLoginPageModule)
+      // },
       {
         path: HealthAuthSiteRegRoutes.LOGIN_PAGE,
         canLoad: [AuthorizationRedirectGuard],
@@ -84,4 +86,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AuthRoutingModule {}
+export class AuthRoutingModule { }

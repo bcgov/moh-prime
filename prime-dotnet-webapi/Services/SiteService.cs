@@ -451,7 +451,7 @@ namespace Prime.Services
         public async Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user)
         {
             return await _context.SiteRegistrationNotes
-                .Where(en => en.SiteNotification != null && en.SiteNotification.Assignee.UserId == user.GetPrimeUserId())
+                .Where(en => en.SiteNotification != null && en.SiteNotification.Assignee.Username == user.GetPrimeUsername())
                 .Select(en => en.SiteId)
                 .ToListAsync();
         }

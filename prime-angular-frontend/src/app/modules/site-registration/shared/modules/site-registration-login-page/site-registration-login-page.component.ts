@@ -34,7 +34,7 @@ export class SiteRegistrationLoginPageComponent implements OnInit {
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
-      idpHint: IdentityProviderEnum.BCSC,
+      idpHint: IdentityProviderEnum.BCSC_MOH,
       redirectUri
     });
   }

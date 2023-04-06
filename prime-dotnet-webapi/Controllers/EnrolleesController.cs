@@ -84,9 +84,9 @@ namespace Prime.Controllers
                 return BadRequest("Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
-            if (await _enrolleeService.UserIdExistsAsync(User.GetPrimeUserId()))
+            if (await _enrolleeService.UsernameExistsAsync(User.GetPrimeUsername()))
             {
-                return BadRequest("An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
+                return BadRequest("An enrollee already exists for this Username, only one enrollee is allowed per Username.");
             }
 
             var createModel = payload.Enrollee;
@@ -169,18 +169,18 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets a specific Enrollee by User ID.
         /// </summary>
-        /// <param name="userId"></param>
-        [HttpGet("{userId:guid}", Name = nameof(GetEnrolleeByUserId))]
+        /// <param name="username"></param>
+        [HttpGet("{username}", Name = nameof(GetEnrolleeByUsername))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetEnrolleeByUserId(Guid userId)
+        public async Task<ActionResult> GetEnrolleeByUsername(string username)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeStubAsync(userId);
+            var enrollee = await _enrolleeService.GetEnrolleeStubAsync(username);
             if (enrollee == null)
             {
-                return NotFound($"Enrollee not found with User ID {userId}");
+                return NotFound($"Enrollee not found with User Name {username}");
             }
             if (!enrollee.PermissionsRecord().AccessableBy(User))
             {
@@ -216,7 +216,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            if (!record.MatchesUserIdOf(User))
+            if (!record.MatchesUsernameOf(User))
             {
                 return Forbid();
             }

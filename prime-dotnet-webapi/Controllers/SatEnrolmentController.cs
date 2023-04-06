@@ -22,6 +22,7 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.PrimeEnrollee)]
     [Route("api/parties/sat")]
     [ApiController]
+    [Obsolete("No longer used in production")]
     public class SatEnrolmentController : PrimeControllerBase
     {
         private readonly IMapper _mapper;
@@ -81,7 +82,8 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<SatViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSatEnrolleeByUserId(Guid userId)
         {
-            var satEnrollee = await _partyService.GetPartyForUserIdAsync(userId, PartyType.SatEnrollee);
+            // Fixed just for compilation purposes
+            var satEnrollee = await _partyService.GetPartyForUsernameAsync(null, PartyType.SatEnrollee);
             if (satEnrollee == null)
             {
                 return NotFound($"SAT Enrollee not found with id {userId}");
@@ -199,6 +201,7 @@ namespace Prime.Controllers
 
             var existsInPlr = await _plrProviderService.PartyExistsInPlrWithCollegeIdAndNameAsync(satId);
             var submission = await _partyService.CreateSubmissionAsync(satId, SubmissionType.SatEnrollee, existsInPlr);
+            // Obsolete
             await _keycloakClient.AssignRealmRole(satEnrollee.UserId, Roles.PhsaEformsSat);
 
             return Ok(submission);
