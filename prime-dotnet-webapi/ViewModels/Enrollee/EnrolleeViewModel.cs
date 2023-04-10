@@ -101,6 +101,11 @@ namespace Prime.ViewModels
                 return HasNewestAgreement ? "Yes" : "No";
             }
         }
+
+        /// <summary>
+        /// e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc"
+        /// </summary>
+        public string Username { get; set; }
     }
 }
 

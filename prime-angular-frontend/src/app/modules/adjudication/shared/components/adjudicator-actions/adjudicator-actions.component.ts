@@ -119,7 +119,7 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   }
 
   public onDelete() {
-    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
+    if (this.permissionService.hasRoles(Role.SUPER_ADMIN)) {
       this.delete.emit(this.enrollee.id);
     }
   }

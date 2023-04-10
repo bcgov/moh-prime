@@ -34,7 +34,7 @@ namespace Prime.Services
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .Where(s => s.Id == siteId)
-                .Select(s => new PermissionsRecord { UserId = s.AuthorizedUser.Party.UserId })
+                .Select(s => new PermissionsRecord { Username = s.AuthorizedUser.Party.Username })
                 .SingleOrDefaultAsync();
         }
 

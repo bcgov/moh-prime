@@ -32,6 +32,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.DeviceProviderIdentifier, f => null);
             RuleFor(x => x.GPID, f => null);
             RuleFor(x => x.HPDID, f => null);
+            RuleFor(x => x.Username, f => null);
             RuleFor(x => x.ProfileCompleted, f => false);
             RuleFor(x => x.IdentityAssuranceLevel, 3);
 

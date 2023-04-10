@@ -129,6 +129,11 @@ spec:
             configMapKeyRef:
               key: JWT_OIDC_WELL_KNOWN_CONFIG
               name: document-manager-backend--env-prime
+        - name: KEYCLOAK_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              key: KEYCLOAK_CLIENT_ID
+              name: document-manager-backend--env-prime
         image: ' '
         name: document-manager-backend
         ports:
