@@ -10,9 +10,9 @@ namespace Prime.Services
     public interface IPartyService
     {
         Task<bool> PartyExistsAsync(int partyId, PartyType? withType = null);
-        Task<bool> PartyExistsForUserIdAsync(Guid userId, PartyType? withType = null);
+        Task<bool> PartyExistsForUsernameAsync(string username, PartyType? withType = null);
         Task<Party> GetPartyAsync(int partyId, PartyType? withType = null);
-        Task<Party> GetPartyForUserIdAsync(Guid userId, PartyType? withType = null);
+        Task<Party> GetPartyForUsernameAsync(string username, PartyType? withType = null);
         Task<int> CreateOrUpdatePartyAsync(IPartyChangeModel changeModel, ClaimsPrincipal user);
         void UpdateAddress<T>(Party dbParty, T newAddress) where T : Address;
         Task RemovePartyEnrolmentAsync(int partyId, PartyType partyType);
@@ -20,5 +20,6 @@ namespace Prime.Services
         Task<IEnumerable<PartyType>> GetPreApprovedRegistrationsAsync(string firstName, string lastName, string email);
         Task UpdateCertificationsAsync(int satId, IEnumerable<PartyCertificationViewModel> viewModels);
         Task<PartySubmissionViewModel> CreateSubmissionAsync(int partyId, SubmissionType type, bool approved);
+        Task<int> UpdatePartyHpdid(int limit);
     }
 }

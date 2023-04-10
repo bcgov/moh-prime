@@ -124,6 +124,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
     const {
       userId,
+      username,
       firstName,
       lastName,
       givenNames,
@@ -148,6 +149,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     return {
       enrollee: {
         userId,
+        username,
         firstName,
         lastName,
         givenNames,

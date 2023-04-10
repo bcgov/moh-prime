@@ -199,7 +199,7 @@ namespace Prime.Services
             return await _context.CommunitySites
                 .AsNoTracking()
                 .Where(s => s.Id == siteId)
-                .Select(s => new PermissionsRecord { UserId = s.Organization.SigningAuthority.UserId })
+                .Select(s => new PermissionsRecord { Username = s.Organization.SigningAuthority.Username })
                 .SingleOrDefaultAsync();
         }
 

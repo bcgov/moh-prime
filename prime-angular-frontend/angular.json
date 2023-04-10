@@ -113,8 +113,7 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-          },
+          "options": {},
           "configurations": {
             "production": {
               "browserTarget": "angular-frontend:build:production"
@@ -187,6 +186,9 @@
   "cli": {
     "analytics": false,
     "packageManager": "yarn",
-    "defaultCollection": "@angular-eslint/schematics"
+    "defaultCollection": "@angular-eslint/schematics",
+    "cache": {
+      "enabled": false
+    }
   }
 }

@@ -38,15 +38,7 @@ export class AdjudicationGuard extends BaseGuard {
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
     const admin$ = this.authService.getAdmin$()
       .pipe(
-        exhaustMap(({ userId, firstName, lastName, email, idir }: Admin) => {
-          const admin = {
-            userId,
-            firstName,
-            lastName,
-            email,
-            idir
-          } as Admin;
-
+        exhaustMap((admin: Admin) => {
           // Attempt to create an admin if they don't exist
           return (this.permissionService.hasRoles(Role.ADMIN))
             ? this.adjudicationResource.createAdmin(admin)

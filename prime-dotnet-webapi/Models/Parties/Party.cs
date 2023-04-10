@@ -36,6 +36,11 @@ namespace Prime.Models
 
         public string JobRoleTitle { get; set; }
 
+        /// <summary>
+        /// HPDID associated with BCSC, with suffix, e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc"
+        /// </summary>
+        public string Username { get; set; }
+
         [JsonIgnore]
         public ICollection<PartyAddress> Addresses { get; set; }
 

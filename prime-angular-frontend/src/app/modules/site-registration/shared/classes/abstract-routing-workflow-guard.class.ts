@@ -36,11 +36,11 @@ export abstract class AbstractRoutingWorkflowGuard extends BaseGuard {
       .pipe(
         // Having no signing authority or organizations results in the same
         // redirection logic for the user, and therefore not handled individually
-        exhaustMap(({ userId }: BcscUser) =>
+        exhaustMap(({ username }: BcscUser) =>
           forkJoin([
-            this.organizationResource.getSigningAuthorityByUserId(userId),
-            this.organizationResource.getSigningAuthorityOrganizationByUserId(userId),
-            this.organizationResource.getOrganizationClaim({ userId })
+            this.organizationResource.getSigningAuthorityByUsername(username),
+            this.organizationResource.getSigningAuthorityOrganizationByUsername(username),
+            this.organizationResource.getOrganizationClaim({ username })
           ])
         ),
         map(([signingAuthority, organization, claimed]: [Party | null, Organization | null, boolean]) => {
