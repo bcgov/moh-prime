@@ -13,6 +13,7 @@ class Config(object):
     JWT_OIDC_WELL_KNOWN_CONFIG = os.environ.get('JWT_OIDC_WELL_KNOWN_CONFIG')
     JWT_OIDC_AUDIENCE = 'prime-document-manager'
     JWT_OIDC_ALGORITHMS = 'RS256'
+    KEYCLOAK_CLIENT_ID = os.environ.get('KEYCLOAK_CLIENT_ID')
 
     # Cache settings
     CACHE_TYPE = 'redis'
@@ -27,7 +28,7 @@ class Config(object):
     JSONIFY_PRETTYPRINT_REGULAR = False
 
     def JWT_ROLE_CALLBACK(jwt_dict):
-        return (jwt_dict['realm_access']['roles'])
+        return (jwt_dict['resource_access'][os.environ.get('KEYCLOAK_CLIENT_ID')]['roles'])
 
 
 class TestConfig(Config):

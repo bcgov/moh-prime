@@ -13,12 +13,12 @@ namespace Prime.Services
     public interface IEnrolleeService
     {
         Task<bool> EnrolleeExistsAsync(int enrolleeId);
-        Task<bool> UserIdExistsAsync(Guid userId);
+        Task<bool> UsernameExistsAsync(string username);
         Task<bool> GpidExistsAsync(string gpid);
-        Task<EnrolleeStub> GetEnrolleeStubAsync(Guid userId);
+        Task<EnrolleeStub> GetEnrolleeStubAsync(string username);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
-        Task<string> GetActiveGpidAsync(Guid userId);
-        Task<HpdidLookup> GetActiveGpidDetailAsync(Guid userId);
+        Task<string> GetActiveGpidAsync(string username);
+        Task<HpdidLookup> GetActiveGpidDetailAsync(string username);
         Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId);
         Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null, ClaimsPrincipal user = null);
         Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId);

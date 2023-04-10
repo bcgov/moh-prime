@@ -64,10 +64,10 @@ namespace Prime.Services
             return token;
         }
 
-        public async Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUserIdAsync(Guid userId)
+        public async Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUsernameAsync(string username)
         {
             return await _context.EnrolmentCertificateAccessTokens
-                .Where(t => t.Enrollee.UserId == userId
+                .Where(t => t.Enrollee.Username == username
                     && t.Active)
                 .ToListAsync();
         }

@@ -135,7 +135,7 @@ namespace Prime.Controllers
                 return BadRequest("Adjudicator notes can't be null or empty.");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
             var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note, admin.Id);
 
             if (link)
@@ -171,7 +171,7 @@ namespace Prime.Controllers
             }
             var status = await _enrolleeService.GetEnrolleeCurrentStatusAsync(enrolleeId);
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
             var createdEnrolmentStatusReference = await _enrolleeService.CreateEnrolmentStatusReferenceAsync(status.Id, admin.Id);
 
             return CreatedAtAction(
@@ -211,7 +211,7 @@ namespace Prime.Controllers
                 return BadRequest("Access agreement notes can not be updated when the current status is 'Editable'.");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
             var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, admin.Id, accessAgreementNote);
 
             return Ok(updatedNote);
@@ -338,7 +338,7 @@ namespace Prime.Controllers
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
             var username = admin.IDIR.Replace("@idir", "");
             await _emailService.SendReminderEmailAsync(enrolleeId);
             await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Email reminder sent to Enrollee by {username}");
@@ -364,7 +364,7 @@ namespace Prime.Controllers
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
             var username = admin.IDIR.Replace("@idir", "");
 
             await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Email Initiated to Enrollee by {username}");
@@ -392,7 +392,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            if (!record.MatchesUserIdOf(User))
+            if (!record.MatchesUsernameOf(User))
             {
                 return Forbid();
             }
@@ -479,7 +479,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             var document = await _enrolleeService.AddEnrolleeAdjudicationDocumentAsync(enrolleeId, documentGuid, admin.Id);
             if (document == null)
@@ -611,7 +611,7 @@ namespace Prime.Controllers
                 return NotFound($"Enrollee note not found with id {adjudicatorNoteId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
             var notification = await _enrolleeService.CreateEnrolleeNotificationAsync(note.Id, admin.Id, assigneeId);
 
             return Ok(notification);
@@ -664,7 +664,7 @@ namespace Prime.Controllers
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             var notes = await _enrolleeService.GetNotificationsAsync(enrolleeId, admin.Id);
 
