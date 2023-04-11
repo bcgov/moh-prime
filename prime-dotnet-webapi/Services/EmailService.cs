@@ -246,6 +246,12 @@ namespace Prime.Services
             var emailedEnrolleeIds = new List<int>();
             foreach (var enrollee in enrollees)
             {
+                if (!Email.IsValidEmail(enrollee.Email))
+                {
+                    _logger.LogWarning($"The email address {enrollee.Email} is likely a Data Issue.");
+                    continue;
+                }
+
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
 
                 if (reminderEmailsIntervals.Contains(expiryDays))
@@ -395,17 +401,19 @@ namespace Prime.Services
         {
             var doNotEmail = await _context.DoNotEmail
                 .Where(e => e.Email.ToLower() == string.Join(",", email.To).ToLower())
-                .Select(e => new {
+                .Select(e => new
+                {
                     e.Email,
                     e.Id
                 })
                 .SingleOrDefaultAsync();
 
-            if (doNotEmail != null) {
-                await _businessEventService.CreateEmailEventAsync($"The address {string.Join(",", email.To)} has been blocked as do-not-email" );
+            if (doNotEmail != null)
+            {
+                await _businessEventService.CreateEmailEventAsync($"The address {string.Join(",", email.To)} has been blocked as do-not-email");
                 return;
             }
-                
+
             if (!PrimeConfiguration.IsProduction())
             {
                 email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
