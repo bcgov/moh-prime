@@ -553,15 +553,19 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     return this.fb.group({
       hasConviction: [null, [FormControlValidators.requiredBoolean]],
       hasConvictionDetails: [null, []],
+      hasConvictionDocumentFilenames: this.fb.array([]),
       hasConvictionDocumentGuids: this.fb.array([]),
       hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasRegistrationSuspendedDetails: [null, []],
+      hasRegistrationSuspendedDocumentFilenames: this.fb.array([]),
       hasRegistrationSuspendedDocumentGuids: this.fb.array([]),
       hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
       hasDisciplinaryActionDetails: [null, []],
+      hasDisciplinaryActionDocumentFilenames: this.fb.array([]),
       hasDisciplinaryActionDocumentGuids: this.fb.array([]),
       hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasPharmaNetSuspendedDetails: [null, []],
+      hasPharmaNetSuspendedDocumentFilenames: this.fb.array([]),
       hasPharmaNetSuspendedDocumentGuids: this.fb.array([])
     });
   }
@@ -649,12 +653,12 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * Document Upload Helpers
    */
 
-  public addSelfDeclarationDocumentGuid(control: FormArray, value: string) {
+  public addSelfDeclarationDocumentControlValue(control: FormArray, value: string) {
     control.push(this.fb.control(value));
   }
 
-  public removeSelfDeclarationDocumentGuid(control: FormArray, documentGuid: string) {
-    control.removeAt(control.value.findIndex((guid: string) => guid === documentGuid));
+  public removeSelfDeclarationDocumentControlValue(control: FormArray, targetValue: string) {
+    control.removeAt(control.value.findIndex((value: string) => value === targetValue));
   }
 
   public clearSelfDeclarationDocumentGuids() {
@@ -662,7 +666,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       'hasConvictionDocumentGuids',
       'hasRegistrationSuspendedDocumentGuids',
       'hasDisciplinaryActionDocumentGuids',
-      'hasPharmaNetSuspendedDocumentGuids'
+      'hasPharmaNetSuspendedDocumentGuids',
+      'hasConvictionDocumentFilenames',
+      'hasRegistrationSuspendedDocumentFilenames',
+      'hasDisciplinaryActionDocumentFilenames',
+      'hasPharmaNetSuspendedDocumentFilenames'
     ]
       .map((formArrayName: string) => this.selfDeclarationForm.get(formArrayName) as FormArray)
       .forEach((formArray: FormArray) => formArray.clear());

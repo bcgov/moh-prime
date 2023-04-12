@@ -112,15 +112,50 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onUpload(controlName: string, sdd: SelfDeclarationDocument) {
-    this.addSelfDeclarationDocumentGuid(controlName, sdd.documentGuid);
+    this.addSelfDeclarationDocument(controlName, sdd.documentGuid, sdd.filename);
   }
 
-  public onRemove(controlName: string, documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
+  public onRemove(controlName: string, sdd: SelfDeclarationDocument) {
+    this.removeSelfDeclarationDocument(controlName, sdd.documentGuid, sdd.filename);
   }
 
   public getSelfDeclarationDocuments(selfDeclarationType: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
-    return this.enrolment?.selfDeclarationDocuments.filter((sdd: SelfDeclarationDocument) => sdd.selfDeclarationTypeCode === selfDeclarationType);
+    let documents: SelfDeclarationDocument[] = [];
+
+    const existingDocuments = this.enrolment?.selfDeclarationDocuments.filter((sdd: SelfDeclarationDocument) => sdd.selfDeclarationTypeCode === selfDeclarationType);
+    if (existingDocuments) {
+      documents = documents.concat(existingDocuments);
+    }
+
+    // get document from form controls
+    switch (selfDeclarationType) {
+      case SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION:
+        documents = documents.concat(this.getDocumentFromFormControl('hasDisciplinaryActionDocument'));
+        break;
+      case SelfDeclarationTypeEnum.HAS_CONVICTION:
+        documents = documents.concat(this.getDocumentFromFormControl('hasConvictionDocument'));
+        break;
+      case SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED:
+        documents = documents.concat(this.getDocumentFromFormControl('hasPharmaNetSuspendedDocument'));
+        break;
+      case SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED:
+        documents = documents.concat(this.getDocumentFromFormControl('hasRegistrationSuspendedDocument'));
+        break;
+    }
+
+    return documents;
+  }
+
+  private getDocumentFromFormControl(controlPrefix: string): SelfDeclarationDocument[] {
+    let documents: SelfDeclarationDocument[] = [];
+    let filenameArray = this.form.get(`${controlPrefix}Filenames`) as FormArray;
+    if (filenameArray.value.length > 0) {
+      let guidArray = this.form.get(`${controlPrefix}Guids`) as FormArray;
+      for (var i = 0; i < filenameArray.value.length; i++) {
+        documents.push({ filename: filenameArray.value[i], documentGuid: guidArray.value[i] } as SelfDeclarationDocument);
+      }
+    }
+    return documents;
   }
 
   public downloadSelfDeclarationDocument({ documentId }: { documentId: number }): void {
@@ -241,13 +276,17 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     return shouldShowUnansweredQuestions;
   }
 
-  private addSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
+  private addSelfDeclarationDocument(controlName: string, documentGuid: string, filename: string) {
     this.enrolmentFormStateService
-      .addSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
+      .addSelfDeclarationDocumentControlValue(this.form.get(`${controlName}Guids`) as FormArray, documentGuid);
+    this.enrolmentFormStateService
+      .addSelfDeclarationDocumentControlValue(this.form.get(`${controlName}Filenames`) as FormArray, filename);
   }
 
-  private removeSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
+  private removeSelfDeclarationDocument(controlName: string, documentGuid: string, filename: string) {
     this.enrolmentFormStateService
-      .removeSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
+      .removeSelfDeclarationDocumentControlValue(this.form.get(`${controlName}Guids`) as FormArray, documentGuid);
+    this.enrolmentFormStateService
+      .removeSelfDeclarationDocumentControlValue(this.form.get(`${controlName}Filenames`) as FormArray, filename);
   }
 }
