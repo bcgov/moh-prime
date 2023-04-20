@@ -203,6 +203,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     } else {
       //for renewal, pull the enrolment from enrolment service instead
       this.enrolment = this.enrolmentService.enrolment;
+      this.enrolmentFormStateService.patchOboSitesForm(this.enrolment.oboSites);
       this.setOboSites();
     }
   }
