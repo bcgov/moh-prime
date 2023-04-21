@@ -373,31 +373,37 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
 
     oboSites.forEach((s: OboSite) => {
-      const site = this.buildOboSiteForm();
-      site.patchValue(s);
-      oboSitesFormArray.push(site);
+      const careSetting = this.careSettingsForm.get('careSettings');
 
-      switch (s.careSettingCode) {
-        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-          this.addNonHealthAuthorityOboSite(site, communityHealthSites);
-          break;
-        }
-        case CareSettingEnum.COMMUNITY_PHARMACIST: {
-          this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
-          break;
-        }
-        case CareSettingEnum.DEVICE_PROVIDER: {
-          this.addNonHealthAuthorityOboSite(site, deviceProviderSites);
-          break;
-        }
-        case CareSettingEnum.HEALTH_AUTHORITY: {
-          //create separate site to avoid validator transfered to oboSitesFormArray
-          const haSite = this.buildOboSiteForm();
-          haSite.patchValue(s);
-          this.addHealthAuthorityOboSite(haSite, healthAuthoritySites, s.healthAuthorityCode);
-          break;
+      if (careSetting && (careSetting.value.length === 0 || careSetting.value.filter((c) => c.careSettingCode === s.careSettingCode).length > 0)) {
+
+        const site = this.buildOboSiteForm();
+        site.patchValue(s);
+        oboSitesFormArray.push(site);
+
+        switch (s.careSettingCode) {
+          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+            this.addNonHealthAuthorityOboSite(site, communityHealthSites);
+            break;
+          }
+          case CareSettingEnum.COMMUNITY_PHARMACIST: {
+            this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
+            break;
+          }
+          case CareSettingEnum.DEVICE_PROVIDER: {
+            this.addNonHealthAuthorityOboSite(site, deviceProviderSites);
+            break;
+          }
+          case CareSettingEnum.HEALTH_AUTHORITY: {
+            //create separate site to avoid validator transfered to oboSitesFormArray
+            const haSite = this.buildOboSiteForm();
+            haSite.patchValue(s);
+            this.addHealthAuthorityOboSite(haSite, healthAuthoritySites, s.healthAuthorityCode);
+            break;
+          }
         }
       }
+
     });
   }
 
