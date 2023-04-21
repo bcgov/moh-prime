@@ -6,6 +6,10 @@ using System.Linq;
 
 namespace Prime.Configuration.Environment
 {
+    /// <summary>
+    /// Maps from environment variables (localhost or OpenShift ConfigMaps) to
+    /// in-memory Configuration objects.
+    /// </summary>
     public class PrimeEnvironmentVariablesConfigurationProvider : ConfigurationProvider
     {
         public override void Load()
@@ -35,6 +39,7 @@ namespace Prime.Configuration.Environment
                 "KEYCLOAK_REALM_URL" => "PrimeKeycloak__RealmUrl",
                 "KEYCLOAK_ADMINISTRATION_URL" => "PrimeKeycloak__AdministrationUrl",
                 "KEYCLOAK_ADMINISTRATION_CLIENT_SECRET" => "PrimeKeycloak__AdministrationClientSecret",
+                "KEYCLOAK_CLIENT_ID" => "PrimeKeycloak__KeycloakClientId",
 
                 "MOH_KEYCLOAK_REALM_URL" => "MohKeycloak__RealmUrl",
                 "MOH_KEYCLOAK_ADMINISTRATION_URL" => "MohKeycloak__AdministrationUrl",

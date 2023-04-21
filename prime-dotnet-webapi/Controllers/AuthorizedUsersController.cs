@@ -32,18 +32,18 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets a AuthorizedUser by user ID.
         /// </summary>
-        /// <param name="userId"></param>
-        [HttpGet("{userId:guid}", Name = nameof(GetAuthorizedUserByUserId))]
+        /// <param name="username"></param>
+        [HttpGet("{username}", Name = nameof(GetAuthorizedUserByUsername))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAuthorizedUserByUserId(Guid userId)
+        public async Task<ActionResult> GetAuthorizedUserByUsername(string username)
         {
-            var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUserIdAsync(userId);
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUsernameAsync(username);
             if (authorizedUser == null)
             {
-                return NotFound($"Authorized user not found with id {userId}");
+                return NotFound($"Authorized user not found with username {username}");
             }
             if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
