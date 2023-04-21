@@ -86,24 +86,23 @@ export class AuthService implements IAuthService {
   // TODO use this as a base method for all other types of users
   // TODO multiple return types through switch-case, and new up objects for narrowing
   public async getUser(forceReload?: boolean): Promise<BcscUser> {
-    const {
-      firstName,
-      lastName,
-      email: email = '',
-      attributes: {
-        birthdate: [dateOfBirth] = '',
-        country: [countryCode] = '',
-        region: [provinceCode] = '',
-        streetAddress: [street] = '',
-        locality: [city] = '',
-        postalCode: [postal] = '',
-        givenNames: [givenNames] = ''
-      }
-    } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
+    const token = await this.accessTokenService.decodeToken();
 
-    const userId = await this.getUserId();
+    const firstName = token?.given_name;
+    const lastName = token?.family_name;
+    const email = '';
+    const dateOfBirth = token?.birthdate;
+    const countryCode = token?.address?.country;
+    const provinceCode = token?.address?.region;
+    const street = token?.address?.street_address;
+    const city = token?.address?.locality;
+    const postal = token?.address?.postal_code;
+    const givenNames = token?.given_names;
+
+    const userId = token?.sub;
+    const username = token?.preferred_username;  // Expecting e.g. gtcochh2vajdtodkby27kspv554dn4is@bcsc
+
     const claims = await this.getTokenAttribsByKey('bcsc_guid');  // e.g. from MoH KeyCloak   "bcsc_guid": "GTCOCHH2VAJDTODKBY27KSPV554DN4IS"
-    const username = await this.getUsername();  // Expecting e.g. gtcochh2vajdtodkby27kspv554dn4is@bcsc
 
     const mapping = {
       bcsc_guid: 'hpdid'
@@ -143,15 +142,15 @@ export class AuthService implements IAuthService {
    */
   // TODO drop after getUser provides object instance of auth user
   public async getAdmin(forceReload?: boolean): Promise<Admin> {
-    const {
-      firstName,
-      lastName,
-      email
-    } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
+    const token = await this.accessTokenService.decodeToken();
 
-    const userId = await this.getUserId();
+    const firstName = token?.given_name;
+    const lastName = token?.family_name;
+    const email = token?.email;
+    const userId = token?.sub;
+    const username = token?.preferred_username;
+
     const claims = await this.getTokenAttribsByKey('preferred_username');
-    const username = await this.getUsername();
 
     const mapping = {
       preferred_username: 'idir'
@@ -170,27 +169,6 @@ export class AuthService implements IAuthService {
 
   public getAdmin$(forceReload?: boolean): Observable<Admin> {
     return from(this.getAdmin(forceReload)).pipe(take(1));
-  }
-
-  private async getUserId(): Promise<string> {
-    const token = await this.accessTokenService.decodeToken();
-
-    this.logger.info('TOKEN', token);
-
-    return token.sub;
-  }
-
-  private async getUsername(): Promise<string> {
-    const token = await this.accessTokenService.decodeToken();
-
-    this.logger.info('TOKEN', token);
-
-    return token.preferred_username;
-  }
-
-  private async checkAssuranceLevel(assuranceLevel: number): Promise<boolean> {
-    const token = await this.accessTokenService.decodeToken();
-    return token.identity_assurance_level === assuranceLevel;
   }
 
   private async getTokenAttribsByKey(keys: string | string[]): Promise<{ [key: string]: any }> {
