@@ -431,8 +431,15 @@ namespace Prime.Services
             }
 
             // Allways fall back to smtp
-            await _smtpEmailClient.SendAsync(email);
-            await CreateEmailLog(email, SendType.Smtp);
+            try
+            {
+                await _smtpEmailClient.SendAsync(email);
+                await CreateEmailLog(email, SendType.Smtp);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to send email to {email.To}, using SMTP", e);
+            }
         }
 
         private async Task CreateEmailLog(Email email, string sendType, Guid? msgId = null)
