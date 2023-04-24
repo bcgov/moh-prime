@@ -236,14 +236,14 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         case CareSettingEnum.HEALTH_AUTHORITY: {
           //determine if necessary to add HA job site
           if (this.oboSites?.length) {
-            let haSiteNum = this.oboSites?.value.filter((s) => s.careSettingCode === 1).length;
+            let haSiteNum = this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY).length;
             if (haSiteNum < this.enrolleeHealthAuthorities.length) {
-              let hasSiteWOHa = false;
+              let hasSiteWithoutHASpecified = false;
               if (haSiteNum > 0) {
-                hasSiteWOHa = this.oboSites?.value.filter((s) => s.careSettingCode === 1 && s.healthAuthorityCode === null).length > 0;
+                hasSiteWithoutHASpecified = this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY && s.healthAuthorityCode === null).length > 0;
               }
 
-              if (hasSiteWOHa) {
+              if (hasSiteWithoutHASpecified) {
                 for (let i = 0; i < (this.enrolleeHealthAuthorities.length - haSiteNum); i++) {
                   this.addOboSite(careSettingCode);
                 }
