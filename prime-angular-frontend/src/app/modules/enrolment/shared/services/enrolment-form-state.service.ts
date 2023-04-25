@@ -377,7 +377,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       //add existing obo job site back to the form only if the care setting is selected
       if (careSettings && (careSettings.value.length === 0 || careSettings.value.filter((c) => c.careSettingCode === s.careSettingCode).length > 0)) {
 
-        const site = this.buildOboSiteForm();
+        const site = this.buildOboSiteForm() as FormGroup;
         site.patchValue(s);
         oboSitesFormArray.push(site);
 
