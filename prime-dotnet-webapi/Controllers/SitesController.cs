@@ -265,7 +265,7 @@ namespace Prime.Controllers
 
             Admin admin = adjudicatorId.HasValue
                 ? await _adminService.GetAdminAsync(adjudicatorId.Value)
-                : await _adminService.GetAdminAsync(User.GetPrimeUserId());
+                : await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             if (admin == null)
             {
@@ -631,7 +631,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             var document = await _siteService.AddSiteAdjudicationDocumentAsync(siteId, documentGuid, admin.Id);
             if (document == null)
@@ -1024,7 +1024,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
 
@@ -1143,7 +1143,7 @@ namespace Prime.Controllers
                 return NotFound($"Site Registration Note not found with id {siteRegistrationNoteId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
             var notification = await _siteService.CreateSiteNotificationAsync(note.Id, admin.Id, assigneeId);
 
             return Ok(notification);
@@ -1197,7 +1197,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             var notes = await _siteService.GetNotificationsAsync(siteId, admin.Id);
 

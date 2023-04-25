@@ -9,8 +9,8 @@ import { ConfigService } from '@config/config.service';
 import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { UtilsService } from '@core/services/utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -27,7 +27,9 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 })
 export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public jobNames: Config<number>[];
+  public healthAuthorities: Config<number>[];
   public allowDefaultOption: boolean;
+  public showHAError: boolean;
   public defaultOptionLabel: string;
   public CareSettingEnum = CareSettingEnum;
   public HealthAuthorityEnum = HealthAuthorityEnum;
@@ -64,6 +66,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.jobNames = this.configService.jobNames;
     this.allowDefaultOption = false;
     this.defaultOptionLabel = 'None';
+    this.healthAuthorities = this.configService.healthAuthorities;
   }
 
   public get oboSites(): FormArray {
@@ -96,6 +99,12 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
     }
     return careSettings;
+  }
+
+  public get enrolleeHealthAuthorities(): Config<number>[] {
+    return this.healthAuthorities.filter(a =>
+      this.enrolmentFormStateService.json?.enrolleeHealthAuthorities.find((aa) => aa.healthAuthorityCode === a.code)
+    );
   }
 
   public healthAuthoritySiteControl(healthAuthorityCode: string): AbstractControl[] {
@@ -155,14 +164,12 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
         const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
-        sitesOfHealthAuthority.removeAt(index);
+        if (sitesOfHealthAuthority) {
+          sitesOfHealthAuthority.removeAt(index);
+        }
         break;
       }
     }
-  }
-
-  public routeBackTo() {
-    this.routeTo(EnrolmentRoutes.REGULATORY);
   }
 
   public ngOnInit() {
@@ -175,48 +182,89 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.removeCareSettingSites();
   }
 
+  public onSubmit(): void {
+    this.showHAError = !this.eachSelectedHAHasOboJobSite();
+    if (!this.showHAError) {
+      super.onSubmit();
+    } else {
+      this.utilService.scrollTop();
+    }
+  }
+
   protected createFormInstance() {
     this.form = this.enrolmentFormStateService.oboSitesForm;
   }
 
   protected initForm() {
-    const forcedPatch: boolean = true;
-    // Initialize listeners before patching
-    this.patchForm(forcedPatch).subscribe(() => {
-      // Add at least one site for each careSetting selected by enrollee
-      this.careSettings.forEach(({ careSettingCode }) => {
-        switch (careSettingCode) {
-          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            this.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
-            if (!this.communityHealthSites.length) {
-              this.addOboSite(careSettingCode);
-            }
-            break;
+    if (this.enrolmentService.isInitialEnrolment) {
+      this.patchForm(true).subscribe(() => {
+        this.setOboSites();
+      });
+    } else {
+      //for renewal, pull the enrolment from enrolment service instead
+      this.enrolment = this.enrolmentService.enrolment;
+      this.enrolmentFormStateService.patchOboSitesForm(this.enrolment.oboSites);
+      this.setOboSites();
+    }
+  }
+
+  private setOboSites() {
+    // Add at least one site for each careSetting selected by enrollee
+    this.careSettings.forEach(({ careSettingCode }) => {
+      switch (careSettingCode) {
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+          this.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
+          if (!this.communityHealthSites.length) {
+            this.addOboSite(careSettingCode);
           }
-          case CareSettingEnum.COMMUNITY_PHARMACIST: {
-            this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
-            if (!this.communityPharmacySites.length) {
-              this.addOboSite(careSettingCode);
-            }
-            break;
+          break;
+        }
+        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
+          if (!this.communityPharmacySites.length) {
+            this.addOboSite(careSettingCode);
           }
-          case CareSettingEnum.DEVICE_PROVIDER: {
-            this.deviceProviderSites.setValidators([FormArrayValidators.atLeast(1)]);
-            if (!this.deviceProviderSites.length) {
-              this.addOboSite(careSettingCode);
-            }
-            break;
+          break;
+        }
+        case CareSettingEnum.DEVICE_PROVIDER: {
+          this.deviceProviderSites.setValidators([FormArrayValidators.atLeast(1)]);
+          if (!this.deviceProviderSites.length) {
+            this.addOboSite(careSettingCode);
           }
-          case CareSettingEnum.HEALTH_AUTHORITY: {
+          break;
+        }
+        case CareSettingEnum.HEALTH_AUTHORITY: {
+          //determine if necessary to add HA job site
+          if (this.oboSites?.length) {
+            let haSiteNum = this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY).length;
+            if (haSiteNum < this.enrolleeHealthAuthorities.length) {
+              let hasSiteWithoutHASpecified = false;
+              if (haSiteNum > 0) {
+                hasSiteWithoutHASpecified = this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY && s.healthAuthorityCode === null).length > 0;
+              }
+
+              if (hasSiteWithoutHASpecified) {
+                for (let i = 0; i < (this.enrolleeHealthAuthorities.length - haSiteNum); i++) {
+                  this.addOboSite(careSettingCode);
+                }
+              } else {
+                this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
+                  if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
+                    this.addOboSite(careSettingCode, ha.healthAuthorityCode);
+                  }
+                });
+              }
+            }
+          } else {
             this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
               if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
                 this.addOboSite(careSettingCode, ha.healthAuthorityCode);
               }
             });
-            break;
           }
+          break;
         }
-      });
+      }
     });
   }
 
@@ -308,5 +356,30 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       sitesOfHealthAuthority.updateValueAndValidity();
       sitesOfHealthAuthority.clear();
     });
+  }
+
+  /**
+   * Check if each selected HA has at least one obo job site
+   * @returns true if pass
+   */
+  private eachSelectedHAHasOboJobSite(): boolean {
+    let result = true;
+    if (this.careSettings.find((c) => c.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
+      if (this.enrolleeHealthAuthorities.length > 0) {
+
+        let jobSiteHAs = [];
+
+        Object.values(this.healthAuthoritySites.controls).forEach((formArray: FormArray) => {
+          jobSiteHAs = [...jobSiteHAs, ...formArray.value.map((s) => s.healthAuthorityCode)];
+        });
+
+        this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
+          if (!jobSiteHAs.find(s => s === ha.healthAuthorityCode)) {
+            result = false;
+          }
+        });
+      }
+    }
+    return result;
   }
 }

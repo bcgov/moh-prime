@@ -45,6 +45,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   public form: FormGroup;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   /**
    * @description
    * URL parameter indicating the ID of the remote user, or
@@ -144,6 +145,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
 
     // Attempt to patch if needed on a refresh, otherwise do not forcibly
     // update the form state as it will drop unsaved updates

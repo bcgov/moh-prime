@@ -23,10 +23,10 @@ namespace Prime.Services
                 .AnyAsync(a => a.Id == adminId);
         }
 
-        public async Task<bool> UserIdExistsAsync(Guid userId)
+        public async Task<bool> UsernameExistsAsync(string username)
         {
             return await _context.Admins
-                .AnyAsync(a => a.UserId == userId);
+                .AnyAsync(a => a.Username == username);
         }
 
         public async Task<int> CreateAdminAsync(Admin admin)
@@ -64,10 +64,10 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(a => a.Id == adminId);
         }
 
-        public async Task<Admin> GetAdminAsync(Guid userId)
+        public async Task<Admin> GetAdminAsync(string username)
         {
             return await _context.Admins
-                .SingleOrDefaultAsync(a => a.UserId == userId);
+                .SingleOrDefaultAsync(a => a.Username == username);
         }
 
         public async Task<string> GetAdminIdirAsync(int adminId)

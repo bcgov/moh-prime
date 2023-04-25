@@ -366,6 +366,8 @@
       <ng-container *ngFor="let site of enrolment?.oboSites">
         <ng-container *ngIf="site.careSettingCode === careSetting.careSettingCode">
           <app-enrollee-property title="Care Setting"
+                                 [hasError]="enrolmentErrors?.missingHAOboSite && site.healthAuthorityCode === null"
+                                 errorMessage="Must specify the health authority."
                                  [makeBold]="true">
             <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
               <span *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY">

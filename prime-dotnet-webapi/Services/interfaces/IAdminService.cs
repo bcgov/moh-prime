@@ -9,11 +9,11 @@ namespace Prime.Services
     {
         Task<bool> AdminExistsAsync(int adminId);
 
-        Task<bool> UserIdExistsAsync(Guid userId);
+        Task<bool> UsernameExistsAsync(string username);
 
         Task<Admin> GetAdminAsync(int adminId);
 
-        Task<Admin> GetAdminAsync(Guid userId);
+        Task<Admin> GetAdminAsync(string username);
 
         Task<string> GetAdminIdirAsync(int adminId);
 

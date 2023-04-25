@@ -78,6 +78,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
     const {
       userId,
+      username,
       firstName,
       lastName,
       givenNames,
@@ -101,6 +102,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
     return {
       enrollee: {
         userId,
+        username,
         firstName,
         lastName,
         givenNames,

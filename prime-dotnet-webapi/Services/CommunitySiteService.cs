@@ -164,7 +164,8 @@ namespace Prime.Services
             try
             {
                 await _context.SaveChangesAsync();
-                if (remoteUsersUpdated)
+                //send email only when the site is completed and org. agreement should have been signed.
+                if (remoteUsersUpdated && currentSite.Completed)
                 {
                     var site = await GetSiteAsync(siteId);
                     // Send HIBC an email when remote users are updated for a submitted site
@@ -183,7 +184,7 @@ namespace Prime.Services
             return await _context.CommunitySites
                 .AsNoTracking()
                 .Where(s => s.Id == siteId)
-                .Select(s => new PermissionsRecord { UserId = s.Organization.SigningAuthority.UserId })
+                .Select(s => new PermissionsRecord { Username = s.Organization.SigningAuthority.Username })
                 .SingleOrDefaultAsync();
         }
 

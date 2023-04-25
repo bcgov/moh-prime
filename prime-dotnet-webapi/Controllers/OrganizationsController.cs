@@ -125,7 +125,7 @@ namespace Prime.Controllers
                 return BadRequest("Could not claim an organization, the passed in SigningAuthority does not exist.");
             }
 
-            if (party.UserId != User.GetPrimeUserId())
+            if (party.Username != User.GetPrimeUsername())
             {
                 return BadRequest("Could not claim an organization, the passed in party does not match current user.");
             }
