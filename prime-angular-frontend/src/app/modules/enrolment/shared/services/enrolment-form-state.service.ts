@@ -373,9 +373,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
 
     oboSites.forEach((s: OboSite) => {
-      const careSetting = this.careSettingsForm.get('careSettings');
+      const careSettings = this.careSettingsForm.get('careSettings') as FormArray;
 
-      if (careSetting && (careSetting.value.length === 0 || careSetting.value.filter((c) => c.careSettingCode === s.careSettingCode).length > 0)) {
+      if (careSettings && (careSettings.value.length === 0 || careSettings.value.filter((c) => c.careSettingCode === s.careSettingCode).length > 0)) {
 
         const site = this.buildOboSiteForm();
         site.patchValue(s);

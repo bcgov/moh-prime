@@ -101,7 +101,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     return careSettings;
   }
 
-  public get enrolleeHealthAuthorities() {
+  public get enrolleeHealthAuthorities(): Config<number>[] {
     return this.healthAuthorities.filter(a =>
       this.enrolmentFormStateService.json?.enrolleeHealthAuthorities.find((aa) => aa.healthAuthorityCode === a.code)
     );
@@ -183,7 +183,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public onSubmit(): void {
-    this.showHAError = !this.validateHAOboSiteJob();
+    this.showHAError = !this.eachSelectedHAHasOboJobSite();
     if (!this.showHAError) {
       super.onSubmit();
     } else {
@@ -362,7 +362,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
    * Check if each selected HA has at least one obo job site
    * @returns true if pass
    */
-  private validateHAOboSiteJob(): boolean {
+  private eachSelectedHAHasOboJobSite(): boolean {
     let result = true;
     if (this.careSettings.find((c) => c.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
       if (this.enrolleeHealthAuthorities.length > 0) {
