@@ -230,6 +230,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       deviceProviderOrOboSite: (enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
         && !enrolment.deviceProviderIdentifier)
         && !enrolment.oboSites?.length,
+      missingHAOboSite: enrolment.oboSites?.length && enrolment.oboSites.some(s => s.careSettingCode == CareSettingEnum.HEALTH_AUTHORITY && s.healthAuthorityCode === null),
       missingPharmaNetId: this.isMissingPharmaNetId(enrolment.certifications),
       missingHealthAuthorityCareSetting: enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
         && !enrolment.enrolleeHealthAuthorities?.some(ha => ha.healthAuthorityCode),

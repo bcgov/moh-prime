@@ -5,6 +5,15 @@
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
+  <app-alert *ngIf="showHAError"
+             type="danger"
+             icon="error">
+    <ng-container #alertContent
+                  class="alert-content">
+      Please ensure each health authority has at least one job site.
+    </ng-container>
+  </app-alert>
+
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
         novalidate>
@@ -73,6 +82,7 @@
                                        [index]="index"
                                        [careSettingCode]="careSetting.careSettingCode"
                                        [healthAuthorityName]="+healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true"
+                                       [healthAuthorities]="enrolleeHealthAuthorities"
                                        [site]="site"
                                        [total]="healthAuthoritySiteControl(healthAuthorityCode).length"
                                        [last]="last"
@@ -133,6 +143,5 @@
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
                    (back)="onBack(EnrolmentRoutes.REGULATORY)"
-                   (continue)="onBack()"></app-page-footer>
-
+                   (continue)="onBack(EnrolmentRoutes.OVERVIEW)"></app-page-footer>
 </app-enrollee-page>
