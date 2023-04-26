@@ -147,15 +147,17 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * will allow submission for an unapproved site that does not have a PEC.
    */
   public get isValidSubmission(): boolean {
-    const isCommunityPharmacy = this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+    const isCPorPCHP = this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST ||
+      this.site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
+
     const pecControl = this.businessLicenceFormState.pec;
     // Managed to make it through the registration without a PEC and is
-    // Community Pharmacy then assumed to indicate deferment, which is
+    // Community Pharmacy or PCHP then assumed to indicate deferment, which is
     // not possible after the site has been approved
     const pecDeferred = this.site.completed &&
       !this.site.approvedDate &&
       !pecControl.value &&
-      isCommunityPharmacy;
+      isCPorPCHP;
 
     // Loosen validation on submission only when the PEC is deferred, which
     // allows for submissions regardless of toggle state that is not
@@ -176,7 +178,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       businessLicenceExpiryControl.clearValidators();
       businessLicenceExpiryControl.updateValueAndValidity();
 
-      if (isCommunityPharmacy && doingBusinessAsDeferred) {
+      if (isCPorPCHP && doingBusinessAsDeferred) {
         doingBusinessAsControl.clearValidators();
         doingBusinessAsControl.updateValueAndValidity();
       }
@@ -211,7 +213,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       businessLicenceExpiryControl.setValidators([Validators.required]);
       businessLicenceExpiryControl.updateValueAndValidity();
 
-      if (isCommunityPharmacy && doingBusinessAsDeferred) {
+      if (isCPorPCHP && doingBusinessAsDeferred) {
         doingBusinessAsControl.setValidators([Validators.required]);
         doingBusinessAsControl.updateValueAndValidity();
       }
