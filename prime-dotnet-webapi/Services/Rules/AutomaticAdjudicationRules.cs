@@ -135,18 +135,15 @@ namespace Prime.Services.Rules
                                 if ((record.Status != "P" && nonPrescribing.Status == "P") ||
                                 (record.Status == "P" && nonPrescribing.Status == "P" && nonPrescribing.EffectiveDate > record.EffectiveDate))
                                 {
-                                    //if non-prescrbing one is practing but other is not or
-                                    // both practing and non-prescribing has the most recent effective date
+                                    //if non-prescrbing one is practicing but other is not or
+                                    // both practicing and non-prescribing has the most recent effective date
                                     useNonPrescribing = true;
                                 }
                             }
                             else
                             {
                                 // prescribing does not exist
-                                if (nonPrescribing.Status == "P")
-                                {
-                                    useNonPrescribing = true;
-                                }
+                                useNonPrescribing = true;
                             }
 
                             if (useNonPrescribing)
@@ -177,12 +174,9 @@ namespace Prime.Services.Rules
                 }
                 else
                 {
-                    if (record.Status == "P")
-                    {
-                        //save the prefix if the status = practicing
-                        await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
-                        await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "College record stored in PRIME.");
-                    }
+                    //save the prefix
+                    await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "College record stored in PRIME.");
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))
