@@ -29,7 +29,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   public jobNames: Config<number>[];
   public healthAuthorities: Config<number>[];
   public allowDefaultOption: boolean;
-  public showHAError: boolean;
+  public showHAJobSiteError: boolean;
   public defaultOptionLabel: string;
   public CareSettingEnum = CareSettingEnum;
   public HealthAuthorityEnum = HealthAuthorityEnum;
@@ -105,6 +105,16 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     return this.healthAuthorities.filter(a =>
       this.enrolmentFormStateService.json?.enrolleeHealthAuthorities.find((aa) => aa.healthAuthorityCode === a.code)
     );
+  }
+
+  public get showHASelectError(): boolean {
+    let result = false;
+    Object.values(this.healthAuthoritySites.value).forEach((s: any[]) => {
+      if (s[0] && !s[0].healthAuthorityCode) {
+        result = true;
+      }
+    })
+    return result;
   }
 
   public healthAuthoritySiteControl(healthAuthorityCode: string): AbstractControl[] {
@@ -183,8 +193,8 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public onSubmit(): void {
-    this.showHAError = !this.eachSelectedHAHasOboJobSite();
-    if (!this.showHAError) {
+    this.showHAJobSiteError = !this.eachSelectedHAHasOboJobSite();
+    if (!this.showHAJobSiteError) {
       super.onSubmit();
     } else {
       this.utilService.scrollTop();
