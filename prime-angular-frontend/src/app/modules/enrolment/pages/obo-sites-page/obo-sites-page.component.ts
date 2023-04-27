@@ -109,7 +109,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
 
   public get showHASelectError(): boolean {
     let result = false;
-    Object.values(this.healthAuthoritySites.value).forEach((s) => {
+    Object.values(this.healthAuthoritySites.value).forEach((s: any[]) => {
       if (s[0] && !s[0].healthAuthorityCode) {
         result = true;
       }
