@@ -133,7 +133,7 @@ namespace Prime.Services.Rules
                             if (record != null)
                             {
                                 if ((record.Status != "P" && nonPrescribing.Status == "P") ||
-                                (record.Status == "P" && nonPrescribing.Status == "P" && nonPrescribing.EffectiveDate > record.EffectiveDate))
+                                (record.Status == nonPrescribing.Status && nonPrescribing.EffectiveDate > record.EffectiveDate))
                                 {
                                     //if non-prescrbing one is practicing but other is not or
                                     // both practicing and non-prescribing has the most recent effective date
