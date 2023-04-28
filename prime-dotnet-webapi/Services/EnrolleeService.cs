@@ -1002,6 +1002,12 @@ namespace Prime.Services
 
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
+            var definiteAbsentHpdids = await _context.EnrolleeAbsences
+                .Where(a => hpdids.Contains(a.Enrollee.HPDID))
+                .Where(a => a.EndTimestamp == null && a.StartTimestamp > DateTime.UtcNow)
+                .Select(a => a.Enrollee.HPDID)
+                .ToListAsync();
+
             return await _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
@@ -1011,6 +1017,9 @@ namespace Prime.Services
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
+                    Status = definiteAbsentHpdids.Contains(e.HPDID) ?
+                        ProvisionerEnrolmentStatusType.IndefiniteAbsent :
+                        ProvisionerEnrolmentStatusType.Complete,
                     RenewalDate = e.ExpiryDate,
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
