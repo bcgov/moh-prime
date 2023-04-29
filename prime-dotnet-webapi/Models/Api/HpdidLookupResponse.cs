@@ -14,7 +14,6 @@ namespace Prime.Models.Api
     public class EnrolleeLookup
     {
         public string Gpid { get; set; }
-        public DateTimeOffset? RenewalDate { get; set; }
         public string Status { get; set; }
 
         /// <summary>

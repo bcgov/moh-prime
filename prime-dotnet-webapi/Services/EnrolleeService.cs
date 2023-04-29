@@ -107,7 +107,6 @@ namespace Prime.Services
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
-                    RenewalDate = e.ExpiryDate,
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
                                         .Where(a => a.AcceptedDate != null)
@@ -1012,21 +1011,21 @@ namespace Prime.Services
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
                 // Filter out enrollees that haven't got a signed TOA
-                .Where(e => e.CurrentAgreementId != null)
                 .Select(e => new HpdidLookup
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
                     Status = definiteAbsentHpdids.Contains(e.HPDID) ?
                         ProvisionerEnrolmentStatusType.IndefiniteAbsent :
-                        ProvisionerEnrolmentStatusType.Complete,
-                    RenewalDate = e.ExpiryDate,
+                            e.CurrentAgreementId != null ?
+                        ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
                         .Where(a => a.AcceptedDate != null)
                         .Select(a => a.AgreementVersion.AccessType)
                         .FirstOrDefault(),
-                    Licences = e.Certifications.Select(cert =>
+                    Licences = definiteAbsentHpdids.Contains(e.HPDID) || e.CurrentAgreementId != null
+                        ? new List<EnrolleeCertDto>() : e.Certifications.Select(cert =>
                         new EnrolleeCertDto
                         {
                             // TODO: Retrieve from cert.Prefix in future?
