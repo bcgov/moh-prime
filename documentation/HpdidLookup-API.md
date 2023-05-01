@@ -68,11 +68,10 @@ Enrollees that are Under Review or that haven't signed a TOA (Requires TOA) have
     "result": [
         {
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
-            "gpid": "",
+            "gpid": null,
             "status": "Incomplete",
-            "accessType": "",
-            "licences": [
-            ]
+            "accessType": null,
+            "licences": null
         }
     ]
 }
