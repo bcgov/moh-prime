@@ -1001,9 +1001,9 @@ namespace Prime.Services
 
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
-            var definiteAbsentHpdids = await _context.EnrolleeAbsences
+            var indefiniteAbsenceHpdids = await _context.EnrolleeAbsences
                 .Where(a => hpdids.Contains(a.Enrollee.HPDID))
-                .Where(a => a.EndTimestamp == null && a.StartTimestamp > DateTime.UtcNow)
+                .Where(a => a.StartTimestamp != null && a.EndTimestamp == null)
                 .Select(a => a.Enrollee.HPDID)
                 .ToListAsync();
 
@@ -1016,8 +1016,8 @@ namespace Prime.Services
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
-                    Status = definiteAbsentHpdids.Contains(e.HPDID) ?
-                        ProvisionerEnrolmentStatusType.IndefiniteAbsent :
+                    Status = indefiniteAbsenceHpdids.Contains(e.HPDID) ?
+                        ProvisionerEnrolmentStatusType.IndefiniteAbsence :
                             e.CurrentAgreementId != null ?
                         ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
@@ -1025,7 +1025,7 @@ namespace Prime.Services
                         .Where(a => a.AcceptedDate != null)
                         .Select(a => a.AgreementVersion.AccessType)
                         .FirstOrDefault(),
-                    Licences = definiteAbsentHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null
+                    Licences = indefiniteAbsenceHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null
                         ? null
                         : (e.Certifications.Count > 1)
                             ? e.Certifications.Select(cert =>

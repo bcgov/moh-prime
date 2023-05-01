@@ -4,6 +4,6 @@ namespace Prime.Models
     {
         public const string Complete = "Complete";
         public const string Incomplete = "Incomplete";
-        public const string IndefiniteAbsent = "Indefinite absent";
+        public const string IndefiniteAbsence = "Indefinite absence";
     }
 }
