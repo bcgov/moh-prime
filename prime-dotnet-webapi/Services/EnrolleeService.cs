@@ -1010,8 +1010,7 @@ namespace Prime.Services
             return await _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
-                .Where(e => (e.Submissions.Count > 0))
-                // Filter out enrollees that haven't got a signed TOA
+                .Where(e => e.Submissions.Count > 0)
                 .Select(e => new HpdidLookup
                 {
                     Gpid = e.GPID,
