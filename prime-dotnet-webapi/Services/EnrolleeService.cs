@@ -1024,8 +1024,9 @@ namespace Prime.Services
                         .Where(a => a.AcceptedDate != null)
                         .Select(a => a.AgreementVersion.AccessType)
                         .FirstOrDefault(),
-                    Licences = definiteAbsentHpdids.Contains(e.HPDID) || e.CurrentAgreementId != null
-                        ? null : e.Certifications.Select(cert =>
+                    Licences = definiteAbsentHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null
+                        ? null
+                        : e.Certifications.Select(cert =>
                         new EnrolleeCertDto
                         {
                             // TODO: Retrieve from cert.Prefix in future?
