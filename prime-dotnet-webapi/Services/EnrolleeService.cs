@@ -1027,14 +1027,24 @@ namespace Prime.Services
                         .FirstOrDefault(),
                     Licences = definiteAbsentHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null
                         ? null
-                        : e.Certifications.Select(cert =>
-                        new EnrolleeCertDto
-                        {
-                            // TODO: Retrieve from cert.Prefix in future?
-                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
-                            CollegeLicenceNumber = cert.LicenseNumber,
-                            PharmaNetId = cert.PractitionerId
-                        })
+                        : (e.Certifications.Count > 1)
+                            ? e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = true,
+                                    PractRefId = null,
+                                    CollegeLicenceNumber = null,
+                                    PharmaNetId = null
+                                })
+                            : e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = false,
+                                    // TODO: Retrieve from cert.Prefix in future?
+                                    PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                                    CollegeLicenceNumber = cert.LicenseNumber,
+                                    PharmaNetId = cert.PractitionerId
+                                })
                 })
                 .DecompileAsync()
                 .ToListAsync();
