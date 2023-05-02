@@ -84,7 +84,7 @@ If a BCSC user has not submitted the enrollment yet or never enrolled, nothing i
 }
 ```
 
-In the case of an indefinite absence (absence From date provided but no To date given), the status will be `Indefinite absence` and the vendor should deprovision this user, e.g.
+In the case of an indefinite absence (absence From date provided, starting today or in the past, but no To date given), the status will be `Indefinite absence` and the vendor should deprovision this user, e.g.
 ```
 {
     "result": [
