@@ -1003,7 +1003,7 @@ namespace Prime.Services
 
             var indefiniteAbsenceHpdids = await _context.EnrolleeAbsences
                 .Where(a => hpdids.Contains(a.Enrollee.HPDID))
-                .Where(a => a.StartTimestamp != null && a.StartTimestamp <= DateTime.UtcNow && a.EndTimestamp == null)
+                .Where(a => a.StartTimestamp <= DateTime.UtcNow && a.EndTimestamp == null)
                 .Select(a => a.Enrollee.HPDID)
                 .ToListAsync();
 
