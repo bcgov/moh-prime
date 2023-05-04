@@ -5,12 +5,21 @@
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
-  <app-alert *ngIf="showHAError"
+  <app-alert *ngIf="showHAJobSiteError && !showHASelectError"
              type="danger"
              icon="error">
     <ng-container #alertContent
                   class="alert-content">
       Please ensure each health authority has at least one job site.
+    </ng-container>
+  </app-alert>
+
+  <app-alert *ngIf="showHASelectError"
+             type="danger"
+             icon="error">
+    <ng-container #alertContent
+                  class="alert-content">
+      Please specify the health authority for each job site.
     </ng-container>
   </app-alert>
 
