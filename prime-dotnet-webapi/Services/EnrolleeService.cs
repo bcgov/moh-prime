@@ -107,19 +107,35 @@ namespace Prime.Services
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
+                    Status = e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp > DateTime.Today).Any() ?
+                        ProvisionerEnrolmentStatusType.IndefiniteAbsence :
+                            e.CurrentAgreementId != null ?
+                        ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
                                         .Where(a => a.AcceptedDate != null)
                                         .Select(a => a.AgreementVersion.AccessType)
                                         .FirstOrDefault(),
-                    Licences = e.Certifications.Select(cert =>
-                        new EnrolleeCertDto
-                        {
-                            // TODO: Retrieve from cert.Prefix in future?
-                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
-                            CollegeLicenceNumber = cert.LicenseNumber,
-                            PharmaNetId = cert.PractitionerId
-                        })
+                    Licences = e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp > DateTime.Today).Any() || e.CurrentAgreementId == null
+                        ? null
+                        : (e.Certifications.Count > 1)
+                            ? e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = true,
+                                    PractRefId = null,
+                                    CollegeLicenceNumber = null,
+                                    PharmaNetId = null
+                                })
+                            : e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = false,
+                                    // TODO: Retrieve from cert.Prefix in future?
+                                    PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                                    CollegeLicenceNumber = cert.LicenseNumber,
+                                    PharmaNetId = cert.PractitionerId
+                                })
                 })
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
