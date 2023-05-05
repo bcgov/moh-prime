@@ -1017,8 +1017,12 @@ namespace Prime.Services
                     Hpdid = e.HPDID,
                     Status = indefiniteAbsenceHpdids.Contains(e.HPDID) ?
                         ProvisionerEnrolmentStatusType.IndefiniteAbsence :
-                            e.CurrentAgreementId != null ?
-                        ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
+                            e.CurrentAgreementId == null ?
+                                ProvisionerEnrolmentStatusType.Incomplete :
+                                e.Agreements.OrderByDescending(a => a.CreatedDate)
+                                .Where(a => a.AcceptedDate != null).Select(a => a.ExpiryDate).FirstOrDefault() < DateTimeOffset.UtcNow ?
+                                    ProvisionerEnrolmentStatusType.PastRenewal :
+                                    ProvisionerEnrolmentStatusType.Complete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
                         .Where(a => a.AcceptedDate != null)
