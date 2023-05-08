@@ -29,7 +29,8 @@ export class MockSatEnrolleeService implements ISatEnrolleeService {
       physicalAddress: new Address(),
       verifiedAddress: new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode()),
       partyCertifications: [],
-      submittedDate: faker.date.past(1).toDateString()
+      submittedDate: faker.date.past(1).toDateString(),
+      username: `${faker.random.uuid()}@bcsc`
     });
   }
 

@@ -21,10 +21,32 @@
            class="row">
         <div class="col-12">
 
+          <app-alert *ngIf="healthAuthorityName === '' && healthAuthorities.length === 0"
+                     type="danger"
+                     icon="error">
+            <ng-container #alertContent
+                          class="alert-content">
+              Missing Health Authority selection in Care Setting section.
+            </ng-container>
+          </app-alert>
+          <mat-form-field class="w-100"
+                          *ngIf="healthAuthorityName === '' && healthAuthorities.length > 0">
+            <mat-label>Health Authority</mat-label>
+            <mat-select formControlName="healthAuthorityCode">
+              <mat-option *ngFor="let ha of healthAuthorities"
+                          [value]="ha.code">
+                {{ ha.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+              Required
+            </mat-error>
+          </mat-form-field>
           <mat-form-field class="w-100">
             <mat-label>
               <strong>{{ healthAuthorityName }}</strong> Health Authority Facility Name
             </mat-label>
+
             <input matInput
                    formControlName="facilityName">
             <mat-error>Required</mat-error>

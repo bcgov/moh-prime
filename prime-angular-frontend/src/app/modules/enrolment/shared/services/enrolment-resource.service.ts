@@ -45,9 +45,9 @@ export class EnrolmentResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public enrollee(userId: string): Observable<Enrolment> {
+  public enrollee(username: string): Observable<Enrolment> {
     const selfDeclarationDocumentsParams = this.apiResourceUtilsService.makeHttpParams({ includeHidden: false });
-    return this.apiResource.get<HttpEnrollee>(`enrollees/${userId}`)
+    return this.apiResource.get<HttpEnrollee>(`enrollees/${username}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee) => this.logger.info('ENROLLEE', enrollee)),
@@ -614,6 +614,7 @@ export class EnrolmentResource {
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
     const {
       userId,
+      username,
       firstName,
       lastName,
       givenNames,
@@ -636,6 +637,7 @@ export class EnrolmentResource {
     return {
       enrollee: {
         userId,
+        username,
         firstName,
         lastName,
         givenNames,

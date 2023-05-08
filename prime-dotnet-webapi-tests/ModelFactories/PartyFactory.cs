@@ -17,6 +17,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.HPDID, f => f.Random.String(40));
             RuleFor(x => x.FirstName, f => f.Name.FirstName());
             RuleFor(x => x.LastName, f => f.Name.LastName());
+            RuleFor(x => x.Username, f => null);
             RuleFor(x => x.DateOfBirth, f => f.Person.DateOfBirth);
 
             RuleFor(x => x.JobRoleTitle, f => f.Name.JobTitle());

@@ -1,7 +1,7 @@
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Address } from '@lib/models/address.model';
 
-export interface Enrollee extends Omit<BcscUser, 'username'> {
+export interface Enrollee extends BcscUser {
   id?: number;
   preferredFirstName: string;
   preferredMiddleName: string;

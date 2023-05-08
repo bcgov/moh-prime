@@ -74,7 +74,7 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
     return (this.isClaimExistingOrg)
       ? this.authService.getUser$()
         .pipe(
-          exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUserId(bcscUser.userId)),
+          exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUsername(bcscUser.username)),
           exhaustMap((party: Party) =>
             this.organizationResource.claimOrganization(party.id, this.formState.json)
               .pipe(
@@ -82,7 +82,7 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
                   this.hasOrgClaimError = true;
                   return EMPTY;
                 })
-            )),
+              )),
           NoContentResponse
         )
       : of(NoContentResponse);
