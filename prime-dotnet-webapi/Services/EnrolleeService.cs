@@ -1310,7 +1310,7 @@ namespace Prime.Services
                 .Select(e => e.HPDID)
                 .Union(_context.EnrolleeAbsences
                     .Where(a => a.EndTimestamp == null && hpdids.Contains(a.Enrollee.HPDID))
-                    .Where(a => a.StartTimestamp.CompareTo(updatedSince.UtcDateTime) > 0)
+                    .Where(a => a.StartTimestamp.CompareTo(updatedSince.UtcDateTime) >= 0)
                     .Select(a => a.Enrollee.HPDID));
 
             return await query.DecompileAsync()
