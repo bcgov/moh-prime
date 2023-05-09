@@ -59,12 +59,14 @@ namespace Prime.Controllers
         public async Task<ActionResult> SendEnrolleeRenewalEmails()
         {
             var enrolleesEmailed = await _emailService.SendEnrolleeRenewalEmails();
+            int numEmailed = 0;
             foreach (var enrolleeId in enrolleesEmailed)
             {
                 await _businessEventService.CreateEmailEventAsync(enrolleeId, "Notified enrollee to renew");
+                numEmailed++;
             }
 
-            return NoContent();
+            return Ok($"Sent {numEmailed} renewal emails.");
         }
 
         // POST: api/Emails/management/enrollees/unsigned-toa
