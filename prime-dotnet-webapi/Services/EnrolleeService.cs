@@ -1014,8 +1014,9 @@ namespace Prime.Services
                 .Select(e => new HpdidLookup
                 {
                     Gpid = e.GPID,
-                    Hpdid = e.HPDID,
-                    Status = indefiniteAbsenceHpdids.Contains(e.HPDID) ?
+                    Hpdid = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null : e.HPDID,
+                    Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
+                        indefiniteAbsenceHpdids.Contains(e.HPDID) ?
                         ProvisionerEnrolmentStatusType.IndefiniteAbsence :
                             e.CurrentAgreementId == null ?
                                 ProvisionerEnrolmentStatusType.Incomplete :
@@ -1024,11 +1025,12 @@ namespace Prime.Services
                                     ProvisionerEnrolmentStatusType.PastRenewal :
                                     ProvisionerEnrolmentStatusType.Complete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
-                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
-                        .Where(a => a.AcceptedDate != null)
-                        .Select(a => a.AgreementVersion.AccessType)
-                        .FirstOrDefault(),
-                    Licences = indefiniteAbsenceHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null
+                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
+                        e.Agreements.OrderByDescending(a => a.CreatedDate)
+                            .Where(a => a.AcceptedDate != null)
+                            .Select(a => a.AgreementVersion.AccessType)
+                            .FirstOrDefault(),
+                    Licences = indefiniteAbsenceHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null || e.CurrentStatus.StatusCode == (int)StatusType.Locked
                         ? null
                         : (e.Certifications.Count > 1)
                             ? e.Certifications.Select(cert =>
