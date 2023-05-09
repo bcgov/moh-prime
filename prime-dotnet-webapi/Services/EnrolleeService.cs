@@ -1013,8 +1013,8 @@ namespace Prime.Services
                 .Where(e => e.Submissions.Count > 0)
                 .Select(e => new HpdidLookup
                 {
-                    Gpid = e.GPID,
-                    Hpdid = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null : e.HPDID,
+                    Gpid = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null : e.GPID,
+                    Hpdid = e.HPDID,
                     Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
                         indefiniteAbsenceHpdids.Contains(e.HPDID) ?
                         ProvisionerEnrolmentStatusType.IndefiniteAbsence :
