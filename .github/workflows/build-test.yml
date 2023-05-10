@@ -9,6 +9,8 @@ on:
   workflow_dispatch:
     branches:
       - test
+    paths-ignore:
+      - moh-prime/prime-angular-frontend/
       
 jobs:
   build-document-manager-backend:

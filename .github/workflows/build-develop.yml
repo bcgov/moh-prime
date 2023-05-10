@@ -6,6 +6,8 @@ on:
   push:
     branches:
       - develop
+    paths-ignore:
+      - moh-prime/prime-angular-frontend/
 
   workflow_dispatch:
     branches:
