@@ -35,13 +35,11 @@ namespace Prime.Models
         [StringLength(255)]
         public string HPDID { get; set; }
 
-        [Required]
         public string FirstName { get; set; }
 
         [Required]
         public string LastName { get; set; }
 
-        [Required]
         public string GivenNames { get; set; }
 
         public string PreferredFirstName { get; set; }
@@ -127,6 +125,11 @@ namespace Prime.Models
         public EnrolleeLinkedEnrolment PaperToEnrolleeLink { get; set; }
 
         public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
+
+        /// <summary>
+        /// HPDID associated with BCSC, with suffix, e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc"
+        /// </summary>
+        public string Username { get; set; }
 
         [NotMapped]
         [Computed]
@@ -361,6 +364,10 @@ namespace Prime.Models
             if (Guid.Empty.Equals(UserId))
             {
                 yield return new ValidationResult($"UserId cannot be empty");
+            }
+            if (null == Username)
+            {
+                yield return new ValidationResult($"Username cannot be empty");
             }
         }
     }

@@ -1,7 +1,7 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
-
+  <app-site-progress-indicator [inProgress]="!isSubmitted"
+                               [steps]="siteSteps"></app-site-progress-indicator>
   <form (ngSubmit)="onSubmit()"
         [formGroup]="formState.form"
         novalidate

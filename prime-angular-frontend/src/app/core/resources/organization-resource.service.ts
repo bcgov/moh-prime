@@ -29,8 +29,8 @@ export class OrganizationResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public getSigningAuthorityByUserId(userId: string): Observable<Party | null> {
-    return this.apiResource.get<Party>(`parties/signing-authorities/${userId}`)
+  public getSigningAuthorityByUsername(username: string): Observable<Party | null> {
+    return this.apiResource.get<Party>(`parties/signing-authorities/${username}`)
       .pipe(
         map((response: ApiHttpResponse<Party>) => response.result),
         tap((party: Party) => this.logger.info('SIGNING_AUTHORITY', party)),
@@ -40,7 +40,7 @@ export class OrganizationResource {
           }
 
           this.toastService.openErrorToast('Signing authority could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getSigningAuthorityByUserId error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getSigningAuthorityByUsername error has occurred: ', error);
           throw error;
         })
       );
@@ -97,8 +97,8 @@ export class OrganizationResource {
    * Get the organization for a signing authority by user ID, and provide null when
    * a signing authority could not be found.
    */
-  public getSigningAuthorityOrganizationByUserId(userId: string): Observable<Organization | null> {
-    return this.apiResource.get<Organization[]>(`parties/signing-authorities/${userId}/organizations`)
+  public getSigningAuthorityOrganizationByUsername(username: string): Observable<Organization | null> {
+    return this.apiResource.get<Organization[]>(`parties/signing-authorities/${username}/organizations`)
       .pipe(
         map((response: ApiHttpResponse<Organization[]>) => response.result),
         map((organizations: Organization[]) => (organizations?.length) ? organizations[0] : null),
@@ -110,7 +110,7 @@ export class OrganizationResource {
           }
 
           this.toastService.openErrorToast('Organizations could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getOrganizationByUserId error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getSigningAuthorityOrganizationByUsername error has occurred: ', error);
           throw error;
         })
       );
@@ -129,7 +129,7 @@ export class OrganizationResource {
       );
   }
 
-  public getOrganizationClaim(queryParam: { pec?: string, userId?: string }): Observable<boolean> {
+  public getOrganizationClaim(queryParam: { pec?: string, username?: string }): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
     return this.apiResource.get<boolean>(`organizations/claims`, params)
       .pipe(

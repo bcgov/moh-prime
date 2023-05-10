@@ -73,6 +73,7 @@ namespace Prime.Services
             var enrollee = _mapper.Map<Enrollee>(viewModel);
 
             enrollee.UserId = Guid.NewGuid();
+            // TODO: enrollee.Username?
             enrollee.GPID = Gpid.NewGpid(Enrollee.PaperGpidPrefix);
             var enrolleeAddresses = new List<EnrolleeAddress>()
             {

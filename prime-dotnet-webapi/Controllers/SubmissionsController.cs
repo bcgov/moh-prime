@@ -54,7 +54,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            if (!record.MatchesUserIdOf(User))
+            if (!record.MatchesUsernameOf(User))
             {
                 return Forbid();
             }

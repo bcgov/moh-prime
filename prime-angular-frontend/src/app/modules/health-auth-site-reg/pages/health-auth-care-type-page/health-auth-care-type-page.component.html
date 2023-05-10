@@ -35,7 +35,8 @@
       </div>
     </section>
 
-    <section class="mb-3">
+    <section *ngIf="vendors?.length"
+             class="mb-3">
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Vendor</ng-container>
         <ng-container appPageSubheader2Summary>

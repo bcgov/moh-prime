@@ -25,6 +25,7 @@ export class PrivacyOfficerPageComponent extends AbstractCommunitySiteRegistrati
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public SiteRoutes = SiteRoutes;
 
   private site: Site;
@@ -72,6 +73,7 @@ export class PrivacyOfficerPageComponent extends AbstractCommunitySiteRegistrati
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
+    this.isSubmitted = this.site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(this.site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
   }

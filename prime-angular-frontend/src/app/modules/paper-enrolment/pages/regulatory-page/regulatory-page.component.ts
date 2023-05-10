@@ -116,7 +116,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
       );
   }
 
-  protected performSubmission(): Observable<number> {
+  protected performSubmission(): Observable<void> {
     this.formState.removeIncompleteCertifications(true);
     this.formState.removeIncompleteUnlistedCertifications();
     this.formState.form.markAsPristine();

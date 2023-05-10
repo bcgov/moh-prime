@@ -58,6 +58,7 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
     const {
       id,
       userId,
+      username,
       firstName,
       lastName,
       givenNames,
@@ -82,6 +83,7 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
       enrollee: {
         id,
         userId,
+        username,
         firstName,
         lastName,
         givenNames,

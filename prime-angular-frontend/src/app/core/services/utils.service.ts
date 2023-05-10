@@ -138,8 +138,10 @@ export class UtilsService {
   public downloadDocument(file: Blob, filename: string): void {
     // Allow downloads in IE and Edge browsers prior to
     // Chromium-based Edge where it is deprecated
-    if (navigator && navigator.msSaveOrOpenBlob) {
-      navigator.msSaveOrOpenBlob(file, filename);
+    // https://stackoverflow.com/questions/69552023/after-update-typescript-3-7-2-to-latest-typescript-4-4-4-error-ts2339 - With later version of TypeScript, revised to the following
+    const nav = (window.navigator as any);
+    if (nav && nav.msSaveOrOpenBlob) {
+      nav.msSaveOrOpenBlob(file, filename);
       return;
     }
 

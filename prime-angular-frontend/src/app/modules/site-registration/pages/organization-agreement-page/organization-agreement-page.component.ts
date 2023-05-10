@@ -39,6 +39,7 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
   public hasUploadedFile: boolean;
   public hasNoUploadError: boolean;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public SiteRoutes = SiteRoutes;
 
   @ViewChild('accept') public accepted: MatCheckbox;
@@ -110,6 +111,7 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
   protected patchForm(): void {
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
+    this.isSubmitted = this.siteService.site?.submittedDate ? true : false;
     this.organizationFormStateService.setForm(organization);
   }
 

@@ -1,5 +1,15 @@
 .stepIndicator {
-  width: 750px;
+  width: 950px;
+}
+
+.stepIndicator-center {
+  width: auto;
+}
+
+.stepWrapper-center {
+  width: 133%;
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 950px) {
@@ -13,7 +23,7 @@
   position: relative;
   float: left;
   height: 160px;
-  width: 120px;
+  width: 114px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,10 +51,10 @@
 
 .separator {
   position: absolute;
-  left: 70px;
+  left: 67px;
   top: 80px;
   height: 2px;
-  width: 130px;
+  width: 120px;
   background-color: #707070;
 }
 
@@ -85,7 +95,7 @@
   height: 35px;
   width: 35px;
   top: 63px;
-  left: 43px;
+  left: 40px;
 }
 
 .complete .check {
