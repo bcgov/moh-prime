@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 using Prime.Configuration.Auth;
 using Prime.Models;
@@ -25,6 +26,7 @@ namespace Prime.Controllers
         private readonly IEnrolmentCertificateService _certificateService;
         private readonly IEmailService _emailService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IVendorAPILogService _vendorAPILogService;
 
         private const int _hpdidLimit_GetUpdatedGpids = 1000;
         private const int _hpdidLimit_HpdidLookup = 10;
@@ -34,12 +36,14 @@ namespace Prime.Controllers
             IEnrolmentCertificateService enrolmentCertificateService,
             IEmailService emailService,
             IBusinessEventService businessEventService,
+            IVendorAPILogService vendorAPILogService,
             IMapper mapper)
         {
             _enrolleeService = enrolleeService;
             _certificateService = enrolmentCertificateService;
             _emailService = emailService;
             _businessEventService = businessEventService;
+            _vendorAPILogService = vendorAPILogService;
             _mapper = mapper;
         }
 
@@ -179,14 +183,20 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HpdidLookup>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> HpdidLookup([FromQuery] string[] hpdids)
         {
+            var hpdidsJson = JsonConvert.SerializeObject(hpdids);
+            var logId = await _vendorAPILogService.CreateLogAsync(User.GetPrimeUsername(), "api/provisioner-access/gpids", hpdidsJson);
             if (hpdids != null && hpdids.Length > _hpdidLimit_HpdidLookup)
             {
-                return BadRequest($"number of {nameof(hpdids)} should not exceed {_hpdidLimit_HpdidLookup}");
+                var errorMessage = $"number of {nameof(hpdids)} should not exceed {_hpdidLimit_HpdidLookup}";
+                _vendorAPILogService.UpdateLogAsync(logId, null, errorMessage);
+                return BadRequest(errorMessage);
             }
             else
             {
                 var result = await _enrolleeService.HpdidLookupAsync(hpdids);
+                var resultJson = JsonConvert.SerializeObject(result);
 
+                _vendorAPILogService.UpdateLogAsync(logId, resultJson);
                 return Ok(result);
             }
         }
