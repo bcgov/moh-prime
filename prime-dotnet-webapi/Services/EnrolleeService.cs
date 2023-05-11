@@ -1020,18 +1020,17 @@ namespace Prime.Services
                         ProvisionerEnrolmentStatusType.IndefiniteAbsence :
                             e.CurrentAgreementId == null ?
                                 ProvisionerEnrolmentStatusType.Incomplete :
-                                e.Agreements.OrderByDescending(a => a.CreatedDate)
-                                .Where(a => a.AcceptedDate != null).Select(a => a.ExpiryDate).FirstOrDefault() < DateTimeOffset.UtcNow ?
+                                IsPastRenewal(e.Agreements) ?
                                     ProvisionerEnrolmentStatusType.PastRenewal :
                                     ProvisionerEnrolmentStatusType.Complete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
-                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked || indefiniteAbsenceHpdids.Contains(e.HPDID)
+                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked || indefiniteAbsenceHpdids.Contains(e.HPDID) || IsPastRenewal(e.Agreements)
                         ? null
                         : e.Agreements.OrderByDescending(a => a.CreatedDate)
                             .Where(a => a.AcceptedDate != null)
                             .Select(a => a.AgreementVersion.AccessType)
                             .FirstOrDefault(),
-                    Licences = indefiniteAbsenceHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null || e.CurrentStatus.StatusCode == (int)StatusType.Locked
+                    Licences = indefiniteAbsenceHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null || e.CurrentStatus.StatusCode == (int)StatusType.Locked || IsPastRenewal(e.Agreements)
                         ? null
                         : (e.Certifications.Count > 1)
                             ? e.Certifications.Select(cert =>
@@ -1318,6 +1317,14 @@ namespace Prime.Services
 
             return await query.DecompileAsync()
                 .ToListAsync();
+        }
+
+        private static bool IsPastRenewal(ICollection<Agreement> enrolleeAgreements)
+        {
+            return enrolleeAgreements
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.AcceptedDate != null)
+                .Select(a => a.ExpiryDate).FirstOrDefault() < DateTimeOffset.UtcNow;
         }
     }
 }
