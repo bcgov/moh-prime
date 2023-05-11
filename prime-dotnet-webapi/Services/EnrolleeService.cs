@@ -1025,8 +1025,9 @@ namespace Prime.Services
                                     ProvisionerEnrolmentStatusType.PastRenewal :
                                     ProvisionerEnrolmentStatusType.Complete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
-                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
-                        e.Agreements.OrderByDescending(a => a.CreatedDate)
+                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked || indefiniteAbsenceHpdids.Contains(e.HPDID)
+                        ? null
+                        : e.Agreements.OrderByDescending(a => a.CreatedDate)
                             .Where(a => a.AcceptedDate != null)
                             .Select(a => a.AgreementVersion.AccessType)
                             .FirstOrDefault(),
