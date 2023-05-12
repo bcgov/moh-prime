@@ -111,7 +111,7 @@ namespace Prime
         public DbSet<SiteNotification> SiteNotifications { get; set; }
         public DbSet<AuthorizedUser> AuthorizedUsers { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
-        public DbSet<DoNotEmail> DoNotEmail { get; set;}
+        public DbSet<DoNotEmail> DoNotEmail { get; set; }
         public DbSet<Banner> Banners { get; set; }
 
         // Parties
@@ -122,6 +122,7 @@ namespace Prime
         // PLR Integration
         public DbSet<PlrProvider> PlrProviders { get; set; }
         public DbSet<CollegeForPlrRoleType> CollegeForPlrRoleTypes { get; set; }
+        public DbSet<Practitioner> Practitioner { get; set; }
 
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
