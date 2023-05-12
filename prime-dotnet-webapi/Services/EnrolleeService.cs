@@ -1019,7 +1019,7 @@ namespace Prime.Services
 
             var indefiniteAbsenceHpdids = await _context.EnrolleeAbsences
                 .Where(a => hpdids.Contains(a.Enrollee.HPDID))
-                .Where(a => a.StartTimestamp != null && a.EndTimestamp == null)
+                .Where(a => a.StartTimestamp <= DateTime.UtcNow && a.EndTimestamp == null)
                 .Select(a => a.Enrollee.HPDID)
                 .ToListAsync();
 
@@ -1029,18 +1029,24 @@ namespace Prime.Services
                 .Where(e => e.Submissions.Count > 0)
                 .Select(e => new HpdidLookup
                 {
-                    Gpid = e.GPID,
+                    Gpid = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null : e.GPID,
                     Hpdid = e.HPDID,
-                    Status = indefiniteAbsenceHpdids.Contains(e.HPDID) ?
+                    Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
+                        indefiniteAbsenceHpdids.Contains(e.HPDID) ?
                         ProvisionerEnrolmentStatusType.IndefiniteAbsence :
-                            e.CurrentAgreementId != null ?
-                        ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
+                            e.CurrentAgreementId == null ?
+                                ProvisionerEnrolmentStatusType.Incomplete :
+                                IsPastRenewal(e.Agreements) ?
+                                    ProvisionerEnrolmentStatusType.PastRenewal :
+                                    ProvisionerEnrolmentStatusType.Complete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
-                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
-                        .Where(a => a.AcceptedDate != null)
-                        .Select(a => a.AgreementVersion.AccessType)
-                        .FirstOrDefault(),
-                    Licences = indefiniteAbsenceHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null
+                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked || indefiniteAbsenceHpdids.Contains(e.HPDID) || IsPastRenewal(e.Agreements)
+                        ? null
+                        : e.Agreements.OrderByDescending(a => a.CreatedDate)
+                            .Where(a => a.AcceptedDate != null)
+                            .Select(a => a.AgreementVersion.AccessType)
+                            .FirstOrDefault(),
+                    Licences = indefiniteAbsenceHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null || e.CurrentStatus.StatusCode == (int)StatusType.Locked || IsPastRenewal(e.Agreements)
                         ? null
                         : (e.Certifications.Count > 1)
                             ? e.Certifications.Select(cert =>
@@ -1322,11 +1328,20 @@ namespace Prime.Services
                 .Select(e => e.HPDID)
                 .Union(_context.EnrolleeAbsences
                     .Where(a => a.EndTimestamp == null && hpdids.Contains(a.Enrollee.HPDID))
-                    .Where(a => a.CreatedTimeStamp.CompareTo(updatedSince) > 0)
+                    .Where(a => a.StartTimestamp.CompareTo(updatedSince.UtcDateTime) >= 0)
+                    .Where(a => a.StartTimestamp.CompareTo(DateTime.Now) < 0)
                     .Select(a => a.Enrollee.HPDID));
 
             return await query.DecompileAsync()
                 .ToListAsync();
+        }
+
+        private static bool IsPastRenewal(ICollection<Agreement> enrolleeAgreements)
+        {
+            return enrolleeAgreements
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.AcceptedDate != null)
+                .Select(a => a.ExpiryDate).FirstOrDefault() < DateTimeOffset.UtcNow;
         }
     }
 }
