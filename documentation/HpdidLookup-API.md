@@ -92,15 +92,14 @@ In the case of an indefinite absence (absence From date provided, starting today
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
             "status": "Indefinite absence",
-            "accessType": "",
-            "licences": [
-            ]
+            "accessType": null,
+            "licences": null
         }
     ]
 }
 ```
 
-Enrollees that have their renewal period expired and have not renewed, they will have a `status` of `Past Renewal`.
+For enrollees that have their renewal period expired and have not renewed, they will have a `status` of `Past Renewal`.
 ```
 {
     "result": [
@@ -108,6 +107,22 @@ Enrollees that have their renewal period expired and have not renewed, they will
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
             "status": "Past Renewal",
+            "accessType": null,
+            "licences": null
+        }
+    ]
+}
+```
+
+For enrollees that have been `locked` by PRIME administrators (such that they cannot view or edit their enrollment details, even if
+previously approved), the API response will be:
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": null,
+            "status": null,
             "accessType": "",
             "licences": [
             ]
