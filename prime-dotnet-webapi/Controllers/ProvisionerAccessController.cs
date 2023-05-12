@@ -172,6 +172,36 @@ namespace Prime.Controllers
             return Ok(enrollee);
         }
 
+
+        // GET: api/provisioner-access/gpid-lookup
+        /// <summary>
+        /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid direct access grant token.
+        /// </summary>
+        [HttpGet("gpid-lookup", Name = nameof(GpidLookup))]
+        [Authorize(Roles = Roles.ExternalHpdidAccess)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeLookup>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GpidLookup(string gpid, string firstName, string lastName, string careSettingCode)
+        {
+            var inputJson = JsonConvert.SerializeObject(new { gpid, firstName, lastName, careSettingCode });
+            var logId = await _vendorAPILogService.CreateLogAsync(User.GetPrimeUsername(), "api/provisioner-access/gpid-lookup", inputJson);
+            if (gpid != null && firstName != null && lastName != null && careSettingCode != null)
+            {
+                var errorMessage = $"Missing input information: Gpid={gpid}, firstname={firstName}, lastName={lastName}, careSettingCode={careSettingCode}.";
+                _vendorAPILogService.UpdateLogAsync(logId, null, errorMessage);
+                return BadRequest(errorMessage);
+            }
+            else
+            {
+                var result = await _enrolleeService.GpidLookupAsync(gpid, firstName, lastName, careSettingCode);
+                var resultJson = JsonConvert.SerializeObject(result);
+
+                _vendorAPILogService.UpdateLogAsync(logId, resultJson);
+                return Ok(result);
+            }
+        }
+
         // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222
         /// <summary>
         /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid direct access grant token.

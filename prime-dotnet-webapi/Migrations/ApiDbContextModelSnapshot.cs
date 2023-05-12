@@ -4120,6 +4120,9 @@ namespace Prime.Migrations
                     b.Property<int>("CareSettingCode")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("ConsentForAutoPull")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -4150,6 +4153,9 @@ namespace Prime.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool>("ConsentForAutoPull")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");

@@ -107,7 +107,8 @@ namespace Prime.Services
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
-                    Status = e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp > DateTime.Today).Any() ?
+                    Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
+                        e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ?
                         ProvisionerEnrolmentStatusType.IndefiniteAbsence :
                             e.CurrentAgreementId != null ?
                         ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
@@ -116,7 +117,8 @@ namespace Prime.Services
                                         .Where(a => a.AcceptedDate != null)
                                         .Select(a => a.AgreementVersion.AccessType)
                                         .FirstOrDefault(),
-                    Licences = e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp > DateTime.Today).Any() || e.CurrentAgreementId == null
+                    Licences = e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ||
+                        e.CurrentStatus.StatusCode == (int)StatusType.Locked || IsPastRenewal(e.Agreements)
                         ? null
                         : (e.Certifications.Count > 1)
                             ? e.Certifications.Select(cert =>
@@ -1069,6 +1071,50 @@ namespace Prime.Services
                 })
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        public async Task<EnrolleeLookup> GpidLookupAsync(string gpid, string firstName, string lastName, string careSettingCode)
+        {
+            return await _context.Enrollees
+                .Where(e => e.GPID == gpid && e.FirstName == firstName && e.LastName == lastName
+                    && e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Select(e => new EnrolleeLookup
+                {
+                    Gpid = e.GPID,
+                    Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
+                        e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ?
+                        ProvisionerEnrolmentStatusType.IndefiniteAbsence :
+                            e.CurrentAgreementId != null ?
+                        ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
+                    // TODO: Refactor code from `EnrolmentCertificate` class
+                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
+                                        .Where(a => a.AcceptedDate != null)
+                                        .Select(a => a.AgreementVersion.AccessType)
+                                        .FirstOrDefault(),
+                    Licences = e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ||
+                        e.CurrentStatus.StatusCode == (int)StatusType.Locked || IsPastRenewal(e.Agreements)
+                        ? null
+                        : (e.Certifications.Count > 1)
+                            ? e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = true,
+                                    PractRefId = null,
+                                    CollegeLicenceNumber = null,
+                                    PharmaNetId = null
+                                })
+                            : e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = false,
+                                    // TODO: Retrieve from cert.Prefix in future?
+                                    PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                                    CollegeLicenceNumber = cert.LicenseNumber,
+                                    PharmaNetId = cert.PractitionerId
+                                })
+                })
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
         }
 
         public async Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)

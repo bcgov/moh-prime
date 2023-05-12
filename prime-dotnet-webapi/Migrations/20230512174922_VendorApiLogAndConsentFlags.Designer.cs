@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230510223006_VendorAPILog")]
-    partial class VendorAPILog
+    [Migration("20230512174922_VendorApiLogAndConsentFlags")]
+    partial class VendorApiLogAndConsentFlags
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -4122,6 +4122,9 @@ namespace Prime.Migrations
                     b.Property<int>("CareSettingCode")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("ConsentForAutoPull")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -4152,6 +4155,9 @@ namespace Prime.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool>("ConsentForAutoPull")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");

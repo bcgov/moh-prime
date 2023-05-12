@@ -4,10 +4,24 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class VendorAPILog : Migration
+    public partial class VendorApiLogAndConsentFlags : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<bool>(
+                name: "ConsentForAutoPull",
+                table: "EnrolleeHealthAuthority",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "ConsentForAutoPull",
+                table: "EnrolleeCareSetting",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
+
             migrationBuilder.CreateTable(
                 name: "VendorApiLog",
                 columns: table => new
@@ -34,6 +48,14 @@ namespace Prime.Migrations
         {
             migrationBuilder.DropTable(
                 name: "VendorApiLog");
+
+            migrationBuilder.DropColumn(
+                name: "ConsentForAutoPull",
+                table: "EnrolleeHealthAuthority");
+
+            migrationBuilder.DropColumn(
+                name: "ConsentForAutoPull",
+                table: "EnrolleeCareSetting");
         }
     }
 }
