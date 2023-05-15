@@ -1073,11 +1073,41 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<EnrolleeLookup> GpidLookupAsync(string gpid, string firstName, string lastName, string careSettingCode)
+        public async Task<EnrolleeLookup> GpidLookupAsync(GpidLookupOption option)
         {
+            var careSettingIds = new List<int>();
+            var haIds = new List<int>();
+
+            switch (option.CareSetting)
+            {
+                case ProvisionerCareSettingCode.CommunityPharmacy:
+                    careSettingIds.Add((int)CareSettingType.CommunityPharmacy);
+                    break;
+                case ProvisionerCareSettingCode.PrivateCommunityHealthPractice:
+                    careSettingIds.Add((int)CareSettingType.CommunityPractice);
+                    break;
+                case ProvisionerCareSettingCode.FraserHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.FraserHealth);
+                    break;
+                case ProvisionerCareSettingCode.InteriorHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.InteriorHealth);
+                    break;
+                case ProvisionerCareSettingCode.VancouverCoastalHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
+                    break;
+                case ProvisionerCareSettingCode.VancouverIslandHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
+                    break;
+                case ProvisionerCareSettingCode.NorthernHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.NorthernHealth);
+                    break;
+            }
+
             return await _context.Enrollees
-                .Where(e => e.GPID == gpid && e.FirstName == firstName && e.LastName == lastName
+                .Where(e => e.GPID == option.Gpid && e.FirstName == option.FirstName && e.LastName == option.LastName
                     && e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Where(e => careSettingIds.Count() == 0 || e.EnrolleeCareSettings.Where(s => careSettingIds.Contains(s.CareSettingCode)).Any())
+                .Where(e => haIds.Count() == 0 || e.EnrolleeHealthAuthorities.Where(ha => haIds.Contains((int)ha.HealthAuthorityCode)).Any())
                 .Select(e => new EnrolleeLookup
                 {
                     Gpid = e.GPID,

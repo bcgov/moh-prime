@@ -31,7 +31,7 @@ namespace Prime.Services
             return newLog.Id;
         }
 
-        public async void UpdateLogAsync(int id, string output, string errorMessage = null)
+        public async Task UpdateLogAsync(int id, string output, string errorMessage = null)
         {
             var log = await _context.VendorApiLogs.SingleOrDefaultAsync(l => l.Id == id);
 

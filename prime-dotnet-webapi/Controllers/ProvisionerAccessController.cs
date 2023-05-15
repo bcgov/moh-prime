@@ -182,22 +182,22 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeLookup>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GpidLookup(string gpid, string firstName, string lastName, string careSettingCode)
+        public async Task<ActionResult> GpidLookup(GpidLookupOption option)
         {
-            var inputJson = JsonConvert.SerializeObject(new { gpid, firstName, lastName, careSettingCode });
+            var inputJson = JsonConvert.SerializeObject(option);
             var logId = await _vendorAPILogService.CreateLogAsync(User.GetPrimeUsername(), "api/provisioner-access/gpid-lookup", inputJson);
-            if (gpid != null && firstName != null && lastName != null && careSettingCode != null)
+            if (option.Gpid == null || option.FirstName == null || option.LastName == null || option.CareSetting == null)
             {
-                var errorMessage = $"Missing input information: Gpid={gpid}, firstname={firstName}, lastName={lastName}, careSettingCode={careSettingCode}.";
-                _vendorAPILogService.UpdateLogAsync(logId, null, errorMessage);
+                var errorMessage = $"Missing input information: Gpid={option.Gpid}, firstname={option.FirstName}, lastName={option.LastName}, careSettingCode={option.CareSetting}.";
+                await _vendorAPILogService.UpdateLogAsync(logId, null, errorMessage);
                 return BadRequest(errorMessage);
             }
             else
             {
-                var result = await _enrolleeService.GpidLookupAsync(gpid, firstName, lastName, careSettingCode);
+                var result = await _enrolleeService.GpidLookupAsync(option);
                 var resultJson = JsonConvert.SerializeObject(result);
 
-                _vendorAPILogService.UpdateLogAsync(logId, resultJson);
+                await _vendorAPILogService.UpdateLogAsync(logId, resultJson);
                 return Ok(result);
             }
         }
@@ -218,7 +218,7 @@ namespace Prime.Controllers
             if (hpdids != null && hpdids.Length > _hpdidLimit_HpdidLookup)
             {
                 var errorMessage = $"number of {nameof(hpdids)} should not exceed {_hpdidLimit_HpdidLookup}";
-                _vendorAPILogService.UpdateLogAsync(logId, null, errorMessage);
+                await _vendorAPILogService.UpdateLogAsync(logId, null, errorMessage);
                 return BadRequest(errorMessage);
             }
             else
@@ -226,7 +226,7 @@ namespace Prime.Controllers
                 var result = await _enrolleeService.HpdidLookupAsync(hpdids);
                 var resultJson = JsonConvert.SerializeObject(result);
 
-                _vendorAPILogService.UpdateLogAsync(logId, resultJson);
+                await _vendorAPILogService.UpdateLogAsync(logId, resultJson);
                 return Ok(result);
             }
         }

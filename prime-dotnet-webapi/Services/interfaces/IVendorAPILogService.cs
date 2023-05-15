@@ -6,6 +6,6 @@ namespace Prime.Services
     public interface IVendorAPILogService
     {
         Task<int> CreateLogAsync(string userId, string endPoint, string input);
-        void UpdateLogAsync(int id, string output, string errorMessage = null);
+        Task UpdateLogAsync(int id, string output, string errorMessage = null);
     }
 }

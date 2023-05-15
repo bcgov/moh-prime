@@ -96,6 +96,38 @@ In the case of an indefinite absence (absence From date provided but no To date 
 }
 ```
 
+For enrollees that have their renewal period expired and have not renewed, they will have a `status` of `Past Renewal`.
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
+            "status": "Past Renewal",
+            "accessType": null,
+            "licences": null
+        }
+    ]
+}
+```
+
+For enrollees that have been `locked` by PRIME administrators (such that they cannot view or edit their enrollment details, even if
+previously approved), the API response will be:
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": null,
+            "status": null,
+            "accessType": "",
+            "licences": [
+            ]
+        }
+    ]
+}
+```
+
 Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has more than one licence, for each licence, the licence-related information would be blanked-out and a licence-level Boolean field `redacted` would be set to `true`, e.g.
 ```
 {
@@ -141,6 +173,7 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 |----------------------------|
 |Complete|
 |Indefinite absence|
+|Past Renewal|
 
 |Possible values for `accessType`|
 |--------------------------------|
