@@ -178,7 +178,7 @@ namespace Prime.Controllers
         /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid direct access grant token.
         /// </summary>
         [HttpGet("gpid-lookup", Name = nameof(GpidLookup))]
-        [Authorize(Roles = Roles.ExternalHpdidAccess)]
+        [Authorize(Roles = Roles.ExternalGpidAccess)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeLookup>), StatusCodes.Status200OK)]
