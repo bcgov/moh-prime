@@ -13,6 +13,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.HttpClients.Mail;
+using Newtonsoft.Json.Serialization;
 
 namespace Prime.Controllers
 {
@@ -182,10 +183,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeLookup>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GpidLookup(GpidLookupOption option)
+        public async Task<ActionResult> GpidLookup(GpidLookupOptions option)
         {
-            var inputJson = JsonConvert.SerializeObject(option);
-            var logId = await _vendorAPILogService.CreateLogAsync(User.GetPrimeUsername(), "api/provisioner-access/gpid-lookup", inputJson);
+            var logId = await _vendorAPILogService.CreateLogAsync(User.GetPrimeUsername(), Request.Path.Value, SerializeObjectForLog(option));
             if (option.Gpid == null || option.FirstName == null || option.LastName == null || option.CareSetting == null)
             {
                 var errorMessage = $"Missing input information: Gpid={option.Gpid}, firstname={option.FirstName}, lastName={option.LastName}, careSettingCode={option.CareSetting}.";
@@ -195,9 +195,7 @@ namespace Prime.Controllers
             else
             {
                 var result = await _enrolleeService.GpidLookupAsync(option);
-                var resultJson = JsonConvert.SerializeObject(result);
-
-                await _vendorAPILogService.UpdateLogAsync(logId, resultJson);
+                await _vendorAPILogService.UpdateLogAsync(logId, SerializeObjectForLog(result));
                 return Ok(result);
             }
         }
@@ -213,8 +211,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HpdidLookup>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> HpdidLookup([FromQuery] string[] hpdids)
         {
-            var hpdidsJson = JsonConvert.SerializeObject(hpdids);
-            var logId = await _vendorAPILogService.CreateLogAsync(User.GetPrimeUsername(), "api/provisioner-access/gpids", hpdidsJson);
+            var logId = await _vendorAPILogService.CreateLogAsync(User.GetPrimeUsername(), Request.Path.Value, SerializeObjectForLog(hpdids));
             if (hpdids != null && hpdids.Length > _hpdidLimit_HpdidLookup)
             {
                 var errorMessage = $"number of {nameof(hpdids)} should not exceed {_hpdidLimit_HpdidLookup}";
@@ -224,9 +221,7 @@ namespace Prime.Controllers
             else
             {
                 var result = await _enrolleeService.HpdidLookupAsync(hpdids);
-                var resultJson = JsonConvert.SerializeObject(result);
-
-                await _vendorAPILogService.UpdateLogAsync(logId, resultJson);
+                await _vendorAPILogService.UpdateLogAsync(logId, SerializeObjectForLog(result));
                 return Ok(result);
             }
         }
@@ -286,6 +281,15 @@ namespace Prime.Controllers
             }
 
             return Ok(response);
+        }
+
+        private static string SerializeObjectForLog(object obj)
+        {
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            return JsonConvert.SerializeObject(obj, serializerSettings);
         }
     }
 }

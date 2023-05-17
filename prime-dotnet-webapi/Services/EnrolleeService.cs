@@ -1073,7 +1073,7 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<EnrolleeLookup> GpidLookupAsync(GpidLookupOption option)
+        public async Task<EnrolleeLookup> GpidLookupAsync(GpidLookupOptions option)
         {
             var careSettingIds = new List<int>();
             var haIds = new List<int>();
@@ -1106,8 +1106,12 @@ namespace Prime.Services
             return await _context.Enrollees
                 .Where(e => e.GPID == option.Gpid && e.FirstName == option.FirstName && e.LastName == option.LastName
                     && e.CurrentStatus.StatusCode != (int)StatusType.Declined)
-                .Where(e => careSettingIds.Count() == 0 || e.EnrolleeCareSettings.Where(s => careSettingIds.Contains(s.CareSettingCode)).Any())
-                .Where(e => haIds.Count() == 0 || e.EnrolleeHealthAuthorities.Where(ha => haIds.Contains((int)ha.HealthAuthorityCode)).Any())
+                .Where(e => careSettingIds.Count() == 0 ||
+                    e.EnrolleeCareSettings.Where(s => careSettingIds.Contains(s.CareSettingCode))
+                        .Where(s => s.ConsentForAutoPull).Any())
+                .Where(e => haIds.Count() == 0 ||
+                    e.EnrolleeHealthAuthorities.Where(ha => haIds.Contains((int)ha.HealthAuthorityCode))
+                        .Where(ha => ha.ConsentForAutoPull).Any())
                 .Select(e => new EnrolleeLookup
                 {
                     Gpid = e.GPID,

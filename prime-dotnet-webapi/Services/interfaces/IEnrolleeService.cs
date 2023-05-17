@@ -44,7 +44,7 @@ namespace Prime.Services
         Task UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null);
         Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes);
         Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids);
-        Task<EnrolleeLookup> GpidLookupAsync(GpidLookupOption option);
+        Task<EnrolleeLookup> GpidLookupAsync(GpidLookupOptions option);
         Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters);
         Task<EnrolmentStatusReference> CreateEnrolmentStatusReferenceAsync(int statusId, int adminId);
         Task<EnrolmentStatusReference> AddAdjudicatorNoteToReferenceIdAsync(int statusId, int noteId);
