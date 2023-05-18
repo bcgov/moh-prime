@@ -28,13 +28,6 @@ RUN echo "Checking workdir..." && \
 
 RUN apt-get -y install nano net-tools gnupg wget ca-certificates apt-transport-https cron inetutils-ping libcurl4-openssl-dev 
 
-
-# RUN wget -qO - http://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
-#     echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
-#     apt-get update && \
-#     apt-get install mongodb-org-tools && \
-#     ls -alh /opt
-
 RUN chmod -R 755 /opt/backup && \
     touch /var/log/cron.log && \
     chmod 777 /var/log/cron.log && \
