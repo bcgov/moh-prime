@@ -72,7 +72,7 @@ import { RegulatoryForm } from './regulatory-form.model';
       </ng-container>
 
       <app-enrollee-property *ngIf="!regulatory?.certifications?.length"
-                             title="College Certification"
+                             title="College Licence"
                              [makeBold]="true">
         <div class="mb-2">
           None
