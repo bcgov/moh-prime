@@ -113,7 +113,7 @@ namespace Prime.Services.Rules
                 else
                 {
                     await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber,
-                        $"A record was found in PharmaNet with effective date {record.EffectiveDate:dd MMM yyy} and status {record.Status}.");
+                        $"A record was found in PharmaNet with effective date {record.EffectiveDate:dd MMM yyyy} and status {record.Status}.");
                 }
 
                 //As long as the licence class has non prescribing prefix, fetch the college record
@@ -126,7 +126,7 @@ namespace Prime.Services.Rules
                         if (nonPrescribing != null)
                         {
                             await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber,
-                                $"A record was found in PharmaNet with effective date {nonPrescribing.EffectiveDate:dd MMM yyy} and status {nonPrescribing.Status}.");
+                                $"A record was found in PharmaNet with effective date {nonPrescribing.EffectiveDate:dd MMM yyyy} and status {nonPrescribing.Status}.");
 
                             bool useNonPrescribing = false;
 
@@ -154,13 +154,13 @@ namespace Prime.Services.Rules
                         }
                         else
                         {
-                            await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "Record not found in Pharmanet.");
+                            await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "Record not found in PharmaNet.");
                         }
                     }
                     catch (PharmanetCollegeApiException)
                     {
                         enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.NonPrescribingPrefix}-{cert.LicenseNumber}");
-                        await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "An error occurred calling the Pharmanet API.");
+                        await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "An error occurred calling the PharmaNet API.");
                         passed = false;
                         continue;
                     }
