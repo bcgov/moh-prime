@@ -8,6 +8,10 @@ namespace Prime.Models.Api
         public string PractRefId { get; set; }
         public string CollegeLicenceNumber { get; set; }
         public string PharmaNetId { get; set; }
+        /// <summary>
+        /// If redacted, other fields should be `null`
+        /// </summary>
+        public bool Redacted { get; set; }
     }
 
     public class EnrolleeCertExtDto : EnrolleeCertDto

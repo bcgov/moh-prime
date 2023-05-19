@@ -14,7 +14,7 @@ namespace Prime.Models.Api
     public class EnrolleeLookup
     {
         public string Gpid { get; set; }
-        public DateTimeOffset? RenewalDate { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// Something like "Independent User" or "On-behalf-of User", or <c>null</c> if no TOA has been assigned yet

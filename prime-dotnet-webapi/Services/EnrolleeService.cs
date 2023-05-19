@@ -107,7 +107,6 @@ namespace Prime.Services
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
-                    RenewalDate = e.ExpiryDate,
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
                                         .Where(a => a.AcceptedDate != null)
@@ -1002,29 +1001,55 @@ namespace Prime.Services
 
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
+            var indefiniteAbsenceHpdids = await _context.EnrolleeAbsences
+                .Where(a => hpdids.Contains(a.Enrollee.HPDID))
+                .Where(a => a.StartTimestamp <= DateTime.UtcNow && a.EndTimestamp == null)
+                .Select(a => a.Enrollee.HPDID)
+                .ToListAsync();
+
             return await _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
-                // Filter out enrollees that haven't got a signed TOA
-                .Where(e => e.CurrentAgreementId != null)
+                .Where(e => e.Submissions.Count > 0)
                 .Select(e => new HpdidLookup
                 {
-                    Gpid = e.GPID,
+                    Gpid = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null : e.GPID,
                     Hpdid = e.HPDID,
-                    RenewalDate = e.ExpiryDate,
+                    Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
+                        indefiniteAbsenceHpdids.Contains(e.HPDID) ?
+                        ProvisionerEnrolmentStatusType.IndefiniteAbsence :
+                            e.CurrentAgreementId == null ?
+                                ProvisionerEnrolmentStatusType.Incomplete :
+                                IsPastRenewal(e.Agreements) ?
+                                    ProvisionerEnrolmentStatusType.PastRenewal :
+                                    ProvisionerEnrolmentStatusType.Complete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
-                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
-                        .Where(a => a.AcceptedDate != null)
-                        .Select(a => a.AgreementVersion.AccessType)
-                        .FirstOrDefault(),
-                    Licences = e.Certifications.Select(cert =>
-                        new EnrolleeCertDto
-                        {
-                            // TODO: Retrieve from cert.Prefix in future?
-                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
-                            CollegeLicenceNumber = cert.LicenseNumber,
-                            PharmaNetId = cert.PractitionerId
-                        })
+                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked || indefiniteAbsenceHpdids.Contains(e.HPDID) || IsPastRenewal(e.Agreements)
+                        ? null
+                        : e.Agreements.OrderByDescending(a => a.CreatedDate)
+                            .Where(a => a.AcceptedDate != null)
+                            .Select(a => a.AgreementVersion.AccessType)
+                            .FirstOrDefault(),
+                    Licences = indefiniteAbsenceHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null || e.CurrentStatus.StatusCode == (int)StatusType.Locked || IsPastRenewal(e.Agreements)
+                        ? null
+                        : (e.Certifications.Count > 1)
+                            ? e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = true,
+                                    PractRefId = null,
+                                    CollegeLicenceNumber = null,
+                                    PharmaNetId = null
+                                })
+                            : e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = false,
+                                    // TODO: Retrieve from cert.Prefix in future?
+                                    PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                                    CollegeLicenceNumber = cert.LicenseNumber,
+                                    PharmaNetId = cert.PractitionerId
+                                })
                 })
                 .DecompileAsync()
                 .ToListAsync();
@@ -1275,7 +1300,7 @@ namespace Prime.Services
 
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
-            return await _context.Enrollees
+            var query = _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
                 // Filter out enrollees that haven't got a signed TOA
@@ -1285,8 +1310,22 @@ namespace Prime.Services
                                 .Select(a => a.AcceptedDate)
                                 .FirstOrDefault()).CompareTo(updatedSince) > 0)
                 .Select(e => e.HPDID)
-                .DecompileAsync()
+                .Union(_context.EnrolleeAbsences
+                    .Where(a => a.EndTimestamp == null && hpdids.Contains(a.Enrollee.HPDID))
+                    .Where(a => a.StartTimestamp.CompareTo(updatedSince.UtcDateTime) >= 0)
+                    .Where(a => a.StartTimestamp.CompareTo(DateTime.Now) < 0)
+                    .Select(a => a.Enrollee.HPDID));
+
+            return await query.DecompileAsync()
                 .ToListAsync();
+        }
+
+        private static bool IsPastRenewal(ICollection<Agreement> enrolleeAgreements)
+        {
+            return enrolleeAgreements
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.AcceptedDate != null)
+                .Select(a => a.ExpiryDate).FirstOrDefault() < DateTimeOffset.UtcNow;
         }
     }
 }
