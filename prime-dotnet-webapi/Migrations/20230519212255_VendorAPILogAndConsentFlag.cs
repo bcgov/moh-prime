@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class VendorApiLogAndConsentFlags : Migration
+    public partial class VendorAPILogAndConsentFlag : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,7 +28,7 @@ namespace Prime.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: false),
+                    ServiceAccountUsername = table.Column<string>(type: "text", nullable: false),
                     EndPoint = table.Column<string>(type: "text", nullable: false),
                     Input = table.Column<string>(type: "text", nullable: true),
                     Output = table.Column<string>(type: "text", nullable: true),

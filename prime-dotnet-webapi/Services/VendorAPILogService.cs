@@ -15,11 +15,11 @@ namespace Prime.Services
             : base(context, logger)
         { }
 
-        public async Task<int> CreateLogAsync(string userId, string endPoint, string input)
+        public async Task<int> CreateLogAsync(string ServiceAccountUsername, string endPoint, string input)
         {
             var newLog = new VendorApiLog
             {
-                UserId = userId,
+                ServiceAccountUsername = ServiceAccountUsername,
                 EndPoint = endPoint,
                 Input = input,
             };

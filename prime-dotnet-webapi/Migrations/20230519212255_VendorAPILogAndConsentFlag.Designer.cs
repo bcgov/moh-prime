@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230512174922_VendorApiLogAndConsentFlags")]
-    partial class VendorApiLogAndConsentFlags
+    [Migration("20230519212255_VendorAPILogAndConsentFlag")]
+    partial class VendorAPILogAndConsentFlag
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -14410,15 +14410,15 @@ namespace Prime.Migrations
                     b.Property<string>("Output")
                         .HasColumnType("text");
 
+                    b.Property<string>("ServiceAccountUsername")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

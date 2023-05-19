@@ -10,7 +10,7 @@ namespace Prime.Models
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public string ServiceAccountUsername { get; set; }
 
         [Required]
         public string EndPoint { get; set; }

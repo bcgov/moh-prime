@@ -14408,15 +14408,15 @@ namespace Prime.Migrations
                     b.Property<string>("Output")
                         .HasColumnType("text");
 
+                    b.Property<string>("ServiceAccountUsername")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
