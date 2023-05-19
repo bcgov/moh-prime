@@ -176,7 +176,8 @@ namespace Prime.Controllers
 
         // GET: api/provisioner-access/gpid-lookup
         /// <summary>
-        /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid direct access grant token.
+        /// Gets the enrollee licence information by providing GPID, Firstname, Lastname and Care Setting code.
+        /// However, the enrollee must have given consent to share the licence information in PRIME.
         /// </summary>
         [HttpGet("gpid-lookup", Name = nameof(GpidLookup))]
         [Authorize(Roles = Roles.ExternalGpidAccess)]
