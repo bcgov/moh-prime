@@ -38,7 +38,7 @@ The response will be something like this, with the token embedded:
 In the call to this API, pass details about a PRIME enrollee and interested Care Setting, as well as the token obtained in the previous step, e.g.:
 
 ```
-curl --location 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/provisioner-access/gpid-lookup' \
+curl -v -X GET --location 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/provisioner-access/gpid-lookup' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer eyTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT' \
 --data-raw '{
@@ -101,7 +101,6 @@ For enrollees that have their renewal period expired and have not renewed, they 
 {
     "result": [
         {
-            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
             "status": "Past Renewal",
             "accessType": null,
@@ -117,7 +116,6 @@ previously approved), the API response will be:
 {
     "result": [
         {
-            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": null,
             "status": null,
             "accessType": "",
