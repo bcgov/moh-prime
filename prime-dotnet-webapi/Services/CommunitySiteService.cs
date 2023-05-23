@@ -180,7 +180,8 @@ namespace Prime.Services
             try
             {
                 await _context.SaveChangesAsync();
-                if (updateRemoteUserResult.Count > 0)
+                //send email only when the site is completed and org. agreement should have been signed.
+                if (updateRemoteUserResult.Count > 0 && currentSite.Completed) 
                 {
                     var site = await GetSiteAsync(siteId);
                     // Send HIBC an email when remote users are updated for a submitted site

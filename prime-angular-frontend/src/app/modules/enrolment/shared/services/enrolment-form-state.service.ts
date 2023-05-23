@@ -373,28 +373,37 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
 
     oboSites.forEach((s: OboSite) => {
-      const site = this.buildOboSiteForm();
-      site.patchValue(s);
-      oboSitesFormArray.push(site);
+      const careSettings = this.careSettingsForm.get('careSettings') as FormArray;
+      //add existing obo job site back to the form only if the care setting is selected
+      if (careSettings && (careSettings.value.length === 0 || careSettings.value.filter((c) => c.careSettingCode === s.careSettingCode).length > 0)) {
 
-      switch (s.careSettingCode) {
-        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-          this.addNonHealthAuthorityOboSite(site, communityHealthSites);
-          break;
-        }
-        case CareSettingEnum.COMMUNITY_PHARMACIST: {
-          this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
-          break;
-        }
-        case CareSettingEnum.DEVICE_PROVIDER: {
-          this.addNonHealthAuthorityOboSite(site, deviceProviderSites);
-          break;
-        }
-        case CareSettingEnum.HEALTH_AUTHORITY: {
-          this.addHealthAuthorityOboSite(site, healthAuthoritySites, s.healthAuthorityCode);
-          break;
+        const site = this.buildOboSiteForm() as FormGroup;
+        site.patchValue(s);
+        oboSitesFormArray.push(site);
+
+        switch (s.careSettingCode) {
+          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+            this.addNonHealthAuthorityOboSite(site, communityHealthSites);
+            break;
+          }
+          case CareSettingEnum.COMMUNITY_PHARMACIST: {
+            this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
+            break;
+          }
+          case CareSettingEnum.DEVICE_PROVIDER: {
+            this.addNonHealthAuthorityOboSite(site, deviceProviderSites);
+            break;
+          }
+          case CareSettingEnum.HEALTH_AUTHORITY: {
+            //create separate site to avoid validator transfered to oboSitesFormArray
+            const haSite = this.buildOboSiteForm();
+            haSite.patchValue(s);
+            this.addHealthAuthorityOboSite(haSite, healthAuthoritySites, s.healthAuthorityCode);
+            break;
+          }
         }
       }
+
     });
   }
 
@@ -614,9 +623,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * works, contains a FormArray. This nested FormArray contains a FormGroup for each facility that the enrollee works
    * at, in that Health Authority
    */
-  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormGroup, healthAuthorityCode: number) {
+  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormGroup, healthAuthorityCode?: number) {
     const facilityName = haSiteForm.get('facilityName') as FormControl;
     this.formUtilsService.setValidators(facilityName, [Validators.required]);
+    const healthAuthorityControl = haSiteForm.get('healthAuthorityCode') as FormControl;
+    this.formUtilsService.setValidators(healthAuthorityControl, [Validators.required]);
     let sitesOfHealthAuthority = healthAuthoritySites.get(String(healthAuthorityCode)) as FormArray;
     if (!sitesOfHealthAuthority) {
       sitesOfHealthAuthority = this.fb.array([]);
