@@ -87,10 +87,11 @@ namespace Prime.Services.Rules
 
             bool passed = true;
             string testedPharmaNetIds;
+            PharmanetCollegeRecord record;
 
             foreach (var cert in certifications)
             {
-                PharmanetCollegeRecord record = null;
+                record = null;
                 try
                 {
                     record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.Prefix, cert.LicenseNumber);
@@ -99,7 +100,7 @@ namespace Prime.Services.Rules
                 catch (PharmanetCollegeApiException)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, cert.ToString());
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "An error occurred calling the Pharmanet API.");
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "An error occurred calling the PharmaNet API.");
                     passed = false;
                     continue;
                 }
@@ -107,30 +108,61 @@ namespace Prime.Services.Rules
                 //After validating with prescriber prefix and no hit, try to validate with non-prescriber prefix
                 if (record == null)
                 {
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "Record not found in Pharmanet.");
-                    if (cert.NonPrescribingPrefix != null)
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "Record not found in PharmaNet.");
+                }
+                else
+                {
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber,
+                        $"A record was found in PharmaNet with effective date {record.EffectiveDate:d MMM yyyy} and status {record.Status}.");
+                }
+
+                //As long as the licence class has non prescribing prefix, fetch the college record
+                if (cert.NonPrescribingPrefix != null)
+                {
+                    try
                     {
-                        try
+                        PharmanetCollegeRecord nonPrescribing = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NonPrescribingPrefix, cert.LicenseNumber);
+                        testedPharmaNetIds += $", {cert.NonPrescribingPrefix}-{cert.LicenseNumber}";
+                        if (nonPrescribing != null)
                         {
-                            record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NonPrescribingPrefix, cert.LicenseNumber);
-                            testedPharmaNetIds += $", {cert.NonPrescribingPrefix}-{cert.LicenseNumber}";
+                            await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber,
+                                $"A record was found in PharmaNet with effective date {nonPrescribing.EffectiveDate:d MMM yyyy} and status {nonPrescribing.Status}.");
+
+                            bool useNonPrescribing = false;
+
                             if (record != null)
                             {
-                                //if got a hit, overwrite the prefix and store it in DB
-                                cert.Prefix = cert.NonPrescribingPrefix;
+                                if ((record.Status != "P" && nonPrescribing.Status == "P") ||
+                                (record.Status == nonPrescribing.Status && nonPrescribing.EffectiveDate > record.EffectiveDate))
+                                {
+                                    //if non-prescrbing one is practicing but other is not or
+                                    // both practicing and non-prescribing has the most recent effective date
+                                    useNonPrescribing = true;
+                                }
                             }
                             else
                             {
-                                await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "Record not found in Pharmanet.");
+                                // prescribing does not exist
+                                useNonPrescribing = true;
+                            }
+
+                            if (useNonPrescribing)
+                            {
+                                cert.Prefix = cert.NonPrescribingPrefix;
+                                record = nonPrescribing;
                             }
                         }
-                        catch (PharmanetCollegeApiException)
+                        else
                         {
-                            enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.NonPrescribingPrefix}-{cert.LicenseNumber}");
-                            await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "An error occurred calling the Pharmanet API.");
-                            passed = false;
-                            continue;
+                            await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "Record not found in PharmaNet.");
                         }
+                    }
+                    catch (PharmanetCollegeApiException)
+                    {
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.NonPrescribingPrefix}-{cert.LicenseNumber}");
+                        await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "An error occurred calling the PharmaNet API.");
+                        passed = false;
+                        continue;
                     }
                 }
 
@@ -144,7 +176,7 @@ namespace Prime.Services.Rules
                 {
                     //save the prefix
                     await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "A record was found in Pharmanet.");
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "College record stored in PRIME.");
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))

@@ -285,9 +285,9 @@
   </ng-container>
 
   <app-enrollee-property *ngIf="!hasCertification"
-                         title="College Certification"
+                         title="College Licence"
                          [hasError]="enrolmentErrors?.certificateOrOboSite"
-                         errorMessage="Must have a college certificate or job site information"
+                         errorMessage="Must have a college licence or job site information"
                          [makeBold]="true">
     None
   </app-enrollee-property>
@@ -425,9 +425,9 @@
                            [hasError]="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite"
                            errorMessage="Must have a {{
                             !hasCertification && enrolmentErrors?.deviceProvider
-                             ? 'college certificate and a device provider ID'
+                             ? 'college licence and a device provider ID'
                              : !hasCertification
-                                ? 'college certificate'
+                                ? 'college licence'
                                 : 'device provider ID'
                             }} or job site information"
                            [makeBold]="true">
