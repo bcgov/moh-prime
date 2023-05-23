@@ -107,11 +107,6 @@ namespace Prime.Services
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
-                    Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
-                        e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ?
-                        ProvisionerEnrolmentStatusType.IndefiniteAbsence :
-                            e.CurrentAgreementId != null ?
-                        ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
                                         .Where(a => a.AcceptedDate != null)
@@ -1117,11 +1112,13 @@ namespace Prime.Services
                     Gpid = e.GPID,
                     Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
                         e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ?
-                        ProvisionerEnrolmentStatusType.IndefiniteAbsence :
-                            e.CurrentAgreementId != null ?
+                        ProvisionerEnrolmentStatusType.IndefiniteAbsence : IsPastRenewal(e.Agreements) ?
+                        ProvisionerEnrolmentStatusType.PastRenewal : e.CurrentAgreementId != null ?
                         ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
-                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
+                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked ||
+                            e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ?
+                            null : e.Agreements.OrderByDescending(a => a.CreatedDate)
                                         .Where(a => a.AcceptedDate != null)
                                         .Select(a => a.AgreementVersion.AccessType)
                                         .FirstOrDefault(),
