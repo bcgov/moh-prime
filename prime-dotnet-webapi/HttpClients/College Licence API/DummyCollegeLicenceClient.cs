@@ -35,11 +35,6 @@ namespace Prime.HttpClients
 
             if (info == null)
             {
-                info = new { Date = "1999-04-29", Name = "THIRTEEN" };
-            }
-
-            if (info == null)
-            {
                 return Task.FromResult<PharmanetCollegeRecord>(null);
             }
 
