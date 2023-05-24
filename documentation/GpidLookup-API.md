@@ -116,11 +116,10 @@ previously approved), the API response will be:
 {
     "result": [
         {
-            "gpid": null,
+            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
             "status": null,
-            "accessType": "",
-            "licences": [
-            ]
+            "accessType": null,
+            "licences": null
         }
     ]
 }
