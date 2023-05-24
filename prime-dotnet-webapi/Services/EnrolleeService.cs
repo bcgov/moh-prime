@@ -1117,7 +1117,8 @@ namespace Prime.Services
                         ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked ||
-                            e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ?
+                            e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ||
+                            IsPastRenewal(e.Agreements) ?
                             null : e.Agreements.OrderByDescending(a => a.CreatedDate)
                                         .Where(a => a.AcceptedDate != null)
                                         .Select(a => a.AgreementVersion.AccessType)
