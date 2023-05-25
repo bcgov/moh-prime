@@ -74,4 +74,4 @@ jobs:
           -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
           -p OC_APP=dev \
           -p POSTGRESQL_HOST=postgresql \
-          -p METABASE_HOST=metabase-database \
+          -p METABASE_HOST=metabase-database | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} -f -
