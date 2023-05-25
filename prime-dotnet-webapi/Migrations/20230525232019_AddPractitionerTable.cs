@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class PractitionerTable : Migration
+    public partial class AddPractitionerTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,7 +18,7 @@ namespace Prime.Migrations
                     PracRefId = table.Column<string>(type: "text", nullable: true),
                     FirstName = table.Column<string>(type: "text", nullable: true),
                     LastName = table.Column<string>(type: "text", nullable: true),
-                    ProcessedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ProcessedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedTimeStamp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedUserId = table.Column<Guid>(type: "uuid", nullable: false),

@@ -19,6 +19,6 @@ namespace Prime.Models
 
         public string LastName { get; set; }
 
-        public DateTime ProcessedDate { get; set; }
+        public DateTime? ProcessedDate { get; set; }
     }
 }

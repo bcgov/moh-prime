@@ -12435,7 +12435,7 @@ namespace Prime.Migrations
                     b.Property<string>("PracRefId")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ProcessedDate")
+                    b.Property<DateTime?>("ProcessedDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")

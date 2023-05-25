@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230511235507_PractitionerTable")]
-    partial class PractitionerTable
+    [Migration("20230525232019_AddPractitionerTable")]
+    partial class AddPractitionerTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -12437,7 +12437,7 @@ namespace Prime.Migrations
                     b.Property<string>("PracRefId")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ProcessedDate")
+                    b.Property<DateTime?>("ProcessedDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")

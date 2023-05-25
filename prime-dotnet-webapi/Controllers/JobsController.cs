@@ -13,7 +13,7 @@ using Prime.Models.Api;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/parties/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class JobsController : PrimeControllerBase
     {
