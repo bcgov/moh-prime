@@ -9,6 +9,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public int HealthAuthorityOrganizationId { get; set; }
         public string HealthAuthorityName { get; set; }
         public string SiteName { get; set; }
+        public string Mnemonic { get; set; }
         public string PEC { get; set; }
         public bool Flagged { get; set; }
         public HealthAuthorityVendorViewModel HealthAuthorityVendor { get; set; }
