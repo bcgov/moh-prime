@@ -30,6 +30,8 @@ namespace Prime.Models
 
         public string PEC { get; set; }
 
+        public string Mnemonic { get; set; }
+
         public string DoingBusinessAs { get; set; }
 
         public bool ActiveBeforeRegistration { get; set; }

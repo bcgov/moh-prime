@@ -20,6 +20,10 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     return this.formInstance.get('siteName') as FormControl;
   }
 
+  public get mnemonic(): FormControl {
+    return this.formInstance.get('mnemonic') as FormControl;
+  }
+
   public get pec(): FormControl {
     return this.formInstance.get('pec') as FormControl;
   }
@@ -53,6 +57,7 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     this.formInstance = this.fb.group({
       siteName: ['', [Validators.required]],
       pec: [null, []],
+      mnemonic: [null, []],
       securityGroupCode: [null, [Validators.required]],
       physicalAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
