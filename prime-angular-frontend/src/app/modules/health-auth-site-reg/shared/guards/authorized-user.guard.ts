@@ -42,7 +42,7 @@ export class AuthorizedUserGuard extends BaseGuard {
         // Having no authorized user in the same redirection logic for the user as
         // an unapproved status, and therefore not handled individually
         exhaustMap((user: BcscUser) =>
-          this.authorizedUserResource.getAuthorizedUserByUserId(user.userId)
+          this.authorizedUserResource.getAuthorizedUserByUsername(user.username)
         ),
         map((authorizedUser: AuthorizedUser | null) =>
           (authorizedUser)

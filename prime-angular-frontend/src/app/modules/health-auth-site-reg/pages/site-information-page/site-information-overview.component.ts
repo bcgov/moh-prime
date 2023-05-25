@@ -19,6 +19,9 @@ import { SiteInformationForm } from './site-information-form.model';
       <app-enrollee-property title="Site ID/PEC Code">
         {{ siteInformation?.pec | default }}
       </app-enrollee-property>
+      <app-enrollee-property title="Site Mnemonic">
+        {{ siteInformation?.mnemonic | default }}
+      </app-enrollee-property>
 
       <app-address-view title="Site Address"
                       [address]="siteInformation?.physicalAddress"
