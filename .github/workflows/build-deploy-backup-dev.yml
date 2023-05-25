@@ -68,10 +68,9 @@ jobs:
       id: oc
       run: |
         oc process -f infrastructure/backup-container.yml \
-
-          -p NAME=backup
-          -p SOURCE_CONTEXT_DIR=prime-database-backup
-          -p SOURCE_REPOSITORY_URL=https://github.com/bcgov/moh-prime
+          -p NAME=backup \
+          -p SOURCE_CONTEXT_DIR=prime-database-backup \
+          -p SOURCE_REPOSITORY_URL=https://github.com/bcgov/moh-prime \
           -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
           -p OC_APP=dev \
           -p POSTGRESQL_HOST=postgresql \
