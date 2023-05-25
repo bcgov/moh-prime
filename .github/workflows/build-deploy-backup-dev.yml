@@ -1,6 +1,7 @@
 name: Build & Deploy Backup - Develop
 
 on:
+  pull_request: # remove after pr is approved / before pr is merged
   workflow_dispatch:
   push:
     branches:
