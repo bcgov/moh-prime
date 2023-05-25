@@ -120,7 +120,7 @@ namespace Prime.Services
 
         public async Task SendRemoteUsersUpdatedAsync(CommunitySite site)
         {
-            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.Id);
+            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.BusinessLicence.Id);
             var viewModel = new RemoteUsersUpdatedEmailViewModel
             {
                 SiteStreetAddress = site.PhysicalAddress.Street,
