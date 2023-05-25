@@ -10,6 +10,13 @@ on:
     - prime-database-backup/**
     - .github/workflows/build-deploy-backup-dev.yml
 
+env:
+  NAME: backup
+  INITIAL_TAG: latest
+  TAG: dev
+  CONTEXT: prime-database-backup/
+
+
 jobs:
   build-backup:
     runs-on: ubuntu-20.04
@@ -27,16 +34,15 @@ jobs:
 
     - name: "Build Backup image"
       run: |
-        docker build prime-database-backup/ \
-        --file build prime-database-backup/openshift.dockerfile \
-        --tag backup \
-        --build-arg BUILD_LOGLEVEL=2 \
-        --build-arg SVC_NAME=dev
+        docker build -t ${{ env.NAME }}:${{ env.INITIAL_TAG }} ${{ env.CONTEXT }} -f ${{ env.CONTEXT }}openshift.dockerfile
 
     - name: "Docker tag and push Backup image"
       run: |
-        docker tag backup ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/backup:dev
-        docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/backup:dev
+        docker tag ${{ env.NAME }}:${{ env.INITIAL_TAG }} ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{ env.NAME }}:${{ env.INITIAL_TAG }}
+
+        docker tag ${{ env.NAME }}:${{ env.INITIAL_TAG }} ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{ env.NAME }}:${{ env.TAG }}
+
+        docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/${{ env.NAME }}:${{ env.TAG }}
 
   apply-oc-template:
     runs-on: ubuntu-20.04
