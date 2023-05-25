@@ -20,10 +20,10 @@ export class AuthorizedUserResource {
     private apiResource: ApiResource,
     private logger: ConsoleLoggerService,
     private toastService: ToastService
-  ) {}
+  ) { }
 
-  public getAuthorizedUserByUserId(userId: string): Observable<AuthorizedUser | null> {
-    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${userId}`)
+  public getAuthorizedUserByUsername(username: string): Observable<AuthorizedUser | null> {
+    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${username}`)
       .pipe(
         map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
         tap((authorizedUser: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', authorizedUser)),
