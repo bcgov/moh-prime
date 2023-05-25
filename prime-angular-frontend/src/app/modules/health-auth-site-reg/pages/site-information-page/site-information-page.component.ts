@@ -94,7 +94,7 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
   public onToggleChange($event: MatSlideToggleChange) {
     if (!$event.checked) {
       this.formUtilsService.resetAndClearValidators(this.formState.pec);
-      this.formState.patchValue({ pec: null, siteName: this.formState.siteName.value, securityGroupCode: this.formState.securityGroupCode.value, physicalAddress: this.formState.physicalAddress.value }, this.route.snapshot.params.sid);
+      this.formState.patchValue({ pec: null, siteName: this.formState.siteName.value, securityGroupCode: this.formState.securityGroupCode.value, mnemonic: this.formState.mnemonic.value, physicalAddress: this.formState.physicalAddress.value }, this.route.snapshot.params.sid);
     } else {
       this.formUtilsService.setValidators(this.formState.pec, [Validators.required]);
     }
