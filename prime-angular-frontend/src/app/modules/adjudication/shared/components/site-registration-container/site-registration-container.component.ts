@@ -222,6 +222,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
       remoteUsers,
       adjudicator,
       pec,
+      mnemonic,
       status,
       businessLicence,
       flagged
@@ -238,6 +239,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
       remoteUserCount: remoteUsers?.length,
       adjudicatorIdir: adjudicator?.idir,
       pec,
+      mnemonic,
       status,
       businessLicence,
       flagged

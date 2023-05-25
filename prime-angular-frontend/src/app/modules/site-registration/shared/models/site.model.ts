@@ -46,6 +46,7 @@ export class Site {
   adjudicator: Admin;
   status: SiteStatusType;
   pec: string;
+  mnemonic: string;
   flagged: boolean;
   activeBeforeRegistration: boolean;
 
@@ -64,7 +65,7 @@ export class Site {
   }
 }
 
-export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'status' | 'businessLicence' | 'flagged' | 'approvedDate'> {
+export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'mnemonic' | 'status' | 'businessLicence' | 'flagged' | 'approvedDate'> {
   adjudicatorIdir: string;
   remoteUserCount: number;
   flagged: boolean;
