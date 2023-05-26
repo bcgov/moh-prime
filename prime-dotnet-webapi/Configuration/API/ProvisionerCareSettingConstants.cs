@@ -1,6 +1,6 @@
-namespace Prime.Models
+namespace Prime.Configuration.Api
 {
-    public static class ProvisionerCareSettingCode
+    public static class ProvisionerCareSettingConstants
     {
         public const string PrivateCommunityHealthPractice = "PCHP";
         public const string CommunityPharmacy = "CP";
@@ -11,7 +11,7 @@ namespace Prime.Models
         public const string FraserHealthAuthority = "FHA";
         public const string ProvincialHealthServicesAuthority = "PHSA";
 
-        public static readonly string[] CareSettingCodeList = {
+        public static readonly string[] ProvisionerCareSettingList = {
             PrivateCommunityHealthPractice,
             CommunityPharmacy,
             NorthernHealthAuthority,

@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 using Prime.Configuration.Auth;
+using Prime.Configuration.Api;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
@@ -1084,28 +1085,28 @@ namespace Prime.Services
 
             switch (option.CareSetting)
             {
-                case ProvisionerCareSettingCode.CommunityPharmacy:
+                case ProvisionerCareSettingConstants.CommunityPharmacy:
                     careSettingIds.Add((int)CareSettingType.CommunityPharmacy);
                     break;
-                case ProvisionerCareSettingCode.PrivateCommunityHealthPractice:
+                case ProvisionerCareSettingConstants.PrivateCommunityHealthPractice:
                     careSettingIds.Add((int)CareSettingType.CommunityPractice);
                     break;
-                case ProvisionerCareSettingCode.FraserHealthAuthority:
+                case ProvisionerCareSettingConstants.FraserHealthAuthority:
                     haIds.Add((int)HealthAuthorityCode.FraserHealth);
                     break;
-                case ProvisionerCareSettingCode.InteriorHealthAuthority:
+                case ProvisionerCareSettingConstants.InteriorHealthAuthority:
                     haIds.Add((int)HealthAuthorityCode.InteriorHealth);
                     break;
-                case ProvisionerCareSettingCode.VancouverCoastalHealthAuthority:
+                case ProvisionerCareSettingConstants.VancouverCoastalHealthAuthority:
                     haIds.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
                     break;
-                case ProvisionerCareSettingCode.VancouverIslandHealthAuthority:
+                case ProvisionerCareSettingConstants.VancouverIslandHealthAuthority:
                     haIds.Add((int)HealthAuthorityCode.IslandHealth);
                     break;
-                case ProvisionerCareSettingCode.NorthernHealthAuthority:
+                case ProvisionerCareSettingConstants.NorthernHealthAuthority:
                     haIds.Add((int)HealthAuthorityCode.NorthernHealth);
                     break;
-                case ProvisionerCareSettingCode.ProvincialHealthServicesAuthority:
+                case ProvisionerCareSettingConstants.ProvincialHealthServicesAuthority:
                     haIds.Add((int)HealthAuthorityCode.ProvincialHealthServicesAuthority);
                     break;
             }
