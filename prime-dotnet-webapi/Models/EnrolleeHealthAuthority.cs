@@ -15,6 +15,7 @@ namespace Prime.Models
         public Enrollee Enrollee { get; set; }
 
         public HealthAuthorityCode HealthAuthorityCode { get; set; }
+        public bool ConsentForAutoPull { get; set; }
 
         [JsonIgnore]
         public HealthAuthority HealthAuthority { get; set; }
