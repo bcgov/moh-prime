@@ -6,241 +6,92 @@ metadata:
     tags: cronjob
   name: retrieve-pnet-logs-cronjob-template
 objects:
-  - apiVersion: batch/v1beta1
-    kind: CronJob
-    metadata:
-      name: '${CRON_NAME}'
-    spec:
-      concurrencyPolicy: Forbid
-      jobTemplate:
-        spec:
-          template:
-            spec:
-              containers:
-                - command:
-                  - bash
-                  - '-c'
-                  - >-
-                    #!/usr/bin/env bash
-
-
-                    function get_now_timestamp() {
-                      # Return formatted timestamp (UTC time)
-                      local  __resultvar=$1
-                      local  now_ts="$(date +'%T')" 
-                      eval $__resultvar="${now_ts}"
-                    }
-
-
-                    function exec_sql_no_resultset() {
-                      # $1 parameter - SQL to execute 
-                      # No result set will be returned 
-                      
-                      # Quote parameter to handle spaces in SQL string 
-                      psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c "$1"
-                    }
-
-
-                    function drop_db_indices() {
-                      # Drop most indices on PharmanetTransactionLog table for better performance
-                      # during importing of data 
-
-                      echo -e "-------- Dropping indices --------"
-                      exec_sql_no_resultset 'DROP INDEX public."IX_PharmanetTransactionLog_PharmacyId";'
-                      exec_sql_no_resultset 'DROP INDEX public."IX_PharmanetTransactionLog_TxDateTime";'
-                      exec_sql_no_resultset 'DROP INDEX public."IX_PharmanetTransactionLog_UserId";'
-                      echo
-                    }
-
-
-                    function get_last_tx_id() {
-                      # See https://www.linuxjournal.com/content/return-values-bash-functions
-                      local  __resultvar=$1
-                      local  tx_id=''
-
-                      # Set to enter loop
-                      local db_status=-1
-                      while [ $db_status -ne 0 ]
-                      do
-                        echo -e "-------- get_last_tx_id calling psql --------"
-                        tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')   
-                        db_status=$?
-                        echo -e "Last psql status:  _${db_status}_"
-                        # If error encountered, wait, let database server recover before trying again 
-                        if [ $db_status -ne 0 ]; then sleep 10; fi
-                      done
-
-                      # Trim whitespace
-                      tx_id=`echo ${tx_id} | sed 's/^ *//g'`
-                      # Handle initial empty table condition
-                      if [ "${tx_id}" = '' ]; then tx_id='0'; fi
-                      # "Return" result to caller
-                      eval $__resultvar="${tx_id}"
-                    }
-
-
-                    function create_db_indices() {
-                      # Re-create indices on PharmanetTransactionLog table for better performance
-                      # for queries/reports
-
-                      get_now_timestamp NOW_TIMESTAMP; echo -e "-------- Creating indices at ${NOW_TIMESTAMP} --------"
-                      exec_sql_no_resultset 'CREATE INDEX "IX_PharmanetTransactionLog_PharmacyId" ON public."PharmanetTransactionLog" USING btree ("PharmacyId");'
-                      get_now_timestamp NOW_TIMESTAMP; echo -e "Created IX_PharmanetTransactionLog_PharmacyId at ${NOW_TIMESTAMP}"
-                      exec_sql_no_resultset 'CREATE INDEX "IX_PharmanetTransactionLog_TxDateTime" ON public."PharmanetTransactionLog" USING btree ("TxDateTime");'
-                      get_now_timestamp NOW_TIMESTAMP; echo -e "Created IX_PharmanetTransactionLog_TxDateTime at ${NOW_TIMESTAMP}"
-                      exec_sql_no_resultset 'CREATE INDEX "IX_PharmanetTransactionLog_UserId" ON public."PharmanetTransactionLog" USING btree ("UserId");'
-                      get_now_timestamp NOW_TIMESTAMP; echo -e "Created IX_PharmanetTransactionLog_UserId at ${NOW_TIMESTAMP}"
-                    }
-
-
-                    function main() {
-                      echo -e "-------- STARTING CRON at $(date +"%B %d, %Y %T") UTC --------\n"
-
-                      echo -e "Connecting to database host:  _${PGHOST}_"
-                      echo -e "API client name:  _${PRIME_ODR_API_CLIENT_NAME}_"
-                      echo -e "Fetch size:  _${PRIME_ODR_API_FETCH_SIZE}_"
-                      echo
-
-                      drop_db_indices
-                      HAS_MORE='Y'
-                      num_iterations=0
-                      while [[ "${HAS_MORE}" = 'Y' && "$num_iterations" -lt "${PRIME_ODR_API_MAX_FETCH_TIMES}" ]]
-                      do
-                        ((num_iterations=num_iterations+1))
-                        echo -e "-------- Iteration #${num_iterations} --------\n"
-                        
-                        get_last_tx_id LAST_TX_ID
-                        echo -e "Last transaction id:  _${LAST_TX_ID}_\n"
-
-                        UUID=$(cat /proc/sys/kernel/random/uuid)
-                        echo -e "Generated request id:  _${UUID}_"
-
-                        echo -e "-------- Calling PRIME-ODR API then Postgres COPY --------\n"
-                        get_now_timestamp NOW_TIMESTAMP; echo -e "Calling curl at ${NOW_TIMESTAMP}"
-                        # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url
-                        # ls -l /etc/ssl/certs
-                        curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
-                          "${PRIME_ODR_API_URL}?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}" | \
-                          python3 /opt/scripts/parse_api_response.py | \
-                          exec_sql_no_resultset "\copy \"PharmanetTransactionLog\"(\"TransactionId\", \"TxDateTime\", \"UserId\", \"SourceIpAddress\", \"LocationIpAddress\", \"PharmacyId\", \"ProviderSoftwareId\", \"ProviderSoftwareVersion\", \"PractitionerId\", \"CollegePrefix\", \"TransactionType\", \"TransactionSubType\", \"TransactionOutcome\") FROM STDIN (FORMAT CSV)"
-
-                        HAS_MORE=$(cat /tmp/isThereMoreData.txt)     
-                        echo
-                      done
-                      create_db_indices
-                    }
-
-                    main  # Ensure the whole file is downloaded before executing
-                  env:
-                    - name: PGHOST
-                      value: ${SVC_NAME}-patroni
-                    - name: PGDATABASE
-                      valueFrom:
-                        secretKeyRef:
-                          name: ${SVC_NAME}-patroni-secret
-                          key: app-db-name
-                    # If working with model changes during PR, specify PR database, but don't merge hard-coding into `develop`
-                    # - name: PGDATABASE
-                    #   value: prime-pr-1912
-                    - name: PGUSER
-                      valueFrom:
-                        secretKeyRef:
-                          name: ${SVC_NAME}-patroni-secret
-                          key: app-db-username
-                    - name: PGPASSWORD
-                      valueFrom:
-                        secretKeyRef:
-                          name: ${SVC_NAME}-patroni-secret
-                          key: app-db-password
-                    - name: PRIME_ODR_API_ENCODED_CREDENTIALS
-                      valueFrom:
-                        secretKeyRef:
-                          name: prime-odr-api-secrets
-                          key: PRIME_ODR_API_ENCODED_CREDENTIALS
-                    - name: PRIME_ODR_API_SSL_CERT_PASSWORD
-                      valueFrom:
-                        secretKeyRef:
-                          name: prime-odr-api-secrets
-                          key: PRIME_ODR_API_SSL_CERT_PASSWORD
-                  envFrom:
-                    - configMapRef:
-                        name: prime-odr-api
-                  volumeMounts:
-                    - name: cert-volume
-                      mountPath: /opt/certs
-                      readOnly: true
-                    - name: script-volume
-                      mountPath: /opt/scripts
-                      mode: 0555
-                  image: public.ecr.aws/h0h9t7p1/farma-retriever:12
-                  limits:
-                    cpu: 500m
-                    memory: 2Gi
-                  name: '${CRON_NAME}'
-                  requests:
-                    cpu: 100m
-                    memory: 512Mi
-                  resources: null
-              restartPolicy: Never
-              volumes:
-                - name: cert-volume
-                  secret:
-                    secretName: prime-odr-api-ssl-certs
-                - name: script-volume
-                  configMap:
-                    name: prime-odr-api-cron-scripts
-      schedule: '${CRON_SCHEDULE}'
-  - apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: prime-odr-api-cron-scripts
-    data:
-      parse_api_response.py: |-
-        from json.decoder import JSONDecodeError
-        import sys, os, json, csv, datetime;
-
-        IS_THERE_MORE_DATA_FILE_LOCATION = "/tmp/isThereMoreData.txt"
-
-        json_as_dict = None
-        try:
-            json_as_dict = json.load(sys.stdin);
-        except JSONDecodeError:
-            print('Non-JSON response from API.', file=sys.stderr)
-            # Remove in case it exists from previous loop iteration 
-            os.remove(IS_THERE_MORE_DATA_FILE_LOCATION)
-            sys.exit(1)
-
-        output = csv.writer(sys.stdout);
-        # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process 
-        print(f"Converting JSON to CSV at {datetime.datetime.now()} ...", file=sys.stderr)
-        num_pnet_logs = 0
-        # Note that the columns in the CSV output need to match the invocation of the Postgres COPY command
-        # Ultimately the `pnetTransactions` JSON fields need to be in the expected order 
-        for row in json_as_dict['pnetTransactions']:
-            # Remove any leading and trailing whitespace
-            if row['providerSoftwareId'] is not None:
-                row['providerSoftwareId'] = row['providerSoftwareId'].strip()
-            if row['providerSoftwareVer'] is not None:
-                row['providerSoftwareVer'] = row['providerSoftwareVer'].strip()
-            output.writerow(row.values());
-            num_pnet_logs += 1
-        # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process 
-        print(f'{num_pnet_logs} PharmanetTransactionLog(s) in JSON', file=sys.stderr)
-
-        isThereMoreData = json_as_dict['isThereMoreData']
-        # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process 
-        print(f"Writing to file:  Is there more data?  {isThereMoreData}", file=sys.stderr)
-        # Let external process know whether there are more results according to JSON response
-        f = open(IS_THERE_MORE_DATA_FILE_LOCATION, "w")
-        f.write(isThereMoreData)
-        f.close()
-
+- apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    name: '${CRON_NAME}'
+  spec:
+    concurrencyPolicy: Forbid
+    jobTemplate:
+      spec:
+        template:
+          spec:
+            containers:
+            - command:
+              - bash
+              - '-c'
+              - "#!/usr/bin/env bash #magic___^_^___line #magic___^_^___line function get_now_timestamp() {\n  # Return formatted timestamp (UTC time)\n  local  __resultvar=$1\n  local  now_ts=\"$(date +'%T')\" \n  eval $__resultvar=\"${now_ts}\"\n}\n  #magic___^_^___line\n  #magic___^_^___line\nfunction exec_sql_no_resultset() {\n  # $1 parameter - SQL to execute \n  # No result set will be returned \n  #magic___^_^___line\n  # Quote parameter to handle spaces in SQL string \n  psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c \"$1\"\n}\n  #magic___^_^___line\n  #magic___^_^___line\nfunction drop_db_indices() {\n  # Drop most indices on PharmanetTransactionLog table for better performance\n  # during importing of data \n  #magic___^_^___line\n  echo -e \"-------- Dropping indices --------\"\n  exec_sql_no_resultset 'DROP INDEX public.\"IX_PharmanetTransactionLog_PharmacyId\";'\n  exec_sql_no_resultset 'DROP INDEX public.\"IX_PharmanetTransactionLog_TxDateTime\";'\n  exec_sql_no_resultset 'DROP INDEX public.\"IX_PharmanetTransactionLog_UserId\";'\n  echo\n}\n  #magic___^_^___line\n  #magic___^_^___line\nfunction get_last_tx_id() {\n  # See https://www.linuxjournal.com/content/return-values-bash-functions\n  local  __resultvar=$1\n  local  tx_id=''\n  #magic___^_^___line\n  # Set to enter loop\n  local db_status=-1\n  while [ $db_status -ne 0 ]\n  do\n    echo -e \"-------- get_last_tx_id calling psql --------\"\n    tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl.\"TransactionId\") from \"PharmanetTransactionLog\" ptl')   \n    db_status=$?\n    echo -e \"Last psql status:  _${db_status}_\"\n    # If error encountered, wait, let database server recover before trying again \n    if [ $db_status -ne 0 ]; then sleep 10; fi\n  done\n    #magic___^_^___line\n  # Trim whitespace\n  tx_id=`echo ${tx_id} | sed 's/^ *//g'`\n  # Handle initial empty table condition\n  if [ \"${tx_id}\" = '' ]; then tx_id='0'; fi\n  # \"Return\" result to caller\n  eval $__resultvar=\"${tx_id}\"\n}\n    #magic___^_^___line\n    #magic___^_^___line\nfunction create_db_indices() {\n  # Re-create indices on PharmanetTransactionLog table for better performance\n  # for queries/reports\n    #magic___^_^___line\n  get_now_timestamp NOW_TIMESTAMP; echo -e \"-------- Creating indices at ${NOW_TIMESTAMP} --------\"\n  exec_sql_no_resultset 'CREATE INDEX \"IX_PharmanetTransactionLog_PharmacyId\" ON public.\"PharmanetTransactionLog\" USING btree (\"PharmacyId\");'\n  get_now_timestamp NOW_TIMESTAMP; echo -e \"Created IX_PharmanetTransactionLog_PharmacyId at ${NOW_TIMESTAMP}\"\n  exec_sql_no_resultset 'CREATE INDEX \"IX_PharmanetTransactionLog_TxDateTime\" ON public.\"PharmanetTransactionLog\" USING btree (\"TxDateTime\");'\n  get_now_timestamp NOW_TIMESTAMP; echo -e \"Created IX_PharmanetTransactionLog_TxDateTime at ${NOW_TIMESTAMP}\"\n  exec_sql_no_resultset 'CREATE INDEX \"IX_PharmanetTransactionLog_UserId\" ON public.\"PharmanetTransactionLog\" USING btree (\"UserId\");'\n  get_now_timestamp NOW_TIMESTAMP; echo -e \"Created IX_PharmanetTransactionLog_UserId at ${NOW_TIMESTAMP}\"\n}\n    #magic___^_^___line\n    #magic___^_^___line\nfunction main() {\n  echo -e \"-------- STARTING CRON at $(date +\"%B %d, %Y %T\") UTC --------\\n\"\n    #magic___^_^___line\n  echo -e \"Connecting to database host:  _${PGHOST}_\"\n  echo -e \"API client name:  _${PRIME_ODR_API_CLIENT_NAME}_\"\n  echo -e \"Fetch size:  _${PRIME_ODR_API_FETCH_SIZE}_\"\n  echo\n    #magic___^_^___line\n  drop_db_indices\n  HAS_MORE='Y'\n  num_iterations=0\n  while [[ \"${HAS_MORE}\" = 'Y' && \"$num_iterations\" -lt \"${PRIME_ODR_API_MAX_FETCH_TIMES}\" ]]\n  do\n    ((num_iterations=num_iterations+1))\n    echo -e \"-------- Iteration #${num_iterations} --------\\n\"\n    #magic___^_^___line\n    get_last_tx_id LAST_TX_ID\n    echo -e \"Last transaction id:  _${LAST_TX_ID}_\\n\"\n    #magic___^_^___line\n    UUID=$(cat /proc/sys/kernel/random/uuid)\n    echo -e \"Generated request id:  _${UUID}_\"\n    #magic___^_^___line\n    echo -e \"-------- Calling PRIME-ODR API then Postgres COPY --------\\n\"\n    get_now_timestamp NOW_TIMESTAMP; echo -e \"Calling curl at ${NOW_TIMESTAMP}\"\n    # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url\n    # ls -l /etc/ssl/certs\n    curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header \"Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}\" \\\n      \"${PRIME_ODR_API_URL}?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}\" | \\\n      python3 /opt/scripts/parse_api_response.py | \\\n      exec_sql_no_resultset \"\\copy \\\"PharmanetTransactionLog\\\"(\\\"TransactionId\\\", \\\"TxDateTime\\\", \\\"UserId\\\", \\\"SourceIpAddress\\\", \\\"LocationIpAddress\\\", \\\"PharmacyId\\\", \\\"ProviderSoftwareId\\\", \\\"ProviderSoftwareVersion\\\", \\\"PractitionerId\\\", \\\"CollegePrefix\\\", \\\"TransactionType\\\", \\\"TransactionSubType\\\", \\\"TransactionOutcome\\\") FROM STDIN (FORMAT CSV)\"\n      #magic___^_^___line\n    HAS_MORE=$(cat /tmp/isThereMoreData.txt)     \n    echo\n  done\n  create_db_indices\n}\n      #magic___^_^___line\nmain  # Ensure the whole file is downloaded before executing"
+              env:
+              - name: PGHOST
+                value: ${SVC_NAME}-patroni
+              - name: PGDATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-patroni-secret
+                    key: app-db-name
+              # - name: PGDATABASE
+              #   value: prime-pr-1912
+              - name: PGUSER
+                # If working with model changes during PR, specify PR database, but don't merge hard-coding into `develop`
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-patroni-secret
+                    key: app-db-username
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-patroni-secret
+                    key: app-db-password
+              - name: PRIME_ODR_API_ENCODED_CREDENTIALS
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-odr-api-secrets
+                    key: PRIME_ODR_API_ENCODED_CREDENTIALS
+              - name: PRIME_ODR_API_SSL_CERT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-odr-api-secrets
+                    key: PRIME_ODR_API_SSL_CERT_PASSWORD
+              envFrom:
+              - configMapRef:
+                  name: prime-odr-api
+              volumeMounts:
+              - name: cert-volume
+                mountPath: /opt/certs
+                readOnly: true
+              - name: script-volume
+                mountPath: /opt/scripts
+                mode: 0555
+              image: public.ecr.aws/h0h9t7p1/farma-retriever:12
+              limits:
+                cpu: 500m
+                memory: 2Gi
+              name: '${CRON_NAME}'
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              resources: null
+            restartPolicy: Never
+            volumes:
+            - name: cert-volume
+              secret:
+                secretName: prime-odr-api-ssl-certs
+            - name: script-volume
+              configMap:
+                name: prime-odr-api-cron-scripts
+    schedule: '${CRON_SCHEDULE}'
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: prime-odr-api-cron-scripts
+  data:
+    parse_api_response.py: "from json.decoder import JSONDecodeError\nimport sys, os, json, csv, datetime;\n                  #magic___^_^___line\nIS_THERE_MORE_DATA_FILE_LOCATION = \"/tmp/isThereMoreData.txt\"\n                  #magic___^_^___line\njson_as_dict = None\ntry:\n    json_as_dict = json.load(sys.stdin);\nexcept JSONDecodeError:\n    print('Non-JSON response from API.', file=sys.stderr)\n    # Remove in case it exists from previous loop iteration \n    os.remove(IS_THERE_MORE_DATA_FILE_LOCATION)\n    sys.exit(1)\n                  #magic___^_^___line\noutput = csv.writer(sys.stdout);\n# Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process \nprint(f\"Converting JSON to CSV at {datetime.datetime.now()} ...\", file=sys.stderr)\nnum_pnet_logs = 0\n# Note that the columns in the CSV output need to match the invocation of the Postgres COPY command\n# Ultimately the `pnetTransactions` JSON fields need to be in the expected order \nfor row in json_as_dict['pnetTransactions']:\n    # Remove any leading and trailing whitespace\n    if row['providerSoftwareId'] is not None:\n        row['providerSoftwareId'] = row['providerSoftwareId'].strip()\n    if row['providerSoftwareVer'] is not None:\n        row['providerSoftwareVer'] = row['providerSoftwareVer'].strip()\n    output.writerow(row.values());\n    num_pnet_logs += 1\n# Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process \nprint(f'{num_pnet_logs} PharmanetTransactionLog(s) in JSON', file=sys.stderr)\n                  #magic___^_^___line\nisThereMoreData = json_as_dict['isThereMoreData']\n# Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process \nprint(f\"Writing to file:  Is there more data?  {isThereMoreData}\", file=sys.stderr)\n# Let external process know whether there are more results according to JSON response\nf = open(IS_THERE_MORE_DATA_FILE_LOCATION, \"w\")\nf.write(isThereMoreData)\nf.close()\n                  #magic___^_^___line"
 parameters:
-  - description: 'Cron-like schedule expression'
-    name: CRON_SCHEDULE
-    value: '*/60 * * * *'
-  - name: CRON_NAME
-    value: retrieve-pnet-logs-cronjob
-  - description: 'Environment name'
-    name: SVC_NAME
-    value: dev
+- description: 'Cron-like schedule expression'
+  name: CRON_SCHEDULE
+  value: '*/60 * * * *'
+- name: CRON_NAME
+  value: retrieve-pnet-logs-cronjob
+- description: 'Environment name'
+  name: SVC_NAME
+  value: dev

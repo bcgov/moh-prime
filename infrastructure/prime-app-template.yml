@@ -1,4 +1,3 @@
----
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
@@ -105,99 +104,99 @@ objects:
         affinity:
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
-              - weight: 100
-                podAffinityTerm:
-                  topologyKey: kubernetes.io/hostname
-                  labelSelector:
-                    matchExpressions:
-                      - key: deploymentconfig
-                        operator: In
-                        values:
-                          - ${SVC_NAME}-frontend
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                  - key: deploymentconfig
+                    operator: In
+                    values:
+                    - ${SVC_NAME}-frontend
         volumes:
-          - name: vanity-tls-certs
-            secret:
-              secretName: vanity-tls-certificate
-              defaultMode: 420
-          - name: nginx-config
-            configMap:
-              name: ${SVC_NAME}-nginx-config
-              defaultMode: 420
-          - name: plr-integration-volume
-            secret:
-              secretName: plr-integration
-              defaultMode: 420
-          - name: env-config
-            configMap:
-              name: ${SVC_NAME}-env-config
-              defaultMode: 420
+        - name: vanity-tls-certs
+          secret:
+            secretName: vanity-tls-certificate
+            defaultMode: 420
+        - name: nginx-config
+          configMap:
+            name: ${SVC_NAME}-nginx-config
+            defaultMode: 420
+        - name: plr-integration-volume
+          secret:
+            secretName: plr-integration
+            defaultMode: 420
+        - name: env-config
+          configMap:
+            name: ${SVC_NAME}-env-config
+            defaultMode: 420
         containers:
-          - name: ${SVC_NAME}-frontend
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-frontend:${IMAGE_TAG}
-            ports:
-              - containerPort: 80
-                protocol: TCP
-              - containerPort: 8080
-                protocol: TCP
-              - containerPort: 8443
-                protocol: TCP
-              - containerPort: 8888
-                protocol: TCP
-              - containerPort: 8890
-                protocol: TCP
-            volumeMounts:
-            - name: vanity-tls-certs
-              readOnly: true
-              mountPath: /opt/bitnami/nginx/conf/certs
-            - name: plr-integration-volume
-              readOnly: true
-              mountPath: /opt/bitnami/nginx/conf/certs/plr
-            - name: nginx-config
-              readOnly: true
-              mountPath: /opt/bitnami/nginx/conf/nginx.conf
-              subPath: nginx.conf
-            - name: env-config
-              readOnly: true
-              mountPath: /opt/app-root/src/assets/config-map.json
-              subPath: config-map.json
-            resources:
-              limits:
-                cpu: 50m
-                memory: 50Mi
-              requests:
-                cpu: 15m
-                memory: 10Mi
-            envFrom:
-              - configMapRef:
-                  name: keycloak
-            env:
-              - name: DOCUMENT_MANAGER_URL
-                value: https://${VANITY_URL}/api/docman
-            readinessProbe:
-              httpGet:
-                path: /
-                port: 8080
-              initialDelaySeconds: 5
-              periodSeconds: 5
-            livenessProbe:
-              httpGet:
-                path: /
-                port: 8080
-              initialDelaySeconds: 5
-              failureThreshold: 1
-              periodSeconds: 5
+        - name: ${SVC_NAME}-frontend
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-frontend:${IMAGE_TAG}
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          - containerPort: 8888
+            protocol: TCP
+          - containerPort: 8890
+            protocol: TCP
+          volumeMounts:
+          - name: vanity-tls-certs
+            readOnly: true
+            mountPath: /opt/bitnami/nginx/conf/certs
+          - name: plr-integration-volume
+            readOnly: true
+            mountPath: /opt/bitnami/nginx/conf/certs/plr
+          - name: nginx-config
+            readOnly: true
+            mountPath: /opt/bitnami/nginx/conf/nginx.conf
+            subPath: nginx.conf
+          - name: env-config
+            readOnly: true
+            mountPath: /opt/app-root/src/assets/config-map.json
+            subPath: config-map.json
+          resources:
+            limits:
+              cpu: 50m
+              memory: 50Mi
+            requests:
+              cpu: 15m
+              memory: 10Mi
+          envFrom:
+          - configMapRef:
+              name: keycloak
+          env:
+          - name: DOCUMENT_MANAGER_URL
+            value: https://${VANITY_URL}/api/docman
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            failureThreshold: 1
+            periodSeconds: 5
     triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-frontend
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-frontend:${IMAGE_TAG}'
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${SVC_NAME}-frontend
+        from:
+          kind: ImageStreamTag
+          namespace: "${OC_LICENSE_PLATE}-tools"
+          name: 'prime-frontend:${IMAGE_TAG}'
 
 #   NGINX Configuration
 - apiVersion: v1
@@ -415,8 +414,8 @@ objects:
         }
       }
 
-#   Frontend Service
 - apiVersion: v1
+  #   Frontend Service
   kind: Service
   metadata:
     name: ${SVC_NAME}-frontend
@@ -425,22 +424,22 @@ objects:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: "http"
-        port: 8080
-        targetPort: 8080
-      - name: "https"
-        port: 8443
-        targetPort: 8443
-      - name: "hpr"
-        port: 8888
-        targetPort: 8888
-      - name: "mutualauth"
-        port: 8890
-        targetPort: 8890
+    - name: "http"
+      port: 8080
+      targetPort: 8080
+    - name: "https"
+      port: 8443
+      targetPort: 8443
+    - name: "hpr"
+      port: 8888
+      targetPort: 8888
+    - name: "mutualauth"
+      port: 8890
+      targetPort: 8890
     selector:
       name: ${SVC_NAME}-frontend
-#   Frontend Route (Web)
 - kind: Route
+  #   Frontend Route (Web)
   apiVersion: route.openshift.io/v1
   metadata:
     name: ${SVC_NAME}-frontend
@@ -480,8 +479,8 @@ objects:
       termination: edge
       insecureEdgeTerminationPolicy: Allow
     wildcardPolicy: None
-#   Frontend Route (Mutual Authentication)
 - apiVersion: route.openshift.io/v1
+  #   Frontend Route (Mutual Authentication)
   kind: Route
   metadata:
     name: ${SVC_NAME}-frontend-mutualauth
@@ -535,15 +534,15 @@ objects:
         affinity:
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
-              - weight: 100
-                podAffinityTerm:
-                  topologyKey: kubernetes.io/hostname
-                  labelSelector:
-                    matchExpressions:
-                      - key: deploymentconfig
-                        operator: In
-                        values:
-                          - ${SVC_NAME}-webapi
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                  - key: deploymentconfig
+                    operator: In
+                    values:
+                    - ${SVC_NAME}-webapi
         initContainers:
         - name: run-migrations
           image: >-
@@ -571,150 +570,150 @@ objects:
                 key: app-db-name
           command: ['psql', '-a', '-f', './databaseMigrations.sql']
         containers:
-          - name: ${SVC_NAME}-webapi
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
-            command:
-              - bash
-              - '-c'
-              - dotnet ./prime.dll -v 2>&1> /dev/stdout
-            resources:
-              limits:
-                cpu: 100m
-                memory: 1Gi
-              requests:
-                cpu: 10m
-                memory: 500Mi
-            env:
-              - name: DOCUMENT_MANAGER_CLIENT_ID
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: DOCUMENT_MANAGER_CLIENT_ID
-              - name: OC_APP
-                value: ${OC_APP}
-              - name: DOCUMENT_MANAGER_URL
-                value: http://${SVC_NAME}-document-manager:6001
-              - name: PHARMANET_SSL_CERT_FILENAME
-                value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
-              - name: DB_HOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-host
-              - name: BACKEND_URL
-                value: https://${VANITY_URL}/api/v1/
-              - name: FRONTEND_URL
-                value: https://${VANITY_URL}
-              - name: POSTGRESQL_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-patroni-secret
-                    key: app-db-password
-              - name: POSTGRESQL_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-patroni-secret
-                    key: app-db-username
-              - name: POSTGRESQL_DATABASE
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-patroni-secret
-                    key: app-db-name
-              - name: DB_CONNECTION_STRING
-                value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
-            ports:
-              - containerPort: 1025
-                protocol: TCP
-              - containerPort: 5001
-                protocol: TCP
-              - containerPort: 8080
-                protocol: TCP
-            startupProbe:
-              httpGet:
-                path: /api/healthcheck/startup
-                port: 8080
-                scheme: HTTP
-              timeoutSeconds: 60
-              periodSeconds: 10
-              successThreshold: 1
-              failureThreshold: 120
-            readinessProbe:
-              httpGet:
-                path: /api/healthcheck/readiness
-                port: 8080
-                scheme: HTTP
-              initialDelaySeconds: 5
-              timeoutSeconds: 1
-              periodSeconds: 5
-              successThreshold: 1
-              failureThreshold: 3
-            livenessProbe:
-              httpGet:
-                path: /api/healthcheck/liveness
-                port: 8080
-                scheme: HTTP
-              timeoutSeconds: 1
-              periodSeconds: 5
-              successThreshold: 1
-              failureThreshold: 3
-            imagePullPolicy: IfNotPresent
-            terminationMessagePolicy: File
-            envFrom:
-              - configMapRef:
-                  name: canada-post-addresscomplete
-              - configMapRef:
-                  name: ches
-              - configMapRef:
-                  name: dotnet-webapi-backend
-              - configMapRef:
-                  name: keycloak
-              - configMapRef:
-                  name: ldap
-              - configMapRef:
-                  name: mail-settings
-              - configMapRef:
-                  name: metabase-embedded
-              - configMapRef:
-                  name: pharmanet-api
-              - configMapRef:
-                  name: verifiable-credential
-              - secretRef:
-                  name: canada-post-addresscomplete-secrets
-              - secretRef:
-                  name: ches-secrets
-              - secretRef:
-                  name: document-manager-secrets
-              - secretRef:
-                  name: keycloak-secrets
-              - secretRef:
-                  name: metabase-embedded-secrets
-              - secretRef:
-                  name: pharmanet-api-secrets
-              - secretRef:
-                  name: verifiable-credential-secrets
-              - secretRef:
-                  name: plr-integration-thumbprint
-            volumeMounts:
-              - name: cert-volume
-                mountPath: /opt/app-root/etc/certs
-                readOnly: true
-        volumes:
+        - name: ${SVC_NAME}-webapi
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
+          command:
+          - bash
+          - '-c'
+          - dotnet ./prime.dll -v 2>&1> /dev/stdout
+          resources:
+            limits:
+              cpu: 100m
+              memory: 1Gi
+            requests:
+              cpu: 10m
+              memory: 500Mi
+          env:
+          - name: DOCUMENT_MANAGER_CLIENT_ID
+            valueFrom:
+              configMapKeyRef:
+                name: document-manager
+                key: DOCUMENT_MANAGER_CLIENT_ID
+          - name: OC_APP
+            value: ${OC_APP}
+          - name: DOCUMENT_MANAGER_URL
+            value: http://${SVC_NAME}-document-manager:6001
+          - name: PHARMANET_SSL_CERT_FILENAME
+            value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: database-cm
+                key: database-host
+          - name: BACKEND_URL
+            value: https://${VANITY_URL}/api/v1/
+          - name: FRONTEND_URL
+            value: https://${VANITY_URL}
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-password
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-username
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-name
+          - name: DB_CONNECTION_STRING
+            value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
+          ports:
+          - containerPort: 1025
+            protocol: TCP
+          - containerPort: 5001
+            protocol: TCP
+          - containerPort: 8080
+            protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /api/healthcheck/startup
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 120
+          readinessProbe:
+            httpGet:
+              path: /api/healthcheck/readiness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /api/healthcheck/liveness
+              port: 8080
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: File
+          envFrom:
+          - configMapRef:
+              name: canada-post-addresscomplete
+          - configMapRef:
+              name: ches
+          - configMapRef:
+              name: dotnet-webapi-backend
+          - configMapRef:
+              name: keycloak
+          - configMapRef:
+              name: ldap
+          - configMapRef:
+              name: mail-settings
+          - configMapRef:
+              name: metabase-embedded
+          - configMapRef:
+              name: pharmanet-api
+          - configMapRef:
+              name: verifiable-credential
+          - secretRef:
+              name: canada-post-addresscomplete-secrets
+          - secretRef:
+              name: ches-secrets
+          - secretRef:
+              name: document-manager-secrets
+          - secretRef:
+              name: keycloak-secrets
+          - secretRef:
+              name: metabase-embedded-secrets
+          - secretRef:
+              name: pharmanet-api-secrets
+          - secretRef:
+              name: verifiable-credential-secrets
+          - secretRef:
+              name: plr-integration-thumbprint
+          volumeMounts:
           - name: cert-volume
-            secret:
-              secretName: pharmanet-api-ssl-certs
+            mountPath: /opt/app-root/etc/certs
+            readOnly: true
+        volumes:
+        - name: cert-volume
+          secret:
+            secretName: pharmanet-api-ssl-certs
     triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-webapi
-            - run-migrations
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-webapi-backend:${IMAGE_TAG}'
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${SVC_NAME}-webapi
+        - run-migrations
+        from:
+          kind: ImageStreamTag
+          namespace: "${OC_LICENSE_PLATE}-tools"
+          name: 'prime-webapi-backend:${IMAGE_TAG}'
 
 #   Backend Web API Service
 - apiVersion: v1
@@ -726,9 +725,9 @@ objects:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${SVC_NAME}-webapi
-        port: 8080
-        targetPort: 8080
+    - name: ${SVC_NAME}-webapi
+      port: 8080
+      targetPort: 8080
     selector:
       name: ${SVC_NAME}-webapi
 
@@ -768,150 +767,150 @@ objects:
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
           command:
-            # Script force waits migration pod execution until PostgreSQL is verified to
-            # be open to query connections.
-            - /opt/app-root/src/app.sh
+          # Script force waits migration pod execution until PostgreSQL is verified to
+          # be open to query connections.
+          - /opt/app-root/src/app.sh
           args:
-            - migrate
+          - migrate
           env:
-            - name: CACHE_REDIS_HOST
-              value: ${SVC_NAME}-redis
-            - name: CACHE_REDIS_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: redis
-                  key: database-password
-            - name: CACHE_REDIS_PORT
-              value: "6379"
-            - name: PGHOST
-              valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-host
-            - name: PGDATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: ${SVC_NAME}-patroni-secret
-                  key: app-db-name
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ${SVC_NAME}-patroni-secret
-                  key: app-db-password
-            - name: PGUSER
-              valueFrom:
-                secretKeyRef:
-                  name: ${SVC_NAME}-patroni-secret
-                  key: app-db-username
-            - name: DOCUMENT_MANAGER_URL
-              value: "https://${VANITY_URL}/api/docman/"
-            - name: JWT_OIDC_WELL_KNOWN_CONFIG
-              valueFrom:
-                configMapKeyRef:
-                  name: keycloak
-                  key: JWT_WELL_KNOWN_CONFIG
-            - name: SQLALCHEMY_DATABASE_URI
-              value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
+          - name: CACHE_REDIS_HOST
+            value: ${SVC_NAME}-redis
+          - name: CACHE_REDIS_PASS
+            valueFrom:
+              secretKeyRef:
+                name: redis
+                key: database-password
+          - name: CACHE_REDIS_PORT
+            value: "6379"
+          - name: PGHOST
+            valueFrom:
+              configMapKeyRef:
+                name: database-cm
+                key: database-host
+          - name: PGDATABASE
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-name
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-password
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-username
+          - name: DOCUMENT_MANAGER_URL
+            value: "https://${VANITY_URL}/api/docman/"
+          - name: JWT_OIDC_WELL_KNOWN_CONFIG
+            valueFrom:
+              configMapKeyRef:
+                name: keycloak
+                key: JWT_WELL_KNOWN_CONFIG
+          - name: SQLALCHEMY_DATABASE_URI
+            value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
           envFrom:
-            - configMapRef:
-                name: document-manager
+          - configMapRef:
+              name: document-manager
         containers:
-          - name: ${SVC_NAME}-document-manager
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
-            resources:
-              limits:
-                cpu: 80m
-                memory: 200Mi
-              requests:
-                cpu: 10m
-                memory: 28Mi
-            env:
-              - name: CACHE_REDIS_HOST
-                value: ${SVC_NAME}-redis
-              - name: CACHE_REDIS_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: redis
-                    key: database-password
-              - name: CACHE_REDIS_PORT
-                value: "6379"
-              - name: PGHOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-host
-              - name: PGDATABASE
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-patroni-secret
-                    key: app-db-name
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-patroni-secret
-                    key: app-db-password
-              - name: PGUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-patroni-secret
-                    key: app-db-username
-              - name: DOCUMENT_MANAGER_URL
-                value: "https://${VANITY_URL}/api/docman/"
-              - name: JWT_OIDC_WELL_KNOWN_CONFIG
-                valueFrom:
-                  configMapKeyRef:
-                    name: keycloak
-                    key: JWT_WELL_KNOWN_CONFIG
-              - name: SQLALCHEMY_DATABASE_URI
-                value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
-            envFrom:
-              - configMapRef:
-                  name: document-manager
-            volumeMounts:
-            # Mount Document Manager to PVC
-              - mountPath: /app/
-                name: ${SVC_NAME}-document-manager-pvc
-            ports:
-              - containerPort: 6001
-                protocol: TCP
-              - containerPort: 9191
-                protocol: TCP
-            startupProbe:
-              httpGet:
-                path: /healthcheck
-                port: 6001
-                scheme: HTTP
-              timeoutSeconds: 1
-              periodSeconds: 20
-              successThreshold: 1
-              failureThreshold: 120
-            readinessProbe:
-              httpGet:
-                path: /healthcheck
-                port: 6001
-                scheme: HTTP
-              initialDelaySeconds: 5
-              timeoutSeconds: 1
-              periodSeconds: 5
-              successThreshold: 1
-              failureThreshold: 3
+        - name: ${SVC_NAME}-document-manager
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
+          resources:
+            limits:
+              cpu: 80m
+              memory: 200Mi
+            requests:
+              cpu: 10m
+              memory: 28Mi
+          env:
+          - name: CACHE_REDIS_HOST
+            value: ${SVC_NAME}-redis
+          - name: CACHE_REDIS_PASS
+            valueFrom:
+              secretKeyRef:
+                name: redis
+                key: database-password
+          - name: CACHE_REDIS_PORT
+            value: "6379"
+          - name: PGHOST
+            valueFrom:
+              configMapKeyRef:
+                name: database-cm
+                key: database-host
+          - name: PGDATABASE
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-name
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-password
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-patroni-secret
+                key: app-db-username
+          - name: DOCUMENT_MANAGER_URL
+            value: "https://${VANITY_URL}/api/docman/"
+          - name: JWT_OIDC_WELL_KNOWN_CONFIG
+            valueFrom:
+              configMapKeyRef:
+                name: keycloak
+                key: JWT_WELL_KNOWN_CONFIG
+          - name: SQLALCHEMY_DATABASE_URI
+            value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
+          envFrom:
+          - configMapRef:
+              name: document-manager
+          volumeMounts:
+          # Mount Document Manager to PVC
+          - mountPath: /app/
+            name: ${SVC_NAME}-document-manager-pvc
+          ports:
+          - containerPort: 6001
+            protocol: TCP
+          - containerPort: 9191
+            protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /healthcheck
+              port: 6001
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 20
+            successThreshold: 1
+            failureThreshold: 120
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 6001
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
         volumes:
-          - name: ${SVC_NAME}-document-manager-pvc
-            persistentVolumeClaim:
-              claimName: '${SVC_NAME}-document-manager-pvc'
+        - name: ${SVC_NAME}-document-manager-pvc
+          persistentVolumeClaim:
+            claimName: '${SVC_NAME}-document-manager-pvc'
     triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-document-manager
-            - run-migrations
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-document-manager:${IMAGE_TAG}'
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${SVC_NAME}-document-manager
+        - run-migrations
+        from:
+          kind: ImageStreamTag
+          namespace: "${OC_LICENSE_PLATE}-tools"
+          name: 'prime-document-manager:${IMAGE_TAG}'
 
 #   Document Manager (backend) Service
 - apiVersion: v1
@@ -923,13 +922,13 @@ objects:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${SVC_NAME}-document-manager
-        port: 6001
-        targetPort: 6001
+    - name: ${SVC_NAME}-document-manager
+      port: 6001
+      targetPort: 6001
     selector:
       name: ${SVC_NAME}-document-manager
-#   Document Manager (backend) Persistent Volume Claim
 - apiVersion: v1
+  #   Document Manager (backend) Persistent Volume Claim
   kind: PersistentVolumeClaim
   metadata:
     name: ${SVC_NAME}-document-manager-pvc
@@ -938,7 +937,7 @@ objects:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     accessModes:
-      - ReadWriteOnce
+    - ReadWriteOnce
     resources:
       requests:
         storage: ${DOCMAN_VOLUME_CAPACITY}
@@ -976,61 +975,60 @@ objects:
           name: ${SVC_NAME}-redis
       spec:
         volumes:
-          - name: ${SVC_NAME}-redis-data
-            emptyDir: {}
+        - name: ${SVC_NAME}-redis-data
+          emptyDir: {}
         containers:
-          - name: redis
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:latest
-            resources:
-              limits:
-                cpu: 25m
-                memory: 512Mi
-              requests:
-                cpu: 5m
-                memory: 50Mi 
-            env:
-              - name: REDIS_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: redis
-                    key: database-password
-              - name: REDIS_PORT
-                value: "6379"
-            readinessProbe:
-              exec:
-                command:
-                  - /bin/sh
-                  - '-i'
-                  - '-c'
-                  - >-
-                    test "$(redis-cli -h 127.0.0.1 -a $REDIS_PASSWORD ping)" ==
-                    "PONG"
-              initialDelaySeconds: 5
-              timeoutSeconds: 1
-              periodSeconds: 10
-              successThreshold: 1
-              failureThreshold: 3
-            terminationMessagePath: /dev/termination-log
-            livenessProbe:
-              tcpSocket:
-                port: 6379
-              initialDelaySeconds: 30
-              timeoutSeconds: 1
-              periodSeconds: 10
-              successThreshold: 1
-              failureThreshold: 3
-            securityContext:
-              capabilities: {}
-              privileged: false
-            ports:
-              - containerPort: 6379
-                protocol: TCP
-            imagePullPolicy: IfNotPresent
-            volumeMounts:
-              - name: ${SVC_NAME}-redis-data
-                mountPath: /var/lib/redis/data
-            terminationMessagePolicy: File
+        - name: redis
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:latest
+          resources:
+            limits:
+              cpu: 25m
+              memory: 512Mi
+            requests:
+              cpu: 5m
+              memory: 50Mi
+          env:
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: redis
+                key: database-password
+          - name: REDIS_PORT
+            value: "6379"
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - '-i'
+              - '-c'
+              - >-
+                test "$(redis-cli -h 127.0.0.1 -a $REDIS_PASSWORD ping)" == "PONG"
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          livenessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          securityContext:
+            capabilities: {}
+            privileged: false
+          ports:
+          - containerPort: 6379
+            protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: ${SVC_NAME}-redis-data
+            mountPath: /var/lib/redis/data
+          terminationMessagePolicy: File
         restartPolicy: Always
         dnsPolicy: ClusterFirst
 
@@ -1044,10 +1042,10 @@ objects:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: redis
-        protocol: TCP
-        port: 6379
-        targetPort: 6379
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
     selector:
       name: ${SVC_NAME}-redis
 
@@ -1055,7 +1053,7 @@ objects:
 ###              Cron Jobs              ###
 ###########################################
 #   Template for job that activates api to update email statuses
-- apiVersion: batch/v1beta1
+- apiVersion: batch/v1
   kind: CronJob
   metadata:
     name: ${SVC_NAME}-update-email-statuses
@@ -1068,69 +1066,65 @@ objects:
         template:
           spec:
             containers:
-              - name: ${SVC_NAME}-update-email-statuses
-                image: >-
-                  public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
-                command:
-                - bash
-                - '-c'
-                - >-
-                  echo -e "-------- STARTING CRON --------\n"
+            - name: ${SVC_NAME}-update-email-statuses
+              image: >-
+                public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
+              command:
+              - bash
+              - '-c'
+              - >-
+                echo -e "-------- STARTING CRON --------\n"
 
-                  echo -e "-------- Getting access_token --------\n"
+                echo -e "-------- Getting access_token --------\n"
 
-                  TOKEN=$(curl -X POST
-                  "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token"
-                  \
-                    -H "Content-Type: application/x-www-form-urlencoded" \
-                    -d "grant_type=client_credentials" \
-                    -d "client_id=${KEYCLOAK_CLIENT_ID}" \
-                    -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token' )
+                TOKEN=$(curl -X POST "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token" \
+                  -H "Content-Type: application/x-www-form-urlencoded" \
+                  -d "grant_type=client_credentials" \
+                  -d "client_id=${KEYCLOAK_CLIENT_ID}" \
+                  -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token' )
 
-                  echo -e ${TOKEN}
+                echo -e ${TOKEN}
 
-                  echo -e "-------- Calling PRIME API --------\n"
+                echo -e "-------- Calling PRIME API --------\n"
 
-                  curl -v -X POST
-                  http://${SVC_NAME}-webapi:8080/api/Emails/management/statuses
-                  \
-                    -H "Authorization: Bearer ${TOKEN}" \
-                    -H "Content-Length: 0"
+                curl -v -X POST http://${SVC_NAME}-webapi:8080/api/Emails/management/statuses \
+                  -H "Authorization: Bearer ${TOKEN}" \
+                  -H "Content-Length: 0"
 
-                  echo -e "-------- CRON COMPLETE --------\n"
-                env:
-                  - name: KEYCLOAK_CLIENT_SECRET
-                    valueFrom:
-                      secretKeyRef:
-                        key: prime_service_account_client_secret
-                        name: prime-service-account
-                  - name: KEYCLOAK_CLIENT_ID
-                    valueFrom:
-                      secretKeyRef:
-                        key: prime_service_account_client_id
-                        name: prime-service-account
-                  - name: KEYCLOAK_URL
-                    valueFrom:
-                      secretKeyRef:
-                        key: KEYCLOAK_URL
-                        name: keycloak
-                  - name: KEYCLOAK_REALM
-                    valueFrom:
-                      secretKeyRef:
-                        key: KEYCLOAK_REALM
-                        name: keycloak
-                resources:
-                  limits:
-                    cpu: 500m
-                    memory: 2Gi
-                  requests:
-                    cpu: 100m
-                    memory: 512Mi
+                echo -e "-------- CRON COMPLETE --------\n"
+              env:
+              - name: KEYCLOAK_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: prime_service_account_client_secret
+                    name: prime-service-account
+              - name: KEYCLOAK_CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    key: prime_service_account_client_id
+                    name: prime-service-account
+              - name: KEYCLOAK_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: KEYCLOAK_URL
+                    name: keycloak
+              - name: KEYCLOAK_REALM
+                valueFrom:
+                  secretKeyRef:
+                    key: KEYCLOAK_REALM
+                    name: keycloak
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 2Gi
+                requests:
+                  cpu: 100m
+                  memory: 512Mi
             restartPolicy: Never
     schedule: '${CRON_SCHEDULE_STATUSES}'
 
 #   Template for job that activates api to send renewal emails 
-- apiVersion: batch/v1beta1
+- apiVersion: batch/v1
   kind: CronJob
   metadata:
     name: ${SVC_NAME}-send-renewal-emails
@@ -1143,63 +1137,59 @@ objects:
         template:
           spec:
             containers:
-              - name: ${SVC_NAME}-send-renewal-emails
-                image: >-
-                  public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
-                command:
-                - bash
-                - '-c'
-                - >-
-                  echo -e "-------- STARTING CRON --------\n"
+            - name: ${SVC_NAME}-send-renewal-emails
+              image: >-
+                public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
+              command:
+              - bash
+              - '-c'
+              - >-
+                echo -e "-------- STARTING CRON --------\n"
 
-                  echo -e "-------- Getting access_token --------\n"
+                echo -e "-------- Getting access_token --------\n"
 
-                  TOKEN=$(curl -X POST
-                  "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token"
-                  \
-                    -H "Content-Type: application/x-www-form-urlencoded" \
-                    -d "grant_type=client_credentials" \
-                    -d "client_id=${KEYCLOAK_CLIENT_ID}" \
-                    -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token' )
+                TOKEN=$(curl -X POST "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token" \
+                  -H "Content-Type: application/x-www-form-urlencoded" \
+                  -d "grant_type=client_credentials" \
+                  -d "client_id=${KEYCLOAK_CLIENT_ID}" \
+                  -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token' )
 
-                  echo -e ${TOKEN}
+                echo -e ${TOKEN}
 
-                  echo -e "-------- Calling PRIME API --------\n"
+                echo -e "-------- Calling PRIME API --------\n"
 
-                  curl -v -X POST
-                  http://${SVC_NAME}-webapi:8080/api/Emails/management/enrollees/renewal
-                  \
-                    -H "Authorization: Bearer ${TOKEN}" \
-                    -H "Content-Length: 0"
+                curl -v -X POST http://${SVC_NAME}-webapi:8080/api/Emails/management/enrollees/renewal \
+                  -H "Authorization: Bearer ${TOKEN}" \
+                  -H "Content-Length: 0"
 
-                  echo -e "-------- CRON COMPLETE --------\n"
-                env:
-                  - name: KEYCLOAK_CLIENT_SECRET
-                    valueFrom:
-                      secretKeyRef:
-                        key: prime_service_account_client_secret
-                        name: prime-service-account
-                  - name: KEYCLOAK_CLIENT_ID
-                    valueFrom:
-                      secretKeyRef:
-                        key: prime_service_account_client_id
-                        name: prime-service-account
-                  - name: KEYCLOAK_URL
-                    valueFrom:
-                      secretKeyRef:
-                        key: KEYCLOAK_URL
-                        name: keycloak
-                  - name: KEYCLOAK_REALM
-                    valueFrom:
-                      secretKeyRef:
-                        key: KEYCLOAK_REALM
-                        name: keycloak
-                resources:
-                  limits:
-                    cpu: 500m
-                    memory: 2Gi
-                  requests:
-                    cpu: 100m
-                    memory: 512Mi
+                echo -e "-------- CRON COMPLETE --------\n"
+              env:
+              - name: KEYCLOAK_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: prime_service_account_client_secret
+                    name: prime-service-account
+              - name: KEYCLOAK_CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    key: prime_service_account_client_id
+                    name: prime-service-account
+              - name: KEYCLOAK_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: KEYCLOAK_URL
+                    name: keycloak
+              - name: KEYCLOAK_REALM
+                valueFrom:
+                  secretKeyRef:
+                    key: KEYCLOAK_REALM
+                    name: keycloak
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 2Gi
+                requests:
+                  cpu: 100m
+                  memory: 512Mi
             restartPolicy: Never
     schedule: '${CRON_SCHEDULE_RENEWALS}'
