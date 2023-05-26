@@ -1100,20 +1100,23 @@ namespace Prime.Services
                     haIds.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
                     break;
                 case ProvisionerCareSettingCode.VancouverIslandHealthAuthority:
-                    haIds.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
+                    haIds.Add((int)HealthAuthorityCode.IslandHealth);
                     break;
                 case ProvisionerCareSettingCode.NorthernHealthAuthority:
                     haIds.Add((int)HealthAuthorityCode.NorthernHealth);
+                    break;
+                case ProvisionerCareSettingCode.ProvincialHealthServicesAuthority:
+                    haIds.Add((int)HealthAuthorityCode.ProvincialHealthServicesAuthority);
                     break;
             }
 
             return await _context.Enrollees
                 .Where(e => e.GPID == option.Gpid && e.FirstName == option.FirstName && e.LastName == option.LastName
                     && e.CurrentStatus.StatusCode != (int)StatusType.Declined)
-                .Where(e => careSettingIds.Count() == 0 ||
+                .Where(e => (haIds.Count() > 0 && careSettingIds.Count() == 0) ||
                     e.EnrolleeCareSettings.Where(s => careSettingIds.Contains(s.CareSettingCode))
                         .Where(s => s.ConsentForAutoPull).Any())
-                .Where(e => haIds.Count() == 0 ||
+                .Where(e => (haIds.Count() == 0 && careSettingIds.Count() > 0) ||
                     e.EnrolleeHealthAuthorities.Where(ha => haIds.Contains((int)ha.HealthAuthorityCode))
                         .Where(ha => ha.ConsentForAutoPull).Any())
                 .Select(e => new EnrolleeLookup
