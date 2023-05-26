@@ -44,14 +44,17 @@ namespace Prime.Services
                     endDate = DateTime.Now;
                 }
 
-                var enrolleeLicenseNumbers = await _context.Enrollees
+                var enrolleeCerts = _context.Enrollees
                     .Where(e => e.GPID != null && e.Certifications.Any())
-                    .Select(e => e.Certifications.FirstOrDefault().LicenseNumber)
-                    .ToListAsync();
+                    .Select(e => new
+                    {
+                        e.Certifications.FirstOrDefault().LicenseNumber,
+                        e.Certifications.FirstOrDefault().Prefix
+                    });
 
                 var questionablePractitionerIds = await _context.PharmanetTransactionLogs
                     .Where(l => l.TxDateTime >= startDate && l.TxDateTime <= endDate)
-                    .Where(l => !enrolleeLicenseNumbers.Contains(l.PractitionerId))
+                    .Where(l => !enrolleeCerts.Where(e => e.LicenseNumber == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
                     .Where(l => !_context.Practitioner.Where(p => p.PracRefId == l.CollegePrefix && p.CollegeId == l.PractitionerId).Any())
                     .Select(l => new
                     {
