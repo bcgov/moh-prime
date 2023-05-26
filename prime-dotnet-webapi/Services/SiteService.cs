@@ -250,7 +250,8 @@ namespace Prime.Services
             var matchesAnyCert = PredicateBuilder.New<RemoteUserCertification>();
             foreach (var searchedCert in certs)
             {
-                matchesAnyCert.Or(ruc => ruc.CollegeCode == searchedCert.CollegeCode && ruc.LicenseNumber == searchedCert.LicenceNumber);
+                matchesAnyCert.Or(ruc => ruc.CollegeCode == searchedCert.CollegeCode &&
+                    (ruc.LicenseNumber == searchedCert.LicenceNumber || ruc.LicenseNumber == searchedCert.PractitionerId));
             }
 
             IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications
