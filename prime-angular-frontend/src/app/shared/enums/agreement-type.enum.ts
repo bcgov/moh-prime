@@ -6,7 +6,7 @@ const COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT = 'Community Pharmacy Organizati
 const PHARMACY_OBO_TOA = 'Pharmacy On Behalf Of User';
 const DEVICE_PROVIDER_ORG_AGREEMENT = 'Device Provider Organization';
 const PHARMACY_TECHNICIAN_TOA = 'Pharmacy Technician Toa';
-const LICENCED_PRACTICAL_NURSE_TOA = 'Licenced Practical Nurse';
+const LICENCED_PRACTICAL_NURSE_TOA = 'Licenced Practical Nurse Toa';
 
 export enum AgreementType {
   COMMUNITY_PHARMACIST_TOA = 1,
