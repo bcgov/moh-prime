@@ -80,6 +80,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<LicenseDetail, LicenseViewModel>();
 
             CreateMap<HpdidLookup, EnrolleeLookup>();
+            CreateMap<HpdidLookup, GpidDetailLookup>();
         }
     }
 }
