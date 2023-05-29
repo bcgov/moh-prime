@@ -88,7 +88,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     this.showPharmacist = true;
     this.showHealthAuthority = true;
     this.showDeviceProvider = true;
-    this.title = 'Next Steps To Get PharmaNet';
+    this.title = 'Notify Pharmanet administrator of my PRIME approval';
     this.careSettingConfigs = [];
   }
 
