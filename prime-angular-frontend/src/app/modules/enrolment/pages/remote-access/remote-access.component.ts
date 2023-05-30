@@ -209,7 +209,8 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       .collegeCertifications
       .map(c => ({
         collegeCode: c.collegeCode,
-        licenceNumber: c.licenseNumber
+        licenceNumber: c.licenseNumber,
+        practitionerId: c.practitionerId
       }));
 
     this.siteResource.getSitesByRemoteUserInfo(certSearch)
