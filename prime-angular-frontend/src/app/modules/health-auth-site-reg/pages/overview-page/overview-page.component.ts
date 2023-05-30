@@ -108,7 +108,7 @@ export class OverviewPageComponent implements OnInit {
       return;
     }
 
-    const { pharmanetAdministrators, technicalSupports } = this.healthAuthorityService.healthAuthority;
+    const { pharmanetAdministrators, technicalSupports, vendors } = this.healthAuthorityService.healthAuthority;
     this.pharmanetAdministrators = pharmanetAdministrators;
     this.technicalSupports = technicalSupports;
 
@@ -129,6 +129,9 @@ export class OverviewPageComponent implements OnInit {
       // Replace site with the version from the form for the user
       // to review which maintains a subset of immutable properties
       healthAuthoritySite = this.healthAuthoritySiteFormStateService.json;
+      // set the vendor code, since the json does not have vendor code
+      let vendorCode = vendors.find((v) => v.id === healthAuthoritySite.healthAuthorityVendor.id).vendorCode;
+      healthAuthoritySite.healthAuthorityVendor.vendorCode = vendorCode;
     }
 
     // Store a local copy of the site for overview

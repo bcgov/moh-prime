@@ -78,6 +78,7 @@ export class MockCommunitySiteService {
       adjudicator: null,
       status: SiteStatusType.EDITABLE,
       pec: null,
+      mnemonic: null,
       flagged: false,
       activeBeforeRegistration: false,
       individualDeviceProviders: []
