@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 using Prime.Configuration.Auth;
+using Prime.Configuration.Api;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -130,7 +131,7 @@ namespace Prime.Controllers
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
             foreach (var emailPair in providedEmails)
             {
-                await _emailService.SendProvisionerLinkAsync(emailPair.Emails, createdToken, emailPair.CareSettingCode);
+                await _emailService.SendProvisionerLinkAsync(emailPair.Emails, createdToken, GetCareSettingCode(emailPair.SettingCode));
                 await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emailPair.Emails)}");
             }
 
@@ -291,6 +292,22 @@ namespace Prime.Controllers
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
             return JsonConvert.SerializeObject(obj, serializerSettings);
+        }
+
+        private static int GetCareSettingCode(string provisionerCareSettingCode)
+        {
+            return provisionerCareSettingCode switch
+            {
+                ProvisionerCareSettingConstants.CommunityPharmacy => (int)CareSettingType.CommunityPharmacy,
+                ProvisionerCareSettingConstants.PrivateCommunityHealthPractice => (int)CareSettingType.CommunityPractice,
+                ProvisionerCareSettingConstants.FraserHealthAuthority or
+                ProvisionerCareSettingConstants.InteriorHealthAuthority or
+                ProvisionerCareSettingConstants.NorthernHealthAuthority or
+                ProvisionerCareSettingConstants.ProvincialHealthServicesAuthority or
+                ProvisionerCareSettingConstants.VancouverCoastalHealthAuthority or
+                ProvisionerCareSettingConstants.VancouverIslandHealthAuthority => (int)CareSettingType.HealthAuthority,
+                _ => 0,
+            };
         }
     }
 }

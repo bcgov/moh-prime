@@ -26,8 +26,8 @@
               administrator(s)
               have
               been contacted. With this process PRIME will automatically share your GPID/Approval with your consent.
-            </ng-container>
-            <ng-container>
+              <br/>
+              <br/>
               <table class="table table-striped">
                 <thead class="table-header">
                   <tr>
@@ -36,31 +36,72 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>@mdo</td>
+                    <td>Your name: </td>
                   </tr>
                   <tr>
-                    <td>@fat</td>
+                    <td>College name:</td>
                   </tr>
                   <tr>
-                    <td>@twitter</td>
+                    <td>College ID:</td>
                   </tr>
                   <tr>
-                    <td>@twitter</td>
+                    <td>Licence number from college:</td>
                   </tr>
                   <tr>
-                    <td>@mdo</td>
+                    <td>PharmaNet ID (BCCNM registrants):</td>
                   </tr>
                   <tr>
-                    <td>@fat</td>
+                    <td>Care Setting:</td>
                   </tr>
                   <tr>
-                    <td>@twitter</td>
+                    <td>Type of PharmaNet access approved:</td>
                   </tr>
                   <tr>
-                    <td>@twitter</td>
+                    <td>GPID: </td>
                   </tr>
                 </tbody>
               </table>
+              <div class="container">
+                <div class="row">
+                  Examples of when you would need to share your GPID
+                </div>
+                <div class="row">
+                  <span class="sub-note">(<b>Note:</b> these exmaples are for renewal only)</span>
+                </div>
+              </div>
+
+              <div class="container ext_width">
+                <div class="row">
+                  <div class="col-3 pl-0">
+                    <div class="row align-items-center sgp-card">
+                      <div class="icon-01"></div>
+                      <div class="col">If I change work sites</div>
+                    </div>
+                  </div>
+                  <div class="col-3 pl-0">
+                    <div class="row align-items-center sgp-card">
+                      <div class="icon-02"></div>
+                      <div class="col">If I change jobs</div>
+                    </div>
+                  </div>
+                  <div class="col-3 pl-0">
+                    <div class="row align-items-center sgp-card">
+                      <div class="icon-03"></div>
+                      <div class="col">If my worksite has new PharmaNet Software</div>
+                    </div>
+                  </div>
+                  <div class="col-3 pl-0">
+                    <div class="row align-items-center sgp-card">
+                      <div class="icon-04"></div>
+                      <div class="col">
+                        If I get a new credential issued by my college
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
             </ng-container>
           </app-page-subheader>
         </div>
@@ -98,6 +139,10 @@
           </ng-container>
         </app-page-subheader>
 
+        <span>
+          Please provide the PharmaNet administrar email for the {{ setting }} that you work at.
+        </span>
+
         <form [formGroup]="form">
           <div class="row">
             <div class="col col-sm-8"
@@ -119,10 +164,20 @@
                       color="primary"
                       (click)="addEmptyEmailInput(settingCode)">
                 <mat-icon>add</mat-icon>
-                Add email of PharmaNet administrator
+                Add another PharmaNet administrator email
               </button>
             </div>
           </div>
+        </form>
+
+        <form [formGroup]="form">
+          <mat-radio-group formControlName="provideConsent">
+            <mat-radio-button class="mr-4"
+                              *ngFor="let decision of decisions"
+                              [value]="decision.code">
+              {{ decision.name }}
+            </mat-radio-button>
+          </mat-radio-group>
         </form>
 
       </ng-template>

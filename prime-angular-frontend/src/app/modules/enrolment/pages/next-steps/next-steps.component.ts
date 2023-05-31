@@ -16,8 +16,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
+import { ProvisionerCareSettingEnum } from '@shared/enums/provisioner-care-setting.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
@@ -35,8 +37,10 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
   public enrolment: Enrolment;
   public hasReadAgreement: boolean;
 
+  public ProvisionerCareSettingEnum = ProvisionerCareSettingEnum;
   public CareSettingEnum = CareSettingEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
+  public HealthAuthorityEnum = HealthAuthorityEnum;
 
   public showCommunityHealth: boolean;
   public showPharmacist: boolean;
@@ -50,11 +54,13 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
   public careSettingConfigs: {
     setting: string,
     settingPlural: string,
-    settingCode: number,
+    settingCode: string,
     formArray: FormArray,
     formArrayName: string,
     subheaderContent: string;
   }[];
+
+  public decisions: { code: boolean, name: string }[];
 
   public constructor(
     protected route: ActivatedRoute,
@@ -90,41 +96,102 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     this.showDeviceProvider = true;
     this.title = 'Notify Pharmanet administrator of my PRIME approval';
     this.careSettingConfigs = [];
+
+    this.decisions = [
+      { code: false, name: 'No' },
+      { code: true, name: 'Yes' }
+    ];
   }
 
+  /*
   public get careSettings() {
     return (this.enrolment) ? this.enrolment.careSettings : null;
   }
+  */
 
-  public get communityHealthEmails(): FormArray {
-    return this.form.get('communityHealthEmails') as FormArray;
+  public get provisionerCareSetting() {
+    var result: String[];
+
+    if (this.enrolment) {
+      result = this.enrolment.careSettings
+        .filter(c => c.careSettingCode != CareSettingEnum.HEALTH_AUTHORITY)
+        .map(c => {
+          switch (c.careSettingCode) {
+            case CareSettingEnum.COMMUNITY_PHARMACIST:
+              return ProvisionerCareSettingEnum.COMMUNITY_PHARMACIST;
+            case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
+              return ProvisionerCareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
+          }
+        });
+
+      if (this.enrolment.careSettings.find(c => c.careSettingCode == CareSettingEnum.HEALTH_AUTHORITY)) {
+        this.enrolment.enrolleeHealthAuthorities.forEach(ha => {
+          switch (ha.healthAuthorityCode) {
+            case HealthAuthorityEnum.FRASER_HEALTH:
+              result.push(ProvisionerCareSettingEnum.FRASER_HEALTH_AUTHORITY);
+              break;
+            case HealthAuthorityEnum.INTERIOR_HEALTH:
+              result.push(ProvisionerCareSettingEnum.INTERIOR_HEALTH_AUTHORITY);
+              break;
+            case HealthAuthorityEnum.ISLAND_HEALTH:
+              result.push(ProvisionerCareSettingEnum.VANCOUVER_ISLAND_HEALTH_AUTHORITY);
+              break;
+            case HealthAuthorityEnum.NORTHERN_HEALTH:
+              result.push(ProvisionerCareSettingEnum.NORTHERN_HEALTH_AUTHORITY);
+              break;
+            case HealthAuthorityEnum.PROVINCIAL_HEALTH_SERVICES_AUTHORITY:
+              result.push(ProvisionerCareSettingEnum.PROVINCIAL_HEALTH_SERVICES_AUTHORITY);
+              break;
+            case HealthAuthorityEnum.VANCOUVER_COASTAL_HEALTH:
+              result.push(ProvisionerCareSettingEnum.VANCOUVER_COASTAL_HEALTH_AUTHORITY);
+              break;
+          }
+        });
+      }
+    }
+
+    return result;
+  }
+
+  public get islandHealthEmails(): FormArray {
+    return this.form.get('islandHealthEmails') as FormArray;
+  }
+
+  public get fraserHealthEmails(): FormArray {
+    return this.form.get('fraserHealthEmails') as FormArray;
+  }
+
+  public get interiorHealthEmails(): FormArray {
+    return this.form.get('interiorHealthEmails') as FormArray;
+  }
+
+  public get vancouverCoastalHealthEmails(): FormArray {
+    return this.form.get('vancouverCoastalHealthEmails') as FormArray;
+  }
+
+  public get northernHealthEmails(): FormArray {
+    return this.form.get('northernHealthEmails') as FormArray;
+  }
+
+  public get provincialHealthServicesAuthorityEmails(): FormArray {
+    return this.form.get('provincialHealthServicesAuthorityEmails') as FormArray;
   }
 
   public get pharmacistEmails(): FormArray {
     return this.form.get('pharmacistEmails') as FormArray;
   }
 
-  public get healthAuthorityEmails(): FormArray {
-    return this.form.get('healthAuthorityEmails') as FormArray;
+  public get communityHealthEmails(): FormArray {
+    return this.form.get('communityHealthEmails') as FormArray;
   }
 
   public get deviceProviderEmails(): FormArray {
     return this.form.get('deviceProviderEmails') as FormArray;
   }
 
-  public getAgreementDescription() {
-    switch (this.currentAgreementGroup) {
-      case AgreementTypeGroup.ON_BEHALF_OF:
-        return 'You are an on behalf of user';
-      case AgreementTypeGroup.REGULATED_USER:
-        return 'You are an independant user';
-      default:
-        return '';
-    }
-  }
-
-  public isEmailVisible(careSettingCode: number): boolean {
-    switch (careSettingCode) {
+  /*
+  public isEmailVisible(provisionerCareSettingCode: number): boolean {
+    switch (provisionerCareSettingCode) {
       case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         return this.showCommunityHealth;
       }
@@ -142,6 +209,8 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
       }
     }
   }
+  */
+
 
   public sendProvisionerAccessLink() {
     const data: DialogOptions = {
@@ -177,24 +246,44 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     this.onPageChange({ atEnd: true });
   }
 
-  public GetEmailsGroup(careSettingCode: number) {
+  public GetEmailsGroup(settingCode: string) {
     let formArray: FormArray;
 
-    switch (careSettingCode) {
-      case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+    switch (settingCode) {
+      case ProvisionerCareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         formArray = this.communityHealthEmails;
         break;
       }
-      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case ProvisionerCareSettingEnum.COMMUNITY_PHARMACIST: {
         formArray = this.pharmacistEmails;
         break;
       }
-      case this.CareSettingEnum.HEALTH_AUTHORITY: {
-        formArray = this.healthAuthorityEmails;
+      case ProvisionerCareSettingEnum.DEVICE_PROVIDER: {
+        formArray = this.deviceProviderEmails;
         break;
       }
-      case this.CareSettingEnum.DEVICE_PROVIDER: {
-        formArray = this.deviceProviderEmails;
+      case ProvisionerCareSettingEnum.FRASER_HEALTH_AUTHORITY: {
+        formArray = this.fraserHealthEmails;
+        break;
+      }
+      case ProvisionerCareSettingEnum.INTERIOR_HEALTH_AUTHORITY: {
+        formArray = this.interiorHealthEmails;
+        break;
+      }
+      case ProvisionerCareSettingEnum.FRASER_HEALTH_AUTHORITY: {
+        formArray = this.fraserHealthEmails;
+        break;
+      }
+      case ProvisionerCareSettingEnum.FRASER_HEALTH_AUTHORITY: {
+        formArray = this.fraserHealthEmails;
+        break;
+      }
+      case ProvisionerCareSettingEnum.FRASER_HEALTH_AUTHORITY: {
+        formArray = this.fraserHealthEmails;
+        break;
+      }
+      case ProvisionerCareSettingEnum.FRASER_HEALTH_AUTHORITY: {
+        formArray = this.fraserHealthEmails;
         break;
       }
     }
@@ -233,67 +322,122 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     this.enrolmentResource.getCurrentAgreementGroupForAnEnrollee(this.enrolment.id)
       .subscribe((group: AgreementTypeGroup) => this.currentAgreementGroup = group)
 
-    this.careSettingConfigs = this.careSettings.map(careSetting => {
-      switch (careSetting.careSettingCode) {
-        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+    this.careSettingConfigs = this.provisionerCareSetting.map(s => {
+      switch (s) {
+        case ProvisionerCareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
           return {
             setting: 'Private Community Health Practice',
-            settingPlural: 'Private Community Health Practices',
-            settingCode: careSetting.careSettingCode,
+            settingPlural: '',
+            settingCode: ProvisionerCareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
             formArray: this.communityHealthEmails,
             formArrayName: 'communityHealthEmails',
             subheaderContent: `Send your approval to your private community health practice's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
-        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+        case ProvisionerCareSettingEnum.COMMUNITY_PHARMACIST: {
           return {
-            setting: 'Community Pharmacy',
-            settingPlural: 'Community Pharmacies',
-            settingCode: careSetting.careSettingCode,
+            setting: 'Community Pharmacist',
+            settingPlural: '',
+            settingCode: ProvisionerCareSettingEnum.COMMUNITY_PHARMACIST,
             formArray: this.pharmacistEmails,
             formArrayName: 'pharmacistEmails',
             subheaderContent: `Send your approval to your community pharmacy's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
-        case CareSettingEnum.HEALTH_AUTHORITY: {
-          return {
-            setting: 'Health Authority',
-            settingPlural: 'Health Authorities',
-            settingCode: careSetting.careSettingCode,
-            formArray: this.healthAuthorityEmails,
-            formArrayName: 'healthAuthorityEmails',
-            subheaderContent: `Send your approval to your health authority's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
-          };
-        }
-        case CareSettingEnum.DEVICE_PROVIDER: {
+        case ProvisionerCareSettingEnum.DEVICE_PROVIDER: {
           return {
             setting: 'Device Provider',
-            settingPlural: 'Device Providers',
-            settingCode: careSetting.careSettingCode,
+            settingPlural: '',
+            settingCode: ProvisionerCareSettingEnum.DEVICE_PROVIDER,
             formArray: this.deviceProviderEmails,
             formArrayName: 'deviceProviderEmails',
             subheaderContent: `Send your approval to your device provider's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+          };
+        }
+        case ProvisionerCareSettingEnum.FRASER_HEALTH_AUTHORITY: {
+          return {
+            setting: 'Fraser Health',
+            settingPlural: '',
+            settingCode: ProvisionerCareSettingEnum.FRASER_HEALTH_AUTHORITY,
+            formArray: this.fraserHealthEmails,
+            formArrayName: 'fraserHealthEmails',
+            subheaderContent: `Send your approval to your health authority's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+          };
+        }
+        case ProvisionerCareSettingEnum.INTERIOR_HEALTH_AUTHORITY: {
+          return {
+            setting: 'Interior Health',
+            settingPlural: '',
+            settingCode: ProvisionerCareSettingEnum.INTERIOR_HEALTH_AUTHORITY,
+            formArray: this.interiorHealthEmails,
+            formArrayName: 'interiorHealthEmails',
+            subheaderContent: `Send your approval to your health authority's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+          };
+        }
+        case ProvisionerCareSettingEnum.NORTHERN_HEALTH_AUTHORITY: {
+          return {
+            setting: 'Northen Health',
+            settingPlural: '',
+            settingCode: ProvisionerCareSettingEnum.NORTHERN_HEALTH_AUTHORITY,
+            formArray: this.northernHealthEmails,
+            formArrayName: 'northernHealthEmails',
+            subheaderContent: `Send your approval to your health authority's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+          };
+        }
+        case ProvisionerCareSettingEnum.PROVINCIAL_HEALTH_SERVICES_AUTHORITY: {
+          return {
+            setting: 'Provincial Health',
+            settingPlural: '',
+            settingCode: ProvisionerCareSettingEnum.PROVINCIAL_HEALTH_SERVICES_AUTHORITY,
+            formArray: this.provincialHealthServicesAuthorityEmails,
+            formArrayName: 'provincialHealthServicesAuthorityEmails',
+            subheaderContent: `Send your approval to your health authority's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+          };
+        }
+        case ProvisionerCareSettingEnum.VANCOUVER_COASTAL_HEALTH_AUTHORITY: {
+          return {
+            setting: 'Vancouver Coastal Health',
+            settingPlural: '',
+            settingCode: ProvisionerCareSettingEnum.VANCOUVER_COASTAL_HEALTH_AUTHORITY,
+            formArray: this.vancouverCoastalHealthEmails,
+            formArrayName: 'vancouverCoastalHealthEmails',
+            subheaderContent: `Send your approval to your health authority's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+          };
+        }
+        case ProvisionerCareSettingEnum.VANCOUVER_ISLAND_HEALTH_AUTHORITY: {
+          return {
+            setting: 'Vancouver Island Health',
+            settingPlural: '',
+            settingCode: ProvisionerCareSettingEnum.VANCOUVER_ISLAND_HEALTH_AUTHORITY,
+            formArray: this.islandHealthEmails,
+            formArrayName: 'islandHealthEmails',
+            subheaderContent: `Send your approval to your health authority's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           };
         }
       }
     });
   }
 
-  public addEmptyEmailInput(settingCode: number) {
+  public addEmptyEmailInput(settingCode: string) {
     let emailsArray = this.GetEmailsGroup(settingCode);
     this.addEmail(emailsArray);
   }
 
-  public removeEmail(settingCode: number, index: number): void {
+  public removeEmail(settingCode: string, index: number): void {
     let emailsArray = this.GetEmailsGroup(settingCode);
     emailsArray.removeAt(index);
   }
 
   protected initForm() {
-    if (!this.communityHealthEmails.length) {
-      this.addEmail(this.communityHealthEmails);
+    if (!this.pharmacistEmails.length) {
+      this.addEmail(this.provincialHealthServicesAuthorityEmails);
+      this.addEmail(this.islandHealthEmails);
+      this.addEmail(this.fraserHealthEmails);
+      this.addEmail(this.interiorHealthEmails);
+      this.addEmail(this.northernHealthEmails);
+      this.addEmail(this.vancouverCoastalHealthEmails);
       this.addEmail(this.pharmacistEmails);
-      this.addEmail(this.healthAuthorityEmails);
+      this.addEmail(this.communityHealthEmails);
       this.addEmail(this.deviceProviderEmails);
     }
   }
@@ -323,8 +467,13 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     return this.fb.group({
       communityHealthEmails: this.fb.array([], [Validators.required]),
       pharmacistEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityEmails: this.fb.array([], [Validators.required]),
       deviceProviderEmails: this.fb.array([], [Validators.required]),
+      provincialHealthServicesAuthorityEmails: this.fb.array([], [Validators.required]),
+      islandHealthEmails: this.fb.array([], [Validators.required]),
+      fraserHealthEmails: this.fb.array([], [Validators.required]),
+      interiorHealthEmails: this.fb.array([], [Validators.required]),
+      northernHealthEmails: this.fb.array([], [Validators.required]),
+      vancouverCoastalHealthEmails: this.fb.array([], [Validators.required]),
     });
   }
 }

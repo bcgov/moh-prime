@@ -12,3 +12,60 @@
 .table {
   border: solid 1px #DADADA;
 }
+
+.sub-note {
+  color: #D1D1D1;
+  font-style: italic;
+  font-size: small;
+}
+
+.ext_width {
+  width: 960px;
+}
+
+.sgp-card {
+  border: solid 1px #DADADA;
+  border-radius: 10px;
+  margin: 0;
+  height: 125px;
+  color: #003366;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.card-content {
+  height: 100%;
+  vertical-align: middle;
+}
+
+.icon-01 {
+  background-image: url('/assets/sgp_1.svg');
+  background-size: 47px auto;
+  width: 47px;
+  height: 47px;
+  margin-left: 20px;
+}
+
+.icon-02 {
+  background-image: url('/assets/sgp_2.svg');
+  background-size: 47px auto;
+  width: 47px;
+  height: 47px;
+  margin-left: 20px;
+}
+
+.icon-03 {
+  background-image: url('/assets/sgp_3.svg');
+  background-size: 47px auto;
+  width: 47px;
+  height: 47px;
+  margin-left: 20px;
+}
+
+.icon-04 {
+  background-image: url('/assets/sgp_4.svg');
+  background-size: 47px auto;
+  width: 47px;
+  height: 47px;
+  margin-left: 20px;
+}
