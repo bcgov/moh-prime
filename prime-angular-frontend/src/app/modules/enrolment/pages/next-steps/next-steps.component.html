@@ -131,20 +131,14 @@
                    let-settingCode="settingCode"
                    let-formArray="formArray"
                    let-formArrayName="formArrayName"
+                   let-consentControl="consentControl"
+                   let-consentControlName="consentControlName"
                    let-subheaderContent="subheaderContent">
-        <app-page-subheader [divider]="false">
-          <ng-container appPageSubheaderTitle>{{ setting }}</ng-container>
-          <ng-container appPageSubheaderSummary>
-            {{ subheaderContent }}
-          </ng-container>
-        </app-page-subheader>
-
-        <span>
-          Please provide the PharmaNet administrar email for the {{ setting }} that you work at.
-        </span>
-
+        <div>
+          Please provide the PharmaNet administrar email for the <strong>{{ setting }}</strong> that you work at.
+        </div>
         <form [formGroup]="form">
-          <div class="row">
+          <div class="row mt-1">
             <div class="col col-sm-8"
                  [formArrayName]="formArrayName">
               <ng-container *ngFor="let email of formArray.controls; let i = index;"
@@ -171,13 +165,26 @@
         </form>
 
         <form [formGroup]="form">
-          <mat-radio-group formControlName="provideConsent">
-            <mat-radio-button class="mr-4"
-                              *ngFor="let decision of decisions"
-                              [value]="decision.code">
-              {{ decision.name }}
-            </mat-radio-button>
-          </mat-radio-group>
+          <div class="container consent">
+            <div class="row">
+              <div class="col">
+                Some PharmaNet software vendors use an automated process to collect, or ask to collect your information.
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                Do you approve the sharing of your information?
+                <mat-radio-group class="ml-3"
+                                 [formControlName]="consentControlName">
+                  <mat-radio-button class="mr-4"
+                                    *ngFor="let decision of decisions"
+                                    [value]="decision.code">
+                    {{ decision.name }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
         </form>
 
       </ng-template>
