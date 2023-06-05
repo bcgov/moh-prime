@@ -49,7 +49,7 @@ namespace Prime.Engines.AgreementEngineInternal
             {
                 if (License.isLicensedPracticalNurse(cert.License.CurrentLicenseDetail))
                 {
-                    return new LicensedPracticalNurse();
+                    return new LicensedPracticalNurse(regulated);
                 }
                 else
                 {
@@ -144,11 +144,22 @@ namespace Prime.Engines.AgreementEngineInternal
 
     public class LicensedPracticalNurse : ICertificationDigest
     {
-        public LicensedPracticalNurse() { }
+        private bool Regulated { get; set; }
+        public LicensedPracticalNurse(bool regulated)
+        {
+            Regulated = regulated;
+        }
 
         public AgreementType? ResolveWith(SettingsDigest settings)
         {
-            return AgreementType.LicencedPracticalNurseTOA;
+            if (Regulated)
+            {
+                return AgreementType.LicencedPracticalNurseTOA;
+            }
+            else
+            {
+                return AgreementType.OboTOA;
+            }
         }
     }
 
