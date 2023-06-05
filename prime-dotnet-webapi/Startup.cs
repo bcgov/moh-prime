@@ -60,6 +60,7 @@ namespace Prime
             services.AddScoped<IBannerService, BannerService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<IClientLogService, ClientLogService>();
+            services.AddScoped<IVendorAPILogService, VendorAPILogService>();
             services.AddScoped<ICommunitySiteService, CommunitySiteService>();
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IDocumentService, DocumentService>();

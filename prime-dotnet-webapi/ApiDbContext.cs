@@ -51,6 +51,7 @@ namespace Prime
         }
 
         public DbSet<ClientLog> ClientLogs { get; set; }
+        public DbSet<VendorApiLog> VendorApiLogs { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Address> Addresses { get; set; }
