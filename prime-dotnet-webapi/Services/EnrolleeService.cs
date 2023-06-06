@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 using Prime.Configuration.Auth;
+using Prime.Configuration.Api;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
@@ -112,14 +113,27 @@ namespace Prime.Services
                                         .Where(a => a.AcceptedDate != null)
                                         .Select(a => a.AgreementVersion.AccessType)
                                         .FirstOrDefault(),
-                    Licences = e.Certifications.Select(cert =>
-                        new EnrolleeCertDto
-                        {
-                            // TODO: Retrieve from cert.Prefix in future?
-                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
-                            CollegeLicenceNumber = cert.LicenseNumber,
-                            PharmaNetId = cert.PractitionerId
-                        })
+                    Licences = e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ||
+                        e.CurrentStatus.StatusCode == (int)StatusType.Locked || IsPastRenewal(e.Agreements)
+                        ? null
+                        : (e.Certifications.Count > 1)
+                            ? e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = true,
+                                    PractRefId = null,
+                                    CollegeLicenceNumber = null,
+                                    PharmaNetId = null
+                                })
+                            : e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = false,
+                                    // TODO: Retrieve from cert.Prefix in future?
+                                    PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                                    CollegeLicenceNumber = cert.LicenseNumber,
+                                    PharmaNetId = cert.PractitionerId
+                                })
                 })
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
@@ -1062,6 +1076,90 @@ namespace Prime.Services
                 })
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        public async Task<EnrolleeLookup> GpidLookupAsync(GpidLookupOptions option)
+        {
+            var careSettingIds = new List<int>();
+            var haIds = new List<int>();
+
+            switch (option.CareSetting)
+            {
+                case ProvisionerCareSettingConstants.CommunityPharmacy:
+                    careSettingIds.Add((int)CareSettingType.CommunityPharmacy);
+                    break;
+                case ProvisionerCareSettingConstants.PrivateCommunityHealthPractice:
+                    careSettingIds.Add((int)CareSettingType.CommunityPractice);
+                    break;
+                case ProvisionerCareSettingConstants.FraserHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.FraserHealth);
+                    break;
+                case ProvisionerCareSettingConstants.InteriorHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.InteriorHealth);
+                    break;
+                case ProvisionerCareSettingConstants.VancouverCoastalHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
+                    break;
+                case ProvisionerCareSettingConstants.VancouverIslandHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.IslandHealth);
+                    break;
+                case ProvisionerCareSettingConstants.NorthernHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.NorthernHealth);
+                    break;
+                case ProvisionerCareSettingConstants.ProvincialHealthServicesAuthority:
+                    haIds.Add((int)HealthAuthorityCode.ProvincialHealthServicesAuthority);
+                    break;
+            }
+
+            return await _context.Enrollees
+                .Where(e => e.GPID == option.Gpid && e.FirstName == option.FirstName && e.LastName == option.LastName
+                    && e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Where(e => (haIds.Count() > 0 && careSettingIds.Count() == 0) ||
+                    e.EnrolleeCareSettings.Where(s => careSettingIds.Contains(s.CareSettingCode))
+                        .Where(s => s.ConsentForAutoPull).Any())
+                .Where(e => (haIds.Count() == 0 && careSettingIds.Count() > 0) ||
+                    e.EnrolleeHealthAuthorities.Where(ha => haIds.Contains((int)ha.HealthAuthorityCode))
+                        .Where(ha => ha.ConsentForAutoPull).Any())
+                .Select(e => new EnrolleeLookup
+                {
+                    Gpid = e.GPID,
+                    Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
+                        e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ?
+                        ProvisionerEnrolmentStatusType.IndefiniteAbsence : IsPastRenewal(e.Agreements) ?
+                        ProvisionerEnrolmentStatusType.PastRenewal : e.CurrentAgreementId != null ?
+                        ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
+                    // TODO: Refactor code from `EnrolmentCertificate` class
+                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked ||
+                            e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ||
+                            IsPastRenewal(e.Agreements) ?
+                            null : e.Agreements.OrderByDescending(a => a.CreatedDate)
+                                        .Where(a => a.AcceptedDate != null)
+                                        .Select(a => a.AgreementVersion.AccessType)
+                                        .FirstOrDefault(),
+                    Licences = e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ||
+                        e.CurrentStatus.StatusCode == (int)StatusType.Locked || IsPastRenewal(e.Agreements)
+                        ? null
+                        : (e.Certifications.Count > 1)
+                            ? e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = true,
+                                    PractRefId = null,
+                                    CollegeLicenceNumber = null,
+                                    PharmaNetId = null
+                                })
+                            : e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = false,
+                                    // TODO: Retrieve from cert.Prefix in future?
+                                    PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                                    CollegeLicenceNumber = cert.LicenseNumber,
+                                    PharmaNetId = cert.PractitionerId
+                                })
+                })
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
         }
 
         public async Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)

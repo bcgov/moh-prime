@@ -60,6 +60,7 @@ namespace Prime.Configuration.Auth
 
         // Service Account Roles
         public const string ExternalHpdidAccess = "external_hpdid_access";
+        public const string ExternalGpidAccess = "external_gpid_access";
         public const string ExternalGpidValidation = "external_gpid_validation";
         public const string PrimeApiServiceAccount = "prime_api_service_account";
 
