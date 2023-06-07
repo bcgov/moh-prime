@@ -174,12 +174,12 @@ namespace Prime.Controllers
         }
 
 
-        // GET: api/provisioner-access/gpid-lookup
+        // POST: api/provisioner-access/gpid-lookup
         /// <summary>
         /// Gets the enrollee licence information by providing GPID, Firstname, Lastname and Care Setting code.
         /// However, the enrollee must have given consent to share the licence information in PRIME.
         /// </summary>
-        [HttpGet("gpid-lookup", Name = nameof(GpidLookup))]
+        [HttpPost("gpid-lookup", Name = nameof(GpidLookup))]
         [Authorize(Roles = Roles.ExternalGpidAccess)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
