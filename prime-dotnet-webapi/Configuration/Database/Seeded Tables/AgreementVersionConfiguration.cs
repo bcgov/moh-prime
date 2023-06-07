@@ -11,6 +11,7 @@ namespace Prime.Configuration.Database
     public class AgreementVersionConfiguration : SeededTable<AgreementVersion>
     {
         public static readonly DateTime Nov17th2022AgreementUpdate = new(2022, 11, 17, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime Sept27th2022AgreementUpdate = new(2022, 9, 27, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<AgreementVersion> SeedData
         {
@@ -45,6 +46,8 @@ namespace Prime.Configuration.Database
                     new AgreementVersion { Id = 25, AgreementType = AgreementType.CommunityPracticeOrgAgreement, Text =  "com-practice-org-v2.html",            EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new AgreementVersion { Id = 26, AgreementType = AgreementType.CommunityPharmacyOrgAgreement, Text =  "com-pharmacy-org-v2.html",            EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new AgreementVersion { Id = 27, AgreementType = AgreementType.DeviceProviderOrgAgreement,    Text =  "device-provider-org-v2.html",         EffectiveDate = Nov17th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    new AgreementVersion { Id = 28, AgreementType = AgreementType.LicencedPracticalNurseTOA,     Text =  "lpn-toa-v1.html",                     EffectiveDate = Sept27th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }
