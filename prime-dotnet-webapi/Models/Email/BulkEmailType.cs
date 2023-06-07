@@ -9,6 +9,7 @@ namespace Prime.Models
         RuTOA = 5,
         OboTOA = 6,
         PharmRuTOA = 7,
-        PharmOboTOA = 8
+        PharmOboTOA = 8,
+        LPNTOA = 9
     }
 }
