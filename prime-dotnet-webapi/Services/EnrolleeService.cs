@@ -1297,6 +1297,7 @@ namespace Prime.Services
                 BulkEmailType.OboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.OboTOA,
                 BulkEmailType.PharmRuTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.CommunityPharmacistTOA,
                 BulkEmailType.PharmOboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.PharmacyOboTOA,
+                BulkEmailType.LPNTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.LicencedPracticalNurseTOA,
                 _ => null,
             };
 
