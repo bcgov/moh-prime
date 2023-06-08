@@ -176,7 +176,8 @@ namespace Prime.Services.Rules
                 {
                     //save the prefix
                     await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "College record stored in PRIME.");
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber,
+                    $"A record with effective date {record.EffectiveDate:d MMM yyyy} and status {record.Status} is stored in PRIME.");
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))
