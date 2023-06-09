@@ -80,7 +80,7 @@ objects:
 parameters:
   - description: 'Cron-like schedule expression. Default: Once a day at 6 AM'
     name: CRON_SCHEDULE
-    value: '0 6 * * *'
+    value: '0 13 * * *'
   - name: CRON_NAME
     value: populate-practitioner-table-cronjob
   - description: 'Environment name'
