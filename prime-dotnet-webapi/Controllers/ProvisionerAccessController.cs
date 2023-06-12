@@ -6,12 +6,14 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.HttpClients.Mail;
+using Newtonsoft.Json.Serialization;
 
 namespace Prime.Controllers
 {
@@ -25,6 +27,7 @@ namespace Prime.Controllers
         private readonly IEnrolmentCertificateService _certificateService;
         private readonly IEmailService _emailService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IVendorAPILogService _vendorAPILogService;
 
         private const int _hpdidLimit_GetUpdatedGpids = 1000;
         private const int _hpdidLimit_HpdidLookup = 10;
@@ -34,12 +37,14 @@ namespace Prime.Controllers
             IEnrolmentCertificateService enrolmentCertificateService,
             IEmailService emailService,
             IBusinessEventService businessEventService,
+            IVendorAPILogService vendorAPILogService,
             IMapper mapper)
         {
             _enrolleeService = enrolleeService;
             _certificateService = enrolmentCertificateService;
             _emailService = emailService;
             _businessEventService = businessEventService;
+            _vendorAPILogService = vendorAPILogService;
             _mapper = mapper;
         }
 
@@ -156,16 +161,44 @@ namespace Prime.Controllers
         [HttpGet("gpid-detail", Name = nameof(GetGpidDetail))]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeLookup>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<GpidDetailLookup>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetGpidDetail()
         {
-            var result = new EnrolleeLookup();
+            var result = new GpidDetailLookup();
             var enrollee = await _enrolleeService.GetActiveGpidDetailAsync(User.GetPrimeUsername());
             if (enrollee != null)
             {
                 return Ok(_mapper.Map(enrollee, result));
             }
             return Ok(enrollee);
+        }
+
+
+        // POST: api/provisioner-access/gpid-lookup
+        /// <summary>
+        /// Gets the enrollee licence information by providing GPID, Firstname, Lastname and Care Setting code.
+        /// However, the enrollee must have given consent to share the licence information in PRIME.
+        /// </summary>
+        [HttpPost("gpid-lookup", Name = nameof(GpidLookup))]
+        [Authorize(Roles = Roles.ExternalGpidAccess)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeLookup>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GpidLookup(GpidLookupOptions option)
+        {
+            var logId = await _vendorAPILogService.CreateLogAsync(User.GetPrimeUsername(), Request.Path.Value, SerializeObjectForLog(option));
+            if (option.Gpid == null || option.FirstName == null || option.LastName == null || option.CareSetting == null)
+            {
+                var errorMessage = $"Missing input information: Gpid={option.Gpid}, firstname={option.FirstName}, lastName={option.LastName}, careSettingCode={option.CareSetting}.";
+                await _vendorAPILogService.UpdateLogAsync(logId, null, errorMessage);
+                return BadRequest(errorMessage);
+            }
+            else
+            {
+                var result = await _enrolleeService.GpidLookupAsync(option);
+                await _vendorAPILogService.UpdateLogAsync(logId, SerializeObjectForLog(result));
+                return Ok(result);
+            }
         }
 
         // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222
@@ -179,14 +212,17 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HpdidLookup>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> HpdidLookup([FromQuery] string[] hpdids)
         {
+            var logId = await _vendorAPILogService.CreateLogAsync(User.GetPrimeUsername(), Request.Path.Value, SerializeObjectForLog(hpdids));
             if (hpdids != null && hpdids.Length > _hpdidLimit_HpdidLookup)
             {
-                return BadRequest($"number of {nameof(hpdids)} should not exceed {_hpdidLimit_HpdidLookup}");
+                var errorMessage = $"number of {nameof(hpdids)} should not exceed {_hpdidLimit_HpdidLookup}";
+                await _vendorAPILogService.UpdateLogAsync(logId, null, errorMessage);
+                return BadRequest(errorMessage);
             }
             else
             {
                 var result = await _enrolleeService.HpdidLookupAsync(hpdids);
-
+                await _vendorAPILogService.UpdateLogAsync(logId, SerializeObjectForLog(result));
                 return Ok(result);
             }
         }
@@ -246,6 +282,15 @@ namespace Prime.Controllers
             }
 
             return Ok(response);
+        }
+
+        private static string SerializeObjectForLog(object obj)
+        {
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            return JsonConvert.SerializeObject(obj, serializerSettings);
         }
     }
 }

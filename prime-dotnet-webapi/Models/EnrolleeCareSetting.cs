@@ -17,6 +17,7 @@ namespace Prime.Models
         public Enrollee Enrollee { get; set; }
 
         public int CareSettingCode { get; set; }
+        public bool ConsentForAutoPull { get; set; }
 
         [JsonIgnore]
         public CareSetting CareSetting { get; set; }
