@@ -51,6 +51,7 @@ namespace Prime
         }
 
         public DbSet<ClientLog> ClientLogs { get; set; }
+        public DbSet<VendorApiLog> VendorApiLogs { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Address> Addresses { get; set; }
@@ -111,7 +112,7 @@ namespace Prime
         public DbSet<SiteNotification> SiteNotifications { get; set; }
         public DbSet<AuthorizedUser> AuthorizedUsers { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
-        public DbSet<DoNotEmail> DoNotEmail { get; set;}
+        public DbSet<DoNotEmail> DoNotEmail { get; set; }
         public DbSet<Banner> Banners { get; set; }
 
         // Parties
