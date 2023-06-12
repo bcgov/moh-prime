@@ -31,7 +31,7 @@ parameters:
   value: dev
 - name: POSTGRESQL_HOST
   required: true
-  value: postgresql
+  value: ${OC_APP}-patroni
 - name: METABASE_HOST
   required: true
   value: metabase-database
@@ -90,18 +90,18 @@ objects:
           - name: PGUSERNAME
             valueFrom:
               secretKeyRef:
-                name: "postgresql-secrets"
-                key: postgresql_database_username
+                name: "${OC_APP}-patroni-secret"
+                key: app-db-username
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: "postgresql-secrets"
-                key: postgresql_database_admin_password
+                name: "${OC_APP}-patroni-secret"
+                key: app-db-password
           - name: PGDATABASE
             valueFrom:
-              configMapKeyRef:
-                name: "postgresql"
-                key: postgresql_database_name
+              secretKeyRef:
+                name: "${OC_APP}-patroni-secret"
+                key: app-db-name
 
           image: ' '
           name: backup
