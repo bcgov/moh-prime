@@ -5,7 +5,7 @@ namespace Prime.Services
 {
     public interface IReportingService
     {
-        Task PopulatePractitionerTableAsync(DateTime? startDate = null, DateTime? endDate = null);
-        Task UpdatePractitionerTableAsync();
+        Task<string> PopulatePractitionerTableAsync(DateTime? startDate = null, DateTime? endDate = null);
+        Task<string> UpdatePractitionerTableAsync();
     }
 }

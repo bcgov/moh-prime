@@ -35,8 +35,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> PopulatePractitionerTable()
         {
-            await _reportingService.PopulatePractitionerTableAsync();
-            return NoContent();
+            var result = await _reportingService.PopulatePractitionerTableAsync();
+            return Ok(result);
         }
 
         // POST: api/jobs/update/practitioner
@@ -50,8 +50,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdatePractitionerTable()
         {
-            await _reportingService.UpdatePractitionerTableAsync();
-            return NoContent();
+            var result = await _reportingService.UpdatePractitionerTableAsync();
+            return Ok(result);
         }
     }
 }

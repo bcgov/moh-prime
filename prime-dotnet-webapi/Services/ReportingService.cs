@@ -30,8 +30,9 @@ namespace Prime.Services
             _collegeLicenceClient = collegeLicenceClient;
         }
 
-        public async Task PopulatePractitionerTableAsync(DateTime? startDate = null, DateTime? endDate = null)
+        public async Task<string> PopulatePractitionerTableAsync(DateTime? startDate = null, DateTime? endDate = null)
         {
+            var result = "";
             try
             {
                 if (startDate == null)
@@ -71,23 +72,29 @@ namespace Prime.Services
                     });
                 }
 
+                result = $"Start date = {startDate:dd MMM yyyy}, End Date = {endDate:dd MMM yyyy}, questionablePractitionerIds count = {questionablePractitionerIds.Count} ";
+
                 await _context.SaveChangesAsync();
 
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error: PopulatePractitionerTableAsync - Message: {ex.Message}");
+                result = $"Error: PopulatePractitionerTableAsync - Message: {ex.Message}";
             }
+
+            return result;
         }
 
-        public async Task UpdatePractitionerTableAsync()
+        public async Task<string> UpdatePractitionerTableAsync()
         {
+            var result = "";
             try
             {
-                var practitonerRecords = await _context.Practitioner.Where(p => p.ProcessedDate == null && p.FirstName == null)
+                var practitionerRecords = await _context.Practitioner.Where(p => p.ProcessedDate == null && p.FirstName == null)
                 .Select(p => p).ToListAsync();
 
-                foreach (var p in practitonerRecords)
+                foreach (var p in practitionerRecords)
                 {
                     var collegeRecord = await _collegeLicenceClient.GetCollegeRecordAsync(p.PracRefId, p.CollegeId);
                     if (collegeRecord != null)
@@ -99,13 +106,17 @@ namespace Prime.Services
 
                     _context.Update(p);
                 }
+                result = $"practitionerRecords count = {practitionerRecords.Count}";
 
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error: PopulatePractitionerTableAsync - Message: {ex.Message}");
+                result = $"Error: PopulatePractitionerTableAsync - Message: {ex.Message}";
             }
+
+            return result;
         }
     }
 }
