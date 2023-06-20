@@ -11,15 +11,22 @@
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Municipal Site Business Licence and Other Document</ng-container>
         <ng-container appPageSubheader2Summary>
-          Scan and upload a single file of the business licence.
-          If you don't have your business licence, provide other documentation as proof of business address, e.g.
-          <ul>
-            <li>
-              Facilities accredited under the CPSBC Diagnostic Accreditation Program or Non-Hospital Medical and
-              Surgical Facilities Accreditation Program may provide the certificate from CPSBC in lieu of a municipal
-              business license
-            </li>
-          </ul>
+
+          <div *ngIf="isCommunityPharmacy()">
+            Scan and upload a single file of the business licence. If you don't have your business licence, provide
+            other documentation as proof of business address, e.g. CPBC pharmacy license.
+          </div>
+          <div *ngIf="!isCommunityPharmacy()">
+            Scan and upload a single file of the business licence.
+            If you don't have your business licence, provide other documentation as proof of business address, e.g.
+            <ul>
+              <li>
+                Facilities accredited under the CPSBC Diagnostic Accreditation Program or Non-Hospital Medical and
+                Surgical Facilities Accreditation Program may provide the certificate from CPSBC in lieu of a municipal
+                business license
+              </li>
+            </ul>
+          </div>
         </ng-container>
       </app-page-subheader2>
 

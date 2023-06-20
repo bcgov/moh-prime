@@ -42,15 +42,28 @@
       }
     }
 
-    & > li,
-    ol[type="1"] > li {
+    &>li,
+    ol[type="1"]>li {
       // Increment for each in parent and children
       counter-increment: section;
 
       // Allow the first element to be a paragraph without line wrapping the
       // content, and avoid display: inline issues with spacing
-      & > p:first-child {
+      &>p:first-child {
         margin-top: -1.5rem;
+      }
+
+      &>div:first-child {
+        margin-top: -1.5rem;
+      }
+
+      &>div {
+        margin-left: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      &>address.address {
+        margin-left: 1rem;
       }
     }
 
@@ -60,9 +73,9 @@
       // Remove list defaults
       list-style-type: none;
 
-      & > li::before {
+      &>li::before {
         // Only display list counts in children
-        content: counters(section,".") " ";
+        content: counters(section, ".") " ";
         // Re-align with default list counters
         // TODO make this -50px and wrap text in <p> if just in an <li> only
         margin-left: -26px;

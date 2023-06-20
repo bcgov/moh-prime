@@ -1,1 +1,8 @@
+@import 'palette';
 @import 'mixins/agreements';
+@import 'mixins/lists';
+
+.organization-agreement ::ng-deep {
+  @include agreement;
+  @include list-decimal;
+}

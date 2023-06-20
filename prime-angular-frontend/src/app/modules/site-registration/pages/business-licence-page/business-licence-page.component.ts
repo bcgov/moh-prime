@@ -86,6 +86,10 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     ].includes(this.siteService.site.careSettingCode);
   }
 
+  public isCommunityPharmacy(): boolean {
+    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+  }
+
   public onUpload(document: BaseDocument): void {
     this.formState.businessLicenceGuid.patchValue(document.documentGuid);
     this.uploadedFile = true;

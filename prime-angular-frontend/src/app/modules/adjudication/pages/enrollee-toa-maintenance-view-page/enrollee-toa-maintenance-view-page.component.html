@@ -17,5 +17,6 @@
     </ng-container>
   </app-page-subheader>
 
-  <div [innerHtml]="enrolleeAgreementVersion?.text"></div>
+  <div class="organization-agreement"
+       [innerHtml]="enrolleeAgreementVersion?.text | safe: 'html'"></div>
 </app-page>
