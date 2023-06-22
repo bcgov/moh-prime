@@ -26,7 +26,9 @@ namespace Prime.Controllers
 
         // POST: api/jobs/populate/practitioner
         /// <summary>
-        /// execute job to update practitioner table
+        /// execute job to populate practitioner table
+        /// - to query practitioner IDs for the unauthorized access from PharmaNet transaction log
+        /// and store them in practitioner table.
         /// </summary>
         [HttpPost("populate/practitioner", Name = nameof(PopulatePractitionerTable))]
         [Authorize(Roles = Roles.PrimeApiServiceAccount)]
@@ -41,7 +43,7 @@ namespace Prime.Controllers
 
         // POST: api/jobs/update/practitioner
         /// <summary>
-        /// execute job to update practitioner table
+        /// execute job to update the contact information in practitioner table by calling PharmaNet API
         /// </summary>
         [HttpPost("update/practitioner", Name = nameof(UpdatePractitionerTable))]
         [Authorize(Roles = Roles.PrimeApiServiceAccount)]
