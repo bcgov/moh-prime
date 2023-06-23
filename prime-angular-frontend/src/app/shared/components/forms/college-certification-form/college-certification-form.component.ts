@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
@@ -63,8 +63,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     private configService: ConfigService,
     private viewportService: ViewportService,
     private formUtilsService: FormUtilsService,
-    private enrolmentService: EnrolmentService,
-    private cd: ChangeDetectorRef
+    private enrolmentService: EnrolmentService
   ) {
     this.remove = new EventEmitter<number>();
     this.licenses = this.configService.licenses.filter(l => l.collegeLicenses.filter(cl => cl.discontinued).length === 0);
