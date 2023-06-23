@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
@@ -44,6 +44,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   public filteredPractices: Config<number>[];
   public nurseGroups: CollegeLicenseGroupingConfig[];
   public hasPractices: boolean;
+  public licenseClassDiscontinued: boolean;
+  public collegeLicenseName: string;
   /**
    * @description
    * Indicates the prescriber ID (PharmaNet) type associated with a
@@ -61,11 +63,20 @@ export class CollegeCertificationFormComponent implements OnInit {
     private configService: ConfigService,
     private viewportService: ViewportService,
     private formUtilsService: FormUtilsService,
-    private enrolmentService: EnrolmentService
+    private enrolmentService: EnrolmentService,
+    private cd: ChangeDetectorRef
   ) {
     this.remove = new EventEmitter<number>();
-    this.colleges = this.configService.colleges;
-    this.licenses = this.configService.licenses;
+    this.licenses = this.configService.licenses.filter(l => l.collegeLicenses.filter(cl => cl.discontinued).length === 0);
+    var collegeCodes: Array<number> = [];
+    this.configService.licenses.forEach(l => {
+      l.collegeLicenses.forEach(cl => {
+        if (!cl.discontinued && !collegeCodes.some(cc => cc === cl.collegeCode)) {
+          collegeCodes.push(cl.collegeCode);
+        }
+      });
+    });
+    this.colleges = this.configService.colleges.filter(c => collegeCodes.some(cc => cc === c.code));
     this.practices = this.configService.practices;
     this.nurseGroups = this.configService.collegeLicenseGroupings;
     this.minRenewalDate = (this.enrolmentService.isProfileComplete) ? null : moment();
@@ -159,6 +170,8 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   // TODO decouple default and condensed modes in controller and template
   public ngOnInit() {
+    this.checkLicenseIfDiscontinued();
+
     if (this.condensed) {
       this.formUtilsService.setValidators(this.collegeCode, [Validators.required]);
     }
@@ -261,11 +274,15 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private resetCollegeCertification() {
     this.licenseCode.reset(null);
-    this.licenseNumber.reset(null);
+    if (!this.licenseClassDiscontinued) {
+      this.licenseNumber.reset(null);
+    }
 
     if (!this.condensed) {
       this.nurseCategory.reset(null);
-      this.renewalDate.reset(null);
+      if (!this.licenseClassDiscontinued) {
+        this.renewalDate.reset(null);
+      }
       this.practiceCode.reset(null);
       this.resetPractitionerIdStateAndValidators();
     }
@@ -381,5 +398,26 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private filterPractices(collegeCode: number): PracticeConfig[] {
     return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
+  }
+
+  private checkLicenseIfDiscontinued() {
+    if (this.collegeCode.value && this.licenseCode.value) {
+      this.licenseClassDiscontinued = this.isCertificationDiscontinued(this.collegeCode.value, this.licenseCode.value);
+      this.collegeLicenseName = `${this.configService.colleges.find(c => c.code === this.collegeCode.value).name} -` +
+        ` ${this.configService.licenses.find(l => l.code === this.licenseCode.value).name}`;
+    }
+    /*
+    if (this.licenseClassDiscontinued) {
+      this.collegeCode.setValue(CollegeLicenceClassEnum.OralHealth);
+      this.cd.detectChanges();
+      this.setCollegeCertification(CollegeLicenceClassEnum.OralHealth);
+    }
+    */
+  }
+
+  private isCertificationDiscontinued(collegeCode: number, licenseCode: number): boolean {
+    return this.configService.licenses.filter(l => {
+      return l.collegeLicenses.filter(cl => cl.collegeCode == collegeCode && cl.licenseCode == licenseCode && cl.discontinued);
+    }).length > 0;
   }
 }

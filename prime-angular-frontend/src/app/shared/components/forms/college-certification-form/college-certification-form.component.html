@@ -1,3 +1,13 @@
+<app-alert *ngIf="licenseClassDiscontinued"
+           type="danger"
+           icon="warning"
+           class="mb-4">
+  <ng-container #alertContent
+                class="alert-content">
+    Previous College License "{{this.collegeLicenseName}}" is no longer available. Please update your college license.
+  </ng-container>
+</app-alert>
+
 <ng-container [formGroup]="form">
 
   <app-form-icon-group [show]="total > 1"

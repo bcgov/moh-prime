@@ -52,6 +52,7 @@ export interface CollegeLicenseConfig {
   collegeCode: number;
   licenseCode: number;
   collegeLicenseGroupingCode: number;
+  discontinued: boolean;
 }
 
 export class CollegeLicenseGroupingConfig extends Config<number> implements IWeightedConfig {

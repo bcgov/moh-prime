@@ -117,6 +117,23 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 19, LicenseCode = 84 },
                     new CollegeLicense { CollegeCode = 19, LicenseCode = 85 },
                     new CollegeLicense { CollegeCode = 19, LicenseCode = 86 },
+
+                    //College of Oral Health Professionals
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 87 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 88 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 89 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 90 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 91 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 92 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 93 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 94 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 95 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 96 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 97 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 98 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 99 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 100 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 101 },
                 };
             }
         }
