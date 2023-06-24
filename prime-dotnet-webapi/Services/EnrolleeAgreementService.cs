@@ -192,6 +192,13 @@ namespace Prime.Services
                         .ThenInclude(l => l.LicenseDetails)
                 .Include(e => e.EnrolleeCareSettings)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (!enrollee.ProfileCompleted)
+            {
+                //return false if the profile is not even completed yet.
+                return false;
+            }
+
             var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
 
             var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);

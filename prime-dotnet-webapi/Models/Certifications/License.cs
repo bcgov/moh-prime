@@ -50,5 +50,10 @@ namespace Prime.Models
         {
             return licenseDetail.Prefix == "T9";
         }
+
+        public static bool isLicensedPracticalNurse(LicenseDetail licenseDetail)
+        {
+            return licenseDetail.Prefix == "L9";
+        }
     }
 }

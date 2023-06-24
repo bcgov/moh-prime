@@ -36,7 +36,7 @@ export class ExpiryAlertComponent implements OnInit, OnChanges {
   public withinDaysOfRenewal: boolean;
 
   constructor() {
-    this.type = 'info';
+    this.type = 'danger';
     this.icon = 'error_outline';
   }
 
