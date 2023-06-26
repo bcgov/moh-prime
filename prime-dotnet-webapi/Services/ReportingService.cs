@@ -40,7 +40,7 @@ namespace Prime.Services
                 }
 
                 // get all approved enrollee
-                var enrolleeCerts = _context.Enrollees
+                var enrolleeLicences = _context.Enrollees
                     .Where(e => e.GPID != null && e.Certifications.Any())
                     .Select(e => new
                     {
@@ -50,7 +50,7 @@ namespace Prime.Services
                 // query the unauthorized access practitioner ID from pharmanet transaction log table
                 var questionablePractitionerIds = await _context.PharmanetTransactionLogs
                     .Where(l => l.TxDateTime >= startDate && l.TxDateTime <= endDate)
-                    .Where(l => !enrolleeCerts.Where(e => e.LicenseNumber == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
+                    .Where(l => !enrolleeLicences.Where(e => e.LicenseNumber == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
                     .Where(l => !_context.Practitioner.Where(p => p.PracRefId == l.CollegePrefix && p.CollegeId == l.PractitionerId).Any())
                     .Select(l => new
                     {
