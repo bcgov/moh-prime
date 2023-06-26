@@ -80,10 +80,10 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 69, CollegeLicenseGroupingCode = 5 },
 
                     // College of Dental Surgeons of BC
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 70 },
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 75 },
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 76 },
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 77 },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 70, Discontinued = true},
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 75, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 76, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 77, Discontinued = true },
 
                     // College of Naturopathic Physicians of BC
                     new CollegeLicense { CollegeCode = 11,  LicenseCode = 78 },
@@ -99,9 +99,9 @@ namespace Prime.Configuration.Database
 
                     // All other colleges are assigned the "Not Displayed" Licence
                     new CollegeLicense { CollegeCode = 4,  LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 5,  LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 6,  LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 8,  LicenseCode = 64 },
+                    new CollegeLicense { CollegeCode = 5,  LicenseCode = 64, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 6,  LicenseCode = 64, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 8,  LicenseCode = 64, Discontinued = true },
                     new CollegeLicense { CollegeCode = 9,  LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 10, LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 12, LicenseCode = 64 },
