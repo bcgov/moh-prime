@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prime.Models
 {
-    /// <summary>store unautorized access college id and pracRefId from transaction log then fill the first name and last name from PharmaNetAPI.</summary>
+    /// <summary>store college id, pracRefId and the contact information.
+    /// mainly used by unauthorized reporting from transaction log.</summary>
     [Table("Practitioner")]
     public class Practitioner : BaseAuditable
     {

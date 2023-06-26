@@ -1,16 +1,10 @@
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Prime.Models;
-using Prime.Models.Plr;
-using Prime.ViewModels.Plr;
-using Prime.ViewModels;
 using Prime.HttpClients;
 
 namespace Prime.Services
