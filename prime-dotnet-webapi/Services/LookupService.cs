@@ -26,7 +26,7 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
-        public async Task<List<SelfDeclarationVersion>> GetSelfDeclarationVersion(DateTimeOffset targetDate)
+        public async Task<List<SelfDeclarationVersion>> GetSelfDeclarationVersion(DateTimeOffset? targetDate)
         {
             return await _context.Set<SelfDeclarationType>()
                 .AsNoTracking()

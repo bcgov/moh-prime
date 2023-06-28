@@ -25,6 +25,7 @@ namespace Prime.Services
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly ILookupService _lookupService;
         private readonly IMapper _mapper;
 
         public EnrolleeService(
@@ -32,11 +33,13 @@ namespace Prime.Services
             ILogger<EnrolleeService> logger,
             IBusinessEventService businessEventService,
             IDocumentManagerClient documentClient,
+            ILookupService lookupService,
             IMapper mapper)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
             _documentClient = documentClient;
+            _lookupService = lookupService;
             _mapper = mapper;
         }
 
@@ -402,15 +405,7 @@ namespace Prime.Services
 
         private async Task PopulateSelfDeclarationVersion(EnrolleeUpdateModel model, DateTimeOffset selfDeclarationCompleteDate)
         {
-            var versions = await _context.Set<SelfDeclarationType>()
-                .AsNoTracking()
-                .Select(t => _context.Set<SelfDeclarationVersion>()
-                    .Where(av => av.EffectiveDate <= selfDeclarationCompleteDate)
-                    .Where(av => av.SelfDeclarationTypeCode == t.Code)
-                    .OrderByDescending(av => av.EffectiveDate)
-                    .First())
-                .OrderBy(av => av.SelfDeclarationType.SortingNumber)
-                .ToListAsync();
+            var versions = await _lookupService.GetSelfDeclarationVersion(selfDeclarationCompleteDate);
 
             foreach (var sd in model.SelfDeclarations)
             {

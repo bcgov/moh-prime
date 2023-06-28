@@ -10,6 +10,6 @@ namespace Prime.Services
     {
         Task<LookupEntity> GetLookupsAsync();
         Task<int> GetCareSettingCountAsync();
-        Task<List<SelfDeclarationVersion>> GetSelfDeclarationVersion(DateTimeOffset targetDate);
+        Task<List<SelfDeclarationVersion>> GetSelfDeclarationVersion(DateTimeOffset? targetDate);
     }
 }
