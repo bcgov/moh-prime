@@ -41,7 +41,7 @@ namespace Prime.Services
 
                 // get all approved enrollee
                 var enrolleeLicences = _context.Enrollees
-                    .Where(e => e.GPID != null && e.Certifications.Any())
+                    .Where(e => e.GPID != null && e.Certifications.Any(c => c.Prefix != null))
                     .Select(e => new
                     {
                         e.Certifications.FirstOrDefault().LicenseNumber,
