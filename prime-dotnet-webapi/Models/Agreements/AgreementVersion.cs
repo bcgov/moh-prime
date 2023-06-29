@@ -27,9 +27,11 @@ namespace Prime.Models
                 switch (AgreementType)
                 {
                     case AgreementType.CommunityPharmacistTOA:
-                        return "Independent User – Pharmacy";
+                        return "Independent User – with OBOs, Pharmacy";
                     case AgreementType.RegulatedUserTOA:
                         return "Independent User - with OBOs";
+                    case AgreementType.LicencedPracticalNurseTOA:
+                        return "Independent User - without OBOs";
                     case AgreementType.OboTOA:
                         return "On-behalf-of User";
                     case AgreementType.PharmacyOboTOA:
