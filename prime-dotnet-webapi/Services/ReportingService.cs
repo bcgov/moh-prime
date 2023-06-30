@@ -45,6 +45,8 @@ namespace Prime.Services
                     .Select(e => new
                     {
                         e.Certifications.FirstOrDefault().LicenseNumber,
+                        // do not pull prefix from LicenseDetail since we are not sure if prescruibing or not
+                        // and the Prefix here has been verified from PharmaNet API
                         e.Certifications.FirstOrDefault().Prefix
                     });
                 // query the unauthorized access practitioner ID from pharmanet transaction log table
