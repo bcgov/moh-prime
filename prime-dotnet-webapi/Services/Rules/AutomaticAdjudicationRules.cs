@@ -39,8 +39,8 @@ namespace Prime.Services.Rules
             var addresses = new Address[] { enrollee.PhysicalAddress, enrollee.MailingAddress, enrollee.VerifiedAddress }
                 .Where(a => a != null);
 
-            //if preferred physical address is in BC, skip the check
-            if (!enrollee.PhysicalAddress.IsInBC)
+            //if preferred physical address not null and is in BC, skip the check
+            if (enrollee.PhysicalAddress == null || !enrollee.PhysicalAddress.IsInBC)
             {
                 if (addresses.Any(a => !a.IsInBC))
                 {
