@@ -4,7 +4,7 @@
       <ng-container appPageSubheader2Title>Site Name</ng-container>
       <ng-container appPageSubheader2Summary>
         <ng-container *ngIf="organizationId; else noOrganizationSummary">
-          The site name must match the name on the site's business licence.
+          The site name must match the name on the site's business licence, if you have one.
         </ng-container>
         <ng-template #noOrganizationSummary>Provide this site's name.</ng-template>
       </ng-container>
