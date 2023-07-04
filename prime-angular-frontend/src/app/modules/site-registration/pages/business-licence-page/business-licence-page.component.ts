@@ -236,17 +236,15 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       enableOrDisable = 'disable';
       this.updateBusLicValidations(
         [this.formState.deferredLicenceReason],
-        [this.formState.doingBusinessAs, this.formState.businessLicenceExpiry]
+        [this.formState.businessLicenceExpiry]
       );
     } else {
       enableOrDisable = 'enable';
       this.updateBusLicValidations(
-        [this.formState.doingBusinessAs, this.formState.businessLicenceExpiry],
+        [this.formState.businessLicenceExpiry],
         [this.formState.deferredLicenceReason]
       );
     }
-
-    this.formState.doingBusinessAs[enableOrDisable]();
   }
 
   private updateBusLicValidations(requiredControls: FormControl[], notRequiredControls: FormControl[]): void {
