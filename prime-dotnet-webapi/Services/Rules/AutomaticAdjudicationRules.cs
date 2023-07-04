@@ -39,10 +39,14 @@ namespace Prime.Services.Rules
             var addresses = new Address[] { enrollee.PhysicalAddress, enrollee.MailingAddress, enrollee.VerifiedAddress }
                 .Where(a => a != null);
 
-            if (addresses.Any(a => !a.IsInBC))
+            //if preferred physical address is in BC, skip the check
+            if (!enrollee.PhysicalAddress.IsInBC)
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.Address);
-                return Task.FromResult(false);
+                if (addresses.Any(a => !a.IsInBC))
+                {
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.Address);
+                    return Task.FromResult(false);
+                }
             }
 
             return Task.FromResult(true);
