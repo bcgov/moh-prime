@@ -45,7 +45,7 @@ namespace Prime.Services
                     .Select(e => new
                     {
                         e.Certifications.FirstOrDefault().LicenseNumber,
-                        // do not pull prefix from LicenseDetail since we are not sure if prescruibing or not
+                        // do not pull prefix from LicenseDetail since we are not sure if prescribing or not
                         // and the Prefix here has been verified from PharmaNet API
                         e.Certifications.FirstOrDefault().Prefix
                     });

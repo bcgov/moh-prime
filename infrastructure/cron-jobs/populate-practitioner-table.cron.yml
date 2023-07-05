@@ -4,7 +4,7 @@ metadata:
   annotations:
     description: Template for job that activates api to populate practitioner table for reporting purpose
     tags: cronjob
-  name: populate-table-cronjob-template
+  name: populate-practitioner-table-cronjob-template
 objects:
   - apiVersion: batch/v1
     kind: CronJob
