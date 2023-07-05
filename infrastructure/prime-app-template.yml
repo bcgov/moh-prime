@@ -1055,7 +1055,7 @@ objects:
 ###              Cron Jobs              ###
 ###########################################
 #   Template for job that activates api to update email statuses
-- apiVersion: batch/v1beta1
+- apiVersion: batch/v1
   kind: CronJob
   metadata:
     name: ${SVC_NAME}-update-email-statuses
@@ -1130,7 +1130,7 @@ objects:
     schedule: '${CRON_SCHEDULE_STATUSES}'
 
 #   Template for job that activates api to send renewal emails 
-- apiVersion: batch/v1beta1
+- apiVersion: batch/v1
   kind: CronJob
   metadata:
     name: ${SVC_NAME}-send-renewal-emails

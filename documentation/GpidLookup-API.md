@@ -1,4 +1,11 @@
-# HpdidLookup API
+# GpidLookup API
+
+A GpidLookup API client will obtain their own account from the Ministry of Health, associated with a Keycloak instance.
+Credentials consist of an account ID and secret.
+
+PRIME will log each request to the API, including the API client details and request parameters, in a
+secure database.  The retrieved data will also be logged.  This is meant to prevent misuse of this API.
+
 
 ## Step 1:  Obtain JWT Bearer Token
 
@@ -26,23 +33,31 @@ The response will be something like this, with the token embedded:
 ```
 
 
-## Step 2:  Call HpdidLookup API with one or more HPDID values
+## Step 2:  Call GpidLookup API with details about a PRIME enrollee
 
-An HPDID is associated with an enrollee's BCSC in a 1-to-1 manner.  In the call to this API, pass along the interested HPDIDs (for multiple PRIME enrollees) as well as the token obtained in the previous step, e.g.:
+In the call to this API, pass details about a PRIME enrollee and interested Care Setting, as well as the token obtained in the previous step, e.g.:
 
 ```
-curl --location --request GET 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/provisioner-access/gpids?hpdids=gtcochh2vajdtodkby27kspv554dn4is&hpdids=kax2r4lbr2ejsew4ba5bivvsk5onfqaj' \
---header 'Authorization: Bearer eyTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT'
+curl -v -X GET --location 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/provisioner-access/gpid-lookup' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT' \
+--data-raw '{
+    "Gpid": "H86$J0C3Z$6DYHDFUZ@N",
+    "FirstName": "PRIMET",
+    "LastName": "FIFTEEN",
+    "CareSetting": "PCHP"
+}'
 ```
 
-There is a limit to the number of HPDIDs accepted in a single call:  10 (subject to change depending on performance testing results).  If too many HPDIDs are provided, a HTTP status code of 400 (Bad Request) is returned.
+The name parameters will be compared against BCSC and Preferred names in the PRIME database.
+Information will be returned if and only if all four parameters match data in the PRIME database, and the enrollee
+has indicated consent to share their information for the given `CareSetting` and API `client_id`.
 
-The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement.  E.g.
+The response will contain the following information for an enrollee that has signed a Terms of Access (TOA) agreement.  E.g.
 ```
 {
     "result": [
         {
-            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
             "status": "Complete",
             "accessType": "Independent User - with OBOs",
@@ -59,41 +74,23 @@ The response will contain the GPID associated with each enrollee that has signed
 }
 ```
 
-> **Note:**
-> `renewalDate` will no longer be provided in the response.
-
-Enrollees that are Under Review or that haven't signed a TOA (Requires TOA) have a `status` of `Incomplete`, e.g.
-```
-{
-    "result": [
-        {
-            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
-            "gpid": null,
-            "status": "Incomplete",
-            "accessType": null,
-            "licences": null
-        }
-    ]
-}
-```
-
-If a BCSC user has not submitted the enrollment yet or never enrolled, nothing is returned:
+If a BCSC user has not submitted the enrollment yet or never enrolled, or for enrollees that are Under Review or that haven't signed a TOA (Requires TOA) nothing is returned:
 ```
 {
     "result": []
 }
 ```
 
-In the case of an indefinite absence (absence From date provided, starting today or in the past, but no To date given), the status will be `Indefinite absence` and the vendor should deprovision this user, e.g.
+In the case of an indefinite absence (absence From date provided but no To date given), the status will be `Indefinite absence` and the vendor should deprovision this user, e.g.
 ```
 {
     "result": [
         {
-            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
             "status": "Indefinite absence",
-            "accessType": null,
-            "licences": null
+            "accessType": "",
+            "licences": [
+            ]
         }
     ]
 }
@@ -104,7 +101,6 @@ For enrollees that have their renewal period expired and have not renewed, they 
 {
     "result": [
         {
-            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
             "status": "Past Renewal",
             "accessType": null,
@@ -120,12 +116,10 @@ previously approved), the API response will be:
 {
     "result": [
         {
-            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
-            "gpid": null,
+            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
             "status": null,
-            "accessType": "",
-            "licences": [
-            ]
+            "accessType": null,
+            "licences": null
         }
     ]
 }
@@ -136,7 +130,6 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 {
     "result": [
         {
-            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
             "status": "Complete",
             "accessType": "Independent User - with OBOs",
@@ -162,9 +155,19 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 
 ## Appendix
 
+|Possible value for `CareSetting` input parameter|Human-readable definition|
+|------------------------------------------------|-------------------------|
+|PCHP|Private Community Health Practice|
+|CP|Community Pharmacy|
+|NHA|Northern Health Authority|
+|IHA|Interior Health Authority|
+|VCHA|Vancouver Coastal Health Authority|
+|VIHA|Vancouver Island Health Authority|
+|FHA|Fraser Health Authority|
+|PHSA|Provincial Health Services Authority|
+
 |Possible values for `status`|
 |----------------------------|
-|Incomplete|
 |Complete|
 |Indefinite absence|
 |Past Renewal|

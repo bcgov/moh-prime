@@ -6,5 +6,6 @@ namespace Prime.ViewModels
     {
         public int CollegeCode { get; set; }
         public string LicenceNumber { get; set; }
+        public string PractitionerId { get; set; }
     }
 }

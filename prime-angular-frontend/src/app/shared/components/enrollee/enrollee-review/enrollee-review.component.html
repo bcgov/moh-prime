@@ -6,40 +6,40 @@
        so it is pointless to show the preferred names -->
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
+    <ng-container appPageSubheaderTitle>Alternate Name</ng-container>
 
     <button *ngIf="showEditRedirect"
             mat-icon-button
-            matTooltip="Edit Preferred Name"
+            matTooltip="Edit Alternate Name"
             (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
 
   <ng-container *ngIf="hasPreferredName; else noPreferredName">
-    <app-enrollee-property title="Preferred First Name">
+    <app-enrollee-property title="Alternate First Name">
       {{ enrollee?.preferredFirstName | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Preferred Middle Name">
+    <app-enrollee-property title="Alternate Middle Name">
       {{ enrollee?.preferredMiddleName | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Preferred Last Name">
+    <app-enrollee-property title="Alternate Last Name">
       {{ enrollee?.preferredLastName | default }}
     </app-enrollee-property>
   </ng-container>
 
   <ng-template #noPreferredName>
     <div class="mb-2">
-      No preferred name entered.
+      No alternate name entered.
     </div>
   </ng-template>
 
   <button *ngIf="showEditRedirect"
           mat-flat-button
           color="primary"
-          (click)="onRoute(demographicRoutePath)">Edit Preferred Name
+          (click)="onRoute(demographicRoutePath)">Edit Alternate Name
   </button>
 </app-page-section>
 
