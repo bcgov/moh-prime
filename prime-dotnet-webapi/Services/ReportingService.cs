@@ -64,7 +64,7 @@ namespace Prime.Services
                     {
                         l.PractitionerId,
                         l.CollegePrefix
-                    }).ToListAsync();
+                    }).Distinct().ToListAsync();
 
                 foreach (var p in questionablePractitionerIds)
                 {
