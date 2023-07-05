@@ -44,6 +44,8 @@ namespace Prime.Services
                     .Where(e => e.GPID != null && e.Certifications.Any(c => c.Prefix != null))
                     .Select(e => new
                     {
+                        e.Certifications.FirstOrDefault().CollegeCode,
+                        e.Certifications.FirstOrDefault().PractitionerId,
                         e.Certifications.FirstOrDefault().LicenseNumber,
                         // do not pull prefix from LicenseDetail since we are not sure if prescribing or not
                         // and the Prefix here has been verified from PharmaNet API
@@ -52,7 +54,11 @@ namespace Prime.Services
                 // query the unauthorized access practitioner ID from pharmanet transaction log table
                 var questionablePractitionerIds = await _context.PharmanetTransactionLogs
                     .Where(l => l.TxDateTime >= startDate && l.TxDateTime <= endDate)
-                    .Where(l => !enrolleeLicences.Where(e => e.LicenseNumber == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
+                    .Where(l => !enrolleeLicences.Where(e =>
+                        // for college BCCNM (code 3), compare PharmaNet ID of the college license to Practitioner Id of the log
+                        (e.CollegeCode == 3 && e.PractitionerId == l.PractitionerId && e.Prefix == l.CollegePrefix)
+                        //for other college, use License Number
+                        || (e.CollegeCode != 3 && e.LicenseNumber == l.PractitionerId && e.Prefix == l.CollegePrefix)).Any())
                     .Where(l => !_context.Practitioner.Where(p => p.PracRefId == l.CollegePrefix && p.CollegeId == l.PractitionerId).Any())
                     .Select(l => new
                     {
@@ -76,8 +82,8 @@ namespace Prime.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error: PopulatePractitionerTableAsync - Message: {ex.Message}");
-                result = $"Error: PopulatePractitionerTableAsync - Message: {ex.Message}";
+                _logger.LogError($"Error: {nameof(PopulatePractitionerTableAsync)} - Message: {ex.Message}");
+                result = $"Error: {nameof(PopulatePractitionerTableAsync)} - Message: {ex.Message}";
             }
 
             return result;
@@ -109,8 +115,8 @@ namespace Prime.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error: PopulatePractitionerTableAsync - Message: {ex.Message}");
-                result = $"Error: PopulatePractitionerTableAsync - Message: {ex.Message}";
+                _logger.LogError($"Error: {nameof(UpdatePractitionerTableAsync)} - Message: {ex.Message}");
+                result = $"Error: {nameof(UpdatePractitionerTableAsync)} - Message: {ex.Message}";
             }
 
             return result;
