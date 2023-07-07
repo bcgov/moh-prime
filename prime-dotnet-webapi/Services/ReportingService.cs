@@ -51,6 +51,9 @@ namespace Prime.Services
                         // and the Prefix here has been verified from PharmaNet API
                         e.Certifications.FirstOrDefault().Prefix
                     });
+
+                _logger.LogInformation("Execute query to get questionable practitioner ID");
+
                 // query the unauthorized access practitioner ID from pharmanet transaction log table
                 var questionablePractitionerIds = await _context.PharmanetTransactionLogs
                     .Where(l => l.TxDateTime >= startDate && l.TxDateTime <= endDate)
@@ -65,6 +68,8 @@ namespace Prime.Services
                         l.PractitionerId,
                         l.CollegePrefix
                     }).Distinct().ToListAsync();
+
+                _logger.LogInformation("Save practitioner IDs to database");
 
                 foreach (var p in questionablePractitionerIds)
                 {
