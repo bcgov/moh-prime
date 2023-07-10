@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230525232019_AddPractitionerTable")]
+    partial class AddPractitionerTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -541,7 +543,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 11, 17, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Text = "<h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>\r\n\r\n<p>\r\n  <strong>BETWEEN:</strong>\r\n</p>\r\n\r\n<p>\r\n  HIS MAJESTY THE KING IN RIGHT OF THE PROVINCE OF BRITISH COLUMBIA, as represented by the Minister of Health\r\n  (the &quot;Province&quot;).\r\n</p>\r\n\r\n<p>\r\n  <strong>AND:</strong>\r\n</p>\r\n\r\n<p>\r\n  {{organization_name}} (&quot;Organization&quot;)\r\n</p>\r\n\r\n<p>\r\n  <strong>WHEREAS:</strong>\r\n</p>\r\n\r\n<ol type=\"A\">\r\n  <li>\r\n    The Province owns and is responsible for the operation of PharmaNet, the province-wide network that links\r\n    pharmacies to a central data system. Every prescription dispensed in community pharmacies in British\r\n    Columbia is entered into PharmaNet.\r\n  </li>\r\n  <li>\r\n    PharmaNet contains highly sensitive confidential information, including personal information, and it is\r\n    in the public interest to ensure that appropriate measures are in place to protect the confidentiality\r\n    and integrity of such information. All access to and use of PharmaNet and PharmaNet Data is subject to\r\n    the Act and other applicable law.\r\n  </li>\r\n  <li>\r\n    The Province permits Authorized Users to access PharmaNet to provide health services to, or to facilitate\r\n    the care of, the individual whose personal information is being accessed.\r\n  </li>\r\n  <li>\r\n    Organization is a service provider to HealthLink BC, the Province’s self-care program providing health\r\n    information and advice to British Columbia through integrated print, web, and telephony channels to help\r\n    the public make better decisions about their health, and provides Services to the Province in accordance\r\n    with the Service Contract,\r\n  </li>\r\n  <li>\r\n    Pharmacists at Organization require access to PharmaNet so Organization can provide the Services in\r\n    accordance with the Service Contract.\r\n  </li>\r\n  <li>\r\n    This Agreement sets out the terms by which Organization may permit Authorized Users to access PharmaNet\r\n    at the Site(s) operated by Organization.\r\n  </li>\r\n</ol>\r\n\r\n<p>\r\n  <strong>NOW THEREFORE</strong> in consideration of the promises and the covenants, agreements, representations\r\n  and warranties set out in this Agreement (the receipt and sufficiency of which is hereby acknowledged by each\r\n  party), the parties agree as follows:\r\n</p>\r\n\r\n<p class=\"text-center\">\r\n  <strong>ARTICLE 1 – INTERPRETATION</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"1\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <p>\r\n          In this Agreement, unless the context otherwise requires, the following definitions will apply:\r\n        </p>\r\n\r\n        <ol type=\"a\">\r\n          <li>\r\n            <strong>&quot;Act&quot;</strong> means the <em>Pharmaceutical Services Act</em>;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Approved SSO&quot;</strong> means, in relation to a Site, the software support organization\r\n            identified in section 1 of the Site Request that provides Organization with the SSO-Provided Technology\r\n            used at the Site;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Associated Technology&quot;</strong> means, in relation to a Site, any information technology\r\n            hardware, software or services used at the Site, other than the SSO-Provided Technology, that is in any way\r\n            used in connection with Site Access or any PharmaNet Data;\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;Authorized User&quot;</strong> means an individual who is granted access to PharmaNet by the\r\n              Province and who is:\r\n            </p>\r\n\r\n            <ol type=\"i\">\r\n              <li>\r\n                an employee or independent contractor of Organization, or\r\n              </li>\r\n              <li>\r\n                if Organization is an individual, the Organization;\r\n              </li>\r\n            </ol>\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Information Management Regulation&quot;</strong> means the\r\n            <em>Information Management Regulation</em>, B.C. Reg. 74/2015;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;PharmaNet&quot;</strong> means PharmaNet as continued under section 2 of the\r\n            <em>Information Management Regulation</em>;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;PharmaNet Data&quot;</strong> includes any records or information contained in PharmaNet\r\n            and any records or information in the custody, control or possession of Organization or any Authorized User\r\n            as the result of any Site Access;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Regulated User&quot;</strong> means an Authorized User described in subsections 4 (2) to (4)\r\n            of the <em>Information Management Regulation</em>;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Service Contract&quot;</strong> means the contract for services between the Province and\r\n            Organization, contract file number 2021-075, dated November 1, 2020, as amended from time to time by the\r\n            parties in accordance with its terms;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Signing Authority&quot;</strong> means the individual identified by Organization as the\r\n            &quot;Signing Authority&quot; for a Site, with the associated contact information, as set out in section 2\r\n            of the Site Request;\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;Site&quot;</strong> means a licensed community pharmacy premises operated by Organization\r\n              and located in British Columbia that:\r\n            </p>\r\n\r\n            <ol type=\"i\">\r\n              <li>\r\n                is the subject of a Site Request submitted to the Province, and\r\n              </li>\r\n              <li>\r\n                has been approved for Site Access by the Province in writing\r\n              </li>\r\n            </ol>\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Site Access&quot;</strong> means any access to or use of PharmaNet at a Site as permitted by\r\n            the Province;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Site Request&quot;</strong> means, in relation to a Site, the information contained in the\r\n            PharmaNet access request form submitted to the Province by the Organization, requesting PharmaNet access at\r\n            the Site, as such information is updated by the Organization from time to time in accordance with\r\n            section 2.2;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;SSO-Provided Technology&quot;</strong> means any information technology hardware, software or\r\n            services provided to Organization by an Approved SSO for the purpose of Site Access;\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        Unless otherwise specified, a reference to a statute or regulation by name means a statute or regulation of\r\n        British Columbia of that name, as amended or replaced from time to time, and includes any enactments made\r\n        under the authority of that statute or regulation.\r\n      </li>\r\n      <li>\r\n        <p>\r\n          The following are the Schedules attached to and incorporated into this Agreement:\r\n        </p>\r\n\r\n        <ul>\r\n          <li>\r\n            Schedule A – Specific Privacy and Security Measures\r\n          </li>\r\n        </ul>\r\n      </li>\r\n      <li>\r\n        The main body of this Agreement, the Schedules, and any documents incorporated by reference into this Agreement\r\n        are to be interpreted so that all of the provisions are given as full effect as possible. In the event of a\r\n        conflict, unless expressly stated to the contrary, the main body of the Agreement will prevail over the\r\n        Schedules, which will prevail over any document incorporated by reference.\r\n      </li>\r\n      <li>\r\n        For greater certainty, nothing in this Agreement is intended to modify or otherwise limit the applicability of\r\n        the privacy, security or confidentiality obligations agreed to by the Organization in the Service Contract.\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center\">\r\n  <strong>ARTICLE 2 – REPRESENTATIONS AND WARRANTIES</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"2\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <p>\r\n          Organization represents and warrants to the Province, as of the date of this Agreement and throughout its\r\n          term, that:\r\n        </p>\r\n\r\n        <ol type=\"a\">\r\n          <li>\r\n            the information contained in the Site Request for each Site is true and correct;\r\n          </li>\r\n          <li>\r\n            <p>\r\n              if Organization is not an individual:\r\n            </p>\r\n\r\n            <ol type=\"i\">\r\n              <li>\r\n                Organization has the power and capacity to enter into this Agreement and to comply with its terms;\r\n              </li>\r\n              <li>\r\n                all necessary corporate or other proceedings have been taken to authorize the execution and delivery of\r\n                this Agreement by, or on behalf of, Organization; and\r\n              </li>\r\n              <li>\r\n                this Agreement has been legally and properly executed by, or on behalf of, the Organization and is\r\n                legally binding upon and enforceable against Organization in accordance with its terms.\r\n              </li>\r\n            </ol>\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        Organization must notify the Province at least seven (7) days in advance of any change to the information\r\n        contained in a Site Request, including any change to a Site’s status, location, normal operating hours,\r\n        Approved SSO, or the name and contact information of the Signing Authority or any of the other specific\r\n        roles set out in the Site Request. Such notices must be submitted to the Province in the form and manner\r\n        directed by the Province in its published instructions regarding the submission of updated Site Request\r\n        information, as such instructions may be updated from time to time by the Province.\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center\">\r\n  <strong>ARTICLE 3 – SITE ACCESS REQUIREMENTS</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"3\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        Organization must comply with the Act and all applicable law.\r\n      </li>\r\n      <li>\r\n        Organization must submit a Site Request to the Province for each physical location where it intends to provide\r\n        Site Access, and must only provide Site Access from Sites approved in writing by the Province and only as\r\n        authorized by the Province.\r\n      </li>\r\n      <li>\r\n        Organization must only provide Site Access using SSO-Provided Technology.\r\n      </li>\r\n      <li>\r\n        Unless otherwise authorized by the Province in writing, Organization must at all times use the secure network\r\n        or security technology that the Province certifies or makes available to Organization for the purpose of Site\r\n        Access. The use of any such network or technology by Organization may be subject to terms and conditions of\r\n        use, including acceptable use policies, established by the Province and communicated to Organization from time\r\n        to time in writing (including through this Agreement), and Organization must comply with all such terms and\r\n        conditions of use.\r\n      </li>\r\n      <li>\r\n        <p>\r\n          Organization must only make Site Access available to the following individuals:\r\n        </p>\r\n\r\n        <ol type=\"a\">\r\n          <li>\r\n            Authorized Users when they are physically located at a Site;\r\n          </li>\r\n          <li>\r\n            Representatives of an Approved SSO for technical support purposes, in accordance with section 6 of the\r\n            <em>Information Management Regulation</em>.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          Organization must ensure that Authorized Users with Site Access:\r\n        </p>\r\n        <ol type=\"a\">\r\n          <li>\r\n            only access PharmaNet to the extent necessary to provide Services in accordance with the Service Contract;\r\n          </li>\r\n          <li>\r\n            first complete any mandatory training program(s) that the Site’s Approved SSO or the Province makes\r\n            available in relation to PharmaNet;\r\n          </li>\r\n          <li>\r\n            access PharmaNet using their own separate login identifications and credentials, and do not share or have\r\n            multiple use of any such login identifications and credentials;\r\n          </li>\r\n          <li>\r\n            secure all devices, codes and credentials that enable access to PharmaNet against unauthorized use;\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        If notified by the Province that an Authorized User’s access to PharmaNet has been suspended or revoked,\r\n        Organization will immediately take any local measures necessary to remove the Authorized User’s Site Access.\r\n        Organization will only restore Site Access to a previously suspended or revoked Authorized User upon the\r\n        Province’s specific written direction.\r\n      </li>\r\n      <li>\r\n        <p>\r\n          For the purposes of this section:\r\n        </p>\r\n\r\n        <ol type=\"a\">\r\n          <li>\r\n            <strong>&quot;Responsible Authorized User&quot;</strong> means, in relation to any PharmaNet Data, the\r\n            Regulated User by whom that data was obtained from PharmaNet; and\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Use&quot;</strong> includes to collect, access, retain, use, de-identify, and disclose.\r\n          </li>\r\n        </ol>\r\n\r\n        <p>\r\n          The PharmaNet Data disclosed under this Agreement is disclosed by the Province solely for the Use of the\r\n          Responsible Authorized User to whom it is disclosed.\r\n        </p>\r\n\r\n        <p>\r\n          Organization must not Use any PharmaNet Data, or permit any third party to Use PharmaNet Data, unless the\r\n          Responsible Authorized User has authorized such Use and it is otherwise permitted under the Act, applicable\r\n          law, and the limits and conditions imposed by the Province on the Responsible Authorized User.\r\n        </p>\r\n\r\n        <p>\r\n          Organization explicitly acknowledges that sections 24 and 25 of the Act apply to all PharmaNet Data.\r\n        </p>\r\n\r\n        <p>\r\n          This Agreement documents limits and conditions, set by the Minister in writing, that the Act requires\r\n          Organization and Authorized Users to comply with.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          Organization must make all reasonable arrangements to protect PharmaNet Data against such risks as\r\n          unauthorized access, collection, use, modification, retention, disclosure or disposal, including by:\r\n        </p>\r\n\r\n        <ol type=\"a\">\r\n          <li>\r\n            taking all reasonable physical, technical and operational measures necessary to ensure Site Access operates\r\n            in accordance with sections 3.1 to 3.9 above, and\r\n          </li>\r\n          <li>\r\n            complying with the requirements of Schedule A.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        Organization must ensure that no Authorized User submits Claims on PharmaNet other than from a Site in respect\r\n        of which\r\n        a person is enrolled as a Provider.\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center\">\r\n  <strong>ARTICLE 4 – NON-COMPLIANCE AND INVESTIGATIONS</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"4\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        Organization must promptly notify the Province, and provide particulars, if Organization does not comply, or\r\n        anticipates that it will be unable to comply, with the terms of this Agreement, or if Organization has knowledge\r\n        of any circumstances, incidents or events which have or may jeopardize the security, confidentiality or\r\n        integrity of PharmaNet, including any attempt by any person to gain unauthorized access to PharmaNet or the\r\n        networks or equipment used to connect to PharmaNet or convey PharmaNet Data.\r\n      </li>\r\n      <li>\r\n        Organization must immediately investigate any suspected breaches of this Agreement and take all reasonable steps\r\n        to prevent recurrences of any such breaches.\r\n      </li>\r\n      <li>\r\n        Organization must cooperate with any audits or investigations conducted by the Province (including any\r\n        independent auditor appointed by the Province) regarding compliance with this Agreement, including by providing\r\n        access upon request to a Site and any associated facilities, networks, equipment, systems, books, records and\r\n        personnel for the purposes of such audit or investigation.\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center\">\r\n  <strong>ARTICLE 5 – SITE TERMINATION</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"5\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <p>\r\n          The Province may terminate all Site Access at a Site immediately, upon notice to the Signing Authority for\r\n          the Site, if:\r\n        </p>\r\n\r\n        <ol type=\"a\">\r\n          <li>\r\n            the Approved SSO for the Site is no longer approved by the Province to provide information technology\r\n            hardware, software, or service in connection with PharmaNet, or\r\n          </li>\r\n          <li>\r\n            the Province determines that the SSO-Provided Technology or Associated Technology in use at the Site, or\r\n            any component thereof, is obsolete, unsupported, or otherwise poses an unacceptable security risk to\r\n            PharmaNet and Organization is unable or unwilling to remedy the problem within a time frame acceptable to\r\n            the Province.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        As a security precaution, the Province may suspend Site Access at a Site after a period of inactivity. If Site\r\n        Access at a Site remains inactive for a period of 90 days or more, the Province may, immediately upon notice to\r\n        the Signing Authority for the Site, terminate all further Site Access at the Site.\r\n      </li>\r\n      <li>\r\n        Organization must prevent all further Site Access at a Site immediately upon the Province’s termination, in\r\n        accordance with this Article 5 of Site Access at the Site.\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center\">\r\n  <strong>ARTICLE 6 – TERM AND TERMINATION</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"6\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <p>\r\n          The term of this Agreement begins on the date first noted above and continues until the earliest of:\r\n        </p>\r\n\r\n        <ol type=\"a\">\r\n          <li>\r\n            the expiration or earlier termination of the term of the Service Contract; or\r\n          </li>\r\n          <li>\r\n            the date this Agreement is terminated in accordance with this Article 6.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        Organization may terminate this Agreement at any time on notice to the Province.\r\n      </li>\r\n      <li>\r\n        The Province may terminate this Agreement immediately upon notice to Organization if Organization fails to\r\n        comply with any provision of this Agreement.\r\n      </li>\r\n      <li>\r\n        The Province may terminate this Agreement immediately upon notice to Organization in the event Organization no\r\n        longer operates any Sites where Site Access is permitted.\r\n      </li>\r\n      <li>\r\n        The Province may terminate this Agreement for any reason upon two (2) months advance notice to Organization.\r\n      </li>\r\n      <li>\r\n        Organization must prevent any further Site Access immediately upon expiration or termination of the term of\r\n        this Agreement.\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center\">\r\n  <strong>ARTICLE 7 – DISCLAIMER AND INDEMNITY</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"7\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        The PharmaNet access and PharmaNet Data provided under this Agreement are provided \"as is\" without warranty of\r\n        any kind, whether express or implied. All implied warranties, including, without limitation, implied warranties\r\n        of merchantability, fitness for a particular purpose, and non-infringement, are hereby expressly disclaimed.\r\n        The Province does not warrant the accuracy, completeness or reliability of the PharmaNet Data or the\r\n        availability of PharmaNet, or that access to or the operation of PharmaNet will function without error,\r\n        failure or interruption.\r\n      </li>\r\n      <li>\r\n        Under no circumstances will the Province be liable to any person or business entity for any direct, indirect,\r\n        special, incidental, consequential, or other damages based on any use of PharmaNet or the PharmaNet Data,\r\n        including without limitation any lost profits, business interruption, or loss of programs or information, even\r\n        if the Province has been specifically advised of the possibility of such damages.\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center\">\r\n  <strong>ARTICLE 8 – GENERAL</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"8\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <p>\r\n          <strong class=\"underline\">Notice.</strong> Except where this Agreement expressly provides for another method\r\n          of delivery, any notice to be given to the Province must be in writing and mailed or emailed to:\r\n        </p>\r\n\r\n        <address>\r\n          Director, Information and PharmaNet Innovation<br>\r\n          Ministry of Health<br>\r\n          PO Box 9652, STN PROV GOVT<br>\r\n          Victoria, BC V8W 9P4<br>\r\n\r\n          <br>\r\n\r\n          <a href=\"mailto:PRIMESupport@gov.bc.ca\">PRIMESupport@gov.bc.ca</a>\r\n        </address>\r\n\r\n        <p>\r\n          Any notice to be given to a Signing Authority or the Organization will be in writing and emailed, mailed,\r\n          faxed or text-messaged to the Signing Authority (in the case of notice to a Signing Authority) or all Signing\r\n          Authorities (in the case of notice to the Organization). A Signing Authority may be required to click a URL\r\n          link or to log in to the Province’s \"PRIME\" system to receive the content of any such notice.\r\n        </p>\r\n\r\n        <p>\r\n          Any written notice from a party, if sent electronically, will be deemed to have been received 24 hours after\r\n          the time the notice was sent, or, if sent by mail, will be deemed to have been received 3 days (excluding\r\n          Saturdays, Sundays and statutory holidays) after the date the notice was sent.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <strong class=\"underline\">Waiver.</strong> The failure of the Province at any time to insist on performance of\r\n        any provision of this Agreement by Organization is not a waiver of its right subsequently to insist on\r\n        performance of that or any other provision of this Agreement. A waiver of any provision or breach of this\r\n        Agreement is effective only if it is writing and signed by, or on behalf of, the waiving party.\r\n      </li>\r\n      <li>\r\n        <strong class=\"underline\">Modification.</strong> No modification to this Agreement is effective unless it is\r\n        in writing and signed by, or on behalf of, the parties.\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong class=\"underline\">Governing Law.</strong> This Agreement will be governed by and will be construed\r\n          and interpreted in accordance with the laws of British Columbia and the laws of Canada applicable therein.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong class=\"underline\">Survival.</strong> Sections 3.1, 3.8, 3.9, 4, 7 and any other provision of this\r\n          Agreement that expressly or by its nature continues after termination, shall survive termination of this\r\n          Agreement.\r\n        </p>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n{{signature_block}}\r\n\r\n<p class=\"text-center break-before\">\r\n  <strong>SCHEDULE A – SPECIFIC PRIVACY AND SECURITY MEASURES</strong>\r\n</p>\r\n\r\n<p>\r\n  Organization must, in relation to each Site\r\n</p>\r\n\r\n<ol type=\"a\">\r\n  <li>\r\n    secure all workstations and printers at the Site to prevent any viewing of PharmaNet Data by persons other than\r\n    Authorized Users;\r\n  </li>\r\n  <li>\r\n    <p>\r\n      implement all privacy and security measures specified in the following documents published by the Province, as\r\n      amended from time to time:\r\n    </p>\r\n\r\n    <ol type=\"i\">\r\n      <li>\r\n        <p>\r\n          the PharmaNet Professional and Software Conformance Standards\r\n        </p>\r\n\r\n        <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\"\r\n           target=\"_blank\"\r\n           rel=\"noopener noreferrer\">\r\n          https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\r\n        </a>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          Office of the Chief Information Officer: \"Submission for Technical Security Standard and High Level\r\n          Architecture for Wireless Local Area Network Connectivity\"\r\n        </p>\r\n\r\n        <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet\"\r\n           target=\"_blank\"\r\n           rel=\"noopener noreferrer\">\r\n          https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet\r\n        </a>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n  <li>\r\n    ensure that a qualified technical support person is engaged to provide security support for the Site. This person\r\n    should be familiar with the Site’s network configurations, hardware and software, including all SSO-Provided\r\n    Technology and Associated Technology, and should be capable of understanding and adhering to the standards set\r\n    forth in this Agreement and Schedule. Note that any such qualified technical support person must not be permitted\r\n    by Organization to access or use PharmaNet in any manner, unless otherwise permitted under this Agreement;\r\n  </li>\r\n  <li>\r\n    establish and maintain documented privacy policies that detail how Organization will meet its privacy obligations\r\n    in relation to the Site;\r\n  </li>\r\n  <li>\r\n    establish breach reporting and response processes in relation to the Site;\r\n  </li>\r\n  <li>\r\n    detail expectations for privacy protection in contracts and service agreements as applicable at the Site;\r\n  </li>\r\n  <li>\r\n    regularly review the administrative, physical and technological safeguards at the Site;\r\n  </li>\r\n  <li>\r\n    establish and maintain a program for monitoring PharmaNet use at the Site, including by making appropriate\r\n    monitoring and reporting mechanisms available to Authorized Users for this purpose.\r\n  </li>\r\n</ol>\r\n",
+                            Text = "<h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>\n\n<p>\n  <strong>BETWEEN:</strong>\n</p>\n\n<p>\n  HIS MAJESTY THE KING IN RIGHT OF THE PROVINCE OF BRITISH COLUMBIA, as represented by the Minister of Health\n  (the &quot;Province&quot;).\n</p>\n\n<p>\n  <strong>AND:</strong>\n</p>\n\n<p>\n  {{organization_name}} (&quot;Organization&quot;)\n</p>\n\n<p>\n  <strong>WHEREAS:</strong>\n</p>\n\n<ol type=\"A\">\n  <li>\n    The Province owns and is responsible for the operation of PharmaNet, the province-wide network that links\n    pharmacies to a central data system. Every prescription dispensed in community pharmacies in British\n    Columbia is entered into PharmaNet.\n  </li>\n  <li>\n    PharmaNet contains highly sensitive confidential information, including personal information, and it is\n    in the public interest to ensure that appropriate measures are in place to protect the confidentiality\n    and integrity of such information. All access to and use of PharmaNet and PharmaNet Data is subject to\n    the Act and other applicable law.\n  </li>\n  <li>\n    The Province permits Authorized Users to access PharmaNet to provide health services to, or to facilitate\n    the care of, the individual whose personal information is being accessed.\n  </li>\n  <li>\n    Organization is a service provider to HealthLink BC, the Province’s self-care program providing health\n    information and advice to British Columbia through integrated print, web, and telephony channels to help\n    the public make better decisions about their health, and provides Services to the Province in accordance\n    with the Service Contract,\n  </li>\n  <li>\n    Pharmacists at Organization require access to PharmaNet so Organization can provide the Services in\n    accordance with the Service Contract.\n  </li>\n  <li>\n    This Agreement sets out the terms by which Organization may permit Authorized Users to access PharmaNet\n    at the Site(s) operated by Organization.\n  </li>\n</ol>\n\n<p>\n  <strong>NOW THEREFORE</strong> in consideration of the promises and the covenants, agreements, representations\n  and warranties set out in this Agreement (the receipt and sufficiency of which is hereby acknowledged by each\n  party), the parties agree as follows:\n</p>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 1 – INTERPRETATION</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"1\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        <p>\n          In this Agreement, unless the context otherwise requires, the following definitions will apply:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            <strong>&quot;Act&quot;</strong> means the <em>Pharmaceutical Services Act</em>;\n          </li>\n          <li>\n            <strong>&quot;Approved SSO&quot;</strong> means, in relation to a Site, the software support organization\n            identified in section 1 of the Site Request that provides Organization with the SSO-Provided Technology\n            used at the Site;\n          </li>\n          <li>\n            <strong>&quot;Associated Technology&quot;</strong> means, in relation to a Site, any information technology\n            hardware, software or services used at the Site, other than the SSO-Provided Technology, that is in any way\n            used in connection with Site Access or any PharmaNet Data;\n          </li>\n          <li>\n            <p>\n              <strong>&quot;Authorized User&quot;</strong> means an individual who is granted access to PharmaNet by the\n              Province and who is:\n            </p>\n\n            <ol type=\"i\">\n              <li>\n                an employee or independent contractor of Organization, or\n              </li>\n              <li>\n                if Organization is an individual, the Organization;\n              </li>\n            </ol>\n          </li>\n          <li>\n            <strong>&quot;Information Management Regulation&quot;</strong> means the\n            <em>Information Management Regulation</em>, B.C. Reg. 74/2015;\n          </li>\n          <li>\n            <strong>&quot;PharmaNet&quot;</strong> means PharmaNet as continued under section 2 of the\n            <em>Information Management Regulation</em>;\n          </li>\n          <li>\n            <strong>&quot;PharmaNet Data&quot;</strong> includes any records or information contained in PharmaNet\n            and any records or information in the custody, control or possession of Organization or any Authorized User\n            as the result of any Site Access;\n          </li>\n          <li>\n            <strong>&quot;Regulated User&quot;</strong> means an Authorized User described in subsections 4 (2) to (4)\n            of the <em>Information Management Regulation</em>;\n          </li>\n          <li>\n            <strong>&quot;Service Contract&quot;</strong> means the contract for services between the Province and\n            Organization, contract file number 2021-075, dated November 1, 2020, as amended from time to time by the\n            parties in accordance with its terms;\n          </li>\n          <li>\n            <strong>&quot;Signing Authority&quot;</strong> means the individual identified by Organization as the\n            &quot;Signing Authority&quot; for a Site, with the associated contact information, as set out in section 2\n            of the Site Request;\n          </li>\n          <li>\n            <p>\n              <strong>&quot;Site&quot;</strong> means a licensed community pharmacy premises operated by Organization\n              and located in British Columbia that:\n            </p>\n\n            <ol type=\"i\">\n              <li>\n                is the subject of a Site Request submitted to the Province, and\n              </li>\n              <li>\n                has been approved for Site Access by the Province in writing\n              </li>\n            </ol>\n          </li>\n          <li>\n            <strong>&quot;Site Access&quot;</strong> means any access to or use of PharmaNet at a Site as permitted by\n            the Province;\n          </li>\n          <li>\n            <strong>&quot;Site Request&quot;</strong> means, in relation to a Site, the information contained in the\n            PharmaNet access request form submitted to the Province by the Organization, requesting PharmaNet access at\n            the Site, as such information is updated by the Organization from time to time in accordance with\n            section 2.2;\n          </li>\n          <li>\n            <strong>&quot;SSO-Provided Technology&quot;</strong> means any information technology hardware, software or\n            services provided to Organization by an Approved SSO for the purpose of Site Access;\n          </li>\n        </ol>\n      </li>\n      <li>\n        Unless otherwise specified, a reference to a statute or regulation by name means a statute or regulation of\n        British Columbia of that name, as amended or replaced from time to time, and includes any enactments made\n        under the authority of that statute or regulation.\n      </li>\n      <li>\n        <p>\n          The following are the Schedules attached to and incorporated into this Agreement:\n        </p>\n\n        <ul>\n          <li>\n            Schedule A – Specific Privacy and Security Measures\n          </li>\n        </ul>\n      </li>\n      <li>\n        The main body of this Agreement, the Schedules, and any documents incorporated by reference into this Agreement\n        are to be interpreted so that all of the provisions are given as full effect as possible. In the event of a\n        conflict, unless expressly stated to the contrary, the main body of the Agreement will prevail over the\n        Schedules, which will prevail over any document incorporated by reference.\n      </li>\n      <li>\n        For greater certainty, nothing in this Agreement is intended to modify or otherwise limit the applicability of\n        the privacy, security or confidentiality obligations agreed to by the Organization in the Service Contract.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 2 – REPRESENTATIONS AND WARRANTIES</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"2\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        <p>\n          Organization represents and warrants to the Province, as of the date of this Agreement and throughout its\n          term, that:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            the information contained in the Site Request for each Site is true and correct;\n          </li>\n          <li>\n            <p>\n              if Organization is not an individual:\n            </p>\n\n            <ol type=\"i\">\n              <li>\n                Organization has the power and capacity to enter into this Agreement and to comply with its terms;\n              </li>\n              <li>\n                all necessary corporate or other proceedings have been taken to authorize the execution and delivery of\n                this Agreement by, or on behalf of, Organization; and\n              </li>\n              <li>\n                this Agreement has been legally and properly executed by, or on behalf of, the Organization and is\n                legally binding upon and enforceable against Organization in accordance with its terms.\n              </li>\n            </ol>\n          </li>\n        </ol>\n      </li>\n      <li>\n        Organization must notify the Province at least seven (7) days in advance of any change to the information\n        contained in a Site Request, including any change to a Site’s status, location, normal operating hours,\n        Approved SSO, or the name and contact information of the Signing Authority or any of the other specific\n        roles set out in the Site Request. Such notices must be submitted to the Province in the form and manner\n        directed by the Province in its published instructions regarding the submission of updated Site Request\n        information, as such instructions may be updated from time to time by the Province.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 3 – SITE ACCESS REQUIREMENTS</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"3\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        Organization must comply with the Act and all applicable law.\n      </li>\n      <li>\n        Organization must submit a Site Request to the Province for each physical location where it intends to provide\n        Site Access, and must only provide Site Access from Sites approved in writing by the Province and only as\n        authorized by the Province.\n      </li>\n      <li>\n        Organization must only provide Site Access using SSO-Provided Technology.\n      </li>\n      <li>\n        Unless otherwise authorized by the Province in writing, Organization must at all times use the secure network\n        or security technology that the Province certifies or makes available to Organization for the purpose of Site\n        Access. The use of any such network or technology by Organization may be subject to terms and conditions of\n        use, including acceptable use policies, established by the Province and communicated to Organization from time\n        to time in writing (including through this Agreement), and Organization must comply with all such terms and\n        conditions of use.\n      </li>\n      <li>\n        <p>\n          Organization must only make Site Access available to the following individuals:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            Authorized Users when they are physically located at a Site;\n          </li>\n          <li>\n            Representatives of an Approved SSO for technical support purposes, in accordance with section 6 of the\n            <em>Information Management Regulation</em>.\n          </li>\n        </ol>\n      </li>\n      <li>\n        <p>\n          Organization must ensure that Authorized Users with Site Access:\n        </p>\n        <ol type=\"a\">\n          <li>\n            only access PharmaNet to the extent necessary to provide Services in accordance with the Service Contract;\n          </li>\n          <li>\n            first complete any mandatory training program(s) that the Site’s Approved SSO or the Province makes\n            available in relation to PharmaNet;\n          </li>\n          <li>\n            access PharmaNet using their own separate login identifications and credentials, and do not share or have\n            multiple use of any such login identifications and credentials;\n          </li>\n          <li>\n            secure all devices, codes and credentials that enable access to PharmaNet against unauthorized use;\n          </li>\n        </ol>\n      </li>\n      <li>\n        If notified by the Province that an Authorized User’s access to PharmaNet has been suspended or revoked,\n        Organization will immediately take any local measures necessary to remove the Authorized User’s Site Access.\n        Organization will only restore Site Access to a previously suspended or revoked Authorized User upon the\n        Province’s specific written direction.\n      </li>\n      <li>\n        <p>\n          For the purposes of this section:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            <strong>&quot;Responsible Authorized User&quot;</strong> means, in relation to any PharmaNet Data, the\n            Regulated User by whom that data was obtained from PharmaNet; and\n          </li>\n          <li>\n            <strong>&quot;Use&quot;</strong> includes to collect, access, retain, use, de-identify, and disclose.\n          </li>\n        </ol>\n\n        <p>\n          The PharmaNet Data disclosed under this Agreement is disclosed by the Province solely for the Use of the\n          Responsible Authorized User to whom it is disclosed.\n        </p>\n\n        <p>\n          Organization must not Use any PharmaNet Data, or permit any third party to Use PharmaNet Data, unless the\n          Responsible Authorized User has authorized such Use and it is otherwise permitted under the Act, applicable\n          law, and the limits and conditions imposed by the Province on the Responsible Authorized User.\n        </p>\n\n        <p>\n          Organization explicitly acknowledges that sections 24 and 25 of the Act apply to all PharmaNet Data.\n        </p>\n\n        <p>\n          This Agreement documents limits and conditions, set by the Minister in writing, that the Act requires\n          Organization and Authorized Users to comply with.\n        </p>\n      </li>\n      <li>\n        <p>\n          Organization must make all reasonable arrangements to protect PharmaNet Data against such risks as\n          unauthorized access, collection, use, modification, retention, disclosure or disposal, including by:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            taking all reasonable physical, technical and operational measures necessary to ensure Site Access operates\n            in accordance with sections 3.1 to 3.9 above, and\n          </li>\n          <li>\n            complying with the requirements of Schedule A.\n          </li>\n        </ol>\n      </li>\n      <li>\n        Organization must ensure that no Authorized User submits Claims on PharmaNet other than from a Site in respect\n        of which\n        a person is enrolled as a Provider.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 4 – NON-COMPLIANCE AND INVESTIGATIONS</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"4\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        Organization must promptly notify the Province, and provide particulars, if Organization does not comply, or\n        anticipates that it will be unable to comply, with the terms of this Agreement, or if Organization has knowledge\n        of any circumstances, incidents or events which have or may jeopardize the security, confidentiality or\n        integrity of PharmaNet, including any attempt by any person to gain unauthorized access to PharmaNet or the\n        networks or equipment used to connect to PharmaNet or convey PharmaNet Data.\n      </li>\n      <li>\n        Organization must immediately investigate any suspected breaches of this Agreement and take all reasonable steps\n        to prevent recurrences of any such breaches.\n      </li>\n      <li>\n        Organization must cooperate with any audits or investigations conducted by the Province (including any\n        independent auditor appointed by the Province) regarding compliance with this Agreement, including by providing\n        access upon request to a Site and any associated facilities, networks, equipment, systems, books, records and\n        personnel for the purposes of such audit or investigation.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 5 – SITE TERMINATION</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"5\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        <p>\n          The Province may terminate all Site Access at a Site immediately, upon notice to the Signing Authority for\n          the Site, if:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            the Approved SSO for the Site is no longer approved by the Province to provide information technology\n            hardware, software, or service in connection with PharmaNet, or\n          </li>\n          <li>\n            the Province determines that the SSO-Provided Technology or Associated Technology in use at the Site, or\n            any component thereof, is obsolete, unsupported, or otherwise poses an unacceptable security risk to\n            PharmaNet and Organization is unable or unwilling to remedy the problem within a time frame acceptable to\n            the Province.\n          </li>\n        </ol>\n      </li>\n      <li>\n        As a security precaution, the Province may suspend Site Access at a Site after a period of inactivity. If Site\n        Access at a Site remains inactive for a period of 90 days or more, the Province may, immediately upon notice to\n        the Signing Authority for the Site, terminate all further Site Access at the Site.\n      </li>\n      <li>\n        Organization must prevent all further Site Access at a Site immediately upon the Province’s termination, in\n        accordance with this Article 5 of Site Access at the Site.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 6 – TERM AND TERMINATION</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"6\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        <p>\n          The term of this Agreement begins on the date first noted above and continues until the earliest of:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            the expiration or earlier termination of the term of the Service Contract; or\n          </li>\n          <li>\n            the date this Agreement is terminated in accordance with this Article 6.\n          </li>\n        </ol>\n      </li>\n      <li>\n        Organization may terminate this Agreement at any time on notice to the Province.\n      </li>\n      <li>\n        The Province may terminate this Agreement immediately upon notice to Organization if Organization fails to\n        comply with any provision of this Agreement.\n      </li>\n      <li>\n        The Province may terminate this Agreement immediately upon notice to Organization in the event Organization no\n        longer operates any Sites where Site Access is permitted.\n      </li>\n      <li>\n        The Province may terminate this Agreement for any reason upon two (2) months advance notice to Organization.\n      </li>\n      <li>\n        Organization must prevent any further Site Access immediately upon expiration or termination of the term of\n        this Agreement.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 7 – DISCLAIMER AND INDEMNITY</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"7\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        The PharmaNet access and PharmaNet Data provided under this Agreement are provided \"as is\" without warranty of\n        any kind, whether express or implied. All implied warranties, including, without limitation, implied warranties\n        of merchantability, fitness for a particular purpose, and non-infringement, are hereby expressly disclaimed.\n        The Province does not warrant the accuracy, completeness or reliability of the PharmaNet Data or the\n        availability of PharmaNet, or that access to or the operation of PharmaNet will function without error,\n        failure or interruption.\n      </li>\n      <li>\n        Under no circumstances will the Province be liable to any person or business entity for any direct, indirect,\n        special, incidental, consequential, or other damages based on any use of PharmaNet or the PharmaNet Data,\n        including without limitation any lost profits, business interruption, or loss of programs or information, even\n        if the Province has been specifically advised of the possibility of such damages.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 8 – GENERAL</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"8\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        <p>\n          <strong class=\"underline\">Notice.</strong> Except where this Agreement expressly provides for another method\n          of delivery, any notice to be given to the Province must be in writing and mailed or emailed to:\n        </p>\n\n        <address>\n          Director, Information and PharmaNet Innovation<br>\n          Ministry of Health<br>\n          PO Box 9652, STN PROV GOVT<br>\n          Victoria, BC V8W 9P4<br>\n\n          <br>\n\n          <a href=\"mailto:PRIMESupport@gov.bc.ca\">PRIMESupport@gov.bc.ca</a>\n        </address>\n\n        <p>\n          Any notice to be given to a Signing Authority or the Organization will be in writing and emailed, mailed,\n          faxed or text-messaged to the Signing Authority (in the case of notice to a Signing Authority) or all Signing\n          Authorities (in the case of notice to the Organization). A Signing Authority may be required to click a URL\n          link or to log in to the Province’s \"PRIME\" system to receive the content of any such notice.\n        </p>\n\n        <p>\n          Any written notice from a party, if sent electronically, will be deemed to have been received 24 hours after\n          the time the notice was sent, or, if sent by mail, will be deemed to have been received 3 days (excluding\n          Saturdays, Sundays and statutory holidays) after the date the notice was sent.\n        </p>\n      </li>\n      <li>\n        <strong class=\"underline\">Waiver.</strong> The failure of the Province at any time to insist on performance of\n        any provision of this Agreement by Organization is not a waiver of its right subsequently to insist on\n        performance of that or any other provision of this Agreement. A waiver of any provision or breach of this\n        Agreement is effective only if it is writing and signed by, or on behalf of, the waiving party.\n      </li>\n      <li>\n        <strong class=\"underline\">Modification.</strong> No modification to this Agreement is effective unless it is\n        in writing and signed by, or on behalf of, the parties.\n      </li>\n      <li>\n        <p>\n          <strong class=\"underline\">Governing Law.</strong> This Agreement will be governed by and will be construed\n          and interpreted in accordance with the laws of British Columbia and the laws of Canada applicable therein.\n        </p>\n      </li>\n      <li>\n        <p>\n          <strong class=\"underline\">Survival.</strong> Sections 3.1, 3.8, 3.9, 4, 7 and any other provision of this\n          Agreement that expressly or by its nature continues after termination, shall survive termination of this\n          Agreement.\n        </p>\n      </li>\n    </ol>\n  </li>\n</ol>\n\n{{signature_block}}\n\n<p class=\"text-center break-before\">\n  <strong>SCHEDULE A – SPECIFIC PRIVACY AND SECURITY MEASURES</strong>\n</p>\n\n<p>\n  Organization must, in relation to each Site\n</p>\n\n<ol type=\"a\">\n  <li>\n    secure all workstations and printers at the Site to prevent any viewing of PharmaNet Data by persons other than\n    Authorized Users;\n  </li>\n  <li>\n    <p>\n      implement all privacy and security measures specified in the following documents published by the Province, as\n      amended from time to time:\n    </p>\n\n    <ol type=\"i\">\n      <li>\n        <p>\n          the PharmaNet Professional and Software Conformance Standards\n        </p>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\"\n           target=\"_blank\"\n           rel=\"noopener noreferrer\">\n          https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\n        </a>\n      </li>\n      <li>\n        <p>\n          Office of the Chief Information Officer: \"Submission for Technical Security Standard and High Level\n          Architecture for Wireless Local Area Network Connectivity\"\n        </p>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet\"\n           target=\"_blank\"\n           rel=\"noopener noreferrer\">\n          https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet\n        </a>\n      </li>\n    </ol>\n  </li>\n  <li>\n    ensure that a qualified technical support person is engaged to provide security support for the Site. This person\n    should be familiar with the Site’s network configurations, hardware and software, including all SSO-Provided\n    Technology and Associated Technology, and should be capable of understanding and adhering to the standards set\n    forth in this Agreement and Schedule. Note that any such qualified technical support person must not be permitted\n    by Organization to access or use PharmaNet in any manner, unless otherwise permitted under this Agreement;\n  </li>\n  <li>\n    establish and maintain documented privacy policies that detail how Organization will meet its privacy obligations\n    in relation to the Site;\n  </li>\n  <li>\n    establish breach reporting and response processes in relation to the Site;\n  </li>\n  <li>\n    detail expectations for privacy protection in contracts and service agreements as applicable at the Site;\n  </li>\n  <li>\n    regularly review the administrative, physical and technological safeguards at the Site;\n  </li>\n  <li>\n    establish and maintain a program for monitoring PharmaNet use at the Site, including by making appropriate\n    monitoring and reporting mechanisms available to Authorized Users for this purpose.\n  </li>\n</ol>\n",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -553,17 +555,6 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 11, 17, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Text = "<h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>\n\n<p>\n  This Organization Agreement for PharmaNet Use (the &quot;Agreement&quot;) is executed by {{organization_name}}\n  (&quot;Organization&quot;) for the benefit of HIS MAJESTY THE KING IN RIGHT OF THE PROVINCE OF BRITISH COLUMBIA, as\n  represented by the Minister of Health (the &quot;Province&quot;).\n</p>\n\n<p>\n  <strong>WHEREAS:</strong>\n</p>\n\n<ol type=\"A\">\n  <li>\n    The Province owns and is responsible for the operation of PharmaNet, the province-wide network that links\n    pharmacies to a central data system. Every prescription dispensed in community pharmacies in British\n    Columbia is entered into PharmaNet.\n  </li>\n  <li>\n    PharmaNet contains highly sensitive confidential information, including personal information, and it is in\n    the public interest to ensure that appropriate measures are in place to protect the confidentiality and\n    integrity of such information. All access to and use of PharmaNet and PharmaNet Data is subject to the\n    Act and other applicable law.\n  </li>\n  <li>\n    The Province permits Authorized Users to access PharmaNet to provide health services to, or to facilitate\n    the care of, the individual whose personal information is being accessed.\n  </li>\n  <li>\n    This Agreement sets out the terms by which Organization may permit Authorized Users to access PharmaNet\n    at the Site(s) operated by Organization.\n  </li>\n</ol>\n\n<p>\n  <strong>NOW THEREFORE</strong> Organization makes this Agreement knowing that the Province will rely on it\n  in permitting access to and use of PharmaNet from Sites operated by Organization. Organization conclusively\n  acknowledges that reliance by the Province on this Agreement is in every respect justifiable and that it\n  received fair and valuable consideration for this Agreement, the receipt and adequacy of which is hereby\n  acknowledged. Organization hereby agrees as follows:\n</p>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 1 – INTERPRETATION</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"1\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        <p>\n          In this Agreement, unless the context otherwise requires, the following definitions will apply:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            <strong>&quot;Act&quot;</strong> means the <em>Pharmaceutical Services Act</em>;\n          </li>\n          <li>\n            <strong>&quot;Approved SSO&quot;</strong> means, in relation to a Site, the software support organization\n            identified in section 1 of the Site Request that provides Organization with the SSO-Provided\n            Technology used at the Site;\n          </li>\n          <li>\n            <strong>&quot;Associated Technology&quot;</strong> means, in relation to a Site, any information technology\n            hardware, software or services used at the Site, other than the SSO-Provided Technology, that is\n            in any way used in connection with Site Access or any PharmaNet Data;\n          </li>\n          <li>\n            <p>\n              <strong>&quot;Authorized User&quot;</strong> means an individual who is granted access to PharmaNet by the\n              Province and who is:\n            </p>\n\n            <ol type=\"i\">\n              <li>\n                an employee or independent contractor of Organization, or\n              </li>\n              <li>\n                if Organization is an individual, the Organization;\n              </li>\n            </ol>\n          </li>\n          <li>\n            <strong>&quot;Information Management Regulation&quot;</strong> means the\n            <em>Information Management Regulation</em>,\n            B.C. Reg. 74/2015;\n          </li>\n          <li>\n            <strong>&quot;On-Behalf-Of User&quot;</strong> means an Authorized User described in subsection 4 (5) of the\n            <em>Information Management Regulation</em> who acts on behalf of a Regulated User when accessing\n            PharmaNet;\n          </li>\n          <li>\n            &quot;PharmaNet&quot; means PharmaNet as continued under section 2 of the\n            <em>Information Management Regulation</em>;\n          </li>\n          <li>\n            <strong>&quot;PharmaNet Data&quot;</strong> includes any records or information contained in PharmaNet and\n            any records\n            or information in the custody, control or possession of Organization or any Authorized User as the result of\n            any Site Access;\n          </li>\n          <li>\n            <strong>&quot;Regulated User&quot;</strong> means an Authorized User described in subsections 4 (2) to (4)\n            of the\n            <em>Information Management Regulation</em>;\n          </li>\n          <li>\n            <strong>&quot;Signing Authority&quot;</strong> means the individual identified by Organization as the\n            &quot;Signing Authority&quot;\n            for a Site, with the associated contact information, as set out in section 2 of the Site Request;\n          </li>\n          <li>\n            <p>\n              <strong>&quot;Site&quot;</strong> means a premises operated by Organization and located in British\n              Columbia that:\n            </p>\n\n            <ol type=\"i\">\n              <li>\n                is the subject of a Site Request submitted to the Province, and\n              </li>\n              <li>\n                has been approved for Site Access by the Province in writing\n              </li>\n            </ol>\n\n            <p class=\"underline\">\n              For greater certainty, &quot;Site&quot; does not include a location from which remote access to PharmaNet\n              takes place;\n            </p>\n          </li>\n          <li>\n            <strong>&quot;Site Access&quot;</strong> means any access to or use of PharmaNet at a Site or remotely as\n            permitted\n            by the Province;\n          </li>\n          <li>\n            <strong>&quot;Site Request&quot;</strong> means, in relation to a Site, the information contained in the\n            PharmaNet access\n            request form submitted to the Province by the Organization, requesting PharmaNet access at the Site, as such\n            information is updated by the Organization from time to time in accordance with section 2.2;\n          </li>\n          <li>\n            <strong>&quot;SSO-Provided Technology&quot;</strong> means any information technology hardware, software or\n            services\n            provided to Organization by an Approved SSO for the purpose of Site Access;\n          </li>\n        </ol>\n      </li>\n      <li>\n        Unless otherwise specified, a reference to a statute or regulation by name means a statute or regulation of\n        British\n        Columbia of that name, as amended or replaced from time to time, and includes any enactments made under the\n        authority\n        of that statute or regulation.\n      </li>\n      <li>\n        <p>\n          The following are the Schedules attached to and incorporated into this Agreement:\n        </p>\n\n        <ul>\n          <li>\n            Schedule A – Specific Privacy and Security Measures\n          </li>\n        </ul>\n      </li>\n      <li>\n        The main body of this Agreement, the Schedules, and any documents incorporated by reference into this Agreement\n        are to\n        be interpreted so that all of the provisions are given as full effect as possible. In the event of a conflict,\n        unless\n        expressly stated to the contrary the main body of the Agreement will prevail over the Schedules, which will\n        prevail\n        over any document incorporated by reference.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 2 – REPRESENTATIONS AND WARRANTIES</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"2\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        <p>\n          Organization represents and warrants to the Province, as of the date of this\n          Agreement and throughout its term, that:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            the information contained in the Site Request for each Site is true and correct;\n          </li>\n          <li>\n            <p>\n              if Organization is not an individual:\n            </p>\n\n            <ol type=\"i\">\n              <li>\n                Organization has the power and capacity to enter into this Agreement and to comply with its terms;\n              </li>\n              <li>\n                all necessary corporate or other proceedings have been taken to authorize the execution and delivery\n                of this Agreement by, or on behalf of, Organization; and\n              </li>\n              <li>\n                this Agreement has been legally and properly executed by, or on behalf of, the Organization and is\n                legally binding upon and enforceable against Organization in accordance with its terms.\n              </li>\n            </ol>\n          </li>\n        </ol>\n      </li>\n      <li>\n        Organization must immediately notify the Province of any change to the information contained in a Site Request,\n        including any change to a Site’s status, location, normal operating hours, Approved SSO, or the name and contact\n        information of the Signing Authority or any of the other specific roles set out in the Site Request. Such\n        notices\n        must be submitted to the Province in the form and manner directed by the Province in its published instructions\n        regarding the submission of updated Site Request information, as such instructions may be updated from time to\n        time by the Province.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 3 – SITE ACCESS REQUIREMENTS</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"3\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        Organization must comply with the Act and all applicable law.\n      </li>\n      <li>\n        Organization must submit a Site Request to the Province for each physical location where it intends to provide\n        Site\n        Access, and must only provide Site Access from Sites approved in writing by the Province. For greater certainty,\n        a\n        Site Request is not required for each physical location from which remote access, as permitted under section\n        3.6,\n        may occur, but Organization must provide, with the Site Request, a list of the locations from which remote\n        access\n        may occur, and ensure this list remains current for the term of this agreement.\n      </li>\n      <li>\n        Organization must only provide Site Access using SSO-Provided Technology. For the purposes of remote access,\n        Organization must ensure that technology used meets the requirements of Schedule A.\n      </li>\n      <li>\n        Unless otherwise authorized by the Province in writing, Organization must at all times use the secure network or\n        security technology that the Province certifies or makes available to Organization for the purpose of Site\n        Access.\n        The use of any such network or technology by Organization may be subject to terms and conditions of use,\n        including\n        acceptable use policies, established by the Province and communicated to Organization from time to time in\n        writing.\n      </li>\n      <li>\n        <p>\n          Organization must only make Site Access available to the following individuals:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            Authorized Users when they are physically located at a Site, and, in the case of an On-Behalf-of-User\n            accessing\n            personal information of a patient on behalf of a Regulated User, only if the Regulated User will be\n            delivering\n            care to that patient at the same Site at which the access to personal information occurs;\n          </li>\n          <li>\n            Representatives of an Approved SSO for technical support purposes, in accordance with section 6 of the\n            <em>Information Management Regulation</em>.\n          </li>\n        </ol>\n      </li>\n      <li>\n        Despite section 3.5(a), Organization may make Site Access available to Regulated Users who are physically\n        located in\n        British Columbia and remotely connected to a Site using a VPN or other remote access technology specifically\n        approved\n        by the Province in writing for the Site.\n      </li>\n      <li>\n        <p>\n          Organization must ensure that Authorized Users with Site Access:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            only access PharmaNet to the extent necessary to provide health services to, or facilitate the care of, the\n            individual whose personal information is being accessed;\n          </li>\n          <li>\n            first complete any mandatory training program(s) that the Site’s Approved SSO or the Province makes\n            available\n            in relation to PharmaNet;\n          </li>\n          <li>\n            access PharmaNet using their own separate login identifications and credentials, and do not share or have\n            multiple use of any such login identifications and credentials;\n          </li>\n          <li>\n            secure all devices, codes and credentials that enable access to PharmaNet against unauthorized use; and\n          </li>\n          <li>\n            in the case of remote access, comply with the policies of the Province relating to remote access to\n            PharmaNet.\n          </li>\n        </ol>\n      </li>\n      <li>\n        If notified by the Province that an Authorized User’s access to PharmaNet has been suspended or revoked,\n        Organization\n        will immediately take any local measures necessary to remove the Authorized User’s Site Access. Organization\n        will\n        only restore Site Access to a previously suspended or revoked Authorized User upon the Province’s specific\n        written\n        direction.\n      </li>\n      <li>\n        <p>\n          For the purposes of this section:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            <strong>&quot;Responsible Authorized User&quot;</strong> means, in relation to any PharmaNet Data, the\n            Regulated User by whom,\n            or on whose behalf, that data was obtained from PharmaNet; and\n          </li>\n          <li>\n            <strong>&quot;Use&quot;</strong> includes to collect, access, retain, use, de-identify, and disclose.\n          </li>\n        </ol>\n\n        <p>\n          The PharmaNet Data disclosed under this Agreement is disclosed by the Province solely for the Use of the\n          Responsible\n          User to whom it is disclosed.\n        </p>\n\n        <p>\n          Organization must not Use any PharmaNet Data, or permit any third party to Use PharmaNet Data, unless the\n          Responsible\n          User has authorized such Use and it is otherwise permitted under the Act, applicable law, and the limits and\n          conditions imposed by the Province on the Responsible User.\n        </p>\n      </li>\n      <li>\n        <p>\n          Organization must make all reasonable arrangements to protect PharmaNet Data against such risks as\n          unauthorized access,\n          collection, use, modification, retention, disclosure or disposal, including by:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            taking all reasonable physical, technical and operational measures necessary to ensure Site Access operates\n            in\n            accordance with sections 3.1 to 3.9 above, and\n          </li>\n          <li>\n            complying with the requirements of Schedule A.\n          </li>\n        </ol>\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 4 – NON-COMPLIANCE AND INVESTIGATIONS</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"4\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        Organization must promptly notify the Province, and provide particulars, if Organization does not comply, or\n        anticipates\n        that it will be unable to comply, with the terms of this Agreement, or if Organization has knowledge of any\n        circumstances,\n        incidents or events which have or may jeopardize the security, confidentiality or integrity of PharmaNet,\n        including any\n        attempt by any person to gain unauthorized access to PharmaNet or the networks or equipment used to connect to\n        PharmaNet\n        or convey PharmaNet Data.\n      </li>\n      <li>\n        Organization must immediately investigate any suspected breaches of this Agreement and take all reasonable steps\n        to prevent\n        recurrences of any such breaches.\n      </li>\n      <li>\n        Organization must cooperate with any audits or investigations conducted by the Province (including any\n        independent auditor\n        appointed by the Province) regarding compliance with this Agreement, including by providing access upon request\n        to a Site\n        and any associated facilities, networks, equipment, systems, books, records and personnel for the purposes of\n        such audit\n        or investigation.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 5 – SITE TERMINATION</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"5\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        <p>\n          The Province may terminate all Site Access at a Site immediately, upon notice to the Signing Authority for the\n          Site, if:\n        </p>\n\n        <ol type=\"a\">\n          <li>\n            the Approved SSO for the Site is no longer approved by the Province to provide information technology\n            hardware, software,\n            or service in connection with PharmaNet, or\n          </li>\n          <li>\n            the Province determines that the SSO-Provided Technology or Associated Technology in use at the Site, or any\n            component\n            thereof, is obsolete, unsupported, or otherwise poses an unacceptable security risk to PharmaNet,\n          </li>\n        </ol>\n\n        <p>\n          and the Organization is unable or unwilling to remedy the problem within a timeframe acceptable to the\n          Province.\n        </p>\n      </li>\n      <li>\n        As a security precaution, the Province may suspend Site Access at a Site after a period of inactivity. If Site\n        Access at a\n        Site remains inactive for a period of 90 days or more, the Province may, immediately upon notice to the Signing\n        Authority\n        for the Site, terminate all further Site Access at the Site.\n      </li>\n      <li>\n        Organization must prevent all further Site Access at a Site immediately upon the Province’s termination, in\n        accordance with\n        this Article 5, of Site Access at the Site.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 6 – TERM AND TERMINATION</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"6\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        The term of this Agreement begins on the date first noted above and continues until it is terminated\n        in accordance with this Article 6.\n      </li>\n      <li>\n        Organization may terminate this Agreement at any time on notice to the Province.\n      </li>\n      <li>\n        The Province may terminate this Agreement immediately upon notice to Organization if Organization fails to\n        comply with any\n        provision of this Agreement.\n      </li>\n      <li>\n        The Province may terminate this Agreement immediately upon notice to Organization in the event Organization no\n        longer operates\n        any Sites where Site Access is permitted.\n      </li>\n      <li>\n        The Province may terminate this Agreement for any reason upon two (2) months advance notice to Organization.\n      </li>\n      <li>\n        Organization must prevent any further Site Access immediately upon termination of this Agreement.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 7 – DISCLAIMER AND INDEMNITY</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"7\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        The PharmaNet access and PharmaNet Data provided under this Agreement are provided &quot;as is&quot; without\n        warranty of any kind,\n        whether express or implied. All implied warranties, including, without limitation, implied warranties of\n        merchantability,\n        fitness for a particular purpose, and non-infringement, are hereby expressly disclaimed. The Province does not\n        warrant\n        the accuracy, completeness or reliability of the PharmaNet Data or the availability of PharmaNet, or that access\n        to or\n        the operation of PharmaNet will function without error, failure or interruption.\n      </li>\n      <li>\n        Under no circumstances will the Province be liable to any person or business entity for any direct, indirect,\n        special,\n        incidental, consequential, or other damages based on any use of PharmaNet or the PharmaNet Data, including\n        without\n        limitation any lost profits, business interruption, or loss of programs or information, even if the Province has\n        been specifically advised of the possibility of such damages.\n      </li>\n\n      <li>\n        Organization must indemnify and save harmless the Province, and the Province’s employees and agents (each an\n        <strong>\"Indemnified Person\"</strong>) from any losses, claims, damages, actions, causes of action, costs and\n        expenses that an Indemnified Person may sustain, incur, suffer or be put to at any time, either before or after\n        this Agreement ends, which are based upon, arise out of or occur directly or indirectly by reason of any act\n        or omission by Organization, or by any Authorized User at the Site, in connection with this Agreement.\n      </li>\n    </ol>\n  </li>\n</ol>\n\n<p class=\"text-center\">\n  <strong>ARTICLE 8 – GENERAL</strong>\n</p>\n\n<ol type=\"1\"\n    start=\"8\"\n    class=\"decimal\">\n  <li>\n    <ol type=\"1\">\n      <li>\n        <p>\n          <strong class=\"underline\">Notice.</strong> Except where this Agreement expressly provides for another method\n          of delivery, any notice to be given to the Province must be in writing and emailed or mailed to:\n        </p>\n\n        <address>\n          Director, Information and PharmaNet Innovation<br>\n          Ministry of Health<br>\n          PO Box 9652, STN PROV GOVT<br>\n          Victoria, BC V8W 9P4<br>\n\n          <br>\n\n          <a href=\"mailto:PRIMESupport@gov.bc.ca\">PRIMESupport@gov.bc.ca</a>\n        </address>\n\n        <p>\n          Any notice to be given to a Signing Authority or the Organization will be in writing and emailed, mailed,\n          faxed\n          or text messaged to the Signing Authority (in the case of notice to a Signing Authority) or all Signing\n          Authorities (in the case of notice to the Organization). A Signing Authority may be required to click a\n          URL link or to log in to the Province’s &quot;PRIME&quot; system to receive the content of any such notice.\n        </p>\n\n        <p>\n          Any written notice from a party, if sent electronically, will be deemed to have been received 24 hours after\n          the\n          time the notice was sent, or, if sent by mail, will be deemed to have been received 3 days (excluding\n          Saturdays,\n          Sundays and statutory holidays) after the date the notice was sent.\n        </p>\n      </li>\n      <li>\n        <strong class=\"underline\">Waiver.</strong> The failure of the Province at any time to insist on performance of\n        any\n        provision of this Agreement by Organization is not a waiver of its right subsequently to insist on performance\n        of\n        that or any other provision of this Agreement. A waiver of any provision or breach of this Agreement is\n        effective\n        only if it is writing and signed by, or on behalf of, the waiving party.\n      </li>\n      <li>\n        <p>\n          <strong class=\"underline\">Modification.</strong> No modification to this Agreement is effective unless it is\n          in writing and signed\n          by, or on behalf of, the parties.\n        </p>\n\n        <p>\n          Notwithstanding the foregoing, the Province may amend this Agreement, including the Schedules and this\n          section,\n          at any time in its sole discretion, by written notice to Organization, in which case the amendment will become\n          effective upon the later of: (i) the date notice of the amendment is delivered to Organization; and (ii) the\n          effective date of the amendment specified by the Province. The Province will make reasonable efforts to\n          provide\n          at least thirty (30) days advance notice of any such amendment, subject to any determination by the Province\n          that a shorter notice period is necessary due to changes in the Act, applicable law or applicable policies of\n          the Province, or is necessary to maintain privacy and security in relation to PharmaNet or PharmaNet Data.\n        </p>\n\n        <p>\n          If Organization does not agree with any amendment for which notice has been provided by the Province in\n          accordance with this section, Organization must promptly (and in any event prior to the effective date)\n          cease Site Access at all Sites and take the steps necessary to terminate this Agreement in accordance\n          with Article 6.\n        </p>\n      </li>\n      <li>\n        <p>\n          <strong class=\"underline\">Governing Law.</strong> This Agreement will be governed by and will be construed\n          and interpreted in accordance with the laws of British Columbia and the laws of Canada applicable therein.\n        </p>\n      </li>\n    </ol>\n  </li>\n</ol>\n\n{{signature_block}}\n\n<p class=\"text-center break-before\">\n  <strong>SCHEDULE A – SPECIFIC PRIVACY AND SECURITY MEASURES</strong>\n</p>\n\n<p>\n  Organization must, in relation to each Site and in relation to Remote Access:\n</p>\n\n<ol type=\"a\">\n  <li>\n    secure all workstations and printers at the Site to prevent any viewing of PharmaNet Data by persons other\n    than Authorized Users;\n  </li>\n  <li>\n    <p>\n      implement all privacy and security measures specified in the following documents published by the Province, as\n      amended from time to time:\n    </p>\n\n    <ol type=\"i\">\n      <li>\n        <p>\n          the PharmaNet Professional and Software Conformance Standards\n        </p>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\"\n           target=\"_blank\"\n           rel=\"noopener noreferrer\">\n          https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\n        </a>\n      </li>\n      <li>\n        <p>\n          Office of the Chief Information Officer: &quot;Submission for Technical Security Standard and High Level\n          Architecture for Wireless Local Area Network Connectivity&quot;\n        </p>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet\"\n           target=\"_blank\"\n           rel=\"noopener noreferrer\">\n          https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet\n        </a>\n      </li>\n      <li>\n        <p>\n          Policy for Secure Remote Access to PharmaNet\n        </p>\n\n        <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\"\n           target=\"_blank\"\n           rel=\"noopener noreferrer\">\n          https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\n        </a>\n      </li>\n    </ol>\n  </li>\n  <li>\n    ensure that a qualified technical support person is engaged to provide security support for the Site. This person\n    should be familiar with the Site’s network configurations, hardware and software, including all SSO-Provided\n    Technology\n    and Associated Technology, and should be capable of understanding and adhering to the standards set forth in this\n    Agreement and Schedule. Note that any such qualified technical support person must not be permitted by Organization\n    to access or use PharmaNet in any manner, unless otherwise permitted under this Agreement;\n  </li>\n  <li>\n    establish and maintain documented privacy policies that detail how Organization will meet its privacy obligations\n    in relation to the Site;\n  </li>\n  <li>\n    establish breach reporting and response processes in relation to the Site;\n  </li>\n  <li>\n    detail expectations for privacy protection in contracts and service agreements as applicable at the Site;\n  </li>\n  <li>\n    regularly review the administrative, physical and technological safeguards at the Site;\n  </li>\n  <li>\n    establish and maintain a program for monitoring PharmaNet use at the Site, including by making appropriate\n    monitoring\n    and reporting mechanisms available to Authorized Users for this purpose.\n  </li>\n</ol>\n",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 28,
-                            AgreementType = 9,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2022, 9, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Text = "<h1>\r\n  PharmaNet Licenced Practical Nurse Registrant Terms of Access\r\n</h1>\r\n<p class=\"bold\">\r\n  By enrolling for PharmaNet access, you agree to the following terms (the &quot;Agreement&quot;). Please read them\r\n  carefully.\r\n</p>\r\n<ol>\r\n  <li>\r\n    <p class=\"bold underline\">\r\n      BACKGROUND\r\n    </p>\r\n    <p>\r\n      The Province owns and is responsible for the operation of PharmaNet, the province- wide network that links all\r\n      health\r\n      care providers in British Columbia to a central data system. Every prescription dispensed in community pharmacies\r\n      is\r\n      entered into PharmaNet.\r\n    </p>\r\n    <p>\r\n      The purpose of providing you with access to PharmaNet is to enhance patient care by providing timely and relevant\r\n      information to persons involved in the provision of direct patient care.\r\n    </p>\r\n    <p class=\"bold\">\r\n      PharmaNet contains highly sensitive confidential information, including Personal Information and the proprietary\r\n      and\r\n      confidential information of third- party licensors to the Province, and it is in the public interest to ensure\r\n      that\r\n      appropriate measures are in place to protect the confidentiality of all such information. All access to and use of\r\n      PharmaNet and PharmaNet Data is subject to the Act and other applicable laws.\r\n    </p>\r\n  </li>\r\n  <li>\r\n    <p class=\"bold underline\">\r\n      INTERPRETATION\r\n    </p>\r\n    <ol type=\"a\">\r\n      <li>\r\n        <p>\r\n          <strong>Definitions.</strong> Unless otherwise provided, capitalized terms in these Terms of Access will have\r\n          the meanings given below:\r\n        </p>\r\n        <ul>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;Act&quot;</strong> means the <em>Pharmaceutical Services Act</em>.\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;Approved Site&quot;</strong> means a location within which you provide Health Services and\r\n              which is approved by the Province for PharmaNet access.\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;Conformance Standards&quot;</strong> means the following documents published by the\r\n              Province, as amended from time to time:\r\n            </p>\r\n            <ol type=\"i\">\r\n              <li>\r\n                <p>\r\n                  PharmaNet Professional and Software Conformance Standards\r\n                </p>\r\n                <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\">https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards</a>:\r\n                and\r\n              </li>\r\n              <li>\r\n                <p>\r\n                  Office of the Chief Information Officer: &quot;Submission for Technical Security Standard and High\r\n                  Level\r\n                  Architecture for Wireless Local Area Network Connectivity&quot;.\r\n                </p>\r\n                <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet \">https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet</a>.\r\n              </li>\r\n            </ol>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;Health Services&quot;</strong> means &quot;health services&quot; as defined in the\r\n              Information\r\n              Management Regulation.\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;Information Management Regulation&quot;</strong> means the Information Management\r\n              Regulation,\r\n              B.C. Reg. 328/2021.\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;Personal Information&quot;</strong> means recorded information about an identifiable\r\n              individual.\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;PharmaNet Access Agreement&quot;</strong> means, in respect of an Approved Site, the\r\n              &quot;PharmaNet access agreement&quot; (as defined in the Information Management\r\n              Regulation) between the Province and the owner or operator of the Approved Site.\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;PharmaCare Newsletter&quot;</strong>means the PharmaCare newsletter published by the\r\n              Province\r\n              on the following website (or such other website as may be\r\n              specified by the Province from time to time for this purpose):\r\n              <a href=\"http://www.gov.bc.ca/pharmacarenewsletter\">www.gov.bc.ca/pharmacarenewsletter</a>\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;PharmaNet&quot;</strong> means PharmaNet as continued under section 2 of the Information\r\n              Management Regulation.\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;PharmaNet Data&quot;</strong> includes any record or information contained in PharmaNet and\r\n              any record or information obtained from PharmaNet that is\r\n              in your custody, control or possession.\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;PRIME&quot;</strong> means the online service provided by the Province that allows users to\r\n              apply for, and manage, their access to PharmaNet,\r\n              and through which users are granted access by the Province.\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;Province&quot;</strong> means His Majesty the King in Right of British Columbia, as\r\n              represented by the Minister of Health.\r\n            </p>\r\n          </li>\r\n          <li>\r\n            <p>\r\n              <strong>&quot;Professional College&quot;</strong> means the regulatory body governing your provision of\r\n              Health Services.\r\n            </p>\r\n          </li>\r\n        </ul>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>Reference to Enactments.</strong> In these Terms of Access, a reference to a statute or regulation by\r\n          name means the statute or regulation of British\r\n          Columbia of that name, as amended or replaced from time to time, and includes any enactment made under the\r\n          authority of that statute or regulation.\r\n        </p>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n  <li>\r\n    <p class=\"bold underline\">\r\n      ACCESS TERMS\r\n    </p>\r\n    <ol type=\"a\">\r\n      <li>\r\n        <p>\r\n          <strong>Acknowledgement.</strong> You acknowledge that:\r\n        </p>\r\n        <ol type=\"i\">\r\n          <li>\r\n            the Act and the Information Management Regulation govern your PharmaNet access;\r\n          </li>\r\n          <li>\r\n            PharmaNet Data accessed or obtained as a result of such access is disclosed to you by the Province under\r\n            the\r\n            authority of the Act;\r\n          </li>\r\n          <li>\r\n            sections 24 and 25(3) of the Act govern your further use or disclosure of PharmaNet Data; and\r\n          </li>\r\n          <li>\r\n            these terms of access document limits and conditions set, in writing, by the minister, that you are required\r\n            to\r\n            comply with pursuant to section 24(2) of the Act.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>Compliance with Applicable Law.</strong> You must comply with the Act, the Information Management\r\n          Regulation and all other laws applicable to PharmaNet access\r\n          and PharmaNet Data.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>Written Limits and Conditions of Access.</strong> The following limits and conditions apply to your\r\n          access to PharmaNet:\r\n        </p>\r\n        <ol type=\"i\">\r\n          <li>\r\n            unless (ii) below applies, you must only access PharmaNet when you are physically at an Approved Site, using\r\n            the\r\n            technologies and applications at the Approved Site that are approved by the Province for use for PharmaNet\r\n            access.\r\n          </li>\r\n          <li>\r\n            you may access PharmaNet &quot;remotely&quot; and when you are not physically at the Approved Site only if\r\n            all the following conditions are met:\r\n            <ol type=\"1\">\r\n              <li>\r\n                the owner or operator of the Approved Site has registered you with the Province for remote access\r\n                through the\r\n                Approved Site;\r\n              </li>\r\n              <li>\r\n                you have applied for remote access at the Approved Site using PRIME and are approved by the Province;\r\n              </li>\r\n              <li>\r\n                you are physically located in British Columbia at the time of any such remote access:\r\n              </li>\r\n              <li>\r\n                the remote access technology used at the Approved Site has been specifically approved in writing by the\r\n                Province, and\r\n              </li>\r\n              <li>\r\n                the requirements of the Province’s Policy for Remote Access to PharmaNet\r\n                (https://www2.gov.bc.ca/gov/content/health/practitioner-\r\n                professional-resources/software/conformance-standards) are met.\r\n              </li>\r\n            </ol>\r\n          </li>\r\n          <li>\r\n            you will complete any PharmaNet-related training programs made available to you by the software support\r\n            organization that provides the information technology software and/or services for accessing PharmaNet at\r\n            the Approved\r\n            Site;\r\n          </li>\r\n          <li>\r\n            you acknowledge that the Province may, in writing, communicate additional written limits or conditions\r\n            that apply to\r\n            your access to PharmaNet, in which case you must comply with any such limits or conditions in addition to\r\n            the limits and\r\n            conditions established under these terms of access.\r\n          </li>\r\n          <li>\r\n            you must not permit on-behalf-of users (as defined in the Information Management Regulation) to access\r\n            PharmaNet on\r\n            your behalf.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>Privacy and Security Measures.</strong> You will take all reasonable measures to safeguard Personal\r\n          Information, including any Personal Information in the\r\n          PharmaNet Data, while it is in your custody, control or possession. Without limiting the foregoing, you will:\r\n        </p>\r\n        <ol type=\"i\">\r\n          <li>\r\n            secure any workstations used to access PharmaNet and all devices, codes or passwords that enable access to\r\n            PharmaNet;\r\n          </li>\r\n          <li>\r\n            take such other privacy and security measures as the Province may reasonably require from time-to-time.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>Conformance Standards.</strong> You will comply with the rules specified in the Conformance Standards\r\n          when accessing and recording information in\r\n          PharmaNet.\r\n        </p>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n  <li>\r\n    <p class=\"bold underline\">\r\n      DISCLOSURE, STORAGE, AND ACCESS REQUESTS\r\n    </p>\r\n    <ol type=\"a\">\r\n      <li>\r\n        <p><strong>Retention of PharmaNet Data.</strong> You will not store or retain PharmaNet Data in any paper files\r\n          or\r\n          any electronic system, unless such storage or\r\n          retention is required for record keeping in connection with your provisions of Health Services; is in\r\n          accordance\r\n          with\r\n          the requirements of your Professional College; and is otherwise in compliance with the Conformance Standards.\r\n          You will\r\n          not modify any records retained in accordance with this section other than as may be expressly authorized in\r\n          the\r\n          Conformance Standards. For clarity, you may annotate a discrete record provided that the discrete record is\r\n          not\r\n          itself\r\n          modified other than as expressly authorized in the Conformance Standards.</p>\r\n      </li>\r\n      <li>\r\n        <p><strong>Use of Retained Records.</strong> You may use any records retained by you in accordance with section\r\n          4(a) of these Terms of Access for a purpose\r\n          authorized under section 24(1) of the Act.</p>\r\n      </li>\r\n      <li>\r\n        <p><strong>Secondary Use.</strong> Subject to section 4(b) of these Terms of Access, you must not use PharmaNet\r\n          Data for the purpose of quality\r\n          improvement, evaluation, health care planning, surveillance, research, or any purpose other than your\r\n          provision\r\n          of\r\n          Health Services.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p><strong>Disclosure to Third Parties.</strong> You must not disclose PharmaNet Data to any third party unless\r\n          such disclosure is required for your provision of Health\r\n          Services or is otherwise authorized under section 24(1) of the Act.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p><strong>Responding to Patient Access Requests.</strong> Aside from any records retained by you in accordance\r\n          with section 4(a) of these Terms of Access, you will not provide to\r\n          patients any copies of records containing PharmaNet Data or &quot;print outs&quot; produced directly from\r\n          PharmaNet,\r\n          and\r\n          will\r\n          refer any requests for access to such records or &quot;print outs&quot; to the Province.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p><strong>Responding to Requests to Correct a Record contained in PharmaNet.</strong> If you receive a request\r\n          for\r\n          correction of any record or information contained in PharmaNet, you will refer the request\r\n          to the Province.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p><strong>Legal Demands for Records Contained in PharmaNet.</strong> You will immediately notify the Province\r\n          if\r\n          you receive any order, demand or request compelling, or threatening to\r\n          compel, disclosure of records contained in PharmaNet. You will cooperate and consult with the Province in\r\n          responding to\r\n          any such demands. For greater certainty, the foregoing requires that you notify the Province only with respect\r\n          to any\r\n          access requests or demands for records contained in PharmaNet, and not records retained by you in accordance\r\n          with\r\n          section 4(a) of these Terms of Access.\r\n        </p>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n  <li>\r\n    <p class=\"bold underline\">\r\n      ACCURACY\r\n    </p>\r\n    <p>\r\n      You will make reasonable efforts to ensure that any Personal Information recorded by you in PharmaNet is accurate,\r\n      complete and up to date. In the event that you become aware of a material inaccuracy or error in such information,\r\n      you\r\n      will take reasonable steps to investigate the inaccuracy or error, correct it if necessary, and notify the\r\n      Province of\r\n      the inaccuracy or error and any steps taken.\r\n    </p>\r\n  </li>\r\n  <li>\r\n    <p class=\"bold underline\">\r\n      NOTICE OF NON COMPLIANCE\r\n    </p>\r\n    <ol type=\"a\">\r\n      <li>\r\n        <strong>Non-Compliance.</strong> You will promptly notify the Province, and provide particulars, if:\r\n        <ol type=\"i\">\r\n          <li>\r\n            you do not comply, or you anticipate that you will be unable to comply with these Terms of Access in any\r\n            respect, or\r\n          </li>\r\n          <li>\r\n            you have knowledge of any circumstances, incidents or events which have or may jeopardize the security,\r\n            confidentiality, or integrity of PharmaNet, the provincial drug program, or any government network or\r\n            electronic system\r\n            including any unauthorized attempt, by any person, to access PharmaNet.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>Reports to College or Privacy Commissioner.</strong> You acknowledge that the Province may report of\r\n          any material breach of the Act, the Information Management Regulation,\r\n          or these Terms of Access to your Professional College or to the Information and Privacy Commissioner of\r\n          British\r\n          Columbia.\r\n        </p>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n  <li>\r\n    <p class=\"bold underline\">\r\n      SUSPENSION & TERMINATION OF ACCESS\r\n    </p>\r\n    <ol type=\"a\">\r\n      <li>\r\n        <p><strong>Termination by You for Any Reason.</strong> You may terminate your grant of access to PharmaNet at\r\n          any time on\r\n          written notice to the Province.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>Termination of PharmaNet access.</strong> The Province may take administrative action against you in\r\n          relation to\r\n          your grant of access to PharmaNet, including to\r\n          terminate or suspend your access, in accordance with the provisions of the Information Management Regulation.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>Suspension of Account for Inactivity.</strong> As a security precaution, the Province may suspend your\r\n          account\r\n          after a period of inactivity, in accordance with the\r\n          Province’s policies. Please contact the Province immediately if your account has been suspended for inactivity\r\n          but you\r\n          still require access to PharmaNet.\r\n        </p>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n  <li>\r\n    <p class=\"bold underline\">\r\n      DISCLAIMER OF WARRANTY, LIMITATION OF LIABILITY AND INDEMNITY\r\n    </p>\r\n    <ol type=\"a\">\r\n      <li>\r\n        <p>\r\n          <strong>Information Provided As Is.</strong> You acknowledge and agree that any use of PharmaNet and PharmaNet\r\n          Data is solely at your own risk. All such access and information is provided on an &quot;as is&quot; and\r\n          &quot;as available&quot; basis without warranty or condition of any kind. The Province does not warrant the\r\n          accuracy, completeness or reliability of the PharmaNet Data or the availability of PharmaNet, or that access\r\n          to or the operation of PharmaNet will function without error, failure or interruption.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>You are Responsible.</strong> You are responsible for verifying the accuracy of information disclosed\r\n          to you as a result of your access to PharmaNet or otherwise pursuant to this Agreement before relying or\r\n          acting upon such information. The clinical or other information disclosed to you or an On-Behalf-of User\r\n          pursuant to this Agreement is in no way intended to be a substitute for professional judgment.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>The Province Not Liable for Loss.</strong> No action may be brought by any person against the Province\r\n          for any loss or damage of any kind caused by any reason or purpose related to reliance on PharmaNet or\r\n          PharmaNet Data.\r\n        </p>\r\n      </li>\r\n      <li>\r\n        <p>\r\n          <strong>You Must Indemnify the Province if You Cause a Loss or Claim.</strong> You agree to indemnify and save\r\n          harmless the Province, and the Province’s employees and agents (each an <strong>\"Indemnified Person\"</strong>)\r\n          from any losses, claims, damages, actions, causes of action, costs and expenses that an Indemnified Person may\r\n          sustain, incur, suffer or be put to at any time, either before or after this Agreement ends, which are based\r\n          upon, arise out of or occur directly or indirectly by reason of any act or omission by you, or by any\r\n          On-Behalf-of User, in connection with this Agreement.\r\n        </p>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n  <li>\r\n    <p class=\"bold underline\">\r\n      GENERAL\r\n    </p>\r\n\r\n    <ol type=\"a\">\r\n      <li>\r\n        <p>\r\n          <strong>Notice to Province.</strong> Except where these Terms of Access expressly provides for another method\r\n          of delivery, any notice to be given by you to\r\n          the Province that is contemplated by these Terms of Access must be in writing and emailed or mailed to:\r\n        </p>\r\n\r\n        Director, Information and PharmaNet Development<br/>\r\n        Ministry of Health<br/>\r\n        PO Box 9652, STN PROV GOVT<br/>\r\n        Victoria, BC V8W 9P4<br/>\r\n\r\n        <p>\r\n          Email: <i><a href=\"mailto:PRIMESupport@gov.bc.ca\">PRIMESupport@gov.bc.ca</a></i>\r\n        </p>\r\n\r\n        <p>\r\n          <strong>Notice to You.</strong> Any notice to you to be delivered under these Terms of Access will be in\r\n          writing and delivered by the Province to you\r\n          using any of the contact mechanisms identified by you in PRIME, including by mail to a specified postal\r\n          address, email\r\n          to a specified email address or text message to the specified cell phone number. You may be required to click\r\n          a URL link\r\n          or log into PRIME to receive the content of any such notice.\r\n        </p>\r\n      </li>\r\n      <li>\r\n\r\n        <p>\r\n          <strong>Deemed receipt.</strong>\r\n          Any written communication from a party, if sent electronically, will be deemed to have been received\r\n          immediately, or, if\r\n          sent by mail, will be deemed to have been received three days (excluding Saturdays, Sundays and statutory\r\n          holidays)\r\n          after the date the notice was sent.\r\n        </p>\r\n\r\n      </li>\r\n      <li>\r\n\r\n        <p>\r\n          <strong>Substitute contact information.</strong>\r\n          You may notify the Province of a substitute contact mechanism by updating your contact information in PRIME.\r\n        </p>\r\n\r\n      </li>\r\n      <li>\r\n        <strong>Province may modify Terms of Access.</strong>\r\n        The Province may amend these Terms of Access, including this section, at any time in its sole discretion:\r\n        <ol type=\"i\">\r\n          <li>\r\n            by written notice to you, in which case the amendment will become effective upon the later of (A) the\r\n            date notice of the amendment is first delivered to you, or (B) the effective date of the amendment\r\n            specified by the Province, if any;\r\n            or </li>\r\n          <li>\r\n            by publishing notice of any such amendment in the PharmaCare Newsletter, in which case the notice will\r\n            specify the effective date of the amendment, which date will be at least thirty days after the date\r\n            that the PharmaCare Newsletter containing the notice is first published. </li>\r\n        </ol>\r\n      </li>\r\n    </ol>\r\n\r\n  </li>\r\n</ol>\r\n<p>\r\n  Version Date: September 27, 2022\r\n</p>",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -1154,16 +1145,6 @@ namespace Prime.Migrations
                         {
                             Code = 18,
                             Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC"
-                        },
-                        new
-                        {
-                            Code = 19,
-                            Name = "BC College of Social Workers"
-                        },
-                        new
-                        {
-                            Code = 20,
-                            Name = "College of Oral Health Professionals"
                         });
                 });
 
@@ -1178,9 +1159,6 @@ namespace Prime.Migrations
                     b.Property<int?>("CollegeLicenseGroupingCode")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("Discontinued")
-                        .HasColumnType("boolean");
-
                     b.HasKey("CollegeCode", "LicenseCode");
 
                     b.HasIndex("CollegeLicenseGroupingCode");
@@ -1193,664 +1171,458 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 1,
-                            Discontinued = false
+                            LicenseCode = 1
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 2,
-                            Discontinued = false
+                            LicenseCode = 2
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 3,
-                            Discontinued = false
+                            LicenseCode = 3
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 4,
-                            Discontinued = false
+                            LicenseCode = 4
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 5,
-                            Discontinued = false
+                            LicenseCode = 5
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 6,
-                            Discontinued = false
+                            LicenseCode = 6
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 7,
-                            Discontinued = false
+                            LicenseCode = 7
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 8,
-                            Discontinued = false
+                            LicenseCode = 8
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 9,
-                            Discontinued = false
+                            LicenseCode = 9
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 10,
-                            Discontinued = false
+                            LicenseCode = 10
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 11,
-                            Discontinued = false
+                            LicenseCode = 11
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 12,
-                            Discontinued = false
+                            LicenseCode = 12
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 13,
-                            Discontinued = false
+                            LicenseCode = 13
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 14,
-                            Discontinued = false
+                            LicenseCode = 14
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 15,
-                            Discontinued = false
+                            LicenseCode = 15
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 16,
-                            Discontinued = false
+                            LicenseCode = 16
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 17,
-                            Discontinued = false
+                            LicenseCode = 17
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 18,
-                            Discontinued = false
+                            LicenseCode = 18
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 19,
-                            Discontinued = false
+                            LicenseCode = 19
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 20,
-                            Discontinued = false
+                            LicenseCode = 20
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 21,
-                            Discontinued = false
+                            LicenseCode = 21
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 22,
-                            Discontinued = false
+                            LicenseCode = 22
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 23,
-                            Discontinued = false
+                            LicenseCode = 23
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 24,
-                            Discontinued = false
+                            LicenseCode = 24
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 59,
-                            Discontinued = false
+                            LicenseCode = 59
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 65,
-                            Discontinued = false
+                            LicenseCode = 65
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 66,
-                            Discontinued = false
+                            LicenseCode = 66
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 67,
-                            Discontinued = false
+                            LicenseCode = 67
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 25,
-                            Discontinued = false
+                            LicenseCode = 25
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 26,
-                            Discontinued = false
+                            LicenseCode = 26
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 27,
-                            Discontinued = false
+                            LicenseCode = 27
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 28,
-                            Discontinued = false
+                            LicenseCode = 28
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 29,
-                            Discontinued = false
+                            LicenseCode = 29
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 30,
-                            Discontinued = false
+                            LicenseCode = 30
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 31,
-                            Discontinued = false
+                            LicenseCode = 31
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 68,
-                            Discontinued = false
+                            LicenseCode = 68
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 32,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 33,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 34,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 35,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 36,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 37,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 39,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 40,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 41,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 42,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 43,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 45,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 46,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 47,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 48,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 49,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 51,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 52,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 53,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 54,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 55,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 60,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 61,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 62,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 63,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 69,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 70,
-                            Discontinued = true
+                            LicenseCode = 70
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 75,
-                            Discontinued = true
+                            LicenseCode = 75
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 76,
-                            Discontinued = true
+                            LicenseCode = 76
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 77,
-                            Discontinued = true
+                            LicenseCode = 77
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 78,
-                            Discontinued = false
+                            LicenseCode = 78
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 79,
-                            Discontinued = false
+                            LicenseCode = 79
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 80,
-                            Discontinued = false
+                            LicenseCode = 80
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 81,
-                            Discontinued = false
+                            LicenseCode = 81
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 71,
-                            Discontinued = false
+                            LicenseCode = 71
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 72,
-                            Discontinued = false
+                            LicenseCode = 72
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 73,
-                            Discontinued = false
+                            LicenseCode = 73
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 74,
-                            Discontinued = false
+                            LicenseCode = 74
                         },
                         new
                         {
                             CollegeCode = 4,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 5,
-                            LicenseCode = 64,
-                            Discontinued = true
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 6,
-                            LicenseCode = 64,
-                            Discontinued = true
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 8,
-                            LicenseCode = 64,
-                            Discontinued = true
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 9,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 10,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 12,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 13,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 15,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 16,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 17,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 18,
-                            LicenseCode = 64,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 19,
-                            LicenseCode = 82,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 19,
-                            LicenseCode = 83,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 19,
-                            LicenseCode = 84,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 19,
-                            LicenseCode = 85,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 19,
-                            LicenseCode = 86,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 87,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 88,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 89,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 90,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 91,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 92,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 93,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 94,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 95,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 96,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 97,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 98,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 99,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 100,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 101,
-                            Discontinued = false
+                            LicenseCode = 64
                         });
                 });
 
@@ -4350,9 +4122,6 @@ namespace Prime.Migrations
                     b.Property<int>("CareSettingCode")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("ConsentForAutoPull")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -4383,9 +4152,6 @@ namespace Prime.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<bool>("ConsentForAutoPull")
-                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -6002,126 +5768,6 @@ namespace Prime.Migrations
                             Code = 74,
                             Name = "Limited Optometrist",
                             Weight = 4
-                        },
-                        new
-                        {
-                            Code = 82,
-                            Name = "Full registration",
-                            Weight = 1
-                        },
-                        new
-                        {
-                            Code = 83,
-                            Name = "Clinical registration",
-                            Weight = 2
-                        },
-                        new
-                        {
-                            Code = 84,
-                            Name = "Provisional registration",
-                            Weight = 3
-                        },
-                        new
-                        {
-                            Code = 85,
-                            Name = "Non-practicing registration",
-                            Weight = 4
-                        },
-                        new
-                        {
-                            Code = 86,
-                            Name = "Temporary registration",
-                            Weight = 4
-                        },
-                        new
-                        {
-                            Code = 87,
-                            Name = "Dental Hygienists",
-                            Weight = 1
-                        },
-                        new
-                        {
-                            Code = 88,
-                            Name = "Dental Hygiene Practitioner",
-                            Weight = 2
-                        },
-                        new
-                        {
-                            Code = 89,
-                            Name = "Full Dentist",
-                            Weight = 3
-                        },
-                        new
-                        {
-                            Code = 90,
-                            Name = "Limited Dentist (Restricted to Specialty)",
-                            Weight = 4
-                        },
-                        new
-                        {
-                            Code = 91,
-                            Name = "Limited (Academic) Dentist",
-                            Weight = 5
-                        },
-                        new
-                        {
-                            Code = 92,
-                            Name = "Limited (Educational and Volunteer) Dentist",
-                            Weight = 6
-                        },
-                        new
-                        {
-                            Code = 93,
-                            Name = "Limited (Armed Forces/Government) Dentist",
-                            Weight = 7
-                        },
-                        new
-                        {
-                            Code = 94,
-                            Name = "Dental Therapist",
-                            Weight = 8
-                        },
-                        new
-                        {
-                            Code = 95,
-                            Name = "Dental Technician",
-                            Weight = 9
-                        },
-                        new
-                        {
-                            Code = 96,
-                            Name = "Full Denturist",
-                            Weight = 10
-                        },
-                        new
-                        {
-                            Code = 97,
-                            Name = "Student Dentistry",
-                            Weight = 11
-                        },
-                        new
-                        {
-                            Code = 98,
-                            Name = "Limited (Grandparented) Denturist",
-                            Weight = 12
-                        },
-                        new
-                        {
-                            Code = 99,
-                            Name = "Student dental technology",
-                            Weight = 13
-                        },
-                        new
-                        {
-                            Code = 100,
-                            Name = "Student Denturism",
-                            Weight = 14
-                        },
-                        new
-                        {
-                            Code = 101,
-                            Name = "Temporary",
-                            Weight = 15
                         },
                         new
                         {
@@ -9936,331 +9582,6 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
-                        },
-                        new
-                        {
-                            Id = 233,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 82,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 234,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 83,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 235,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 84,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 236,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 85,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 237,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 9, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 86,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 238,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 87,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 239,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 88,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 240,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 89,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 241,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 90,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 242,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 91,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 243,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 92,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 244,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 93,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 245,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 94,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 246,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 95,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 247,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 96,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 248,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 97,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 249,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 98,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 250,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 99,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 251,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 100,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 252,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 101,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
                         });
                 });
 
@@ -14322,9 +13643,6 @@ namespace Prime.Migrations
                     b.Property<bool>("Flagged")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Mnemonic")
-                        .HasColumnType("text");
-
                     b.Property<string>("PEC")
                         .HasColumnType("text");
 
@@ -15097,47 +14415,6 @@ namespace Prime.Migrations
                             Email = "",
                             Name = "Cerner"
                         });
-                });
-
-            modelBuilder.Entity("Prime.Models.VendorApiLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("EndPoint")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ErrorMessage")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Input")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Output")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ServiceAccountUsername")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("VendorApiLog");
                 });
 
             modelBuilder.Entity("Prime.Models.VerifiableCredentials.Credential", b =>
