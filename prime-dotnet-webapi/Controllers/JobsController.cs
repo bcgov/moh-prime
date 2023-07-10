@@ -1,4 +1,4 @@
-
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -6,9 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Configuration.Auth;
 using Prime.Services;
-using Prime.ViewModels.Emails;
-using System.Collections.Generic;
-using Prime.Models.Api;
 
 namespace Prime.Controllers
 {
@@ -35,9 +32,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> PopulatePractitionerTable()
+        public async Task<ActionResult> PopulatePractitionerTable(DateTime? startDate = null, DateTime? endDate = null)
         {
-            var result = await _reportingService.PopulatePractitionerTableAsync();
+            var result = await _reportingService.PopulatePractitionerTableAsync(startDate, endDate);
             return Ok(result);
         }
 
