@@ -2,6 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/t
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import * as faker from 'faker';
 import { KeycloakService } from 'keycloak-angular';
@@ -25,6 +26,7 @@ describe('AccessAgreementHistoryEnrolmentComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
+        ReactiveFormsModule,
         NgxBusyModule,
         HttpClientTestingModule,
         RouterTestingModule,

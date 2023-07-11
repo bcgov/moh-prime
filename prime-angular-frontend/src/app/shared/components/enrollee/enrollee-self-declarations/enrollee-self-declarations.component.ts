@@ -1,9 +1,8 @@
+import { FormArray } from '@angular/forms';
 import { EventEmitter, Component, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { Router } from '@angular/router';
-
-import { EnumUtils } from '@lib/utils/enum-utils.class';
 
 import moment from 'moment';
 
@@ -11,7 +10,7 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
-import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.model';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 interface SelfDeclarationComposite {
   selfDeclarationTypeCode: SelfDeclarationTypeEnum;
@@ -53,6 +52,7 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
 
   constructor(
     private enrolmentResource: EnrolmentResource,
+    private enrolmentFormStateService: EnrolmentFormStateService,
     private utilsService: UtilsService,
     private router: Router
   ) {
@@ -94,13 +94,41 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
     let newSelfDeclarations = this.enrolment.selfDeclarations
       .map((selfDeclaration: SelfDeclaration) => {
         const selfDeclarationTypeCode = selfDeclaration.selfDeclarationTypeCode;
-        const selfDeclarationDocuments = this.enrolment.selfDeclarationDocuments
+        let selfDeclarationDocuments = this.enrolment.selfDeclarationDocuments
           ?.filter(d => d.selfDeclarationTypeCode === selfDeclarationTypeCode) ?? [];
+
+        //get the document from form control
+        switch (selfDeclarationTypeCode) {
+          case SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION:
+            selfDeclarationDocuments = selfDeclarationDocuments.concat(this.getDocumentFromFormControl('hasDisciplinaryActionDocument'));
+            break;
+          case SelfDeclarationTypeEnum.HAS_CONVICTION:
+            selfDeclarationDocuments = selfDeclarationDocuments.concat(this.getDocumentFromFormControl('hasConvictionDocument'));
+            break;
+          case SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED:
+            selfDeclarationDocuments = selfDeclarationDocuments.concat(this.getDocumentFromFormControl('hasPharmaNetSuspendedDocument'));
+            break;
+          case SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED:
+            selfDeclarationDocuments = selfDeclarationDocuments.concat(this.getDocumentFromFormControl('hasRegistrationSuspendedDocument'));
+            break;
+        }
 
         return this.createSelfDeclarationComposite(selfDeclarationTypeCode, selfDeclaration, selfDeclarationDocuments);
 
       });
     return newSelfDeclarations.sort((a, b) => a.selfDeclarationTypeCode - b.selfDeclarationTypeCode);
+  }
+
+  private getDocumentFromFormControl(controlPrefix: string): SelfDeclarationDocument[] {
+    let documents: SelfDeclarationDocument[] = [];
+    let filenameArray = this.enrolmentFormStateService.selfDeclarationForm.get(`${controlPrefix}Filenames`) as FormArray;
+    if (filenameArray.value.length > 0) {
+      let guidArray = this.enrolmentFormStateService.selfDeclarationForm.get(`${controlPrefix}Guids`) as FormArray;
+      for (var i = 0; i < filenameArray.value.length; i++) {
+        documents.push({ filename: filenameArray.value[i], documentGuid: guidArray.value[i] } as SelfDeclarationDocument);
+      }
+    }
+    return documents;
   }
 
   private createSelfDeclarationComposite(

@@ -116,15 +116,19 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
     this.formInstance = this.fb.group({
       hasConviction: [null, [FormControlValidators.requiredBoolean]],
       hasConvictionDetails: [null, []],
+      hasConvictionDocumentFilenames: this.fb.array([]),
       hasConvictionDocumentGuids: this.fb.array([]),
       hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasRegistrationSuspendedDetails: [null, []],
+      hasRegistrationSuspendedDocumentFilenames: this.fb.array([]),
       hasRegistrationSuspendedDocumentGuids: this.fb.array([]),
       hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
       hasDisciplinaryActionDetails: [null, []],
+      hasDisciplinaryActionDocumentFilenames: this.fb.array([]),
       hasDisciplinaryActionDocumentGuids: this.fb.array([]),
       hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasPharmaNetSuspendedDetails: [null, []],
+      hasPharmaNetSuspendedDocumentFilenames: this.fb.array([]),
       hasPharmaNetSuspendedDocumentGuids: this.fb.array([])
     });
   }
@@ -156,7 +160,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
       'hasConvictionDocumentGuids',
       'hasRegistrationSuspendedDocumentGuids',
       'hasDisciplinaryActionDocumentGuids',
-      'hasPharmaNetSuspendedDocumentGuids'
+      'hasPharmaNetSuspendedDocumentGuids',
     ]
       .map((formArrayName: string) => this.form.get(formArrayName) as FormArray)
       .forEach((formArray: FormArray) => formArray.clear());
