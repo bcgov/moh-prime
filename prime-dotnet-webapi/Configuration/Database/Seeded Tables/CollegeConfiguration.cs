@@ -29,9 +29,7 @@ namespace Prime.Configuration.Database
                     new College { Code = 16, Name = "College of Psychologists of BC"                                                 },
                     new College { Code = 17, Name = "College of Speech and Hearing Health Professionals of BC"                       },
                     new College { Code = 18, Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC" },
-
                     new College { Code = 19, Name = "BC College of Social Workers" },
-
                     new College { Code = 20, Name = "College of Oral Health Professionals" }
                 };
             }
