@@ -7,6 +7,13 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<int>(
+                name: "Weight",
+                table: "CollegeLookup",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
             migrationBuilder.AddColumn<bool>(
                 name: "Discontinued",
                 table: "CollegeLicense",
@@ -70,31 +77,164 @@ namespace Prime.Migrations
                 column: "Discontinued",
                 value: true);
 
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 1,
+                column: "Weight",
+                value: 10);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 2,
+                column: "Weight",
+                value: 20);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 3,
+                column: "Weight",
+                value: 30);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 4,
+                column: "Weight",
+                value: 40);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 5,
+                column: "Weight",
+                value: 999);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 6,
+                column: "Weight",
+                value: 999);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 7,
+                column: "Weight",
+                value: 999);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 8,
+                column: "Weight",
+                value: 60);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 9,
+                column: "Weight",
+                value: 70);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 10,
+                column: "Weight",
+                value: 80);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 11,
+                column: "Weight",
+                value: 90);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 12,
+                column: "Weight",
+                value: 100);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 13,
+                column: "Weight",
+                value: 110);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 14,
+                column: "Weight",
+                value: 120);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 15,
+                column: "Weight",
+                value: 130);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 16,
+                column: "Weight",
+                value: 140);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 17,
+                column: "Weight",
+                value: 160);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 18,
+                column: "Weight",
+                value: 170);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLookup",
+                keyColumn: "Code",
+                keyValue: 19,
+                column: "Weight",
+                value: 180);
+
             migrationBuilder.InsertData(
                 table: "CollegeLookup",
-                columns: new[] { "Code", "Name" },
-                values: new object[] { 20, "College of Oral Health Professionals" });
+                columns: new[] { "Code", "Name", "Weight" },
+                values: new object[] { 20, "College of Oral Health Professionals", 50 });
 
             migrationBuilder.InsertData(
                 table: "LicenseLookup",
                 columns: new[] { "Code", "Name", "Weight" },
                 values: new object[,]
                 {
+                    { 92, "Limited (Educational and Volunteer) Dentist", 6 },
+                    { 93, "Limited (Armed Forces/Government) Dentist", 7 },
+                    { 94, "Dental Therapist", 8 },
                     { 95, "Dental Technician", 9 },
                     { 96, "Full Denturist", 10 },
-                    { 93, "Limited (Armed Forces/Government) Dentist", 7 },
-                    { 98, "Limited (Grandparented) Denturist", 12 },
-                    { 99, "Student dental technology", 13 },
-                    { 100, "Student Denturism", 14 },
+                    { 97, "Student Dentistry", 11 },
                     { 101, "Temporary", 15 },
-                    { 92, "Limited (Educational and Volunteer) Dentist", 6 },
+                    { 100, "Student Denturism", 14 },
                     { 91, "Limited (Academic) Dentist", 5 },
                     { 90, "Limited Dentist (Restricted to Specialty)", 4 },
                     { 89, "Full Dentist", 3 },
                     { 88, "Dental Hygiene Practitioner", 2 },
                     { 87, "Dental Hygienists", 1 },
-                    { 94, "Dental Therapist", 8 },
-                    { 97, "Student Dentistry", 11 }
+                    { 98, "Limited (Grandparented) Denturist", 12 },
+                    { 99, "Student dental technology", 13 }
                 });
 
             migrationBuilder.InsertData(
@@ -373,6 +513,10 @@ namespace Prime.Migrations
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 101);
+
+            migrationBuilder.DropColumn(
+                name: "Weight",
+                table: "CollegeLookup");
 
             migrationBuilder.DropColumn(
                 name: "Discontinued",

@@ -14,6 +14,8 @@ namespace Prime.Models
         [Required]
         public string Name { get; set; }
 
+        public int Weight { get; set; }
+
         [JsonIgnore]
         public ICollection<Certification> Certifications { get; set; }
 

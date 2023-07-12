@@ -1060,6 +1060,9 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Weight")
+                        .HasColumnType("integer");
+
                     b.HasKey("Code");
 
                     b.ToTable("CollegeLookup");
@@ -1068,102 +1071,122 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
-                            Name = "College of Physicians and Surgeons of BC (CPSBC)"
+                            Name = "College of Physicians and Surgeons of BC (CPSBC)",
+                            Weight = 10
                         },
                         new
                         {
                             Code = 2,
-                            Name = "College of Pharmacists of BC (CPBC)"
+                            Name = "College of Pharmacists of BC (CPBC)",
+                            Weight = 20
                         },
                         new
                         {
                             Code = 3,
-                            Name = "BC College of Nurses and Midwives (BCCNM)"
+                            Name = "BC College of Nurses and Midwives (BCCNM)",
+                            Weight = 30
                         },
                         new
                         {
                             Code = 4,
-                            Name = "College of Chiropractors of BC"
+                            Name = "College of Chiropractors of BC",
+                            Weight = 40
                         },
                         new
                         {
                             Code = 5,
-                            Name = "College of Dental Hygenists of BC"
+                            Name = "College of Dental Hygenists of BC",
+                            Weight = 999
                         },
                         new
                         {
                             Code = 6,
-                            Name = "College of Dental Technicians of BC"
+                            Name = "College of Dental Technicians of BC",
+                            Weight = 999
                         },
                         new
                         {
                             Code = 7,
-                            Name = "College of Dental Surgeons of BC"
+                            Name = "College of Dental Surgeons of BC",
+                            Weight = 999
                         },
                         new
                         {
                             Code = 8,
-                            Name = "College of Denturists of BC"
+                            Name = "College of Denturists of BC",
+                            Weight = 60
                         },
                         new
                         {
                             Code = 9,
-                            Name = "College of Dietitians of BC"
+                            Name = "College of Dietitians of BC",
+                            Weight = 70
                         },
                         new
                         {
                             Code = 10,
-                            Name = "College of Massage Therapists of BC"
+                            Name = "College of Massage Therapists of BC",
+                            Weight = 80
                         },
                         new
                         {
                             Code = 11,
-                            Name = "College of Naturopathic Physicians of BC"
+                            Name = "College of Naturopathic Physicians of BC",
+                            Weight = 90
                         },
                         new
                         {
                             Code = 12,
-                            Name = "College of Occupational Therapists of BC"
+                            Name = "College of Occupational Therapists of BC",
+                            Weight = 100
                         },
                         new
                         {
                             Code = 13,
-                            Name = "College of Opticians of BC"
+                            Name = "College of Opticians of BC",
+                            Weight = 110
                         },
                         new
                         {
                             Code = 14,
-                            Name = "College of Optometrists of BC"
+                            Name = "College of Optometrists of BC",
+                            Weight = 120
                         },
                         new
                         {
                             Code = 15,
-                            Name = "College of Physical Therapists of BC"
+                            Name = "College of Physical Therapists of BC",
+                            Weight = 130
                         },
                         new
                         {
                             Code = 16,
-                            Name = "College of Psychologists of BC"
+                            Name = "College of Psychologists of BC",
+                            Weight = 140
                         },
                         new
                         {
                             Code = 17,
-                            Name = "College of Speech and Hearing Health Professionals of BC"
+                            Name = "College of Speech and Hearing Health Professionals of BC",
+                            Weight = 160
                         },
                         new
                         {
                             Code = 18,
-                            Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC"
+                            Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC",
+                            Weight = 170
                         },
                         new
                         {
                             Code = 19,
-                            Name = "BC College of Social Workers"
+                            Name = "BC College of Social Workers",
+                            Weight = 180
                         },
                         new
                         {
                             Code = 20,
-                            Name = "College of Oral Health Professionals"
+                            Name = "College of Oral Health Professionals",
+                            Weight = 50
                         });
                 });
 

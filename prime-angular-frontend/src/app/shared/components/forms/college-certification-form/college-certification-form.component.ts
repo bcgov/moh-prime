@@ -129,8 +129,8 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public allowedColleges(): CollegeConfig[] {
     return (this.collegeFilterPredicate)
-      ? this.filteredColleges.filter(this.collegeFilterPredicate)
-      : this.filteredColleges;
+      ? this.filteredColleges.filter(this.collegeFilterPredicate).sort((a, b) => a.weight - b.weight)
+      : this.filteredColleges.sort((a, b) => a.weight - b.weight);
   }
 
   public allowedLicenses() {
