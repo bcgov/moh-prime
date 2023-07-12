@@ -63,13 +63,13 @@ function dailyAction() {
     done
 }
 
-function hourlyAction() {
-    while true
-    do 
-        sleep 3600
-        databaseBackup
-    done
-}
+# function hourlyAction() {
+#     while true
+#     do 
+#         sleep 3600
+#         databaseBackup
+#     done
+# }
 
 dailyAction &disown
-hourlyAction &disown
+# hourlyAction &disown
