@@ -9,6 +9,7 @@ export class MockConfig {
         {
           'code': 1,
           'name': 'College of Physicians and Surgeons of BC (CPSBC)',
+          'weight': 10,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -184,6 +185,7 @@ export class MockConfig {
         {
           'code': 2,
           'name': 'College of Pharmacists of BC (CPBC)',
+          'weight': 20,
           'collegeLicenses': [
             {
               'collegeCode': 2,
@@ -239,6 +241,7 @@ export class MockConfig {
         {
           'code': 3,
           'name': 'BC College of Nurses and Midwives (BCCNM)',
+          'weight': 30,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -419,6 +422,7 @@ export class MockConfig {
         {
           'code': 4,
           'name': 'College of Chiropractors of BC',
+          'weight': 40,
           'collegeLicenses': [
             {
               'collegeCode': 4,
@@ -432,6 +436,7 @@ export class MockConfig {
         {
           'code': 5,
           'name': 'College of Dental Hygenists of BC',
+          'weight': 50,
           'collegeLicenses': [
             {
               'collegeCode': 5,
@@ -445,6 +450,7 @@ export class MockConfig {
         {
           'code': 6,
           'name': 'College of Dental Technicians of BC',
+          'weight': 60,
           'collegeLicenses': [
             {
               'collegeCode': 6,
@@ -458,6 +464,7 @@ export class MockConfig {
         {
           'code': 7,
           'name': 'College of Dental Surgeons of BC',
+          'weight': 70,
           'collegeLicenses': [
             {
               'collegeCode': 7,
@@ -471,6 +478,7 @@ export class MockConfig {
         {
           'code': 8,
           'name': 'College of Denturists of BC',
+          'weight': 80,
           'collegeLicenses': [
             {
               'collegeCode': 8,
@@ -484,6 +492,7 @@ export class MockConfig {
         {
           'code': 9,
           'name': 'College of Dietitians of BC',
+          'weight': 90,
           'collegeLicenses': [
             {
               'collegeCode': 9,
@@ -497,6 +506,7 @@ export class MockConfig {
         {
           'code': 10,
           'name': 'College of Massage Therapists of BC',
+          'weight': 100,
           'collegeLicenses': [
             {
               'collegeCode': 10,
@@ -510,6 +520,7 @@ export class MockConfig {
         {
           'code': 11,
           'name': 'College of Naturopathic Physicians of BC',
+          'weight': 110,
           'collegeLicenses': [
             {
               'collegeCode': 11,
@@ -523,6 +534,7 @@ export class MockConfig {
         {
           'code': 12,
           'name': 'College of Occupational Therapists of BC',
+          'weight': 120,
           'collegeLicenses': [
             {
               'collegeCode': 12,
@@ -536,6 +548,7 @@ export class MockConfig {
         {
           'code': 13,
           'name': 'College of Opticians of BC',
+          'weight': 130,
           'collegeLicenses': [
             {
               'collegeCode': 13,
@@ -549,6 +562,7 @@ export class MockConfig {
         {
           'code': 14,
           'name': 'College of Optometrists of BC',
+          'weight': 140,
           'collegeLicenses': [
             {
               'collegeCode': 14,
@@ -562,6 +576,7 @@ export class MockConfig {
         {
           'code': 15,
           'name': 'College of Physical Therapists of BC',
+          'weight': 150,
           'collegeLicenses': [
             {
               'collegeCode': 15,
@@ -575,6 +590,7 @@ export class MockConfig {
         {
           'code': 16,
           'name': 'College of Psychologists of BC',
+          'weight': 160,
           'collegeLicenses': [
             {
               'collegeCode': 16,
@@ -588,6 +604,7 @@ export class MockConfig {
         {
           'code': 17,
           'name': 'College of Speech and Hearing Health Professionals of BC',
+          'weight': 170,
           'collegeLicenses': [
             {
               'collegeCode': 17,
@@ -601,6 +618,7 @@ export class MockConfig {
         {
           'code': 18,
           'name': 'College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC',
+          'weight': 180,
           'collegeLicenses': [
             {
               'collegeCode': 18,
