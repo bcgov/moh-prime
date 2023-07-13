@@ -1,7 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
+import { formatDate } from "@angular/common";
+import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Sort, MatSort } from '@angular/material/sort';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
@@ -21,7 +24,7 @@ class ImprovedPageEvent extends PageEvent {
   templateUrl: './site-registration-table.component.html',
   styleUrls: ['./site-registration-table.component.scss']
 })
-export class SiteRegistrationTableComponent implements OnInit {
+export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
   @Input() public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
   @Input() public columns: string[];
   @Input() public pagination: Pagination;
@@ -34,6 +37,7 @@ export class SiteRegistrationTableComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
   @ViewChild('secondaryPaginator', { static: true }) public secondaryPaginator: MatPaginator;
 
+  @ViewChild('siteTbSort') siteTbSort = new MatSort();
 
   public SiteStatusType = SiteStatusType;
   public CareSettingEnum = CareSettingEnum;
@@ -67,6 +71,7 @@ export class SiteRegistrationTableComponent implements OnInit {
     this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.routeUtils = new RouteUtils(activatedRoute, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
+
   }
 
   public onAssign(siteId: number): void {
@@ -123,5 +128,40 @@ export class SiteRegistrationTableComponent implements OnInit {
     other.page.emit(event);
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+  }
+
+  public ngAfterViewInit(): void {
+    this.siteTbSort.disableClear = true;
+    this.dataSource.sort = this.siteTbSort;
+  }
+
+  public sortData(sort: Sort) {
+    const data = this.dataSource.data.slice();
+    if (!sort.active || sort.direction === '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'state':
+          return compare(a.status, b.status, isAsc, false);
+        case 'submissionDate':
+          return compare(a.submittedDate, b.submittedDate, isAsc, true);
+        default:
+          return 0;
+      }
+    });
+  }
+}
+
+
+function compare(a: number | string, b: number | string, isAsc: boolean, isDate: boolean) {
+  if (isDate) {
+    return (formatDate(a, 'dd MMM yyyy', 'en_US') < formatDate(b, 'dd MMM yyyy', 'en_US') ? -1 : 1) * (isAsc ? 1 : -1);
+  } else {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
 }

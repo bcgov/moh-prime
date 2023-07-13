@@ -67,6 +67,9 @@ namespace Prime.Services
                         s => s.Organization.SigningAuthority.FirstName + " " + s.Organization.SigningAuthority.LastName)
                     .Containing(searchOptions.TextSearch)
                 )
+                .If(searchOptions.Status.HasValue, q => q
+                    .Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
+                        .FirstOrDefault().StatusType == searchOptions.Status))
                 .ProjectTo<CommunitySiteAdminListViewModel>(_mapper.ConfigurationProvider)
                 .OrderBy(s => s.DisplayId).ThenByDescending(s => s.SubmittedDate.HasValue).ThenBy(s => s.SubmittedDate)
                 .DecompileAsync();

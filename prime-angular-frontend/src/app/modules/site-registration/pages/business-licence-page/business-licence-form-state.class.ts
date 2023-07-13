@@ -145,6 +145,12 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
     });
   }
 
+  public presetCommunityPharmacySiteId(): void {
+    if (!this.pec.value || this.pec.value === "") {
+      this.pec.setValue("BC00000");
+    }
+  }
+
   private checkPecIsAssignable(): (value: string) => Observable<boolean> {
     return (value: string) => value ? this.siteResource.pecAssignable(this.siteId, value) : of(true);
   }
