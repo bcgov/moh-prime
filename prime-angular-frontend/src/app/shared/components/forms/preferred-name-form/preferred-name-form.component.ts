@@ -24,9 +24,9 @@ export class PreferredNameFormComponent implements OnInit {
   constructor() {
     this.mode = 'column';
     this.formControlConfig = [
-      { label: 'Preferred First Name', name: 'preferredFirstName' },
-      { label: 'Preferred Middle Name (Optional)', name: 'preferredMiddleName' },
-      { label: 'Preferred Last Name', name: 'preferredLastName' }
+      { label: 'Alternate First Name', name: 'preferredFirstName' },
+      { label: 'Alternate Middle Name (Optional)', name: 'preferredMiddleName' },
+      { label: 'Alternate Last Name', name: 'preferredLastName' }
     ];
   }
 

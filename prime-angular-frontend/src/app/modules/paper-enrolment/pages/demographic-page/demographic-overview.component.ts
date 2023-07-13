@@ -14,7 +14,7 @@ import { DemographicForm } from './demographic-form.model';
         <ng-container appPageSubheaderTitle>Enrollee Information</ng-container>
 
         <button mat-icon-button
-                matTooltip="Edit Preferred Name"
+                matTooltip="Edit Alternate Name"
                 (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">
           <mat-icon>edit</mat-icon>
         </button>
@@ -38,7 +38,7 @@ import { DemographicForm } from './demographic-form.model';
 
       <button mat-flat-button
           color="primary"
-          (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">Edit Preferred Name
+          (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">Edit Alternate Name
       </button>
     </app-page-section>
 
