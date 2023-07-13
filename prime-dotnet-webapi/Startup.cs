@@ -93,6 +93,7 @@ namespace Prime
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
+            services.AddScoped<IReportingService, ReportingService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
