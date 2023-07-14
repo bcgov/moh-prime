@@ -50,7 +50,7 @@ namespace Prime.Services
 
                 // query the unauthorized access practitioner ID from pharmanet transaction log table
                 var questionablePractitionerIds = await _context.PharmanetTransactionLogs
-                    .Where(l => l.TxDateTime >= startDate && l.TxDateTime <= endDate)
+                    .Where(l => l.TxDateTime >= startDate && l.TxDateTime <= endDate && l.CollegePrefix != null && l.PractitionerId != null)
                     .Where(l => !enrolleeLicences.Where(e =>
                         // for college BCCNM (code 3), compare PharmaNet ID of the college license to Practitioner Id of the log
                         e.CollegeCode == 3 && e.PractitionerId == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
