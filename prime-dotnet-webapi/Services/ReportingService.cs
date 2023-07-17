@@ -11,7 +11,7 @@ namespace Prime.Services
 {
     public class ReportingService : BaseService, IReportingService
     {
-        private const int CalculationPeriodInDays = 14;
+        private const int CalculationPeriodInDays = 4;
 
         private readonly ICollegeLicenceClient _collegeLicenceClient;
 
