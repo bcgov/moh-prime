@@ -32,7 +32,6 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 18 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 19 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 20 },
-                    new CollegeLicense { CollegeCode = 1, LicenseCode = 21 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 22 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 23 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 24 },
@@ -40,6 +39,8 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 65 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 66 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 67 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 102 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 103 },
 
                     // Pharmacists
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 25 },

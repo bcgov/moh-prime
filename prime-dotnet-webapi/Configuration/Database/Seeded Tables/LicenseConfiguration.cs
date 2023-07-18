@@ -39,6 +39,9 @@ namespace Prime.Configuration.Database
                     new License { Code = 65, Weight = 26, Name = "Educational - Podiatric Surgeon Student (Elective)"  },
                     new License { Code = 66, Weight = 27, Name = "Educational - Podiatric Surgeon Resident (Elective)" },
                     new License { Code = 67, Weight = 28, Name = "Conditional - Podiatric Surgeon Disciplined"         },
+                    // New CPSBC license types
+                    new License { Code = 102, Weight = 21, Name = "Assessment - family" },
+                    new License { Code = 103, Weight = 21, Name = "Associate physician" },
 
                     // Pharmacy
                     new License { Code = 25, Weight = 1, Name = "Full Pharmacist"                    },

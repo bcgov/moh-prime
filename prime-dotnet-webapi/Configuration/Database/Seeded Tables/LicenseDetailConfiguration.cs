@@ -19,6 +19,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime SetValidateForNurseMarch15th2023 = new(2023, 3, 15, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime June9th2023 = new(2023, 6, 9, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime June13th2023 = new(2023, 6, 13, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime July17th2023 = new(2023, 7, 17, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -310,6 +311,17 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id =  250, LicenseCode = 99, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = June13th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id =  251, LicenseCode = 100, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = June13th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id =  252, LicenseCode = 101, Prefix = "", Manual = true, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = June13th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    //CPSBC - Update
+                    new LicenseDetail { Id = 253,  LicenseCode = 7,  Prefix = "91", Manual = false,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true, AllowRequestRemoteAccess = false, EffectiveDate = July17th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 254,  LicenseCode = 16,  Prefix = "91", Manual = true,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true, AllowRequestRemoteAccess = false, EffectiveDate = July17th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 255,  LicenseCode = 9,  Prefix = "91", Manual = false,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true, AllowRequestRemoteAccess = true, EffectiveDate = July17th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 256,  LicenseCode = 15,  Prefix = "91", Manual = false,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true, AllowRequestRemoteAccess = true, EffectiveDate = July17th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 257,  LicenseCode = 22,  Prefix = "91", Manual = false,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true, AllowRequestRemoteAccess = false, EffectiveDate = July17th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 258,  LicenseCode = 17,  Prefix = "91", Manual = false,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true, AllowRequestRemoteAccess = true, EffectiveDate = July17th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    //new CPSBC license types
+                    new LicenseDetail { Id = 259,  LicenseCode = 102,  Prefix = "91", Manual = true,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true, AllowRequestRemoteAccess = false, EffectiveDate = July17th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 260,  LicenseCode = 103,  Prefix = "91", Manual = false,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true, AllowRequestRemoteAccess = true, EffectiveDate = July17th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                  };
             }
         }
