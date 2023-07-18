@@ -26,6 +26,7 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationNamePageFormState } from './organization-name-page-form-state.class';
+import { WebApiLoggerService } from '@core/services/web-api-logger.service';
 
 @UntilDestroy()
 @Component({
@@ -55,6 +56,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
     private siteResource: SiteResource,
     private authService: AuthService,
     private route: ActivatedRoute,
+    private webApiLogger: WebApiLoggerService,
     router: Router
   ) {
     super(dialog, formUtilsService);
@@ -79,6 +81,13 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
         this.orgBookResource.sourceIdMap(),
         tap((sourceId: string) => this.usedOrgBook = true),
         tap((sourceId: string) => this.formState.form.get('registrationId').patchValue(sourceId)),
+        map((sourceId: string) => {
+          console.log('calling webApiLogger.debug ...');
+          this.webApiLogger.debug(`Obtained ${sourceId} for Registration ID`).pipe(
+            tap((logId: number) => console.log(`... webApiLogger.debug called, got ${logId}`))
+          ).subscribe();
+          return sourceId;
+        }),
         this.getDoingBusinessAs()
       )
       .subscribe();
