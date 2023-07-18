@@ -11,7 +11,7 @@ namespace Prime.Services
 {
     public class ReportingService : BaseService, IReportingService
     {
-        private const int CalculationPeriodInDays = 14;
+        private const int CalculationPeriodInDays = 4;
 
         private readonly ICollegeLicenceClient _collegeLicenceClient;
 
@@ -40,28 +40,23 @@ namespace Prime.Services
                 }
 
                 // get all approved enrollee
-                var enrolleeLicences = _context.Enrollees
-                    .Where(e => e.GPID != null && e.Certifications.Any(c => c.Prefix != null))
-                    .Select(e => new
-                    {
-                        e.Certifications.FirstOrDefault().CollegeCode,
-                        e.Certifications.FirstOrDefault().PractitionerId,
-                        e.Certifications.FirstOrDefault().LicenseNumber,
-                        // do not pull prefix from LicenseDetail since we are not sure if prescribing or not
-                        // and the Prefix here has been verified from PharmaNet API
-                        e.Certifications.FirstOrDefault().Prefix
-                    });
+                var enrolleeLicences = _context.Certifications
+                    .Where(c => c.Enrollee.GPID != null && c.Prefix != null)
+                    // do not pull prefix from LicenseDetail since we are not sure if prescribing or not
+                    // and the Prefix here has been verified from PharmaNet API
+                    .Select(e => e);
 
                 _logger.LogInformation("Execute query to get questionable practitioner ID");
 
                 // query the unauthorized access practitioner ID from pharmanet transaction log table
                 var questionablePractitionerIds = await _context.PharmanetTransactionLogs
-                    .Where(l => l.TxDateTime >= startDate && l.TxDateTime <= endDate)
+                    .Where(l => l.TxDateTime >= startDate && l.TxDateTime <= endDate && l.CollegePrefix != null && l.PractitionerId != null)
                     .Where(l => !enrolleeLicences.Where(e =>
                         // for college BCCNM (code 3), compare PharmaNet ID of the college license to Practitioner Id of the log
-                        (e.CollegeCode == 3 && e.PractitionerId == l.PractitionerId && e.Prefix == l.CollegePrefix)
+                        e.CollegeCode == 3 && e.PractitionerId == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
+                    .Where(l => !enrolleeLicences.Where(e =>
                         //for other college, use License Number
-                        || (e.CollegeCode != 3 && e.LicenseNumber == l.PractitionerId && e.Prefix == l.CollegePrefix)).Any())
+                        e.CollegeCode != 3 && e.LicenseNumber == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
                     .Where(l => !_context.Practitioner.Where(p => p.PracRefId == l.CollegePrefix && p.CollegeId == l.PractitionerId).Any())
                     .Select(l => new
                     {
