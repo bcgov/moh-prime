@@ -271,7 +271,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             await _enrolleePaperSubmissionService.AddEnrolleeAdjudicationDocumentsAsync(enrolleeId, admin.Id, payload);
 
@@ -387,7 +387,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            if (!record.MatchesUserIdOf(User))
+            if (!record.MatchesUsernameOf(User))
             {
                 return Forbid();
             }
@@ -417,7 +417,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            if (!record.MatchesUserIdOf(User))
+            if (!record.MatchesUsernameOf(User))
             {
                 return Forbid();
             }

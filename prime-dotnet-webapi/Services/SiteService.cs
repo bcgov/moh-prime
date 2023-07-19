@@ -265,7 +265,10 @@ namespace Prime.Services
             var matchesAnyCert = PredicateBuilder.New<RemoteUserCertification>();
             foreach (var searchedCert in certs)
             {
-                matchesAnyCert.Or(ruc => ruc.CollegeCode == searchedCert.CollegeCode && ruc.LicenseNumber == searchedCert.LicenceNumber);
+                // For BCCNM (college code = 3), matching license number to practitioner ID.
+                matchesAnyCert.Or(ruc => ruc.CollegeCode == searchedCert.CollegeCode &&
+                    ((ruc.LicenseNumber == searchedCert.LicenceNumber && searchedCert.CollegeCode != 3) ||
+                    (ruc.LicenseNumber == searchedCert.PractitionerId && searchedCert.CollegeCode == 3)));
             }
 
             IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications
@@ -465,7 +468,7 @@ namespace Prime.Services
         public async Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user)
         {
             return await _context.SiteRegistrationNotes
-                .Where(en => en.SiteNotification != null && en.SiteNotification.Assignee.UserId == user.GetPrimeUserId())
+                .Where(en => en.SiteNotification != null && en.SiteNotification.Assignee.Username == user.GetPrimeUsername())
                 .Select(en => en.SiteId)
                 .ToListAsync();
         }

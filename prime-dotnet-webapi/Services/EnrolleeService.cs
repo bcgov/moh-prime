@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 using Prime.Configuration.Auth;
+using Prime.Configuration.Api;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
@@ -46,11 +47,11 @@ namespace Prime.Services
                 .AnyAsync(e => e.Id == enrolleeId);
         }
 
-        public async Task<bool> UserIdExistsAsync(Guid userId)
+        public async Task<bool> UsernameExistsAsync(string username)
         {
             return await _context.Enrollees
                 .AsNoTracking()
-                .AnyAsync(e => e.UserId == userId);
+                .AnyAsync(e => e.Username == username);
         }
 
         public async Task<bool> GpidExistsAsync(string gpid)
@@ -60,12 +61,12 @@ namespace Prime.Services
                 .AnyAsync(e => e.GPID == gpid);
         }
 
-        public async Task<EnrolleeStub> GetEnrolleeStubAsync(Guid userId)
+        public async Task<EnrolleeStub> GetEnrolleeStubAsync(string username)
         {
             return await _context.Enrollees
                 .AsNoTracking()
-                .Where(e => e.UserId == userId)
-                .Select(e => new EnrolleeStub { Id = e.Id, UserId = e.UserId })
+                .Where(e => e.Username == username)
+                .Select(e => new EnrolleeStub { Id = e.Id, UserId = e.UserId, Username = e.Username })
                 .SingleOrDefaultAsync();
         }
 
@@ -74,19 +75,19 @@ namespace Prime.Services
             return await _context.Enrollees
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
-                .Select(e => new PermissionsRecord { UserId = e.UserId })
+                .Select(e => new PermissionsRecord { Username = e.Username })
                 .SingleOrDefaultAsync();
         }
 
         /// <summary>
         /// Gets the GPID for an Enrollee.
-        /// Returns null if no Enrollee exists with the given UserId or if the Enrollee is in the 'Declined' status
+        /// Returns null if no Enrollee exists with the given username or if the Enrollee is in the 'Declined' status
         /// </summary>
-        /// <param name="userId"></param>
-        public async Task<string> GetActiveGpidAsync(Guid userId)
+        /// <param name="username"></param>
+        public async Task<string> GetActiveGpidAsync(string username)
         {
             return await _context.Enrollees
-                .Where(enrollee => enrollee.UserId == userId
+                .Where(enrollee => enrollee.Username == username
                     && enrollee.CurrentStatus.StatusCode != (int)StatusType.Declined)
                 .Select(enrollee => enrollee.GPID)
                 .DecompileAsync()
@@ -95,32 +96,44 @@ namespace Prime.Services
 
         /// <summary>
         /// Gets the GPID and other details of an Enrollee.
-        /// Returns null if no Enrollee exists with the given UserId or if the Enrollee is in the 'Declined' status
+        /// Returns null if no Enrollee exists with the given username or if the Enrollee is in the 'Declined' status
         /// </summary>
-        /// <param name="userId"></param>
-        public async Task<HpdidLookup> GetActiveGpidDetailAsync(Guid userId)
+        /// <param name="username"></param>
+        public async Task<HpdidLookup> GetActiveGpidDetailAsync(string username)
         {
             return await _context.Enrollees
-                .Where(enrollee => enrollee.UserId == userId
+                .Where(enrollee => enrollee.Username == username
                     && enrollee.CurrentStatus.StatusCode != (int)StatusType.Declined)
                 .Select(e => new HpdidLookup
                 {
                     Gpid = e.GPID,
                     Hpdid = e.HPDID,
-                    RenewalDate = e.ExpiryDate,
                     // TODO: Refactor code from `EnrolmentCertificate` class
                     AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
                                         .Where(a => a.AcceptedDate != null)
                                         .Select(a => a.AgreementVersion.AccessType)
                                         .FirstOrDefault(),
-                    Licences = e.Certifications.Select(cert =>
-                        new EnrolleeCertDto
-                        {
-                            // TODO: Retrieve from cert.Prefix in future?
-                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
-                            CollegeLicenceNumber = cert.LicenseNumber,
-                            PharmaNetId = cert.PractitionerId
-                        })
+                    Licences = e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ||
+                        e.CurrentStatus.StatusCode == (int)StatusType.Locked || IsPastRenewal(e.Agreements)
+                        ? null
+                        : (e.Certifications.Count > 1)
+                            ? e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = true,
+                                    PractRefId = null,
+                                    CollegeLicenceNumber = null,
+                                    PharmaNetId = null
+                                })
+                            : e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = false,
+                                    // TODO: Retrieve from cert.Prefix in future?
+                                    PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                                    CollegeLicenceNumber = cert.LicenseNumber,
+                                    PharmaNetId = cert.PractitionerId
+                                })
                 })
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
@@ -782,6 +795,15 @@ namespace Prime.Services
             return statusCodesToCheck.Contains(enrollee.CurrentStatus.GetStatusType());
         }
 
+        public async Task<bool> IsEnrolleeProfileCompleteAsync(int enrolleeId)
+        {
+            var enrollee = await _context.Enrollees
+                .AsNoTracking()
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            return enrollee.ProfileCompleted;
+        }
+
         public async Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId)
         {
             return await _context.EnrolleeNotes
@@ -1002,32 +1024,142 @@ namespace Prime.Services
 
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
+            var indefiniteAbsenceHpdids = await _context.EnrolleeAbsences
+                .Where(a => hpdids.Contains(a.Enrollee.HPDID))
+                .Where(a => a.StartTimestamp <= DateTime.UtcNow && a.EndTimestamp == null)
+                .Select(a => a.Enrollee.HPDID)
+                .ToListAsync();
+
             return await _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
-                // Filter out enrollees that haven't got a signed TOA
-                .Where(e => e.CurrentAgreementId != null)
+                .Where(e => e.Submissions.Count > 0)
                 .Select(e => new HpdidLookup
                 {
-                    Gpid = e.GPID,
+                    Gpid = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null : e.GPID,
                     Hpdid = e.HPDID,
-                    RenewalDate = e.ExpiryDate,
+                    Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
+                        indefiniteAbsenceHpdids.Contains(e.HPDID) ?
+                        ProvisionerEnrolmentStatusType.IndefiniteAbsence :
+                            e.CurrentAgreementId == null ?
+                                ProvisionerEnrolmentStatusType.Incomplete :
+                                IsPastRenewal(e.Agreements) ?
+                                    ProvisionerEnrolmentStatusType.PastRenewal :
+                                    ProvisionerEnrolmentStatusType.Complete,
                     // TODO: Refactor code from `EnrolmentCertificate` class
-                    AccessType = e.Agreements.OrderByDescending(a => a.CreatedDate)
-                        .Where(a => a.AcceptedDate != null)
-                        .Select(a => a.AgreementVersion.AccessType)
-                        .FirstOrDefault(),
-                    Licences = e.Certifications.Select(cert =>
-                        new EnrolleeCertDto
-                        {
-                            // TODO: Retrieve from cert.Prefix in future?
-                            PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
-                            CollegeLicenceNumber = cert.LicenseNumber,
-                            PharmaNetId = cert.PractitionerId
-                        })
+                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked || indefiniteAbsenceHpdids.Contains(e.HPDID) || IsPastRenewal(e.Agreements)
+                        ? null
+                        : e.Agreements.OrderByDescending(a => a.CreatedDate)
+                            .Where(a => a.AcceptedDate != null)
+                            .Select(a => a.AgreementVersion.AccessType)
+                            .FirstOrDefault(),
+                    Licences = indefiniteAbsenceHpdids.Contains(e.HPDID) || e.CurrentAgreementId == null || e.CurrentStatus.StatusCode == (int)StatusType.Locked || IsPastRenewal(e.Agreements)
+                        ? null
+                        : (e.Certifications.Count > 1)
+                            ? e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = true,
+                                    PractRefId = null,
+                                    CollegeLicenceNumber = null,
+                                    PharmaNetId = null
+                                })
+                            : e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = false,
+                                    // TODO: Retrieve from cert.Prefix in future?
+                                    PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                                    CollegeLicenceNumber = cert.LicenseNumber,
+                                    PharmaNetId = cert.PractitionerId
+                                })
                 })
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        public async Task<EnrolleeLookup> GpidLookupAsync(GpidLookupOptions option)
+        {
+            var careSettingIds = new List<int>();
+            var haIds = new List<int>();
+
+            switch (option.CareSetting)
+            {
+                case ProvisionerCareSettingConstants.CommunityPharmacy:
+                    careSettingIds.Add((int)CareSettingType.CommunityPharmacy);
+                    break;
+                case ProvisionerCareSettingConstants.PrivateCommunityHealthPractice:
+                    careSettingIds.Add((int)CareSettingType.CommunityPractice);
+                    break;
+                case ProvisionerCareSettingConstants.FraserHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.FraserHealth);
+                    break;
+                case ProvisionerCareSettingConstants.InteriorHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.InteriorHealth);
+                    break;
+                case ProvisionerCareSettingConstants.VancouverCoastalHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
+                    break;
+                case ProvisionerCareSettingConstants.VancouverIslandHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.IslandHealth);
+                    break;
+                case ProvisionerCareSettingConstants.NorthernHealthAuthority:
+                    haIds.Add((int)HealthAuthorityCode.NorthernHealth);
+                    break;
+                case ProvisionerCareSettingConstants.ProvincialHealthServicesAuthority:
+                    haIds.Add((int)HealthAuthorityCode.ProvincialHealthServicesAuthority);
+                    break;
+            }
+
+            return await _context.Enrollees
+                .Where(e => e.GPID == option.Gpid && e.FirstName == option.FirstName && e.LastName == option.LastName
+                    && e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Where(e => (haIds.Count() > 0 && careSettingIds.Count() == 0) ||
+                    e.EnrolleeCareSettings.Where(s => careSettingIds.Contains(s.CareSettingCode))
+                        .Where(s => s.ConsentForAutoPull).Any())
+                .Where(e => (haIds.Count() == 0 && careSettingIds.Count() > 0) ||
+                    e.EnrolleeHealthAuthorities.Where(ha => haIds.Contains((int)ha.HealthAuthorityCode))
+                        .Where(ha => ha.ConsentForAutoPull).Any())
+                .Select(e => new EnrolleeLookup
+                {
+                    Gpid = e.GPID,
+                    Status = e.CurrentStatus.StatusCode == (int)StatusType.Locked ? null :
+                        e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ?
+                        ProvisionerEnrolmentStatusType.IndefiniteAbsence : IsPastRenewal(e.Agreements) ?
+                        ProvisionerEnrolmentStatusType.PastRenewal : e.CurrentAgreementId != null ?
+                        ProvisionerEnrolmentStatusType.Complete : ProvisionerEnrolmentStatusType.Incomplete,
+                    // TODO: Refactor code from `EnrolmentCertificate` class
+                    AccessType = e.CurrentStatus.StatusCode == (int)StatusType.Locked ||
+                            e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ||
+                            IsPastRenewal(e.Agreements) ?
+                            null : e.Agreements.OrderByDescending(a => a.CreatedDate)
+                                        .Where(a => a.AcceptedDate != null)
+                                        .Select(a => a.AgreementVersion.AccessType)
+                                        .FirstOrDefault(),
+                    Licences = e.EnrolleeAbsences.Where(a => a.EndTimestamp == null && a.StartTimestamp <= DateTime.UtcNow).Any() ||
+                        e.CurrentStatus.StatusCode == (int)StatusType.Locked || IsPastRenewal(e.Agreements)
+                        ? null
+                        : (e.Certifications.Count > 1)
+                            ? e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = true,
+                                    PractRefId = null,
+                                    CollegeLicenceNumber = null,
+                                    PharmaNetId = null
+                                })
+                            : e.Certifications.Select(cert =>
+                                new EnrolleeCertDto
+                                {
+                                    Redacted = false,
+                                    // TODO: Retrieve from cert.Prefix in future?
+                                    PractRefId = cert.Prefix ?? cert.License.CurrentLicenseDetail.Prefix,
+                                    CollegeLicenceNumber = cert.LicenseNumber,
+                                    PharmaNetId = cert.PractitionerId
+                                })
+                })
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
         }
 
         public async Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)
@@ -1141,7 +1273,7 @@ namespace Prime.Services
         public async Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user)
         {
             return await _context.EnrolleeNotes
-                .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.UserId == user.GetPrimeUserId())
+                .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.Username == user.GetPrimeUsername())
                 .Select(en => en.EnrolleeId)
                 .ToListAsync();
         }
@@ -1165,6 +1297,7 @@ namespace Prime.Services
                 BulkEmailType.OboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.OboTOA,
                 BulkEmailType.PharmRuTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.CommunityPharmacistTOA,
                 BulkEmailType.PharmOboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.PharmacyOboTOA,
+                BulkEmailType.LPNTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.LicencedPracticalNurseTOA,
                 _ => null,
             };
 
@@ -1275,7 +1408,7 @@ namespace Prime.Services
 
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
-            return await _context.Enrollees
+            var query = _context.Enrollees
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
                 // Filter out enrollees that haven't got a signed TOA
@@ -1285,8 +1418,22 @@ namespace Prime.Services
                                 .Select(a => a.AcceptedDate)
                                 .FirstOrDefault()).CompareTo(updatedSince) > 0)
                 .Select(e => e.HPDID)
-                .DecompileAsync()
+                .Union(_context.EnrolleeAbsences
+                    .Where(a => a.EndTimestamp == null && hpdids.Contains(a.Enrollee.HPDID))
+                    .Where(a => a.StartTimestamp.CompareTo(updatedSince.UtcDateTime) >= 0)
+                    .Where(a => a.StartTimestamp.CompareTo(DateTime.Now) < 0)
+                    .Select(a => a.Enrollee.HPDID));
+
+            return await query.DecompileAsync()
                 .ToListAsync();
+        }
+
+        private static bool IsPastRenewal(ICollection<Agreement> enrolleeAgreements)
+        {
+            return enrolleeAgreements
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.AcceptedDate != null)
+                .Select(a => a.ExpiryDate).FirstOrDefault() < DateTimeOffset.UtcNow;
         }
     }
 }

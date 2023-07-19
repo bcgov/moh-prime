@@ -120,7 +120,7 @@ namespace Prime.Services
 
         public async Task SendRemoteUsersUpdatedAsync(CommunitySite site)
         {
-            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.Id);
+            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.BusinessLicence.Id);
             var viewModel = new RemoteUsersUpdatedEmailViewModel
             {
                 SiteStreetAddress = site.PhysicalAddress.Street,
@@ -246,6 +246,12 @@ namespace Prime.Services
             var emailedEnrolleeIds = new List<int>();
             foreach (var enrollee in enrollees)
             {
+                if (!Email.IsValidEmail(enrollee.Email))
+                {
+                    _logger.LogWarning($"The email address {enrollee.Email} is likely a Data Issue.");
+                    continue;
+                }
+
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
 
                 if (reminderEmailsIntervals.Contains(expiryDays))
@@ -395,17 +401,19 @@ namespace Prime.Services
         {
             var doNotEmail = await _context.DoNotEmail
                 .Where(e => e.Email.ToLower() == string.Join(",", email.To).ToLower())
-                .Select(e => new {
+                .Select(e => new
+                {
                     e.Email,
                     e.Id
                 })
                 .SingleOrDefaultAsync();
 
-            if (doNotEmail != null) {
-                await _businessEventService.CreateEmailEventAsync($"The address {string.Join(",", email.To)} has been blocked as do-not-email" );
+            if (doNotEmail != null)
+            {
+                await _businessEventService.CreateEmailEventAsync($"The address {string.Join(",", email.To)} has been blocked as do-not-email");
                 return;
             }
-                
+
             if (!PrimeConfiguration.IsProduction())
             {
                 email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
@@ -423,8 +431,15 @@ namespace Prime.Services
             }
 
             // Allways fall back to smtp
-            await _smtpEmailClient.SendAsync(email);
-            await CreateEmailLog(email, SendType.Smtp);
+            try
+            {
+                await _smtpEmailClient.SendAsync(email);
+                await CreateEmailLog(email, SendType.Smtp);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to send email to {email.To}, using SMTP", e);
+            }
         }
 
         private async Task CreateEmailLog(Email email, string sendType, Guid? msgId = null)

@@ -7,6 +7,7 @@ using Prime.Models;
 
 namespace Prime.ViewModels.Parties
 {
+    // TODO: Obsolete?
     public class PhsaChangeModel : IPartyChangeModel
     {
         /// <summary> Required </summary>

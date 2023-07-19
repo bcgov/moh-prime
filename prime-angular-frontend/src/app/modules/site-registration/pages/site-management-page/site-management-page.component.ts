@@ -200,7 +200,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.busy = this.authService.getUser$()
       .pipe(
         exhaustMap((user: BcscUser) =>
-          this.organizationResource.getSigningAuthorityOrganizationByUserId(user.userId)
+          this.organizationResource.getSigningAuthorityOrganizationByUsername(user.username)
         ),
         map((organization: Organization) => {
           this.organizationSitesExpiryDates = organization.sites

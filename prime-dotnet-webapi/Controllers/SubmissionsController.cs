@@ -54,7 +54,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            if (!record.MatchesUserIdOf(User))
+            if (!record.MatchesUsernameOf(User))
             {
                 return Forbid();
             }
@@ -69,6 +69,11 @@ namespace Prime.Controllers
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
                 return BadRequest("Application can not be submitted when the current status is not 'Active'.");
+            }
+
+            if (!await _enrolleeService.IsEnrolleeProfileCompleteAsync(enrolleeId))
+            {
+                return BadRequest("Enrollee profile is not completed.");
             }
 
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);

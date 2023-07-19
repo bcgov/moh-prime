@@ -6,40 +6,40 @@
        so it is pointless to show the preferred names -->
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
+    <ng-container appPageSubheaderTitle>Alternate Name</ng-container>
 
     <button *ngIf="showEditRedirect"
             mat-icon-button
-            matTooltip="Edit Preferred Name"
+            matTooltip="Edit Alternate Name"
             (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
 
   <ng-container *ngIf="hasPreferredName; else noPreferredName">
-    <app-enrollee-property title="Preferred First Name">
+    <app-enrollee-property title="Alternate First Name">
       {{ enrollee?.preferredFirstName | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Preferred Middle Name">
+    <app-enrollee-property title="Alternate Middle Name">
       {{ enrollee?.preferredMiddleName | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Preferred Last Name">
+    <app-enrollee-property title="Alternate Last Name">
       {{ enrollee?.preferredLastName | default }}
     </app-enrollee-property>
   </ng-container>
 
   <ng-template #noPreferredName>
     <div class="mb-2">
-      No preferred name entered.
+      No alternate name entered.
     </div>
   </ng-template>
 
   <button *ngIf="showEditRedirect"
           mat-flat-button
           color="primary"
-          (click)="onRoute(demographicRoutePath)">Edit Preferred Name
+          (click)="onRoute(demographicRoutePath)">Edit Alternate Name
   </button>
 </app-page-section>
 
@@ -285,9 +285,9 @@
   </ng-container>
 
   <app-enrollee-property *ngIf="!hasCertification"
-                         title="College Certification"
+                         title="College Licence"
                          [hasError]="enrolmentErrors?.certificateOrOboSite"
-                         errorMessage="Must have a college certificate or job site information"
+                         errorMessage="Must have a college licence or job site information"
                          [makeBold]="true">
     None
   </app-enrollee-property>
@@ -366,6 +366,8 @@
       <ng-container *ngFor="let site of enrolment?.oboSites">
         <ng-container *ngIf="site.careSettingCode === careSetting.careSettingCode">
           <app-enrollee-property title="Care Setting"
+                                 [hasError]="enrolmentErrors?.missingHAOboSite && site.healthAuthorityCode === null"
+                                 errorMessage="Must specify the health authority."
                                  [makeBold]="true">
             <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
               <span *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY">
@@ -423,9 +425,9 @@
                            [hasError]="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProviderOrOboSite"
                            errorMessage="Must have a {{
                             !hasCertification && enrolmentErrors?.deviceProvider
-                             ? 'college certificate and a device provider ID'
+                             ? 'college licence and a device provider ID'
                              : !hasCertification
-                                ? 'college certificate'
+                                ? 'college licence'
                                 : 'device provider ID'
                             }} or job site information"
                            [makeBold]="true">

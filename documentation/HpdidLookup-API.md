@@ -5,7 +5,7 @@
 Connect to Keycloak instance associated with the PRIME environment, passing credentials assigned to your system.  E.g.
 
 ```
-curl --location --request POST 'https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token' \
+curl --location --request POST 'https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
 --data-urlencode 'grant_type=client_credentials' \
 --data-urlencode 'client_id=IDIDIDIDIDIDIDIDIDID' \
@@ -17,11 +17,11 @@ The response will be something like this, with the token embedded:
 ```
 {
     "access_token": "eyTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
-    "expires_in": 36000,
+    "expires_in": 300,
     "refresh_expires_in": 0,
-    "token_type": "bearer",
-    "not-before-policy": 1571785607,
-    "scope": ""
+    "token_type": "Bearer",
+    "not-before-policy": 1605659926,
+    "scope": "profile email"
 }
 ```
 
@@ -37,15 +37,14 @@ curl --location --request GET 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/p
 
 There is a limit to the number of HPDIDs accepted in a single call:  10 (subject to change depending on performance testing results).  If too many HPDIDs are provided, a HTTP status code of 400 (Bad Request) is returned.
 
-The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement.  Details of enrollees that haven't signed a TOA are filtered out from the API's response.  E.g.
-
+The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement.  E.g.
 ```
 {
     "result": [
         {
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
-            "renewalDate": "2023-08-03T14:35:09.670054-06:00",
+            "status": "Complete",
             "accessType": "Independent User - with OBOs",
             "licences": [
                 {
@@ -60,15 +59,86 @@ The response will contain the GPID associated with each enrollee that has signed
 }
 ```
 
-Due to privacy issues, in the very rare cases that a PRIME enrollee has more than one licence, for each licence, the licence-related information would be blanked-out and a licence-level Boolean field `redacted` would be set to `true`, e.g.
+> **Note:**
+> `renewalDate` will no longer be provided in the response.
 
+Enrollees that are Under Review or that haven't signed a TOA (Requires TOA) have a `status` of `Incomplete`, e.g.
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": null,
+            "status": "Incomplete",
+            "accessType": null,
+            "licences": null
+        }
+    ]
+}
+```
+
+If a BCSC user has not submitted the enrollment yet or never enrolled, nothing is returned:
+```
+{
+    "result": []
+}
+```
+
+In the case of an indefinite absence (absence From date provided, starting today or in the past, but no To date given), the status will be `Indefinite absence` and the vendor should deprovision this user, e.g.
 ```
 {
     "result": [
         {
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
-            "renewalDate": "2023-08-03T14:35:09.670054-06:00",
+            "status": "Indefinite absence",
+            "accessType": null,
+            "licences": null
+        }
+    ]
+}
+```
+
+For enrollees that have their renewal period expired and have not renewed, they will have a `status` of `Past Renewal`.
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
+            "status": "Past Renewal",
+            "accessType": null,
+            "licences": null
+        }
+    ]
+}
+```
+
+For enrollees that have been `locked` by PRIME administrators (such that they cannot view or edit their enrollment details, even if
+previously approved), the API response will be:
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": null,
+            "status": null,
+            "accessType": "",
+            "licences": [
+            ]
+        }
+    ]
+}
+```
+
+Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has more than one licence, for each licence, the licence-related information would be blanked-out and a licence-level Boolean field `redacted` would be set to `true`, e.g.
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
+            "status": "Complete",
             "accessType": "Independent User - with OBOs",
             "licences": [
                 {
@@ -88,3 +158,21 @@ Due to privacy issues, in the very rare cases that a PRIME enrollee has more tha
     ]
 }
 ```
+
+
+## Appendix
+
+|Possible values for `status`|
+|----------------------------|
+|Incomplete|
+|Complete|
+|Indefinite absence|
+|Past Renewal|
+
+|Possible values for `accessType`|
+|--------------------------------|
+|Independent User – with OBOs, Pharmacy|
+|Independent User - with OBOs|
+|Independent User - without OBOs|
+|On-behalf-of User|
+|On-behalf-of User – Pharmacy|

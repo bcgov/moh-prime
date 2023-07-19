@@ -36,6 +36,7 @@ namespace Prime.ViewModels.Parties
             party.JobRoleTitle = JobRoleTitle;
 
             party.UserId = user.GetPrimeUserId();
+            party.Username = user.GetPrimeUsername();
             party.FirstName = user.GetFirstName();
             party.LastName = user.GetLastName();
             party.DateOfBirth = user.GetDateOfBirth().Value;

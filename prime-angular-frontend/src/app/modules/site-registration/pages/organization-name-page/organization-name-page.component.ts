@@ -141,7 +141,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
       ? this.organizationResource.updateOrganization(payload)
       : this.authService.getUser$()
         .pipe(
-          exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUserId(bcscUser.userId)),
+          exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUsername(bcscUser.username)),
           exhaustMap((party: Party) => this.organizationResource.createOrganization(party.id)),
           tap((organization: Organization) => {
             this.organizationService.organization = organization;

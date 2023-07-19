@@ -78,7 +78,8 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
       { type: AgreementType.OBO_TOA, name: 'OBO' },
       { type: AgreementType.COMMUNITY_PHARMACIST_TOA, name: 'PharmRU' },
       { type: AgreementType.PHARMACY_OBO_TOA, name: 'PharmOBO' },
-      { type: AgreementType.PHARMACY_TECHNICIAN_TOA, name: 'PharmTech' }
+      { type: AgreementType.PHARMACY_TECHNICIAN_TOA, name: 'PharmTech' },
+      { type: AgreementType.LICENCED_PRACTICAL_NURSE_TOA, name: 'LPNRU' },
     ];
   }
 
@@ -119,7 +120,7 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   }
 
   public onDelete() {
-    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
+    if (this.permissionService.hasRoles(Role.SUPER_ADMIN)) {
       this.delete.emit(this.enrollee.id);
     }
   }

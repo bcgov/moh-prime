@@ -76,7 +76,7 @@ namespace Prime.Services
         public async Task<bool> OrganizationClaimExistsAsync(OrganizationClaimSearchOptions searchOptions)
         {
             // return false if searchOptions is invalid
-            if (searchOptions == null || string.IsNullOrEmpty(searchOptions.Pec) && searchOptions.UserId == Guid.Empty)
+            if (searchOptions == null || string.IsNullOrEmpty(searchOptions.Pec) && searchOptions.Username == null)
             {
                 return false;
             }
@@ -96,8 +96,8 @@ namespace Prime.Services
                 .If(!string.IsNullOrEmpty(searchOptions.Pec), q => q
                     .Where(o => o.Organization.Sites.Any(s => s.PEC == searchOptions.Pec))
                 )
-                .If(searchOptions.UserId != Guid.Empty, q => q
-                    .Where(o => o.NewSigningAuthority.UserId == searchOptions.UserId)
+                .If(searchOptions.Username != null, q => q
+                    .Where(o => o.NewSigningAuthority.Username == searchOptions.Username)
                 )
                 .AnyAsync();
         }

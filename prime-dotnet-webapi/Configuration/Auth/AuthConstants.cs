@@ -4,6 +4,12 @@ namespace Prime.Configuration.Auth
     {
         public const string Audience = "prime-web-api";
         public const string BCServicesCard = "bcsc";
+
+        /// <summary>
+        /// Alias for BCSC Identity Provider for PRIME in MoH KeyCloak
+        /// </summary>
+        public const string BCServicesCardMoHIdpAlias = "bcsc_prime";
+
     }
 
     public static class Schemes
@@ -21,9 +27,11 @@ namespace Prime.Configuration.Auth
         public const string Address = "address";
         public const string Birthdate = "birthdate";
         public const string Email = "email";
-        public const string RealmAccess = "realm_access";
+        public const string ResourceAccess = "resource_access";
         public const string AssuranceLevel = "identity_assurance_level";
         public const string IdentityProvider = "identity_provider";
+        public const string AuthorizedParty = "azp";
+        public const string BcscGuid = "bcsc_guid";
     }
 
     public static class FeatureFlags
@@ -52,6 +60,7 @@ namespace Prime.Configuration.Auth
 
         // Service Account Roles
         public const string ExternalHpdidAccess = "external_hpdid_access";
+        public const string ExternalGpidAccess = "external_gpid_access";
         public const string ExternalGpidValidation = "external_gpid_validation";
         public const string PrimeApiServiceAccount = "prime_api_service_account";
 

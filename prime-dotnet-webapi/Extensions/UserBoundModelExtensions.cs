@@ -6,7 +6,7 @@ namespace Prime
     {
         public static PermissionsRecord PermissionsRecord(this IUserBoundModel model)
         {
-            return model == null ? null : new PermissionsRecord { UserId = model.UserId };
+            return model == null ? null : new PermissionsRecord { Username = model.Username };
         }
     }
 }

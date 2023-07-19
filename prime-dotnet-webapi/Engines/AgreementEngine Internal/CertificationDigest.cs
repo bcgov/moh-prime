@@ -47,7 +47,14 @@ namespace Prime.Engines.AgreementEngineInternal
             }
             else
             {
-                return new OtherCollege(regulated, cert);
+                if (License.isLicensedPracticalNurse(cert.License.CurrentLicenseDetail))
+                {
+                    return new LicensedPracticalNurse(regulated);
+                }
+                else
+                {
+                    return new OtherCollege(regulated, cert);
+                }
             }
         }
     }
@@ -131,6 +138,27 @@ namespace Prime.Engines.AgreementEngineInternal
             else
             {
                 return AgreementType.PharmacyOboTOA;
+            }
+        }
+    }
+
+    public class LicensedPracticalNurse : ICertificationDigest
+    {
+        private bool Regulated { get; set; }
+        public LicensedPracticalNurse(bool regulated)
+        {
+            Regulated = regulated;
+        }
+
+        public AgreementType? ResolveWith(SettingsDigest settings)
+        {
+            if (Regulated)
+            {
+                return AgreementType.LicencedPracticalNurseTOA;
+            }
+            else
+            {
+                return AgreementType.OboTOA;
             }
         }
     }
