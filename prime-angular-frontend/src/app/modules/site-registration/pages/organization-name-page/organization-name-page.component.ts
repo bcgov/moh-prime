@@ -81,12 +81,13 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
         this.orgBookResource.sourceIdMap(),
         tap((sourceId: string) => this.usedOrgBook = true),
         tap((sourceId: string) => this.formState.form.get('registrationId').patchValue(sourceId)),
-        map((sourceId: string) => {
+        switchMap((sourceId: string) => {
           console.log('calling webApiLogger.debug ...');
-          this.webApiLogger.debug(`Obtained ${sourceId} for Registration ID`).pipe(
-            tap((logId: number) => console.log(`... webApiLogger.debug called, got ${logId}`))
-          ).subscribe();
-          return sourceId;
+          return this.webApiLogger.debug(`Obtained ${sourceId} for Registration ID`, { orgName: orgName }).pipe(
+            tap((logId: number) => console.log(`... webApiLogger.debug called, received ${logId}`)),
+            map(() => sourceId)
+          );
+          ;
         }),
         this.getDoingBusinessAs()
       )
@@ -157,6 +158,11 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
             Object.assign(payload, organization);
             payload.name = this.organizationFormStateService.json.name;
             payload.doingBusinessAs = this.organizationFormStateService.json.doingBusinessAs;
+          }),
+          switchMap(() => {
+            return this.webApiLogger.debug(`Registration ID updating to ${payload.registrationId}`, { orgName: payload.name }).pipe(
+              tap((logId: number) => console.log(`... webApiLogger.debug called, received ${logId}`))
+            )
           }),
           exhaustMap(() => this.organizationResource.updateOrganization(payload))
         );
