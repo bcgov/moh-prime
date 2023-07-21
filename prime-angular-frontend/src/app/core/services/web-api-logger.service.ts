@@ -21,7 +21,13 @@ export class WebApiLoggerService extends AbstractLoggerService {
     return this.send('error', { msg, data });
   }
 
+  public debug(msg: string, ...data: any[]): Observable<number> {
+    console.log('debug');
+    return this.send('debug', { msg, data });
+  }
+
   protected send(type: string, params: { msg?: string; data?: any[]; }): Observable<number> {
+    console.log('send');
     return this.loggerResource.createLog({ message: params.msg, data: JSON.stringify(params.data), logType: LogType[type.toUpperCase()] });
   }
 }
