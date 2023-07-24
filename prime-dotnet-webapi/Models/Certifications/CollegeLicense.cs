@@ -15,6 +15,7 @@ namespace Prime.Models
         public License License { get; set; }
 
         public int? CollegeLicenseGroupingCode { get; set; }
+        public bool Discontinued { get; set; }
 
         [JsonIgnore]
         public CollegeLicenseGrouping CollegeLicenseGrouping { get; set; }

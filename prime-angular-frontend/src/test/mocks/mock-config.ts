@@ -9,146 +9,175 @@ export class MockConfig {
         {
           'code': 1,
           'name': 'College of Physicians and Surgeons of BC (CPSBC)',
+          'weight': 10,
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 1,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 2,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 3,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 4,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 5,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 6,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 7,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 8,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 9,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 10,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 11,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 12,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 13,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 14,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 15,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 16,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 17,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 18,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 19,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 20,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 21,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 22,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 23,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 24,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 59,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 65,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 66,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 67,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -156,46 +185,55 @@ export class MockConfig {
         {
           'code': 2,
           'name': 'College of Pharmacists of BC (CPBC)',
+          'weight': 20,
           'collegeLicenses': [
             {
               'collegeCode': 2,
               'licenseCode': 25,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 26,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 27,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 28,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 29,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 30,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 31,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 68,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -203,136 +241,163 @@ export class MockConfig {
         {
           'code': 3,
           'name': 'BC College of Nurses and Midwives (BCCNM)',
+          'weight': 30,
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 32,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 33,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 34,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 35,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 36,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 37,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 39,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 40,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 41,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 42,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 43,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 45,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 46,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 47,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 48,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 49,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 51,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 52,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 53,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 54,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 55,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 60,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 61,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 62,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 63,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 69,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ],
           'collegePractices': [
@@ -357,11 +422,13 @@ export class MockConfig {
         {
           'code': 4,
           'name': 'College of Chiropractors of BC',
+          'weight': 40,
           'collegeLicenses': [
             {
               'collegeCode': 4,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -369,11 +436,13 @@ export class MockConfig {
         {
           'code': 5,
           'name': 'College of Dental Hygenists of BC',
+          'weight': 50,
           'collegeLicenses': [
             {
               'collegeCode': 5,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': true
             }
           ],
           'collegePractices': []
@@ -381,11 +450,13 @@ export class MockConfig {
         {
           'code': 6,
           'name': 'College of Dental Technicians of BC',
+          'weight': 60,
           'collegeLicenses': [
             {
               'collegeCode': 6,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': true
             }
           ],
           'collegePractices': []
@@ -393,11 +464,13 @@ export class MockConfig {
         {
           'code': 7,
           'name': 'College of Dental Surgeons of BC',
+          'weight': 70,
           'collegeLicenses': [
             {
               'collegeCode': 7,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': true
             }
           ],
           'collegePractices': []
@@ -405,11 +478,13 @@ export class MockConfig {
         {
           'code': 8,
           'name': 'College of Denturists of BC',
+          'weight': 80,
           'collegeLicenses': [
             {
               'collegeCode': 8,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': true
             }
           ],
           'collegePractices': []
@@ -417,11 +492,13 @@ export class MockConfig {
         {
           'code': 9,
           'name': 'College of Dietitians of BC',
+          'weight': 90,
           'collegeLicenses': [
             {
               'collegeCode': 9,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': true
             }
           ],
           'collegePractices': []
@@ -429,11 +506,13 @@ export class MockConfig {
         {
           'code': 10,
           'name': 'College of Massage Therapists of BC',
+          'weight': 100,
           'collegeLicenses': [
             {
               'collegeCode': 10,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -441,11 +520,13 @@ export class MockConfig {
         {
           'code': 11,
           'name': 'College of Naturopathic Physicians of BC',
+          'weight': 110,
           'collegeLicenses': [
             {
               'collegeCode': 11,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -453,11 +534,13 @@ export class MockConfig {
         {
           'code': 12,
           'name': 'College of Occupational Therapists of BC',
+          'weight': 120,
           'collegeLicenses': [
             {
               'collegeCode': 12,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -465,11 +548,13 @@ export class MockConfig {
         {
           'code': 13,
           'name': 'College of Opticians of BC',
+          'weight': 130,
           'collegeLicenses': [
             {
               'collegeCode': 13,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -477,11 +562,13 @@ export class MockConfig {
         {
           'code': 14,
           'name': 'College of Optometrists of BC',
+          'weight': 140,
           'collegeLicenses': [
             {
               'collegeCode': 14,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -489,11 +576,13 @@ export class MockConfig {
         {
           'code': 15,
           'name': 'College of Physical Therapists of BC',
+          'weight': 150,
           'collegeLicenses': [
             {
               'collegeCode': 15,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -501,11 +590,13 @@ export class MockConfig {
         {
           'code': 16,
           'name': 'College of Psychologists of BC',
+          'weight': 160,
           'collegeLicenses': [
             {
               'collegeCode': 16,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -513,11 +604,13 @@ export class MockConfig {
         {
           'code': 17,
           'name': 'College of Speech and Hearing Health Professionals of BC',
+          'weight': 170,
           'collegeLicenses': [
             {
               'collegeCode': 17,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -525,11 +618,13 @@ export class MockConfig {
         {
           'code': 18,
           'name': 'College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC',
+          'weight': 180,
           'collegeLicenses': [
             {
               'collegeCode': 18,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -573,7 +668,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 1,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -592,7 +688,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 2,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -611,7 +708,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 3,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -630,7 +728,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 4,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -649,7 +748,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 5,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -668,7 +768,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 6,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -687,7 +788,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 7,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -706,7 +808,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 8,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -725,7 +828,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 9,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -744,7 +848,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 10,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -763,7 +868,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 11,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -782,7 +888,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 12,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -801,7 +908,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 13,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -820,7 +928,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 14,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -839,7 +948,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 15,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -858,7 +968,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 16,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -877,7 +988,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 17,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -896,7 +1008,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 18,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -915,7 +1028,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 19,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -934,7 +1048,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 20,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -953,7 +1068,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 21,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -972,7 +1088,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 22,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -991,7 +1108,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 23,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1010,7 +1128,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 24,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1029,7 +1148,8 @@ export class MockConfig {
             {
               'collegeCode': 2,
               'licenseCode': 25,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1048,7 +1168,8 @@ export class MockConfig {
             {
               'collegeCode': 2,
               'licenseCode': 26,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1067,7 +1188,8 @@ export class MockConfig {
             {
               'collegeCode': 2,
               'licenseCode': 27,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1086,7 +1208,8 @@ export class MockConfig {
             {
               'collegeCode': 2,
               'licenseCode': 28,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1105,7 +1228,8 @@ export class MockConfig {
             {
               'collegeCode': 2,
               'licenseCode': 29,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1124,7 +1248,8 @@ export class MockConfig {
             {
               'collegeCode': 2,
               'licenseCode': 30,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1143,7 +1268,8 @@ export class MockConfig {
             {
               'collegeCode': 2,
               'licenseCode': 31,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1162,7 +1288,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 32,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1181,7 +1308,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 33,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1200,7 +1328,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 34,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1219,7 +1348,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 35,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1238,7 +1368,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 36,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1257,7 +1388,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 37,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1276,7 +1408,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 39,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1295,7 +1428,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 40,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1314,7 +1448,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 41,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             }
           ]
         },
@@ -1333,7 +1468,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 42,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             }
           ]
         },
@@ -1352,7 +1488,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 43,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             }
           ]
         },
@@ -1371,7 +1508,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 45,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             }
           ]
         },
@@ -1390,7 +1528,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 46,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             }
           ]
         },
@@ -1409,7 +1548,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 47,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             }
           ]
         },
@@ -1428,7 +1568,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 48,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             }
           ]
         },
@@ -1447,7 +1588,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 49,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             }
           ]
         },
@@ -1466,7 +1608,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 51,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             }
           ]
         },
@@ -1485,7 +1628,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 52,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             }
           ]
         },
@@ -1504,7 +1648,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 53,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             }
           ]
         },
@@ -1523,7 +1668,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 54,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             }
           ]
         },
@@ -1542,7 +1688,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 55,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             }
           ]
         },
@@ -1561,7 +1708,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 59,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1580,7 +1728,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 60,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ]
         },
@@ -1599,7 +1748,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 61,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ]
         },
@@ -1618,7 +1768,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 62,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ]
         },
@@ -1637,7 +1788,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 63,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ]
         },
@@ -1656,77 +1808,92 @@ export class MockConfig {
             {
               'collegeCode': 4,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 5,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': true
             },
             {
               'collegeCode': 6,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': true
             },
             {
               'collegeCode': 7,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': true
             },
             {
               'collegeCode': 8,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': true
             },
             {
               'collegeCode': 9,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 10,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 11,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 12,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 13,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 14,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 15,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 16,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 17,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 18,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1745,7 +1912,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 65,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1764,7 +1932,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 66,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1783,7 +1952,8 @@ export class MockConfig {
             {
               'collegeCode': 1,
               'licenseCode': 67,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1802,7 +1972,8 @@ export class MockConfig {
             {
               'collegeCode': 2,
               'licenseCode': 68,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1821,7 +1992,8 @@ export class MockConfig {
             {
               'collegeCode': 3,
               'licenseCode': 69,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ]
         }
