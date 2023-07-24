@@ -155,7 +155,12 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
           exhaustMap((party: Party) => this.organizationResource.createOrganization(party.id)),
           tap((organization: Organization) => {
             this.organizationService.organization = organization;
-            Object.assign(payload, organization);
+
+            // Copy over only new information from `organization`
+            payload.id = organization.id;
+            payload.signingAuthorityId = organization.signingAuthorityId;
+            payload.signingAuthority = organization.signingAuthority;
+
             payload.name = this.organizationFormStateService.json.name;
             payload.doingBusinessAs = this.organizationFormStateService.json.doingBusinessAs;
           }),
