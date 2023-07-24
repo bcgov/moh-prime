@@ -8,6 +8,7 @@ import { exhaustMap } from 'rxjs/operators';
 
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { Party } from '@lib/models/party.model';
+import { Vendor } from '@registration/shared/models/vendor.model';
 import { asyncValidator } from '@lib/validators/form-async.validators';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -23,6 +24,8 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
+import { ConfigService } from '@config/config.service';
+import { VendorConfig } from '@config/config.model';
 
 @Component({
   selector: 'app-site-overview',
@@ -34,6 +37,7 @@ export class SiteOverviewComponent implements OnInit {
   public hasActions: boolean;
   public organization: Organization;
   public site: Site;
+  public siteVendors: VendorConfig[];
   public refresh: BehaviorSubject<boolean>;
   public orgClaim: OrganizationClaim;
   public newSigningAuthority: Party;
@@ -54,7 +58,7 @@ export class SiteOverviewComponent implements OnInit {
     private organizationResource: OrganizationResource,
     private formUtilsService: FormUtilsService,
     private fb: FormBuilder,
-
+    private configService: ConfigService,
   ) {
     this.hasActions = true;
     this.refresh = new BehaviorSubject<boolean>(null);
@@ -65,11 +69,15 @@ export class SiteOverviewComponent implements OnInit {
     return this.form.get('pec') as FormControl;
   }
 
+  public get vendors(): FormControl {
+    return this.form.get('vendors') as FormControl;
+  }
+
   public onRoute(routePath: RoutePath): void {
     this.routeUtils.routeWithin(routePath);
   }
 
-  public onSubmit(): void {
+  public saveSiteId(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       const siteId = +this.route.snapshot.params.sid;
       const pec = this.form.value.pec;
@@ -77,6 +85,34 @@ export class SiteOverviewComponent implements OnInit {
         .subscribe(() => {
           this.refresh.next(true);
           this.site.pec = pec;
+        });
+    }
+  }
+
+  public saveVendor(): void {
+
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const siteId = +this.route.snapshot.params.sid;
+      const vendor = this.vendors.value;
+
+      const data: DialogOptions = {
+        title: 'Change Vendor',
+        message: "Are you sure you want to change this site's vendor?",
+        actionType: 'warn',
+        actionText: 'Change Vendor',
+        component: NoteComponent,
+      };
+
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .subscribe(rationale => {
+          if (rationale) {
+            this.siteResource.updateVendor(siteId, vendor.code, rationale.output)
+              .subscribe(() => {
+                this.refresh.next(true);
+                this.site.siteVendors[0].vendorCode = vendor.code;
+              })
+          };
         });
     }
   }
@@ -123,8 +159,10 @@ export class SiteOverviewComponent implements OnInit {
         // Full objects are needed to display overview components
         this.organization = org;
         this.site = site;
+        this.siteVendors = this.configService.vendors
+          .filter((vendor: VendorConfig) => vendor.careSettingCode === site.careSettingCode)
         this.orgClaim = orgClaim;
-        this.initForm(site);
+        this.initForm(site, this.siteVendors.find((vendor: VendorConfig) => vendor.code === this.site.siteVendors[0].vendorCode));
         this.showSendNotification = [
           CareSettingEnum.COMMUNITY_PHARMACIST,
           CareSettingEnum.DEVICE_PROVIDER
@@ -135,7 +173,7 @@ export class SiteOverviewComponent implements OnInit {
         (newSigningAuthorityId)
           ? this.organizationResource.getSigningAuthorityById(newSigningAuthorityId)
           : of(null)
-      )
+      ),
     ).subscribe((signingAuthority: Party | null) => this.newSigningAuthority = signingAuthority);
 
     this.pec.markAsTouched();
@@ -147,12 +185,13 @@ export class SiteOverviewComponent implements OnInit {
         '',
         [Validators.required],
         asyncValidator(this.checkPecIsAssignable(), 'assignable')
-      ]
+      ],
+      vendors: ['', [Validators.required]]
     });
   }
 
-  private initForm({ pec }: Site): void {
-    this.form.patchValue({ pec });
+  private initForm({ pec }: Site, vendor: VendorConfig): void {
+    this.form.patchValue({ pec, 'vendors': vendor });
   }
 
   private checkPecIsAssignable(): (value: string) => Observable<boolean> {

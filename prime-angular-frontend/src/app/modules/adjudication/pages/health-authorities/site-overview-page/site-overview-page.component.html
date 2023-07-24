@@ -35,7 +35,7 @@
       </ng-container>
     </app-page-subheader2>
 
-    <form (ngSubmit)="onSubmit()"
+    <form (ngSubmit)="saveSiteId()"
           [formGroup]="form"
           novalidate>
 
@@ -72,8 +72,8 @@
       <ng-container appPageSubheader2Title>Enter Vendor</ng-container>
     </app-page-subheader2>
 
-    <form (ngSubmit)="onSubmitVendor()"
-          [formGroup]="vendorForm"
+    <form (ngSubmit)="saveVendor()"
+          [formGroup]="form"
           novalidate>
 
       <div class="row">

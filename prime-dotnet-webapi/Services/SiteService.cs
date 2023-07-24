@@ -133,13 +133,27 @@ namespace Prime.Services
 
         public async Task UpdateVendor(int siteId, int vendorCode, string rationale)
         {
-            var healthAuthSite = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
 
-            var site = await _context.HealthAuthorityVendors
-                .SingleOrDefaultAsync(s => s.Id == healthAuthSite.HealthAuthorityVendorId);
+            if (site.CareSettingCode.Value == (int)CareSettingType.HealthAuthority)
+            {
+                var healthAuthSite = await _context.HealthAuthoritySites
+                    .SingleOrDefaultAsync(s => s.Id == siteId);
 
-            site.VendorCode = vendorCode;
+                var healthAuthVendor = await _context.HealthAuthorityVendors
+                    .SingleOrDefaultAsync(v => v.VendorCode == vendorCode);
+
+                healthAuthSite.HealthAuthorityVendorId = healthAuthVendor.Id;
+            }
+            else
+            {
+                var counter = await _context.SiteVendors.FirstAsync();
+
+                var siteVendor = await _context.SiteVendors
+                    .SingleOrDefaultAsync(s => s.SiteId == siteId);
+
+                siteVendor.VendorCode = vendorCode;
+            }
 
             string rationaleEvent = $"Vendor associated with site.  Rationale: {rationale}";
             await _context.SaveChangesAsync();

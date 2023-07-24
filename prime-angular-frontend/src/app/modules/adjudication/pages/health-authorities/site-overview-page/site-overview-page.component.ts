@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, exhaustMap, mergeMap, Observable, Subscription } from 'rxjs';
 
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -17,6 +17,7 @@ import { ConfigService } from '@config/config.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { MatDialog } from '@angular/material/dialog';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 interface HealthAuthorityVendorMap extends VendorConfig {
   id?: number;
@@ -31,7 +32,6 @@ export class SiteOverviewPageComponent implements OnInit {
   public site: HealthAuthoritySiteAdmin;
   public healthAuthoritySite: HealthAuthoritySite;
   public form: FormGroup;
-  public vendorForm: FormGroup;
   public healthAuthorityVendors: HealthAuthorityVendorMap[];
   public refresh: BehaviorSubject<boolean>;
 
@@ -45,8 +45,6 @@ export class SiteOverviewPageComponent implements OnInit {
     private dialog: MatDialog,
   ) {
     this.refresh = new BehaviorSubject<boolean>(null);
-    this.healthAuthorityVendors = this.configService.vendors
-      .filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) as HealthAuthorityVendorMap[];
   }
 
   public get pec(): FormControl {
@@ -54,10 +52,10 @@ export class SiteOverviewPageComponent implements OnInit {
   }
 
   public get vendors(): FormControl {
-    return this.vendorForm.get('vendors') as FormControl;
+    return this.form.get('vendors') as FormControl;
   }
 
-  public onSubmit(): void {
+  public saveSiteId(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       const siteId = +this.route.snapshot.params.sid;
       const pec = this.form.value.pec;
@@ -69,9 +67,9 @@ export class SiteOverviewPageComponent implements OnInit {
     }
   }
 
-  public onSubmitVendor(): void {
+  public saveVendor(): void {
 
-    if (this.formUtilsService.checkValidity(this.vendorForm)) {
+    if (this.formUtilsService.checkValidity(this.form)) {
       const siteId = +this.route.snapshot.params.sid;
       const vendor = this.vendors.value;
 
@@ -86,12 +84,13 @@ export class SiteOverviewPageComponent implements OnInit {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .subscribe(rationale => {
-          this.siteResource.updateVendor(siteId, vendor.code, rationale.output)
-            .subscribe(() => {
-              this.refresh.next(true);
-              this.site.healthAuthorityVendor.vendorCode = vendor.code;
-            })
-
+          if (rationale) {
+            this.siteResource.updateVendor(siteId, vendor.code, rationale.output)
+              .subscribe(() => {
+                this.refresh.next(true);
+                this.site.healthAuthorityVendor.vendorCode = vendor.code;
+              })
+          };
         });
     }
   }
@@ -102,15 +101,23 @@ export class SiteOverviewPageComponent implements OnInit {
 
     this.busy = this.healthAuthorityResource
       .getHealthAuthorityAdminSite(+this.route.snapshot.params.haid, +this.route.snapshot.params.sid)
-      .subscribe((site: HealthAuthoritySiteAdmin) => {
+      .pipe(
+        mergeMap((site: HealthAuthoritySiteAdmin) => {
+          this.site = site;
+          return this.healthAuthorityResource
+            .getHealthAuthorityById(this.site.healthAuthorityOrganizationId);
+        }),
+      )
+      .subscribe((hao: HealthAuthority) => {
+        let careTypeVendors = hao.careTypes.find(t => t.careType === this.site.healthAuthorityCareType.careType).vendors;
+        this.healthAuthorityVendors = this.configService.vendors
+          .filter((vendorConfig: VendorConfig) => careTypeVendors.findIndex(v => v.vendorCode === vendorConfig.code) >= 0) as HealthAuthorityVendorMap[];
 
-        this.site = site;
         const vendor = this.healthAuthorityVendors
           .find((vendorConfig: VendorConfig) =>
             vendorConfig.code == this.site.healthAuthorityVendor.vendorCode
           );
-        this.initForm(site, vendor);
-
+        this.initForm(this.site, vendor);
       });
 
     this.vendors.markAsTouched();
@@ -123,17 +130,13 @@ export class SiteOverviewPageComponent implements OnInit {
         '',
         [Validators.required],
         asyncValidator(this.checkPecIsAssignable(), 'assignable')
-      ]
-    });
-
-    this.vendorForm = this.fb.group({
+      ],
       vendors: ['', [Validators.required]]
     });
   }
 
   private initForm({ pec }: HealthAuthoritySiteAdmin, vendor: VendorConfig): void {
-    this.form.patchValue({ pec });
-    this.vendorForm.patchValue({ 'vendors': vendor });
+    this.form.patchValue({ pec, 'vendors': vendor });
   }
 
   private checkPecIsAssignable(): (value: string) => Observable<boolean> {
