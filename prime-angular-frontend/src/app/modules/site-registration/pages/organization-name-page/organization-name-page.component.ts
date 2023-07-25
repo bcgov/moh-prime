@@ -81,7 +81,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
         this.orgBookResource.sourceIdMap(),
         tap((sourceId: string) => this.usedOrgBook = true),
         tap((sourceId: string) => this.formState.form.get('registrationId').patchValue(sourceId)),
-        switchMap((sourceId: string) => {
+        exhaustMap((sourceId: string) => {
           return this.webApiLogger.debug(`Obtained ${sourceId} for Registration ID`, { orgName: orgName }).pipe(
             map(() => sourceId)
           );
@@ -162,9 +162,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
             payload.name = this.organizationFormStateService.json.name;
             payload.doingBusinessAs = this.organizationFormStateService.json.doingBusinessAs;
           }),
-          switchMap(() => {
-            return this.webApiLogger.debug(`Registration ID updating to ${payload.registrationId}`, { orgName: payload.name });
-          }),
+          exhaustMap(() => this.webApiLogger.debug(`Registration ID updating to ${payload.registrationId}`, { orgName: payload.name })),
           exhaustMap(() => this.organizationResource.updateOrganization(payload))
         );
 
