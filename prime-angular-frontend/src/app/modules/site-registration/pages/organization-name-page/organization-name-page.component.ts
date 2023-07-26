@@ -26,6 +26,7 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationNamePageFormState } from './organization-name-page-form-state.class';
+import { WebApiLoggerService } from '@core/services/web-api-logger.service';
 
 @UntilDestroy()
 @Component({
@@ -55,6 +56,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
     private siteResource: SiteResource,
     private authService: AuthService,
     private route: ActivatedRoute,
+    private webApiLogger: WebApiLoggerService,
     router: Router
   ) {
     super(dialog, formUtilsService);
@@ -79,6 +81,12 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
         this.orgBookResource.sourceIdMap(),
         tap((sourceId: string) => this.usedOrgBook = true),
         tap((sourceId: string) => this.formState.form.get('registrationId').patchValue(sourceId)),
+        exhaustMap((sourceId: string) => {
+          return this.webApiLogger.debug(`Obtained ${sourceId} for Registration ID`, { orgName: orgName }).pipe(
+            map(() => sourceId)
+          );
+          ;
+        }),
         this.getDoingBusinessAs()
       )
       .subscribe();
@@ -145,10 +153,16 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
           exhaustMap((party: Party) => this.organizationResource.createOrganization(party.id)),
           tap((organization: Organization) => {
             this.organizationService.organization = organization;
-            Object.assign(payload, organization);
+
+            // Copy over only new information from `organization`
+            payload.id = organization.id;
+            payload.signingAuthorityId = organization.signingAuthorityId;
+            payload.signingAuthority = organization.signingAuthority;
+
             payload.name = this.organizationFormStateService.json.name;
             payload.doingBusinessAs = this.organizationFormStateService.json.doingBusinessAs;
           }),
+          exhaustMap(() => this.webApiLogger.debug(`Registration ID updating to ${payload.registrationId}`, { orgName: payload.name })),
           exhaustMap(() => this.organizationResource.updateOrganization(payload))
         );
 
