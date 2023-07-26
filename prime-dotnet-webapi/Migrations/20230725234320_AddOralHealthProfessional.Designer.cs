@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230724210734_AddOralHealthProfessional")]
+    [Migration("20230725234320_AddOralHealthProfessional")]
     partial class AddOralHealthProfessional
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -6060,44 +6060,44 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 87,
-                            Name = "Dental Hygienists",
-                            Weight = 1
-                        },
-                        new
-                        {
-                            Code = 88,
-                            Name = "Dental Hygiene Practitioner",
-                            Weight = 2
-                        },
-                        new
-                        {
                             Code = 89,
                             Name = "Full Dentist",
-                            Weight = 3
+                            Weight = 1
                         },
                         new
                         {
                             Code = 90,
                             Name = "Limited Dentist (Restricted to Specialty)",
-                            Weight = 4
+                            Weight = 2
                         },
                         new
                         {
                             Code = 91,
                             Name = "Limited (Academic) Dentist",
-                            Weight = 5
+                            Weight = 3
                         },
                         new
                         {
                             Code = 92,
                             Name = "Limited (Educational and Volunteer) Dentist",
-                            Weight = 6
+                            Weight = 4
                         },
                         new
                         {
                             Code = 93,
                             Name = "Limited (Armed Forces/Government) Dentist",
+                            Weight = 5
+                        },
+                        new
+                        {
+                            Code = 87,
+                            Name = "Dental Hygienists",
+                            Weight = 6
+                        },
+                        new
+                        {
+                            Code = 88,
+                            Name = "Dental Hygiene Practitioner",
                             Weight = 7
                         },
                         new

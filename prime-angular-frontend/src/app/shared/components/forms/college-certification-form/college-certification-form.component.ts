@@ -409,8 +409,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private isCertificationDiscontinued(collegeCode: number, licenseCode: number): boolean {
-    return this.configService.licenses.filter(l => {
-      return l.collegeLicenses.filter(cl => cl.collegeCode == collegeCode && cl.licenseCode == licenseCode && cl.discontinued);
-    }).length > 0;
+    let collegeLicense = this.configService.licenses.find(l => l.code === licenseCode);
+    return collegeLicense.collegeLicenses.find(cl => cl.collegeCode === collegeCode && cl.licenseCode === licenseCode).discontinued;
   }
 }
