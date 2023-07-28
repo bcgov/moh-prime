@@ -7,7 +7,10 @@
 </app-paginator>
 
 <table mat-table
+       matSort
+       #siteTbSort="matSort"
        [dataSource]="dataSource"
+       (matSortChange)="sortData($event)"
        class="w-100">
 
   <ng-container matColumnDef="prefixes">
@@ -60,12 +63,16 @@
         *matHeaderCellDef
         scope="col"> Site Name (Doing Business As) </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.doingBusinessAs | default }} </td>
+        *matCellDef="let row;">
+      <span *ngIf="row.isNew" class="red">NEW </span>
+      {{ row.doingBusinessAs | default }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="submissionDate">
     <th mat-header-cell
         *matHeaderCellDef
+        mat-sort-header
         scope="col"> Submission Date </th>
     <td mat-cell
         *matCellDef="let row;"> {{ row.submittedDate | formatDate | default }} </td>
@@ -82,7 +89,9 @@
   <ng-container matColumnDef="state">
     <th mat-header-cell
         *matHeaderCellDef
-        scope="col"> State </th>
+        mat-sort-header
+        scope="col"> State
+    </th>
     <td mat-cell
         *matCellDef="let row;"
         class="status"

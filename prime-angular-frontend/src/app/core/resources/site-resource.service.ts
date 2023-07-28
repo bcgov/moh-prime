@@ -494,6 +494,24 @@ export class SiteResource {
       );
   }
 
+  public flagIsNewSite(siteId: number, isNew: boolean): NoContent {
+    const url = `sites/${siteId}/isnew`;
+    const body = { data: isNew };
+    const request$ = this.apiResource.put<NoContent>(url, body);
+
+    return request$
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast(`Site has been ${isNew ? ' flagged is-new' : 'unflagged is-new'}`)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site is-new could not be updated');
+          this.logger.error('[Site] SiteResource::flagIsNewSite error has occurred:'
+            , error);
+          throw error;
+        })
+      );
+  }
+
   public createSiteRegistrationNote(siteId: number, note: string): Observable<SiteRegistrationNote> {
     const payload = { data: note };
     return this.apiResource.post(`sites/${siteId}/site-registration-notes`, payload)

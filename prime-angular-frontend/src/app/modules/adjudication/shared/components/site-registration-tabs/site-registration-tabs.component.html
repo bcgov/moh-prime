@@ -48,7 +48,8 @@
                let-localStoragePrefix="localStoragePrefix">
     <div class="mt-3">
       <app-search-form *ngIf="showSearchFilter"
-                       [hideStatus]="true"
+                       [hideStatus]="false"
+                       [statusType]="SearchFormStatusType.SiteStatuses"
                        [localStoragePrefix]="localStoragePrefix"
                        (search)="onSearch($event)"
                        (filter)="onFilter($event)"

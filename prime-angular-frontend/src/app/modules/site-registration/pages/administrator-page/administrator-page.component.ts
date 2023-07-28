@@ -49,6 +49,10 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
+  public isCommunityPharmacy(): boolean {
+    return this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+  }
+
   public onSelect(contact: Contact) {
     if (!contact.physicalAddress) {
       contact.physicalAddress = new Address();

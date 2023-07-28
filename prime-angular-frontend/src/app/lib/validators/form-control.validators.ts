@@ -228,14 +228,25 @@ export class FormControlValidators {
     };
   }
 
-    /**
+  /**
+ * @description
+ * Checks the form control value is letters.
+ */
+  public static validName(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) { return null; }
+    const regExp = /^[a-zA-Z]+[a-zA-Z\s\.\-\']*$/i;
+    const valid = (control.valid && regExp.test(control.value));
+    return (valid) ? null : { validName: true };
+  }
+
+  /**
    * @description
-   * Checks the form control value is letters.
+   * Checks the form control value is BC00000XXX for Community Pharmacy
    */
-    public static validName(control: AbstractControl): ValidationErrors | null {
-      if (!control.value) { return null; }
-      const regExp = /^[a-zA-Z]+[a-zA-Z\s\.\-\']*$/i;
-      const valid = (control.valid && regExp.test(control.value));
-      return (valid) ? null : { validName: true };
-    }
+  public static communityPharmacySiteId(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) { return null; }
+    const regexp = /^BC00000[a-zA-Z0-9]{3}$/;
+    const valid = (control.valid && regexp.test(control.value));
+    return (valid) ? null : { cpSiteId: true };
+  }
 }

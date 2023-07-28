@@ -15,6 +15,7 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -86,6 +87,10 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     ].includes(this.siteService.site.careSettingCode);
   }
 
+  public isCommunityPharmacy(): boolean {
+    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+  }
+
   public onUpload(document: BaseDocument): void {
     this.formState.businessLicenceGuid.patchValue(document.documentGuid);
     this.uploadedFile = true;
@@ -142,6 +147,15 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   protected initForm(): void {
     this.site = this.siteService.site;
     this.getBusinessLicence(this.site.id);
+    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+      if (this.site.activeBeforeRegistration) {
+        this.formUtilsService.setValidators(this.formState.pec, [Validators.required, FormControlValidators.communityPharmacySiteId])
+      } else {
+        this.formUtilsService.setValidators(this.formState.pec, [FormControlValidators.communityPharmacySiteId])
+      }
+    } else {
+      this.formUtilsService.setValidators(this.formState.pec, []);
+    }
   }
 
   protected additionalValidityChecks(): boolean {
