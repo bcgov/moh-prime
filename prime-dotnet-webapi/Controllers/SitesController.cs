@@ -891,10 +891,12 @@ namespace Prime.Controllers
                 }
                 else
                 {
+                    /* do not send email to SA and Admin about the approval
                     await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(communitySite);
                     await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved PharmaNet administrator notification");
                     await _emailService.SendSiteApprovedSigningAuthorityAsync(communitySite);
                     await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved signing authority notification");
+                    */
                 }
                 await _emailService.SendSiteApprovedHIBCAsync(communitySite);
                 await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved HIBC notification");
