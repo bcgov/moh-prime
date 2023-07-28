@@ -55,7 +55,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       return;
     }
 
-    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress } = this.formInstance.getRawValue();
+    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress, isNew } = this.formInstance.getRawValue();
 
     return {
       businessLicence: {
@@ -66,7 +66,8 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       doingBusinessAs,
       pec,
       activeBeforeRegistration,
-      physicalAddress
+      physicalAddress,
+      isNew
     };
   }
 
@@ -85,7 +86,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
     this.siteId = siteId;
 
-    const { doingBusinessAs, pec, businessLicence, physicalAddress } = model;
+    const { doingBusinessAs, pec, businessLicence, physicalAddress, isNew } = model;
     // Preserve the business licence for use when
     // creating JSON format from the form
     this.businessLicence = businessLicence;
@@ -95,6 +96,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       doingBusinessAs,
       pec,
       physicalAddress,
+      isNew
     });
   }
 
@@ -141,8 +143,24 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
         areDisabled: ['provinceCode', 'countryCode'],
         useDefaults: ['provinceCode', 'countryCode'],
         exclude: ['street2']
-      })
+      }),
+      isNew: [
+        false,
+        []
+      ],
     });
+  }
+
+  public presetCommunityPharmacySiteId(): void {
+    if (!this.pec.value || this.pec.value === "") {
+      this.pec.setValue("BC00000");
+    }
+  }
+
+  public resetSiteId(): void {
+    if (this.pec.value && this.pec.value === "BC00000") {
+      this.pec.setValue("");
+    }
   }
 
   private checkPecIsAssignable(): (value: string) => Observable<boolean> {

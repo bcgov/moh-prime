@@ -34,6 +34,7 @@ import { BulkEmailType } from '@shared/enums/bulk-email-type';
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
+import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -58,6 +59,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public SearchFormStatusType = SearchFormStatusType;
 
   protected routeUtils: RouteUtils;
 

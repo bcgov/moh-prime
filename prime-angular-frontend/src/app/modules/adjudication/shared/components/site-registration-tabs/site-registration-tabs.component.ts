@@ -15,6 +15,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
@@ -38,6 +39,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
   public CareSettingEnum = CareSettingEnum;
+  public SearchFormStatusType = SearchFormStatusType;
 
   public communityPracticeColumns: string[];
   public communityPharmacyColumns: string[];
@@ -104,7 +106,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
   }
 
   public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
-    this.routeUtils.updateQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index], page: null });
+    this.routeUtils.removeQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index], page: null });
   }
 
   public ngOnInit(): void {
