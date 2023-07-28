@@ -176,6 +176,9 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
     if (this.formState.json.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
       this.siteFormStateService.businessLicenceFormState.presetCommunityPharmacySiteId();
     }
+    if (this.formState.json.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
+      this.siteFormStateService.businessLicenceFormState.resetSiteId();
+    }
 
     const payload = this.siteFormStateService.json;
     return this.siteResource.updateSite(payload);

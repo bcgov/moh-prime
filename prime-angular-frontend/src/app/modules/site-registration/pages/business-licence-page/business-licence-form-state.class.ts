@@ -157,6 +157,12 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
     }
   }
 
+  public resetSiteId(): void {
+    if (this.pec.value && this.pec.value === "BC00000") {
+      this.pec.setValue("");
+    }
+  }
+
   private checkPecIsAssignable(): (value: string) => Observable<boolean> {
     return (value: string) => value ? this.siteResource.pecAssignable(this.siteId, value) : of(true);
   }
