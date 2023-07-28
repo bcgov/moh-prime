@@ -169,7 +169,7 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode, int siteId)
+        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode, int siteId, bool isNew = false)
         {
 
             string careSetting = careSettingCode switch
@@ -181,12 +181,14 @@ namespace Prime.Services.EmailInternal
                 _ => ""
             };
 
+            var isNewPrefix = isNew ? "Priority! New Pharmacy - " : "";
+
             return new Email
             (
                 from: PrimeEmail,
                 to: MohEmail,
                 cc: PrimeSupportEmail,
-                subject: $"[{siteId}] PRIME Site Registration Submission - {careSetting}",
+                subject: $"[{siteId}] {isNewPrefix} PRIME Site Registration Submission - {careSetting}",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
             );
         }

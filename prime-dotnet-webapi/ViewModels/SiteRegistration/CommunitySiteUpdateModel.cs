@@ -31,6 +31,8 @@ namespace Prime.ViewModels
 
         public bool ActiveBeforeRegistration { get; set; }
 
+        public bool IsNew {get; set;}
+
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
 
         public IEnumerable<SiteRemoteUserUpdateModel> RemoteUsers { get; set; }
