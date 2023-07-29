@@ -245,7 +245,7 @@ export class FormControlValidators {
    */
   public static communityPharmacySiteId(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
-    const regexp = /^BC00000[a-zA-Z0-9]{3}$/;
+    const regexp = /^BC00000[A-Z0-9]{3}$/;
     const valid = (control.valid && regexp.test(control.value));
     return (valid) ? null : { cpSiteId: true };
   }
