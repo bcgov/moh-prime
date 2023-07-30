@@ -78,6 +78,7 @@
     <EmbeddedResource Include="Configuration\Database\Resources\lpn-toa-v1.html" />
     <EmbeddedResource Include="Configuration\Database\Resources\com-practice-org-v3.html" />
     <EmbeddedResource Include="Configuration\Database\Resources\com-pharmacy-org-v3.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\com-pharmacy-org-v4.html" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">
