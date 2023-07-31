@@ -168,7 +168,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   }
 
   protected onSubmitFormIsInvalid(): void {
-    if (!this.uploadedFile && !this.deferredLicenceToggle?.checked && !this.businessLicence?.businessLicenceDocument) {
+    if (!this.uploadedFile && !this.deferredLicenceToggle?.checked && !this.businessLicence?.businessLicenceDocument && this) {
       this.hasNoBusinessLicenceError = true;
     }
     this.showAddressFields = true;
