@@ -16,12 +16,11 @@ namespace Prime.Configuration.Database
                     new Vendor { Code = 4,  CareSettingCode = (int)CareSettingType.CommunityPractice, Name = "Medinet",                           Email = "prime@medinet.ca"       },
                     new Vendor { Code = 5,  CareSettingCode = (int)CareSettingType.CommunityPractice, Name = "Plexia",                            Email = "service@plexia.ca"      },
 
-                    new Vendor { Code = 6,  CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "TELUS Health",                      Email = ""                       },
+                    new Vendor { Code = 6,  CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "TELUS Health – Kroll",              Email = ""                       },
                     new Vendor { Code = 7,  CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "Applied Robotics Inc.",             Email = ""                       },
                     new Vendor { Code = 8,  CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "Loblaws/Shoppers Drug Mart",        Email = ""                       },
                     new Vendor { Code = 9,  CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "McKesson Canada",                   Email = ""                       },
                     new Vendor { Code = 10, CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "Commander Group Software",          Email = ""                       },
-                    new Vendor { Code = 11, CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "BDM (Hospital pharmacy only)",      Email = ""                       },
 
                     new Vendor { Code = 14, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Assyst Rx-A",                       Email = ""                       },
                     new Vendor { Code = 15, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Commander Group",                   Email = ""                       },

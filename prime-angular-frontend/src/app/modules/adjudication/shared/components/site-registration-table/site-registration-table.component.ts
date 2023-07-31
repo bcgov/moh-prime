@@ -37,7 +37,7 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
   @ViewChild('secondaryPaginator', { static: true }) public secondaryPaginator: MatPaginator;
 
-  @ViewChild('siteTbSort') siteTbSort = new MatSort();
+  //  @ViewChild('siteTbSort') siteTbSort = new MatSort();
 
   public SiteStatusType = SiteStatusType;
   public CareSettingEnum = CareSettingEnum;
@@ -132,8 +132,9 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    this.siteTbSort.disableClear = true;
-    this.dataSource.sort = this.siteTbSort;
+    // TODO: Fix sorting
+    // this.siteTbSort.disableClear = true;
+    // this.dataSource.sort = this.siteTbSort;
   }
 
   public sortData(sort: Sort) {

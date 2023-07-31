@@ -13,6 +13,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime Nov17th2022AgreementUpdate = new(2022, 11, 17, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime Sept27th2022AgreementUpdate = new(2022, 9, 27, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime June19th2023AgreementUpdate = new(2023, 6, 19, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime July29th2023AgreementUpdate = new(2023, 7, 29, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<AgreementVersion> SeedData
         {
@@ -51,7 +52,9 @@ namespace Prime.Configuration.Database
                     new AgreementVersion { Id = 28, AgreementType = AgreementType.LicencedPracticalNurseTOA,     Text =  "lpn-toa-v1.html",                     EffectiveDate = Sept27th2022AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     new AgreementVersion { Id = 29, AgreementType = AgreementType.CommunityPracticeOrgAgreement, Text =  "com-practice-org-v3.html",            EffectiveDate = June19th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new AgreementVersion { Id = 30, AgreementType = AgreementType.CommunityPharmacyOrgAgreement, Text =  "com-pharmacy-org-v3.html",            EffectiveDate = June19th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },                };
+                    new AgreementVersion { Id = 30, AgreementType = AgreementType.CommunityPharmacyOrgAgreement, Text =  "com-pharmacy-org-v3.html",            EffectiveDate = June19th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new AgreementVersion { Id = 31, AgreementType = AgreementType.CommunityPharmacyOrgAgreement, Text = "com-pharmacy-org-v4.html",             EffectiveDate = July29th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                };
             }
         }
 
