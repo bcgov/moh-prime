@@ -86,9 +86,7 @@ export class SiteInformationFormComponent implements OnInit {
     if (change.checked) {
       this.activeBeforeRegistration.setValue(false);
       this.isNewWithoutSiteId.setValue(false);
-      if (this.pec.value === "") {
-        this.pec.setValue("BC00000");
-      }
+      this.setCommunityPharmacySiteIdPrefix();
     }
     this.updatePECValidator();
   }
@@ -106,11 +104,15 @@ export class SiteInformationFormComponent implements OnInit {
     if (change.checked) {
       this.isNewWithoutSiteId.setValue(false);
       this.isNewWithSiteId.setValue(false);
-      if (this.pec.value === "") {
-        this.pec.setValue("BC00000");
-      }
+      this.setCommunityPharmacySiteIdPrefix();
     }
     this.updatePECValidator();
+  }
+
+  private setCommunityPharmacySiteIdPrefix() {
+    if (!this.pec.value || this.pec.value === "") {
+      this.pec.setValue("BC00000");
+    }
   }
 
   private updatePECValidator(): void {
