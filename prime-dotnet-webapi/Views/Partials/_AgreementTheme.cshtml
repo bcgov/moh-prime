@@ -59,6 +59,11 @@
     margin-bottom: 1rem;
   }
 
+  address {
+    font-style: normal;
+    margin-bottom: 1rem;
+  }
+
   ol[type="1"].decimal {
     list-style-type: none;
     margin: 0;
@@ -100,5 +105,9 @@
   ol[type="1"].decimal ol[type="1"]>li::before {
     content: counters(section, ".") " ";
     margin-left: -26px;
+  }
+
+  ol[type="1"].hidden {
+    display: none;
   }
 </style>

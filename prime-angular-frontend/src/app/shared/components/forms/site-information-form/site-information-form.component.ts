@@ -43,8 +43,12 @@ export class SiteInformationFormComponent implements OnInit {
     return this.form.get('pec') as FormControl;
   }
 
-  public get isNew(): FormControl {
-    return this.form.get('isNew') as FormControl;
+  public get isNewWithSiteId(): FormControl {
+    return this.form.get('isNewWithSiteId') as FormControl;
+  }
+
+  public get isNewWithoutSiteId(): FormControl {
+    return this.form.get('isNewWithoutSiteId') as FormControl;
   }
 
   public get activeBeforeRegistration(): FormControl {
@@ -78,9 +82,19 @@ export class SiteInformationFormComponent implements OnInit {
       .subscribe();
   }
 
-  public checkAsIsNew(change: MatCheckboxChange): void {
+  public checkAsIsNewWithSiteId(change: MatCheckboxChange): void {
     if (change.checked) {
       this.activeBeforeRegistration.setValue(false);
+      this.isNewWithoutSiteId.setValue(false);
+      this.setCommunityPharmacySiteIdPrefix();
+    }
+    this.updatePECValidator();
+  }
+
+  public checkAsIsNewWithoutSiteId(change: MatCheckboxChange): void {
+    if (change.checked) {
+      this.activeBeforeRegistration.setValue(false);
+      this.isNewWithSiteId.setValue(false);
       this.pec.setValue("");
     }
     this.updatePECValidator();
@@ -88,14 +102,22 @@ export class SiteInformationFormComponent implements OnInit {
 
   public checkAsOperational(change: MatCheckboxChange): void {
     if (change.checked) {
-      this.isNew.setValue(false);
+      this.isNewWithoutSiteId.setValue(false);
+      this.isNewWithSiteId.setValue(false);
+      this.setCommunityPharmacySiteIdPrefix();
     }
     this.updatePECValidator();
   }
 
+  private setCommunityPharmacySiteIdPrefix() {
+    if (!this.pec.value || this.pec.value === "") {
+      this.pec.setValue("BC00000");
+    }
+  }
+
   private updatePECValidator(): void {
     if (this.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
-      if (this.activeBeforeRegistration.value) {
+      if (this.activeBeforeRegistration.value || this.isNewWithSiteId.value) {
         this.formUtilsService.setValidators(this.pec, [Validators.required, FormControlValidators.communityPharmacySiteId]);
       } else {
         this.formUtilsService.setValidators(this.pec, [FormControlValidators.communityPharmacySiteId]);

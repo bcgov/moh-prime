@@ -43,7 +43,8 @@ namespace PrimeTests.UnitTests
         [InlineData(27, true)]
         [InlineData(28, true)]
         [InlineData(29, true)]
-        [InlineData(30, true)]
+        [InlineData(30, false)]
+        [InlineData(31, true)]
         public async void TestCurrentToaRule(int agreementVersionId, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
