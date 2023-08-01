@@ -83,7 +83,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { businessLicence, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress } = this.businessLicenceFormState.json;
+    const { businessLicence, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress, isNew } = this.businessLicenceFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
     const administratorPharmaNet = this.administratorPharmaNetFormState.json;
@@ -118,7 +118,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       // approvedDate (N/A)
       // submittedDate (N/A)
       pec,
-      activeBeforeRegistration
+      activeBeforeRegistration,
+      isNew
     } as Site; // Enforced type due to N/A properties
   }
 
@@ -247,10 +248,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence, activeBeforeRegistration, physicalAddress } = site;
+    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence, activeBeforeRegistration, physicalAddress, isNew } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence, activeBeforeRegistration, physicalAddress }, id);
+    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence, activeBeforeRegistration, physicalAddress, isNew, careSettingCode }, id);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
     this.administratorPharmaNetFormState.patchValue(site?.administratorPharmaNet);

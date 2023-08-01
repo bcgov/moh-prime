@@ -1,14 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import { Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteService } from '@registration/shared/services/site.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { EnrolleeBannerListPageComponent } from '@adjudication/pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
 
 @Component({
   selector: 'app-site-information-form',
@@ -18,7 +22,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 export class SiteInformationFormComponent implements OnInit {
   @Input() public form: FormGroup;
   @Input() public organizationId?: number;
-
+  @Input() public careSettingCode: number;
   public busy: Subscription;
   public doingBusinessAsNames: string[];
 
@@ -26,6 +30,7 @@ export class SiteInformationFormComponent implements OnInit {
     private organizationResource: OrganizationResource,
     private orgBookResource: OrgBookResource,
     private siteService: SiteService,
+    private formUtilsService: FormUtilsService
   ) {
     this.doingBusinessAsNames = [];
   }
@@ -38,12 +43,25 @@ export class SiteInformationFormComponent implements OnInit {
     return this.form.get('pec') as FormControl;
   }
 
+  public get isNewWithSiteId(): FormControl {
+    return this.form.get('isNewWithSiteId') as FormControl;
+  }
+
+  public get isNewWithoutSiteId(): FormControl {
+    return this.form.get('isNewWithoutSiteId') as FormControl;
+  }
+
+  public get activeBeforeRegistration(): FormControl {
+    return this.form.get('activeBeforeRegistration') as FormControl;
+  }
+
   public isCommunityPharmacy() {
     return this.siteService.site?.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
   }
 
   public ngOnInit(): void {
     this.initForm();
+    this.updatePECValidator();
   }
 
   protected initForm(): void {
@@ -62,5 +80,50 @@ export class SiteInformationFormComponent implements OnInit {
         )
       )
       .subscribe();
+  }
+
+  public checkAsIsNewWithSiteId(change: MatCheckboxChange): void {
+    if (change.checked) {
+      this.activeBeforeRegistration.setValue(false);
+      this.isNewWithoutSiteId.setValue(false);
+      this.setCommunityPharmacySiteIdPrefix();
+    }
+    this.updatePECValidator();
+  }
+
+  public checkAsIsNewWithoutSiteId(change: MatCheckboxChange): void {
+    if (change.checked) {
+      this.activeBeforeRegistration.setValue(false);
+      this.isNewWithSiteId.setValue(false);
+      this.pec.setValue("");
+    }
+    this.updatePECValidator();
+  }
+
+  public checkAsOperational(change: MatCheckboxChange): void {
+    if (change.checked) {
+      this.isNewWithoutSiteId.setValue(false);
+      this.isNewWithSiteId.setValue(false);
+      this.setCommunityPharmacySiteIdPrefix();
+    }
+    this.updatePECValidator();
+  }
+
+  private setCommunityPharmacySiteIdPrefix() {
+    if (!this.pec.value || this.pec.value === "") {
+      this.pec.setValue("BC00000");
+    }
+  }
+
+  private updatePECValidator(): void {
+    if (this.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+      if (this.activeBeforeRegistration.value || this.isNewWithSiteId.value) {
+        this.formUtilsService.setValidators(this.pec, [Validators.required, FormControlValidators.communityPharmacySiteId]);
+      } else {
+        this.formUtilsService.setValidators(this.pec, [FormControlValidators.communityPharmacySiteId]);
+      }
+    } else {
+      this.formUtilsService.setValidators(this.pec, []);
+    }
   }
 }

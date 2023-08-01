@@ -29,6 +29,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.DoingBusinessAs, f => f.Company.CompanyName());
 
             RuleFor(x => x.ActiveBeforeRegistration, f => f.Random.Bool());
+            RuleFor(x => x.IsNew, f => f.Random.Bool());
             // TODO: What is this property about?
             RuleFor(x => x.Completed, f => f.Random.Bool());
             RuleFor(x => x.Flagged, f => f.Random.Bool(0.1f));
