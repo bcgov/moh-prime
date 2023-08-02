@@ -18,6 +18,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime SetPractIdToMandatoryFeb2nd2023 = new(2023, 2, 2, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime SetValidateForNurseMarch15th2023 = new(2023, 3, 15, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime June9th2023 = new(2023, 6, 9, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime AdjustmentsToOnboardCollegeOfOptometristsAug2nd2023 = new(2023, 8, 2, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -292,6 +293,11 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id =  235, LicenseCode = 84, Prefix = "", Manual = true, Validate = false, LicensedToProvideCare = false, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = June9th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id =  236, LicenseCode = 85, Prefix = "", Manual = true, Validate = false, LicensedToProvideCare = false, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = June9th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id =  237, LicenseCode = 86, Prefix = "", Manual = true, Validate = false, LicensedToProvideCare = false, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = June9th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Adjustments to onboard College of Optometrists
+                    new LicenseDetail { Id = 261, LicenseCode = 72, Prefix = "94", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true, EffectiveDate = AdjustmentsToOnboardCollegeOfOptometristsAug2nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 262, LicenseCode = 73, Prefix = "94", Manual = true, Validate = true, NamedInImReg = false,  LicensedToProvideCare = true, EffectiveDate = AdjustmentsToOnboardCollegeOfOptometristsAug2nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 263, LicenseCode = 74, Prefix = "94", Manual = true, Validate = true, NamedInImReg = false,  LicensedToProvideCare = true, EffectiveDate = AdjustmentsToOnboardCollegeOfOptometristsAug2nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                  };
             }
         }
