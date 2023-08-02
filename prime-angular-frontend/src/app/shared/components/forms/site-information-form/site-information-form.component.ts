@@ -116,7 +116,7 @@ export class SiteInformationFormComponent implements OnInit {
           this.pec.setValue("BC00000");
         }
       } else {
-        this.formUtilsService.setValidators(this.pec, [FormControlValidators.communityPharmacySiteId]);
+        this.formUtilsService.setValidators(this.pec, []);
         this.pec.disable();
         this.pec.setValue("");
       }
