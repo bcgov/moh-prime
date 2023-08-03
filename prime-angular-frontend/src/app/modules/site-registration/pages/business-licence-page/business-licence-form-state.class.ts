@@ -169,14 +169,8 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
     this.formInstance.setValidators(this.validateMinOneCheckboxChecked());
   }
 
-  public presetCommunityPharmacySiteId(): void {
-    if (!this.pec.value || this.pec.value === "") {
-      this.pec.setValue("BC00000");
-    }
-  }
-
   public resetSiteId(): void {
-    if (this.pec.value && this.pec.value === "BC00000") {
+    if (this.pec.value) {
       this.pec.setValue("");
     }
   }
