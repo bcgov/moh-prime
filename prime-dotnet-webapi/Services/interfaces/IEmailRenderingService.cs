@@ -21,7 +21,7 @@ namespace Prime.Services.EmailInternal
         Task<Email> RenderSiteApprovedHibcEmailAsync(SiteApprovalEmailViewModel viewModel, int siteId);
         Task<Email> RenderSiteApprovedPharmaNetAdministratorEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel);
         Task<Email> RenderSiteApprovedSigningAuthorityEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel);
-        Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode, int siteId);
+        Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode, int siteId, bool isNew = false);
         Task<Email> RenderSiteReviewedNotificationEmailAsync(SiteReviewedEmailViewModel viewModel);
         Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel);
         Task<Email> RenderSiteActiveBeforeRegistrationEmailAsync(string newSigningAuthorityEmail, SiteActiveBeforeRegistrationEmailViewModel viewModel);

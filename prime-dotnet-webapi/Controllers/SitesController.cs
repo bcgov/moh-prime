@@ -367,7 +367,7 @@ namespace Prime.Controllers
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
             await _siteService.SubmitRegistrationAsync(siteId);
 
-            await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
+            await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode, site.IsNew);
             await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site registration submission notification");
 
             return Ok();
@@ -891,10 +891,12 @@ namespace Prime.Controllers
                 }
                 else
                 {
+                    /* do not send email to SA and Admin about the approval
                     await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(communitySite);
                     await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved PharmaNet administrator notification");
                     await _emailService.SendSiteApprovedSigningAuthorityAsync(communitySite);
                     await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved signing authority notification");
+                    */
                 }
                 await _emailService.SendSiteApprovedHIBCAsync(communitySite);
                 await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved HIBC notification");
@@ -1248,6 +1250,30 @@ namespace Prime.Controllers
             }
 
             await _siteService.UpdateSiteFlag(siteId, flagged);
+            return Ok();
+        }
+
+        // PUT: api/sites/5/isNew
+        /// <summary>
+        /// Sets a site's IsNew flag, which serves as a reminder
+        /// for an adjudicator to come back to this site
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="isNew"></param>
+        [HttpPut("{siteId}/isnew", Name = nameof(SetIsNew))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult> SetIsNew(int siteId, FromBodyData<bool> isNew)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            await _siteService.UpdateSiteIsNew(siteId, isNew);
             return Ok();
         }
 

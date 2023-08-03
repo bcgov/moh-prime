@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230730033037_UpdateCommunityPharmacyAgreement")]
+    partial class UpdateCommunityPharmacyAgreement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1093,9 +1095,6 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Weight")
-                        .HasColumnType("integer");
-
                     b.HasKey("Code");
 
                     b.ToTable("CollegeLookup");
@@ -1104,122 +1103,97 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
-                            Name = "College of Physicians and Surgeons of BC (CPSBC)",
-                            Weight = 10
+                            Name = "College of Physicians and Surgeons of BC (CPSBC)"
                         },
                         new
                         {
                             Code = 2,
-                            Name = "College of Pharmacists of BC (CPBC)",
-                            Weight = 20
+                            Name = "College of Pharmacists of BC (CPBC)"
                         },
                         new
                         {
                             Code = 3,
-                            Name = "BC College of Nurses and Midwives (BCCNM)",
-                            Weight = 30
+                            Name = "BC College of Nurses and Midwives (BCCNM)"
                         },
                         new
                         {
                             Code = 4,
-                            Name = "College of Chiropractors of BC",
-                            Weight = 50
+                            Name = "College of Chiropractors of BC"
                         },
                         new
                         {
                             Code = 5,
-                            Name = "College of Dental Hygenists of BC",
-                            Weight = 999
+                            Name = "College of Dental Hygenists of BC"
                         },
                         new
                         {
                             Code = 6,
-                            Name = "College of Dental Technicians of BC",
-                            Weight = 999
+                            Name = "College of Dental Technicians of BC"
                         },
                         new
                         {
                             Code = 7,
-                            Name = "College of Dental Surgeons of BC",
-                            Weight = 999
+                            Name = "College of Dental Surgeons of BC"
                         },
                         new
                         {
                             Code = 8,
-                            Name = "College of Denturists of BC",
-                            Weight = 60
+                            Name = "College of Denturists of BC"
                         },
                         new
                         {
                             Code = 9,
-                            Name = "College of Dietitians of BC",
-                            Weight = 70
+                            Name = "College of Dietitians of BC"
                         },
                         new
                         {
                             Code = 10,
-                            Name = "College of Massage Therapists of BC",
-                            Weight = 80
+                            Name = "College of Massage Therapists of BC"
                         },
                         new
                         {
                             Code = 11,
-                            Name = "College of Naturopathic Physicians of BC",
-                            Weight = 90
+                            Name = "College of Naturopathic Physicians of BC"
                         },
                         new
                         {
                             Code = 12,
-                            Name = "College of Occupational Therapists of BC",
-                            Weight = 100
+                            Name = "College of Occupational Therapists of BC"
                         },
                         new
                         {
                             Code = 13,
-                            Name = "College of Opticians of BC",
-                            Weight = 110
+                            Name = "College of Opticians of BC"
                         },
                         new
                         {
                             Code = 14,
-                            Name = "College of Optometrists of BC",
-                            Weight = 120
+                            Name = "College of Optometrists of BC"
                         },
                         new
                         {
                             Code = 15,
-                            Name = "College of Physical Therapists of BC",
-                            Weight = 130
+                            Name = "College of Physical Therapists of BC"
                         },
                         new
                         {
                             Code = 16,
-                            Name = "College of Psychologists of BC",
-                            Weight = 140
+                            Name = "College of Psychologists of BC"
                         },
                         new
                         {
                             Code = 17,
-                            Name = "College of Speech and Hearing Health Professionals of BC",
-                            Weight = 160
+                            Name = "College of Speech and Hearing Health Professionals of BC"
                         },
                         new
                         {
                             Code = 18,
-                            Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC",
-                            Weight = 170
+                            Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC"
                         },
                         new
                         {
                             Code = 19,
-                            Name = "BC College of Social Workers",
-                            Weight = 180
-                        },
-                        new
-                        {
-                            Code = 20,
-                            Name = "College of Oral Health Professionals",
-                            Weight = 40
+                            Name = "BC College of Social Workers"
                         });
                 });
 
@@ -1234,9 +1208,6 @@ namespace Prime.Migrations
                     b.Property<int?>("CollegeLicenseGroupingCode")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("Discontinued")
-                        .HasColumnType("boolean");
-
                     b.HasKey("CollegeCode", "LicenseCode");
 
                     b.HasIndex("CollegeLicenseGroupingCode");
@@ -1249,664 +1220,483 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 1,
-                            Discontinued = false
+                            LicenseCode = 1
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 2,
-                            Discontinued = false
+                            LicenseCode = 2
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 3,
-                            Discontinued = false
+                            LicenseCode = 3
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 4,
-                            Discontinued = false
+                            LicenseCode = 4
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 5,
-                            Discontinued = false
+                            LicenseCode = 5
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 6,
-                            Discontinued = false
+                            LicenseCode = 6
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 7,
-                            Discontinued = false
+                            LicenseCode = 7
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 8,
-                            Discontinued = false
+                            LicenseCode = 8
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 9,
-                            Discontinued = false
+                            LicenseCode = 9
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 10,
-                            Discontinued = false
+                            LicenseCode = 10
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 11,
-                            Discontinued = false
+                            LicenseCode = 11
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 12,
-                            Discontinued = false
+                            LicenseCode = 12
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 13,
-                            Discontinued = false
+                            LicenseCode = 13
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 14,
-                            Discontinued = false
+                            LicenseCode = 14
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 15,
-                            Discontinued = false
+                            LicenseCode = 15
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 16,
-                            Discontinued = false
+                            LicenseCode = 16
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 17,
-                            Discontinued = false
+                            LicenseCode = 17
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 18,
-                            Discontinued = false
+                            LicenseCode = 18
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 19,
-                            Discontinued = false
+                            LicenseCode = 19
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 20,
-                            Discontinued = false
+                            LicenseCode = 20
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 21,
-                            Discontinued = false
+                            LicenseCode = 21
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 22,
-                            Discontinued = false
+                            LicenseCode = 22
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 23,
-                            Discontinued = false
+                            LicenseCode = 23
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 24,
-                            Discontinued = false
+                            LicenseCode = 24
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 59,
-                            Discontinued = false
+                            LicenseCode = 59
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 65,
-                            Discontinued = false
+                            LicenseCode = 65
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 66,
-                            Discontinued = false
+                            LicenseCode = 66
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 67,
-                            Discontinued = false
+                            LicenseCode = 67
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 25,
-                            Discontinued = false
+                            LicenseCode = 25
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 26,
-                            Discontinued = false
+                            LicenseCode = 26
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 27,
-                            Discontinued = false
+                            LicenseCode = 27
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 28,
-                            Discontinued = false
+                            LicenseCode = 28
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 29,
-                            Discontinued = false
+                            LicenseCode = 29
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 30,
-                            Discontinued = false
+                            LicenseCode = 30
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 31,
-                            Discontinued = false
+                            LicenseCode = 31
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 68,
-                            Discontinued = false
+                            LicenseCode = 68
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 32,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 33,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 34,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 35,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 36,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 37,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 39,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 40,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 41,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 42,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 43,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 45,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 46,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 47,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 48,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 49,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 51,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 52,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 53,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 54,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 55,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 60,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 61,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 62,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 63,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 69,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 70,
-                            Discontinued = true
+                            LicenseCode = 70
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 75,
-                            Discontinued = true
+                            LicenseCode = 75
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 76,
-                            Discontinued = true
+                            LicenseCode = 76
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 77,
-                            Discontinued = true
+                            LicenseCode = 77
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 78,
-                            Discontinued = false
+                            LicenseCode = 78
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 79,
-                            Discontinued = false
+                            LicenseCode = 79
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 80,
-                            Discontinued = false
+                            LicenseCode = 80
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 81,
-                            Discontinued = false
+                            LicenseCode = 81
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 71,
-                            Discontinued = false
+                            LicenseCode = 71
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 72,
-                            Discontinued = false
+                            LicenseCode = 72
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 73,
-                            Discontinued = false
+                            LicenseCode = 73
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 74,
-                            Discontinued = false
+                            LicenseCode = 74
                         },
                         new
                         {
                             CollegeCode = 4,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 5,
-                            LicenseCode = 64,
-                            Discontinued = true
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 6,
-                            LicenseCode = 64,
-                            Discontinued = true
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 8,
-                            LicenseCode = 64,
-                            Discontinued = true
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 9,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 10,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 12,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 13,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 15,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 16,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 17,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 18,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 82,
-                            Discontinued = false
+                            LicenseCode = 82
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 83,
-                            Discontinued = false
+                            LicenseCode = 83
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 84,
-                            Discontinued = false
+                            LicenseCode = 84
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 85,
-                            Discontinued = false
+                            LicenseCode = 85
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 86,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 87,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 88,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 89,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 90,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 91,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 92,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 93,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 94,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 95,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 96,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 97,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 98,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 99,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 100,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 101,
-                            Discontinued = false
+                            LicenseCode = 86
                         });
                 });
 
@@ -6091,96 +5881,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 89,
-                            Name = "Full Dentist",
-                            Weight = 1
-                        },
-                        new
-                        {
-                            Code = 90,
-                            Name = "Limited Dentist (Restricted to Specialty)",
-                            Weight = 2
-                        },
-                        new
-                        {
-                            Code = 91,
-                            Name = "Limited (Academic) Dentist",
-                            Weight = 3
-                        },
-                        new
-                        {
-                            Code = 92,
-                            Name = "Limited (Educational and Volunteer) Dentist",
-                            Weight = 4
-                        },
-                        new
-                        {
-                            Code = 93,
-                            Name = "Limited (Armed Forces/Government) Dentist",
-                            Weight = 5
-                        },
-                        new
-                        {
-                            Code = 87,
-                            Name = "Dental Hygienists",
-                            Weight = 6
-                        },
-                        new
-                        {
-                            Code = 88,
-                            Name = "Dental Hygiene Practitioner",
-                            Weight = 7
-                        },
-                        new
-                        {
-                            Code = 94,
-                            Name = "Dental Therapist",
-                            Weight = 8
-                        },
-                        new
-                        {
-                            Code = 95,
-                            Name = "Dental Technician",
-                            Weight = 9
-                        },
-                        new
-                        {
-                            Code = 96,
-                            Name = "Full Denturist",
-                            Weight = 10
-                        },
-                        new
-                        {
-                            Code = 97,
-                            Name = "Student Dentistry",
-                            Weight = 11
-                        },
-                        new
-                        {
-                            Code = 98,
-                            Name = "Limited (Grandparented) Denturist",
-                            Weight = 12
-                        },
-                        new
-                        {
-                            Code = 99,
-                            Name = "Student dental technology",
-                            Weight = 13
-                        },
-                        new
-                        {
-                            Code = 100,
-                            Name = "Student Denturism",
-                            Weight = 14
-                        },
-                        new
-                        {
-                            Code = 101,
-                            Name = "Temporary",
-                            Weight = 15
-                        },
-                        new
-                        {
                             Code = 64,
                             Name = "Not Displayed",
                             Weight = 1
@@ -10072,294 +9772,6 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false
-                        },
-                        new
-                        {
-                            Id = 238,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 87,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 239,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 88,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 240,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 89,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 241,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 90,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 242,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 91,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 243,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 92,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 244,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 93,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 245,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 94,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 246,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 95,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 247,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 96,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 248,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 97,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 249,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 98,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 250,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 99,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 251,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 100,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 252,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 6, 13, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 101,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 261,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 8, 2, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 72,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "94",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 262,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 8, 2, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 73,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "94",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 263,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 8, 2, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 74,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "94",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
                         });
                 });
 

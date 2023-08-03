@@ -225,7 +225,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
       mnemonic,
       status,
       businessLicence,
-      flagged
+      flagged,
+      isNew
     } = site;
 
     return {
@@ -242,7 +243,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
       mnemonic,
       status,
       businessLicence,
-      flagged
+      flagged,
+      isNew
     };
   }
 }
