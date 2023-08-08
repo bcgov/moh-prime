@@ -1,4 +1,4 @@
-name: Build PR
+name: Build Frontend - Dev
 # Build all of the necessary components for the PRIME application from PullRequest branch. Images are then deployed to Dev environment via the prime-app-ephemeral-template.yml in the infrastructure folder
 on:
   push:
@@ -6,10 +6,8 @@ on:
     - develop
     paths:
     - moh-prime/prime-angular-frontend/
-
   workflow_dispatch:
-    branches:
-    - develop
+
 
 jobs:
   build-frontend:
