@@ -238,10 +238,12 @@
 
   </app-overview-section>
 
-  <app-remote-user-review [remoteUsers]="site.remoteUsers"
+  <app-remote-user-review *ngIf="this.showRemnoteUsers"
+                          [remoteUsers]="site.remoteUsers"
                           [showEditRedirect]="showEditRedirect && site.status === SiteStatusType.EDITABLE"
                           [editRoute]="SiteRoutes.REMOTE_USERS"
                           (route)="onRouteRelative($event)"></app-remote-user-review>
+
 
   <app-overview-section title="PharmaNet Administrator"
                         [showEditRedirect]="showEditRedirect && site.status === SiteStatusType.EDITABLE"

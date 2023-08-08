@@ -81,6 +81,7 @@ export class MockCommunitySiteService {
       mnemonic: null,
       flagged: false,
       activeBeforeRegistration: false,
+      isNew: false,
       individualDeviceProviders: []
     });
   }

@@ -8,6 +8,8 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { LocalStorageService } from '@core/services/local-storage.service';
 import { EnrolmentStatusFilterEnum, PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
+import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
 @Component({
   selector: 'app-search-form',
@@ -16,16 +18,19 @@ import { EnrolmentStatusFilterEnum, PaperStatusEnum, StatusFilterEnum } from '@s
 })
 export class SearchFormComponent implements OnInit {
   @Input() public hideStatus: boolean;
+  @Input() public statusType: SearchFormStatusType;
   @Input() public localStoragePrefix: string;
   @Output() public search: EventEmitter<string>;
-  @Output() public filter: EventEmitter<StatusFilterEnum>;
+  @Output() public filter: EventEmitter<number>;
   @Output() public refresh: EventEmitter<void>;
 
   public form: FormGroup;
-  public statuses: Config<number>[];
+  public enrolleeStatuses: Config<number>[];
+  public siteStatuses: Config<number>[];
 
   private textSearchKey: string;
-  private statusCodeKey: string;
+  private enrolleeStatusCodeKey: string;
+  private siteStatusCodeKey: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,16 +38,22 @@ export class SearchFormComponent implements OnInit {
     private configService: ConfigService,
     private localStorage: LocalStorageService
   ) {
-    this.statuses = this.configService.statuses;
+    this.enrolleeStatuses = this.configService.statuses;
+    this.siteStatuses = new Array<Config<number>>();
 
     // MacGyver paper enrollee filter into the status filter
     const linkedPaperStatus = new Config<number>(PaperStatusEnum.LINKED_PAPER_ENROLMENT, 'Claimed Manual (Paper) Enrollees');
     const unlinkedPaperStatus = new Config<number>(PaperStatusEnum.UNLINKED_PAPER_ENROLMENT, 'Unclaimed Manual (Paper) Enrollees');
     const renewalEnrolmentStatus = new Config<number>(EnrolmentStatusFilterEnum.RENEWED_ENROLMENT, 'Previous Manual Review');
-    this.statuses.push(linkedPaperStatus, unlinkedPaperStatus, renewalEnrolmentStatus);
+    this.enrolleeStatuses.push(linkedPaperStatus, unlinkedPaperStatus, renewalEnrolmentStatus);
+
+    const inReviewStatus = new Config<number>(SiteStatusType.IN_REVIEW, 'In Review');
+    const editableStatus = new Config<number>(SiteStatusType.EDITABLE, 'Editable');
+    const lockedStatus = new Config<number>(SiteStatusType.LOCKED, 'Locked');
+    this.siteStatuses.push(inReviewStatus, editableStatus, lockedStatus);
 
     this.search = new EventEmitter<string>();
-    this.filter = new EventEmitter<StatusFilterEnum>();
+    this.filter = new EventEmitter<number>();
     this.refresh = new EventEmitter<void>();
   }
 
@@ -50,8 +61,20 @@ export class SearchFormComponent implements OnInit {
     return this.form.get('textSearch') as FormControl;
   }
 
-  public get statusCode(): FormControl {
-    return this.form.get('statusCode') as FormControl;
+  public get enrolleeStatusCode(): FormControl {
+    return this.form.get('enrolleeStatusCode') as FormControl;
+  }
+
+  public get siteStatusCode(): FormControl {
+    return this.form.get('siteStatusCode') as FormControl;
+  }
+
+  public get useSiteStatuses(): boolean {
+    return this.statusType === SearchFormStatusType.SiteStatuses;
+  }
+
+  public get useEnrolleeStatuses(): boolean {
+    return this.statusType === SearchFormStatusType.EnrolleeStatuses;
   }
 
   public onRefresh() {
@@ -60,7 +83,8 @@ export class SearchFormComponent implements OnInit {
 
   public ngOnInit() {
     this.textSearchKey = `${this.localStoragePrefix}-search-form-textSearch`;
-    this.statusCodeKey = `${this.localStoragePrefix}-search-form-statusCode`;
+    this.enrolleeStatusCodeKey = `${this.localStoragePrefix}-search-form-enrollee-statusCode`;
+    this.siteStatusCodeKey = `${this.localStoragePrefix}-search-form-site-statusCode`;
 
     this.createFormInstance();
     this.initForm();
@@ -69,16 +93,12 @@ export class SearchFormComponent implements OnInit {
   private createFormInstance() {
     this.form = this.fb.group({
       textSearch: [null, []],
-      statusCode: [{ value: '', disabled: this.hideStatus }, []]
+      enrolleeStatusCode: [{ value: '', disabled: this.hideStatus }, []],
+      siteStatusCode: [{ value: '', disabled: this.hideStatus }, []],
     });
   }
 
   private initForm() {
-    const queryParams = this.route.snapshot.queryParams;
-
-    if (queryParams.textSearch || queryParams.statusCode) {
-      this.form.patchValue(queryParams);
-    }
 
     this.textSearch.valueChanges
       .pipe(debounceTime(500))
@@ -88,18 +108,32 @@ export class SearchFormComponent implements OnInit {
         this.search.emit(search || null);
       });
 
-    this.statusCode.valueChanges
+    this.enrolleeStatusCode.valueChanges
       .pipe(debounceTime(500))
       // Passing `null` removes the query parameter from the URL
-      .subscribe((enrolmentStatus: StatusFilterEnum) => {
-        this.localStorage.set(this.statusCodeKey, enrolmentStatus?.toString());
+      .subscribe((enrolmentStatus: number) => {
+        this.localStorage.set(this.enrolleeStatusCodeKey, enrolmentStatus?.toString());
         this.filter.emit(enrolmentStatus || null);
       });
 
-    if (!queryParams.textSearch && !queryParams.statusCode) {
+    this.siteStatusCode.valueChanges
+      .pipe(debounceTime(500))
+      // Passing `null` removes the query parameter from the URL
+      .subscribe((siteStatus: number) => {
+        this.localStorage.set(this.siteStatusCodeKey, siteStatus?.toString());
+        this.filter.emit(siteStatus || null);
+      });
+
+    if (this.statusType === SearchFormStatusType.SiteStatuses) {
       this.form.patchValue({
         textSearch: this.localStorage.get(this.textSearchKey),
-        statusCode: this.localStorage.getInteger(this.statusCodeKey) || null
+        siteStatusCode: this.localStorage.getInteger(this.siteStatusCodeKey) || null,
+      });
+    }
+    if (this.statusType === SearchFormStatusType.EnrolleeStatuses) {
+      this.form.patchValue({
+        textSearch: this.localStorage.get(this.textSearchKey),
+        enrolleeStatusCode: this.localStorage.getInteger(this.enrolleeStatusCodeKey) || null
       });
     }
   }
