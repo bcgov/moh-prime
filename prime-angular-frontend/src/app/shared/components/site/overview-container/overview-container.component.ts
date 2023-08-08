@@ -42,6 +42,11 @@ export class OverviewContainerComponent implements OnInit {
     this.businessLicenceUpdated = false;
   }
 
+  public get showRemnoteUsers(): boolean {
+    return this.site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY ||
+      this.site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
+  }
+
   public onRoute(routePath: string | (string | number)[]) {
     let navExtra: NavigationExtras;
     if (this.site) {

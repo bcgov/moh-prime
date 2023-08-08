@@ -51,6 +51,11 @@ export abstract class AbstractSiteAdminPage {
       .subscribe(() => this.updateSite(siteId, { flagged }));
   }
 
+  public onToggleIsNewSite({ siteId, isNew }: { siteId: number, isNew: boolean }): void {
+    this.busy = this.siteResource.flagIsNewSite(siteId, isNew)
+      .subscribe(() => this.updateSite(siteId, { isNew }));
+  }
+
   public onAssign(siteId: number): void {
     const data: DialogOptions = {
       title: 'Assign Site',
