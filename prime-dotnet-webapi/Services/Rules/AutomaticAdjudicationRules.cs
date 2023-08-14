@@ -225,8 +225,12 @@ namespace Prime.Services.Rules
             if (enrollee.HasCareSetting(CareSettingType.DeviceProvider) )
             {
                 var errorMessage = "";
+                if(enrollee.EnrolleeDeviceProviders == null || enrollee.EnrolleeDeviceProviders.Count() == 0){
+                    errorMessage = $"Enrollee misses Device Provider info";
+                }
+
                 var site = await _deviceProviderService.GetDeviceProviderSiteAsync(enrollee.EnrolleeDeviceProviders.First().DeviceProviderId);
-                if(site == null){
+                if(string.IsNullOrWhiteSpace(errorMessage) && site == null){
                     errorMessage = $"Device Provider Id {enrollee.EnrolleeDeviceProviders.First().DeviceProviderId} not found";
                 }
 
