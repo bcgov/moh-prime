@@ -325,6 +325,7 @@ namespace Prime.Services
                     .ThenInclude(ral => ral.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeHealthAuthorities)
+                .Include(e => e.EnrolleeDeviceProviders)
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress)
@@ -357,6 +358,7 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.Certifications, updateModel.Certifications, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeDeviceProviders, updateModel.EnrolleeDeviceProviders, enrolleeId);
 
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
             UpdateRemoteAccessSites(enrollee, updateModel);
@@ -686,6 +688,14 @@ namespace Prime.Services
             return await _context.Set<Certification>()
                 .Where(c => c.EnrolleeId == enrolleeId)
                 .ProjectTo<CertificationViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<EnrolleeDeviceProviderViewModel>> GetEnrolleeDeviceProvidersAsync(int enrolleeId)
+        {
+            return await _context.Set<EnrolleeDeviceProvider>()
+                .Where(c => c.EnrolleeId == enrolleeId)
+                .ProjectTo<EnrolleeDeviceProviderViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 

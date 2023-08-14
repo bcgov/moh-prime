@@ -17,5 +17,7 @@ namespace Prime.Models
         public string Text { get; set; }
 
         public DateTimeOffset EffectiveDate { get; set; }
+
+        public string CareSettingCodeStr { get; set; }
     }
 }

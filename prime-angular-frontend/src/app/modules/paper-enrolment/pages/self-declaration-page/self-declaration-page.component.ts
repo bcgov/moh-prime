@@ -20,6 +20,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { SelfDeclarationFormState } from './self-declaration-form-state.class';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-self-declaration-page',
@@ -103,8 +104,9 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
 
   protected initForm(): void {
     if (this.selfDeclarationQuestions.keys.length === 0) {
+      const isDeviceProvider = this.enrollee.enrolleeCareSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
       // convert time zone to utc format
-      this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format()).subscribe((versions) => {
+      this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format(), isDeviceProvider).subscribe((versions) => {
         versions.forEach(v => {
           this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);
         });

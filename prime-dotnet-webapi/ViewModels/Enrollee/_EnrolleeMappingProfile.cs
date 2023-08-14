@@ -55,6 +55,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<Certification, CertificationDto>();
             CreateMap<Certification, CertificationViewModel>();
             CreateMap<EnrolleeRemoteUser, EnrolleeRemoteUserViewModel>();
+            CreateMap<EnrolleeDeviceProvider, EnrolleeDeviceProviderViewModel>();
             CreateMap<OboSite, OboSiteViewModel>();
             CreateMap<RemoteAccessLocation, RemoteAccessLocationViewModel>();
             CreateMap<RemoteAccessSite, RemoteAccessSiteViewModel>()
@@ -81,6 +82,8 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<HpdidLookup, EnrolleeLookup>();
             CreateMap<HpdidLookup, GpidDetailLookup>();
+
+            CreateMap<DeviceProviderSite, DeviceProviderSiteViewModel>();
         }
     }
 }

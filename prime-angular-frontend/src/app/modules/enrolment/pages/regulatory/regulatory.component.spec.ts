@@ -162,7 +162,7 @@ describe('RegulatoryComponent', () => {
         it('routeTo should be called with EnrolmentRoutes.REMOTE_ACCESS', () => {
           const mockRegulatoryForm = {
             certifications: [],
-            deviceProviderIdentifier: '12345'
+            enrolleeDeviceProviders: []
           } as EnrolmentRegulatoryForm;
 
           component.formState.patchValue(mockRegulatoryForm);
@@ -180,7 +180,7 @@ describe('RegulatoryComponent', () => {
         it('routeTo should be called with EnrolmentRoutes.SELF_DECLARATION', () => {
           const mockRegulatoryForm = {
             certifications: [],
-            deviceProviderIdentifier: '12345'
+            enrolleeDeviceProviders: []
           } as EnrolmentRegulatoryForm;
 
           spyOn<any>((component as any).enrolmentService, 'canRequestRemoteAccess')

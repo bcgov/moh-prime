@@ -12,6 +12,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 interface SelfDeclarationComposite {
   selfDeclarationTypeCode: SelfDeclarationTypeEnum;
@@ -77,9 +78,11 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
 
   public ngOnInit(): void {
     if (this.selfDeclarationQuestions.size === 0) {
+
+      const isDeviceProvider = this.enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
       let targetDate = this.enrolment.selfDeclarationCompletedDate ?
         this.enrolment.selfDeclarationCompletedDate : this.enrolment.currentStatus.statusDate;
-      this.enrolmentResource.getSelfDeclarationVersion(moment(targetDate).utc().format()).subscribe(
+      this.enrolmentResource.getSelfDeclarationVersion(moment(targetDate).utc().format(), isDeviceProvider).subscribe(
         (versions) => {
           versions.forEach(v => {
             this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);

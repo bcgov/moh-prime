@@ -141,7 +141,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     if (!this.isProfileComplete) {
       backRoutePath = (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
         ? EnrolmentRoutes.REMOTE_ACCESS
-        : (!certifications.length || (isDeviceProvider && !deviceProviderIdentifier))
+        : (!certifications.length && !isDeviceProvider)
           ? EnrolmentRoutes.OBO_SITES
           : EnrolmentRoutes.REGULATORY;
     }
@@ -163,7 +163,10 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   protected initForm() {
     if (this.selfDeclarationQuestions.keys.length === 0) {
       // convert time zone to utc format
-      this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format()).subscribe((versions) => {
+      const careSettings = this.enrolmentFormStateService.careSettingsForm
+        .get('careSettings').value as CareSetting[];
+      const isDeviceProvider = careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+      this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format(), isDeviceProvider).subscribe((versions) => {
         this.selfDeclarationVersions = versions;
         versions.forEach(v => {
           this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);

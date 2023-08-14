@@ -67,6 +67,8 @@ namespace Prime.Models
 
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
+        public ICollection<EnrolleeDeviceProvider> EnrolleeDeviceProviders { get; set; }
+
         public string DeviceProviderIdentifier { get; set; }
 
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }

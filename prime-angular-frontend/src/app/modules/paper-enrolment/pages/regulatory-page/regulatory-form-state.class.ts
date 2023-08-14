@@ -39,7 +39,9 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
 
     const {
       certifications: rawCertifications,
-      deviceProviderIdentifier,
+      deviceProviderRoleCode,
+      deviceProviderId,
+      certificationNumber,
       unlistedCertifications
     } = this.formInstance.getRawValue();
     const certifications = rawCertifications.map(c => {
@@ -47,14 +49,20 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
       return collegeCertification;
     });
 
+    const enrolleeDeviceProviders = deviceProviderRoleCode ? [{
+      deviceProviderRoleCode,
+      deviceProviderId,
+      certificationNumber,
+    }] : [];
+
     return {
       certifications,
-      deviceProviderIdentifier,
+      enrolleeDeviceProviders,
       unlistedCertifications
     }
   }
 
-  public patchValue({ certifications, deviceProviderIdentifier, unlistedCertifications }: RegulatoryForm): void {
+  public patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications }: RegulatoryForm): void {
 
     if (!this.formInstance || !Array.isArray(certifications) || !Array.isArray(unlistedCertifications)) {
       return;
@@ -70,8 +78,13 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     if (unlistedCertifications.length) {
       unlistedCertifications.forEach((u: UnlistedCertification) => this.addUnlistedCertification(u));
     }
-
-    this.formInstance.patchValue({ certifications, deviceProviderIdentifier, unlistedCertifications });
+    const { deviceProviderRoleCode,
+      deviceProviderId,
+      certificationNumber } = enrolleeDeviceProviders[0];
+    this.formInstance.patchValue({
+      certifications, deviceProviderRoleCode,
+      deviceProviderId, certificationNumber, unlistedCertifications
+    });
     this.unlistedCertifications.patchValue(unlistedCertifications);
   }
 

@@ -33,6 +33,8 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.model';
 import { EmailsForCareSetting } from '@shared/models/email-for-care-setting.model';
+import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
+import { DeviceProviderSite } from "@shared/models/device-provider-site.model";
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +59,8 @@ export class EnrolmentResource {
               .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
             certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrollee.id}/certifications`)
               .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+            enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrollee.id}/device-providers`)
+              .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
             enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrollee.id}/remote-users`)
               .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
             oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrollee.id}/obo-sites`)
@@ -193,8 +197,8 @@ export class EnrolmentResource {
       );
   }
 
-  public getSelfDeclarationVersion(targetDate: string): Observable<SelfDeclarationVersion[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ targetDate });
+  public getSelfDeclarationVersion(targetDate: string, isDeviceProvider: boolean): Observable<SelfDeclarationVersion[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ targetDate, isDeviceProvider });
     return this.apiResource.get<SelfDeclarationVersion[]>(`lookups/self-declaration-question`, params)
       .pipe(
         map((response: ApiHttpResponse<SelfDeclarationVersion[]>) => response.result),
@@ -514,6 +518,17 @@ export class EnrolmentResource {
       );
   }
 
+  public getDeviceProviderSite(deviceProviderId: number): Observable<DeviceProviderSite> {
+    return this.apiResource.get<DeviceProviderSite>(`sites/device-provider-site/${deviceProviderId}`)
+      .pipe(
+        map((response: ApiHttpResponse<DeviceProviderSite>) => response.result),
+        tap((site: DeviceProviderSite) => this.logger.info('DEVICE_PROVIDER_SITE', site)),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getDeviceProviderSite device provider site not found: ', error);
+          throw error;
+        })
+      );
+  }
   // ---
   // Enrollee and Enrolment Adapters
   // ---

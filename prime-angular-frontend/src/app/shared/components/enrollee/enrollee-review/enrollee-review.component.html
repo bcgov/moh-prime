@@ -207,7 +207,7 @@
 
 </app-page-section>
 
-<app-page-section>
+<app-page-section *ngIf="hasDeviceProvider">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
@@ -220,11 +220,19 @@
     </button>
   </app-page-subheader>
 
-  <app-enrollee-property title="Device Provider ID"
-                         [hasError]="enrolmentErrors?.deviceProviderOrOboSite && enrolmentErrors?.deviceProvider"
-                         errorMessage="Must have a device provider ID or job site information"
+  <app-enrollee-property title="User Role"
                          [makeBold]="true">
-    {{ enrolment.deviceProviderIdentifier | default }}
+    {{ enrolleeDeviceProvider.deviceProviderRoleCode | configCode: 'deviceProviderRoles'| default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Device Provider ID"
+                         [makeBold]="true">
+    {{ enrolleeDeviceProvider.deviceProviderId | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Certificate Number"
+                         [makeBold]="true">
+    {{ enrolleeDeviceProvider.certificationNumber | default }}
   </app-enrollee-property>
 
   <button *ngIf="showEditRedirect"

@@ -5,7 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 
 import {
   Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig,
-  LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig
+  LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig, DeviceProviderRoleConfig
 } from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
@@ -110,6 +110,11 @@ export class ConfigService implements IConfigService {
   public get securityGroups(): Config<number>[] {
     return [...this.configuration.securityGroups]
       .sort(this.utilsService.sortByKey<Config<number>>('name'));
+  }
+
+  public get deviceProviderRoles(): DeviceProviderRoleConfig[] {
+    return [...this.configuration.deviceProviderRoles]
+      .sort(this.utilsService.sortByKey<DeviceProviderRoleConfig>('weight'));
   }
 
   /**
