@@ -15,7 +15,7 @@
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>What is your role?</ng-container>
         <ng-container appPageSubheaderSummary>
-          Please select “none” to continue if your role is not listed.
+          Please select “None” to continue if your role is not listed.
         </ng-container>
       </app-page-subheader>
 
@@ -54,7 +54,7 @@
                    placeholder=""
                    formControlName="deviceProviderId">
             <mat-error *ngIf="formState.deviceProviderId.hasError('deviceProviderId')">
-              Must be in format P1-90XXX (The last three digits are numeric)
+              Must be in format P1-90XXX (last three characters are numbers)
             </mat-error>
             <mat-error *ngIf="formState.deviceProviderId.hasError('required')">
               Required

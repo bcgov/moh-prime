@@ -170,36 +170,40 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
 
-      let siteName = this.deviceProviderSite ?
-        this.deviceProviderSite.siteName : "Site not found.";
-      let siteAddress = this.deviceProviderSite ?
-        `${this.deviceProviderSite.siteAddress}, ${this.deviceProviderSite.city}, ${this.deviceProviderSite.prov}` : "";
-      let message = this.deviceProviderSite ?
-        "Is this the correct location where you are the device provider?" : "If you are not sure the Device Provider ID, you might continue."
-      let actionText = this.deviceProviderSite ?
-        "Agree" : "Continue";
+      if (this.isDeviceProvider && this.formState.deviceProviderId.value) {
+        let siteName = this.deviceProviderSite ?
+          this.deviceProviderSite.siteName : "Site not found.";
+        let siteAddress = this.deviceProviderSite ?
+          `${this.deviceProviderSite.siteAddress}, ${this.deviceProviderSite.city}, ${this.deviceProviderSite.prov}` : "";
+        let message = this.deviceProviderSite ?
+          "Is this the correct location where you are the device provider?" : "If you are not sure the Device Provider ID, you might continue."
+        let actionText = this.deviceProviderSite ?
+          "Agree" : "Continue";
 
-      const data: DialogOptions = {
-        title: 'Device Provider Site',
-        boldMessage: siteName,
-        message: siteAddress,
-        message2: message,
-        actionText: actionText
-      };
+        const data: DialogOptions = {
+          title: 'Device Provider Site',
+          boldMessage: siteName,
+          message: siteAddress,
+          message2: message,
+          actionText: actionText
+        };
 
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .subscribe((result: boolean) => {
-          if (result) {
-            // Enrollees can not have certifications and jobs
-            this.removeOboSites();
-            // Remove remote access data when enrollee is no longer eligible, e.g., licence type changes
-            if (this.cannotRequestRemoteAccess) {
-              this.removeRemoteAccessData();
+        this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+          .afterClosed()
+          .subscribe((result: boolean) => {
+            if (result) {
+              // Enrollees can not have certifications and jobs
+              this.removeOboSites();
+              // Remove remote access data when enrollee is no longer eligible, e.g., licence type changes
+              if (this.cannotRequestRemoteAccess) {
+                this.removeRemoteAccessData();
+              }
+              super.handleSubmission();
             }
-            super.handleSubmission();
-          }
-        });
+          });
+      } else {
+        super.handleSubmission();
+      }
     } else {
       this.utilService.scrollToErrorSection();
     }
@@ -212,11 +216,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   protected nextRouteAfterSubmit() {
     const certifications = this.formState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value as CareSetting[];
-    const deviceProviderIdentifier = this.formState.deviceProviderIdentifier.value;
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = (!certifications.length && !this.isDeviceProvider)
+      nextRoutePath = (!certifications.length && (!this.isDeviceProvider || !this.formState.certificationNumber.value))
         ? EnrolmentRoutes.OBO_SITES
         : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
           ? EnrolmentRoutes.REMOTE_ACCESS
@@ -281,10 +284,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   private setupDeviceProvider(): void {
     if (this.isDeviceProvider) {
       if (!this.formState.deviceProviderId.value || this.formState.deviceProviderId.value === "") {
-        this.formState.deviceProviderId.setValue("P1-90");
+        //this.formState.deviceProviderId.setValue("P1-90");
       }
       this.formUtilsService.setValidators(this.formState.deviceProviderId, [
-        FormControlValidators.deviceProviderId, Validators.required
+        FormControlValidators.deviceProviderId
       ]);
       this.toggleCertificationNumberValidation();
     } else {

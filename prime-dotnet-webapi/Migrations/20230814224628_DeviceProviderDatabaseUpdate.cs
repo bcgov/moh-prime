@@ -130,10 +130,10 @@ namespace Prime.Migrations
                     { 14, false, "Anaplastologist", 14 },
                     { 13, false, "Ocularist", 13 },
                     { 12, false, "Breast prosthetic Fitter", 12 },
-                    { 11, false, "Compression Garment Fitter", 11 },
                     { 10, true, "Prosthetic Intern", 10 },
-                    { 8, true, "Prosthetic Resident", 8 },
                     { 9, true, "Orthotic Intern", 9 },
+                    { 8, true, "Prosthetic Resident", 8 },
+                    { 11, false, "Compression Garment Fitter", 11 },
                     { 6, true, "Registered Prosthetic Orthotic Technician", 6 },
                     { 5, true, "Registered Orthotic Technician", 5 },
                     { 4, true, "Registered Prosthetic Technician", 4 },
@@ -143,12 +143,45 @@ namespace Prime.Migrations
                     { 7, true, "Orthotic Resident", 7 }
                 });
 
+            migrationBuilder.InsertData(
+                table: "SelfDeclarationTypeLookup",
+                columns: new[] { "Code", "Name", "SortingNumber" },
+                values: new object[] { 5, "Has PharmaNet Suspended - Device Provider", 2 });
+
+            migrationBuilder.UpdateData(
+                table: "SelfDeclarationVersion",
+                keyColumn: "Id",
+                keyValue: 1,
+                column: "CareSettingCodeStr",
+                value: "1,2,3,4");
+
+            migrationBuilder.UpdateData(
+                table: "SelfDeclarationVersion",
+                keyColumn: "Id",
+                keyValue: 2,
+                column: "CareSettingCodeStr",
+                value: "1,2,3,4");
+
+            migrationBuilder.UpdateData(
+                table: "SelfDeclarationVersion",
+                keyColumn: "Id",
+                keyValue: 3,
+                column: "CareSettingCodeStr",
+                value: "1,2,3,4");
+
+            migrationBuilder.UpdateData(
+                table: "SelfDeclarationVersion",
+                keyColumn: "Id",
+                keyValue: 4,
+                column: "CareSettingCodeStr",
+                value: "1,2,3,4");
+
             migrationBuilder.UpdateData(
                 table: "SelfDeclarationVersion",
                 keyColumn: "Id",
                 keyValue: 5,
                 column: "CareSettingCodeStr",
-                value: "1,2,3");
+                value: "1,2,3,4");
 
             migrationBuilder.UpdateData(
                 table: "SelfDeclarationVersion",
@@ -174,7 +207,7 @@ namespace Prime.Migrations
             migrationBuilder.InsertData(
                 table: "SelfDeclarationVersion",
                 columns: new[] { "Id", "CareSettingCodeStr", "CreatedTimeStamp", "CreatedUserId", "EffectiveDate", "SelfDeclarationTypeCode", "Text", "UpdatedTimeStamp", "UpdatedUserId" },
-                values: new object[] { 9, "4", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), new DateTimeOffset(new DateTime(2023, 8, 10, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), 1, "Place holder question", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000") });
+                values: new object[] { 9, "4", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), new DateTimeOffset(new DateTime(2023, 8, 10, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), 5, "Are you, or have you ever been, <u>disciplined, suspended, or expelled</u>, whether by order or with consent, by Orthotics Prosthetics Canada or a similar organization in another jurisdiction <u>for a matter involving an “unlawful or improper action”</u>?", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_EnrolleeDeviceProvider_DeviceProviderRoleCode",
@@ -215,6 +248,11 @@ namespace Prime.Migrations
                 table: "SelfDeclarationVersion",
                 keyColumn: "Id",
                 keyValue: 9);
+
+            migrationBuilder.DeleteData(
+                table: "SelfDeclarationTypeLookup",
+                keyColumn: "Code",
+                keyValue: 5);
 
             migrationBuilder.DropColumn(
                 name: "CareSettingCodeStr",

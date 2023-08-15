@@ -562,8 +562,9 @@ export class EnrolmentResource {
     const selfDeclarations = {
       hasConviction: 'Has Conviction',
       hasRegistrationSuspended: 'Has Registration Suspended',
+      hasRegistrationSuspendedDeviceProvider: 'Has Registration Suspended for Device Provider',
       hasDisciplinaryAction: 'Has Disciplinary Action',
-      hasPharmaNetSuspended: 'Has PharmaNet Suspended'
+      hasPharmaNetSuspended: 'Has PharmaNet Suspended',
     };
     const keys = Object.keys(selfDeclarations);
 

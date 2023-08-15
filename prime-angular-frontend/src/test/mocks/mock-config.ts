@@ -2559,6 +2559,113 @@ export class MockConfig {
           'name': 'Vancouver Coastal Health'
         }
       ],
+      'deviceProviderRoles': [
+        {
+          'deviceProviderRoleCode': 1,
+          'code': 1,
+          'name': 'Certified Prosthetist',
+          'weight': 1,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 2,
+          'code': 2,
+          'name': 'Certified Orthotist',
+          'weight': 2,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 3,
+          'code': 3,
+          'name': 'Certified Prosthetist Orthotist',
+          'weight': 1,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 4,
+          'code': 4,
+          'name': 'Registered Prosthetic Technician',
+          'weight': 4,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 5,
+          'code': 5,
+          'name': 'Registered Orthotic Technician',
+          'weight': 5,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 6,
+          'code': 6,
+          'name': 'Registered Prosthetic Orthotic Technician',
+          'weight': 6,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 7,
+          'code': 7,
+          'name': 'Orthotic Resident',
+          'weight': 7,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 8,
+          'code': 8,
+          'name': 'Prosthetic Resident',
+          'weight': 8,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 9,
+          'code': 9,
+          'name': 'Orthotic Intern',
+          'weight': 9,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 10,
+          'code': 10,
+          'name': 'Prosthetic Intern',
+          'weight': 10,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 11,
+          'code': 11,
+          'name': 'Compression Garment Fitter',
+          'weight': 1,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 12,
+          'code': 12,
+          'name': 'Breast prosthetic Fitter',
+          'weight': 1,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 13,
+          'code': 13,
+          'name': 'Ocularist',
+          'weight': 13,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 14,
+          'code': 14,
+          'name': 'Anaplastologist',
+          'weight': 14,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 5,
+          'code': 15,
+          'name': 'None',
+          'weight': 15,
+          'certified': false
+        },
+      ],
       'facilities': [
         {
           'code': 4,

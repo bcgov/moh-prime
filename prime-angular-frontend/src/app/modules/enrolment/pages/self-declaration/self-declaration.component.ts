@@ -30,6 +30,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   public decisions: { code: boolean, name: string }[];
   public hasAttemptedFormSubmission: boolean;
   public showUnansweredQuestionsError: boolean;
+  public isDeviceProvider: boolean;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = new Map<number, string>();
   public selfDeclarationVersions: SelfDeclarationVersion[];
@@ -83,6 +84,14 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   public get hasRegistrationSuspendedDetails(): FormControl {
     return this.form.get('hasRegistrationSuspendedDetails') as FormControl;
+  }
+
+  public get hasRegistrationSuspendedDeviceProvider(): FormControl {
+    return this.form.get('hasRegistrationSuspendedDeviceProvider') as FormControl;
+  }
+
+  public get hasRegistrationSuspendedDeviceProviderDetails(): FormControl {
+    return this.form.get('hasRegistrationSuspendedDeviceProviderDetails') as FormControl;
   }
 
   public get hasDisciplinaryAction(): FormControl {
@@ -161,12 +170,13 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected initForm() {
+    const careSettings = this.enrolmentFormStateService.careSettingsForm
+      .get('careSettings').value as CareSetting[];
+    this.isDeviceProvider = careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+
     if (this.selfDeclarationQuestions.keys.length === 0) {
       // convert time zone to utc format
-      const careSettings = this.enrolmentFormStateService.careSettingsForm
-        .get('careSettings').value as CareSetting[];
-      const isDeviceProvider = careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-      this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format(), isDeviceProvider).subscribe((versions) => {
+      this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format(), this.isDeviceProvider).subscribe((versions) => {
         this.selfDeclarationVersions = versions;
         versions.forEach(v => {
           this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);
@@ -185,6 +195,16 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
         this.toggleSelfDeclarationValidators(value, this.hasRegistrationSuspendedDetails);
         this.showUnansweredQuestionsError = this.showUnansweredQuestions();
       });
+
+    if (this.isDeviceProvider) {
+      this.hasRegistrationSuspendedDeviceProvider.valueChanges
+        .subscribe((value: boolean) => {
+          this.toggleSelfDeclarationValidators(value, this.hasRegistrationSuspendedDeviceProviderDetails);
+          this.showUnansweredQuestionsError = this.showUnansweredQuestions();
+        });
+    } else {
+      this.toggleSelfDeclarationValidators(false, this.hasRegistrationSuspendedDeviceProvider);
+    }
 
     this.hasDisciplinaryAction.valueChanges
       .subscribe((value: boolean) => {
@@ -235,10 +255,19 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     let shouldShowUnansweredQuestions = false;
 
     if (this.hasAttemptedFormSubmission) {
-      shouldShowUnansweredQuestions = this.hasConviction.value === null
-        || this.hasRegistrationSuspended.value === null
-        || this.hasDisciplinaryAction.value === null
-        || this.hasPharmaNetSuspended.value === null;
+      const { careSettings } = this.enrolmentService.enrolment;
+      if (careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
+        shouldShowUnansweredQuestions = this.hasConviction.value === null
+          || this.hasRegistrationSuspended.value === null
+          || this.hasRegistrationSuspendedDeviceProvider.value === null
+          || this.hasDisciplinaryAction.value === null
+          || this.hasPharmaNetSuspended.value === null;
+      } else {
+        shouldShowUnansweredQuestions = this.hasConviction.value === null
+          || this.hasRegistrationSuspended.value === null
+          || this.hasDisciplinaryAction.value === null
+          || this.hasPharmaNetSuspended.value === null;
+      }
     }
 
     return shouldShowUnansweredQuestions;

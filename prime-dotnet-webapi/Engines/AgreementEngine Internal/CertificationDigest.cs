@@ -79,9 +79,7 @@ namespace Prime.Engines.AgreementEngineInternal
             if (!string.IsNullOrWhiteSpace(_certNumber))
             {
                 return AgreementType.DeviceProviderRUTOA;
-            }
-            if (!string.IsNullOrWhiteSpace(_dpId))
-            {
+            }else{
                 return AgreementType.DeviceProviderOBOTOA;
             }
 

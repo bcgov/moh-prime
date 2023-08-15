@@ -44,6 +44,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
       certificationNumber,
       unlistedCertifications
     } = this.formInstance.getRawValue();
+
     const certifications = rawCertifications.map(c => {
       const { nurseCategory, ...collegeCertification } = c;
       return collegeCertification;

@@ -52,10 +52,15 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     }
 
     const { certifications: rawCertifications, deviceProviderId, deviceProviderRoleCode, certificationNumber } = this.formInstance.getRawValue();
-    const certifications = rawCertifications.map(c => {
+    let certifications = rawCertifications.map(c => {
       const { nurseCategory, ...collegeCertification } = c;
       return collegeCertification;
     });
+
+    if (certifications && certifications.length === 1 && certifications[0].collegeCode === "") {
+      //reset certifications
+      certifications = [];
+    }
 
     const enrolleeDeviceProviders = deviceProviderRoleCode ?
       [{ deviceProviderId, deviceProviderRoleCode, certificationNumber }] : [];

@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230814034704_DeviceProviderDatabaseUpdate")]
+    [Migration("20230814224628_DeviceProviderDatabaseUpdate")]
     partial class DeviceProviderDatabaseUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -13978,6 +13978,12 @@ namespace Prime.Migrations
                             Code = 3,
                             Name = "Has PharmaNet Suspended",
                             SortingNumber = 3
+                        },
+                        new
+                        {
+                            Code = 5,
+                            Name = "Has PharmaNet Suspended - Device Provider",
+                            SortingNumber = 2
                         });
                 });
 
@@ -14022,6 +14028,7 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 1,
+                            CareSettingCodeStr = "1,2,3,4",
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -14033,6 +14040,7 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 2,
+                            CareSettingCodeStr = "1,2,3,4",
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -14044,6 +14052,7 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 3,
+                            CareSettingCodeStr = "1,2,3,4",
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -14055,6 +14064,7 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 4,
+                            CareSettingCodeStr = "1,2,3,4",
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 2, 1, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -14066,7 +14076,7 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 5,
-                            CareSettingCodeStr = "1,2,3",
+                            CareSettingCodeStr = "1,2,3,4",
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 17, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -14118,8 +14128,8 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2023, 8, 10, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 1,
-                            Text = "Place holder question",
+                            SelfDeclarationTypeCode = 5,
+                            Text = "Are you, or have you ever been, <u>disciplined, suspended, or expelled</u>, whether by order or with consent, by Orthotics Prosthetics Canada or a similar organization in another jurisdiction <u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });

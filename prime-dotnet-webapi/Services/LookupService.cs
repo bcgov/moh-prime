@@ -37,6 +37,7 @@ namespace Prime.Services
                     .OrderByDescending(av => av.EffectiveDate)
                     .First())
                 .OrderBy(av => av.SelfDeclarationType.SortingNumber)
+                .Where(av => av != null)
                 .ToListAsync();
         }
 

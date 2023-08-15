@@ -256,7 +256,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
       hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
       hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
-      hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
+      hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,
+      hasRegistrationSuspendedDeviceProvider: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER,
     };
 
 
@@ -566,6 +567,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasRegistrationSuspendedDetails: [null, []],
       hasRegistrationSuspendedDocumentGuids: this.fb.array([]),
+      hasRegistrationSuspendedDeviceProvider: [null, [FormControlValidators.requiredBoolean]],
+      hasRegistrationSuspendedDeviceProviderDetails: [null, []],
+      hasRegistrationSuspendedDeviceProviderDocumentGuids: this.fb.array([]),
       hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
       hasDisciplinaryActionDetails: [null, []],
       hasDisciplinaryActionDocumentGuids: this.fb.array([]),
@@ -583,6 +587,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const selfDeclarationsTypes = {
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,
+      hasRegistrationSuspendedDeviceProvider: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER,
       hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
       hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED
     };
@@ -683,6 +688,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     [
       'hasConvictionDocumentGuids',
       'hasRegistrationSuspendedDocumentGuids',
+      'hasRegistrationSuspendedDeviceProviderDocumentGuids',
       'hasDisciplinaryActionDocumentGuids',
       'hasPharmaNetSuspendedDocumentGuids'
     ]

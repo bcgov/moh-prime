@@ -103,7 +103,13 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
         return this.createSelfDeclarationComposite(selfDeclarationTypeCode, selfDeclaration, selfDeclarationDocuments);
 
       });
-    return newSelfDeclarations.sort((a, b) => a.selfDeclarationTypeCode - b.selfDeclarationTypeCode);
+
+    if (!this.enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
+      //remove addition self declaration
+      newSelfDeclarations = newSelfDeclarations.filter(sd => sd.selfDeclarationTypeCode !== SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER);
+    }
+
+    return newSelfDeclarations;
   }
 
   private createSelfDeclarationComposite(

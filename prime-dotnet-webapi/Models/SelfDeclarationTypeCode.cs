@@ -6,5 +6,6 @@ namespace Prime.Models
         RegistrationSuspended = 2,
         PharmaNetSuspended = 3,
         DisciplinaryAction = 4,
+        RegistrationSuspended_DeviceProvider = 5,
     }
 }
