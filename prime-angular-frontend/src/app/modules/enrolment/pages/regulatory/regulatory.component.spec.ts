@@ -162,7 +162,11 @@ describe('RegulatoryComponent', () => {
       describe('with isDeviceProvider set to false and with deviceProviderIdentifier, and canRequestRemoteAccess', () => {
         it('routeTo should be called with EnrolmentRoutes.REMOTE_ACCESS', () => {
           const mockRegulatoryForm = {
-            certifications: [],
+            certifications: [{
+              collegeCode: 1,
+              licenseCode: 1,
+              licenseNumber: "12345"
+            }],
             enrolleeDeviceProviders: [],
           } as EnrolmentRegulatoryForm;
 
@@ -172,7 +176,6 @@ describe('RegulatoryComponent', () => {
           component.formState.patchValue(mockRegulatoryForm);
           component.isProfileComplete = false;
           component.isDeviceProvider = false;
-          //component.addEmptyCollegeCertification();
 
           (component as any).nextRouteAfterSubmit();
 
@@ -183,7 +186,11 @@ describe('RegulatoryComponent', () => {
       describe('with isDeviceProvider set to false and canRequestRemoteAccess returning false', () => {
         it('routeTo should be called with EnrolmentRoutes.SELF_DECLARATION', () => {
           const mockRegulatoryForm = {
-            certifications: [],
+            certifications: [{
+              collegeCode: 1,
+              licenseCode: 1,
+              licenseNumber: "12345"
+            }],
             enrolleeDeviceProviders: [],
           } as EnrolmentRegulatoryForm;
 

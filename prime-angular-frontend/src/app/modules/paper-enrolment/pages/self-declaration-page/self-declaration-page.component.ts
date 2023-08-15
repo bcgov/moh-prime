@@ -104,7 +104,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
 
   protected initForm(): void {
     if (this.selfDeclarationQuestions.keys.length === 0) {
-      const isDeviceProvider = this.enrollee.enrolleeCareSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+      const isDeviceProvider = this.enrollee?.enrolleeCareSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
       // convert time zone to utc format
       this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format(), isDeviceProvider).subscribe((versions) => {
         versions.forEach(v => {
