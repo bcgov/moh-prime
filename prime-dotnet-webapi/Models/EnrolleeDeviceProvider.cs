@@ -13,12 +13,12 @@ namespace Prime.Models
         [JsonIgnore]
         public int EnrolleeId { get; set; }
 
+        [JsonIgnore]
+        public Enrollee Enrollee { get; set; }
+
         public string DeviceProviderId { get; set; }
 
         public string CertificationNumber { get; set; }
-
-        [JsonIgnore]
-        public Enrollee Enrollee { get; set; }
 
         public DeviceProviderRoleCode DeviceProviderRoleCode { get; set; }
 
