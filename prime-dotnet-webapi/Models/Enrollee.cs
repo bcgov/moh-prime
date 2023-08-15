@@ -67,6 +67,7 @@ namespace Prime.Models
 
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
+        // Currently enrollee has only 1 device provider (1-to-1 relation) with option to support 1 to manay in the future
         public ICollection<EnrolleeDeviceProvider> EnrolleeDeviceProviders { get; set; }
 
         public string DeviceProviderIdentifier { get; set; }
