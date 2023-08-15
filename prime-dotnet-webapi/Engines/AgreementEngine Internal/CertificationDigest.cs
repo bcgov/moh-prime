@@ -82,8 +82,6 @@ namespace Prime.Engines.AgreementEngineInternal
             }else{
                 return AgreementType.DeviceProviderOBOTOA;
             }
-
-            return null;
         }
     }
 

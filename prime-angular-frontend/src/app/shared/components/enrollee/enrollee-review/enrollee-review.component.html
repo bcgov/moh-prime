@@ -294,7 +294,7 @@
 
   <app-enrollee-property *ngIf="!hasCertification"
                          title="College Licence"
-                         [hasError]="enrolmentErrors?.certificateOrOboSite"
+                         [hasError]="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProvider"
                          errorMessage="Must have a college licence or job site information"
                          [makeBold]="true">
     None

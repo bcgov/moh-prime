@@ -139,9 +139,12 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     );
 
     this.formState.deviceProviderId.valueChanges
-      .pipe(exhaustMap(value =>
-        value.length === 8 ?
-          this.enrolmentResource.getDeviceProviderSite(value) : EMPTY
+      .pipe(exhaustMap(value => {
+        if (value && value.length === 8) {
+          return this.enrolmentResource.getDeviceProviderSite(value);
+        }
+        return EMPTY;
+      }
       ))
       .subscribe(site =>
         this.deviceProviderSite = site

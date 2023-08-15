@@ -52,7 +52,8 @@
             <input matInput
                    maxlength="8"
                    placeholder=""
-                   formControlName="deviceProviderId">
+                   formControlName="deviceProviderId"
+                   appToUppercase>
             <mat-error *ngIf="formState.deviceProviderId.hasError('deviceProviderId')">
               Must be in format P1-90XXX (last three characters are numbers)
             </mat-error>
