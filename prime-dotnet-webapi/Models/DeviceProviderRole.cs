@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Prime.Models
 {
     /// <summary>
-    /// used for device provider
+    /// Used for Device Provider Individual Enrollment
     /// </summary>
     [Table("DeviceProviderRoleLookup")]
     public class DeviceProviderRole : ILookup<DeviceProviderRoleCode>

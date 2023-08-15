@@ -179,7 +179,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
         let siteAddress = this.deviceProviderSite ?
           `${this.deviceProviderSite.siteAddress}, ${this.deviceProviderSite.city}, ${this.deviceProviderSite.prov}` : "";
         let message = this.deviceProviderSite ?
-          "Is this the correct location where you are the device provider?" : "If you are not sure the Device Provider ID, you might continue."
+          "Is this the correct location where you are the device provider?" : "If you are not sure of the Device Provider ID, you may continue."
         let actionText = this.deviceProviderSite ?
           "Agree" : "Continue";
 
