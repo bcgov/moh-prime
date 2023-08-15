@@ -4156,6 +4156,17 @@ namespace Prime.Migrations
                             Template = "Hello @Model.EnrolleeName, <br> <br> You are receiving this message as your PharmaNet user status has changed from on-behalf-of user to independent user following changes to legislation governing access to PharmaNet. <br> <br> Being an independent user of PharmaNet means you now will access PharmaNet as yourself instead of on behalf of another practitioner. <br> <br> <b>This is your last day</b> to log back in to PRIME to confirm your profile information and review and accept the new user terms of access for independent users. These will automatically be presented to you. This is a requirement for you to maintain access to PharmaNet. <br> <br> For information about PRIME, visit the <a href=\"@Model.PrimeUrl\">PRIME web page</a>.  If you have questions or difficulties using PRIME, please contact us at the email address below.<br> <br> Thank you, <br> <br> PRIME Support<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EmailType = 22,
+                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Template = "To: Whom it may concern, <br> <br> @Model.EnrolleeFullName has been approved for <strong>Device Provider Access to PharmaNet.</strong> They can now be set up with their PharmaNet Access account in your local software. You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile. You can access their GPID via this link below. <br> <br> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br> <br> Thank you.",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -13969,19 +13980,19 @@ namespace Prime.Migrations
                         {
                             Code = 4,
                             Name = "Has Disciplinary Action",
-                            SortingNumber = 4
+                            SortingNumber = 5
                         },
                         new
                         {
                             Code = 3,
                             Name = "Has PharmaNet Suspended",
-                            SortingNumber = 3
+                            SortingNumber = 4
                         },
                         new
                         {
                             Code = 5,
                             Name = "Has PharmaNet Suspended - Device Provider",
-                            SortingNumber = 2
+                            SortingNumber = 3
                         });
                 });
 

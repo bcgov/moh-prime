@@ -128,12 +128,12 @@ namespace Prime.Migrations
                 {
                     { 15, false, "None", 15 },
                     { 14, false, "Anaplastologist", 14 },
-                    { 13, false, "Ocularist", 13 },
                     { 12, false, "Breast prosthetic Fitter", 12 },
+                    { 11, false, "Compression Garment Fitter", 11 },
                     { 10, true, "Prosthetic Intern", 10 },
                     { 9, true, "Orthotic Intern", 9 },
                     { 8, true, "Prosthetic Resident", 8 },
-                    { 11, false, "Compression Garment Fitter", 11 },
+                    { 13, false, "Ocularist", 13 },
                     { 6, true, "Registered Prosthetic Orthotic Technician", 6 },
                     { 5, true, "Registered Orthotic Technician", 5 },
                     { 4, true, "Registered Prosthetic Technician", 4 },
@@ -144,9 +144,28 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "EmailTemplate",
+                columns: new[] { "Id", "CreatedTimeStamp", "CreatedUserId", "EmailType", "ModifiedDate", "Template", "UpdatedTimeStamp", "UpdatedUserId" },
+                values: new object[] { 22, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), 22, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), "To: Whom it may concern, <br> <br> @Model.EnrolleeFullName has been approved for <strong>Device Provider Access to PharmaNet.</strong> They can now be set up with their PharmaNet Access account in your local software. You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile. You can access their GPID via this link below. <br> <br> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br> <br> Thank you.", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000") });
+
+            migrationBuilder.UpdateData(
+                table: "SelfDeclarationTypeLookup",
+                keyColumn: "Code",
+                keyValue: 3,
+                column: "SortingNumber",
+                value: 4);
+
+            migrationBuilder.UpdateData(
+                table: "SelfDeclarationTypeLookup",
+                keyColumn: "Code",
+                keyValue: 4,
+                column: "SortingNumber",
+                value: 5);
+
+            migrationBuilder.InsertData(
                 table: "SelfDeclarationTypeLookup",
                 columns: new[] { "Code", "Name", "SortingNumber" },
-                values: new object[] { 5, "Has PharmaNet Suspended - Device Provider", 2 });
+                values: new object[] { 5, "Has PharmaNet Suspended - Device Provider", 3 });
 
             migrationBuilder.UpdateData(
                 table: "SelfDeclarationVersion",
@@ -245,6 +264,11 @@ namespace Prime.Migrations
                 keyValue: 33);
 
             migrationBuilder.DeleteData(
+                table: "EmailTemplate",
+                keyColumn: "Id",
+                keyValue: 22);
+
+            migrationBuilder.DeleteData(
                 table: "SelfDeclarationVersion",
                 keyColumn: "Id",
                 keyValue: 9);
@@ -257,6 +281,20 @@ namespace Prime.Migrations
             migrationBuilder.DropColumn(
                 name: "CareSettingCodeStr",
                 table: "SelfDeclarationVersion");
+
+            migrationBuilder.UpdateData(
+                table: "SelfDeclarationTypeLookup",
+                keyColumn: "Code",
+                keyValue: 3,
+                column: "SortingNumber",
+                value: 3);
+
+            migrationBuilder.UpdateData(
+                table: "SelfDeclarationTypeLookup",
+                keyColumn: "Code",
+                keyValue: 4,
+                column: "SortingNumber",
+                value: 4);
         }
     }
 }

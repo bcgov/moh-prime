@@ -109,7 +109,7 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
       newSelfDeclarations = newSelfDeclarations.filter(sd => sd.selfDeclarationTypeCode !== SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER);
     }
 
-    return newSelfDeclarations;
+    return newSelfDeclarations.sort(sd => sd.selfDeclaration.sortingNumber);
   }
 
   private createSelfDeclarationComposite(
