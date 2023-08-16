@@ -17,6 +17,7 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { Job } from '@enrolment/shared/models/job.model';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { EnrolleeDeviceProvider } from './enrollee-device-provider.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -25,7 +26,7 @@ export interface HttpEnrollee extends Enrollee {
   approvedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
-  deviceProviderIdentifier: string;
+  //deviceProviderIdentifier: string;
   unlistedCertifications: UnlistedCertification[];
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
@@ -39,6 +40,7 @@ export interface HttpEnrollee extends Enrollee {
   identificationDocuments: IdentificationDocument[];
   enrolleeCareSettings: CareSetting[];
   enrolleeHealthAuthorities: EnrolleeHealthAuthority[];
+  enrolleeDeviceProviders: EnrolleeDeviceProvider[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -83,7 +85,7 @@ export interface Enrolment {
   approvedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
-  deviceProviderIdentifier: string;
+  //deviceProviderIdentifier: string;
   unlistedCertifications: UnlistedCertification[];
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
@@ -96,6 +98,7 @@ export interface Enrolment {
   identificationDocuments: IdentificationDocument[];
   careSettings: CareSetting[];
   enrolleeHealthAuthorities: EnrolleeHealthAuthority[];
+  enrolleeDeviceProviders: EnrolleeDeviceProvider[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;

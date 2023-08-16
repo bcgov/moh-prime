@@ -10,7 +10,9 @@
   </span>
 </h2>
 <mat-dialog-content>
+  <p *ngIf="options.boldMessage"><strong>{{ options.boldMessage }}</strong></p>
   <p *ngIf="options.message">{{ options.message }}</p>
+  <p *ngIf="options.message2">{{ options.message2 }}</p>
   <ng-template appDialogContent></ng-template>
 </mat-dialog-content>
 <mat-dialog-actions *ngIf="!(options.cancelHide && options.actionHide)">

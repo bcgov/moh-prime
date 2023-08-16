@@ -21,5 +21,6 @@ namespace Prime.Models.Api
         public List<CollegeLicenseGrouping> CollegeLicenseGroupings { get; set; }
         public List<CareType> CareTypes { get; set; }
         public List<SecurityGroup> SecurityGroups { get; set; }
+        public List<DeviceProviderRole> DeviceProviderRoles { get; set; }
     }
 }

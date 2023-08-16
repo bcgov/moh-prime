@@ -211,15 +211,45 @@ namespace Prime.Services.Rules
 
     public class DeviceProviderRule : AutomaticAdjudicationRule
     {
-        public override Task<bool> ProcessRule(Enrollee enrollee)
+        private readonly IDeviceProviderService _deviceProviderService;
+
+        public DeviceProviderRule(
+            IDeviceProviderService deviceProviderService
+        )
         {
-            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider) || enrollee.DeviceProviderIdentifier != null)
+            _deviceProviderService = deviceProviderService;
+        }
+
+        public override async Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider) )
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProvider);
-                return Task.FromResult(false);
+                var errorMessage = "";
+                if(enrollee.EnrolleeDeviceProviders == null || enrollee.EnrolleeDeviceProviders.Count() == 0){
+                    errorMessage = $"Enrollee misses Device Provider info";
+                }
+
+                var site = await _deviceProviderService.GetDeviceProviderSiteAsync(enrollee.EnrolleeDeviceProviders.First().DeviceProviderId);
+                if(string.IsNullOrWhiteSpace(errorMessage) && site == null){
+                    errorMessage = $"Device Provider Id {enrollee.EnrolleeDeviceProviders.First().DeviceProviderId} not found";
+                }
+
+                if(!string.IsNullOrWhiteSpace(enrollee.EnrolleeDeviceProviders.First().CertificationNumber) &&
+                     string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    var exists = await _deviceProviderService.CertificationNumberExist(enrollee.EnrolleeDeviceProviders.First().CertificationNumber);
+                    if(!exists){
+                        errorMessage = $"Certificate Number {enrollee.EnrolleeDeviceProviders.First().CertificationNumber} not found";
+                    }
+                }
+
+                if(!string.IsNullOrWhiteSpace(errorMessage)){
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProvider, errorMessage);
+                    return false;
+                }
             }
 
-            return Task.FromResult(true);
+            return true;
         }
     }
 

@@ -62,7 +62,8 @@ namespace Prime.Services.Rules
                     CollegeCode = c.CollegeCode,
                     License = c.License,
                     PractitionerId = c.PractitionerId,
-                }).ToList()
+                }).ToList(),
+                EnrolleeDeviceProviders = enrollee.EnrolleeDeviceProviders,
             };
             var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
 
