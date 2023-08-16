@@ -28,6 +28,7 @@ namespace Prime.Services
         Task<AccessAgreementNoteViewModel> GetAccessAgreementNoteAsync(int enrolleeId);
         Task<CareSettingViewModel> GetCareSettingsAsync(int enrolleeId);
         Task<IEnumerable<CertificationViewModel>> GetCertificationsAsync(int enrolleeId);
+        Task<IEnumerable<EnrolleeDeviceProviderViewModel>> GetEnrolleeDeviceProvidersAsync(int enrolleeId);
         Task<IEnumerable<EnrolleeRemoteUserViewModel>> GetEnrolleeRemoteUsersAsync(int enrolleeId);
         Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId);
         Task<IEnumerable<RemoteAccessLocationViewModel>> GetRemoteAccessLocationsAsync(int enrolleeId);

@@ -27,6 +27,7 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
 import { CareSettingForm } from '@paper-enrolment/pages/care-setting-page/care-setting-form.model';
 import { UnlistedCertification } from '../models/unlisted-certification.model';
+import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,8 @@ export class PaperEnrolmentResource {
         .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
       certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
         .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+      enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrolleeId}/device-providers`)
+        .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
       unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrolleeId}/unlisted-certifications`)
         .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
       enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
@@ -125,8 +128,8 @@ export class PaperEnrolmentResource {
       );
   }
 
-  public updateDeviceProvider(enrolleeId: number, deviceProviderIdentifier: string = null): NoContent {
-    const payload = { data: deviceProviderIdentifier };
+  public updateDeviceProvider(enrolleeId: number, enrolleeDeviceProviders: EnrolleeDeviceProvider[]): NoContent {
+    const payload = { data: enrolleeDeviceProviders };
     return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/device-provider`, payload)
       .pipe(
         NoContentResponse,

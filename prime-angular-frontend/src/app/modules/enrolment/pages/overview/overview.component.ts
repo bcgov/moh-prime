@@ -224,12 +224,12 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
    */
   private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
     return {
-      certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length,
+      certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length
+        && !enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER),
       deviceProvider: enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
-        && !enrolment.deviceProviderIdentifier,
-      deviceProviderOrOboSite: (enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
-        && !enrolment.deviceProviderIdentifier)
-        && !enrolment.oboSites?.length,
+        && (!enrolment.enrolleeDeviceProviders || enrolment.enrolleeDeviceProviders.length === 0),
+      deviceProviderOrOboSite: enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
+        && !enrolment.oboSites?.length && enrolment.enrolleeDeviceProviders?.length === 1 && !enrolment.enrolleeDeviceProviders[0]?.certificationNumber,
       missingHAOboSite: enrolment.oboSites?.length && enrolment.oboSites.some(s => s.careSettingCode == CareSettingEnum.HEALTH_AUTHORITY && s.healthAuthorityCode === null),
       missingPharmaNetId: this.isMissingPharmaNetId(enrolment.certifications),
       missingHealthAuthorityCareSetting: enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)

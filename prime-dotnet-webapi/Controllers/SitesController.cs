@@ -31,6 +31,7 @@ namespace Prime.Controllers
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
+        private readonly IDeviceProviderService _deviceProviderService;
 
         public SitesController(
             IAdminService adminService,
@@ -40,7 +41,8 @@ namespace Prime.Controllers
             IEmailService emailService,
             IMapper mapper,
             IOrganizationService organizationService,
-            ISiteService siteService)
+            ISiteService siteService,
+            IDeviceProviderService deviceProviderService)
         {
             _adminService = adminService;
             _businessEventService = businessEventService;
@@ -50,6 +52,7 @@ namespace Prime.Controllers
             _mapper = mapper;
             _organizationService = organizationService;
             _siteService = siteService;
+            _deviceProviderService = deviceProviderService;
         }
 
         // GET: api/Sites
@@ -1300,6 +1303,23 @@ namespace Prime.Controllers
             }
 
             return Ok(await _communitySiteService.GetIndividualDeviceProvidersAsync(siteId));
+        }
+
+        // GET: api/enrollees/device-provider-site/P1-90XXX
+        /// <summary>
+        /// Get device provider site by device provider id.
+        /// </summary>
+        /// <param name="deviceProviderId"></param>
+        [HttpGet("device-provider-site/{deviceProviderId}", Name = nameof(GetDeviceProviderSite))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<DeviceProviderSiteViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetDeviceProviderSite(string deviceProviderId)
+        {
+            var site = await _deviceProviderService.GetDeviceProviderSiteAsync(deviceProviderId);
+            return Ok(site);
         }
     }
 }

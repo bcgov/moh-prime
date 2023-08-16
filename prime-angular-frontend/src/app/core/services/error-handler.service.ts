@@ -45,7 +45,7 @@ export class ErrorHandlerService implements ErrorHandler {
           // Temporary fix to stop the dialog from showing in /provisioner-access
           // where users are not authenticated
           // TODO investigate keycloak initialization for specific modules only using CanLoad
-          if(message.includes('user profile was not loaded')) {
+          if (message.includes('user profile was not loaded')) {
             return;
           }
 
@@ -53,6 +53,6 @@ export class ErrorHandlerService implements ErrorHandler {
         });
     }
 
-    logger.error(message, { url });
+    logger.error(message, { url, error });
   }
 }
