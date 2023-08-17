@@ -22,7 +22,7 @@ namespace Prime.Configuration.Database
                     new DeviceProviderRole { Code = DeviceProviderRoleCode.OrthoticIntern, Weight = 9, Name = "Orthotic Intern", Certified = true},
                     new DeviceProviderRole { Code = DeviceProviderRoleCode.ProstheticIntern, Weight = 10, Name = "Prosthetic Intern", Certified = true},
                     new DeviceProviderRole { Code = DeviceProviderRoleCode.CompressionGarmentFitter, Weight = 11, Name = "Compression Garment Fitter", Certified = false},
-                    new DeviceProviderRole { Code = DeviceProviderRoleCode.BreastProstheticFitter, Weight = 12, Name = "Breast prosthetic Fitter", Certified = false},
+                    new DeviceProviderRole { Code = DeviceProviderRoleCode.BreastProstheticFitter, Weight = 12, Name = "Breast Prosthetic Fitter", Certified = false},
                     new DeviceProviderRole { Code = DeviceProviderRoleCode.Ocularist, Weight = 13, Name = "Ocularist", Certified = false},
                     new DeviceProviderRole { Code = DeviceProviderRoleCode.Anaplastologist, Weight = 14, Name = "Anaplastologist", Certified = false},
                     new DeviceProviderRole { Code = DeviceProviderRoleCode.None, Weight = 15, Name = "None", Certified = false},
