@@ -222,7 +222,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = (!certifications.length && (!this.isDeviceProvider || !this.formState.certificationNumber.value))
+      // If DP Role Code is "None", we go to Job Site page
+      nextRoutePath = (!certifications.length && (!this.isDeviceProvider || this.formState.deviceProviderRoleCode.value === 15))
         ? EnrolmentRoutes.OBO_SITES
         : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
           ? EnrolmentRoutes.REMOTE_ACCESS
