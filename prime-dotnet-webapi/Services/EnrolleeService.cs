@@ -156,6 +156,7 @@ namespace Prime.Services
                         .Any(link => link.PaperEnrolleeId == e.Id));
 
             var dto = await _context.Enrollees
+                .Include(e => e.EnrolleeCareSettings)
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
                 .ProjectTo<EnrolleeDTO>(_mapper.ConfigurationProvider, new { newestAgreementIds, unlinkedPaperEnrolments })
@@ -173,6 +174,9 @@ namespace Prime.Services
 
             // get the latest self declaration effective date and compare the last complete date
             var mostEffectiveDate = await _context.Set<SelfDeclarationVersion>()
+                // If enrollee does NOT work as DP, only SD questions relevant to non-DPs should be considered
+                // TODO: Improve implementation
+                .Where(v => v.CareSettingCodeStr.Contains(dto.HasDeviceProviderCareSetting ? "4" : "1"))
                 .Where(v => v.EffectiveDate <= DateTime.UtcNow)
                 .Select(v => v.EffectiveDate)
                 .MaxAsync();
