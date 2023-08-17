@@ -80,5 +80,7 @@ namespace Prime.ViewModels
         /// e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc"
         /// </summary>
         public string Username { get; set; }
+
+        public bool HasDeviceProviderCareSetting { get; set; }
     }
 }

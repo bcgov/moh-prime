@@ -14,4 +14,5 @@ export interface EnrolmentCertificate {
   group: AgreementTypeGroup;
   accessType: string;
   licences: EnrolmentLicence[];
+  deviceProviderId: string;
 }

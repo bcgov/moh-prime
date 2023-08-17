@@ -13,8 +13,12 @@ namespace Prime.Engines.AgreementEngineInternal
 
     public static class CertificationDigest
     {
-        public static ICertificationDigest Create(ICollection<CertificationDto> certs)
+        public static ICertificationDigest Create(ICollection<CertificationDto> certs, ICollection<EnrolleeDeviceProvider> dps)
         {
+            if(dps != null && dps.Count > 0){
+                return new DeviceProvider(dps.First().DeviceProviderId, dps.First().CertificationNumber);
+            }
+
             if (certs.Count > 1)
             {
                 return new MultipleColleges();
@@ -55,6 +59,28 @@ namespace Prime.Engines.AgreementEngineInternal
                 {
                     return new OtherCollege(regulated, cert);
                 }
+            }
+        }
+    }
+
+    public class DeviceProvider : ICertificationDigest
+    {
+        private string _dpId { get; set; }
+        private string _certNumber { get; set; }
+
+        public DeviceProvider(string dpId, string certNumber)
+        {
+            _dpId = dpId;
+            _certNumber = certNumber;
+        }
+
+        public AgreementType? ResolveWith(SettingsDigest settings)
+        {
+            if (!string.IsNullOrWhiteSpace(_certNumber))
+            {
+                return AgreementType.DeviceProviderRUTOA;
+            }else{
+                return AgreementType.DeviceProviderOBOTOA;
             }
         }
     }

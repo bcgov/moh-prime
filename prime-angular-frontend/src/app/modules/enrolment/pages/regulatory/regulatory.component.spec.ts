@@ -22,6 +22,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
@@ -161,14 +162,20 @@ describe('RegulatoryComponent', () => {
       describe('with isDeviceProvider set to false and with deviceProviderIdentifier, and canRequestRemoteAccess', () => {
         it('routeTo should be called with EnrolmentRoutes.REMOTE_ACCESS', () => {
           const mockRegulatoryForm = {
-            certifications: [],
-            deviceProviderIdentifier: '12345'
+            certifications: [{
+              collegeCode: 1,
+              licenseCode: 1,
+              licenseNumber: "12345"
+            }],
+            enrolleeDeviceProviders: [],
           } as EnrolmentRegulatoryForm;
+
+          spyOn<any>((component as any).enrolmentService, 'canRequestRemoteAccess')
+            .and.callFake(() => true);
 
           component.formState.patchValue(mockRegulatoryForm);
           component.isProfileComplete = false;
-          component.isDeviceProvider = true;
-          component.addEmptyCollegeCertification();
+          component.isDeviceProvider = false;
 
           (component as any).nextRouteAfterSubmit();
 
@@ -176,11 +183,15 @@ describe('RegulatoryComponent', () => {
         });
       });
 
-      describe('with isDeviceProvider set to false and with deviceProviderIdentifier, and canRequestRemoteAccess returning false', () => {
+      describe('with isDeviceProvider set to false and canRequestRemoteAccess returning false', () => {
         it('routeTo should be called with EnrolmentRoutes.SELF_DECLARATION', () => {
           const mockRegulatoryForm = {
-            certifications: [],
-            deviceProviderIdentifier: '12345'
+            certifications: [{
+              collegeCode: 1,
+              licenseCode: 1,
+              licenseNumber: "12345"
+            }],
+            enrolleeDeviceProviders: [],
           } as EnrolmentRegulatoryForm;
 
           spyOn<any>((component as any).enrolmentService, 'canRequestRemoteAccess')
@@ -188,7 +199,7 @@ describe('RegulatoryComponent', () => {
 
           component.formState.patchValue(mockRegulatoryForm);
           component.isProfileComplete = false;
-          component.isDeviceProvider = true;
+          component.isDeviceProvider = false;
           component.addEmptyCollegeCertification();
 
           (component as any).nextRouteAfterSubmit();

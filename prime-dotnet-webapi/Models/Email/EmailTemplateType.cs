@@ -23,5 +23,6 @@ namespace Prime.Models
         EnrolleeAbsenceNotification = 19,
         ForcedRenewalNotification = 20,
         ForcedRenewalPassedNotification = 21,
+        DeviceProviderNotification = 22,
     }
 }
