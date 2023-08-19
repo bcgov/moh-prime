@@ -21,9 +21,19 @@ import { RegulatoryForm } from './regulatory-form.model';
         </button>
       </app-page-subheader>
 
+      <app-enrollee-property title="User Role"
+                            [makeBold]="true">
+        {{ regulatory?.enrolleeDeviceProviders[0].deviceProviderRoleCode | configCode: 'deviecProviderRoles' | default }}
+      </app-enrollee-property>
+
       <app-enrollee-property title="Device Provider ID"
                             [makeBold]="true">
-        {{ regulatory?.deviceProviderIdentifier | default }}
+        {{ regulatory?.enrolleeDeviceProviders[0].deviceProviderId | default }}
+      </app-enrollee-property>
+
+      <app-enrollee-property title="Certificate Number"
+                            [makeBold]="true">
+        {{ regulatory?.enrolleeDeviceProviders[0].certificationNumber | default }}
       </app-enrollee-property>
       <button mat-flat-button
           color="primary"

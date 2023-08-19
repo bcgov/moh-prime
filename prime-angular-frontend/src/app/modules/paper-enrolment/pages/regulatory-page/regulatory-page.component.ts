@@ -106,11 +106,11 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
           if (enrollee) {
             this.enrollee = enrollee;
             // Attempt to patch the form if not already patched
-            const { certifications, deviceProviderIdentifier, unlistedCertifications } = enrollee;
+            const { certifications, enrolleeDeviceProviders, unlistedCertifications } = enrollee;
             this.isDeviceProvider = enrollee.enrolleeCareSettings.some((careSetting) =>
               careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
             this.enableDeviceProviderValidator();
-            this.formState.patchValue({ certifications, deviceProviderIdentifier, unlistedCertifications });
+            this.formState.patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications });
           }
         })
       );
@@ -123,7 +123,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
     const certifications = this.formState.json.certifications;
     const unlistedCertifications = this.formState.json.unlistedCertifications;
-    const deviceProviderIdentifier = this.formState.json.deviceProviderIdentifier;
+    const enrolleeDeviceProviders = this.formState.json.enrolleeDeviceProviders;
     const oboSites = this.removeOboSites(this.enrollee.oboSites);
 
     return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, certifications)
@@ -132,7 +132,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
           this.paperEnrolmentResource.updateUnlistedCertifications(this.enrollee.id, unlistedCertifications)
         ),
         exhaustMap(() =>
-          this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, deviceProviderIdentifier)
+          this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, enrolleeDeviceProviders)
         ),
         exhaustMap(() =>
           (this.enrollee.oboSites.length !== oboSites.length)

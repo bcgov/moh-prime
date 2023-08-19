@@ -20,7 +20,7 @@ namespace Prime.Engines
                 throw new ArgumentException($"Certifications must have Licences loaded.", nameof(dto));
             }
 
-            var certDigest = CertificationDigest.Create(dto.Certifications);
+            var certDigest = CertificationDigest.Create(dto.Certifications, dto.EnrolleeDeviceProviders);
             var settingsDigest = new SettingsDigest(dto.CareSettingCodes);
 
             return certDigest.ResolveWith(settingsDigest);
