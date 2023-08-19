@@ -15,7 +15,6 @@ namespace Prime.Configuration.Database
         public static readonly DateTime June19th2023AgreementUpdate = new(2023, 6, 19, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime July29th2023AgreementUpdate = new(2023, 7, 29, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime August9th2023AgreementUpdate = new(2023, 8, 9, 8, 0, 0, DateTimeKind.Utc);
-
         public static readonly DateTime August15th2023AgreementUpdate = new(2023, 8, 15, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<AgreementVersion> SeedData
