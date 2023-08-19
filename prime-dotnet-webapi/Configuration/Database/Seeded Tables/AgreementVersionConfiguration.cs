@@ -55,9 +55,9 @@ namespace Prime.Configuration.Database
 
                     new AgreementVersion { Id = 29, AgreementType = AgreementType.CommunityPracticeOrgAgreement, Text =  "com-practice-org-v3.html",            EffectiveDate = June19th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new AgreementVersion { Id = 30, AgreementType = AgreementType.CommunityPharmacyOrgAgreement, Text =  "com-pharmacy-org-v3.html",            EffectiveDate = June19th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new AgreementVersion { Id = 31, AgreementType = AgreementType.CommunityPharmacyOrgAgreement, Text = "com-pharmacy-org-v4.html",             EffectiveDate = July29th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new AgreementVersion { Id = 31, AgreementType = AgreementType.CommunityPharmacyOrgAgreement, Text =  "com-pharmacy-org-v4.html",            EffectiveDate = July29th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    new AgreementVersion { Id = 32, AgreementType = AgreementType.DeviceProviderOrgAgreement, Text = "device-provider-org-v3.html",             EffectiveDate = July29th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new AgreementVersion { Id = 32, AgreementType = AgreementType.DeviceProviderOrgAgreement,    Text =  "device-provider-org-v3.html",         EffectiveDate = August15th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
                 };
             }
         }
