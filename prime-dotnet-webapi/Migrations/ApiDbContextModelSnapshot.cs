@@ -15157,6 +15157,9 @@ namespace Prime.Migrations
                     b.Property<int?>("AdministratorPharmaNetId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("DeviceProviderId")
+                        .HasColumnType("text");
+
                     b.Property<int>("OrganizationId")
                         .HasColumnType("integer");
 

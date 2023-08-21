@@ -3,10 +3,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Prime.Migrations
 {
-    public partial class MvpDPOrgAgreement : Migration
+    public partial class DPSiteRegistrationMvpChanges : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "DeviceProviderId",
+                table: "CommunitySite",
+                type: "text",
+                nullable: true);
+
             migrationBuilder.InsertData(
                 table: "AgreementVersion",
                 columns: new[] { "Id", "AgreementType", "CreatedTimeStamp", "CreatedUserId", "EffectiveDate", "Text", "UpdatedTimeStamp", "UpdatedUserId" },
@@ -19,6 +25,10 @@ namespace Prime.Migrations
                 table: "AgreementVersion",
                 keyColumn: "Id",
                 keyValue: 34);
+
+            migrationBuilder.DropColumn(
+                name: "DeviceProviderId",
+                table: "CommunitySite");
         }
     }
 }

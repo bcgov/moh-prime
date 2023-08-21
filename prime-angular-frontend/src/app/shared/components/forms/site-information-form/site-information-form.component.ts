@@ -55,6 +55,10 @@ export class SiteInformationFormComponent implements OnInit {
     return this.form.get('activeBeforeRegistration') as FormControl;
   }
 
+  public get deviceProviderId(): FormControl {
+    return this.form.get('deviceProviderId') as FormControl;
+  }
+
   public isCommunityPharmacy() {
     return this.siteService.site?.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
   }

@@ -90,4 +90,32 @@
     </mat-error>
   </app-page-section>
 
+  <app-page-section *ngIf="isDeviceProvider()">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Device Provider ID</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Enter the device provider registration number the site was issued by the Ministry of Health. You will know it as
+        P1-90XXX (last three characters are numbers).
+      </ng-container>
+    </app-page-subheader2>
+
+    <mat-form-field>
+      <mat-label>Device Provider ID</mat-label>
+      <input matInput
+             formControlName="deviceProviderId"
+             appToUppercase>
+
+      <!-- TODO: -->
+      <mat-error *ngIf="deviceProviderId.hasError('required')">
+        Required
+      </mat-error>
+      <mat-error *ngIf="deviceProviderId.hasError('length') || deviceProviderId.hasError('alpha')">
+        Must be a 3-letter code
+      </mat-error>
+      <mat-error *ngIf="deviceProviderId.hasError('cpSiteId')">
+        Must be in format BC00000XXX
+      </mat-error>
+    </mat-form-field>
+  </app-page-section>
+
 </ng-container>

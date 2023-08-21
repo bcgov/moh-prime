@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230819194050_MvpDPOrgAgreement")]
-    partial class MvpDPOrgAgreement
+    [Migration("20230821002048_DPSiteRegistrationMvpChanges")]
+    partial class DPSiteRegistrationMvpChanges
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -15158,6 +15158,9 @@ namespace Prime.Migrations
 
                     b.Property<int?>("AdministratorPharmaNetId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("DeviceProviderId")
+                        .HasColumnType("text");
 
                     b.Property<int>("OrganizationId")
                         .HasColumnType("integer");

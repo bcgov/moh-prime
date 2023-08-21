@@ -33,6 +33,8 @@ namespace Prime.ViewModels
 
         public bool IsNew { get; set; }
 
+        public string DeviceProviderId { get; set; }
+
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
 
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }

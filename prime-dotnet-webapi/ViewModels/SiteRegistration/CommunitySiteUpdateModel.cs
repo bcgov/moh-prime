@@ -31,7 +31,9 @@ namespace Prime.ViewModels
 
         public bool ActiveBeforeRegistration { get; set; }
 
-        public bool IsNew {get; set;}
+        public bool IsNew { get; set; }
+
+        public string DeviceProviderId { get; set; }
 
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
 

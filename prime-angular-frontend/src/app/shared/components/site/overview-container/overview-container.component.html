@@ -90,6 +90,11 @@
       {{ site?.pec | default }}
     </app-enrollee-property>
 
+    <app-enrollee-property title="Device Provider ID"
+                           *ngIf="showDeviceProviderId">
+      {{ site?.deviceProviderId | default }}
+    </app-enrollee-property>
+
     <ng-container *ngIf="!admin; else businessLicenceListView">
       <ng-container *ngIf="site.businessLicence?.businessLicenceDocument; else deferredLicence">
 
