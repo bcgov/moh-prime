@@ -6,6 +6,7 @@ import { AddressLine } from '@lib/models/address.model';
 import { Country } from '@lib/enums/country.enum';
 import { Province } from '@lib/enums/province.enum';
 import { ConsoleLoggerService } from './console-logger.service';
+import { WebApiLoggerService } from '@core/services/web-api-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ import { ConsoleLoggerService } from './console-logger.service';
 export class FormUtilsService {
   constructor(
     private fb: FormBuilder,
-    private logger: ConsoleLoggerService
+    private logger: ConsoleLoggerService,
+    private webApiLogger: WebApiLoggerService
   ) { }
 
   /**
@@ -141,10 +143,11 @@ export class FormUtilsService {
    * @description
    * Helper for quickly logging form errors.
    */
-  public logFormErrors(form: FormGroup | FormArray) {
+  public logFormErrors(form: FormGroup | FormArray, identifier?: number) {
     const formErrors = this.getFormErrors(form);
     if (formErrors) {
       this.logger.error('FORM_INVALID', formErrors);
+      this.webApiLogger.debug(`logFormErrors regarding entity with id ${identifier}`, formErrors).subscribe();
     }
   }
 
