@@ -71,6 +71,7 @@ export class SiteInformationFormComponent implements OnInit {
   public ngOnInit(): void {
     this.initForm();
     this.updatePEC();
+    this.updateDeviceProviderId();
   }
 
   protected initForm(): void {
@@ -131,6 +132,14 @@ export class SiteInformationFormComponent implements OnInit {
       }
     } else {
       this.formUtilsService.setValidators(this.pec, []);
+    }
+  }
+
+  private updateDeviceProviderId(): void {
+    if (this.careSettingCode === CareSettingEnum.DEVICE_PROVIDER) {
+      this.formUtilsService.setValidators(this.deviceProviderId, [Validators.required, FormControlValidators.deviceProviderId]);
+    } else {
+      this.formUtilsService.setValidators(this.deviceProviderId, []);
     }
   }
 }
