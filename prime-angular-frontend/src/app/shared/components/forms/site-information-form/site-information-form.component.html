@@ -105,15 +105,11 @@
              formControlName="deviceProviderId"
              appToUppercase>
 
-      <!-- TODO: -->
       <mat-error *ngIf="deviceProviderId.hasError('required')">
         Required
       </mat-error>
-      <mat-error *ngIf="deviceProviderId.hasError('length') || deviceProviderId.hasError('alpha')">
-        Must be a 3-letter code
-      </mat-error>
-      <mat-error *ngIf="deviceProviderId.hasError('cpSiteId')">
-        Must be in format BC00000XXX
+      <mat-error *ngIf="deviceProviderId.hasError('deviceProviderId')">
+        Must be in format P1-90XXX (last three characters are numbers)
       </mat-error>
     </mat-form-field>
   </app-page-section>
