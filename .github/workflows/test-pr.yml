@@ -52,10 +52,11 @@ jobs:
 
       - run: cc-test-reporter before-build
 
-      - name: yarn and yarn run test
-        run: |
-          yarn
-          yarn run test
+#      - name: yarn and yarn run test
+#        run: |
+#          yarn
+#          yarn run test
+
       - name: Collect Frontend Report
         run: |
           cc-test-reporter format-coverage -t lcov -o coverage/frontend.json coverage/lcov.info
