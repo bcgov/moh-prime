@@ -89,7 +89,7 @@ export class OverviewPageComponent implements OnInit {
     }
 
     if (!this.siteFormStateService.isValidSubmission) {
-      this.siteFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
+      this.siteFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form, this.site?.id));
       this.toastService.openErrorToast('Your site has an error that needs to be corrected before you will be able to submit');
       return;
     }
