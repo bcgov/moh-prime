@@ -55,13 +55,23 @@ export class SiteInformationFormComponent implements OnInit {
     return this.form.get('activeBeforeRegistration') as FormControl;
   }
 
+  public get deviceProviderId(): FormControl {
+    return this.form.get('deviceProviderId') as FormControl;
+  }
+
   public isCommunityPharmacy() {
     return this.siteService.site?.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+  }
+
+  // TODO: Share with BusinessLicencePageComponent?
+  public isDeviceProvider() {
+    return this.siteService.site?.careSettingCode === CareSettingEnum.DEVICE_PROVIDER;
   }
 
   public ngOnInit(): void {
     this.initForm();
     this.updatePEC();
+    this.updateDeviceProviderId();
   }
 
   protected initForm(): void {
@@ -108,7 +118,7 @@ export class SiteInformationFormComponent implements OnInit {
 
 
   private updatePEC(): void {
-    if (this.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+    if ((this.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST || this.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
       if (this.activeBeforeRegistration.value || this.isNewWithSiteId.value) {
         this.formUtilsService.setValidators(this.pec, [Validators.required, FormControlValidators.communityPharmacySiteId]);
         this.pec.enable();
@@ -122,6 +132,14 @@ export class SiteInformationFormComponent implements OnInit {
       }
     } else {
       this.formUtilsService.setValidators(this.pec, []);
+    }
+  }
+
+  private updateDeviceProviderId(): void {
+    if (this.careSettingCode === CareSettingEnum.DEVICE_PROVIDER) {
+      this.formUtilsService.setValidators(this.deviceProviderId, [Validators.required, FormControlValidators.deviceProviderId]);
+    } else {
+      this.formUtilsService.setValidators(this.deviceProviderId, []);
     }
   }
 }

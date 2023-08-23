@@ -15,7 +15,11 @@
             Scan and upload a single file of the business licence. If you don't have your business licence, provide
             other documentation as proof of business address, e.g. CPBC pharmacy license.
           </div>
-          <div *ngIf="!isCommunityPharmacy()">
+          <div *ngIf="isDeviceProvider()">
+            Scan and upload a single file of the business licence. If you don't have your business licence, contact
+            <a href="mailto:{{ config.prime.supportEmail }}">{{ config.prime.supportEmail}}</a> to discuss.
+          </div>
+          <div *ngIf="!isCommunityPharmacy() && !isDeviceProvider()">
             Scan and upload a single file of the business licence.
             If you don't have your business licence, provide other documentation as proof of business address, e.g.
             <ul>
