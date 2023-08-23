@@ -170,10 +170,8 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
     } else {
       switch (site.careSettingCode) {
         case CareSettingEnum.COMMUNITY_PHARMACIST:
-          routePath = SiteRoutes.ADMINISTRATOR;
-          break;
         case CareSettingEnum.DEVICE_PROVIDER:
-          routePath = SiteRoutes.DEVICE_PROVIDER;
+          routePath = SiteRoutes.ADMINISTRATOR;
           break;
         case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
           routePath = SiteRoutes.REMOTE_USERS;

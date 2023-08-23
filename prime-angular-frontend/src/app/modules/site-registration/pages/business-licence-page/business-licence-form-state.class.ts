@@ -56,7 +56,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       return;
     }
 
-    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress, isNewWithSiteId, isNewWithoutSiteId, careSettingCode } = this.formInstance.getRawValue();
+    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress, isNewWithSiteId, isNewWithoutSiteId, careSettingCode, deviceProviderId } = this.formInstance.getRawValue();
 
     const isNew = isNewWithSiteId || isNewWithoutSiteId;
 
@@ -71,7 +71,8 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       activeBeforeRegistration,
       physicalAddress,
       isNew,
-      careSettingCode
+      careSettingCode,
+      deviceProviderId
     };
   }
 
@@ -165,6 +166,10 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
         null,
         []
       ],
+      deviceProviderId: [
+        null,
+        []
+      ],
     });
     this.formInstance.setValidators(this.validateMinOneCheckboxChecked());
   }
@@ -193,7 +198,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       const activeBeforeRegistration = form.get("activeBeforeRegistration");
       const careSettingCode = form.get("careSettingCode");
 
-      if (careSettingCode.value === CareSettingEnum.COMMUNITY_PHARMACIST &&
+      if ((careSettingCode.value === CareSettingEnum.COMMUNITY_PHARMACIST || careSettingCode.value === CareSettingEnum.DEVICE_PROVIDER) &&
         !(isNewWOSiteId.value || isNewWSiteId.value || activeBeforeRegistration.value)) {
         return { 'checkboxRequired': true };
       }

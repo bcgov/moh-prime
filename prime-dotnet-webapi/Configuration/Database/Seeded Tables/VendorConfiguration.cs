@@ -22,13 +22,8 @@ namespace Prime.Configuration.Database
                     new Vendor { Code = 9,  CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "McKesson Canada",                   Email = ""                       },
                     new Vendor { Code = 10, CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "Commander Group Software",          Email = ""                       },
 
-                    new Vendor { Code = 14, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Assyst Rx-A",                       Email = ""                       },
-                    new Vendor { Code = 15, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Commander Group",                   Email = ""                       },
-                    new Vendor { Code = 16, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Kroll",                             Email = ""                       },
-                    new Vendor { Code = 17, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Nexxsys",                           Email = ""                       },
-                    new Vendor { Code = 18, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "PharmaClik",                        Email = ""                       },
-                    new Vendor { Code = 19, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Shoppers Drug Mart HealthWatch NG", Email = ""                       },
-                    new Vendor { Code = 20, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "WinRx",                             Email = ""                       },
+                    new Vendor { Code = 14, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Applied Robotics Inc.",             Email = ""                       },
+                    new Vendor { Code = 15, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Commander Group Software",          Email = ""                       },
 
                     new Vendor { Code = 21, CareSettingCode = (int)CareSettingType.HealthAuthority,   Name = "CareConnect",                       Email = ""                       },
                     new Vendor { Code = 22, CareSettingCode = (int)CareSettingType.HealthAuthority,   Name = "Excelleris",                        Email = ""                       },

@@ -82,7 +82,8 @@ export class MockCommunitySiteService {
       flagged: false,
       activeBeforeRegistration: false,
       isNew: false,
-      individualDeviceProviders: []
+      individualDeviceProviders: [],
+      deviceProviderId: null
     });
   }
 
