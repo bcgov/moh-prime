@@ -79,6 +79,7 @@
     <EmbeddedResource Include="Configuration\Database\Resources\com-practice-org-v3.html" />
     <EmbeddedResource Include="Configuration\Database\Resources\com-pharmacy-org-v3.html" />
     <EmbeddedResource Include="Configuration\Database\Resources\com-pharmacy-org-v4.html" />
+    <EmbeddedResource Include="Configuration\Database\Resources\device-provider-org-v3.html" />
     <EmbeddedResource Include="Configuration\Database\Resources\device-provider-ru-toa-v1.html" />
     <EmbeddedResource Include="Configuration\Database\Resources\device-provider-obo-toa-v1.html" />
   </ItemGroup>

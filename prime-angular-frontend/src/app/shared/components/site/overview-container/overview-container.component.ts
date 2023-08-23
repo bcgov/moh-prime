@@ -47,6 +47,10 @@ export class OverviewContainerComponent implements OnInit {
       this.site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
   }
 
+  public get showDeviceProviderId(): boolean {
+    return this.site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER;
+  }
+
   public onRoute(routePath: string | (string | number)[]) {
     let navExtra: NavigationExtras;
     if (this.site) {
