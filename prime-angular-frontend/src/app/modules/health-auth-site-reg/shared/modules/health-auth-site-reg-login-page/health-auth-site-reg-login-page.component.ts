@@ -42,6 +42,7 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.disableLogin = this.config.environmentName === 'prod';
+    // Enable, regardless of environment
+    this.disableLogin = false;
   }
 }

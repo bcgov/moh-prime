@@ -81,12 +81,6 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
         this.orgBookResource.sourceIdMap(),
         tap((sourceId: string) => this.usedOrgBook = true),
         tap((sourceId: string) => this.formState.form.get('registrationId').patchValue(sourceId)),
-        exhaustMap((sourceId: string) => {
-          return this.webApiLogger.debug(`Obtained ${sourceId} for Registration ID`, { orgName: orgName }).pipe(
-            map(() => sourceId)
-          );
-          ;
-        }),
         this.getDoingBusinessAs()
       )
       .subscribe();

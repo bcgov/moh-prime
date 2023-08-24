@@ -50,6 +50,7 @@ export class Site {
   flagged: boolean;
   activeBeforeRegistration: boolean;
   isNew: boolean;
+  deviceProviderId: string;
 
   public static getExpiryDate(site: Site | SiteListViewModel): string | null {
     if (!site) {
