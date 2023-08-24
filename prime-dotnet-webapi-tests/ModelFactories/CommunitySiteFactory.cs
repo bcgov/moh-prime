@@ -54,6 +54,7 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.RemoteUsers);
             Ignore(x => x.Adjudicator);
             Ignore(x => x.BusinessHours);
+            Ignore(x => x.DeviceProviderId);
 
             // The following are populated in FinishWith section
             Ignore(x => x.SiteStatuses);

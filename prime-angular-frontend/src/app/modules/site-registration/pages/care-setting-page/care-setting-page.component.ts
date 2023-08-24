@@ -72,7 +72,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
       case CareSettingEnum.COMMUNITY_PHARMACIST:
         return true;
       case CareSettingEnum.DEVICE_PROVIDER:
-        return this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER);
+        return true;
       default:
         return false;
     }
