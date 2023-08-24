@@ -41,9 +41,9 @@
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
         <ng-container appPageSubheaderSummary>
-          Provide details for all your active college licences. This is the licence that indicates your authority to
-          deliver health care directly to patients in B.C. If you do not have a licence from one of the colleges listed
-          here, select <strong>None</strong>.
+          Provide details for all your active college licences. This is the licence that indicates your authority to deliver
+          health care directly to patients in B.C. If you do not have a licence from one of the colleges listed here, select
+          <strong>None</strong>.
         </ng-container>
       </app-page-subheader>
 
@@ -82,6 +82,37 @@
             Add Additional Licences
           </button>
 
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col col-sm-10 py-3" formArrayName="unlistedCertifications">
+          <app-toggle-content label="I am, or have been, licensed by a college in another jurisdiction."
+            [checked]="hasUnlistedCertification"
+            (toggle)="onUnlistedCertification($event)">
+
+            <ng-container *ngFor="let unlistedCertificate of formState.unlistedCertifications.controls; let i = index;"
+                          [formGroupName]="i">
+              <app-unlisted-college-licence-form [form]="unlistedCertificate"
+                                                 [index]="i"
+                                                 [total]="formState.unlistedCertifications.controls.length"
+                                                 [formState]="formState"
+                                                 [validate]="hasUnlistedCertification"
+                                                 (remove)="removeUnlistedCertification($event)">
+
+              </app-unlisted-college-licence-form>
+            </ng-container>
+
+            <button mat-button
+                    type="button"
+                    color="primary"
+                    (click)="formState.addEmptyUnlistedCollegeCertification()">
+              <mat-icon>add</mat-icon>
+              Add additional licences not listed in the dropdown
+            </button>
+
+          </app-toggle-content>
         </div>
       </div>
 

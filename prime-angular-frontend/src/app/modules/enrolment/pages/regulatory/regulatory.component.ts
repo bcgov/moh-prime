@@ -20,6 +20,8 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
+
 
 import { RegulatoryFormState } from './regulatory-form-state';
 
@@ -32,6 +34,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   public formState: RegulatoryFormState;
   public cannotRequestRemoteAccess: boolean;
   public isDeviceProvider: boolean;
+  public hasUnlistedCertification: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -61,6 +64,25 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     );
 
     this.cannotRequestRemoteAccess = false;
+  }
+
+  public onUnlistedCertification({ checked }: ToggleContentChange) {
+    if (!checked) {
+      this.hasUnlistedCertification = false;
+      this.formState.json.unlistedCertifications = [];
+    } else {
+      this.hasUnlistedCertification = true;
+      if (!this.formState.unlistedCertifications.length) {
+        this.formState.addEmptyUnlistedCollegeCertification();
+      }
+    }
+  }
+
+  public removeUnlistedCertification(index: number): void {
+    this.formState.unlistedCertifications.removeAt(index);
+    if (!this.formState.unlistedCertifications.length) {
+      this.hasUnlistedCertification = false;
+    }
   }
 
   public get selectedCollegeCodes(): number[] {
@@ -133,8 +155,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
 
     // Replace previous values on deactivation so updates are discarded
-    const { certifications, deviceProviderIdentifier } = this.enrolmentService.enrolment;
-    this.formState.patchValue({ certifications, deviceProviderIdentifier });
+    const { certifications, deviceProviderIdentifier, unlistedCertifications } = this.enrolmentService.enrolment;
+    this.formState.patchValue({ certifications, deviceProviderIdentifier, unlistedCertifications });
   }
 
   protected onSubmitFormIsValid() {
