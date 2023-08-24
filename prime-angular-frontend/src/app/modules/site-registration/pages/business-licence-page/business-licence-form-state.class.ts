@@ -91,7 +91,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
     this.siteId = siteId;
 
-    const { doingBusinessAs, pec, businessLicence, physicalAddress, isNew, careSettingCode } = model;
+    const { doingBusinessAs, pec, businessLicence, physicalAddress, isNew, careSettingCode, activeBeforeRegistration, deviceProviderId } = model;
     // Preserve the business licence for use when
     // creating JSON format from the form
     this.businessLicence = businessLicence;
@@ -106,7 +106,9 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       physicalAddress,
       isNewWithSiteId,
       isNewWithoutSiteId,
-      careSettingCode
+      careSettingCode,
+      activeBeforeRegistration,
+      deviceProviderId
     });
   }
 

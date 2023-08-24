@@ -146,6 +146,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     if (site.doingBusinessAs && site.businessLicence && site.businessLicence.expiryDate === null) {
       this.showExpiryDate = false;
     } else {
+      //this.formState.businessLicenceExpiry.patchValue(site.businessLicence.expiryDate);
       this.showExpiryDate = true;
     }
   }
@@ -240,7 +241,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
             this.deferredLicenceToggle.checked = !!this.businessLicence.deferredLicenceReason;
           }
 
-          this.updateBusLicAccess(canDefer);
+          this.updateBusLicAccess(this.deferredLicenceToggle.checked);
         }
       });
   }
