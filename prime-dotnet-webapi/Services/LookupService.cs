@@ -26,16 +26,18 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
-        public async Task<List<SelfDeclarationVersion>> GetSelfDeclarationVersion(DateTimeOffset targetDate)
+        public async Task<List<SelfDeclarationVersion>> GetSelfDeclarationVersion(DateTimeOffset targetDate, bool isDeviceProvider)
         {
+            var careSettingCode = isDeviceProvider ? "4" : "1";
             return await _context.Set<SelfDeclarationType>()
                 .AsNoTracking()
                 .Select(t => _context.Set<SelfDeclarationVersion>()
-                    .Where(av => av.EffectiveDate <= targetDate)
+                    .Where(av => av.EffectiveDate <= targetDate && av.CareSettingCodeStr.Contains(careSettingCode))
                     .Where(av => av.SelfDeclarationTypeCode == t.Code)
                     .OrderByDescending(av => av.EffectiveDate)
                     .First())
                 .OrderBy(av => av.SelfDeclarationType.SortingNumber)
+                .Where(av => av != null)
                 .ToListAsync();
         }
 
@@ -98,7 +100,10 @@ namespace Prime.Services
                     .ToListAsync(),
                 SecurityGroups = await _context.Set<SecurityGroup>()
                     .AsNoTracking()
-                    .ToListAsync()
+                    .ToListAsync(),
+                DeviceProviderRoles = await _context.Set<DeviceProviderRole>()
+                    .AsNoTracking()
+                    .ToListAsync(),
             };
         }
     }

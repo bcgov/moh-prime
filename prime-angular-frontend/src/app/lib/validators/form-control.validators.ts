@@ -249,4 +249,15 @@ export class FormControlValidators {
     const valid = (control.valid && regexp.test(control.value));
     return (valid) ? null : { cpSiteId: true };
   }
+
+  /**
+   * @description
+   * Checks the form control value is P1-90XXX for Device Provider Id
+   */
+  public static deviceProviderId(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) { return null; }
+    const regexp = /^P1-90[0-9]{3}$/;
+    const valid = (control.valid && regexp.test(control.value));
+    return (valid) ? null : { deviceProviderId: true };
+  }
 }

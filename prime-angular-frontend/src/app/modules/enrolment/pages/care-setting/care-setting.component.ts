@@ -105,13 +105,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     // should be removed as well
     this.enrolmentFormStateService.removeUnselectedHAOboSites();
 
-    super.onSubmit();
-  }
+    this.enrolmentFormStateService.removeDeviceProvider();
 
-  public disableCareSetting(careSettingCode: number): boolean {
-    return (careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
-      ? !this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER)
-      : false;
+    super.onSubmit();
   }
 
   public addCareSetting() {
@@ -131,12 +127,25 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       // All the currently chosen care settings
       const selectedCareSettingCodes = this.careSettings.value
         .map((cs: CareSetting) => cs.careSettingCode);
+
       // Current care setting selected
       const currentCareSetting = this.careSettingTypes
         .find(cs => cs.code === careSetting.get('careSettingCode').value);
       // Filter the list of possible care settings using the selected care setting
-      const filteredCareSettingTypes = this.careSettingTypes
+      let filteredCareSettingTypes = this.careSettingTypes
         .filter((c: Config<number>) => !selectedCareSettingCodes.includes(c.code));
+
+      if (selectedCareSettingCodes[0] === CareSettingEnum.DEVICE_PROVIDER
+        && !currentCareSetting) {
+        // Remove other options if device provider is first selected
+        filteredCareSettingTypes = [];
+      } else if (selectedCareSettingCodes[0] && selectedCareSettingCodes[0] !== CareSettingEnum.DEVICE_PROVIDER
+        && (!currentCareSetting || currentCareSetting.code != selectedCareSettingCodes[0])) {
+        // if the currenct selected care setting is not the first dropdown, remove device provider
+        filteredCareSettingTypes = filteredCareSettingTypes.filter(t => t.code !== CareSettingEnum.DEVICE_PROVIDER);
+      }
+
+
 
       if (currentCareSetting) {
         // Add the current careSetting to the list of filtered

@@ -68,10 +68,8 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
     } else {
       switch (this.siteService.site.careSettingCode) {
         case CareSettingEnum.COMMUNITY_PHARMACIST:
-          nextRoute = SiteRoutes.HOURS_OPERATION;
-          break;
         case CareSettingEnum.DEVICE_PROVIDER:
-          nextRoute = SiteRoutes.DEVICE_PROVIDER;
+          nextRoute = SiteRoutes.HOURS_OPERATION;
           break;
         default:
           nextRoute = SiteRoutes.REMOTE_USERS;

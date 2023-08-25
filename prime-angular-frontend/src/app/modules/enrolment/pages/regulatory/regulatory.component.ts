@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { map } from 'rxjs/operators';
+import { Observable, concat, EMPTY, pipe } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ToastService } from '@core/services/toast.service';
@@ -12,6 +13,9 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { DeviceProviderRoleConfig } from '@config/config.model';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -22,8 +26,10 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
+import { DeviceProviderSite } from '@shared/models/device-provider-site.model';
 
 import { RegulatoryFormState } from './regulatory-form-state';
+import { ConfigService } from '@config/config.service';
 
 @Component({
   selector: 'app-regulatory',
@@ -36,6 +42,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   public isDeviceProvider: boolean;
   public hasUnlistedCertification: boolean;
 
+  public hasOtherCareSetting: boolean;
+  public deviceProviderRoles: DeviceProviderRoleConfig[];
+  public deviceProviderSite: DeviceProviderSite;
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -47,7 +56,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    protected authService: AuthService
+    protected authService: AuthService,
+    protected configService: ConfigService
   ) {
     super(
       route,
@@ -64,6 +74,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     );
 
     this.cannotRequestRemoteAccess = false;
+    this.deviceProviderRoles = this.configService.deviceProviderRoles;
   }
 
   public onUnlistedCertification({ checked }: ToggleContentChange) {
@@ -109,6 +120,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   public ngOnInit() {
     this.isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+    this.hasOtherCareSetting = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
+      careSetting.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER);
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());
   }
@@ -123,7 +136,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected initForm() {
-    this.toggleDeviceProviderValidator();
+    this.setupDeviceProvider();
 
     // Always have at least one certification ready for
     // the enrollee to fill out
@@ -133,10 +146,31 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     const initialRemoteAccess = this.canRequestRemoteAccess();
 
+    if (this.formState.deviceProviderId.value) {
+      this.enrolmentResource.getDeviceProviderSite(this.formState.deviceProviderId.value)
+        .subscribe((site) => this.deviceProviderSite = site);
+    }
+
     this.formState.form.valueChanges
       .pipe(map((_) => initialRemoteAccess && !this.isInitialEnrolment))
       .subscribe((couldRequestRemoteAccess: boolean) =>
         this.cannotRequestRemoteAccess = couldRequestRemoteAccess && !this.canRequestRemoteAccess()
+      );
+
+    this.formState.deviceProviderRoleCode.valueChanges.subscribe(() =>
+      this.toggleCertificationNumberValidation()
+    );
+
+    this.formState.deviceProviderId.valueChanges
+      .pipe(exhaustMap(value => {
+        if (value && value.length === 8) {
+          return this.enrolmentResource.getDeviceProviderSite(value);
+        }
+        return EMPTY;
+      }
+      ))
+      .subscribe(site =>
+        this.deviceProviderSite = site
       );
 
     // Check if there is validation error, mark as touched to show the error message
@@ -155,16 +189,49 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
 
     // Replace previous values on deactivation so updates are discarded
-    const { certifications, deviceProviderIdentifier, unlistedCertifications } = this.enrolmentService.enrolment;
-    this.formState.patchValue({ certifications, deviceProviderIdentifier, unlistedCertifications });
+    const { certifications, enrolleeDeviceProviders, unlistedCertifications } = this.enrolmentService.enrolment;
+    this.formState.patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications });
   }
 
-  protected onSubmitFormIsValid() {
-    // Enrollees can not have certifications and jobs
-    this.removeOboSites();
-    // Remove remote access data when enrollee is no longer eligible, e.g., licence type changes
-    if (this.cannotRequestRemoteAccess) {
-      this.removeRemoteAccessData();
+  public onSubmit() {
+    if (this.formUtilsService.checkValidity(this.form)) {
+
+      if (this.isDeviceProvider && this.formState.deviceProviderId.value) {
+        let siteName = this.deviceProviderSite ?
+          this.deviceProviderSite.siteName : "Site not found.";
+        let siteAddress = this.deviceProviderSite ?
+          `${this.deviceProviderSite.siteAddress}, ${this.deviceProviderSite.city}, ${this.deviceProviderSite.prov}` : "";
+        let message = this.deviceProviderSite ?
+          "Is this the correct location where you are the device provider?" : "If you are not sure of the Device Provider ID, you may continue."
+        let actionText = this.deviceProviderSite ?
+          "Agree" : "Continue";
+
+        const data: DialogOptions = {
+          title: 'Device Provider Site',
+          boldMessage: siteName,
+          message: siteAddress,
+          message2: message,
+          actionText: actionText
+        };
+
+        this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+          .afterClosed()
+          .subscribe((result: boolean) => {
+            if (result) {
+              // Enrollees can not have certifications and jobs
+              this.removeOboSites();
+              // Remove remote access data when enrollee is no longer eligible, e.g., licence type changes
+              if (this.cannotRequestRemoteAccess) {
+                this.removeRemoteAccessData();
+              }
+              super.handleSubmission();
+            }
+          });
+      } else {
+        super.handleSubmission();
+      }
+    } else {
+      this.utilService.scrollToErrorSection();
     }
   }
 
@@ -175,11 +242,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   protected nextRouteAfterSubmit() {
     const certifications = this.formState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value as CareSetting[];
-    const deviceProviderIdentifier = this.formState.deviceProviderIdentifier.value;
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = (!certifications.length || (this.isDeviceProvider && !deviceProviderIdentifier))
+      // If DP Role Code is "None", we go to Job Site page
+      nextRoutePath = (!certifications.length || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value === 15))
         ? EnrolmentRoutes.OBO_SITES
         : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
           ? EnrolmentRoutes.REMOTE_ACCESS
@@ -218,7 +285,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   private removeOboSites() {
     this.removeIncompleteCertifications(true);
 
-    if (this.formState.certifications.length) {
+    if (this.formState.certifications.length || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value !== 15)) {
       const form = this.enrolmentFormStateService.oboSitesForm;
       const oboSites = form.get('oboSites') as FormArray;
       oboSites.clear();
@@ -241,12 +308,29 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     [remoteAccessSites, enrolleeRemoteUsers, remoteLocations].forEach(f => f.clear());
   }
 
-  private toggleDeviceProviderValidator(): void {
-    this.isDeviceProvider
-      ? this.formUtilsService.setValidators(this.formState.deviceProviderIdentifier, [
-        FormControlValidators.requiredLength(5),
-        FormControlValidators.numeric
-      ])
-      : this.formUtilsService.resetAndClearValidators(this.formState.deviceProviderIdentifier);
+  private setupDeviceProvider(): void {
+    if (this.isDeviceProvider) {
+      if (!this.formState.deviceProviderId.value || this.formState.deviceProviderId.value === "") {
+        //this.formState.deviceProviderId.setValue("P1-90");
+      }
+      this.formUtilsService.setValidators(this.formState.deviceProviderId, [
+        FormControlValidators.deviceProviderId
+      ]);
+      this.toggleCertificationNumberValidation();
+    } else {
+      this.formUtilsService.resetAndClearValidators(this.formState.deviceProviderId);
+    }
+  }
+
+  private toggleCertificationNumberValidation(): void {
+    if (this.formState.deviceProviderRoleCode.value &&
+      this.deviceProviderRoles.find(r => r.code === this.formState.deviceProviderRoleCode.value).certified) {
+      this.formUtilsService.setValidators(this.formState.certificationNumber, [Validators.required]);
+      this.formState.certificationNumber.enable();
+    } else {
+      this.formUtilsService.resetAndClearValidators(this.formState.certificationNumber);
+      this.formState.certificationNumber.markAsUntouched();
+      this.formState.certificationNumber.disable();
+    }
   }
 }

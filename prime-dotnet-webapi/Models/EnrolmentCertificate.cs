@@ -22,6 +22,8 @@ namespace Prime.Models
         public AgreementGroup? Group { get; set; }
         public IEnumerable<EnrolleeCertDto> Licences { get; set; }
         public string AccessType { get; set; }
+        public string DeviceProviderId {get; set;}
+
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
@@ -51,6 +53,9 @@ namespace Prime.Models
                     .Where(a => a.AcceptedDate != null)
                     .Select(a => a.AgreementVersion.AccessType)
                     .FirstOrDefault(),
+                DeviceProviderId = enrollee.EnrolleeDeviceProviders
+                    .Select(dp => dp.DeviceProviderId)
+                    .FirstOrDefault()
             };
         }
     }

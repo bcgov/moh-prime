@@ -41,6 +41,12 @@ namespace Prime.Models
         public ICollection<BusinessLicence> BusinessLicences { get; set; }
 
         /// <summary>
+        /// Expected to be in format P1-90XXX (last three characters are numbers).
+        /// Applicable only for Device Provider care setting.
+        /// </summary>
+        public string DeviceProviderId { get; set; }
+
+        /// <summary>
         /// Gets the most recently uploaded business licence
         /// </summary>
         [NotMapped]
