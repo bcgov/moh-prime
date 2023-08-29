@@ -35,10 +35,13 @@ namespace Prime.Configuration.Database
                     new License { Code = 18, Weight = 22, Name = "Emergency - Family"                                  },
                     new License { Code = 19, Weight = 23, Name = "Emergency - Specialty"                               },
                     new License { Code = 21, Weight = 24, Name = "Temporarily Inactive"                                },
-                    new License { Code = 59, Weight = 25, Name = "Full - Podiatric Surgeon"                                   },
+                    new License { Code = 59, Weight = 25, Name = "Full - Podiatric Surgeon"                            },
                     new License { Code = 65, Weight = 26, Name = "Educational - Podiatric Surgeon Student (Elective)"  },
                     new License { Code = 66, Weight = 27, Name = "Educational - Podiatric Surgeon Resident (Elective)" },
                     new License { Code = 67, Weight = 28, Name = "Conditional - Podiatric Surgeon Disciplined"         },
+                    new License { Code = 87, Weight = 29, Name = "Associate - Acute Care"                              },
+                    new License { Code = 88, Weight = 30, Name = "Associate - Community Primary Care"                  },
+                    new License { Code = 89, Weight = 31, Name = "USA Certified"                                       },
 
                     // Pharmacy
                     new License { Code = 25, Weight = 1, Name = "Full Pharmacist"                    },
