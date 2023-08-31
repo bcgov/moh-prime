@@ -118,12 +118,18 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public ngOnInit() {
+    
     this.isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
     this.hasOtherCareSetting = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER);
     this.createFormInstance();
-    this.patchForm().subscribe(() => this.initForm());
+    this.patchForm().subscribe(() => {
+      this.initForm();
+      if (this.formState.json.unlistedCertifications.length > 0) {
+        this.hasUnlistedCertification = true;
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -175,6 +181,14 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     // Check if there is validation error, mark as touched to show the error message
     this.formState.certifications.controls.forEach((c: FormGroup) => {
+      Object.keys(c.controls).forEach(key => {
+        if (c.get(key).errors) {
+          c.get(key).markAsTouched();
+        }
+      });
+    });
+
+    this.formState.unlistedCertifications.controls.forEach((c: FormGroup) => {
       Object.keys(c.controls).forEach(key => {
         if (c.get(key).errors) {
           c.get(key).markAsTouched();
@@ -240,13 +254,18 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected nextRouteAfterSubmit() {
+    if (!this.hasUnlistedCertification) {
+      this.formState.unlistedCertifications.clear();
+    }
+    
     const certifications = this.formState.collegeCertifications;
+    const unlistedCertifications = this.formState.unlistedCertifications.value;
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value as CareSetting[];
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       // If DP Role Code is "None", we go to Job Site page
-      nextRoutePath = (!certifications.length || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value === 15))
+      nextRoutePath = (!certifications.length && !unlistedCertifications.length || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value === 15))
         ? EnrolmentRoutes.OBO_SITES
         : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
           ? EnrolmentRoutes.REMOTE_ACCESS

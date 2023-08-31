@@ -139,23 +139,23 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   public onBack() {
     const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
+    const unlistedCertifications = this.enrolmentFormStateService.regulatoryFormState.unlistedCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm
       .get('careSettings').value as CareSetting[];
     const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-    const deviceProviderIdentifier = this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.value;
-
+    //const deviceProviderIdentifier = this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.value;
 
     let backRoutePath = EnrolmentRoutes.OVERVIEW;
     if (!this.isProfileComplete) {
       backRoutePath = (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
         ? EnrolmentRoutes.REMOTE_ACCESS
-        : (!certifications.length && !isDeviceProvider)
+        : (!certifications.length && !isDeviceProvider && !unlistedCertifications.length)
           ? EnrolmentRoutes.OBO_SITES
           : EnrolmentRoutes.REGULATORY;
     }
 
-    this.enrolmentFormStateService.reset();
+    //this.enrolmentFormStateService.reset();
 
     this.routeTo(backRoutePath);
   }

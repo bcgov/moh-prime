@@ -91,9 +91,9 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     
     if (enrolleeDeviceProviders && enrolleeDeviceProviders.length) {
       const { deviceProviderId, deviceProviderRoleCode, certificationNumber } = enrolleeDeviceProviders[0];
-      this.formInstance.patchValue({ certifications, deviceProviderId, deviceProviderRoleCode, certificationNumber });
+      this.formInstance.patchValue({ certifications, deviceProviderId, deviceProviderRoleCode, certificationNumber, unlistedCertifications });
     } else {
-      this.formInstance.patchValue({ certifications });
+      this.formInstance.patchValue({ certifications, unlistedCertifications });
     }
     this.unlistedCertifications.patchValue(unlistedCertifications);
   }
