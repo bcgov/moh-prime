@@ -31,6 +31,7 @@ namespace Prime.Controllers
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
+        private readonly IDeviceProviderService _deviceProviderService;
 
         public SitesController(
             IAdminService adminService,
@@ -40,7 +41,8 @@ namespace Prime.Controllers
             IEmailService emailService,
             IMapper mapper,
             IOrganizationService organizationService,
-            ISiteService siteService)
+            ISiteService siteService,
+            IDeviceProviderService deviceProviderService)
         {
             _adminService = adminService;
             _businessEventService = businessEventService;
@@ -50,6 +52,7 @@ namespace Prime.Controllers
             _mapper = mapper;
             _organizationService = organizationService;
             _siteService = siteService;
+            _deviceProviderService = deviceProviderService;
         }
 
         // GET: api/Sites
@@ -367,7 +370,7 @@ namespace Prime.Controllers
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
             await _siteService.SubmitRegistrationAsync(siteId);
 
-            await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
+            await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode, site.IsNew);
             await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site registration submission notification");
 
             return Ok();
@@ -891,10 +894,12 @@ namespace Prime.Controllers
                 }
                 else
                 {
+                    /* do not send email to SA and Admin about the approval
                     await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(communitySite);
                     await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved PharmaNet administrator notification");
                     await _emailService.SendSiteApprovedSigningAuthorityAsync(communitySite);
                     await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved signing authority notification");
+                    */
                 }
                 await _emailService.SendSiteApprovedHIBCAsync(communitySite);
                 await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved HIBC notification");
@@ -1251,6 +1256,30 @@ namespace Prime.Controllers
             return Ok();
         }
 
+        // PUT: api/sites/5/isNew
+        /// <summary>
+        /// Sets a site's IsNew flag, which serves as a reminder
+        /// for an adjudicator to come back to this site
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="isNew"></param>
+        [HttpPut("{siteId}/isnew", Name = nameof(SetIsNew))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult> SetIsNew(int siteId, FromBodyData<bool> isNew)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            await _siteService.UpdateSiteIsNew(siteId, isNew);
+            return Ok();
+        }
+
         // GET: api/sites/5/individual-device-providers
         /// <summary>
         /// Gets the Individual Device Providers for a Device Provider Site.
@@ -1274,6 +1303,23 @@ namespace Prime.Controllers
             }
 
             return Ok(await _communitySiteService.GetIndividualDeviceProvidersAsync(siteId));
+        }
+
+        // GET: api/enrollees/device-provider-site/P1-90XXX
+        /// <summary>
+        /// Get device provider site by device provider id.
+        /// </summary>
+        /// <param name="deviceProviderId"></param>
+        [HttpGet("device-provider-site/{deviceProviderId}", Name = nameof(GetDeviceProviderSite))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<DeviceProviderSiteViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetDeviceProviderSite(string deviceProviderId)
+        {
+            var site = await _deviceProviderService.GetDeviceProviderSiteAsync(deviceProviderId);
+            return Ok(site);
         }
     }
 }

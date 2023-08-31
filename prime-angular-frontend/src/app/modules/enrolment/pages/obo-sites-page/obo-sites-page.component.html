@@ -86,7 +86,6 @@
 
                   <ng-container *ngFor="let site of healthAuthoritySiteControl(healthAuthorityCode); let index = index; let last = last"
                                 [formArrayName]="healthAuthorityCode">
-
                     <app-obo-site-form [form]="site"
                                        [index]="index"
                                        [careSettingCode]="careSetting.careSettingCode"

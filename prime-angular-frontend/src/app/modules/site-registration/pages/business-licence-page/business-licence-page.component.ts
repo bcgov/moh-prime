@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,6 +15,7 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -25,6 +26,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { BusinessLicenceFormState } from './business-licence-form-state.class';
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 // TODO refactor business licence pages into a single page
 @Component({
@@ -52,6 +54,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   @ViewChild('documentUpload') public documentUpload: DocumentUploadComponent;
 
   constructor(
+    @Inject(APP_CONFIG) public config: AppConfig,
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     protected siteService: SiteService,
@@ -84,6 +87,14 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       CareSettingEnum.DEVICE_PROVIDER,
       CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
     ].includes(this.siteService.site.careSettingCode);
+  }
+
+  public isCommunityPharmacy(): boolean {
+    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+  }
+
+  public isDeviceProvider(): boolean {
+    return this.siteService.site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER;
   }
 
   public onUpload(document: BaseDocument): void {
@@ -135,6 +146,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     if (site.doingBusinessAs && site.businessLicence && site.businessLicence.expiryDate === null) {
       this.showExpiryDate = false;
     } else {
+      //this.formState.businessLicenceExpiry.patchValue(site.businessLicence.expiryDate);
       this.showExpiryDate = true;
     }
   }
@@ -142,6 +154,15 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   protected initForm(): void {
     this.site = this.siteService.site;
     this.getBusinessLicence(this.site.id);
+    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+      if (this.site.activeBeforeRegistration) {
+        this.formUtilsService.setValidators(this.formState.pec, [Validators.required, FormControlValidators.communityPharmacySiteId])
+      } else {
+        this.formUtilsService.setValidators(this.formState.pec, [FormControlValidators.communityPharmacySiteId])
+      }
+    } else {
+      this.formUtilsService.setValidators(this.formState.pec, []);
+    }
   }
 
   protected additionalValidityChecks(): boolean {
@@ -154,7 +175,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   }
 
   protected onSubmitFormIsInvalid(): void {
-    if (!this.uploadedFile && !this.deferredLicenceToggle?.checked && !this.businessLicence?.businessLicenceDocument) {
+    if (!this.uploadedFile && !this.deferredLicenceToggle?.checked && !this.businessLicence?.businessLicenceDocument && this) {
       this.hasNoBusinessLicenceError = true;
     }
     this.showAddressFields = true;
@@ -220,7 +241,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
             this.deferredLicenceToggle.checked = !!this.businessLicence.deferredLicenceReason;
           }
 
-          this.updateBusLicAccess(canDefer);
+          this.updateBusLicAccess(this.deferredLicenceToggle.checked);
         }
       });
   }

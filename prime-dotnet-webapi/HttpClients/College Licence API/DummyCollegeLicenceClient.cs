@@ -35,6 +35,18 @@ namespace Prime.HttpClients
 
             if (info == null)
             {
+                var result = licenceNumber switch
+                {
+                    "12345" => new PharmanetCollegeRecord { FirstName = "John", LastName = "Smith" },
+                    "23456" => new PharmanetCollegeRecord { FirstName = "Peter", LastName = "Scott" },
+                    _ => null,
+                };
+
+                return Task.FromResult(result);
+            }
+
+            if (info == null)
+            {
                 return Task.FromResult<PharmanetCollegeRecord>(null);
             }
 

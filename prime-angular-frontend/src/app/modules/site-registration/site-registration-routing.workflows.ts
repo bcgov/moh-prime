@@ -124,6 +124,7 @@ export const defaultCommunitySiteWorkflow = [
                 data: { title: 'Hours of Operation' }
               },
               {
+                // Obsolete as of Aug 2023
                 path: SiteRoutes.DEVICE_PROVIDER,
                 component: DeviceProviderPageComponent,
                 canActivate: [SiteGuard],

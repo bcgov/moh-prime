@@ -31,6 +31,14 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
     return this.form.get('hasRegistrationSuspendedDetails') as FormControl;
   }
 
+  public get hasRegistrationSuspendedDeviceProvider(): FormControl {
+    return this.form.get('hasRegistrationSuspendedDeviceProvider') as FormControl;
+  }
+
+  public get hasRegistrationSuspendedDeviceProviderDetails(): FormControl {
+    return this.form.get('hasRegistrationSuspendedDeviceProviderDetails') as FormControl;
+  }
+
   public get hasDisciplinaryAction(): FormControl {
     return this.form.get('hasDisciplinaryAction') as FormControl;
   }
@@ -57,7 +65,8 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
       hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
       hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
-      hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
+      hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,
+      hasRegistrationSuspendedDeviceProvider: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER
     };
     return {
       selfDeclarations: Object.keys(selfDeclarationsTypes)
@@ -93,6 +102,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
     const selfDeclarationsTypes = {
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,
+      hasRegistrationSuspendedDeviceProvider: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER,
       hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
       hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED
     };
@@ -120,6 +130,9 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
       hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasRegistrationSuspendedDetails: [null, []],
       hasRegistrationSuspendedDocumentGuids: this.fb.array([]),
+      hasRegistrationSuspendedDeviceProvider: [null, [FormControlValidators.requiredBoolean]],
+      hasRegistrationSuspendedDeviceProviderDetails: [null, []],
+      hasRegistrationSuspendedDeviceProviderDocumentGuids: this.fb.array([]),
       hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
       hasDisciplinaryActionDetails: [null, []],
       hasDisciplinaryActionDocumentGuids: this.fb.array([]),
@@ -155,6 +168,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
     [
       'hasConvictionDocumentGuids',
       'hasRegistrationSuspendedDocumentGuids',
+      'hasRegistrationSuspendedDeviceProviderDocumentGuids',
       'hasDisciplinaryActionDocumentGuids',
       'hasPharmaNetSuspendedDocumentGuids'
     ]

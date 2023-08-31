@@ -70,6 +70,7 @@ namespace Prime.Services
                     .ThenInclude(s => s.PhysicalAddress).AsSplitQuery()
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeHealthAuthorities)
+                .Include(e => e.EnrolleeDeviceProviders)
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessSites)
                     .ThenInclude(ras => ras.Site)

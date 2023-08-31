@@ -96,6 +96,13 @@ namespace Prime.Configuration.Database
                     new License { Code = 73, Weight = 3, Name = "Non-Practicing Optometrist" },
                     new License { Code = 74, Weight = 4, Name = "Limited Optometrist" },
 
+                    //BC College of Social Workers
+                    new License { Code = 82, Weight = 1, Name = "Full registration" },
+                    new License { Code = 83, Weight = 2, Name = "Clinical registration" },
+                    new License { Code = 84, Weight = 3, Name = "Provisional registration" },
+                    new License { Code = 85, Weight = 4, Name = "Non-practicing registration" },
+                    new License { Code = 86, Weight = 4, Name = "Temporary registration" },
+
                     // All other colleges are assigned the "Not Displayed" Type
                     new License { Code = 64, Weight = 1, Name = "Not Displayed" },
                 };

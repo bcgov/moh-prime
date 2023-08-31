@@ -81,11 +81,11 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode)
+        public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode, bool isNew = false)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(businessLicenceId);
 
-            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode, siteId);
+            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode, siteId, isNew);
             email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(siteId);
             await Send(email);
 
