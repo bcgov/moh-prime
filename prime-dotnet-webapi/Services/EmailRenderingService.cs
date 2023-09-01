@@ -40,6 +40,7 @@ namespace Prime.Services.EmailInternal
                 CareSettingType.CommunityPharmacy => EmailTemplateType.CommunityPharmacyNotification,
                 CareSettingType.HealthAuthority => EmailTemplateType.HealthAuthorityNotification,
                 CareSettingType.CommunityPractice => EmailTemplateType.CommunityPracticeNotification,
+                CareSettingType.DeviceProvider => EmailTemplateType.DeviceProviderNotification,
                 _ => throw new ArgumentException($"Could not recognize CareSetting {careSetting} in {nameof(RenderProvisionerLinkEmailAsync)}")
             };
 

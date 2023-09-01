@@ -160,7 +160,6 @@ export class SiteRoutes {
       { routes: [this.CARE_SETTING], step: this.STEP_CARE_TYPE },
       { routes: [this.BUSINESS_LICENCE], step: this.STEP_SITE_INFORMATION },
       { routes: [this.HOURS_OPERATION], step: this.STEP_HOURS_OPERATION },
-      { routes: [this.DEVICE_PROVIDER], step: this.STEP_DEVICE_PROVICER },
       { routes: [this.ADMINISTRATOR, this.PRIVACY_OFFICER, this.TECHNICAL_SUPPORT], step: this.STEP_SUPPORT },
       { routes: [this.ORGANIZATION_AGREEMENT], step: this.STEP_ORG_AGREEMENT },
       { routes: [this.SITE_REVIEW], step: this.STEP_OVERVIEW },

@@ -317,7 +317,7 @@ namespace Prime.Controllers
             return Ok(agreements);
         }
 
-        // POST: api/Organizations/5/agreements/4
+        // POST: api/Organizations/5/agreements/care-settings/2
         /// <summary>
         /// Creates a new un-accepted Organization Agreement based on the Care Setting supplied, if a newer version exits
         /// or if the signing authority has changed.

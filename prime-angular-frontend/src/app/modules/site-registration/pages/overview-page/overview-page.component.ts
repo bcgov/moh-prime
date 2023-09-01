@@ -233,8 +233,6 @@ export class OverviewPageComponent implements OnInit {
    */
   private getSiteErrors(site: Site): ValidationErrors {
     return {
-      deviceProviderSite: !site.individualDeviceProviders?.length
-        && site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER,
       missingBusinessLicenceOrReason: !site.businessLicence?.businessLicenceDocument
         && !site.businessLicence?.deferredLicenceReason && !this.isBusinessLicenceUpdated
     };

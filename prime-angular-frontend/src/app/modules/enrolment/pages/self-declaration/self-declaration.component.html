@@ -96,7 +96,6 @@
     </section>
 
 
-
     <section class="mb-3">
 
       <div class="question"
@@ -166,6 +165,76 @@
       </div>
 
     </section>
+
+
+    <section class="mb-3"
+             *ngIf="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER)">
+
+      <div class="question"
+           [innerHtml]="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER) | safe: 'html'">
+      </div>
+
+      <mat-radio-group formControlName="hasRegistrationSuspendedDeviceProvider">
+        <mat-radio-button class="mr-4"
+                          *ngFor="let decision of decisions"
+                          [value]="decision.code">
+          {{ decision.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="hasRegistrationSuspendedDeviceProvider.value"
+           class="row">
+        <div class="col pt-3">
+
+          <p class="mb-1">Provide these details:</p>
+          <ol class="mb-4 pl-3">
+            <li class="small">
+              Describe the events that resulted in limits, conditions or prohibitions being imposed, including when the
+              events occurred.
+            </li>
+            <li class="small">
+              Provide the name and address of the organization where the events that resulted in the limits, conditions
+              or prohibitions being imposed took place.
+            </li>
+            <li class="small">
+              Describe the limits, conditions or prohibitions imposed.
+            </li>
+            <li class="small mb-2">
+              Provide the date that the limits, conditions or prohibitions were imposed and, if applicable, removed.
+            </li>
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Type Here"
+                        rows="5"
+                        #hasRegistrationSuspendedDeviceProvider
+                        formControlName="hasRegistrationSuspendedDeviceProviderDetails"></textarea>
+              <mat-error *ngIf="hasRegistrationSuspendedDeviceProviderDetails.hasError('required')">Required</mat-error>
+            </mat-form-field>
+
+            <li class="small mb-2">
+              Provide a copy of supporting documentation (e.g., an order or letter from OPC).
+            </li>
+
+            <app-document-upload componentName="has-registration-suspended-device-provider"
+                                 [multiple]="true"
+                                 (completed)="onUpload('hasRegistrationSuspendedDeviceProviderDocumentGuids', $event)"
+                                 (remove)="onRemove('hasRegistrationSuspendedDeviceProviderDocumentGuids', $event)">
+            </app-document-upload>
+
+            <app-enrollee-property>
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER)
+                                       (download)="downloadSelfDeclarationDocument($event)">
+              </app-document-attachment>
+            </app-enrollee-property>
+
+          </ol>
+        </div>
+      </div>
+
+    </section>
+
+
     <section class="mb-3">
 
       <div class="question"

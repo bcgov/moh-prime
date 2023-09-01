@@ -20,6 +20,7 @@ import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.mode
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import moment from 'moment';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 export class Status {
   constructor(
@@ -94,7 +95,8 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
       // convert time zone to utc format
       let targetDate = this.enrollee?.selfDeclarationCompletedDate ? moment(this.enrollee?.selfDeclarationCompletedDate).utc().format()
         : moment().utc().format();
-      this.enrolmentResource.getSelfDeclarationVersion(targetDate).subscribe((versions) => {
+      let isDeviceProvider = this.enrollee?.enrolleeCareSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+      this.enrolmentResource.getSelfDeclarationVersion(targetDate, isDeviceProvider).subscribe((versions) => {
         versions.forEach(v => {
           this.questions.set(v.selfDeclarationTypeCode, v.text);
         });

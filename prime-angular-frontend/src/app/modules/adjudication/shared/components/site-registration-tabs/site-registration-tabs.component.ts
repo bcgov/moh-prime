@@ -87,12 +87,14 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     this.tabIndexToCareSettingMap = {
       0: null, // map to null to remove queryString
       1: CareSettingEnum.COMMUNITY_PHARMACIST,
-      2: CareSettingEnum.HEALTH_AUTHORITY
+      2: CareSettingEnum.DEVICE_PROVIDER,
+      3: CareSettingEnum.HEALTH_AUTHORITY
     };
     this.careSettingToTabIndexMap = {
       [CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE]: 0,
       [CareSettingEnum.COMMUNITY_PHARMACIST]: 1,
-      [CareSettingEnum.HEALTH_AUTHORITY]: 2
+      [CareSettingEnum.DEVICE_PROVIDER]: 2,
+      [CareSettingEnum.HEALTH_AUTHORITY]: 3
     };
     this.healthAuthoritySites = [];
   }
