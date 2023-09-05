@@ -30,7 +30,13 @@ namespace Prime.Models
         PharmacyTechnicianTOA = 8,
 
         [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.RegulatedUser)]
-        LicencedPracticalNurseTOA = 9
+        LicencedPracticalNurseTOA = 9,
+
+        [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.RegulatedUser)]
+        DeviceProviderRUTOA = 10,
+
+        [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.OnBehalfOf)]
+        DeviceProviderOBOTOA = 11,
     }
 
     public static class AgreementTypeExtensions

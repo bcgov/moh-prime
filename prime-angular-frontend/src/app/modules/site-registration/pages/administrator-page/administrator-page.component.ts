@@ -49,6 +49,10 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
+  public isCommunityPharmacy(): boolean {
+    return this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+  }
+
   public onSelect(contact: Contact) {
     if (!contact.physicalAddress) {
       contact.physicalAddress = new Address();
@@ -64,10 +68,8 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
     } else {
       switch (this.siteService.site.careSettingCode) {
         case CareSettingEnum.COMMUNITY_PHARMACIST:
-          nextRoute = SiteRoutes.HOURS_OPERATION;
-          break;
         case CareSettingEnum.DEVICE_PROVIDER:
-          nextRoute = SiteRoutes.DEVICE_PROVIDER;
+          nextRoute = SiteRoutes.HOURS_OPERATION;
           break;
         default:
           nextRoute = SiteRoutes.REMOTE_USERS;

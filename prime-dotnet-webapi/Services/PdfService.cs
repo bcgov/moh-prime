@@ -13,6 +13,16 @@ namespace Prime.Services
 
         public byte[] Generate(string htmlContent)
         {
+            var options = new ConvertOptions
+            {
+                PageMargins = new Wkhtmltopdf.NetCore.Options.Margins()
+                {
+                    Top = 15,
+                    Bottom = 15,
+                }
+            };
+
+            _generatePdf.SetConvertOptions(options);
             return _generatePdf.GetPDF(htmlContent);
         }
     }

@@ -36,32 +36,82 @@
       <ng-container appPageSubheader2Title>Site ID</ng-container>
       <ng-container appPageSubheader2Summary>
         Provide the site's
-        ID{{ isCommunityPharmacy() ? '.' : ' or PEC Code. This is a 3-letter code. For example, JZY' }}
+        ID{{ (isCommunityPharmacy() || isDeviceProvider()) ? '. For example, BC00000XXX.' :
+        ' or PEC Code. This is a 3-letter code. For example, JZY'
+        }}
       </ng-container>
     </app-page-subheader2>
 
     <mat-form-field>
       <mat-label>Site ID</mat-label>
       <input matInput
-             formControlName="pec">
+             formControlName="pec"
+             appToUppercase>
       <mat-error *ngIf="pec.hasError('required')">
         Required
       </mat-error>
       <mat-error *ngIf="pec.hasError('length') || pec.hasError('alpha')">
         Must be a 3-letter code
       </mat-error>
+      <mat-error *ngIf="pec.hasError('cpSiteId')">
+        Must be in format BC00000XXX
+      </mat-error>
       <mat-error *ngIf="pec.hasError('assignable')">
         Site ID has already been used by another site
       </mat-error>
     </mat-form-field>
 
-    <div>
-      <mat-checkbox formControlName="activeBeforeRegistration">
+    <div *ngIf="isCommunityPharmacy() || isDeviceProvider()">
+      <mat-checkbox formControlName="isNewWithSiteId"
+                    (change)="checkAsIsNewWithSiteId($event)">
         <div class="pl-3">
-          This site is already operational and submitting PharmaNet transactions.
+          This is a new {{ isCommunityPharmacy() ? "pharmacy" : "device provider" }}, and we have a Site ID.
         </div>
       </mat-checkbox>
     </div>
+    <div *ngIf="isCommunityPharmacy() || isDeviceProvider()">
+      <mat-checkbox formControlName="isNewWithoutSiteId"
+                    (change)="checkAsIsNewWithoutSiteId($event)">
+        <div class="pl-3">
+          This is a new {{ isCommunityPharmacy() ? "pharmacy" : "device provider" }}, and we don't have a Site ID.
+        </div>
+      </mat-checkbox>
+    </div>
+    <div>
+      <mat-checkbox formControlName="activeBeforeRegistration"
+                    (change)="checkAsOperational($event)">
+        <div class="pl-3">
+          This site is already operational and submitting PharmaNet transactions, and we have a Site ID.
+        </div>
+      </mat-checkbox>
+    </div>
+    <mat-error *ngIf="form.hasError('checkboxRequired')">
+      Please select one of above
+    </mat-error>
+  </app-page-section>
+
+  <app-page-section *ngIf="isDeviceProvider()">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Device Provider ID</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Enter the device provider registration number the site was issued by the Ministry of Health. You will know it as
+        P1-90XXX (last three characters are numbers).
+      </ng-container>
+    </app-page-subheader2>
+
+    <mat-form-field>
+      <mat-label>Device Provider ID</mat-label>
+      <input matInput
+             formControlName="deviceProviderId"
+             appToUppercase>
+
+      <mat-error *ngIf="deviceProviderId.hasError('required')">
+        Required
+      </mat-error>
+      <mat-error *ngIf="deviceProviderId.hasError('deviceProviderId')">
+        Must be in format P1-90XXX (last three characters are numbers)
+      </mat-error>
+    </mat-form-field>
   </app-page-section>
 
 </ng-container>

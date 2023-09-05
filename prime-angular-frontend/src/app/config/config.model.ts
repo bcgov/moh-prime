@@ -16,6 +16,7 @@ export interface Configuration {
   careTypes: Config<number>[];
   securityGroups: Config<number>[];
   collegeLicenseGroupings: CollegeLicenseGroupingConfig[];
+  deviceProviderRoles: DeviceProviderRoleConfig[];
 }
 
 export class Config<T> {
@@ -74,5 +75,11 @@ export interface ProvinceConfig extends Config<string> {
 }
 
 export interface IWeightedConfig {
+  weight: number;
+}
+
+export interface DeviceProviderRoleConfig extends Config<number> {
+  deviceProviderRoleCode: number;
+  certified: boolean;
   weight: number;
 }

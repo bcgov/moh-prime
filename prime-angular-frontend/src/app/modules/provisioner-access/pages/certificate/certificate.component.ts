@@ -10,6 +10,7 @@ import { ProvisionerAccessResource } from '../../shared/services/provisioner-acc
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-certificate',
@@ -53,6 +54,10 @@ export class CertificateComponent implements OnInit {
 
   public get userType(): string {
     return this.certificate.accessType;
+  }
+
+  public get hasDeviceProvider(): boolean {
+    return this.certificate.careSettings.some(cs => cs.code === CareSettingEnum.DEVICE_PROVIDER);
   }
 
   public ngOnInit() {
