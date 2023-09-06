@@ -70,9 +70,9 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
         return true;
       case CareSettingEnum.COMMUNITY_PHARMACIST:
-        return this.permissionService.hasRoles(Role.FEATURE_SITE_PHARMACIST);
+        return true;
       case CareSettingEnum.DEVICE_PROVIDER:
-        return this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER);
+        return true;
       default:
         return false;
     }
@@ -173,6 +173,13 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
     if (this.formState.json.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER) {
       this.siteFormStateService.deviceProviderFormState.clearIndividualDeviceProviders();
     }
+    if (this.formState.json.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+      this.siteFormStateService.businessLicenceFormState.presetCommunityPharmacySiteId();
+    }
+    if (this.formState.json.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
+      this.siteFormStateService.businessLicenceFormState.resetSiteId();
+    }
+
     const payload = this.siteFormStateService.json;
     return this.siteResource.updateSite(payload);
   }

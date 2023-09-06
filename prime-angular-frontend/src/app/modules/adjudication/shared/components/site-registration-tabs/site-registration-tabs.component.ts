@@ -15,6 +15,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
@@ -38,6 +39,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
   public CareSettingEnum = CareSettingEnum;
+  public SearchFormStatusType = SearchFormStatusType;
 
   public communityPracticeColumns: string[];
   public communityPharmacyColumns: string[];
@@ -85,12 +87,14 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     this.tabIndexToCareSettingMap = {
       0: null, // map to null to remove queryString
       1: CareSettingEnum.COMMUNITY_PHARMACIST,
-      2: CareSettingEnum.HEALTH_AUTHORITY
+      2: CareSettingEnum.DEVICE_PROVIDER,
+      3: CareSettingEnum.HEALTH_AUTHORITY
     };
     this.careSettingToTabIndexMap = {
       [CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE]: 0,
       [CareSettingEnum.COMMUNITY_PHARMACIST]: 1,
-      [CareSettingEnum.HEALTH_AUTHORITY]: 2
+      [CareSettingEnum.DEVICE_PROVIDER]: 2,
+      [CareSettingEnum.HEALTH_AUTHORITY]: 3
     };
     this.healthAuthoritySites = [];
   }
@@ -104,7 +108,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
   }
 
   public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
-    this.routeUtils.updateQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index], page: null });
+    this.routeUtils.removeQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index], page: null });
   }
 
   public ngOnInit(): void {

@@ -4,6 +4,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 export interface SiteListViewModelPartial extends
   Omit<SiteListViewModel, 'completed'> {
   flagged: boolean;
+  isNew: boolean;
 }
 
 export interface OrganizationListViewModelPartial extends
@@ -27,4 +28,5 @@ export interface OrganizationSearchListViewModel {
 export interface SiteRegistrationListViewModel extends OrganizationListViewModelPartial, SiteListViewModelPartial {
   signingAuthorityName: string;
   organizationName: string;
+
 }

@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, ValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
 
@@ -10,6 +10,7 @@ import { BusinessLicence } from '@registration/shared/models/business-licence.mo
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { BusinessLicenceForm } from './business-licence-form.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceForm> {
   private siteId: number;
@@ -55,7 +56,9 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       return;
     }
 
-    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress } = this.formInstance.getRawValue();
+    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress, isNewWithSiteId, isNewWithoutSiteId, careSettingCode, deviceProviderId } = this.formInstance.getRawValue();
+
+    const isNew = isNewWithSiteId || isNewWithoutSiteId;
 
     return {
       businessLicence: {
@@ -66,7 +69,10 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       doingBusinessAs,
       pec,
       activeBeforeRegistration,
-      physicalAddress
+      physicalAddress,
+      isNew,
+      careSettingCode,
+      deviceProviderId
     };
   }
 
@@ -85,16 +91,24 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
     this.siteId = siteId;
 
-    const { doingBusinessAs, pec, businessLicence, physicalAddress } = model;
+    const { doingBusinessAs, pec, businessLicence, physicalAddress, isNew, careSettingCode, activeBeforeRegistration, deviceProviderId } = model;
     // Preserve the business licence for use when
     // creating JSON format from the form
     this.businessLicence = businessLicence;
+
+    const isNewWithSiteId = isNew && pec && pec !== '';
+    const isNewWithoutSiteId = isNew && (!pec || pec === '');
 
     this.formInstance.patchValue({
       ...businessLicence,
       doingBusinessAs,
       pec,
       physicalAddress,
+      isNewWithSiteId,
+      isNewWithoutSiteId,
+      careSettingCode,
+      activeBeforeRegistration,
+      deviceProviderId
     });
   }
 
@@ -141,11 +155,57 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
         areDisabled: ['provinceCode', 'countryCode'],
         useDefaults: ['provinceCode', 'countryCode'],
         exclude: ['street2']
-      })
+      }),
+      isNewWithSiteId: [
+        false,
+        []
+      ],
+      isNewWithoutSiteId: [
+        false,
+        []
+      ],
+      careSettingCode: [
+        null,
+        []
+      ],
+      deviceProviderId: [
+        null,
+        []
+      ],
     });
+    this.formInstance.setValidators(this.validateMinOneCheckboxChecked());
+  }
+
+  public presetCommunityPharmacySiteId(): void {
+    if (!this.pec.value || this.pec.value === "") {
+      this.pec.setValue("BC00000");
+    }
+  }
+
+  public resetSiteId(): void {
+    if (this.pec.value && this.pec.value === "BC00000") {
+      this.pec.setValue("");
+    }
   }
 
   private checkPecIsAssignable(): (value: string) => Observable<boolean> {
     return (value: string) => value ? this.siteResource.pecAssignable(this.siteId, value) : of(true);
+  }
+
+  public validateMinOneCheckboxChecked(): ValidatorFn {
+    return (form: FormGroup): ValidationErrors | null => {
+
+      const isNewWSiteId = form.get("isNewWithSiteId");
+      const isNewWOSiteId = form.get("isNewWithoutSiteId");
+      const activeBeforeRegistration = form.get("activeBeforeRegistration");
+      const careSettingCode = form.get("careSettingCode");
+
+      if ((careSettingCode.value === CareSettingEnum.COMMUNITY_PHARMACIST || careSettingCode.value === CareSettingEnum.DEVICE_PROVIDER) &&
+        !(isNewWOSiteId.value || isNewWSiteId.value || activeBeforeRegistration.value)) {
+        return { 'checkboxRequired': true };
+      }
+
+      return null;
+    }
   }
 }

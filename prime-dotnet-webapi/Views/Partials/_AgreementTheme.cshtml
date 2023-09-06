@@ -59,6 +59,11 @@
     margin-bottom: 1rem;
   }
 
+  address {
+    font-style: normal;
+    margin-bottom: 1rem;
+  }
+
   ol[type="1"].decimal {
     list-style-type: none;
     margin: 0;
@@ -79,6 +84,19 @@
     margin-top: -1.5rem;
   }
 
+  ol[type="1"].decimal ol[type="1"]>li>div:first-child {
+    margin-top: -19px;
+  }
+
+  ol[type="1"].decimal ol[type="1"]>li>div {
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  ol[type="1"].decimal ol[type="1"]>li>address.address {
+    margin-left: 1rem;
+  }
+
   ol[type="1"].decimal ol[type="1"] {
     counter-reset: section;
     list-style-type: none;
@@ -87,5 +105,9 @@
   ol[type="1"].decimal ol[type="1"]>li::before {
     content: counters(section, ".") " ";
     margin-left: -26px;
+  }
+
+  ol[type="1"].hidden {
+    display: none;
   }
 </style>

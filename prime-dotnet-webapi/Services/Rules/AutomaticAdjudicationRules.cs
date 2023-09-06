@@ -39,10 +39,14 @@ namespace Prime.Services.Rules
             var addresses = new Address[] { enrollee.PhysicalAddress, enrollee.MailingAddress, enrollee.VerifiedAddress }
                 .Where(a => a != null);
 
-            if (addresses.Any(a => !a.IsInBC))
+            //if preferred physical address not null and is in BC, skip the check
+            if (enrollee.PhysicalAddress == null || !enrollee.PhysicalAddress.IsInBC)
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.Address);
-                return Task.FromResult(false);
+                if (addresses.Any(a => !a.IsInBC))
+                {
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.Address);
+                    return Task.FromResult(false);
+                }
             }
 
             return Task.FromResult(true);
@@ -211,15 +215,52 @@ namespace Prime.Services.Rules
 
     public class DeviceProviderRule : AutomaticAdjudicationRule
     {
-        public override Task<bool> ProcessRule(Enrollee enrollee)
+        private readonly IDeviceProviderService _deviceProviderService;
+
+        public DeviceProviderRule(
+            IDeviceProviderService deviceProviderService
+        )
         {
-            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider) || enrollee.DeviceProviderIdentifier != null)
+            _deviceProviderService = deviceProviderService;
+        }
+
+        public override async Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider))
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProvider);
-                return Task.FromResult(false);
+                var errorMessage = "";
+                if (enrollee.EnrolleeDeviceProviders == null || enrollee.EnrolleeDeviceProviders.Count() == 0)
+                {
+                    errorMessage = $"Enrollee misses Device Provider info";
+                }
+
+                var site = await _deviceProviderService.GetDeviceProviderSiteAsync(enrollee.EnrolleeDeviceProviders.First().DeviceProviderId);
+                if (string.IsNullOrWhiteSpace(errorMessage) && site == null)
+                {
+                    errorMessage = $"Device Provider Id {enrollee.EnrolleeDeviceProviders.First().DeviceProviderId} not found";
+                }
+
+                if (!string.IsNullOrWhiteSpace(enrollee.EnrolleeDeviceProviders.First().CertificationNumber) &&
+                     string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    var exists = await _deviceProviderService.CertificationNumberExist(enrollee.EnrolleeDeviceProviders.First().CertificationNumber);
+                    if (!exists)
+                    {
+                        errorMessage = $"Certificate Number {enrollee.EnrolleeDeviceProviders.First().CertificationNumber} not found";
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProvider, errorMessage);
+                    return false;
+                }
+
+                // Addressing Automatic Adjudication later, when rules better understood
+                return false;
             }
 
-            return Task.FromResult(true);
+            return true;
         }
     }
 

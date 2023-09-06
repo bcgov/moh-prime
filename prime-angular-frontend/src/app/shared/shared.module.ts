@@ -53,6 +53,7 @@ import { PageFooterComponent } from '@shared/components/pages/page-footer/page-f
 
 import { NotificationInfoSummaryDirective } from '@shared/components/forms/contact-information-form/notification-info-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
+import { UpperCaseInputDirective } from '@lib/modules/forms/to-uppercase.directive';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alerts/alert/alert.component';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
@@ -161,6 +162,7 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     PageSubheader2SummaryDirective,
     PageSubheader2MoreInfoDirective,
     NotificationInfoSummaryDirective,
+    UpperCaseInputDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
@@ -280,6 +282,7 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     PageSubheader2SummaryDirective,
     PageSubheader2MoreInfoDirective,
     NotificationInfoSummaryDirective,
+    UpperCaseInputDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,

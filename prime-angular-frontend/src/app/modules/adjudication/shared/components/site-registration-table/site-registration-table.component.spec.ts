@@ -14,6 +14,8 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { SiteRegistrationTableComponent } from './site-registration-table.component';
 import { MockPermissionService } from 'test/mocks/mock-permission.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 
 describe('SiteRegistrationTableComponent', () => {
   let component: SiteRegistrationTableComponent;
@@ -60,6 +62,7 @@ describe('SiteRegistrationTableComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SiteRegistrationTableComponent);
     component = fixture.componentInstance;
+    component.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>();
     fixture.detectChanges();
   });
 

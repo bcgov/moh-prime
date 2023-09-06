@@ -8,6 +8,8 @@ namespace Prime.DTOs.AgreementEngine
     {
         public ICollection<CertificationDto> Certifications { get; set; }
 
+        public ICollection<EnrolleeDeviceProvider> EnrolleeDeviceProviders { get; set; }
+
         public ICollection<int> CareSettingCodes { get; set; }
     }
 

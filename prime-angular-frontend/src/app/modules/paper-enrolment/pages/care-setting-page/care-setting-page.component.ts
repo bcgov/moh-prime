@@ -58,12 +58,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.DEMOGRAPHIC]);
   }
 
-  public disableCareSetting(careSettingCode: number): boolean {
-    return (careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
-      ? !this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER)
-      : false;
-  }
-
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
@@ -133,7 +127,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
         // Remove device provider identifier when care setting no longer selected
         exhaustMap(() =>
           (!payload.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER))
-            ? this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id)
+            ? this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, [])
             : of(null)
         ),
         exhaustMap(() =>

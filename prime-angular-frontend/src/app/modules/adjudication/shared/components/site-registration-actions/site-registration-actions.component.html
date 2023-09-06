@@ -65,7 +65,12 @@
       <mat-icon>flag</mat-icon>
       <span>{{siteRegistration?.flagged ? 'Unflag' : 'Flag'}} Site</span>
     </button>
-
+    <button mat-menu-item
+            [disabled]="!(Role.VIEW_SITE | inRole)"
+            (click)="onToggleIsNewSite()">
+      <mat-icon>flag</mat-icon>
+      <span>{{siteRegistration?.isNew ? 'Unflag' : 'Flag'}} "Is New"</span>
+    </button>
     <mat-divider></mat-divider>
 
     <button mat-menu-item

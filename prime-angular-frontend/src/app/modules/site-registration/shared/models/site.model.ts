@@ -49,6 +49,8 @@ export class Site {
   mnemonic: string;
   flagged: boolean;
   activeBeforeRegistration: boolean;
+  isNew: boolean;
+  deviceProviderId: string;
 
   public static getExpiryDate(site: Site | SiteListViewModel): string | null {
     if (!site) {
@@ -65,8 +67,9 @@ export class Site {
   }
 }
 
-export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'mnemonic' | 'status' | 'businessLicence' | 'flagged' | 'approvedDate'> {
+export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'mnemonic' | 'status' | 'businessLicence' | 'flagged' | 'approvedDate' | 'isNew'> {
   adjudicatorIdir: string;
   remoteUserCount: number;
   flagged: boolean;
+  isNew: boolean;
 }

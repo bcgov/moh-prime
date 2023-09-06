@@ -61,9 +61,9 @@ namespace Prime.Controllers
         /// </summary>
         [HttpGet("self-declaration-question", Name = nameof(SelfDeclarationQuestions))]
         [ProducesResponseType(typeof(ApiResultResponse<List<SelfDeclarationVersion>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> SelfDeclarationQuestions(DateTimeOffset targetDate)
+        public async Task<ActionResult> SelfDeclarationQuestions(DateTimeOffset targetDate, bool isDeviceProvider)
         {
-            var record = await _lookupService.GetSelfDeclarationVersion(targetDate);
+            var record = await _lookupService.GetSelfDeclarationVersion(targetDate, isDeviceProvider);
 
             return Ok(record);
         }

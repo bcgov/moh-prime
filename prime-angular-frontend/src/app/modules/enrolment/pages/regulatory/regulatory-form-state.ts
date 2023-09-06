@@ -23,6 +23,18 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     return this.formInstance.get('deviceProviderIdentifier') as FormControl;
   }
 
+  public get deviceProviderRoleCode(): FormControl {
+    return this.formInstance.get('deviceProviderRoleCode') as FormControl;
+  }
+
+  public get deviceProviderId(): FormControl {
+    return this.formInstance.get('deviceProviderId') as FormControl;
+  }
+
+  public get certificationNumber(): FormControl {
+    return this.formInstance.get('certificationNumber') as FormControl;
+  }
+
   /**
    * @description
    * Access to college certifications where a self-documenting
@@ -39,16 +51,24 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
       return;
     }
 
-    const { certifications: rawCertifications, deviceProviderIdentifier } = this.formInstance.getRawValue();
-    const certifications = rawCertifications.map(c => {
+    const { certifications: rawCertifications, deviceProviderId, deviceProviderRoleCode, certificationNumber } = this.formInstance.getRawValue();
+    let certifications = rawCertifications.map(c => {
       const { nurseCategory, ...collegeCertification } = c;
       return collegeCertification;
     });
 
-    return { certifications, deviceProviderIdentifier }
+    if (certifications && certifications.length === 1 && certifications[0].collegeCode === "") {
+      //reset certifications
+      certifications = [];
+    }
+
+    const enrolleeDeviceProviders = deviceProviderRoleCode ?
+      [{ deviceProviderId, deviceProviderRoleCode, certificationNumber }] : [];
+
+    return { certifications, enrolleeDeviceProviders }
   }
 
-  public patchValue({ certifications, deviceProviderIdentifier }: EnrolmentRegulatoryForm): void {
+  public patchValue({ certifications, enrolleeDeviceProviders }: EnrolmentRegulatoryForm): void {
 
     if (!this.formInstance || !Array.isArray(certifications)) {
       return;
@@ -59,14 +79,21 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     if (certifications.length) {
       certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
     }
-
-    this.formInstance.patchValue({ certifications, deviceProviderIdentifier });
+    if (enrolleeDeviceProviders && enrolleeDeviceProviders.length) {
+      const { deviceProviderId, deviceProviderRoleCode, certificationNumber } = enrolleeDeviceProviders[0];
+      this.formInstance.patchValue({ certifications, deviceProviderId, deviceProviderRoleCode, certificationNumber });
+    } else {
+      this.formInstance.patchValue({ certifications });
+    }
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
       certifications: this.fb.array([]),
-      deviceProviderIdentifier: [null, []]
+      deviceProviderIdentifier: [null, []],
+      deviceProviderId: [null, []],
+      deviceProviderRoleCode: [null, []],
+      certificationNumber: [null, []]
     });
   }
 
