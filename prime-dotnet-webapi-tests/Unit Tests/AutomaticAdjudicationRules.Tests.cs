@@ -190,7 +190,11 @@ namespace PrimeTests.UnitTests
             var rule = new AddressRule();
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateAddresses(enrollee, verified, physical, mailing);
-            var expected = new[] { verified, physical, mailing }.All(a => a != AddressCase.OutsideBc);
+            var expected = true;
+            if(physical != AddressCase.InBc)
+            {
+                expected = new[] { verified, physical, mailing }.All(a => a != AddressCase.OutsideBc);
+            }
 
             var result = await rule.ProcessRule(enrollee);
 
