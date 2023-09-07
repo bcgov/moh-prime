@@ -258,6 +258,22 @@ export class OrganizationResource {
 
   /**
    * @description
+   * Invalidate signed organization agreement
+   */
+  public invalidateOrganizationAgreement(organizationId: number, careSettingCode: number): Observable<NoContent> {
+    return this.apiResource.post<NoContent>(`organizations/${organizationId}/agreements/care-settings/${careSettingCode}/invalidate`)
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response?.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement could not be invalidated');
+          this.logger.error('[Core] OrganizationResource::invalidateOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * @description
    * Get care setting codes that still require a signature on an oganization that is
    * pending a transfer
    */
