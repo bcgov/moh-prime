@@ -136,8 +136,7 @@ namespace Prime.Services.Rules
 
                             if (record != null)
                             {
-                                if ((record.Status != "P" && nonPrescribing.Status == "P") ||
-                                (record.Status == nonPrescribing.Status && nonPrescribing.EffectiveDate > record.EffectiveDate))
+                                if ((nonPrescribing.EffectiveDate > record.EffectiveDate) || (nonPrescribing.EffectiveDate == record.EffectiveDate && record.Status != "P" && nonPrescribing.Status == "P"))
                                 {
                                     //if non-prescrbing one is practicing but other is not or
                                     // both practicing and non-prescribing has the most recent effective date
@@ -181,7 +180,8 @@ namespace Prime.Services.Rules
                     //save the prefix
                     await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
                     await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber,
-                    $"A record with effective date {record.EffectiveDate:d MMM yyyy} and status {record.Status} is stored in PRIME.");
+                    $"The record with licence prefix {cert.Prefix}, licence number {cert.LicenseNumber}, effective date {record.EffectiveDate:d MMM yyyy} and status {record.Status} was selected for PRIME.",
+                    true);
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))
