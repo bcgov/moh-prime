@@ -190,11 +190,11 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
           ).subscribe();
         }
         else {
-          // TODO: note error condition
+          throw new RangeError(`Could not determine site ID from redirectPath ${redirectPath}`);
         }
       }
       else {
-        // TODO: note error condition
+        throw new RangeError(`Expected valid redirectPath but was ${redirectPath}`);
       }
     }
 
