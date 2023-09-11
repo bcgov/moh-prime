@@ -180,8 +180,8 @@ namespace Prime.Services.Rules
                     //save the prefix
                     await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
                     await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber,
-                    $"The record with licence prefix {cert.Prefix}, licence number {cert.LicenseNumber}, effective date {record.EffectiveDate:d MMM yyyy} and status {record.Status} was selected for PRIME.",
-                    true);
+                        $"The record with licence prefix {cert.Prefix}, licence number {cert.LicenseNumber}, effective date {record.EffectiveDate:d MMM yyyy} and status {record.Status} was selected for PRIME.",
+                        true);
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))

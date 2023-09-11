@@ -234,7 +234,7 @@ namespace Prime.Services
             }
             else
             {
-                message = $"Called Pharmanet API with licence prefix {licencePrefix} and licence number {licenceNumber}:  {description}";
+                message = $"Called PharmaNet API with licence prefix {licencePrefix} and licence number {licenceNumber}:  {description}";
             }
 
             var businessEvent = await CreateBusinessEvent(BusinessEventType.PharmanetApiCall, enrolleeId, message);
@@ -243,7 +243,7 @@ namespace Prime.Services
 
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not create Pharmanet API call event.");
+                throw new InvalidOperationException("Could not create PharmaNet API call event.");
             }
 
             return businessEvent;
