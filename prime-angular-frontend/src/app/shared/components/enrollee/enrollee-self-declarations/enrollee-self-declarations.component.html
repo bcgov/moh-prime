@@ -18,6 +18,15 @@
     </ng-container>
   </app-alert>
 
+  <app-alert *ngIf="requireUpdateIfChangedToDeviceProvider()"
+             type="danger"
+             icon="error">
+    <ng-container #alertContent
+                  class="alert-content">
+      Please update Self-Declaration due to the care setting change.
+    </ng-container>
+  </app-alert>
+
   <div *ngIf="this.showDescription && !this.enrolment.requireRedoSelfDeclaration"
        class="mb-4">
     <app-self-declaration-term></app-self-declaration-term>
@@ -25,28 +34,30 @@
 
   <div *ngFor="let selfDeclarationComposite of selfDeclarationComposites"
        class="mb-3">
+    <div *ngIf="selfDeclarationComposite.selfDeclarationQuestion">
+      <app-enrollee-property [safeTitle]="selfDeclarationComposite.selfDeclarationQuestion"
+                             [makeBold]="false">
+        {{ selfDeclarationComposite.selfDeclaration?.answered | yesNo: true }}
+      </app-enrollee-property>
 
-    <app-enrollee-property [safeTitle]="selfDeclarationComposite.selfDeclarationQuestion"
-                           [makeBold]="false">
-      {{ selfDeclarationComposite.selfDeclaration?.answered | yesNo: true }}
-    </app-enrollee-property>
+      <app-enrollee-property *ngIf="selfDeclarationComposite.selfDeclaration?.answered"
+                             title="Description"
+                             [makeBold]="false">
+        {{ selfDeclarationComposite.selfDeclaration.selfDeclarationDetails }}
+      </app-enrollee-property>
 
-    <app-enrollee-property *ngIf="selfDeclarationComposite.selfDeclaration?.answered"
-                           title="Description"
-                           [makeBold]="false">
-      {{ selfDeclarationComposite.selfDeclaration.selfDeclarationDetails }}
-    </app-enrollee-property>
-
-    <div *ngIf="selfDeclarationComposite.selfDeclaration?.answered">
-      <button *ngFor="let selfDeclarationDocument of selfDeclarationComposite.selfDeclarationDocuments"
-              mat-stroked-button
-              color="primary"
-              class="pl-2 mb-2 mt-2"
-              (click)="downloadSelfDeclarationDocument(selfDeclarationDocument.id)">
-        <mat-icon class="mr-1">attachment</mat-icon>
-        {{ selfDeclarationDocument.filename }}
-      </button>
+      <div *ngIf="selfDeclarationComposite.selfDeclaration?.answered">
+        <button *ngFor="let selfDeclarationDocument of selfDeclarationComposite.selfDeclarationDocuments"
+                mat-stroked-button
+                color="primary"
+                class="pl-2 mb-2 mt-2"
+                (click)="downloadSelfDeclarationDocument(selfDeclarationDocument.id)">
+          <mat-icon class="mr-1">attachment</mat-icon>
+          {{ selfDeclarationDocument.filename }}
+        </button>
+      </div>
     </div>
+
   </div>
 
   <button *ngIf="showRedirect"
