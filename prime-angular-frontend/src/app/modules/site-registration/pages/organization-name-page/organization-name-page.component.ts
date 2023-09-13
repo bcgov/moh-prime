@@ -180,7 +180,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
     const redirectPath: string = this.route.snapshot.queryParams.redirect;
     let routePath: string | string[];
 
-    if (this.changedLegalName) {
+    if (this.changedLegalName && this.isCompleted) {
       if (redirectPath && redirectPath.startsWith('sites/')) {
         // Attempt to get site ID
         const matches = redirectPath.match(/(\d+)$/g);
@@ -199,7 +199,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
     }
 
     if (redirectPath) {
-      routePath = (this.changedLegalName) ? [redirectPath, SiteRoutes.ORGANIZATION_AGREEMENT] : [redirectPath, SiteRoutes.SITE_REVIEW];
+      routePath = (this.changedLegalName && this.isCompleted) ? [redirectPath, SiteRoutes.ORGANIZATION_AGREEMENT] : [redirectPath, SiteRoutes.SITE_REVIEW];
     } else {
       routePath = (!this.isCompleted)
         ? [SiteRoutes.SITES, `${siteId}`, SiteRoutes.CARE_SETTING]
