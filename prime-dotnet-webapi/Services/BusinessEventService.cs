@@ -224,16 +224,26 @@ namespace Prime.Services
             return businessEvent;
         }
 
-        public async Task<BusinessEvent> CreatePharmanetApiCallEventAsync(int enrolleeId, string licencePrefix, string licenceNumber, string description)
+        public async Task<BusinessEvent> CreatePharmanetApiCallEventAsync(int enrolleeId, string licencePrefix, string licenceNumber, string description, bool overrideWithDesc)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.PharmanetApiCall, enrolleeId,
-                $"Called Pharmanet API with licence prefix {licencePrefix} and licence number {licenceNumber}:  {description}");
+            string message;
+
+            if (overrideWithDesc)
+            {
+                message = description;
+            }
+            else
+            {
+                message = $"Called PharmaNet API with licence prefix {licencePrefix} and licence number {licenceNumber}:  {description}";
+            }
+
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.PharmanetApiCall, enrolleeId, message);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not create Pharmanet API call event.");
+                throw new InvalidOperationException("Could not create PharmaNet API call event.");
             }
 
             return businessEvent;
