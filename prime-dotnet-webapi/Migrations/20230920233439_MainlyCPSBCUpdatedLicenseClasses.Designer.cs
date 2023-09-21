@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230829150232_MainlyCPSBCUpdatedLicenseClasses")]
+    [Migration("20230920233439_MainlyCPSBCUpdatedLicenseClasses")]
     partial class MainlyCPSBCUpdatedLicenseClasses
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1404,6 +1404,16 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 89
+                        },
+                        new
+                        {
+                            CollegeCode = 1,
+                            LicenseCode = 90
+                        },
+                        new
+                        {
+                            CollegeCode = 1,
+                            LicenseCode = 91
                         },
                         new
                         {
@@ -5797,74 +5807,86 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 20,
-                            Name = "Retired - Life ",
+                            Name = "Retired - Life",
                             Weight = 20
+                        },
+                        new
+                        {
+                            Code = 90,
+                            Name = "Assessment - Family",
+                            Weight = 21
+                        },
+                        new
+                        {
+                            Code = 91,
+                            Name = "Assessment - Specialty",
+                            Weight = 22
                         },
                         new
                         {
                             Code = 24,
                             Name = "Assessment",
-                            Weight = 21
+                            Weight = 23
                         },
                         new
                         {
                             Code = 18,
                             Name = "Emergency - Family",
-                            Weight = 22
+                            Weight = 24
                         },
                         new
                         {
                             Code = 19,
                             Name = "Emergency - Specialty",
-                            Weight = 23
+                            Weight = 25
                         },
                         new
                         {
                             Code = 21,
                             Name = "Temporarily Inactive",
-                            Weight = 24
-                        },
-                        new
-                        {
-                            Code = 59,
-                            Name = "Full - Podiatric Surgeon",
-                            Weight = 25
-                        },
-                        new
-                        {
-                            Code = 65,
-                            Name = "Educational - Podiatric Surgeon Student (Elective)",
                             Weight = 26
-                        },
-                        new
-                        {
-                            Code = 66,
-                            Name = "Educational - Podiatric Surgeon Resident (Elective)",
-                            Weight = 27
-                        },
-                        new
-                        {
-                            Code = 67,
-                            Name = "Conditional - Podiatric Surgeon Disciplined",
-                            Weight = 28
                         },
                         new
                         {
                             Code = 87,
                             Name = "Associate - Acute Care",
-                            Weight = 29
+                            Weight = 27
                         },
                         new
                         {
                             Code = 88,
                             Name = "Associate - Community Primary Care",
-                            Weight = 30
+                            Weight = 28
                         },
                         new
                         {
                             Code = 89,
                             Name = "USA Certified",
+                            Weight = 29
+                        },
+                        new
+                        {
+                            Code = 59,
+                            Name = "Full - Podiatric Surgeon",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 65,
+                            Name = "Educational - Podiatric Surgeon Student (Elective)",
                             Weight = 31
+                        },
+                        new
+                        {
+                            Code = 66,
+                            Name = "Educational - Podiatric Surgeon Resident (Elective)",
+                            Weight = 32
+                        },
+                        new
+                        {
+                            Code = 67,
+                            Name = "Conditional - Podiatric Surgeon Disciplined",
+                            Weight = 33
                         },
                         new
                         {
@@ -10169,6 +10191,38 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2023, 8, 28, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 90,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 268,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 8, 28, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 91,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 269,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 8, 28, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 7,
                             LicensedToProvideCare = true,
                             Manual = false,
@@ -10180,7 +10234,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 268,
+                            Id = 270,
                             AllowRequestRemoteAccess = true,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -10196,7 +10250,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 269,
+                            Id = 271,
                             AllowRequestRemoteAccess = true,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -10212,7 +10266,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 270,
+                            Id = 272,
                             AllowRequestRemoteAccess = false,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -10228,7 +10282,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 271,
+                            Id = 273,
                             AllowRequestRemoteAccess = true,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -10244,7 +10298,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 272,
+                            Id = 274,
                             AllowRequestRemoteAccess = false,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -10260,7 +10314,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 273,
+                            Id = 275,
                             AllowRequestRemoteAccess = false,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
