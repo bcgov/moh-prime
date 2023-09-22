@@ -236,6 +236,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       requiresLicenceUpdate: enrolment.certifications.some((cert: CollegeCertification) =>
         !this.configService.licenses.some(l => l.code === cert.licenseCode && l.collegeLicenses.some(cl => cl.collegeCode === cert.collegeCode))),
       requireRedoSelfDeclaration: enrolment.requireRedoSelfDeclaration,
+      missingConsentForAutoPull: enrolment.enrollee?.consentForAutoPull == null,
     };
   }
 

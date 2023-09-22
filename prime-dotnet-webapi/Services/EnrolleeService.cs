@@ -1127,13 +1127,7 @@ namespace Prime.Services
 
             return await _context.Enrollees
                 .Where(e => e.GPID == option.Gpid && e.FirstName == option.FirstName && e.LastName == option.LastName
-                    && e.CurrentStatus.StatusCode != (int)StatusType.Declined)
-                .Where(e => (haIds.Count() > 0 && careSettingIds.Count() == 0) ||
-                    e.EnrolleeCareSettings.Where(s => careSettingIds.Contains(s.CareSettingCode))
-                        .Where(s => s.ConsentForAutoPull).Any())
-                .Where(e => (haIds.Count() == 0 && careSettingIds.Count() > 0) ||
-                    e.EnrolleeHealthAuthorities.Where(ha => haIds.Contains((int)ha.HealthAuthorityCode))
-                        .Where(ha => ha.ConsentForAutoPull).Any())
+                    && e.CurrentStatus.StatusCode != (int)StatusType.Declined && (!e.ConsentForAutoPull.HasValue || e.ConsentForAutoPull.Value))
                 .Select(e => new EnrolleeLookup
                 {
                     Gpid = e.GPID,

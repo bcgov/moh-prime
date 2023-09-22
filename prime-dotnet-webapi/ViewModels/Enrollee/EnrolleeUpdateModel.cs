@@ -37,7 +37,9 @@ namespace Prime.ViewModels
 
         public string PhoneExtension { get; set; }
 
-        public ICollection<EnrolleeDeviceProvider> EnrolleeDeviceProviders { get; set;}
+        public bool? ConsentForAutoPull { get; set; }
+
+        public ICollection<EnrolleeDeviceProvider> EnrolleeDeviceProviders { get; set; }
 
         public ICollection<Certification> Certifications { get; set; }
 

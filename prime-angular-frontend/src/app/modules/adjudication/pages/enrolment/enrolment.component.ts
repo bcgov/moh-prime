@@ -75,6 +75,7 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
       smsPhone,
       phone,
       phoneExtension,
+      consentForAutoPull,
       ...remainder
     } = enrollee;
 
@@ -99,7 +100,8 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
         email,
         smsPhone,
         phone,
-        phoneExtension
+        phoneExtension,
+        consentForAutoPull,
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

@@ -129,6 +129,8 @@ namespace Prime.Models
 
         public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
 
+        public bool? ConsentForAutoPull { get; set; }
+
         /// <summary>
         /// HPDID associated with BCSC, with suffix, e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc"
         /// </summary>

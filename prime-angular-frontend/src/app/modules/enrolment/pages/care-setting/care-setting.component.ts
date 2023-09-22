@@ -11,8 +11,6 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { PermissionService } from '@auth/shared/services/permission.service';
-import { Role } from '@auth/shared/enum/role.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
@@ -33,6 +31,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   public filteredCareSettingTypes: Config<number>[];
   public healthAuthorities: Config<number>[];
   public hasNoHealthAuthoritiesError: boolean;
+  public decisions: { code: boolean, name: string }[];
+  public showConsentError: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -47,7 +47,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
     protected authService: AuthService,
-    private permissionService: PermissionService
   ) {
     super(
       route,
@@ -63,6 +62,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       authService
     );
 
+    this.decisions = [
+      { code: true, name: 'Yes' },
+      { code: false, name: 'No' }
+    ];
+
     this.careSettingTypes = this.configService.careSettings;
     this.healthAuthorities = this.configService.healthAuthorities;
     this.hasNoHealthAuthoritiesError = false;
@@ -70,6 +74,10 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public get careSettings(): FormArray {
     return this.form.get('careSettings') as FormArray;
+  }
+
+  public get consentForAutoPull(): FormControl {
+    return this.form.get('consentForAutoPull') as FormControl;
   }
 
   /**
@@ -197,7 +205,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     // Replace previous values on deactivation so updates are discarded
     const { careSettings, enrolleeHealthAuthorities } = this.enrolmentService.enrolment;
-    this.enrolmentFormStateService.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
+    const { consentForAutoPull } = this.enrolmentService.enrolment.enrollee;
+    this.enrolmentFormStateService.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities, consentForAutoPull });
   }
 
   protected onSubmitFormIsValid(): void {
@@ -207,6 +216,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   protected onSubmitFormIsInvalid(): void {
     if (this.hasSelectedHACareSetting() && this.enrolleeHealthAuthorities.hasError) {
       this.hasNoHealthAuthoritiesError = true;
+    }
+    if (!this.consentForAutoPull.value) {
+      this.showConsentError = true;
     }
   }
 

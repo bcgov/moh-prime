@@ -647,6 +647,7 @@ export class EnrolmentResource {
       smsPhone,
       phone,
       phoneExtension,
+      consentForAutoPull,
       ...remainder
     } = enrollee;
 
@@ -670,6 +671,7 @@ export class EnrolmentResource {
         smsPhone,
         phone,
         phoneExtension,
+        consentForAutoPull,
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

@@ -150,6 +150,14 @@
 
   </app-page-subheader>
 
+  <app-enrollee-property title="Automated Provisioning"
+                         [hasError]="enrolmentErrors?.missingConsentForAutoPull"
+                         errorMessage="Must be answered."
+                         [makeBold]="true">
+    {{ enrolment.enrollee.consentForAutoPull === null ?
+    '-' : enrolment.enrollee.consentForAutoPull ? 'Yes' : 'No' }}
+  </app-enrollee-property>
+
   <ng-container *ngFor="
             let
             careSetting
