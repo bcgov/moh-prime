@@ -44,6 +44,9 @@ export class CollegeCertificationFormComponent implements OnInit {
   public filteredPractices: Config<number>[];
   public nurseGroups: CollegeLicenseGroupingConfig[];
   public hasPractices: boolean;
+  public licenseClassDiscontinued: boolean;
+  public collegeLicenseName: string;
+
   /**
    * @description
    * Indicates the prescriber ID (PharmaNet) type associated with a
@@ -64,7 +67,16 @@ export class CollegeCertificationFormComponent implements OnInit {
     private enrolmentService: EnrolmentService
   ) {
     this.remove = new EventEmitter<number>();
-    this.colleges = this.configService.colleges;
+    this.licenses = this.configService.licenses.filter(l => l.collegeLicenses.filter(cl => cl.discontinued).length === 0);
+    var collegeCodes: Array<number> = [];
+    this.configService.licenses.forEach(l => {
+      l.collegeLicenses.forEach(cl => {
+        if (!cl.discontinued && !collegeCodes.some(cc => cc === cl.collegeCode)) {
+          collegeCodes.push(cl.collegeCode);
+        }
+      });
+    });
+    this.colleges = this.configService.colleges.filter(c => collegeCodes.some(cc => cc === c.code)); this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;
     this.practices = this.configService.practices;
     this.nurseGroups = this.configService.collegeLicenseGroupings;
@@ -119,8 +131,8 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public allowedColleges(): CollegeConfig[] {
     return (this.collegeFilterPredicate)
-      ? this.filteredColleges.filter(this.collegeFilterPredicate)
-      : this.filteredColleges;
+      ? this.filteredColleges.filter(this.collegeFilterPredicate).sort((a, b) => a.weight - b.weight)
+      : this.filteredColleges.sort((a, b) => a.weight - b.weight);
   }
 
   public allowedLicenses() {
@@ -159,6 +171,8 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   // TODO decouple default and condensed modes in controller and template
   public ngOnInit() {
+    this.checkLicenseIfDiscontinued();
+
     if (this.condensed) {
       this.formUtilsService.setValidators(this.collegeCode, [Validators.required]);
     }
@@ -261,11 +275,15 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private resetCollegeCertification() {
     this.licenseCode.reset(null);
-    this.licenseNumber.reset(null);
+    if (!this.licenseClassDiscontinued) {
+      this.licenseNumber.reset(null);
+    }
 
     if (!this.condensed) {
       this.nurseCategory.reset(null);
-      this.renewalDate.reset(null);
+      if (!this.licenseClassDiscontinued) {
+        this.renewalDate.reset(null);
+      }
       this.practiceCode.reset(null);
       this.resetPractitionerIdStateAndValidators();
     }
@@ -381,5 +399,19 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private filterPractices(collegeCode: number): PracticeConfig[] {
     return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
+  }
+
+  private checkLicenseIfDiscontinued() {
+    if (this.collegeCode.value && this.licenseCode.value) {
+      this.licenseClassDiscontinued = this.isCertificationDiscontinued(this.collegeCode.value, this.licenseCode.value);
+
+      this.collegeLicenseName = `${this.configService.colleges.find(c => c.code === this.collegeCode.value).name}` +
+        `${this.licenseCode.value === 64 ? "" : " - " + this.configService.licenses.find(l => l.code === this.licenseCode.value).name}`;
+    }
+  }
+
+  private isCertificationDiscontinued(collegeCode: number, licenseCode: number): boolean {
+    let collegeLicense = this.configService.licenses.find(l => l.code === licenseCode);
+    return collegeLicense.collegeLicenses.find(cl => cl.collegeCode === collegeCode && cl.licenseCode === licenseCode).discontinued;
   }
 }

@@ -85,10 +85,10 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 69, CollegeLicenseGroupingCode = 5 },
 
                     // College of Dental Surgeons of BC
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 70 },
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 75 },
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 76 },
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 77 },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 70, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 75, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 76, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 77, Discontinued = true },
 
                     // College of Naturopathic Physicians of BC
                     new CollegeLicense { CollegeCode = 11,  LicenseCode = 78 },
@@ -122,6 +122,23 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 19, LicenseCode = 84 },
                     new CollegeLicense { CollegeCode = 19, LicenseCode = 85 },
                     new CollegeLicense { CollegeCode = 19, LicenseCode = 86 },
+
+                    //College of Oral Health Professionals
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 92 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 93 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 94 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 95 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 96 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 97 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 98 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 99 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 100 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 101 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 102 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 103 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 104 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 105 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 106 },
                 };
             }
         }

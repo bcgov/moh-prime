@@ -21,7 +21,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime AdjustmentsToOnboardCollegeOfOptometristsAug2nd2023 = new(2023, 8, 2, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime AdjustmentsToCPSBCAug28th2023 = new(2023, 8, 28, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime EmployedStudentNurseChangeAug28th2023 = new(2023, 8, 28, 8, 0, 0, DateTimeKind.Utc);
-
+        public static readonly DateTime OralProfessionalSept22nd2023 = new(2023, 9, 22, 8, 0, 0, DateTimeKind.Utc);
         public override IEnumerable<LicenseDetail> SeedData
         {
             get
@@ -321,7 +321,26 @@ namespace Prime.Configuration.Database
 
                     // Employed Student Nurse Change
                     new LicenseDetail { Id = 275, LicenseCode = 40, Prefix = "R9", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = PrescriberIdType.Optional, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "RX", EffectiveDate = EmployedStudentNurseChangeAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                 };
+
+
+                    //College of Oral Health Professionals
+                    new LicenseDetail { Id =  276, LicenseCode = 92, Prefix = "", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  277, LicenseCode = 93, Prefix = "", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  278, LicenseCode = 94, Prefix = "", Manual = true, Validate = false, LicensedToProvideCare = false, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  279, LicenseCode = 95, Prefix = "", Manual = true, Validate = false, LicensedToProvideCare = false, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  280, LicenseCode = 96, Prefix = "", Manual = true, Validate = false, LicensedToProvideCare = false, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  281, LicenseCode = 97, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  282, LicenseCode = 98, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  283, LicenseCode = 99, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  284, LicenseCode = 100, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  285, LicenseCode = 101, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  286, LicenseCode = 102, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  287, LicenseCode = 103, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  288, LicenseCode = 104, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  289, LicenseCode = 105, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id =  290, LicenseCode = 106, Prefix = "", Manual = true, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalSept22nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                };
             }
         }
 
