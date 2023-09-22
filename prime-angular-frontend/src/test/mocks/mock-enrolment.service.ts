@@ -41,7 +41,8 @@ export class MockEnrolmentService implements IEnrolmentService {
         phoneExtension: null,
         gpid: null,
         hpdid: null,
-        username: `${faker.random.uuid()}@bcsc`
+        username: `${faker.random.uuid()}@bcsc`,
+        consentForAutoPull: null,
       },
       appliedDate: null,
       approvedDate: null,

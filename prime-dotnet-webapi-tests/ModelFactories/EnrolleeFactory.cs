@@ -66,6 +66,7 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.UnlistedCertifications);
             Ignore(x => x.SelfDeclarationCompletedDate);
             Ignore(x => x.EnrolleeDeviceProviders);
+            Ignore(x => x.ConsentForAutoPull);
 
             RuleSet("status.submitted", (set) =>
             {

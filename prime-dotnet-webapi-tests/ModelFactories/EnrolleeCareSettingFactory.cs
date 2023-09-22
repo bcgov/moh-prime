@@ -17,7 +17,6 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.CareSettingCode, f => f.PickRandom(CareSettingLookup.All).Code);
 
             Ignore(x => x.CareSetting);
-            Ignore(x => x.ConsentForAutoPull);
         }
     }
 }
