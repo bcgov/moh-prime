@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230920233439_MainlyCPSBCUpdatedLicenseClasses")]
+    partial class MainlyCPSBCUpdatedLicenseClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4219,9 +4221,6 @@ namespace Prime.Migrations
                     b.Property<bool>("AlwaysManual")
                         .HasColumnType("boolean");
 
-                    b.Property<bool?>("ConsentForAutoPull")
-                        .HasColumnType("boolean");
-
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -4442,6 +4441,9 @@ namespace Prime.Migrations
                     b.Property<int>("CareSettingCode")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("ConsentForAutoPull")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -4512,6 +4514,9 @@ namespace Prime.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool>("ConsentForAutoPull")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
