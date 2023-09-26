@@ -1403,7 +1403,7 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 21,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1421,7 +1421,7 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 24,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1789,19 +1789,19 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 5,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 6,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 8,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {

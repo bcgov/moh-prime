@@ -76,8 +76,7 @@ export class CollegeCertificationFormComponent implements OnInit {
         }
       });
     });
-    this.colleges = this.configService.colleges.filter(c => collegeCodes.some(cc => cc === c.code)); this.colleges = this.configService.colleges;
-    this.licenses = this.configService.licenses;
+    this.colleges = this.configService.colleges.filter(c => collegeCodes.some(cc => cc === c.code));
     this.practices = this.configService.practices;
     this.nurseGroups = this.configService.collegeLicenseGroupings;
     this.minRenewalDate = (this.enrolmentService.isProfileComplete) ? null : moment();

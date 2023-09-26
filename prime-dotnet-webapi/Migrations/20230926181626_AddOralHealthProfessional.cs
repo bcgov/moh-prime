@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Prime.Migrations
 {
-    public partial class OralHealthProfessional : Migration
+    public partial class AddOralHealthProfessional : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,6 +20,34 @@ namespace Prime.Migrations
                 type: "boolean",
                 nullable: false,
                 defaultValue: false);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLicense",
+                keyColumns: new[] { "CollegeCode", "LicenseCode" },
+                keyValues: new object[] { 1, 21 },
+                column: "Discontinued",
+                value: true);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLicense",
+                keyColumns: new[] { "CollegeCode", "LicenseCode" },
+                keyValues: new object[] { 1, 24 },
+                column: "Discontinued",
+                value: true);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLicense",
+                keyColumns: new[] { "CollegeCode", "LicenseCode" },
+                keyValues: new object[] { 5, 64 },
+                column: "Discontinued",
+                value: true);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLicense",
+                keyColumns: new[] { "CollegeCode", "LicenseCode" },
+                keyValues: new object[] { 6, 64 },
+                column: "Discontinued",
+                value: true);
 
             migrationBuilder.UpdateData(
                 table: "CollegeLicense",
@@ -46,6 +74,13 @@ namespace Prime.Migrations
                 table: "CollegeLicense",
                 keyColumns: new[] { "CollegeCode", "LicenseCode" },
                 keyValues: new object[] { 7, 77 },
+                column: "Discontinued",
+                value: true);
+
+            migrationBuilder.UpdateData(
+                table: "CollegeLicense",
+                keyColumns: new[] { "CollegeCode", "LicenseCode" },
+                keyValues: new object[] { 8, 64 },
                 column: "Discontinued",
                 value: true);
 
@@ -192,21 +227,21 @@ namespace Prime.Migrations
                 columns: new[] { "Code", "Name", "Weight" },
                 values: new object[,]
                 {
-                    { 94, "Limited (Academic) Dentist", 3 },
-                    { 95, "Limited (Educational and Volunteer) Dentist", 4 },
-                    { 96, "Limited (Armed Forces/Government) Dentist", 5 },
-                    { 97, "Dental Hygienists", 6 },
-                    { 106, "Temporary", 15 },
                     { 105, "Student Denturism", 14 },
-                    { 104, "Student dental technology", 13 },
-                    { 103, "Limited (Grandparented) Denturist", 12 },
-                    { 102, "Student Dentistry", 11 },
-                    { 101, "Full Denturist", 10 },
                     { 100, "Dental Technician", 9 },
+                    { 101, "Full Denturist", 10 },
+                    { 102, "Student Dentistry", 11 },
+                    { 103, "Limited (Grandparented) Denturist", 12 },
+                    { 104, "Student dental technology", 13 },
+                    { 98, "Dental Hygiene Practitioner", 7 },
+                    { 97, "Dental Hygienists", 6 },
+                    { 96, "Limited (Armed Forces/Government) Dentist", 5 },
+                    { 95, "Limited (Educational and Volunteer) Dentist", 4 },
+                    { 94, "Limited (Academic) Dentist", 3 },
                     { 93, "Limited Dentist (Restricted to Specialty)", 2 },
                     { 92, "Full Dentist", 1 },
-                    { 98, "Dental Hygiene Practitioner", 7 },
-                    { 99, "Dental Therapist", 8 }
+                    { 99, "Dental Therapist", 8 },
+                    { 106, "Temporary", 15 }
                 });
 
             migrationBuilder.InsertData(
