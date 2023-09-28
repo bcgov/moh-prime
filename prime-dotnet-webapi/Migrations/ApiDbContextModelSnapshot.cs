@@ -1863,7 +1863,6 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("JobRoleTitle")

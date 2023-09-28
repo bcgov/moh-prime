@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230927003133_AllowMononymForSiteRegisration")]
-    partial class AllowMononymForSiteRegisration
+    [Migration("20230928173631_AllowMononymForSAandContact")]
+    partial class AllowMononymForSAandContact
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1865,7 +1865,6 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("JobRoleTitle")
