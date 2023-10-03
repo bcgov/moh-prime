@@ -104,17 +104,17 @@ export class SiteResource {
       .pipe(
         map((site: Site) => [
           { label: 'Signing Authority', email: site.provisioner.email },
-          ...ArrayUtils.insertIf(site?.administratorPharmaNet, {
+          ...ArrayUtils.insertIf(site?.administratorPharmaNet?.email, {
             label: 'PharmaNet Administrator',
-            email: site?.administratorPharmaNet.email
+            email: site?.administratorPharmaNet?.email
           }),
-          ...ArrayUtils.insertIf(site?.privacyOfficer.email, {
+          ...ArrayUtils.insertIf(site?.privacyOfficer?.email, {
             label: 'Privacy Officer',
-            email: site?.privacyOfficer.email
+            email: site?.privacyOfficer?.email
           }),
-          ...ArrayUtils.insertIf(site?.technicalSupport.email, {
+          ...ArrayUtils.insertIf(site?.technicalSupport?.email, {
             label: 'Technical Support Contact',
-            email: site?.technicalSupport.email
+            email: site?.technicalSupport?.email
           })
         ])
       );
@@ -502,6 +502,24 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site flag could not be updated');
           this.logger.error('[Site] SiteResource::flagSite error has occurred:'
+            , error);
+          throw error;
+        })
+      );
+  }
+
+  public flagIsNewSite(siteId: number, isNew: boolean): NoContent {
+    const url = `sites/${siteId}/isnew`;
+    const body = { data: isNew };
+    const request$ = this.apiResource.put<NoContent>(url, body);
+
+    return request$
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast(`Site has been ${isNew ? ' flagged is-new' : 'unflagged is-new'}`)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site is-new could not be updated');
+          this.logger.error('[Site] SiteResource::flagIsNewSite error has occurred:'
             , error);
           throw error;
         })

@@ -15,6 +15,7 @@ namespace Prime.Services
         private readonly ICollegeLicenceClient _collegeLicenceClient;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
+        private readonly IDeviceProviderService _deviceProviderService;
 
         public SubmissionRulesService(
             ApiDbContext context,
@@ -22,13 +23,15 @@ namespace Prime.Services
             IBusinessEventService businessEventService,
             ICollegeLicenceClient collegeLicenceClient,
             IEnrolleeService enrolleeService,
-            IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
+            IDeviceProviderService deviceProviderService)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
             _collegeLicenceClient = collegeLicenceClient;
             _enrolleeService = enrolleeService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
+            _deviceProviderService = deviceProviderService;
 
             _logger.LogDebug($"Going to use {_collegeLicenceClient.GetType().Name} in PharmanetValidationRule");
         }
@@ -45,7 +48,7 @@ namespace Prime.Services
                 new AddressRule(),
                 new VerifiedAddressRule(),
                 new PharmanetValidationRule(_collegeLicenceClient, _businessEventService, _enrolleeService),
-                new DeviceProviderRule(),
+                new DeviceProviderRule(_deviceProviderService),
                 new LicenceClassRule(),
                 new AlwaysManualRule(),
                 new IdentityAssuranceLevelRule(),

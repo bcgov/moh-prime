@@ -45,6 +45,7 @@ namespace Prime.Services
         Task<IEnumerable<SiteRegistrationNoteViewModel>> GetNotificationsAsync(int siteId, int adminId);
         Task RemoveNotificationsAsync(int siteId);
         Task UpdateSiteFlag(int siteId, bool flagged);
+        Task UpdateSiteIsNew(int siteId, bool isNew);
         Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user);
         Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId);
         Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId);

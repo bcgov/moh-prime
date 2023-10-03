@@ -55,13 +55,18 @@
       </app-enrollee-property>
     </ng-container>
 
-    <ng-container *ngFor="let careSetting of certificate.careSettings">
+    <ng-container *ngIf="hasDeviceProvider">
+      <app-enrollee-property title="Device Provider Id"
+                             [makeBold]="true">
+        {{ certificate.deviceProviderId | default: "NA" }}
+      </app-enrollee-property>
+    </ng-container>
 
+    <ng-container *ngFor="let careSetting of certificate.careSettings">
       <app-enrollee-property title="Organization Type"
                              [makeBold]="true">
         {{ careSetting.name }}
       </app-enrollee-property>
-
     </ng-container>
 
     <app-enrollee-property *ngIf="!certificate.careSettings.length"

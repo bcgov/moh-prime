@@ -80,6 +80,8 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
       { type: AgreementType.PHARMACY_OBO_TOA, name: 'PharmOBO' },
       { type: AgreementType.PHARMACY_TECHNICIAN_TOA, name: 'PharmTech' },
       { type: AgreementType.LICENCED_PRACTICAL_NURSE_TOA, name: 'LPNRU' },
+      { type: AgreementType.DEVICE_PROVIDER_RU_TOA, name: 'DP RU' },
+      { type: AgreementType.DEVICE_PROVIDER_OBO_TOA, name: 'DP OBO' },
     ];
   }
 

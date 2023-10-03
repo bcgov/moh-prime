@@ -86,6 +86,7 @@ namespace Prime.Services
 
             return !await _context.Sites
                 .AsNoTracking()
+                .Where(s => s.PEC != "BC00000")
                 .AnyAsync(site => site.PEC == pec);
         }
 
@@ -398,6 +399,15 @@ namespace Prime.Services
                 .SingleAsync(s => s.Id == siteId);
 
             site.Flagged = flagged;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateSiteIsNew(int siteId, bool isNew)
+        {
+            var site = await _context.Sites
+                .SingleAsync(s => s.Id == siteId);
+
+            site.IsNew = isNew;
             await _context.SaveChangesAsync();
         }
 

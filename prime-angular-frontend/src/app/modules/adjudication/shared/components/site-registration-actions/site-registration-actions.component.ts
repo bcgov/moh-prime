@@ -23,6 +23,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
   @Output() public enableEditing: EventEmitter<number>;
   @Output() public flag: EventEmitter<{ siteId: number, flagged: boolean }>;
+  @Output() public isNew: EventEmitter<{ siteId: number, isNew: boolean }>;
 
   public Role = Role;
   public SiteStatusType = SiteStatusType;
@@ -38,6 +39,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.escalate = new EventEmitter<number>();
     this.enableEditing = new EventEmitter<number>();
     this.flag = new EventEmitter<{ siteId: number, flagged: boolean }>();
+    this.isNew = new EventEmitter<{ siteId: number, isNew: boolean }>();
   }
 
   public get isCommunitySite(): boolean {
@@ -104,6 +106,15 @@ export class SiteRegistrationActionsComponent implements OnInit {
       this.flag.emit({
         siteId: this.siteRegistration.id,
         flagged: !this.siteRegistration.flagged
+      });
+    }
+  }
+
+  public onToggleIsNewSite() {
+    if (this.permissionService.hasRoles(Role.VIEW_SITE)) {
+      this.isNew.emit({
+        siteId: this.siteRegistration.id,
+        isNew: !this.siteRegistration.isNew
       });
     }
   }

@@ -131,6 +131,10 @@ namespace Prime
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
         public DbSet<EnrolleeLinkedEnrolment> EnrolleeLinkedEnrolments { get; set; }
 
+        //Device Provider data table
+        public DbSet<OpcMember> OpcMembers { get; set; }
+        public DbSet<DeviceProviderSite> DeviceProviderSites { get; set; }
+
         public override int SaveChanges()
         {
             ApplyAudits();

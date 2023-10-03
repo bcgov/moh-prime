@@ -39,10 +39,14 @@ namespace Prime.Services.Rules
             var addresses = new Address[] { enrollee.PhysicalAddress, enrollee.MailingAddress, enrollee.VerifiedAddress }
                 .Where(a => a != null);
 
-            if (addresses.Any(a => !a.IsInBC))
+            //if preferred physical address not null and is in BC, skip the check
+            if (enrollee.PhysicalAddress == null || !enrollee.PhysicalAddress.IsInBC)
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.Address);
-                return Task.FromResult(false);
+                if (addresses.Any(a => !a.IsInBC))
+                {
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.Address);
+                    return Task.FromResult(false);
+                }
             }
 
             return Task.FromResult(true);
@@ -87,10 +91,11 @@ namespace Prime.Services.Rules
 
             bool passed = true;
             string testedPharmaNetIds;
+            PharmanetCollegeRecord record;
 
             foreach (var cert in certifications)
             {
-                PharmanetCollegeRecord record = null;
+                record = null;
                 try
                 {
                     record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.Prefix, cert.LicenseNumber);
@@ -99,7 +104,7 @@ namespace Prime.Services.Rules
                 catch (PharmanetCollegeApiException)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, cert.ToString());
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "An error occurred calling the Pharmanet API.");
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "An error occurred calling the PharmaNet API.");
                     passed = false;
                     continue;
                 }
@@ -107,30 +112,60 @@ namespace Prime.Services.Rules
                 //After validating with prescriber prefix and no hit, try to validate with non-prescriber prefix
                 if (record == null)
                 {
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "Record not found in Pharmanet.");
-                    if (cert.NonPrescribingPrefix != null)
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "Record not found in PharmaNet.");
+                }
+                else
+                {
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber,
+                        $"A record was found in PharmaNet with effective date {record.EffectiveDate:d MMM yyyy} and status {record.Status}.");
+                }
+
+                //As long as the licence class has non prescribing prefix, fetch the college record
+                if (cert.NonPrescribingPrefix != null)
+                {
+                    try
                     {
-                        try
+                        PharmanetCollegeRecord nonPrescribing = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NonPrescribingPrefix, cert.LicenseNumber);
+                        testedPharmaNetIds += $", {cert.NonPrescribingPrefix}-{cert.LicenseNumber}";
+                        if (nonPrescribing != null)
                         {
-                            record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.NonPrescribingPrefix, cert.LicenseNumber);
-                            testedPharmaNetIds += $", {cert.NonPrescribingPrefix}-{cert.LicenseNumber}";
+                            await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber,
+                                $"A record was found in PharmaNet with effective date {nonPrescribing.EffectiveDate:d MMM yyyy} and status {nonPrescribing.Status}.");
+
+                            bool useNonPrescribing = false;
+
                             if (record != null)
                             {
-                                //if got a hit, overwrite the prefix and store it in DB
-                                cert.Prefix = cert.NonPrescribingPrefix;
+                                if ((nonPrescribing.EffectiveDate > record.EffectiveDate) || (nonPrescribing.EffectiveDate == record.EffectiveDate && record.Status != "P" && nonPrescribing.Status == "P"))
+                                {
+                                    //if non-prescrbing one is practicing but other is not or
+                                    // both practicing and non-prescribing has the most recent effective date
+                                    useNonPrescribing = true;
+                                }
                             }
                             else
                             {
-                                await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "Record not found in Pharmanet.");
+                                // prescribing does not exist
+                                useNonPrescribing = true;
+                            }
+
+                            if (useNonPrescribing)
+                            {
+                                cert.Prefix = cert.NonPrescribingPrefix;
+                                record = nonPrescribing;
                             }
                         }
-                        catch (PharmanetCollegeApiException)
+                        else
                         {
-                            enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.NonPrescribingPrefix}-{cert.LicenseNumber}");
-                            await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "An error occurred calling the Pharmanet API.");
-                            passed = false;
-                            continue;
+                            await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "Record not found in PharmaNet.");
                         }
+                    }
+                    catch (PharmanetCollegeApiException)
+                    {
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.NonPrescribingPrefix}-{cert.LicenseNumber}");
+                        await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.NonPrescribingPrefix, cert.LicenseNumber, "An error occurred calling the PharmaNet API.");
+                        passed = false;
+                        continue;
                     }
                 }
 
@@ -144,7 +179,9 @@ namespace Prime.Services.Rules
                 {
                     //save the prefix
                     await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber, "A record was found in Pharmanet.");
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber,
+                        $"The record with licence prefix {cert.Prefix}, licence number {cert.LicenseNumber}, effective date {record.EffectiveDate:d MMM yyyy} and status {record.Status} was selected for PRIME.",
+                        true);
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))
@@ -211,15 +248,52 @@ namespace Prime.Services.Rules
 
     public class DeviceProviderRule : AutomaticAdjudicationRule
     {
-        public override Task<bool> ProcessRule(Enrollee enrollee)
+        private readonly IDeviceProviderService _deviceProviderService;
+
+        public DeviceProviderRule(
+            IDeviceProviderService deviceProviderService
+        )
         {
-            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider) || enrollee.DeviceProviderIdentifier != null)
+            _deviceProviderService = deviceProviderService;
+        }
+
+        public override async Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.HasCareSetting(CareSettingType.DeviceProvider))
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProvider);
-                return Task.FromResult(false);
+                var errorMessage = "";
+                if (enrollee.EnrolleeDeviceProviders == null || enrollee.EnrolleeDeviceProviders.Count() == 0)
+                {
+                    errorMessage = $"Enrollee misses Device Provider info";
+                }
+
+                var site = await _deviceProviderService.GetDeviceProviderSiteAsync(enrollee.EnrolleeDeviceProviders.First().DeviceProviderId);
+                if (string.IsNullOrWhiteSpace(errorMessage) && site == null)
+                {
+                    errorMessage = $"Device Provider Id {enrollee.EnrolleeDeviceProviders.First().DeviceProviderId} not found";
+                }
+
+                if (!string.IsNullOrWhiteSpace(enrollee.EnrolleeDeviceProviders.First().CertificationNumber) &&
+                     string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    var exists = await _deviceProviderService.CertificationNumberExist(enrollee.EnrolleeDeviceProviders.First().CertificationNumber);
+                    if (!exists)
+                    {
+                        errorMessage = $"Certificate Number {enrollee.EnrolleeDeviceProviders.First().CertificationNumber} not found";
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.DeviceProvider, errorMessage);
+                    return false;
+                }
+
+                // Addressing Automatic Adjudication later, when rules better understood
+                return false;
             }
 
-            return Task.FromResult(true);
+            return true;
         }
     }
 

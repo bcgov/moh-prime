@@ -332,6 +332,31 @@ namespace Prime.Controllers
             return Ok(await _enrolleeService.GetCertificationsAsync(enrolleeId));
         }
 
+        // GET: api/enrollees/5/device-provider
+        /// <summary>
+        /// Gets an Enrollee's device providers.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/device-providers", Name = nameof(GetDeviceProviders))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeDeviceProviderViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetDeviceProviders(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleeService.GetEnrolleeDeviceProvidersAsync(enrolleeId));
+        }
+
         // GET: api/enrollees/5/remote-users
         /// <summary>
         /// Gets an Enrollee's Remote Users.
@@ -671,5 +696,7 @@ namespace Prime.Controllers
 
             return NoContent();
         }
+
+
     }
 }

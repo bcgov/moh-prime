@@ -45,7 +45,7 @@ import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteNotification } from '../models/site-notification.model';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
-
+import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 
 @Injectable({
   providedIn: 'root'
@@ -92,6 +92,8 @@ export class AdjudicationResource {
         .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
       certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
         .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+      enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrolleeId}/device-providers`)
+        .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
       unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrolleeId}/unlisted-certifications`)
         .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
       enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
