@@ -44,7 +44,7 @@ export class ContactFormState extends AbstractFormState<Contact> {
       ],
       firstName: [
         { value: null, disabled },
-        [Validators.required]
+        []
       ],
       lastName: [
         { value: null, disabled },

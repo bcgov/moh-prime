@@ -200,7 +200,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         displayId,
         signingAuthorityId,
         signingAuthority,
-        signingAuthorityName: `${signingAuthority.firstName} ${signingAuthority.lastName}`,
+        signingAuthorityName: `${signingAuthority.firstName ? signingAuthority.firstName : ''} ${signingAuthority.lastName}`,
         organizationName: name,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
