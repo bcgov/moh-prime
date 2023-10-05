@@ -260,7 +260,7 @@ export class FormUtilsService {
    * Convert the party form model into JSON.
    */
   public toPersonJson<P extends Person>(person: P, addressKey: 'physicalAddress' | 'mailingAddress' = 'physicalAddress'): P {
-    if (!person.firstName) {
+    if (!person.lastName) {
       person = null;
     } else if (person[addressKey] && !person[addressKey].street) {
       person[addressKey] = null;
