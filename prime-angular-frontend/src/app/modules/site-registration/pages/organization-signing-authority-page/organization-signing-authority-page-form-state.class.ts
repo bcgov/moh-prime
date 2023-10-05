@@ -73,9 +73,9 @@ export class OrganizationSigningAuthorityPageFormState extends AbstractFormState
     // Prevent BCSC information from being changed
     this.formInstance = this.fb.group({
       id: [0, []], // TODO do we need this?
-      firstName: [{ value: null, disabled: true }, [Validators.required]],
+      firstName: [{ value: null, disabled: true }, []],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
-      givenNames: [{ value: null, disabled: true }, [Validators.required]],
+      givenNames: [{ value: null, disabled: true }, []],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
@@ -126,7 +126,7 @@ export class OrganizationSigningAuthorityPageFormState extends AbstractFormState
    */
   private toPartyJson(party: Party): Party {
     // Minimal check that party is invalid
-    if (!party.firstName) {
+    if (!party.lastName) {
       return null;
     }
 
