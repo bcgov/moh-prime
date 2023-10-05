@@ -89,6 +89,8 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderRenewalPassedEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
+            viewModel.PrimeUrl = $"{PrimeConfiguration.Current.FrontendUrl}/info";
+
             return new Email
             (
                 from: PrimeEmail,
@@ -100,7 +102,7 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderForcedRenewalPassedEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
-            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
+            viewModel.PrimeUrl = $"{PrimeConfiguration.Current.FrontendUrl}/info";
 
             return new Email
             (
@@ -113,7 +115,7 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderRenewalRequiredEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
-            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
+            viewModel.PrimeUrl = $"{PrimeConfiguration.Current.FrontendUrl}/info";
 
             return new Email
             (
@@ -126,7 +128,7 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderForcedRenewalEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
-            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
+            viewModel.PrimeUrl = $"{PrimeConfiguration.Current.FrontendUrl}/info";
 
             return new Email
             (
