@@ -17,6 +17,7 @@ import { HealthAuthoritySiteResource } from '@core/resources/health-authority-si
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { ChangeVendorNoteComponent } from '@shared/components/dialogs/content/change-vendor-note/change-vendor-note.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -78,7 +79,7 @@ export class SiteOverviewComponent implements OnInit {
   }
 
   public saveSiteId(): void {
-    if (this.formUtilsService.checkValidity(this.form)) {
+    if (this.form.get('pec').valid) {
       const siteId = +this.route.snapshot.params.sid;
       const pec = this.form.value.pec;
       this.busy = this.siteResource.updatePecCode(siteId, pec)
@@ -90,29 +91,26 @@ export class SiteOverviewComponent implements OnInit {
   }
 
   public saveVendor(): void {
+    const existingVendor = this.siteVendors.find((vendor: VendorConfig) => vendor.code === this.site.siteVendors[0].vendorCode).name;
+    const vendor = this.vendors.value;
 
-    if (this.formUtilsService.checkValidity(this.form)) {
+    if (this.form.get('vendors').valid && existingVendor !== vendor.name) {
       const siteId = +this.route.snapshot.params.sid;
-      const vendor = this.vendors.value;
+      const vendorChangeText = `from ${existingVendor} to ${vendor.name}`;
 
       const data: DialogOptions = {
-        title: 'Change Vendor',
-        message: "Are you sure you want to change this site's vendor?",
-        actionType: 'warn',
-        actionText: 'Change Vendor',
-        component: NoteComponent,
+        data: {
+          siteId,
+          vendorCode: vendor.code,
+          vendorChangeText
+        }
       };
-
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .subscribe(rationale => {
-          if (rationale) {
-            this.siteResource.updateVendor(siteId, vendor.code, rationale.output)
-              .subscribe(() => {
-                this.refresh.next(true);
-                this.site.siteVendors[0].vendorCode = vendor.code;
-              })
-          };
+      this.dialog.open(ChangeVendorNoteComponent, { data }).afterClosed()
+        .subscribe((vendorChanged) => {
+          if (vendorChanged) {
+            this.refresh.next(true);
+            this.site.siteVendors[0].vendorCode = vendor.code;
+          }
         });
     }
   }

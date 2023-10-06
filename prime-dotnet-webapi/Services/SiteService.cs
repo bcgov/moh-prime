@@ -156,7 +156,7 @@ namespace Prime.Services
                 siteVendor.VendorCode = vendorCode;
             }
 
-            string rationaleEvent = $"Vendor associated with site.  Rationale: {rationale}";
+            string rationaleEvent = $"Vendor changed. {rationale}";
             await _context.SaveChangesAsync();
             await _businessEventService.CreateSiteEventAsync(siteId, rationaleEvent);
         }
