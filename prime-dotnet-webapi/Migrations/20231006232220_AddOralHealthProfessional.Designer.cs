@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20230926181626_AddOralHealthProfessional")]
+    [Migration("20231006232220_AddOralHealthProfessional")]
     partial class AddOralHealthProfessional
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -2082,7 +2082,6 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("JobRoleTitle")
@@ -10648,7 +10647,7 @@ namespace Prime.Migrations
                             LicensedToProvideCare = true,
                             Manual = false,
                             NamedInImReg = true,
-                            Prefix = "",
+                            Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
@@ -10664,7 +10663,7 @@ namespace Prime.Migrations
                             LicensedToProvideCare = true,
                             Manual = false,
                             NamedInImReg = true,
-                            Prefix = "",
+                            Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
@@ -10680,10 +10679,10 @@ namespace Prime.Migrations
                             LicensedToProvideCare = false,
                             Manual = true,
                             NamedInImReg = false,
-                            Prefix = "",
+                            Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -10696,10 +10695,10 @@ namespace Prime.Migrations
                             LicensedToProvideCare = false,
                             Manual = true,
                             NamedInImReg = false,
-                            Prefix = "",
+                            Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -10712,10 +10711,10 @@ namespace Prime.Migrations
                             LicensedToProvideCare = false,
                             Manual = true,
                             NamedInImReg = false,
-                            Prefix = "",
+                            Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -11133,7 +11132,6 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("GivenNames")
