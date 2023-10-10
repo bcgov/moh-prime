@@ -75,6 +75,6 @@ export class ChangeVendorNoteComponent implements OnInit {
   }
 
   private getOutputString(): string {
-    return `${this.vendorChangeText}, Requester:${this.requester.value}, Note:${this.note.value}`;
+    return `${this.vendorChangeText}, Requester: ${this.requester.value}, Note: ${this.note.value}.`;
   }
 }
