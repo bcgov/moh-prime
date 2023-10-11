@@ -55,6 +55,7 @@ export class ChangeVendorNoteComponent implements OnInit {
         });
     }
     this.requester.markAsTouched();
+    this.note.markAsTouched();
   }
 
   public ngOnInit(): void {
@@ -63,13 +64,7 @@ export class ChangeVendorNoteComponent implements OnInit {
 
   protected createFormInstance() {
     this.form = this.fb.group({
-      note: [
-        {
-          value: '',
-          disabled: false,
-        },
-        []
-      ],
+      note: [null, [Validators.required]],
       requester: [null, [Validators.required]],
     });
   }
