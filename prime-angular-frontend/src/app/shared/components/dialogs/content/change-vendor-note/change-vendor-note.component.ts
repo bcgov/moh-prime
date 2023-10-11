@@ -20,6 +20,8 @@ export class ChangeVendorNoteComponent implements OnInit {
   public vendorChangeText: string;
   public vendorCode: number;
   public form: FormGroup;
+  public changeVendorClick: boolean;
+
   constructor(
     private siteResource: SiteResource,
     private fb: FormBuilder,
@@ -48,6 +50,8 @@ export class ChangeVendorNoteComponent implements OnInit {
 
   public onChangeVendor() {
     if (this.form.valid) {
+      this.changeVendorClick = true;
+
       this.siteResource.updateVendor(this.siteId, this.vendorCode, this.getOutputString())
         .subscribe(() => {
           this.dialogRef.close({ reload: true });
@@ -60,6 +64,7 @@ export class ChangeVendorNoteComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.changeVendorClick = false;
   }
 
   protected createFormInstance() {
