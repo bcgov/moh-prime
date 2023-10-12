@@ -66,7 +66,7 @@ export interface CollegePracticeConfig {
   practiceCode: number;
 }
 
-export class VendorConfig extends Config<number> {
+export interface VendorConfig extends Config<number> {
   careSettingCode: number;
 }
 

@@ -68,7 +68,7 @@ export class SiteOverviewPageComponent implements OnInit {
 
   public saveVendor(): void {
     const vendor = this.vendors.value;
-    const existingVendor = this.healthAuthorityVendors.find((vendor: VendorConfig) => vendor.code === this.site.healthAuthorityVendor[0].vendorCode).name;
+    const existingVendor = this.healthAuthorityVendors.find((vendor: VendorConfig) => vendor.code === this.site.healthAuthorityVendor.vendorCode).name;
 
     if (this.vendors.valid && vendor.name !== existingVendor) {
       const siteId = +this.route.snapshot.params.sid;
