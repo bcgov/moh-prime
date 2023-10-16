@@ -85,7 +85,7 @@ export class SiteOverviewPageComponent implements OnInit {
         .subscribe((vendorChanged: boolean) => {
           if (vendorChanged) {
             this.refresh.next(true);
-            this.site.healthAuthorityVendor[0].vendorCode = vendor.code;
+            this.site.healthAuthorityVendor.vendorCode = vendor.code;
           }
         });
     }

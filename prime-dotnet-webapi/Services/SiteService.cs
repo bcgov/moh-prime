@@ -142,7 +142,8 @@ namespace Prime.Services
                     .SingleOrDefaultAsync(s => s.Id == siteId);
 
                 var healthAuthVendor = await _context.HealthAuthorityVendors
-                    .SingleOrDefaultAsync(v => v.VendorCode == vendorCode);
+                    .SingleOrDefaultAsync(v => v.VendorCode == vendorCode &&
+                    healthAuthSite.HealthAuthorityOrganizationId == v.HealthAuthorityOrganizationId);
 
                 healthAuthSite.HealthAuthorityVendorId = healthAuthVendor.Id;
             }
