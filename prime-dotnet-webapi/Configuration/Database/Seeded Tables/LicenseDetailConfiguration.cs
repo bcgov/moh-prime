@@ -19,6 +19,8 @@ namespace Prime.Configuration.Database
         public static readonly DateTime SetValidateForNurseMarch15th2023 = new(2023, 3, 15, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime June9th2023 = new(2023, 6, 9, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime AdjustmentsToOnboardCollegeOfOptometristsAug2nd2023 = new(2023, 8, 2, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime AdjustmentsToCPSBCAug28th2023 = new(2023, 8, 28, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime EmployedStudentNurseChangeAug28th2023 = new(2023, 8, 28, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -298,6 +300,27 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 261, LicenseCode = 72, Prefix = "94", Manual = false, Validate = true, NamedInImReg = true,  LicensedToProvideCare = true, EffectiveDate = AdjustmentsToOnboardCollegeOfOptometristsAug2nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 262, LicenseCode = 73, Prefix = "94", Manual = true, Validate = true, NamedInImReg = false,  LicensedToProvideCare = true, EffectiveDate = AdjustmentsToOnboardCollegeOfOptometristsAug2nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 263, LicenseCode = 74, Prefix = "94", Manual = true, Validate = true, NamedInImReg = false,  LicensedToProvideCare = true, EffectiveDate = AdjustmentsToOnboardCollegeOfOptometristsAug2nd2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // CPSBC license classes changes
+                    // New
+                    new LicenseDetail { Id = 264, LicenseCode = 87, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 265, LicenseCode = 88, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 266, LicenseCode = 89, Prefix = "91", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    // `LicensedToProvideCare = false` so that OBO TOA will be assigned
+                    new LicenseDetail { Id = 267, LicenseCode = 90, Prefix = "91", Manual = true, Validate = true, LicensedToProvideCare = false, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    // `LicensedToProvideCare = false` so that OBO TOA will be assigned
+                    new LicenseDetail { Id = 268, LicenseCode = 91, Prefix = "91", Manual = true, Validate = true, LicensedToProvideCare = false, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    // Adjustments
+                    new LicenseDetail { Id = 269, LicenseCode = 7, Prefix = "91", Manual = false, Validate = true, NamedInImReg = true, LicensedToProvideCare = true, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 270, LicenseCode = 9, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 271, LicenseCode = 15, Prefix = "91", Manual = false, Validate = true, NamedInImReg = true, LicensedToProvideCare = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 272, LicenseCode = 16, Prefix = "91", Manual = true, Validate = true, NamedInImReg = true, LicensedToProvideCare = true, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 273, LicenseCode = 17, Prefix = "91", Manual = false, Validate = true, NamedInImReg = true, LicensedToProvideCare = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    // `LicensedToProvideCare = false` so that OBO TOA will be assigned
+                    new LicenseDetail { Id = 274, LicenseCode = 22, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = false, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Employed Student Nurse Change
+                    new LicenseDetail { Id = 275, LicenseCode = 40, Prefix = "R9", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = PrescriberIdType.Optional, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "RX", EffectiveDate = EmployedStudentNurseChangeAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                  };
             }
         }

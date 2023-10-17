@@ -104,17 +104,17 @@ export class SiteResource {
       .pipe(
         map((site: Site) => [
           { label: 'Signing Authority', email: site.provisioner.email },
-          ...ArrayUtils.insertIf(site?.administratorPharmaNet, {
+          ...ArrayUtils.insertIf(site?.administratorPharmaNet?.email, {
             label: 'PharmaNet Administrator',
-            email: site?.administratorPharmaNet.email
+            email: site?.administratorPharmaNet?.email
           }),
-          ...ArrayUtils.insertIf(site?.privacyOfficer.email, {
+          ...ArrayUtils.insertIf(site?.privacyOfficer?.email, {
             label: 'Privacy Officer',
-            email: site?.privacyOfficer.email
+            email: site?.privacyOfficer?.email
           }),
-          ...ArrayUtils.insertIf(site?.technicalSupport.email, {
+          ...ArrayUtils.insertIf(site?.technicalSupport?.email, {
             label: 'Technical Support Contact',
-            email: site?.technicalSupport.email
+            email: site?.technicalSupport?.email
           })
         ])
       );
