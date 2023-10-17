@@ -13,14 +13,14 @@ import { DialogOptions } from '../../dialog-options.model';
   styleUrls: ['./change-vendor-note.component.scss']
 })
 export class ChangeVendorNoteComponent implements OnInit {
-  @Output() public vendorChnaged: EventEmitter<boolean>;
+  @Output() public vendorChanged: EventEmitter<boolean>;
 
   public siteId: number;
   public title: string;
   public vendorChangeText: string;
   public vendorCode: number;
   public form: FormGroup;
-  public changeVendorClick: boolean;
+  public changeVendorClicked: boolean;
 
   constructor(
     private siteResource: SiteResource,
@@ -32,7 +32,7 @@ export class ChangeVendorNoteComponent implements OnInit {
     this.title = data.data.title;
     this.vendorChangeText = data.data.vendorChangeText;
     this.vendorCode = data.data.vendorCode;
-    this.vendorChnaged = new EventEmitter<boolean>();
+    this.vendorChanged = new EventEmitter<boolean>();
   }
 
   public get note(): FormControl {
@@ -45,17 +45,17 @@ export class ChangeVendorNoteComponent implements OnInit {
 
   public onCancel() {
     this.dialogRef.close();
-    this.vendorChnaged.emit(false);
+    this.vendorChanged.emit(false);
   }
 
   public onChangeVendor() {
     if (this.form.valid) {
-      this.changeVendorClick = true;
+      this.changeVendorClicked = true;
 
       this.siteResource.updateVendor(this.siteId, this.vendorCode, this.getOutputString())
         .subscribe(() => {
           this.dialogRef.close({ reload: true });
-          this.vendorChnaged.emit(true);
+          this.vendorChanged.emit(true);
         });
     }
     this.requester.markAsTouched();
@@ -64,7 +64,7 @@ export class ChangeVendorNoteComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.changeVendorClick = false;
+    this.changeVendorClicked = false;
   }
 
   protected createFormInstance() {

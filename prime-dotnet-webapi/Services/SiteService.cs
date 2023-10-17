@@ -149,8 +149,6 @@ namespace Prime.Services
             }
             else
             {
-                var counter = await _context.SiteVendors.FirstAsync();
-
                 var siteVendor = await _context.SiteVendors
                     .SingleOrDefaultAsync(s => s.SiteId == siteId);
 
