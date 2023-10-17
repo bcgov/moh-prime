@@ -1,9 +1,8 @@
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { Component, OnInit } from '@angular/core';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, exhaustMap, mergeMap, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, mergeMap, Observable, Subscription } from 'rxjs';
 
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';

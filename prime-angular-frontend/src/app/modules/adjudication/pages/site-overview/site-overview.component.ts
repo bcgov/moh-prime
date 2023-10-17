@@ -8,7 +8,6 @@ import { exhaustMap } from 'rxjs/operators';
 
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { Party } from '@lib/models/party.model';
-import { Vendor } from '@registration/shared/models/vendor.model';
 import { asyncValidator } from '@lib/validators/form-async.validators';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
