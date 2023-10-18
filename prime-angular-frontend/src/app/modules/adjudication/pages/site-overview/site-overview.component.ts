@@ -78,7 +78,7 @@ export class SiteOverviewComponent implements OnInit {
   }
 
   public saveSiteId(): void {
-    if (this.form.get('pec').valid) {
+    if (this.pec.valid) {
       const siteId = +this.route.snapshot.params.sid;
       const pec = this.form.value.pec;
       this.busy = this.siteResource.updatePecCode(siteId, pec)
@@ -93,7 +93,7 @@ export class SiteOverviewComponent implements OnInit {
     const existingVendor = this.siteVendors.find((vendor: VendorConfig) => vendor.code === this.site.siteVendors[0].vendorCode).name;
     const vendor = this.vendors.value;
 
-    if (this.form.get('vendors').valid && existingVendor !== vendor.name) {
+    if (this.vendors.valid && existingVendor !== vendor.name) {
       const siteId = +this.route.snapshot.params.sid;
       const vendorChangeText = `from ${existingVendor} to ${vendor.name}`;
 
