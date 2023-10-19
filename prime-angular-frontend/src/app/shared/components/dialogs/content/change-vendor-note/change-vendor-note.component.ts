@@ -65,7 +65,7 @@ export class ChangeVendorNoteComponent implements OnInit {
   public ngOnInit(): void {
     this.createFormInstance();
     // To accommodate lengthy instruction text
-    this.dialogRef.updateSize('60%', '50%');
+    this.dialogRef.updateSize('750px', '50%');
     this.changeVendorClicked = false;
   }
 
