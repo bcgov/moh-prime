@@ -6,11 +6,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { MockPermissionService } from 'test/mocks/mock-permission.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
+import { ConfigService } from '@config/config.service';
 
 import { SiteOverviewPageComponent } from './site-overview-page.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -37,6 +39,10 @@ describe('SiteOverviewPageComponent', () => {
         {
           provide: PermissionService,
           useClass: MockPermissionService
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
         },
         CapitalizePipe
       ],
