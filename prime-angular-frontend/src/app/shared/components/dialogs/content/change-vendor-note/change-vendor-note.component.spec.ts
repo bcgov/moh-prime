@@ -31,7 +31,8 @@ describe('ChangeVendorNoteComponent', () => {
         {
           provide: MatDialogRef,
           useValue: {
-            close: (dialogResult: any) => { }
+            close: (dialogResult: any) => { },
+            updateSize: () => { }
           }
         },
         {
