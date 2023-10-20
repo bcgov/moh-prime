@@ -12,7 +12,7 @@
   <form [formGroup]="form">
     <mat-form-field class="w-100">
       <input matInput
-             placeholder="Requester"
+             placeholder="Requestor"
              formControlName="requester">
       <mat-error *ngIf="form.get('requester').hasError('required')">Required</mat-error>
     </mat-form-field>
@@ -22,7 +22,7 @@
                 rows="5"
                 formControlName="note"></textarea>
       <mat-hint [ngClass]="{ 'text-green': !!note.value }">
-        Please include the requester's email address here with the rationale.
+        Please provide the requestor's email address here and upload their change request to the Notes section.
       </mat-hint>
       <mat-error *ngIf="form.get('note').hasError('required')">Required</mat-error>
     </mat-form-field>
