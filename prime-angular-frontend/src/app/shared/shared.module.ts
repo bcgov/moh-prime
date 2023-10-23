@@ -126,6 +126,7 @@ import { AdministratorOverviewComponent } from '@health-auth/pages/administrator
 import { HealthAuthCareTypeOverviewComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-overview.component';
 import { HealthAuthSiteOverviewContainerComponent } from './components/health-auth-site-overview-container/health-auth-site-overview-container.component';
 import { EmailFormComponent } from './components/forms/email-form/email-form.component';
+import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
 
 @NgModule({
   declarations: [
@@ -179,6 +180,7 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     AccessTermsTableComponent,
     AccessTermComponent,
     NoteComponent,
+    ChangeVendorNoteComponent,
     ManualFlagNoteComponent,
     ImageComponent,
     CollectionNoticeContainerComponent,
