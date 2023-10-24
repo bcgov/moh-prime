@@ -109,7 +109,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
     if (this.organizationId === 0) {
       return;
     }
-    const organization = this.organizationService.organizations.find((org) => org.id === this.organizationId);
+    const organization = this.organizationService.organizations?.find((org) => org.id === this.organizationId);
     if (!organization) {
       return;
     }
