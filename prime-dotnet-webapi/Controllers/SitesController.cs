@@ -760,6 +760,31 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // PUT: api/Sites/5/vendor
+        /// <summary>
+        /// Update the Vendor code.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="siteVendor"></param>
+        [HttpPut("{siteId}/vendor", Name = nameof(UpdateVendor))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateVendor(int siteId, SiteVendorUpdateViewModel siteVendor)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            await _siteService.UpdateVendor(siteId, siteVendor.VendorCode, siteVendor.Rationale);
+
+            return NoContent();
+        }
+
         // Get: api/site/5/business-licences/5/document/token
         /// <summary>
         /// Gets a download token for the latest business licence on a site.
