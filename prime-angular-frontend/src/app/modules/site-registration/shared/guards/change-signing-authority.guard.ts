@@ -38,7 +38,7 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
   protected routeDestination(
     routePath: string,
     params: Params,
-    organization: Organization | null,
+    organizations: Organization[] | null,
     signingAuthority: Party | null,
     hasClaim: boolean
   ): boolean {
@@ -46,7 +46,8 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
       return this.manageNoPartyExistsRouting(routePath);
     }
 
-    if (organization) {
+    if (organizations) {
+      //ToCheck
       return this.manageAlreadySigningAuthorityRouting(routePath);
     }
 

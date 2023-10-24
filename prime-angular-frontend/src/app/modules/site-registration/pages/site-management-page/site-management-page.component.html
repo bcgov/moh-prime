@@ -45,11 +45,44 @@
 
   <ng-container *ngIf="organization">
 
+    <div class="add-org">
+      <button mat-button
+              type="button"
+              color="primary"
+              [disabled]="!organization.completed || isPendingTransfer()"
+              (click)="addOrganization()">
+        <mat-icon>add_business</mat-icon>
+        Add Organization
+      </button>
+    </div>
+
     <app-summary-card icon="business"
                       title="Organization Information"
                       [menu]="organizationMenu"
                       [menuOutletContext]="{ organization: organization }"
-                      [properties]="getOrganizationProperties(organization)"></app-summary-card>
+                      [properties]="getOrganizationProperties(organization)">
+      <div class="text-right">
+        <button mat-stroked-button
+                type="button"
+                color="primary"
+                [disabled]="!organization.completed || isPendingTransfer()"
+                *ngIf="organizations && organizations.length > 1"
+                [matMenuTriggerFor]="orgMenu">
+          <mat-icon>swap_horiz</mat-icon>
+          Change Organization
+        </button>
+        <mat-menu #orgMenu="matMenu"
+                  aria-label="Change Organization">
+          <ng-container *ngFor="let org of organizations">
+            <button *ngIf="org.id !== organization.id"
+                    mat-menu-item
+                    (click)="changeOrganization(org.id )">
+              <span>Organization: {{ org.name }}</span>
+            </button>
+          </ng-container>
+        </mat-menu>
+      </div>
+    </app-summary-card>
 
     <hr class="divider">
 

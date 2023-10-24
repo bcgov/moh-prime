@@ -12,6 +12,7 @@ using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
+using Prime.Migrations;
 
 namespace Prime.Services
 {
@@ -86,12 +87,6 @@ namespace Prime.Services
 
         public async Task<int> CreateOrganizationAsync(int partyId)
         {
-            var organizations = await GetOrganizationsByPartyIdAsync(partyId);
-            if (organizations.Count() != 0)
-            {
-                throw new InvalidOperationException("Could not create Organization. Only one organization can exist for a party.");
-            }
-
             var organization = new Organization
             {
                 SigningAuthorityId = partyId
