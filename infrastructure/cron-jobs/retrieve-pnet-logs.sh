@@ -4,23 +4,23 @@
 function get_now_timestamp() {
   # Return formatted timestamp (UTC time)
   local  __resultvar=$1
-  local  now_ts="$(date +'%T')" 
+  local  now_ts="$(date +'%T')"
   eval $__resultvar="${now_ts}"
 }
 
 
 function exec_sql_no_resultset() {
-  # $1 parameter - SQL to execute 
-  # No result set will be returned 
-  
-  # Quote parameter to handle spaces in SQL string 
+  # $1 parameter - SQL to execute
+  # No result set will be returned
+
+  # Quote parameter to handle spaces in SQL string
   psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c "$1"
 }
 
 
 function drop_db_indices() {
   # Drop most indices on PharmanetTransactionLog table for better performance
-  # during importing of data 
+  # during importing of data
 
   echo -e "-------- Dropping indices --------"
   exec_sql_no_resultset 'DROP INDEX public."IX_PharmanetTransactionLog_PharmacyId";'
@@ -40,10 +40,10 @@ function get_last_tx_id() {
   while [ $db_status -ne 0 ]
   do
     echo -e "-------- get_last_tx_id calling psql --------"
-    tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')   
+    tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
     db_status=$?
     echo -e "Last psql status:  _${db_status}_"
-    # If error encountered, wait, let database server recover before trying again 
+    # If error encountered, wait, let database server recover before trying again
     if [ $db_status -ne 0 ]; then sleep 10; fi
   done
 
@@ -74,7 +74,7 @@ function main() {
   echo -e "-------- STARTING CRON at $(date +"%B %d, %Y %T") UTC --------\n"
 
   echo -e "Connecting to database host:  _${PGHOST}_"
-  echo -e "API client name:  _${PRIME_ODR_API_CLIENT_NAME}_"
+  echo -e "API client name:  _${PRIME_ODR_API_CLIENT_NAME}_ for _${PRIME_ODR_API_URL}_"
   echo -e "Fetch size:  _${PRIME_ODR_API_FETCH_SIZE}_"
   echo
 
@@ -85,7 +85,7 @@ function main() {
   do
     ((num_iterations=num_iterations+1))
     echo -e "-------- Iteration #${num_iterations} --------\n"
-     
+
     get_last_tx_id LAST_TX_ID
     echo -e "Last transaction id:  _${LAST_TX_ID}_\n"
 
@@ -101,7 +101,7 @@ function main() {
       python3 /opt/scripts/parse_api_response.py | \
       exec_sql_no_resultset "\copy \"PharmanetTransactionLog\"(\"TransactionId\", \"TxDateTime\", \"UserId\", \"SourceIpAddress\", \"LocationIpAddress\", \"PharmacyId\", \"ProviderSoftwareId\", \"ProviderSoftwareVersion\", \"PractitionerId\", \"CollegePrefix\", \"TransactionType\", \"TransactionSubType\", \"TransactionOutcome\") FROM STDIN (FORMAT CSV)"
 
-    HAS_MORE=$(cat /tmp/isThereMoreData.txt)     
+    HAS_MORE=$(cat /tmp/isThereMoreData.txt)
     echo
   done
   create_db_indices
