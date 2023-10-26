@@ -112,21 +112,44 @@ namespace Prime.Configuration.Database
                     new License { Code = 64, Weight = 1, Name = "Not Displayed" },
 
                     //College of Oral Health Professionals
-                    new License { Code = 92, Weight = 1, Name = "Full Dentist" },
-                    new License { Code = 93, Weight = 2, Name = "Limited Dentist (Restricted to Specialty)" },
-                    new License { Code = 94, Weight = 3, Name = "Limited (Academic) Dentist" },
-                    new License { Code = 95, Weight = 4, Name = "Limited (Educational and Volunteer) Dentist" },
-                    new License { Code = 96, Weight = 5, Name = "Limited (Armed Forces/Government) Dentist" },
-                    new License { Code = 97, Weight = 6, Name = "Dental Hygienists" },
-                    new License { Code = 98, Weight = 7, Name = "Dental Hygiene Practitioner" },
-                    new License { Code = 99, Weight = 8, Name = "Dental Therapist" },
-                    new License { Code = 100, Weight = 9, Name = "Dental Technician" },
-                    new License { Code = 101, Weight = 10, Name = "Full Denturist" },
-                    new License { Code = 102, Weight = 11, Name = "Student Dentistry" },
-                    new License { Code = 103, Weight = 12, Name = "Limited (Grandparented) Denturist" },
-                    new License { Code = 104, Weight = 13, Name = "Student dental technology" },
-                    new License { Code = 105, Weight = 14, Name = "Student Denturism" },
-                    new License { Code = 106, Weight = 15, Name = "Temporary" },
+                    // Dental Assistant
+                    new License { Code = 92, Weight = 1, Name = "Full Certified Dental Assisant" },
+                    new License { Code = 93, Weight = 2, Name = "Limited Certified Dental Assistant" },
+                    new License { Code = 94, Weight = 3, Name = "Non-Practising Certified Dental Assistant" },
+                    new License { Code = 95, Weight = 4, Name = "Temporary Certified Dental Assistant" },
+
+                    // Dental Hygienist
+                    new License { Code = 96, Weight = 1, Name = "Registered Dental Hygienist Registration" },
+                    new License { Code = 97, Weight = 2, Name = "Dental Hygiene Practitioner" },
+                    new License { Code = 98, Weight = 3, Name = "Non-Practising Registration" },
+                    new License { Code = 99, Weight = 4, Name = "Temporary Registration" },
+
+                    // Dental Technician
+                    new License { Code = 100, Weight = 1, Name = "Dental Technician" },
+                    new License { Code = 101, Weight = 2, Name = "Temporary" },
+                    new License { Code = 102, Weight = 3, Name = "Non-Practising Dental Technician" },
+                    new License { Code = 103, Weight = 4, Name = "Student Registrant" },
+
+                    // Dental Therapist
+                    new License { Code = 104, Weight = 1, Name = "Dental Therapist" },
+
+                    // Dentist
+                    new License { Code = 105, Weight = 1, Name = "Full Dentist Registrant" },
+                    new License { Code = 106, Weight = 2, Name = "Limited (Academic) Registrant" },
+                    new License { Code = 107, Weight = 3, Name = "Limited (Armed Services or Government) Registrant" },
+                    new License { Code = 108, Weight = 4, Name = "Limited (Education & Volunteer) Registrant" },
+                    new License { Code = 109, Weight = 5, Name = "Limited (Restricted-to-Specialty) Registrant" },
+                    new License { Code = 110, Weight = 6, Name = "Student Registrant" },
+                    new License { Code = 111, Weight = 7, Name = "Non-Practising Registrant" },
+                    new License { Code = 112, Weight = 8, Name = "Temporary Registrant" },
+
+                    // Denturist
+                    new License { Code = 113, Weight = 1, Name = "Full" },
+                    new License { Code = 114, Weight = 2, Name = "Limited" },
+                    new License { Code = 115, Weight = 3, Name = "Limited (Grandfathered)" },
+                    new License { Code = 116, Weight = 4, Name = "Temporary" },
+                    new License { Code = 117, Weight = 5, Name = "Non-Practising" },
+                    new License { Code = 118, Weight = 6, Name = "Student" },
                 };
             }
         }

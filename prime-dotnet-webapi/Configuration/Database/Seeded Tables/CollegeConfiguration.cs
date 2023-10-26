@@ -30,7 +30,7 @@ namespace Prime.Configuration.Database
                     new College { Code = 17, Name = "College of Speech and Hearing Health Professionals of BC", Weight = 160                       },
                     new College { Code = 18, Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC", Weight = 170 },
                     new College { Code = 19, Name = "BC College of Social Workers", Weight = 180                                                   },
-                    new College { Code = 20, Name = "College of Oral Health Professionals", Weight = 40                                            }
+                    new College { Code = 20, Name = "BC College of Oral Health Professionals", Weight = 40                                            }
                 };
             }
         }

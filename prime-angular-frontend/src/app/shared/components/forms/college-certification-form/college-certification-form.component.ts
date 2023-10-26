@@ -92,8 +92,8 @@ export class CollegeCertificationFormComponent implements OnInit {
     return this.form.get('collegeCode') as FormControl;
   }
 
-  public get nurseCategory(): FormControl {
-    return this.form.get('nurseCategory') as FormControl;
+  public get category(): FormControl {
+    return this.form.get('category') as FormControl;
   }
 
   public get licenseNumber(): FormControl {
@@ -119,6 +119,19 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public get practiceCode(): FormControl {
     return this.form.get('practiceCode') as FormControl;
+  }
+
+  public getGrouping(collegeCode: string): CollegeLicenseGroupingConfig[] {
+    let groupingCodes = this.colleges.find((c) => c.code === +collegeCode).collegeLicenses.map((l) => l.collegeLicenseGroupingCode);
+    return this.nurseGroups.filter((g) => groupingCodes.some((gc) => gc === g.code));
+  }
+
+  public collegeHasGrouping(collegeCode: string): boolean {
+    if (collegeCode === '') {
+      return false;
+    }
+    const college = this.colleges.find((c) => c.code === +collegeCode);
+    return college.collegeLicenses.some((l) => l.collegeLicenseGroupingCode);
   }
 
   public get filteredColleges(): CollegeConfig[] {
@@ -198,8 +211,8 @@ export class CollegeCertificationFormComponent implements OnInit {
           }
         });
 
-      const initialNursingCategory = +this.nurseCategory.value ?? null;
-      this.nurseCategory.valueChanges
+      const initialNursingCategory = +this.category.value ?? null;
+      this.category.valueChanges
         .pipe(
           startWith(initialNursingCategory),
           tap((collegeLicenseGroupingCode: number | null) => (collegeLicenseGroupingCode) ? this.clearNursingCategoryValidators() : null),
@@ -211,7 +224,7 @@ export class CollegeCertificationFormComponent implements OnInit {
         )
         .subscribe((collegeLicenseGroupingCode: number) => {
           this.setNursingCategoryValidators();
-          this.loadLicensesByNursingCategory(collegeLicenseGroupingCode);
+          this.loadLicensesByCategory(collegeLicenseGroupingCode);
         });
     } else {
       const prescriberIdType = this.enrolmentService.getPrescriberIdType(this.licenseCode.value);
@@ -227,13 +240,13 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
 
     if (collegeCode === CollegeLicenceClassEnum.BCCNM && !this.condensed) {
-      this.formUtilsService.setValidators(this.nurseCategory, [Validators.required]);
+      this.formUtilsService.setValidators(this.category, [Validators.required]);
       return;
     }
 
     // In case previous selection was BCCNM, clear validators
     if (!this.condensed) {
-      this.formUtilsService.setValidators(this.nurseCategory, []);
+      this.formUtilsService.setValidators(this.category, []);
       this.clearNursingCategoryValidators();
     }
 
@@ -279,7 +292,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
 
     if (!this.condensed) {
-      this.nurseCategory.reset(null);
+      this.category.reset(null);
       if (!this.licenseClassDiscontinued) {
         this.renewalDate.reset(null);
       }
@@ -360,24 +373,24 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.formUtilsService.setValidators(this.licenseNumber, []);
 
     if (!this.condensed) {
-      this.formUtilsService.setValidators(this.nurseCategory, []);
+      this.formUtilsService.setValidators(this.category, []);
       this.formUtilsService.setValidators(this.renewalDate, []);
       this.formUtilsService.setValidators(this.practitionerId, []);
     }
   }
 
   private loadLicenses(collegeCode: number) {
-    if (collegeCode !== CollegeLicenceClassEnum.BCCNM || this.condensed) {
+    if (!this.collegeHasGrouping(collegeCode.toString()) || this.condensed) {
       this.filteredLicenses = this.filterLicenses(collegeCode);
       this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
     }
   }
 
-  private loadLicensesByNursingCategory(nursingCategory: number) {
+  private loadLicensesByCategory(category: number) {
     const collegeCode = this.collegeCode.value;
-    if (collegeCode === CollegeLicenceClassEnum.BCCNM) {
+    if (this.collegeHasGrouping(collegeCode)) {
       this.loadPractices(collegeCode);
-      this.filteredLicenses = this.filterLicensesByGrouping(nursingCategory);
+      this.filteredLicenses = this.filterLicensesByGrouping(category);
       this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
     }
   }

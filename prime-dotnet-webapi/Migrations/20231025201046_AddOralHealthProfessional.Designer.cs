@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231006232220_AddOralHealthProfessional")]
+    [Migration("20231025201046_AddOralHealthProfessional")]
     partial class AddOralHealthProfessional
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1253,7 +1253,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 20,
-                            Name = "College of Oral Health Professionals",
+                            Name = "BC College of Oral Health Professionals",
                             Weight = 40
                         });
                 });
@@ -1887,90 +1887,189 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 20,
                             LicenseCode = 92,
+                            CollegeLicenseGroupingCode = 6,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 93,
+                            CollegeLicenseGroupingCode = 6,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 94,
+                            CollegeLicenseGroupingCode = 6,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 95,
+                            CollegeLicenseGroupingCode = 6,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 96,
+                            CollegeLicenseGroupingCode = 7,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 97,
+                            CollegeLicenseGroupingCode = 7,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 98,
+                            CollegeLicenseGroupingCode = 7,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 99,
+                            CollegeLicenseGroupingCode = 7,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 100,
+                            CollegeLicenseGroupingCode = 8,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 101,
+                            CollegeLicenseGroupingCode = 8,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 102,
+                            CollegeLicenseGroupingCode = 8,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 103,
+                            CollegeLicenseGroupingCode = 8,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 104,
+                            CollegeLicenseGroupingCode = 9,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 105,
+                            CollegeLicenseGroupingCode = 10,
                             Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 20,
                             LicenseCode = 106,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 107,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 108,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 109,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 110,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 111,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 112,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 113,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 114,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 115,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 116,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 117,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 118,
+                            CollegeLicenseGroupingCode = 11,
                             Discontinued = false
                         });
                 });
@@ -2022,6 +2121,42 @@ namespace Prime.Migrations
                             Code = 5,
                             Name = "Midwife",
                             Weight = 5
+                        },
+                        new
+                        {
+                            Code = 6,
+                            Name = "Dental Assistant",
+                            Weight = 6
+                        },
+                        new
+                        {
+                            Code = 7,
+                            Name = "Dental Hygienist",
+                            Weight = 7
+                        },
+                        new
+                        {
+                            Code = 8,
+                            Name = "Dental Technician",
+                            Weight = 8
+                        },
+                        new
+                        {
+                            Code = 9,
+                            Name = "Dental Therapist",
+                            Weight = 9
+                        },
+                        new
+                        {
+                            Code = 10,
+                            Name = "Dentist",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 11,
+                            Name = "Denturist",
+                            Weight = 11
                         });
                 });
 
@@ -6419,92 +6554,164 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 92,
-                            Name = "Full Dentist",
+                            Name = "Full Certified Dental Assisant",
                             Weight = 1
                         },
                         new
                         {
                             Code = 93,
-                            Name = "Limited Dentist (Restricted to Specialty)",
+                            Name = "Limited Certified Dental Assistant",
                             Weight = 2
                         },
                         new
                         {
                             Code = 94,
-                            Name = "Limited (Academic) Dentist",
+                            Name = "Non-Practising Certified Dental Assistant",
                             Weight = 3
                         },
                         new
                         {
                             Code = 95,
-                            Name = "Limited (Educational and Volunteer) Dentist",
+                            Name = "Temporary Certified Dental Assistant",
                             Weight = 4
                         },
                         new
                         {
                             Code = 96,
-                            Name = "Limited (Armed Forces/Government) Dentist",
-                            Weight = 5
+                            Name = "Registered Dental Hygienist Registration",
+                            Weight = 1
                         },
                         new
                         {
                             Code = 97,
-                            Name = "Dental Hygienists",
-                            Weight = 6
+                            Name = "Dental Hygiene Practitioner",
+                            Weight = 2
                         },
                         new
                         {
                             Code = 98,
-                            Name = "Dental Hygiene Practitioner",
-                            Weight = 7
+                            Name = "Non-Practising Registration",
+                            Weight = 3
                         },
                         new
                         {
                             Code = 99,
-                            Name = "Dental Therapist",
-                            Weight = 8
+                            Name = "Temporary Registration",
+                            Weight = 4
                         },
                         new
                         {
                             Code = 100,
                             Name = "Dental Technician",
-                            Weight = 9
+                            Weight = 1
                         },
                         new
                         {
                             Code = 101,
-                            Name = "Full Denturist",
-                            Weight = 10
+                            Name = "Temporary",
+                            Weight = 2
                         },
                         new
                         {
                             Code = 102,
-                            Name = "Student Dentistry",
-                            Weight = 11
+                            Name = "Non-Practising Dental Technician",
+                            Weight = 3
                         },
                         new
                         {
                             Code = 103,
-                            Name = "Limited (Grandparented) Denturist",
-                            Weight = 12
+                            Name = "Student Registrant",
+                            Weight = 4
                         },
                         new
                         {
                             Code = 104,
-                            Name = "Student dental technology",
-                            Weight = 13
+                            Name = "Dental Therapist",
+                            Weight = 1
                         },
                         new
                         {
                             Code = 105,
-                            Name = "Student Denturism",
-                            Weight = 14
+                            Name = "Full Dentist Registrant",
+                            Weight = 1
                         },
                         new
                         {
                             Code = 106,
+                            Name = "Limited (Academic) Registrant",
+                            Weight = 2
+                        },
+                        new
+                        {
+                            Code = 107,
+                            Name = "Limited (Armed Services or Government) Registrant",
+                            Weight = 3
+                        },
+                        new
+                        {
+                            Code = 108,
+                            Name = "Limited (Education & Volunteer) Registrant",
+                            Weight = 4
+                        },
+                        new
+                        {
+                            Code = 109,
+                            Name = "Limited (Restricted-to-Specialty) Registrant",
+                            Weight = 5
+                        },
+                        new
+                        {
+                            Code = 110,
+                            Name = "Student Registrant",
+                            Weight = 6
+                        },
+                        new
+                        {
+                            Code = 111,
+                            Name = "Non-Practising Registrant",
+                            Weight = 7
+                        },
+                        new
+                        {
+                            Code = 112,
+                            Name = "Temporary Registrant",
+                            Weight = 8
+                        },
+                        new
+                        {
+                            Code = 113,
+                            Name = "Full",
+                            Weight = 1
+                        },
+                        new
+                        {
+                            Code = 114,
+                            Name = "Limited",
+                            Weight = 2
+                        },
+                        new
+                        {
+                            Code = 115,
+                            Name = "Limited (Grandfathered)",
+                            Weight = 3
+                        },
+                        new
+                        {
+                            Code = 116,
                             Name = "Temporary",
-                            Weight = 15
+                            Weight = 4
+                        },
+                        new
+                        {
+                            Code = 117,
+                            Name = "Non-Practising",
+                            Weight = 5
+                        },
+                        new
+                        {
+                            Code = 118,
+                            Name = "Student",
+                            Weight = 6
                         });
                 });
 
@@ -10868,6 +11075,198 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 106,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 291,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 107,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 292,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 108,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 293,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 109,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 294,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 110,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 295,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 111,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 296,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 112,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 297,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 113,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 298,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 114,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 299,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 115,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 300,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 116,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 301,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 117,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 302,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 9, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 118,
                             LicensedToProvideCare = true,
                             Manual = true,
                             NamedInImReg = false,
