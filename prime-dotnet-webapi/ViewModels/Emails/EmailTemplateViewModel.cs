@@ -8,5 +8,6 @@ namespace Prime.ViewModels.Emails
         public string Template { get; set; }
         public DateTimeOffset ModifiedDate { get; set; }
         public string TemplateName { get; set; }
+        public string Subject { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace Prime.Models
         public string Template { get; set; }
         public DateTimeOffset ModifiedDate { get; set; }
         public EmailTemplateType EmailType { get; set; }
+        public string Subject { get; set; }
 
         public string VersionedName()
         {
