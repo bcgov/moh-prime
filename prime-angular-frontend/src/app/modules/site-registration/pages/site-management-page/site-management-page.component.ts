@@ -110,7 +110,7 @@ export class SiteManagementPageComponent implements OnInit {
 
   public changeOrganization(organizationId: number): void {
     this.organizationService.organization = this.organizationService.organizations.find((org) => org.id === organizationId);
-    this.organization = this.organizationService.organization;
+    this.getOrganizations(this.organizationService.organization.id);
   }
 
   public getOrganizationProperties(organization: Organization): KeyValue<string, string>[] {
@@ -207,19 +207,25 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.getOrganizations();
+    this.getOrganizations(0);
   }
 
-  private getOrganizations(): void {
+  /**
+   *  Get organization data and bind them to this component
+   * @param orgId organization Id, put zero when no specific organization id
+   */
+  private getOrganizations(orgId: number): void {
     this.busy = this.authService.getUser$()
       .pipe(
         exhaustMap((user: BcscUser) =>
           this.organizationResource.getSigningAuthorityOrganizationByUsername(user.username)
         ),
         map((organizations: Organization[]) => {
-          //let organization = organizations.find(org => org.id === this.organizationId);
+          const organization = orgId > 0 ?
+            organizations.find((org) => org.id === orgId)
+            : organizations[0];
 
-          this.organizationSitesExpiryDates = organizations[0].sites
+          this.organizationSitesExpiryDates = organization.sites
             .reduce((expiryDates: string[], site: Site) => {
               return (site.status === SiteStatusType.EDITABLE && !!site.approvedDate)
                 ? [...expiryDates, Site.getExpiryDate(site)]
