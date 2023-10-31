@@ -58,4 +58,19 @@ export class EmailTemplateResourceService {
         })
       );
   }
+
+  public updateEmailSubject(id: number, subject: string): Observable<EmailTemplate> {
+    const payload = { data: subject };
+    return this.apiResource.put<EmailTemplate>(`emails/management/subject/${id}`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<EmailTemplate>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Email Subject has been updated.')),
+        tap((emailTemplate: EmailTemplate) => this.logger.info('EMAIL_SUBJECT', emailTemplate)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Email Subject could not be updated');
+          this.logger.error('[Adjudication] EmailTemplateResource::updateEmailSubject error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }

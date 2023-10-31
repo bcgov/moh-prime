@@ -4,4 +4,6 @@ export interface EmailTemplate {
   templateName: string;
   modifiedDate?: string;
   subject: string;
+  description: string;
+  recipient: string;
 }

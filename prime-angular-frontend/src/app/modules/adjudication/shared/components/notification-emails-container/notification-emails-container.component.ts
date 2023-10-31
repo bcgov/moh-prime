@@ -4,6 +4,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+import { Moment } from 'moment';
+import { DateUtils } from '@lib/utils/date-utils.class';
 
 @Component({
   selector: 'app-notification-emails-container',
@@ -35,8 +37,17 @@ export class NotificationEmailsContainerComponent implements OnInit {
         value: template.subject
       },
       {
+        key: 'Description',
+        value: template.description
+      },
+      {
+        key: 'Recipient',
+        value: template.recipient
+      },
+      {
         key: 'Last Modified',
-        value: this.formatDatePipe.transform(template.modifiedDate)
+        value: this.formatDatePipe.transform(template.modifiedDate),
+        danger: DateUtils.withinDaysAfterDate(template.modifiedDate, 182)
       },
     ];
   }

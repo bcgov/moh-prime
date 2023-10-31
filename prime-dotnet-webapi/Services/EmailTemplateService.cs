@@ -65,5 +65,19 @@ namespace Prime.Services
 
             return _mapper.Map<EmailTemplateViewModel>(emailTemplate);
         }
+
+        public async Task<EmailTemplateViewModel> UpdateEmailSubjectAsync(int id, string subject)
+        {
+
+            var emailTemplate = await _context.EmailTemplates
+                .SingleOrDefaultAsync(t => t.Id == id);
+
+            emailTemplate.Subject = subject;
+            emailTemplate.ModifiedDate = DateTimeOffset.Now;
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<EmailTemplateViewModel>(emailTemplate);
+        }
     }
 }

@@ -145,5 +145,28 @@ namespace Prime.Controllers
             var emailTemplate = await _emailTemplateService.UpdateEmailTemplateAsync(emailTemplateId, template);
             return Ok(emailTemplate);
         }
+
+        // PUT: api/emails/management/subject/1
+        /// <summary>
+        /// Update email template
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="subject"></param>
+        [HttpPut("management/subject/{emailTemplateId}", Name = nameof(UpdateEmailSubject))]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailSubject(int emailTemplateId, FromBodyText subject)
+        {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
+            var emailTemplate = await _emailTemplateService.UpdateEmailSubjectAsync(emailTemplateId, subject);
+            return Ok(emailTemplate);
+        }
     }
 }

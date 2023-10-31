@@ -6,35 +6,82 @@
   </ng-container>
 </app-page-subheader>
 
-<app-page-subheader class="mb-4"
-                    [divider]="false">
-  <ng-container appPageSubheaderTitle>
-    Subject:
-  </ng-container>
-  <ng-container appPageSubheaderSummary>
-    {{ emailTemplate?.subject }}
-  </ng-container>
-</app-page-subheader>
-
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>
-    {{ (editable) ? 'Editing' : 'Preview' }}
+    Description
+  </ng-container>
+</app-page-subheader>
+<ng-container>
+  {{ this.emailTemplate?.description | default }}
+</ng-container>
+<br/>
+<br/>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>
+    Recipient
+  </ng-container>
+</app-page-subheader>
+<ng-container>
+  {{ this.emailTemplate?.recipient | default }}
+</ng-container>
+<br/>
+<br/>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>
+    Subject
+  </ng-container>
+  <button *ngIf="Role.MAINTENANCE | inRole"
+          mat-icon-button
+          [matTooltip]="(!subjectEditable) ? 'Edit Email Subject' : 'Cancel Editing'"
+          (click)="toggleEditSubject(!subjectEditable)">
+    <mat-icon>{{ (!subjectEditable) ? 'edit' : 'close' }}</mat-icon>
+  </button>
+</app-page-subheader>
+<ng-container *ngIf="!subjectEditable">
+  {{ emailTemplate?.subject }}
+</ng-container>
+<ng-container *ngIf="subjectEditable">
+  <form [formGroup]="form"
+        (ngSubmit)="saveSubject()">
+    <mat-form-field appearance="fill"
+                    class="w-100">
+      <mat-label>Subject</mat-label>
+      <textarea formControlName="subject"
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="0"></textarea>
+    </mat-form-field>
+    <div class="d-flex justify-content-end">
+      <button mat-flat-button
+              color="primary">
+        Save
+      </button>
+    </div>
+  </form>
+</ng-container>
+<br/>
+<br/>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>
+    {{ (templateEditable) ? 'Editing' : 'Preview' }}
   </ng-container>
 
   <button *ngIf="Role.MAINTENANCE | inRole"
           mat-icon-button
-          [matTooltip]="(!editable) ? 'Edit Email Template' : 'Cancel Editing'"
-          (click)="toggleEdit(!editable)">
-    <mat-icon>{{ (!editable) ? 'edit' : 'close' }}</mat-icon>
+          [matTooltip]="(!templateEditable) ? 'Edit Email Template' : 'Cancel Editing'"
+          (click)="toggleEditTemplate(!templateEditable)">
+    <mat-icon>{{ (!templateEditable) ? 'edit' : 'close' }}</mat-icon>
   </button>
 </app-page-subheader>
 
-<ng-container *ngIf="!editable">
+<ng-container *ngIf="!templateEditable">
   <div [innerHtml]="emailTemplate?.template"></div>
 </ng-container>
-<ng-container *ngIf="editable">
+<ng-container *ngIf="templateEditable">
   <form [formGroup]="form"
-        (ngSubmit)="onSubmit()">
+        (ngSubmit)="saveTemplate()">
     <mat-form-field appearance="fill"
                     class="w-100">
       <mat-label>Template</mat-label>
