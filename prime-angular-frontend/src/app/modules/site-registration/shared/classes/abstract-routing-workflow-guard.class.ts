@@ -43,12 +43,19 @@ export abstract class AbstractRoutingWorkflowGuard extends BaseGuard {
             this.organizationResource.getOrganizationClaim({ username })
           ])
         ),
-        map(([signingAuthority, organization, claimed]: [Party | null, Organization | null, boolean]) => {
+        map(([signingAuthority, organizations, claimed]: [Party | null, Organization[] | null, boolean]) => {
           // Store the organization for access throughout registration, which
           // will allows be the most up-to-date organization
           this.signingAuthorityService.signingAuthority = signingAuthority;
-          this.organizationService.organization = organization;
-          return this.routeDestination(routePath, params, organization, signingAuthority, claimed);
+          this.organizationService.organizations = organizations;
+          if (!this.organizationService.organization) {
+            if (organizations) {
+              this.organizationService.organization = organizations[0];
+            }
+          } else {
+            this.organizationService.organization = organizations.find((org) => org.id === this.organizationService.organization.id);
+          }
+          return this.routeDestination(routePath, params, organizations, signingAuthority, claimed);
         })
       );
   }
@@ -60,7 +67,7 @@ export abstract class AbstractRoutingWorkflowGuard extends BaseGuard {
   protected abstract routeDestination(
     routePath: string,
     params: Params,
-    organization: Organization | null,
+    organizations: Organization[] | null,
     party: Party | null,
     hasOrgClaim: boolean
   ): boolean;
