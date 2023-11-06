@@ -232,7 +232,7 @@ export class SiteManagementPageComponent implements OnInit {
                 : expiryDates;
             }, []);
           this.organizations = organizations;
-          return this.organization = organizations.find((org) => org.id === organization.id);
+          return this.organization = organizations.find((org) => org.id === this.organizationService.organization.id);
         }),
         exhaustMap((organization: Organization) =>
           this.organizationResource.getOrganizationAgreements(organization.id)
