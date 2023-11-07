@@ -50,7 +50,6 @@
         <button mat-raised-button
                 color="secondary"
                 [disabled]="!organization.completed || isPendingTransfer()"
-                *ngIf="organizations && organizations.length > 1"
                 [matMenuTriggerFor]="orgMenu">
           {{ organization.name }}<mat-icon>keyboard_arrow_down</mat-icon>
         </button>
