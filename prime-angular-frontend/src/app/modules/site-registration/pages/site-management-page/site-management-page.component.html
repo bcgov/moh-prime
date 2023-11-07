@@ -47,12 +47,17 @@
     <div class="row mb-2">
       <div class="text-left col-6">
         Current Organization:
-        <button mat-raised-button
-                color="secondary"
-                [disabled]="!organization.completed || isPendingTransfer()"
-                [matMenuTriggerFor]="orgMenu">
-          {{ organization.name }}<mat-icon>keyboard_arrow_down</mat-icon>
-        </button>
+        <ng-container *ngIf="organizations.length > 1">
+          <button mat-raised-button
+                  color="secondary"
+                  [matMenuTriggerFor]="orgMenu">
+            {{ organization.name }}<mat-icon>keyboard_arrow_down</mat-icon>
+          </button>
+        </ng-container>
+        <span *ngIf="organizations.length === 1"
+             class="button mat-raised-button">
+          {{ organization.name }}
+        </span>
         <mat-menu #orgMenu="matMenu"
                   aria-label="Change Organization">
           <ng-container *ngFor="let org of organizations">

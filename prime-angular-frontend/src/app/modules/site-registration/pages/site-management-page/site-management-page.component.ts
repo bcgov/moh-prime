@@ -110,7 +110,7 @@ export class SiteManagementPageComponent implements OnInit {
 
   public changeOrganization(organizationId: number): void {
     this.organizationService.organization = this.organizationService.organizations.find((org) => org.id === organizationId);
-    this.getOrganizations(this.organizationService.organization.id);
+    this.getOrganizations();
   }
 
   public getOrganizationProperties(organization: Organization): KeyValue<string, string>[] {
@@ -207,22 +207,21 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.getOrganizations(0);
+    this.getOrganizations();
   }
 
   /**
    *  Get organization data and bind them to this component
-   * @param orgId organization Id, put zero when no specific organization id
    */
-  private getOrganizations(orgId: number): void {
+  private getOrganizations(): void {
     this.busy = this.authService.getUser$()
       .pipe(
         exhaustMap((user: BcscUser) =>
           this.organizationResource.getSigningAuthorityOrganizationByUsername(user.username)
         ),
         map((organizations: Organization[]) => {
-          const organization = orgId > 0 ?
-            organizations.find((org) => org.id === orgId)
+          const organization = this.organizationService.organization ?
+            organizations.find((org) => org.id === this.organizationService.organization.id)
             : organizations[0];
 
           this.organizationSitesExpiryDates = organization.sites
@@ -232,7 +231,7 @@ export class SiteManagementPageComponent implements OnInit {
                 : expiryDates;
             }, []);
           this.organizations = organizations;
-          return this.organization = organizations.find((org) => org.id === this.organizationService.organization.id);
+          return this.organization = organization;
         }),
         exhaustMap((organization: Organization) =>
           this.organizationResource.getOrganizationAgreements(organization.id)
