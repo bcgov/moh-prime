@@ -139,7 +139,7 @@ jobs:
       - name: install yarn
         run: npm install -g yarn
 
-      - run: yarn global add @angular/compiler-cli
+      - run: yarn global add @angular/compiler-cli@16.2.12
       - run: yarn global add @angular/cli
 
       - name: install dependencies
