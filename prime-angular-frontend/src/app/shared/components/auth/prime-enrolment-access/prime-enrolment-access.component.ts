@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
@@ -22,11 +22,15 @@ import { CollectionNoticeService } from '@shared/services/collection-notice.serv
   ]
 })
 export class PrimeEnrolmentAccessComponent implements OnInit {
+  @Input() public mode: 'enrolment' | 'community' | 'health-authority';
   @Output() public login: EventEmitter<void>;
   public locationCode: BannerLocationCode;
   public bcscMobileSetupUrl: string;
   public loginCancelled: boolean;
   public bcscHelpDeskUrl: string;
+  public enrolmentUrl: string;
+  public communitySiteUrl: string;
+  public healthAuthorityUrl: string;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -41,6 +45,9 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     this.loginCancelled =
       this.route.snapshot.queryParams.action === 'cancelled';
     this.bcscHelpDeskUrl = this.config.bcscHelpDeskUrl;
+    this.enrolmentUrl = "info";
+    this.communitySiteUrl = "site";
+    this.healthAuthorityUrl = "health-authority";
   }
 
   public get isMobile(): boolean {

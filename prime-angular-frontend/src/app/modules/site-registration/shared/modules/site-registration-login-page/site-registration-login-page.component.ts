@@ -30,7 +30,8 @@ export class SiteRegistrationLoginPageComponent implements OnInit {
 
   public onLogin() {
     // Route to COLLECTION_NOTICE which determines the direction of routing
-    const redirectRoute = SiteRoutes.routePath(`${this.redirectRoutePath}${SiteRoutes.COLLECTION_NOTICE}`);
+    //const redirectRoute = SiteRoutes.routePath(`${this.redirectRoutePath}${SiteRoutes.COLLECTION_NOTICE}`);
+    const redirectRoute = '/enrolment/collection_notice'
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
