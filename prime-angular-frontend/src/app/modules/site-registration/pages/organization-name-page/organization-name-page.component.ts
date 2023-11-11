@@ -107,7 +107,10 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected patchForm(): void {
-    const organization = this.organizationService.organization;
+    if (this.organizationId === 0) {
+      return;
+    }
+    const organization = this.organizationService.organizations?.find((org) => org.id === this.organizationId);
     if (!organization) {
       return;
     }
@@ -150,6 +153,13 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
           tap((organization: Organization) => {
             this.organizationService.organization = organization;
 
+            // Add newly created Organization
+            if (!this.organizationService.organizations) {
+              this.organizationService.organizations = [organization];
+            } else {
+              this.organizationService.organizations.push(organization);
+            }
+
             // Copy over only new information from `organization`
             payload.id = organization.id;
             payload.signingAuthorityId = organization.signingAuthorityId;
@@ -159,7 +169,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
             payload.doingBusinessAs = this.organizationFormStateService.json.doingBusinessAs;
           }),
           exhaustMap(() => this.webApiLogger.debug(`Registration ID updating to ${payload.registrationId}`, { orgName: payload.name })),
-          exhaustMap(() => this.organizationResource.updateOrganization(payload))
+          exhaustMap(() => this.organizationResource.updateOrganization(payload)),
         );
 
     return request$
@@ -172,7 +182,8 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
             ? this.siteResource.createSite(this.organizationService.organization.id)
             : of(null)
         ),
-        map((site: Site) => site?.id)
+        map((site: Site) => site?.id),
+        tap(() => this.organizationService.organization.completed = true),
       );
   }
 

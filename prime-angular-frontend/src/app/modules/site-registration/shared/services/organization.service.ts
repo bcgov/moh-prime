@@ -12,6 +12,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 export interface IOrganizationService {
   organization$: Observable<Organization | null>;
   organization: Organization | null;
+  organizations: Organization[] | null;
 }
 
 @Injectable({
@@ -20,6 +21,7 @@ export interface IOrganizationService {
 export class OrganizationService implements IOrganizationService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _organization: BehaviorSubject<Organization>;
+  private _organizations: Organization[];
 
   constructor() {
     this._organization = new BehaviorSubject<Organization>(null);
@@ -36,8 +38,19 @@ export class OrganizationService implements IOrganizationService {
     return (value) ? { ...this._organization.value } : null;
   }
 
+  public set organizations(organizations: Organization[]) {
+    // Store a copy to prevent updates by reference
+    this._organizations = organizations;
+  }
+
+  public get organizations(): Organization[] | null {
+    // Allow access to current value, but prevent updates by reference
+    return this._organizations;
+  }
+
   public get organization$(): Observable<Organization | null> {
     // Allow subscriptions, but make the subject immutable
     return this._organization.asObservable();
   }
+
 }
