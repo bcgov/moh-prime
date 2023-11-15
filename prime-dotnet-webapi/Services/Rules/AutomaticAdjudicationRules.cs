@@ -74,15 +74,18 @@ namespace Prime.Services.Rules
         private readonly ICollegeLicenceClient _collegeLicenceClient;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEnrolleeService _enrolleeService;
+        private bool _ignoreDOBDiscrepancy;
 
         public PharmanetValidationRule(
             ICollegeLicenceClient collegeLicenceClient,
             IBusinessEventService businessEventService,
-            IEnrolleeService enrolleeService)
+            IEnrolleeService enrolleeService,
+            bool ignoreDOBDiscrepancy = false)
         {
             _collegeLicenceClient = collegeLicenceClient;
             _businessEventService = businessEventService;
             _enrolleeService = enrolleeService;
+            _ignoreDOBDiscrepancy = ignoreDOBDiscrepancy;
         }
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
@@ -189,7 +192,7 @@ namespace Prime.Services.Rules
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{cert} returned \"{record.FirstName} {record.LastName}\".");
                     passed = false;
                 }
-                if (record.DateofBirth.Date != enrollee.DateOfBirth.Date)
+                if (!_ignoreDOBDiscrepancy && record.DateofBirth.Date != enrollee.DateOfBirth.Date)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{cert} returned {record.DateofBirth:d MMM yyyy}");
                     passed = false;

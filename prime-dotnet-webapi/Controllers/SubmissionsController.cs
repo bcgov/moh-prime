@@ -251,6 +251,20 @@ namespace Prime.Controllers
             return Ok();
         }
 
+        // POST: api/enrollees/rerun-rules-for-naturopaths
+        /// <summary>
+        /// Re-runs (most) adjudication rules for applicable naturopaths
+        /// </summary>
+        [HttpPost("rerun-rules-for-naturopaths", Name = nameof(RerunRulesForNaturopaths))]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> RerunRulesForNaturopaths()
+        {
+            await _submissionService.RerunRulesForNaturopathsAsync();
+            return Ok();
+        }
+
         private async Task<ActionResult> EnrolleeStatusActionInternal(int enrolleeId, EnrolleeStatusAction action, object additionalParameters = null)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
