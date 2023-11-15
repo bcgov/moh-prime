@@ -3,7 +3,7 @@
   <div class="row title">
     <div class="col-sm-8">
       <div class="t1">Request for access to pharmanet</div>
-      <div class="st1">Please choocse the type of registration you will need</div>
+      <div class="st1">Please choose the type of registration you will need</div>
     </div>
     <div class="col-sm-4 logo">
       <app-prime-logo label="right"
@@ -42,7 +42,7 @@
     <div class="col-sm-auto tab selected-tab"
          [ngClass]="{'selected-tab': mode === 'enrolment'}">
       <a class="tab-link" href="{{ this.enrolmentUrl}}">
-        User enrolment
+        Individual enrolment
       </a>
     </div>
     <div class="col-sm-auto tab"
@@ -67,23 +67,11 @@
       <div class="mst1">for health professionals of British Columbia</div>
     </div>
     <div class="row pb-4">
-      <div class="col-sm-6 border-right">
-        <div class="button_title">
-          Looking to start a new enrolment?
-        </div>
-        <button mat-flat-button
-                color="primary"
-                class="large"
-                (click)="onLogin()">Begin Enrolment</button>
-      </div>
       <div class="col-sm-6">
-        <div class="button_title">
-          I want to renew or update my exisiting information
-        </div>
         <button mat-flat-button
                 color="primary"
                 class="large"
-                (click)="onLogin()">Manage</button>
+                (click)="onLogin()">Access Individual Enrolment</button>
       </div>
     </div>
   </div>
@@ -95,9 +83,7 @@
     <div class="row pb-4">
       <div class="col-sm-6">
         <div class="button_title">
-          Private Community Health Practices:<br/>
-          Community Pharmacies:<br/>
-          Device Providers:
+          Health Authorities
         </div>
         <button mat-flat-button
                 color="primary"
@@ -114,7 +100,9 @@
     <div class="row pb-4">
       <div class="col-sm-6">
         <div class="button_title">
-          Health Authorities:
+          Private Community Health Practices<br/>
+          Community Pharmacies<br/>
+          Device Providers
         </div>
         <button mat-flat-button
                 color="primary"
