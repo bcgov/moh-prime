@@ -215,7 +215,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task RerunRulesForNaturopathsAsync()
+        public async Task RerunRulesForNaturopathsAsync(bool listOnly)
         {
             var pharmanetStatusReasons = new[]
             {
@@ -234,17 +234,20 @@ namespace Prime.Services
 
             foreach (var enrollee in enrollees)
             {
-                // Group results of the rules under a new enrollment status
-                enrollee.AddEnrolmentStatus(StatusType.UnderReview);
-                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Cron Job running the enrollee application rules");
-
-                Console.WriteLine($"RerunRulesAsync on {enrollee.FullName} (Id {enrollee.Id})");
-                if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee, true))
+                Console.WriteLine($"RerunRulesAsync on {enrollee.FullName} (Id {enrollee.Id}, DOB: {enrollee.DateOfBirth})");
+                if (!listOnly)
                 {
-                    Console.WriteLine($"Cron Job Automatically Approved {enrollee.FullName} (Id {enrollee.Id})");
-                    // await AdjudicatedAutomatically(enrollee, "Cron Job Automatically Approved");
+                    // Group results of the rules under a new enrollment status
+                    enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+                    await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Cron Job running the enrollee application rules");
+
+                    if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee, true))
+                    {
+                        Console.WriteLine($"Cron Job Automatically Approved {enrollee.FullName} (Id {enrollee.Id})");
+                        await AdjudicatedAutomatically(enrollee, "Cron Job Automatically Approved");
+                    }
+                    // We don't perform a `_enrolleeService.RemoveNotificationsAsync`
                 }
-                // We don't perform a `_enrolleeService.RemoveNotificationsAsync`
             }
             await _context.SaveChangesAsync();
         }

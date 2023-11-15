@@ -259,9 +259,9 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.PrimeApiServiceAccount)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> RerunRulesForNaturopaths()
+        public async Task<ActionResult> RerunRulesForNaturopaths([FromQuery] bool listOnly = true)
         {
-            await _submissionService.RerunRulesForNaturopathsAsync();
+            await _submissionService.RerunRulesForNaturopathsAsync(listOnly);
             return Ok();
         }
 

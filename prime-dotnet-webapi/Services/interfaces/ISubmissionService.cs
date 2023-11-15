@@ -24,7 +24,8 @@ namespace Prime.Services
         /// 3. Have a BirthdateDiscrepancy Status Reason
         /// 4. Are Full Naturopaths
         /// </summary>
+        /// <param name="listOnly">If `true`, only writes to console the matching enrollees</param>
         /// <returns></returns>
-        Task RerunRulesForNaturopathsAsync();
+        Task RerunRulesForNaturopathsAsync(bool listOnly);
     }
 }
