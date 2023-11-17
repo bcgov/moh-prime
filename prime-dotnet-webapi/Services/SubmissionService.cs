@@ -215,6 +215,43 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task RerunRulesForNaturopathsAsync(bool listOnly)
+        {
+            var pharmanetStatusReasons = new[]
+            {
+                (int) StatusReasonType.BirthdateDiscrepancy,
+            };
+
+            var enrollees = GetBaseQueryForEnrolleeApplicationRules()
+                .Where(e => e.Adjudicator == null)
+                .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview)
+                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => pharmanetStatusReasons.Contains(esr.StatusReasonCode)))
+                // Looking for Full Naturopaths
+                .Where(e => e.Certifications.Any(c => c.LicenseCode == 78))
+                // Need `DecompileAsync` due to computed property `CurrentStatus`
+                .DecompileAsync()
+                .ToList();
+
+            foreach (var enrollee in enrollees)
+            {
+                Console.WriteLine($"RerunRulesAsync on {enrollee.FullName} (Id {enrollee.Id}, DOB: {enrollee.DateOfBirth})");
+                if (!listOnly)
+                {
+                    // Group results of the rules under a new enrollment status
+                    enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+                    await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Cron Job running the enrollee application rules");
+
+                    if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee, true))
+                    {
+                        Console.WriteLine($"Cron Job Automatically Approved {enrollee.FullName} (Id {enrollee.Id})");
+                        await AdjudicatedAutomatically(enrollee, "Cron Job Automatically Approved");
+                    }
+                    // We don't perform a `_enrolleeService.RemoveNotificationsAsync`
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
+
         private async Task<bool> HandleEnrolleeStatusActionAsync(EnrolleeStatusAction action, Enrollee enrollee, object additionalParameters)
         {
             switch (action)
