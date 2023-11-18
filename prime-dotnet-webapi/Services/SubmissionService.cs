@@ -220,6 +220,8 @@ namespace Prime.Services
             var pharmanetStatusReasons = new[]
             {
                 (int) StatusReasonType.BirthdateDiscrepancy,
+                // NotInPharmanet included due to earlier mistake running against non-PROD PharmaNet API
+                (int) StatusReasonType.NotInPharmanet
             };
 
             var enrollees = GetBaseQueryForEnrolleeApplicationRules()
@@ -481,7 +483,8 @@ namespace Prime.Services
                     .ThenInclude(es => es.EnrolmentStatusReasons)
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
-                        .ThenInclude(l => l.LicenseDetails);
+                        .ThenInclude(l => l.LicenseDetails)
+                .AsSplitQuery();
         }
     }
 }
