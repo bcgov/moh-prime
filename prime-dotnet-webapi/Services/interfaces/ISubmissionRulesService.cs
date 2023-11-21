@@ -8,7 +8,7 @@ namespace Prime.Services
 {
     public interface ISubmissionRulesService
     {
-        Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee);
+        Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee, bool ignoreDOBDiscrepancy = false);
 
         Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate, List<int> newestAgreementVersionIds);
     }
