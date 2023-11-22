@@ -40,14 +40,14 @@ namespace Prime.Services
         /// All rules must pass for this enrollee to qualify to be automatically adjudicated.
         /// Failing rules will add Status Reasons to the current status.
         /// </summary>
-        public async Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee)
+        public async Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee, bool ignoreDOBDiscrepancy = false)
         {
             var rules = new List<AutomaticAdjudicationRule>
             {
                 new SelfDeclarationRule(),
                 new AddressRule(),
                 new VerifiedAddressRule(),
-                new PharmanetValidationRule(_collegeLicenceClient, _businessEventService, _enrolleeService),
+                new PharmanetValidationRule(_collegeLicenceClient, _businessEventService, _enrolleeService, ignoreDOBDiscrepancy),
                 new DeviceProviderRule(_deviceProviderService),
                 new LicenceClassRule(),
                 new AlwaysManualRule(),
