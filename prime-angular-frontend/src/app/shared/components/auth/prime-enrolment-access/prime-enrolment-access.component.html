@@ -2,8 +2,8 @@
   <app-banner></app-banner>
   <div class="row title">
     <div class="col-sm-8">
-      <div class="t1">Request for access to pharmanet</div>
-      <div class="st1">Please choose the type of registration you will need</div>
+      <div class="t1">Request for access to PharmaNet</div>
+      <div class="st1">Please select from the tabs below</div>
     </div>
     <div class="col-sm-4 logo">
       <app-prime-logo label="right"
@@ -48,8 +48,8 @@
     <div class="col-sm-auto tab"
          [ngClass]="{'selected-tab': mode === 'community'}">
       <a class="tab-link" href="{{ this.communitySiteUrl}}">
-          Community site registration
-        </a>
+        Community site registration
+      </a>
     </div>
     <div class="col-sm-auto tab"
          [ngClass]="{'selected-tab': mode === 'health-authority'}">
@@ -64,7 +64,7 @@
        class="container mt-0 mb-1">
     <div class="mid-content">
       <div class="mt1">Request approval to access PharmaNet</div>
-      <div class="mst1">for health professionals of British Columbia</div>
+      <div class="mst1">for health professionals in British Columbia</div>
     </div>
     <div class="row pb-4">
       <div class="col-sm-6">
@@ -78,12 +78,14 @@
   <div *ngIf="mode === 'health-authority'"
        class="container mt-0 mb-1">
     <div class="mid-content">
-      <div class="mt1">A site is a physical address in combination with a PharmaNet software vendor</div>
+      <div class="mt1">If you hace been identified as an authorized site registrant by your health authority, continue.
+      </div>
+      <div class="mst1">Otherwise, you are in the wrong part of PRIME.</div>
     </div>
     <div class="row pb-4">
       <div class="col-sm-6">
         <div class="button_title">
-          Health Authorities
+          Health Authorities:
         </div>
         <button mat-flat-button
                 color="primary"
@@ -100,9 +102,9 @@
     <div class="row pb-4">
       <div class="col-sm-6">
         <div class="button_title">
-          Private Community Health Practices<br/>
-          Community Pharmacies<br/>
-          Device Providers
+          Private community health practices:<br/>
+          Community pharmacies:<br/>
+          Device providers:
         </div>
         <button mat-flat-button
                 color="primary"
@@ -142,7 +144,9 @@
         </section>
       </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+
+    <div class="col-sm-12 col-md-4"
+         *ngIf="mode === 'enrolment'">
       <div>
         <div class="graphic-wrapper">
           <img class="graphic"
@@ -160,7 +164,8 @@
         </section>
       </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+    <div class="col-sm-12 col-md-4"
+         *ngIf="mode === 'enrolment'">
       <div>
         <div class="graphic-wrapper">
           <img class="graphic"
@@ -173,6 +178,82 @@
             Once you are approved to use PharmaNet, you will enter the email of the person in your workplace who sets up
             PharmaNet accounts. They will get you connected to PharmaNet.
           </p>
+        </section>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-4"
+         *ngIf="mode !== 'enrolment'">
+      <div>
+        <div class="graphic-wrapper">
+          <img class="graphic"
+               src="/assets/signing_authority_v2.svg"
+               alt="Enrolment Icon">
+        </div>
+        <section class="content">
+          <h2>Who can register a site?</h2>
+
+          <p>
+            A person authorized by the organization to register sites.
+
+            <app-contextual-help>
+              A site must be registered by the organization's Signing Authority. The Signing Authority is responsible
+              for PharmaNet use, and can legally bind the organization to the terms of the registration and the
+              Organization Agreement for PharmaNet Use.
+            </app-contextual-help>
+          </p>
+        </section>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-4"
+         *ngIf="mode !== 'enrolment'">
+      <div>
+        <div class="graphic-wrapper">
+          <img class="graphic"
+               src="/assets/enrolment_v2.svg"
+               alt="Notification Icon">
+        </div>
+        <section class="content">
+          <h2>What you need</h2>
+
+          <p>
+            Your mobile BC Services Card and the contact details for these people for your site:
+          </p>
+
+          <ul>
+            <li>
+              PharmaNet Administrator
+
+              <app-contextual-help>
+                Either directly sets up individual PharmaNet access accounts at a site or
+                has the authority to request accounts from the site's contracted PharmaNet software vendor. They may,
+                for example, be the site’s office administrator, HR lead, medical office assistant (MOA), or
+                practitioner. This may be the software vendor.
+              </app-contextual-help>
+            </li>
+            <li>
+              Privacy Officer
+
+              <app-contextual-help>
+                Under privacy legislation (PIPA and FOIPPA), organizations holding or accessing
+                personal information must designate a Privacy Officer, who responds to privacy and information
+                management concerns on the organization’s behalf. In the event of a security breach, or concerns with
+                how PharmaNet data is accessed or used at the site, the Privacy Officer will be asked to help with
+                investigations and provide critical information quickly.
+              </app-contextual-help>
+            </li>
+            <li>
+              Technical Support Contact
+
+              <app-contextual-help>
+                This individual may be either a staff person at the site, a corporate IT
+                resource, or an independent IT contractor. They will be contacted in the event of a technology-related
+                issue (e.g., malware, problematic network traffic). They should familiar with: the practice's network
+                structure, Internet connections in use at the site, the application(s) used to access PharmaNet at the
+                site and security mechanisms such as firewalls and anti-virus measures (generally and at the site).
+              </app-contextual-help>
+            </li>
+          </ul>
         </section>
       </div>
     </div>
