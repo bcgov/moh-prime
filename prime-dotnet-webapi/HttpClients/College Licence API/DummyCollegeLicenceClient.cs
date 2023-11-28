@@ -30,6 +30,10 @@ namespace Prime.HttpClients
                 "9" => new { Date = "1997-10-12", Name = "NINE" },
                 "10" => new { Date = "2000-05-30", Name = "TEN" },
                 "11" => new { Date = "2000-06-07", Name = "ELEVEN" },
+                // To test PharmaNet birthdate discrepancy
+                "12" => new { Date = "1998-09-17", Name = "TWELVE" },
+                // To test PharmaNet birthdate discrepancy
+                "13" => new { Date = "1999-04-28", Name = "THIRTEEN" },
                 _ => null,
             };
 
