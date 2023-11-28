@@ -21,6 +21,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime AdjustmentsToOnboardCollegeOfOptometristsAug2nd2023 = new(2023, 8, 2, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime AdjustmentsToCPSBCAug28th2023 = new(2023, 8, 28, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime EmployedStudentNurseChangeAug28th2023 = new(2023, 8, 28, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime PhysicalAssistantChangeAug28th2023 = new(2023, 11, 27, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -321,6 +322,9 @@ namespace Prime.Configuration.Database
 
                     // Employed Student Nurse Change
                     new LicenseDetail { Id = 275, LicenseCode = 40, Prefix = "R9", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = PrescriberIdType.Optional, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "RX", EffectiveDate = EmployedStudentNurseChangeAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // CPSBC - Physician Assistant
+                    new LicenseDetail { Id = 276, LicenseCode = 92, Prefix = "M9", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, NonPrescribingPrefix = null, EffectiveDate = PhysicalAssistantChangeAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                  };
             }
         }
