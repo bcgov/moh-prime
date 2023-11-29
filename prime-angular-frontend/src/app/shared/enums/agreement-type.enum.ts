@@ -9,6 +9,7 @@ const PHARMACY_TECHNICIAN_TOA = 'Pharmacy Technician Toa';
 const LICENCED_PRACTICAL_NURSE_TOA = 'Licenced Practical Nurse Toa';
 const DEVICE_PROVIDER_RU_TOA = 'Device Provider RU Toa';
 const DEVICE_PROVIDER_OBO_TOA = 'Device Provider OBO Toa';
+const PRESCRIBER_OBO_TOA = 'On Behalf Of User (can prescribe independently)';
 
 export enum AgreementType {
   COMMUNITY_PHARMACIST_TOA = 1,
@@ -21,7 +22,8 @@ export enum AgreementType {
   PHARMACY_TECHNICIAN_TOA,
   LICENCED_PRACTICAL_NURSE_TOA,
   DEVICE_PROVIDER_RU_TOA,
-  DEVICE_PROVIDER_OBO_TOA
+  DEVICE_PROVIDER_OBO_TOA,
+  PRESCRIBER_OBO_TOA
 }
 
 export const AgreementTypeNameMap: Record<AgreementType, string> = {
@@ -36,6 +38,7 @@ export const AgreementTypeNameMap: Record<AgreementType, string> = {
   [AgreementType.LICENCED_PRACTICAL_NURSE_TOA]: LICENCED_PRACTICAL_NURSE_TOA,
   [AgreementType.DEVICE_PROVIDER_RU_TOA]: DEVICE_PROVIDER_RU_TOA,
   [AgreementType.DEVICE_PROVIDER_OBO_TOA]: DEVICE_PROVIDER_OBO_TOA,
+  [AgreementType.PRESCRIBER_OBO_TOA]: PRESCRIBER_OBO_TOA,
 };
 
 // Paper Enrolment
