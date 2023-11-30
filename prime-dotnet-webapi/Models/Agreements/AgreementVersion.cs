@@ -40,6 +40,8 @@ namespace Prime.Models
                         return "Device Provider Agent - with OBOs";
                     case AgreementType.DeviceProviderOBOTOA:
                         return "On-behalf-of User - Device Provider";
+                    case AgreementType.PrescriberOBOTOA:
+                        return "On-behalf-of User (can prescribe independently)";
                     // TODO: TBD
                     // case AgreementType.PharmacyTechnicianTOA:
                     //     break;
