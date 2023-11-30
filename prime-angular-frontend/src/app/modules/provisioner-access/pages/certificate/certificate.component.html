@@ -63,14 +63,14 @@
     </ng-container>
 
     <ng-container *ngFor="let careSetting of certificate.careSettings">
-      <app-enrollee-property title="Organization Type"
+      <app-enrollee-property title="Care Setting"
                              [makeBold]="true">
         {{ careSetting.name }}
       </app-enrollee-property>
     </ng-container>
 
     <app-enrollee-property *ngIf="!certificate.careSettings.length"
-                           title="Organization Type"
+                           title="Care Setting"
                            [makeBold]="true">
       None
     </app-enrollee-property>

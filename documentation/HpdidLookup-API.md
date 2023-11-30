@@ -172,7 +172,10 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 |Possible values for `accessType`|
 |--------------------------------|
 |Independent User – with OBOs, Pharmacy|
-|Independent User - with OBOs|
-|Independent User - without OBOs|
+|Independent User – with OBOs|
+|Independent User – without OBOs|
 |On-behalf-of User|
 |On-behalf-of User – Pharmacy|
+|Device Provider Agent – with OBOs|
+|On-behalf-of User – Device Provider|
+|On-behalf-of User (can prescribe independently)|
