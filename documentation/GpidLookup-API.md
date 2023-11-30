@@ -179,6 +179,6 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 |Independent User - without OBOs|
 |On-behalf-of User|
 |On-behalf-of User – Pharmacy|
-|Device Provider Agent - with OBOs|
+|Device Provider Agent – with OBOs|
 |On-behalf-of User – Device Provider|
 |On-behalf-of User (can prescribe independently)|
