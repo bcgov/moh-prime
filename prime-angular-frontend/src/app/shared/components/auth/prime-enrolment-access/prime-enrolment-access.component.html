@@ -45,7 +45,7 @@
         Individual enrolment
       </a>
     </div>
-    <div class="col-sm-auto tab"
+    <div class="col-sm-auto tab-mid"
          [ngClass]="{'selected-tab': mode === 'community'}">
       <a class="tab-link" href="{{ this.communitySiteUrl}}">
         Community site registration
@@ -66,7 +66,7 @@
       <div class="mt1">Request approval to access PharmaNet</div>
       <div class="mst1">for health professionals in British Columbia</div>
     </div>
-    <div class="row pb-4">
+    <div class="row pb-50">
       <div class="col-sm-6">
         <button mat-flat-button
                 color="primary"
@@ -78,11 +78,11 @@
   <div *ngIf="mode === 'health-authority'"
        class="container mt-0 mb-1">
     <div class="mid-content">
-      <div class="mt1">If you hace been identified as an authorized site registrant by your health authority, continue.
+      <div class="mt1">If you have been identified as an authorized site registrant by your health authority, continue.
       </div>
       <div class="mst1">Otherwise, you are in the wrong part of PRIME.</div>
     </div>
-    <div class="row pb-4">
+    <div class="row pb-50">
       <div class="col-sm-6">
         <div class="button_title">
           Health Authorities:
@@ -90,7 +90,7 @@
         <button mat-flat-button
                 color="primary"
                 class="large"
-                (click)="onLogin()">Access the registration</button>
+                (click)="onLogin()">Access site registration</button>
       </div>
     </div>
   </div>
@@ -99,7 +99,7 @@
     <div class="mid-content">
       <div class="mt1">A site is a physical address in combination with a PharmaNet software vendor</div>
     </div>
-    <div class="row pb-4">
+    <div class="row pb-50">
       <div class="col-sm-6">
         <div class="button_title">
           Private community health practices:<br/>
@@ -109,7 +109,7 @@
         <button mat-flat-button
                 color="primary"
                 class="large"
-                (click)="onLogin()">Access the registration</button>
+                (click)="onLogin()">Access site registration</button>
       </div>
     </div>
   </div>

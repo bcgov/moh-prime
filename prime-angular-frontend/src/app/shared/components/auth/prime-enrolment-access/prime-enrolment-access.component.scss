@@ -29,13 +29,20 @@
   color: #C5E5FB;
 }
 
-.tab {
-  border: 1px solid #606B75;
+.tab,
+.tab-mid {
+  border-top: 1px solid #606B75;
   padding: 15px 55px 15px 55px;
   color: #606B75;
   font-weight: 500;
   font-size: 1.25rem;
 }
+
+.tab {
+  border-left: 1px solid #606B75;
+  border-right: 1px solid #606B75;
+}
+
 
 .selected-tab,
 .selected-tab .tab-link {
@@ -82,6 +89,10 @@
 
 .border-right {
   border-right: 1px solid #ffffff;
+}
+
+.pb-50 {
+  padding-bottom: 50px;
 }
 
 a,
