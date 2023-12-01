@@ -203,6 +203,7 @@ namespace Prime.Controllers
             var notificationRequired = existingSigningAuthorityId != orgClaim.NewSigningAuthorityId;
 
             await _organizationService.SwitchSigningAuthorityAsync(organizationId, orgClaim.NewSigningAuthorityId);
+            await _communitySiteService.UpdateSigningAuthorityForOrganization(organizationId, orgClaim.NewSigningAuthorityId);
             await _organizationService.RemoveUnsignedOrganizationAgreementsAsync(organizationId);
             await _organizationService.FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(organizationId);
 
@@ -210,7 +211,12 @@ namespace Prime.Controllers
 
             if (notificationRequired)
             {
-                await _partyService.RemovePartyEnrolmentAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
+                var organizations = await _organizationService.GetOrganizationsByPartyIdAsync(existingSigningAuthorityId);
+                if (organizations.Count() == 0)
+                {
+                    //if no organization belong to existing signing authority, remove Party Enrolment record
+                    await _partyService.RemovePartyEnrolmentAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
+                }
                 await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
                 await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
                 await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, "Sent organization claim approval notification");
