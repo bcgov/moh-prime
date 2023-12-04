@@ -490,6 +490,20 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task UpdateSigningAuthorityForOrganization(int organizationId, int partyId)
+        {
+            var sites = await _context.CommunitySites
+                .Where(s => s.OrganizationId == organizationId)
+                .ToListAsync();
+
+            foreach (var site in sites)
+            {
+                site.ProvisionerId = partyId;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         private IQueryable<CommunitySite> GetBaseSiteQuery()
         {
             return _context.CommunitySites
