@@ -53,24 +53,7 @@ namespace Prime.Services
             return null;
         }
 
-        /*
-                public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(int enrolleeId)
-                {
-                    EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
-                    {
-                        EnrolleeId = enrolleeId,
-                        ViewCount = 0,
-                        Expires = DateTimeOffset.Now.Add(EnrolmentCertificateAccessToken.Lifespan),
-                        Active = true
-                    };
-
-                    _context.EnrolmentCertificateAccessTokens.Add(token);
-                    await _context.SaveChangesAsync();
-
-                    return token;
-                }
-        */
-        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenWithCareSettingAsync(int enrolleeId, int careSettingCode, int healthAuthorityCode)
+        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenWithCareSettingAsync(int enrolleeId, int careSettingCode, int? healthAuthorityCode)
         {
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
