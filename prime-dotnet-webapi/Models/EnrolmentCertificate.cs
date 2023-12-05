@@ -26,7 +26,7 @@ namespace Prime.Models
         public IEnumerable<HealthAuthority> HealthAuthories { get; set; }
 
 
-        public static EnrolmentCertificate Create(Enrollee enrollee)
+        public static EnrolmentCertificate Create(EnrolmentCertificateAccessToken token, Enrollee enrollee)
         {
             return new EnrolmentCertificate
             {
@@ -37,8 +37,9 @@ namespace Prime.Models
                 PreferredLastName = enrollee.PreferredLastName,
                 GPID = enrollee.GPID,
                 ExpiryDate = enrollee.ExpiryDate,
-                CareSettings = enrollee.EnrolleeCareSettings.Select(org => org.CareSetting),
-                HealthAuthories = enrollee.EnrolleeHealthAuthorities.Select(e => e.HealthAuthority),
+                CareSettings = enrollee.EnrolleeCareSettings.Where(ecs => ecs.CareSettingCode == token.CareSettingCode).Select(org => org.CareSetting),
+                HealthAuthories = token.HealthAuthorityCode == null ?
+                    null : enrollee.EnrolleeHealthAuthorities.Where(eha => (int)eha.HealthAuthorityCode == token.HealthAuthorityCode).Select(e => e.HealthAuthority),
                 Group = enrollee.Agreements.OrderByDescending(a => a.CreatedDate)
                     .Where(a => a.AcceptedDate != null)
                     .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? AgreementGroup.OnBehalfOf : AgreementGroup.RegulatedUser)

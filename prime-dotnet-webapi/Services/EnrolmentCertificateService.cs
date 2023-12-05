@@ -47,19 +47,38 @@ namespace Prime.Services
 
             if (token.Active)
             {
-                return EnrolmentCertificate.Create(token.Enrollee);
+                return EnrolmentCertificate.Create(token, token.Enrollee);
             }
 
             return null;
         }
 
-        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(int enrolleeId)
+        /*
+                public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(int enrolleeId)
+                {
+                    EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
+                    {
+                        EnrolleeId = enrolleeId,
+                        ViewCount = 0,
+                        Expires = DateTimeOffset.Now.Add(EnrolmentCertificateAccessToken.Lifespan),
+                        Active = true
+                    };
+
+                    _context.EnrolmentCertificateAccessTokens.Add(token);
+                    await _context.SaveChangesAsync();
+
+                    return token;
+                }
+        */
+        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenWithCareSettingAsync(int enrolleeId, int careSettingCode, int healthAuthorityCode)
         {
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
                 EnrolleeId = enrolleeId,
                 ViewCount = 0,
                 Expires = DateTimeOffset.Now.Add(EnrolmentCertificateAccessToken.Lifespan),
+                CareSettingCode = careSettingCode,
+                HealthAuthorityCode = healthAuthorityCode,
                 Active = true
             };
 
@@ -68,6 +87,7 @@ namespace Prime.Services
 
             return token;
         }
+
 
         public async Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUsernameAsync(string username)
         {
