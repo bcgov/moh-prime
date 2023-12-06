@@ -216,19 +216,13 @@
 
           <p>
             A person authorized by their health authority to register sites.
-
-            <app-contextual-help>
-              A site must be registered by the organization's Signing Authority. The Signing Authority is responsible
-              for PharmaNet use, and can legally bind the organization to the terms of the registration and the
-              Organization Agreement for PharmaNet Use.
-            </app-contextual-help>
           </p>
         </section>
       </div>
     </div>
 
     <div class="col-sm-12 col-md-4"
-         *ngIf="mode !== 'enrolment'">
+         *ngIf="mode === 'community'">
       <div>
         <div class="graphic-wrapper">
           <img class="graphic"
@@ -276,6 +270,23 @@
               </app-contextual-help>
             </li>
           </ul>
+        </section>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-4"
+         *ngIf="mode === 'health-authority'">
+      <div>
+        <div class="graphic-wrapper">
+          <img class="graphic"
+               src="/assets/enrolment_v2.svg"
+               alt="Notification Icon">
+        </div>
+        <section class="content">
+          <h2>What you need</h2>
+          <p>
+            Your BC Services Card app and the contact details for these people for your site:
+          </p>
         </section>
       </div>
     </div>
