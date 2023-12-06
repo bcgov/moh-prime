@@ -18,9 +18,7 @@ export class BcscEnrolmentLoginPageComponent implements OnInit {
 
   public onLogin() {
     // Route to COLLECTION_NOTICE which determines the direction of routing
-    //const redirectRoute = EnrolmentRoutes.routePath(EnrolmentRoutes.COLLECTION_NOTICE);
-
-    const redirectRoute = '/site/collection-notice'
+    const redirectRoute = EnrolmentRoutes.routePath(EnrolmentRoutes.COLLECTION_NOTICE);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
