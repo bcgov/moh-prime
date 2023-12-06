@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -36,6 +36,7 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private viewportService: ViewportService,
     private route: ActivatedRoute,
+    protected router: Router,
     private dialog: MatDialog,
     private collectionNoticeService: CollectionNoticeService
   ) {
@@ -75,5 +76,9 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     this.viewportService.onResize()
       .pipe(untilDestroyed(this))
       .subscribe();
+  }
+
+  public goTo(url: string) {
+    this.router.navigate([url]);
   }
 }

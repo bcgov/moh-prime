@@ -36,6 +36,7 @@
   color: #606B75;
   font-weight: 500;
   font-size: 1.25rem;
+  cursor: pointer;
 }
 
 .tab {
@@ -43,11 +44,11 @@
   border-right: 1px solid #606B75;
 }
 
-
 .selected-tab,
 .selected-tab .tab-link {
   color: #ffffff;
   background-color: #606B75;
+  cursor: inherit;
 }
 
 .mid-content {
