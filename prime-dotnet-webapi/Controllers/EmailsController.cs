@@ -148,7 +148,7 @@ namespace Prime.Controllers
 
         // PUT: api/emails/management/subject/1
         /// <summary>
-        /// Update email template
+        /// Update email template subject
         /// </summary>
         /// <param name="emailTemplateId"></param>
         /// <param name="subject"></param>
@@ -166,6 +166,75 @@ namespace Prime.Controllers
             }
 
             var emailTemplate = await _emailTemplateService.UpdateEmailSubjectAsync(emailTemplateId, subject);
+            return Ok(emailTemplate);
+        }
+
+        // PUT: api/emails/management/title/1
+        /// <summary>
+        /// Update email template title
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="title"></param>
+        [HttpPut("management/title/{emailTemplateId}", Name = nameof(UpdateEmailTitle))]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailTitle(int emailTemplateId, FromBodyText title)
+        {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
+            var emailTemplate = await _emailTemplateService.UpdateEmailTitleAsync(emailTemplateId, title);
+            return Ok(emailTemplate);
+        }
+
+        // PUT: api/emails/management/description/1
+        /// <summary>
+        /// Update email description
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="description"></param>
+        [HttpPut("management/description/{emailTemplateId}", Name = nameof(UpdateEmailDescription))]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailDescription(int emailTemplateId, FromBodyText description)
+        {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
+            var emailTemplate = await _emailTemplateService.UpdateEmailDescriptionAsync(emailTemplateId, description);
+            return Ok(emailTemplate);
+        }
+
+        // PUT: api/emails/management/recipient/1
+        /// <summary>
+        /// Update email recipient
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="recipient"></param>
+        [HttpPut("management/recipient/{emailTemplateId}", Name = nameof(UpdateEmailRecipient))]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailRecipient(int emailTemplateId, FromBodyText recipient)
+        {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
+            var emailTemplate = await _emailTemplateService.UpdateEmailRecipientAsync(emailTemplateId, recipient);
             return Ok(emailTemplate);
         }
     }

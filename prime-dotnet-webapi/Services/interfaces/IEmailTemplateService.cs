@@ -13,5 +13,8 @@ namespace Prime.Services
         Task<EmailTemplateViewModel> GetEmailTemplateAsync(int id);
         Task<EmailTemplateViewModel> UpdateEmailTemplateAsync(int id, string template);
         Task<EmailTemplateViewModel> UpdateEmailSubjectAsync(int id, string subject);
+        Task<EmailTemplateViewModel> UpdateEmailTitleAsync(int id, string title);
+        Task<EmailTemplateViewModel> UpdateEmailRecipientAsync(int id, string recipient);
+        Task<EmailTemplateViewModel> UpdateEmailDescriptionAsync(int id, string description);
     }
 }

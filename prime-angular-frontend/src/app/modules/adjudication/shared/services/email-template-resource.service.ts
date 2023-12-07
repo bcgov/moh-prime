@@ -73,4 +73,49 @@ export class EmailTemplateResourceService {
         })
       );
   }
+
+  public updateEmailTitle(id: number, title: string): Observable<EmailTemplate> {
+    const payload = { data: title };
+    return this.apiResource.put<EmailTemplate>(`emails/management/title/${id}`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<EmailTemplate>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Email Title has been updated.')),
+        tap((emailTemplate: EmailTemplate) => this.logger.info('EMAIL_TITLE', emailTemplate)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Email Title could not be updated');
+          this.logger.error('[Adjudication] EmailTemplateResource::updateEmailTitle error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateEmailDescription(id: number, subject: string): Observable<EmailTemplate> {
+    const payload = { data: subject };
+    return this.apiResource.put<EmailTemplate>(`emails/management/description/${id}`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<EmailTemplate>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Email Subject has been updated.')),
+        tap((emailTemplate: EmailTemplate) => this.logger.info('EMAIL_SUBJECT', emailTemplate)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Email Subject could not be updated');
+          this.logger.error('[Adjudication] EmailTemplateResource::updateEmailSubject error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateEmailRecipient(id: number, recipient: string): Observable<EmailTemplate> {
+    const payload = { data: recipient };
+    return this.apiResource.put<EmailTemplate>(`emails/management/recipient/${id}`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<EmailTemplate>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Email Recipient has been updated.')),
+        tap((emailTemplate: EmailTemplate) => this.logger.info('EMAIL_RECIPIENT', emailTemplate)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Email Recipient could not be updated');
+          this.logger.error('[Adjudication] EmailTemplateResource::updateEmailRecipient error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }

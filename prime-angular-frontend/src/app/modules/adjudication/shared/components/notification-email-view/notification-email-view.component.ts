@@ -23,6 +23,9 @@ export class NotificationEmailViewComponent implements OnInit {
   public emailTemplate: EmailTemplate;
   public subjectEditable: boolean;
   public templateEditable: boolean;
+  public titleEditable: boolean;
+  public descriptionEditable: boolean;
+  public recipientEditable: boolean;
   public form: FormGroup;
 
   public Role = Role;
@@ -42,6 +45,18 @@ export class NotificationEmailViewComponent implements OnInit {
 
   public get subject(): FormControl {
     return this.form.get('subject') as FormControl;
+  }
+
+  public get emailTitle(): FormControl {
+    return this.form.get("emailTitle") as FormControl;
+  }
+
+  public get description(): FormControl {
+    return this.form.get("description") as FormControl;
+  }
+
+  public get recipient(): FormControl {
+    return this.form.get("recipient") as FormControl;
   }
 
   public saveTemplate(): void {
@@ -92,6 +107,78 @@ export class NotificationEmailViewComponent implements OnInit {
     }
   }
 
+  public saveTitle(): void {
+    if (this.emailTitle.valid) {
+      const data: DialogOptions = {
+        title: 'Save Email Title',
+        message: `Are you sure you want to overwrite the email title?`,
+        actionText: 'Save Title'
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: { output: string }) =>
+            (result)
+              ? this.emailTemplateResource.updateEmailTitle(this.route.snapshot.params.eid, this.emailTitle.value)
+              : EMPTY
+          ),
+        )
+        .subscribe((emailTemplate: EmailTemplate) => {
+          this.emailTemplate = emailTemplate;
+          this.titleEditable = false;
+        });
+    }
+  }
+
+  public saveDescription(): void {
+    if (this.description.valid) {
+      const data: DialogOptions = {
+        title: 'Save Email Description',
+        message: `Are you sure you want to overwrite the email description?`,
+        actionText: 'Save Description'
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: { output: string }) =>
+            (result)
+              ? this.emailTemplateResource.updateEmailDescription(this.route.snapshot.params.eid, this.description.value)
+              : EMPTY
+          ),
+        )
+        .subscribe((emailTemplate: EmailTemplate) => {
+          this.emailTemplate = emailTemplate;
+          this.descriptionEditable = false;
+        });
+    }
+  }
+
+  public saveRecipient(): void {
+    if (this.recipient.valid) {
+      const data: DialogOptions = {
+        title: 'Save Email Recipient',
+        message: `Are you sure you want to overwrite the email recipient?`,
+        actionText: 'Save Recipient'
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: { output: string }) =>
+            (result)
+              ? this.emailTemplateResource.updateEmailRecipient(this.route.snapshot.params.eid, this.recipient.value)
+              : EMPTY
+          ),
+        )
+        .subscribe((emailTemplate: EmailTemplate) => {
+          this.emailTemplate = emailTemplate;
+          this.recipientEditable = false;
+        });
+    }
+  }
+
   public toggleEditTemplate(value: boolean): void {
     this.templateEditable = value;
     this.template.patchValue(this.emailTemplate?.template);
@@ -100,6 +187,21 @@ export class NotificationEmailViewComponent implements OnInit {
   public toggleEditSubject(value: boolean): void {
     this.subjectEditable = value;
     this.subject.patchValue(this.emailTemplate?.subject);
+  }
+
+  public toggleEditTitle(value: boolean): void {
+    this.titleEditable = value;
+    this.emailTitle.patchValue(this.emailTemplate?.templateName);
+  }
+
+  public toggleEditDescription(value: boolean): void {
+    this.descriptionEditable = value;
+    this.description.patchValue(this.emailTemplate?.description);
+  }
+
+  public toggleEditRecipient(value: boolean): void {
+    this.recipientEditable = value;
+    this.recipient.patchValue(this.emailTemplate.recipient);
   }
 
   public ngOnInit(): void {
@@ -111,6 +213,9 @@ export class NotificationEmailViewComponent implements OnInit {
     this.form = this.fb.group({
       template: [this.emailTemplate?.template, [Validators.required]],
       subject: [this.emailTemplate?.subject, [Validators.required]],
+      emailTitle: [this.emailTemplate?.templateName, [Validators.required]],
+      description: [this.emailTemplate?.description, [Validators.required]],
+      recipient: [this.emailTemplate?.recipient, [Validators.required]],
     });
   }
 

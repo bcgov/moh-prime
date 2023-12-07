@@ -9,6 +9,7 @@ namespace Prime.Models
     {
         [Key]
         public int Id { get; set; }
+        public string TemplateName { get; set; }
         public string Template { get; set; }
         public DateTimeOffset ModifiedDate { get; set; }
         public EmailTemplateType EmailType { get; set; }

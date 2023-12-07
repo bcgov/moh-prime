@@ -1,18 +1,74 @@
-<app-page-subheader *ngIf="emailTemplate"
-                    class="mb-4"
-                    [divider]="false">
+<app-page-subheader>
   <ng-container appPageSubheaderTitle>
-    {{ emailTemplate.templateName }}
+    Email Template Title
   </ng-container>
+  <button *ngIf="Role.MAINTENANCE | inRole"
+          mat-icon-button
+          [matTooltip]="(!titleEditable) ? 'Edit Email Title' : 'Cancel Editing'"
+          (click)="toggleEditTitle(!titleEditable)">
+    <mat-icon>{{ (!titleEditable) ? 'edit' : 'close' }}</mat-icon>
+  </button>
 </app-page-subheader>
-
+<ng-container *ngIf="!titleEditable">
+  {{ emailTemplate?.templateName }}
+</ng-container>
+<ng-container *ngIf="titleEditable">
+  <form [formGroup]="form"
+        (ngSubmit)="saveTitle()">
+    <mat-form-field appearance="fill"
+                    class="w-100">
+      <mat-label>Email Template Title</mat-label>
+      <textarea formControlName="emailTitle"
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="0"></textarea>
+    </mat-form-field>
+    <div class="d-flex justify-content-end">
+      <button mat-flat-button
+              color="primary">
+        Save
+      </button>
+    </div>
+  </form>
+</ng-container>
+<br/>
+<br/>
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>
     Description
   </ng-container>
+  <button *ngIf="Role.MAINTENANCE | inRole"
+          mat-icon-button
+          [matTooltip]="(!descriptionEditable) ? 'Edit Email Description' : 'Cancel Editing'"
+          (click)="toggleEditDescription(!descriptionEditable)">
+    <mat-icon>{{ (!descriptionEditable) ? 'edit' : 'close' }}</mat-icon>
+  </button>
 </app-page-subheader>
-<ng-container>
-  {{ this.emailTemplate?.description | default }}
+<ng-container *ngIf="!descriptionEditable">
+  {{ emailTemplate?.description }}
+</ng-container>
+<ng-container *ngIf="descriptionEditable">
+  <form [formGroup]="form"
+        (ngSubmit)="saveDescription()">
+    <mat-form-field appearance="fill"
+                    class="w-100">
+      <mat-label>Description</mat-label>
+      <textarea formControlName="description"
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="0"></textarea>
+    </mat-form-field>
+    <div class="d-flex justify-content-end">
+      <button mat-flat-button
+              color="primary">
+        Save
+      </button>
+    </div>
+  </form>
 </ng-container>
 <br/>
 <br/>
@@ -20,9 +76,36 @@
   <ng-container appPageSubheaderTitle>
     Recipient
   </ng-container>
+  <button *ngIf="Role.MAINTENANCE | inRole"
+          mat-icon-button
+          [matTooltip]="(!recipientEditable) ? 'Edit Email Recipient' : 'Cancel Editing'"
+          (click)="toggleEditRecipient(!recipientEditable)">
+    <mat-icon>{{ (!recipientEditable) ? 'edit' : 'close' }}</mat-icon>
+  </button>
 </app-page-subheader>
-<ng-container>
-  {{ this.emailTemplate?.recipient | default }}
+<ng-container *ngIf="!recipientEditable">
+  {{ emailTemplate?.recipient }}
+</ng-container>
+<ng-container *ngIf="recipientEditable">
+  <form [formGroup]="form"
+        (ngSubmit)="saveRecipient()">
+    <mat-form-field appearance="fill"
+                    class="w-100">
+      <mat-label>Recipient</mat-label>
+      <textarea formControlName="recipient"
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="0"></textarea>
+    </mat-form-field>
+    <div class="d-flex justify-content-end">
+      <button mat-flat-button
+              color="primary">
+        Save
+      </button>
+    </div>
+  </form>
 </ng-container>
 <br/>
 <br/>
