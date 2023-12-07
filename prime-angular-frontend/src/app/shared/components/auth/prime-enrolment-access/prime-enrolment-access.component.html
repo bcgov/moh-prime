@@ -63,11 +63,14 @@
       <div class="mt1">Request approval to access PharmaNet</div>
     </div>
     <div class="row pb-50">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
         <button mat-flat-button
                 color="primary"
                 class="large"
                 (click)="onLogin()">Access Individual Enrolment</button>
+        <div>
+          You can start a new enrolment, or renew and update my existing information
+        </div>
       </div>
     </div>
   </div>
@@ -83,9 +86,6 @@
                 color="primary"
                 class="large"
                 (click)="onLogin()">Access Site Registration</button>
-        <div>
-          You can start a new enrolment, or renew and update my existing information
-        </div>
       </div>
     </div>
   </div>
@@ -213,7 +213,8 @@
           <h2>Who can register a site?</h2>
 
           <p>
-            A person authorized by their health authority to register sites.
+            A person authorized by their health authority to register sites. If you have not been approved as an
+            authorized user for site registration, you will be directed to request approval first.
           </p>
         </section>
       </div>
@@ -271,7 +272,7 @@
 
           <h2>User Guides</h2>
           <p>
-            Click here for your guides.
+            Click here for your guides:
             <a href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides">PRIME user guides</a>
           </p>
         </section>
@@ -289,7 +290,7 @@
         <section class="content">
           <h2>User Guides</h2>
           <p>
-            Click here for your guides.
+            Click here for your guides:
             <a href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/hospital-access-to-pharmanet">PRIME user guides</a>
           </p>
         </section>
