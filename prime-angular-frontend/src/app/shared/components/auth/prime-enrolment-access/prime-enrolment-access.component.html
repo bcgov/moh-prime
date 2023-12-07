@@ -61,6 +61,7 @@
        class="container mt-0 mb-1">
     <div class="mid-content">
       <div class="mt1">Request approval to access PharmaNet</div>
+      <div class="mt1">Renew or update existing enrolment</div>
     </div>
     <div class="row pb-50">
       <div class="col-sm-12">
@@ -68,9 +69,6 @@
                 color="primary"
                 class="large"
                 (click)="onLogin()">Access Individual Enrolment</button>
-        <div>
-          Begin a new enrolment or renew/update existing information.
-        </div>
       </div>
     </div>
   </div>
@@ -92,7 +90,7 @@
   <div *ngIf="mode === 'community'"
        class="container mt-0 mb-1">
     <div class="mid-content">
-      <div class="mt1">Site Registration for the following:</div>
+      <div class="mt1">Site Registration for:</div>
     </div>
     <div class="row pb-50">
       <div class="col-sm-6">
