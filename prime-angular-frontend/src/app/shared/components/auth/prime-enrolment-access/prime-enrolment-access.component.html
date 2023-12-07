@@ -42,17 +42,17 @@
     <div class="col-sm-auto tab selected-tab"
          [ngClass]="{'selected-tab': mode === 'enrolment'}"
          (click)="goTo(this.enrolmentUrl)">
-      Individual enrolment
+      BC health professionals
     </div>
     <div class="col-sm-auto tab-mid"
          [ngClass]="{'selected-tab': mode === 'community'}"
          (click)="goTo(this.communitySiteUrl)">
-      Community site registration
+      Community sites
     </div>
     <div class="col-sm-auto tab"
          [ngClass]="{'selected-tab': mode === 'health-authority'}"
          (click)="goTo(this.healthAuthorityUrl)">
-      Health authority site registration
+      Health authority sites
     </div>
   </div>
 </div>
@@ -61,7 +61,6 @@
        class="container mt-0 mb-1">
     <div class="mid-content">
       <div class="mt1">Request approval to access PharmaNet</div>
-      <div class="mst1">for health professionals in British Columbia</div>
     </div>
     <div class="row pb-50">
       <div class="col-sm-6">
@@ -75,19 +74,18 @@
   <div *ngIf="mode === 'health-authority'"
        class="container mt-0 mb-1">
     <div class="mid-content">
-      <div class="mt1">If you have been authorized by your health authority to register PharmaNet sites, please
-        continue.
+      <div class="mt1">For people authorized by their health authority to register sites
       </div>
     </div>
     <div class="row pb-50">
-      <div class="col-sm-6">
-        <div class="button_title">
-          Health Authorities
-        </div>
+      <div class="col-sm-12">
         <button mat-flat-button
                 color="primary"
                 class="large"
                 (click)="onLogin()">Access Site Registration</button>
+        <div>
+          You can start a new enrolment, or renew and update my existing information
+        </div>
       </div>
     </div>
   </div>
@@ -99,9 +97,9 @@
     <div class="row pb-50">
       <div class="col-sm-6">
         <div class="button_title">
-          Private community health practice<br/>
-          Community pharmacy<br/>
-          Device providers
+          - Private community health practice<br/>
+          - Community pharmacy<br/>
+          - Device providers
         </div>
         <button mat-flat-button
                 color="primary"
