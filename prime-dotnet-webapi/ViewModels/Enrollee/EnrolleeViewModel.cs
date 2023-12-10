@@ -78,6 +78,8 @@ namespace Prime.ViewModels
 
         public bool PossiblePaperEnrolmentMatch { get; set; }
 
+        public bool? ConsentForAutoPull { get; set; }
+
         public bool RequiresConfirmation { get => !Confirmed && PreviousStatus?.IsType(StatusType.UnderReview) == true; }
 
         public string CurrentTOAStatus => (StatusType)CurrentStatus.StatusCode switch

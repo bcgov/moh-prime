@@ -14,4 +14,5 @@ export interface Enrollee extends BcscUser {
   smsPhone?: string;
   gpid: string;
   userProvidedGpid?: string;
+  consentForAutoPull: boolean;
 }

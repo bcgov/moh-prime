@@ -124,6 +124,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       id,
       enrollee: {
         userId,
+        consentForAutoPull: careSettings.consentForAutoPull,
         ...profile,
         ...paperProfile
       },
@@ -224,7 +225,10 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       profileCompleted,
       requireRedoSelfDeclaration,
     } = enrolment;
-    this.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities });
+    const {
+      consentForAutoPull
+    } = enrolment.enrollee;
+    this.patchCareSettingsForm({ careSettings, enrolleeHealthAuthorities, consentForAutoPull });
     this.patchOboSitesForm(oboSites);
     this.patchRemoteAccessForm({ enrolleeRemoteUsers, remoteAccessSites });
     this.patchRemoteAccessLocationsForm(remoteAccessLocations);
@@ -295,7 +299,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   private convertCareSettingFormToJson(enrolleeId: number): any {
     // Variable names must match keys for FormArrays in the FormGroup to get values
     // eslint-disable-next-line prefer-const
-    let { careSettings, enrolleeHealthAuthorities } = this.careSettingsForm.getRawValue();
+    let { careSettings, enrolleeHealthAuthorities, consentForAutoPull } = this.careSettingsForm.getRawValue();
 
     // Any checked HA is converted into an enrollee health authority object literal,
     // which is used to create the payload to back-end
@@ -308,7 +312,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       }
       return selectedHealthAuthorities;
     }, []);
-    return { careSettings, enrolleeHealthAuthorities };
+    return { careSettings, enrolleeHealthAuthorities, consentForAutoPull };
   }
 
   /**
@@ -508,7 +512,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   private buildCareSettingsForm(): FormGroup {
     return this.fb.group({
       careSettings: this.fb.array([]),
-      enrolleeHealthAuthorities: this.fb.array([])
+      enrolleeHealthAuthorities: this.fb.array([]),
+      consentForAutoPull: [null, [FormControlValidators.requiredBoolean]],
     });
   }
 
@@ -519,8 +524,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   }
 
   public patchCareSettingsForm(
-    { careSettings, enrolleeHealthAuthorities }: { careSettings: CareSetting[], enrolleeHealthAuthorities: EnrolleeHealthAuthority[] }
+    { careSettings, enrolleeHealthAuthorities, consentForAutoPull }: { careSettings: CareSetting[], enrolleeHealthAuthorities: EnrolleeHealthAuthority[], consentForAutoPull: boolean }
   ) {
+    this.careSettingsForm.get('consentForAutoPull').patchValue(consentForAutoPull);
     if (!Array.isArray(careSettings)) {
       careSettings = [];
     }

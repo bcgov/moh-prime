@@ -82,5 +82,7 @@ namespace Prime.ViewModels
         public string Username { get; set; }
 
         public bool HasDeviceProviderCareSetting { get; set; }
+
+        public bool? ConsentForAutoPull { get; set; }
     }
 }

@@ -17,7 +17,6 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.HealthAuthorityCode, f => f.PickRandom(HealthAuthorityLookup.All).Code);
 
             Ignore(x => x.HealthAuthority);
-            Ignore(x => x.ConsentForAutoPull);
         }
     }
 }
