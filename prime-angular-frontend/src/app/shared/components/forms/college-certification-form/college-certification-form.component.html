@@ -1,3 +1,13 @@
+<app-alert *ngIf="licenseClassDiscontinued"
+           type="danger"
+           icon="warning"
+           class="mb-4">
+  <ng-container #alertContent
+                class="alert-content">
+    Previous College License "{{this.collegeLicenseName}}" is no longer available. Please update your college license.
+  </ng-container>
+</app-alert>
+
 <ng-container [formGroup]="form">
 
   <app-form-icon-group [show]="total > 1"
@@ -38,22 +48,22 @@
       </div>
 
       <div class="col-sm-12">
-        <ng-container *ngIf="!condensed && collegeCode?.value === CollegeLicenceClassEnum.BCCNM">
+        <ng-container *ngIf="!condensed && collegeHasGrouping(collegeCode?.value)">
           <mat-form-field class="w-100">
-            <mat-label>Nurse Category</mat-label>
-            <mat-select formControlName="nurseCategory">
-              <mat-option *ngFor="let group of nurseGroups"
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let group of getGrouping(collegeCode?.value)"
                           [value]="group.code">
                 {{ group.name }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="nurseCategory.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="category.hasError('required')">Required</mat-error>
           </mat-form-field>
         </ng-container>
       </div>
 
       <ng-container
-                    *ngIf="collegeCode.value !== CollegeLicenceClassEnum.BCCNM && collegeCode.value || collegeCode.value === CollegeLicenceClassEnum.BCCNM && (condensed || nurseCategory?.value)">
+                    *ngIf="!collegeHasGrouping(collegeCode?.value) && collegeCode.value || collegeHasGrouping(collegeCode?.value) && (condensed || category?.value)">
         <div *ngIf="showLicenceClass()"
              class="col-sm-12 pl-5">
 
