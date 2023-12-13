@@ -306,6 +306,22 @@ namespace Prime.Models
             get => $"{FirstName} {LastName}";
         }
 
+        [NotMapped]
+        [Computed]
+        [JsonIgnore]
+        public string CurrentFirstName
+        {
+            get => PreferredFirstName ?? FirstName;
+        }
+
+        [NotMapped]
+        [Computed]
+        [JsonIgnore]
+        public string CurrentLastName
+        {
+            get => PreferredLastName ?? LastName;
+        }
+
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
             var newStatus = EnrolmentStatus.FromType(statusType, Id);
