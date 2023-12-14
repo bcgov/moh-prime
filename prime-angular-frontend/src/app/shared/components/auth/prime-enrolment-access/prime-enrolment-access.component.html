@@ -62,6 +62,10 @@
     <div class="mid-content">
       <div class="mt1">Request approval to access PharmaNet</div>
       <div class="mt1">Renew or update existing enrolment</div>
+      <div class="button_title">
+        Health care providers working in health authority faciliites, private community health practice sites, community
+        practice health practices (clinics), pharmacies, and device provider locations.
+      </div>
     </div>
     <div class="row pb-50">
       <div class="col-sm-12">
@@ -75,30 +79,48 @@
   <div *ngIf="mode === 'health-authority'"
        class="container mt-0 mb-1">
     <div class="mid-content">
-      <div class="mt1">For people authorized by their health authority to register sites
+      <div class="mt1">Are you authorized by your health authority to register sites?
+      </div>
+      <div class="mst1">
+        <mat-radio-group class="radio-group"
+                         (change)="isAuthorizedUser($event)">
+
+          <div class="radio_button">
+            <mat-radio-button *ngFor="let option of [true, false]"
+                              [value]="option"
+                              class="radio_button">
+              {{ option | yesNo }}
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
       </div>
     </div>
-    <div class="row pb-50">
-      <div class="col-sm-12">
-        <button mat-flat-button
-                color="primary"
-                class="large"
-                (click)="onLogin()">Access Site Registration</button>
-      </div>
+    <div class="pb-50"
+         *ngIf="showHealthAuthorityAccessBtn">
+      <button mat-flat-button
+              color="primary"
+              class="large"
+              (click)="onLogin()">Access Site Registration</button>
+    </div>
+    <div class="pb-50 button_title"
+         *ngIf="showIndividualEnrolleePanel">
+      This section is for authorized user to register health authority sites.
+      <br/>
+      Please select other two taps for your purpose.
     </div>
   </div>
   <div *ngIf="mode === 'community'"
        class="container mt-0 mb-1">
     <div class="mid-content">
       <div class="mt1">Site registration for:</div>
+      <div class="button_title">
+        - Private community health practice<br/>
+        - Community pharmacy<br/>
+        - Device providers
+      </div>
     </div>
     <div class="row pb-50">
       <div class="col-sm-6">
-        <div class="button_title">
-          - Private community health practice<br/>
-          - Community pharmacy<br/>
-          - Device providers
-        </div>
         <button mat-flat-button
                 color="primary"
                 class="large"
