@@ -6564,163 +6564,163 @@ namespace Prime.Migrations
                         {
                             Code = 93,
                             Name = "Full Certified Dental Assisant",
-                            Weight = 1
+                            Weight = 120
                         },
                         new
                         {
                             Code = 94,
                             Name = "Limited Certified Dental Assistant",
-                            Weight = 2
+                            Weight = 121
                         },
                         new
                         {
                             Code = 95,
                             Name = "Non-Practising Certified Dental Assistant",
-                            Weight = 3
+                            Weight = 123
                         },
                         new
                         {
                             Code = 96,
                             Name = "Temporary Certified Dental Assistant",
-                            Weight = 4
+                            Weight = 124
                         },
                         new
                         {
                             Code = 97,
                             Name = "Registered Dental Hygienist",
-                            Weight = 1
+                            Weight = 131
                         },
                         new
                         {
                             Code = 98,
                             Name = "Dental Hygiene Practitioner",
-                            Weight = 2
+                            Weight = 132
                         },
                         new
                         {
                             Code = 99,
                             Name = "Non-Practising Dental Hygienist",
-                            Weight = 3
+                            Weight = 133
                         },
                         new
                         {
                             Code = 100,
                             Name = "Temporary Dental Hygienist",
-                            Weight = 4
+                            Weight = 134
                         },
                         new
                         {
                             Code = 101,
                             Name = "Dental Technician",
-                            Weight = 1
+                            Weight = 141
                         },
                         new
                         {
                             Code = 102,
                             Name = "Student Dental Technician",
-                            Weight = 2
+                            Weight = 142
                         },
                         new
                         {
                             Code = 103,
                             Name = "Non-Practising Dental Technician",
-                            Weight = 3
+                            Weight = 143
                         },
                         new
                         {
                             Code = 104,
                             Name = "Temporary Dental Technician",
-                            Weight = 4
+                            Weight = 144
                         },
                         new
                         {
                             Code = 105,
                             Name = "Dental Therapist",
-                            Weight = 1
+                            Weight = 110
                         },
                         new
                         {
                             Code = 106,
                             Name = "Full Dentist",
-                            Weight = 1
+                            Weight = 100
                         },
                         new
                         {
                             Code = 107,
                             Name = "Limited (Academic) Dentist",
-                            Weight = 2
+                            Weight = 102
                         },
                         new
                         {
                             Code = 108,
                             Name = "Limited (Armed Services or Government) Dentist",
-                            Weight = 3
+                            Weight = 103
                         },
                         new
                         {
                             Code = 109,
                             Name = "Limited (Education & Volunteer) Dentist",
-                            Weight = 4
+                            Weight = 104
                         },
                         new
                         {
                             Code = 110,
                             Name = "Limited (Restricted-to-Specialty) Dentist",
-                            Weight = 5
+                            Weight = 105
                         },
                         new
                         {
                             Code = 111,
                             Name = "Student Dentist",
-                            Weight = 6
+                            Weight = 106
                         },
                         new
                         {
                             Code = 112,
                             Name = "Non-Practising Dentist",
-                            Weight = 7
+                            Weight = 107
                         },
                         new
                         {
                             Code = 113,
                             Name = "Temporary Dentist",
-                            Weight = 8
+                            Weight = 108
                         },
                         new
                         {
                             Code = 114,
                             Name = "Full Denturist",
-                            Weight = 1
+                            Weight = 151
                         },
                         new
                         {
                             Code = 115,
                             Name = "Limited Denturist",
-                            Weight = 2
+                            Weight = 152
                         },
                         new
                         {
                             Code = 116,
                             Name = "Limited (Grandfathered) Denturist",
-                            Weight = 3
+                            Weight = 153
                         },
                         new
                         {
                             Code = 117,
                             Name = "Student Denturist",
-                            Weight = 4
+                            Weight = 154
                         },
                         new
                         {
                             Code = 118,
                             Name = "Non-Practising Denturist",
-                            Weight = 5
+                            Weight = 155
                         },
                         new
                         {
                             Code = 119,
                             Name = "Temporary Denturist",
-                            Weight = 6
+                            Weight = 156
                         },
                         new
                         {
