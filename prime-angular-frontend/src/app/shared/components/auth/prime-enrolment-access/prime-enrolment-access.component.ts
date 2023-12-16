@@ -11,7 +11,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { HtmlComponent } from '@shared/components/dialogs/content/html/html.component';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { CollectionNoticeService } from '@shared/services/collection-notice.service';
-import { MAT_RADIO_DEFAULT_OPTIONS, MAT_RADIO_GROUP_CONTROL_VALUE_ACCESSOR, MatRadioChange } from '@angular/material/radio';
+import { MatRadioChange } from '@angular/material/radio';
 
 @UntilDestroy()
 @Component({
