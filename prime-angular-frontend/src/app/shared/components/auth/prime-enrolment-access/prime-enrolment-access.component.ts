@@ -33,7 +33,7 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
   public communitySiteUrl: string;
   public healthAuthorityUrl: string;
   public showHealthAuthorityAccessBtn: boolean;
-  public showIndividualEnrolleePanel: boolean;
+  public showNonAuthorizedUserPanel: boolean;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -89,6 +89,6 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
 
   public isAuthorizedUser(data: MatRadioChange) {
     this.showHealthAuthorityAccessBtn = data.value;
-    this.showIndividualEnrolleePanel = !data.value;
+    this.showNonAuthorizedUserPanel = !data.value;
   }
 }
