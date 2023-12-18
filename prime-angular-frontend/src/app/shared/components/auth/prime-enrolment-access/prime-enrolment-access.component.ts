@@ -11,6 +11,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { HtmlComponent } from '@shared/components/dialogs/content/html/html.component';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { CollectionNoticeService } from '@shared/services/collection-notice.service';
+import { MatRadioChange } from '@angular/material/radio';
 
 @UntilDestroy()
 @Component({
@@ -19,7 +20,7 @@ import { CollectionNoticeService } from '@shared/services/collection-notice.serv
   styleUrls: [
     './prime-enrolment-access.component.scss',
     '../access.component.scss'
-  ]
+  ],
 })
 export class PrimeEnrolmentAccessComponent implements OnInit {
   @Input() public mode: 'enrolment' | 'community' | 'health-authority';
@@ -31,6 +32,8 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
   public enrolmentUrl: string;
   public communitySiteUrl: string;
   public healthAuthorityUrl: string;
+  public showHealthAuthorityAccessBtn: boolean;
+  public showNonAuthorizedUserPanel: boolean;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -73,6 +76,8 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.showHealthAuthorityAccessBtn = false;
+
     this.viewportService.onResize()
       .pipe(untilDestroyed(this))
       .subscribe();
@@ -80,5 +85,10 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
 
   public goTo(url: string) {
     this.router.navigate([url]);
+  }
+
+  public isAuthorizedUser(data: MatRadioChange) {
+    this.showHealthAuthorityAccessBtn = data.value;
+    this.showNonAuthorizedUserPanel = !data.value;
   }
 }
