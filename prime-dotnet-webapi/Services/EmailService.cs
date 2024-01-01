@@ -64,8 +64,8 @@ namespace Prime.Services
                 .Where(e => e.Id == token.EnrolleeId)
                 .Select(e => new
                 {
-                    FirstName = e.CurrentFirstName,
-                    LastName = e.CurrentLastName,
+                    e.FirstName,
+                    e.LastName,
                     e.Email
                 })
                 .SingleAsync();
@@ -234,8 +234,8 @@ namespace Prime.Services
                 .Select(e => new
                 {
                     e.Id,
-                    FirstName = e.CurrentFirstName,
-                    LastName = e.CurrentLastName,
+                    e.FirstName,
+                    e.LastName,
                     e.Email,
                     e.ExpiryDate,
                     e.ExpiryReason
@@ -294,8 +294,8 @@ namespace Prime.Services
                 .Select(e => new
                 {
                     e.Id,
-                    FirstName = e.CurrentFirstName,
-                    LastName = e.CurrentLastName,
+                    e.FirstName,
+                    e.LastName,
                     e.Email,
                     e.CurrentStatus.StatusDate
                 })
@@ -390,10 +390,7 @@ namespace Prime.Services
         {
             var viewModel = await _context.Enrollees
                 .Where(e => e.Id == enrolleeId)
-                .Select(e => new EnrolleeAbsenceNotificationEmailViewModel(
-                    e.CurrentFirstName,
-                    e.CurrentLastName,
-                    absence.StartTimestamp, absence.EndTimestamp))
+                .Select(e => new EnrolleeAbsenceNotificationEmailViewModel(e.FirstName, e.LastName, absence.StartTimestamp, absence.EndTimestamp))
                 .SingleAsync();
 
             var renderedEmail = await _emailRenderingService.RenderEnrolleeAbsenceNotificationEmailAsync(email, viewModel);
