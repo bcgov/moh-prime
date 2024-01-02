@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231215175742_UpdateOralHealthProfessional")]
-    partial class UpdateOralHealthProfessional
+    [Migration("20240102180214_UpdateOralHealthProferssional")]
+    partial class UpdateOralHealthProferssional
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1488,6 +1488,12 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 91,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 1,
+                            LicenseCode = 92,
                             Discontinued = false
                         },
                         new

@@ -3,15 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Prime.Migrations
 {
-    public partial class UpdateOralHealthProfessional : Migration
+    public partial class UpdateOralHealthProferssional : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "CollegeLicense",
-                keyColumns: new[] { "CollegeCode", "LicenseCode" },
-                keyValues: new object[] { 1, 92 });
-
             migrationBuilder.AddColumn<int>(
                 name: "Weight",
                 table: "CollegeLookup",
@@ -792,11 +787,6 @@ namespace Prime.Migrations
             migrationBuilder.DropColumn(
                 name: "Discontinued",
                 table: "CollegeLicense");
-
-            migrationBuilder.InsertData(
-                table: "CollegeLicense",
-                columns: new[] { "CollegeCode", "LicenseCode", "CollegeLicenseGroupingCode" },
-                values: new object[] { 1, 92, null });
         }
     }
 }

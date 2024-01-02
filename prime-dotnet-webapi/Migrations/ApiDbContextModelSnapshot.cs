@@ -1490,6 +1490,12 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            CollegeCode = 1,
+                            LicenseCode = 92,
+                            Discontinued = false
+                        },
+                        new
+                        {
                             CollegeCode = 2,
                             LicenseCode = 25,
                             Discontinued = false
