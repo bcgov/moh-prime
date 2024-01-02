@@ -26,7 +26,7 @@
 
 .mst1 {
   font-size: 1.75rem;
-  color: #C5E5FB;
+  color: #fff;
 }
 
 .tab,
@@ -58,6 +58,7 @@
 .button_title {
   font-size: 1.75rem;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .graphic {
@@ -101,7 +102,11 @@ a:hover,
 a:visited {
   color: #007bff;
   text-decoration: underline;
+}
 
+.link-button {
+  color: #007bff;
+  text-decoration: underline;
 }
 
 a.tab-link,
@@ -112,3 +117,16 @@ a.tab-link:visited {
   font-size: 1.25rem;
   text-decoration: none;
 }
+
+.radio_button {
+  color: #ffffff;
+  margin-right: 20px;
+}
+
+.radio-group {
+  //display: flex;
+  //flex-direction: column;
+  display: grid;
+  margin: 10px 20px 0;
+}
+
