@@ -42,7 +42,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public practices: PracticeConfig[];
   public filteredLicenses: Config<number>[];
   public filteredPractices: Config<number>[];
-  public nurseGroups: CollegeLicenseGroupingConfig[];
+  public licenseGroups: CollegeLicenseGroupingConfig[];
   public hasPractices: boolean;
   public licenseClassDiscontinued: boolean;
   public collegeLicenseName: string;
@@ -78,7 +78,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     });
     this.colleges = this.configService.colleges.filter(c => collegeCodes.some(cc => cc === c.code));
     this.practices = this.configService.practices;
-    this.nurseGroups = this.configService.collegeLicenseGroupings;
+    this.licenseGroups = this.configService.collegeLicenseGroupings;
     this.minRenewalDate = (this.enrolmentService.isProfileComplete) ? null : moment();
     this.condensed = false;
     this.defaultOption = true;
@@ -123,7 +123,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public getGrouping(collegeCode: string): CollegeLicenseGroupingConfig[] {
     let groupingCodes = this.colleges.find((c) => c.code === +collegeCode).collegeLicenses.map((l) => l.collegeLicenseGroupingCode);
-    return this.nurseGroups.filter((g) => groupingCodes.some((gc) => gc === g.code));
+    return this.licenseGroups.filter((g) => groupingCodes.some((gc) => gc === g.code));
   }
 
   public collegeHasGrouping(collegeCode: string): boolean {
@@ -131,7 +131,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       return false;
     }
     const college = this.colleges.find((c) => c.code === +collegeCode);
-    return college.collegeLicenses.some((l) => l.collegeLicenseGroupingCode);
+    return college ? college.collegeLicenses.some((l) => l.collegeLicenseGroupingCode) : false;
   }
 
   public get filteredColleges(): CollegeConfig[] {
@@ -239,7 +239,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       return;
     }
 
-    if (collegeCode === CollegeLicenceClassEnum.BCCNM && !this.condensed) {
+    if ((collegeCode === CollegeLicenceClassEnum.BCCNM || collegeCode === CollegeLicenceClassEnum.OralHealth) && !this.condensed) {
       this.formUtilsService.setValidators(this.category, [Validators.required]);
       return;
     }

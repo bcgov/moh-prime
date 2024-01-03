@@ -10,8 +10,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20240102180214_UpdateOralHealthProferssional")]
-    partial class UpdateOralHealthProferssional
+    [Migration("20240103232732_UpdateOralHealthProfessional")]
+    partial class UpdateOralHealthProfessional
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -11180,7 +11180,7 @@ namespace Prime.Migrations
                             LicenseCode = 111,
                             LicensedToProvideCare = true,
                             Manual = true,
-                            NamedInImReg = true,
+                            NamedInImReg = false,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -11211,8 +11211,8 @@ namespace Prime.Migrations
                             EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 113,
                             LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
+                            Manual = false,
+                            NamedInImReg = false,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
