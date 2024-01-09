@@ -21,6 +21,10 @@
       {{ user?.preferredLastName | default }}
     </app-enrollee-property>
   </ng-container>
+
+  <app-enrollee-property title="Submitted Date">
+    {{ user?.submittedDate | formatDate | default }}
+  </app-enrollee-property>
 </app-overview-section>
 
 <app-address-view title="Verified Address"
