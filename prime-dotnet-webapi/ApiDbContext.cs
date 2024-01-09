@@ -77,6 +77,7 @@ namespace Prime
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Site> Sites { get; set; }
+        public DbSet<SiteVendor> SiteVendors { get; set; }
         public DbSet<CommunitySite> CommunitySites { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
@@ -129,6 +130,10 @@ namespace Prime
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
         public DbSet<EnrolleeLinkedEnrolment> EnrolleeLinkedEnrolments { get; set; }
+
+        //Device Provider data table
+        public DbSet<OpcMember> OpcMembers { get; set; }
+        public DbSet<DeviceProviderSite> DeviceProviderSites { get; set; }
 
         public override int SaveChanges()
         {

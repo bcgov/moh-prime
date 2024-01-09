@@ -109,7 +109,7 @@ namespace Prime.Services.EmailInternal
                         Day = h.Day,
                         StartTime = h.StartTime,
                         EndTime = h.EndTime
-                    }),
+                    }).OrderBy(h => h.Day).ToList(),
                     Vendors = s.SiteVendors.Select(sv => new VendorViewModel
                     {
                         Name = sv.Vendor.Name,

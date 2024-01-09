@@ -40,6 +40,12 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 65 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 66 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 67 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 87 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 88 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 89 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 90 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 91 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 92 },
 
                     // Pharmacists
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 25 },
@@ -110,6 +116,13 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 16, LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 17, LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 18, LicenseCode = 64 },
+
+                    //BC College of Social Workers
+                    new CollegeLicense { CollegeCode = 19, LicenseCode = 82 },
+                    new CollegeLicense { CollegeCode = 19, LicenseCode = 83 },
+                    new CollegeLicense { CollegeCode = 19, LicenseCode = 84 },
+                    new CollegeLicense { CollegeCode = 19, LicenseCode = 85 },
+                    new CollegeLicense { CollegeCode = 19, LicenseCode = 86 },
                 };
             }
         }

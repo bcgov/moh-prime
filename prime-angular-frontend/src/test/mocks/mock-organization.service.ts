@@ -9,6 +9,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 export class MockOrganizationService implements IOrganizationService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _organization: BehaviorSubject<Organization>;
+  private _organizations: Organization[];
 
   constructor() {
     const address = new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode());
@@ -58,5 +59,9 @@ export class MockOrganizationService implements IOrganizationService {
 
   public get organization(): Organization {
     return this._organization.value;
+  }
+
+  public get organizations(): Organization[] {
+    return this._organizations;
   }
 }

@@ -23,6 +23,12 @@ export class BusinessLicenceExpiryComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    if (!this.showExpiryDate) {
+      let expiryDateControl = this.form.get('expiryDate');
+      expiryDateControl.reset();
+      expiryDateControl.clearValidators();
+      expiryDateControl.updateValueAndValidity();
+    }
   }
 
   public onChange(event: MatSlideToggleChange): void {

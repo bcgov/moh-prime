@@ -97,12 +97,12 @@ export class OrganizationResource {
    * Get the organization for a signing authority by user ID, and provide null when
    * a signing authority could not be found.
    */
-  public getSigningAuthorityOrganizationByUsername(username: string): Observable<Organization | null> {
+  public getSigningAuthorityOrganizationByUsername(username: string): Observable<Organization[] | null> {
     return this.apiResource.get<Organization[]>(`parties/signing-authorities/${username}/organizations`)
       .pipe(
         map((response: ApiHttpResponse<Organization[]>) => response.result),
-        map((organizations: Organization[]) => (organizations?.length) ? organizations[0] : null),
-        tap((organization: Organization) => this.logger.info('ORGANIZATION', organization)),
+        map((organizations: Organization[]) => (organizations?.length) ? organizations : null),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           if (error.status === 404) {
             // No organization exists for the provided user ID
@@ -332,7 +332,7 @@ export class OrganizationResource {
    */
   public getOrganizationAgreementForSigning(
     organizationId: number,
-    agreementType: AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT | AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT
+    agreementType: AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT | AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT | AgreementType.DEVICE_PROVIDER_ORGANIZATION_AGREEMENT
   ) {
     const params = this.apiResourceUtilsService.makeHttpParams({ agreementType });
     return this.apiResource.get<string>(`organizations/${organizationId}/signable`, params)

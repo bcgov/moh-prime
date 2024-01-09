@@ -26,6 +26,7 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationNamePageFormState } from './organization-name-page-form-state.class';
+import { WebApiLoggerService } from '@core/services/web-api-logger.service';
 
 @UntilDestroy()
 @Component({
@@ -55,6 +56,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
     private siteResource: SiteResource,
     private authService: AuthService,
     private route: ActivatedRoute,
+    private webApiLogger: WebApiLoggerService,
     router: Router
   ) {
     super(dialog, formUtilsService);
@@ -104,7 +106,10 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected patchForm(): void {
-    const organization = this.organizationService.organization;
+    if (this.organizationId === 0) {
+      return;
+    }
+    const organization = this.organizationService.organizations?.find((org) => org.id === this.organizationId);
     if (!organization) {
       return;
     }
@@ -145,11 +150,24 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
           exhaustMap((party: Party) => this.organizationResource.createOrganization(party.id)),
           tap((organization: Organization) => {
             this.organizationService.organization = organization;
-            Object.assign(payload, organization);
+
+            // Add newly created Organization
+            if (!this.organizationService.organizations) {
+              this.organizationService.organizations = [organization];
+            } else {
+              this.organizationService.organizations.push(organization);
+            }
+
+            // Copy over only new information from `organization`
+            payload.id = organization.id;
+            payload.signingAuthorityId = organization.signingAuthorityId;
+            payload.signingAuthority = organization.signingAuthority;
+
             payload.name = this.organizationFormStateService.json.name;
             payload.doingBusinessAs = this.organizationFormStateService.json.doingBusinessAs;
           }),
-          exhaustMap(() => this.organizationResource.updateOrganization(payload))
+          exhaustMap(() => this.webApiLogger.debug(`Registration ID updating to ${payload.registrationId}`, { orgName: payload.name })),
+          exhaustMap(() => this.organizationResource.updateOrganization(payload)),
         );
 
     return request$
@@ -162,7 +180,8 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
             ? this.siteResource.createSite(this.organizationService.organization.id)
             : of(null)
         ),
-        map((site: Site) => site?.id)
+        map((site: Site) => site?.id),
+        tap(() => this.organizationService.organization.completed = true),
       );
   }
 

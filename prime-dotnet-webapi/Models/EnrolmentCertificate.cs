@@ -22,6 +22,9 @@ namespace Prime.Models
         public AgreementGroup? Group { get; set; }
         public IEnumerable<EnrolleeCertDto> Licences { get; set; }
         public string AccessType { get; set; }
+        public string DeviceProviderId { get; set; }
+        public IEnumerable<HealthAuthority> HealthAuthories { get; set; }
+
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
@@ -35,6 +38,7 @@ namespace Prime.Models
                 GPID = enrollee.GPID,
                 ExpiryDate = enrollee.ExpiryDate,
                 CareSettings = enrollee.EnrolleeCareSettings.Select(org => org.CareSetting),
+                HealthAuthories = enrollee.EnrolleeHealthAuthorities.Select(e => e.HealthAuthority),
                 Group = enrollee.Agreements.OrderByDescending(a => a.CreatedDate)
                     .Where(a => a.AcceptedDate != null)
                     .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? AgreementGroup.OnBehalfOf : AgreementGroup.RegulatedUser)
@@ -51,6 +55,9 @@ namespace Prime.Models
                     .Where(a => a.AcceptedDate != null)
                     .Select(a => a.AgreementVersion.AccessType)
                     .FirstOrDefault(),
+                DeviceProviderId = enrollee.EnrolleeDeviceProviders
+                    .Select(dp => dp.DeviceProviderId)
+                    .FirstOrDefault()
             };
         }
     }

@@ -67,6 +67,9 @@ namespace Prime.Services
                         s => s.Organization.SigningAuthority.FirstName + " " + s.Organization.SigningAuthority.LastName)
                     .Containing(searchOptions.TextSearch)
                 )
+                .If(searchOptions.Status.HasValue, q => q
+                    .Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
+                        .FirstOrDefault().StatusType == searchOptions.Status))
                 .ProjectTo<CommunitySiteAdminListViewModel>(_mapper.ConfigurationProvider)
                 .OrderBy(s => s.DisplayId).ThenByDescending(s => s.SubmittedDate.HasValue).ThenBy(s => s.SubmittedDate)
                 .DecompileAsync();
@@ -607,6 +610,20 @@ namespace Prime.Services
                 .Where(p => p.CommunitySiteId == siteId)
                 .ProjectTo<IndividualDeviceProviderViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task UpdateSigningAuthorityForOrganization(int organizationId, int partyId)
+        {
+            var sites = await _context.CommunitySites
+                .Where(s => s.OrganizationId == organizationId)
+                .ToListAsync();
+
+            foreach (var site in sites)
+            {
+                site.ProvisionerId = partyId;
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         private IQueryable<CommunitySite> GetBaseSiteQuery()

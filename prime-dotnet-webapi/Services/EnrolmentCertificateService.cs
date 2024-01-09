@@ -31,6 +31,11 @@ namespace Prime.Services
                     .ThenInclude(e => e.Certifications)
                         .ThenInclude(c => c.License)
                             .ThenInclude(l => l.LicenseDetails)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(t => t.EnrolleeDeviceProviders)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(t => t.EnrolleeHealthAuthorities)
+                        .ThenInclude(a => a.HealthAuthority)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)

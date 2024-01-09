@@ -43,7 +43,7 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
   protected routeDestination(
     routePath: string,
     params: Params,
-    organization: Organization | null,
+    organizations: Organization[] | null,
     signingAuthority: Party | null,
     hasClaim: boolean
   ): boolean {
@@ -62,19 +62,25 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
       return false;
     }
 
-    // When the organization ID mismatches the organizations route ID
-    // correct the route immediately
-    const redirectPath = this.detectRouteMismatch(routePath, params, organization?.id);
-    if (redirectPath) {
-      this.router.navigate([redirectPath]);
-      return false;
+
+    if (params.oid) {
+      // When the organization ID mismatches the organizations route ID
+      // correct the route immediately
+      const redirectPath = this.detectRouteMismatch(routePath, params, organizations);
+      if (redirectPath) {
+        this.router.navigate([redirectPath]);
+        return false;
+      }
+
     }
 
+    const organization = this.organizationService.organization;
     if (organization) {
       return (organization.completed)
         ? this.manageCompleteOrganizationRouting(routePath, organization)
         : this.manageIncompleteOrganizationRouting(routePath, organization, signingAuthority);
     }
+
 
     // Otherwise, no organization exists
     return this.manageNoOrganizationRouting(routePath, signingAuthority);
@@ -174,15 +180,26 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
    * Detect an organization ID mismatch to provide confidence in
    * the organization ID URI param.
    *
-   * NOTE: Dependent on the assumption that there is only a
-   * single organization per signing authority.
    */
-  private detectRouteMismatch(routePath, params: Params, organizationId: number): string | null {
-    return (params.oid && (
-      (organizationId && organizationId !== +params.oid) || (!organizationId && +params.oid !== 0)
-    ))
-      ? routePath.replace(`${SiteRoutes.ORGANIZATIONS}/${params.oid}`, `${SiteRoutes.ORGANIZATIONS}/${organizationId}`)
-      : null;
+  private detectRouteMismatch(routePath, params: Params, organizations: Organization[]): string | null {
+    // return when user trying to create a new organization
+    if (params.oid && params.oid === '0') {
+      // if adding to new site for new organization, replace the organization ID
+      if (routePath.includes(SiteRoutes.CARE_SETTING) && this.organizationService.organization) {
+        return routePath.replace(`${SiteRoutes.ORGANIZATIONS}/${params.oid}`, `${SiteRoutes.ORGANIZATIONS}/${this.organizationService.organization.id}`);
+      } else {
+        return null;
+      }
+    }
+    if (params.oid && params.oid !== '0') {
+      // if the oid does not belong to current user, update url with the oid does.
+      if (!organizations.some((org) => org.id === +params.oid)) {
+        return routePath.replace(`${SiteRoutes.ORGANIZATIONS}/${params.oid}`, `${SiteRoutes.ORGANIZATIONS}/${organizations[0].id}`);
+      } else if (this.organizationService.organization.id !== +params.oid) {
+        this.organizationService.organization = this.organizationService.organizations.find((org) => org.id === +params.oid);
+      }
+    }
+    return null;
   }
 
   /**

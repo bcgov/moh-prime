@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Prime.Services;
 using Prime.ViewModels;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace Prime.Controllers
 {
@@ -16,9 +17,14 @@ namespace Prime.Controllers
     {
         private readonly IClientLogService _logService;
 
-        public ClientLogsController(IClientLogService logService)
+        private readonly ILogger<ClientLogsController> _logger;
+
+
+        public ClientLogsController(IClientLogService logService,
+            ILogger<ClientLogsController> logger)
         {
             _logService = logService;
+            _logger = logger;
         }
 
         // POST /api/client-logs
@@ -35,9 +41,9 @@ namespace Prime.Controllers
             {
                 logId = await _logService.CreateLogAsync(log);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                // Do Nothing
+                _logger.LogError($"Error while logging {log}", e);
             }
             return Ok(logId);
         }

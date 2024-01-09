@@ -31,6 +31,7 @@ export class HealthAuthoritySiteAdminList extends AbstractBaseHealthAuthoritySit
     public readonly status: SiteStatusType,
     public healthAuthorityName: string,
     public flagged: boolean,
+    public isNew: boolean,
     public readonly authorizedUserName: string,
     public readonly authorizedUserEmail: string,
     public readonly adjudicatorIdir: string
@@ -44,6 +45,7 @@ export class HealthAuthoritySiteAdminList extends AbstractBaseHealthAuthoritySit
 
     this.healthAuthorityName = healthAuthorityName;
     this.flagged = flagged;
+    this.isNew = isNew;
     this.authorizedUserName = authorizedUserName;
     this.authorizedUserEmail = authorizedUserEmail;
     this.adjudicatorIdir = adjudicatorIdir;

@@ -21,5 +21,6 @@ namespace Prime.ViewModels
         public bool MissingBusinessLicence { get; set; }
         public int RemoteUserCount { get; set; }
         public bool Flagged { get; set; }
+        public bool IsNew { get; set; }
     }
 }

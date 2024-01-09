@@ -15,6 +15,7 @@ import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.mo
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -74,8 +75,18 @@ export class EnrolleeReviewComponent {
 
   public get certifications(): CollegeCertification[] {
     return (this.hasCertification)
-    ? this.enrolment.certifications
-    : [];
+      ? this.enrolment.certifications
+      : [];
+  }
+
+  public get hasDeviceProvider(): boolean {
+    return (this.enrolment && !!this.enrolment.enrolleeDeviceProviders.length);
+  }
+
+  public get enrolleeDeviceProvider(): EnrolleeDeviceProvider {
+    return (this.hasDeviceProvider)
+      ? this.enrolment.enrolleeDeviceProviders[0]
+      : null;
   }
 
   public get hasUnlistedCertification(): boolean {
@@ -86,10 +97,6 @@ export class EnrolleeReviewComponent {
     return (this.hasUnlistedCertification)
       ? this.enrolment.unlistedCertifications
       : [];
-  }
-
-  public get hasDeviceProviderIdentifier(): boolean {
-    return (this.enrolment && !!this.enrolment.deviceProviderIdentifier);
   }
 
   public get hasCareSetting(): boolean {

@@ -15,6 +15,7 @@ namespace Prime.Services
         private readonly ICollegeLicenceClient _collegeLicenceClient;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
+        private readonly IDeviceProviderService _deviceProviderService;
 
         public SubmissionRulesService(
             ApiDbContext context,
@@ -22,13 +23,15 @@ namespace Prime.Services
             IBusinessEventService businessEventService,
             ICollegeLicenceClient collegeLicenceClient,
             IEnrolleeService enrolleeService,
-            IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
+            IEnrolleePaperSubmissionService enrolleePaperSubmissionService,
+            IDeviceProviderService deviceProviderService)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
             _collegeLicenceClient = collegeLicenceClient;
             _enrolleeService = enrolleeService;
             _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
+            _deviceProviderService = deviceProviderService;
 
             _logger.LogDebug($"Going to use {_collegeLicenceClient.GetType().Name} in PharmanetValidationRule");
         }
@@ -37,15 +40,15 @@ namespace Prime.Services
         /// All rules must pass for this enrollee to qualify to be automatically adjudicated.
         /// Failing rules will add Status Reasons to the current status.
         /// </summary>
-        public async Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee)
+        public async Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee, bool ignoreDOBDiscrepancy = false)
         {
             var rules = new List<AutomaticAdjudicationRule>
             {
                 new SelfDeclarationRule(),
                 new AddressRule(),
                 new VerifiedAddressRule(),
-                new PharmanetValidationRule(_collegeLicenceClient, _businessEventService, _enrolleeService),
-                new DeviceProviderRule(),
+                new PharmanetValidationRule(_collegeLicenceClient, _businessEventService, _enrolleeService, ignoreDOBDiscrepancy),
+                new DeviceProviderRule(_deviceProviderService),
                 new LicenceClassRule(),
                 new AlwaysManualRule(),
                 new IdentityAssuranceLevelRule(),

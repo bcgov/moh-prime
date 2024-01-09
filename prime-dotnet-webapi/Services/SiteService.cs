@@ -86,6 +86,7 @@ namespace Prime.Services
 
             return !await _context.Sites
                 .AsNoTracking()
+                .Where(s => s.PEC != "BC00000")
                 .AnyAsync(site => site.PEC == pec);
         }
 
@@ -129,6 +130,34 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
             await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
+        }
+
+        public async Task UpdateVendor(int siteId, int vendorCode, string rationale)
+        {
+            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
+
+            if (site.CareSettingCode.Value == (int)CareSettingType.HealthAuthority)
+            {
+                var healthAuthSite = await _context.HealthAuthoritySites
+                    .SingleOrDefaultAsync(s => s.Id == siteId);
+
+                var healthAuthVendor = await _context.HealthAuthorityVendors
+                    .SingleOrDefaultAsync(v => v.VendorCode == vendorCode &&
+                    healthAuthSite.HealthAuthorityOrganizationId == v.HealthAuthorityOrganizationId);
+
+                healthAuthSite.HealthAuthorityVendorId = healthAuthVendor.Id;
+            }
+            else
+            {
+                var siteVendor = await _context.SiteVendors
+                    .SingleOrDefaultAsync(s => s.SiteId == siteId);
+
+                siteVendor.VendorCode = vendorCode;
+            }
+
+            string rationaleEvent = $"Vendor changed {rationale}";
+            await _context.SaveChangesAsync();
+            await _businessEventService.CreateSiteEventAsync(siteId, rationaleEvent);
         }
 
         public async Task DeleteSiteAsync(int siteId)
@@ -369,6 +398,15 @@ namespace Prime.Services
                 .SingleAsync(s => s.Id == siteId);
 
             site.Flagged = flagged;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateSiteIsNew(int siteId, bool isNew)
+        {
+            var site = await _context.Sites
+                .SingleAsync(s => s.Id == siteId);
+
+            site.IsNew = isNew;
             await _context.SaveChangesAsync();
         }
 
