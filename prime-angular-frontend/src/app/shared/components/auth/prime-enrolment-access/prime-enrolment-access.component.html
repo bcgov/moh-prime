@@ -73,7 +73,7 @@
         <button mat-flat-button
                 color="primary"
                 class="large"
-                (click)="onLogin()">Access Individual Enrolment</button>
+                (click)="onLogin(false)">Access Individual Enrolment</button>
       </div>
     </div>
   </div>
@@ -98,10 +98,25 @@
     </div>
     <div class="pb-50"
          *ngIf="showHealthAuthorityAccessBtn">
-      <button mat-flat-button
-              color="primary"
-              class="large"
-              (click)="onLogin()">Access Site Registration</button>
+      <div class="mst1">
+        Please enter the provided passcode to continue
+      </div>
+      <form [formGroup]="form"
+            novalidate
+            autocomplete="off">
+        <label>Passcode</label>
+        <mat-form-field class="w-100">
+          <input matInput
+                 class="input"
+                 formControlName="passcode">
+          <mat-error *ngIf="passcode.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="passcode.hasError('validPasscode')">Invalid Passcode</mat-error>
+        </mat-form-field>
+        <button mat-flat-button
+                color="primary"
+                class="large"
+                (click)="onLogin(true)">Access Site Registration</button>
+      </form>
     </div>
     <div class="pb-50 button_title"
          *ngIf="showNonAuthorizedUserPanel">
@@ -125,7 +140,7 @@
         <button mat-flat-button
                 color="primary"
                 class="large"
-                (click)="onLogin()">Access Site Registration</button>
+                (click)="onLogin(false)">Access Site Registration</button>
       </div>
     </div>
   </div>

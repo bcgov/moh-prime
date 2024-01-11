@@ -213,4 +213,25 @@ export class HealthAuthorityResource {
         })
       );
   }
+
+
+  /**
+   * @description
+   * Get health authority by passcode.
+   */
+  public checkHealthAuthorityPasscode(passcode: string): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ passcode });
+    return this.apiResource.get<HealthAuthority[]>('lookups/ha-by-passcode', params)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthority[]>) => response.result),
+        map((healthAuthorityList: HealthAuthority[]) => {
+          return healthAuthorityList.length > 0;
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast(`Health authority Passcode - ${passcode}, not found. `);
+          this.logger.error(`[Core] HealthAuthorityResource::getHealthAuthority(${passcode}) error has occurred: `, error);
+          throw error;
+        })
+      );
+  }
 }
