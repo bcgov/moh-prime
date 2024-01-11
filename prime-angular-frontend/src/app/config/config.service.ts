@@ -27,7 +27,7 @@ export class ConfigService implements IConfigService {
   constructor(
     protected apiResource: ApiResource,
     protected utilsService: UtilsService,
-    private apiResourceUtilsService: ApiResourceUtilsService,
+    protected apiResourceUtilsService: ApiResourceUtilsService,
   ) { }
 
   public get practices(): PracticeConfig[] {
