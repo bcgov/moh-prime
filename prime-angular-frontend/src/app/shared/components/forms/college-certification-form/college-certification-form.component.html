@@ -4,8 +4,11 @@
            class="mb-4">
   <ng-container #alertContent
                 class="alert-content">
-    The name of your college has changed. Please select the new name from the drop-down list for college name. Then
-    select your current professional group, then the license you currently hold.
+    {{ this.collegeDiscontinued ?
+    "Your previous license class is no longer available, please " :
+    "The name of your college has changed. Please select the new name from the drop-down list for college name, " +
+    "then"}}
+    use the dropdown menu to select the license you currently hold.
   </ng-container>
 </app-alert>
 
@@ -16,7 +19,7 @@
 
     <ng-template #collegeLicences>
       <mat-form-field class="w-100">
-        <mat-label>College Licences</mat-label>
+        <mat-label>College</mat-label>
         <mat-select formControlName="collegeCode">
           <mat-option *ngIf="!condensed && defaultOption"
                       value="">
