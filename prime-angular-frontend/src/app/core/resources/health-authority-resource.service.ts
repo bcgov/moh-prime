@@ -217,7 +217,7 @@ export class HealthAuthorityResource {
 
   /**
    * @description
-   * Get health authority by passcode.
+   * Check health authority passcode, return true when health authority list is not empty
    */
   public checkHealthAuthorityPasscode(passcode: string): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams({ passcode });
@@ -228,8 +228,8 @@ export class HealthAuthorityResource {
           return healthAuthorityList.length > 0;
         }),
         catchError((error: any) => {
-          this.toastService.openErrorToast(`Health authority Passcode - ${passcode}, not found. `);
-          this.logger.error(`[Core] HealthAuthorityResource::getHealthAuthority(${passcode}) error has occurred: `, error);
+          this.toastService.openErrorToast(`Check Health authority Passcode - ${passcode}, error occurred.`);
+          this.logger.error(`[Core] HealthAuthorityResource::checkHealthAuthorityPasscode(${passcode}) error has occurred: `, error);
           throw error;
         })
       );
