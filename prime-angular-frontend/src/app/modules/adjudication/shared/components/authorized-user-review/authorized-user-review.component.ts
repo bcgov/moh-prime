@@ -50,8 +50,8 @@ export class AuthorizedUserReviewComponent implements OnInit {
   public onDelete() {
 
     const data: DialogOptions = {
-      title: 'Delete Authroized User',
-      message: 'Are you sure you want to delete this authroized user request?',
+      title: 'Delete Authorized User',
+      message: 'Are you sure you want to delete this authorized user request?',
       actionText: "Yes"
     };
 
