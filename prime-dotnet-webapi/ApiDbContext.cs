@@ -120,6 +120,7 @@ namespace Prime
         public DbSet<Party> Parties { get; set; }
         public DbSet<PartySubmission> PartySubmissions { get; set; }
         public DbSet<PartyCertification> PartyCertifications { get; set; }
+        public DbSet<PartyEnrolment> PartyEnrolments { get; set; }
 
         // PLR Integration
         public DbSet<PlrProvider> PlrProviders { get; set; }

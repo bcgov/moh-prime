@@ -25,5 +25,6 @@ namespace Prime.ViewModels.Parties
         public string JobRoleTitle { get; set; }
         public HealthAuthorityCode HealthAuthorityCode { get; set; }
         public AccessStatusType Status { get; set; }
+        public DateTimeOffset SubmittedDate { get; set; }
     }
 }
