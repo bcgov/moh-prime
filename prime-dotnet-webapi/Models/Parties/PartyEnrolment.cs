@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace Prime.Models
 {
+    [Table("PartyEnrolment")]
     public class PartyEnrolment : BaseAuditable
     {
         [Key]
