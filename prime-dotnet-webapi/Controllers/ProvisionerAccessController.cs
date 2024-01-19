@@ -60,16 +60,16 @@ namespace Prime.Controllers
         {
             var certificate = await _certificateService.GetEnrolmentCertificateAsync(accessTokenId);
 
+            if (certificate == null)
+            {
+                return NotFound($"No valid Enrolment Certificate Access Token found with id {accessTokenId}");
+            }
+
             //set health authority
             if (certificate.HealthAuthories.Count() > 0)
             {
                 var careSetting = certificate.CareSettings.First(cs => cs.Code == (int)CareSettingType.HealthAuthority);
                 careSetting.Name += $" - {string.Join(", ", certificate.HealthAuthories.Select(ha => ha.Name))}";
-            }
-
-            if (certificate == null)
-            {
-                return NotFound($"No valid Enrolment Certificate Access Token found with id {accessTokenId}");
             }
 
             return Ok(certificate);
