@@ -5,4 +5,5 @@ import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 export interface AuthorizedUser extends Party {
   healthAuthorityCode: HealthAuthorityEnum;
   status: AccessStatusEnum;
+  submittedDate: string;
 }
