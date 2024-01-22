@@ -417,12 +417,13 @@ export class CollegeCertificationFormComponent implements OnInit {
   private checkLicenseIfDiscontinued() {
     if (this.collegeCode.value && this.licenseCode.value) {
       this.licenseClassDiscontinued = this.isCertificationDiscontinued(this.collegeCode.value, this.licenseCode.value);
-      this.collegeDiscontinued = this.colleges.some(c => c.code == this.collegeCode.value);
+      //check if the current college code is in the valid college list. If not, the current college is discontinued.
+      this.collegeDiscontinued = !this.colleges.some(c => c.code === this.collegeCode.value);
     }
   }
 
   private isCertificationDiscontinued(collegeCode: number, licenseCode: number): boolean {
-    let collegeLicense = this.configService.licenses.find(l => l.code === licenseCode);
-    return collegeLicense.collegeLicenses.find(cl => cl.collegeCode === collegeCode && cl.licenseCode === licenseCode).discontinued;
+    let license = this.configService.licenses.find(l => l.code === licenseCode);
+    return license.collegeLicenses.find(cl => cl.collegeCode === collegeCode && cl.licenseCode === licenseCode).discontinued;
   }
 }
