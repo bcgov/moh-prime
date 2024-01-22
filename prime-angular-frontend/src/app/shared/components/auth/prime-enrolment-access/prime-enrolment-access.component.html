@@ -79,27 +79,10 @@
   </div>
   <div *ngIf="mode === 'health-authority'"
        class="container mt-0 mb-1">
-    <div class="mid-content">
-      <div class="mt1">Are you authorized by your health authority to register sites?
-      </div>
+    <div class="mid-content pb-50">
       <div class="mst1">
-        <mat-radio-group class="radio-group"
-                         (change)="isAuthorizedUser($event)">
-
-          <div class="radio_button">
-            <mat-radio-button *ngFor="let option of [true, false]"
-                              [value]="option"
-                              class="radio_button">
-              {{ option | yesNo }}
-            </mat-radio-button>
-          </div>
-        </mat-radio-group>
-      </div>
-    </div>
-    <div class="pb-50"
-         *ngIf="showHealthAuthorityAccessBtn">
-      <div class="mst1">
-        Please enter the provided passcode to continue
+        Please enter the passcode provided by your health authority to continue.
+        <br/> Otherwise, choose another tab.
       </div>
       <form [formGroup]="form"
             novalidate
@@ -118,12 +101,6 @@
                 class="large"
                 (click)="onLogin(true)">Access Site Registration</button>
       </form>
-    </div>
-    <div class="pb-50 button_title"
-         *ngIf="showNonAuthorizedUserPanel">
-      This section is for an authorized user to register health authority sites.
-      <br/>
-      Please select a different tab.
     </div>
   </div>
   <div *ngIf="mode === 'community'"
