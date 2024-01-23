@@ -240,5 +240,34 @@ namespace Prime.Controllers
 
             return NoContent();
         }
+
+
+        // DELETE: api/parties/authorized-user/5
+        /// <summary>
+        /// Delete the authorized user.
+        /// </summary>
+        /// <param name="authorizedUserId"></param>
+        [HttpDelete("{authorizedUserId}", Name = nameof(DeleteAuthorizedUser))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteAuthorizedUser(int authorizedUserId)
+        {
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
+            if (authorizedUser == null)
+            {
+                return NotFound($"AuthorizedUser not found with id {authorizedUserId}");
+            }
+            if (!authorizedUser.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _authorizedUserService.DeleteAuthorizedUserAsync(authorizedUserId);
+
+            return NoContent();
+        }
     }
 }

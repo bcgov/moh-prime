@@ -38,7 +38,9 @@ namespace Prime.ViewModels.Profiles
             CreateMap<IContactViewModel, Contact>();
 
             CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
-                .IncludeMembers(src => src.Party);
+                .IncludeMembers(src => src.Party)
+                .ForMember(dest => dest.SubmittedDate, opt => opt.MapFrom(src => src.CreatedTimeStamp));
+
             CreateMap<Party, AuthorizedUserViewModel>();
         }
     }
