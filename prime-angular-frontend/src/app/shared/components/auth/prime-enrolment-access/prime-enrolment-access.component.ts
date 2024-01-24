@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -11,6 +11,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { HtmlComponent } from '@shared/components/dialogs/content/html/html.component';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { CollectionNoticeService } from '@shared/services/collection-notice.service';
+import { MatRadioChange } from '@angular/material/radio';
 
 @UntilDestroy()
 @Component({
@@ -19,19 +20,26 @@ import { CollectionNoticeService } from '@shared/services/collection-notice.serv
   styleUrls: [
     './prime-enrolment-access.component.scss',
     '../access.component.scss'
-  ]
+  ],
 })
 export class PrimeEnrolmentAccessComponent implements OnInit {
+  @Input() public mode: 'enrolment' | 'community' | 'health-authority';
   @Output() public login: EventEmitter<void>;
   public locationCode: BannerLocationCode;
   public bcscMobileSetupUrl: string;
   public loginCancelled: boolean;
   public bcscHelpDeskUrl: string;
+  public enrolmentUrl: string;
+  public communitySiteUrl: string;
+  public healthAuthorityUrl: string;
+  public showHealthAuthorityAccessBtn: boolean;
+  public showNonAuthorizedUserPanel: boolean;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private viewportService: ViewportService,
     private route: ActivatedRoute,
+    protected router: Router,
     private dialog: MatDialog,
     private collectionNoticeService: CollectionNoticeService
   ) {
@@ -41,6 +49,9 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     this.loginCancelled =
       this.route.snapshot.queryParams.action === 'cancelled';
     this.bcscHelpDeskUrl = this.config.bcscHelpDeskUrl;
+    this.enrolmentUrl = "info";
+    this.communitySiteUrl = "site";
+    this.healthAuthorityUrl = "health-authority";
   }
 
   public get isMobile(): boolean {
@@ -65,8 +76,19 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.showHealthAuthorityAccessBtn = false;
+
     this.viewportService.onResize()
       .pipe(untilDestroyed(this))
       .subscribe();
+  }
+
+  public goTo(url: string) {
+    this.router.navigate([url]);
+  }
+
+  public isAuthorizedUser(data: MatRadioChange) {
+    this.showHealthAuthorityAccessBtn = data.value;
+    this.showNonAuthorizedUserPanel = !data.value;
   }
 }

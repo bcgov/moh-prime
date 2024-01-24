@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { AuthorizedUserResource } from '@core/resources/authorized-user-resource.service';
@@ -31,6 +34,7 @@ export class AuthorizedUserReviewComponent implements OnInit {
     private route: ActivatedRoute,
     private authorizedUserResource: AuthorizedUserResource,
     private configService: ConfigService,
+    private dialog: MatDialog,
     private router: Router
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.HEALTH_AUTHORITIES);
@@ -41,6 +45,25 @@ export class AuthorizedUserReviewComponent implements OnInit {
     this.busy = this.authorizedUserResource
       .approveAuthorizedUser(this.route.snapshot.params.auid)
       .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS]));
+  }
+
+  public onDelete() {
+
+    const data: DialogOptions = {
+      title: 'Delete Authorized User',
+      message: 'Are you sure you want to delete this authorized user request?',
+      actionText: "Yes"
+    };
+
+    this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .subscribe((result: boolean) => {
+        if (result) {
+          this.authorizedUserResource
+            .deleteAuthorizedUser(this.route.snapshot.params.auid)
+            .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS]));
+        }
+      });
   }
 
   public onBack() {

@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 
@@ -14,7 +16,8 @@ import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 @Component({
   selector: 'app-health-auth-authorized-users-view',
   templateUrl: './health-auth-authorized-users-view.component.html',
-  styleUrls: ['./health-auth-authorized-users-view.component.scss']
+  styleUrls: ['./health-auth-authorized-users-view.component.scss'],
+  providers: [FormatDatePipe]
 })
 export class HealthAuthAuthorizedUsersViewComponent implements OnInit {
   public busy: Subscription;
@@ -26,6 +29,7 @@ export class HealthAuthAuthorizedUsersViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private healthAuthorityResource: HealthAuthorityResource,
+    private formatDatePipe: FormatDatePipe,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
@@ -47,7 +51,11 @@ export class HealthAuthAuthorizedUsersViewComponent implements OnInit {
       {
         key: 'Job Title',
         value: user.jobRoleTitle
-      }
+      },
+      {
+        key: 'Submitted Date',
+        value: this.formatDatePipe.transform(user.submittedDate)
+      },
     ];
   }
 

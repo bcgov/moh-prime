@@ -68,6 +68,7 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
           return {
             collegeName: college.name,
             licenseCode: collegeLicense.licenseCode,
+            discontinued: collegeLicense.discontinued,
             ...license
           } as LicenseMaintenanceConfig;
         }).sort(this.utilsService.sortByKey<LicenseMaintenanceConfig>('weight'))
