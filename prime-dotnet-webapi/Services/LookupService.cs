@@ -54,6 +54,7 @@ namespace Prime.Services
                     .AsNoTracking()
                     .Include(c => c.CollegeLicenses)
                     .Include(c => c.CollegePractices)
+                    .OrderBy(c => c.Weight)
                     .ToListAsync(),
                 JobNames = await _context.Set<JobName>()
                     .AsNoTracking()

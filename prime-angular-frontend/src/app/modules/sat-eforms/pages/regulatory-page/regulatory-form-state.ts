@@ -70,7 +70,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryForm> {
     return this.fb.group({
       // Force selection of "None" on new certifications
       collegeCode: ['', [Validators.required]],
-      nurseCategory: [null, []],
+      category: [null, []],
       licenseCode: [null, []],
       // Validators are applied at the component-level when
       // fields are made visible to allow empty submissions
@@ -87,7 +87,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryForm> {
     if (collegeCertification) {
       // Nursing category is a derived field for BCCNM, which is used to filter the
       // results for the verbose number of available licence codes for nurses
-      const nurseCategory = (collegeCertification.collegeCode === CollegeLicenceClassEnum.BCCNM)
+      const category = (collegeCertification.collegeCode === CollegeLicenceClassEnum.BCCNM)
         ? this.configService.colleges
           .find(c => c.code === CollegeLicenceClassEnum.BCCNM)
           .collegeLicenses
@@ -96,7 +96,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryForm> {
           .collegeLicenseGroupingCode
         : null;
 
-      certification.patchValue({ ...collegeCertification, nurseCategory });
+      certification.patchValue({ ...collegeCertification, category });
     }
 
     this.certifications.push(certification);
