@@ -165,7 +165,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
 
     if (careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
       const { textSearch, careType, statusId, vendorId, assignToMe } = queryParams;
-      this.healthAuthResource.getHealthAuthoritySitesByQeury({ textSearch, careType, statusId, vendorId, assignToMe })
+      this.healthAuthResource.getHealthAuthoritySitesByQuery({ textSearch, careType, statusId, vendorId, assignToMe })
         .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = sites)
     } else {
       this.busy = this.getPaginatedSites({ careSettingCode, ...queryParams })

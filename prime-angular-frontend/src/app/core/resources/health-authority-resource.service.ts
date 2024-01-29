@@ -73,7 +73,7 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthoritySitesByQeury(
+  public getHealthAuthoritySitesByQuery(
     queryParam: {
       textSearch?: string, adjudicatorId?: number, vendorId?: number,
       careType?: string, statusId?: number, healthAuthorityId?: number, assignToMe: boolean
