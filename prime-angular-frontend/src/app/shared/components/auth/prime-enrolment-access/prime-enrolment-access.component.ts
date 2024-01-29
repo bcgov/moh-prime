@@ -107,7 +107,7 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     });
   }
 
-  private checkHAPasscode(): (value: string) => Observable<boolean> {
-    return (value: string) => this.healthAuthorityResource.checkHealthAuthorityPasscode(value);
+  private checkHAPasscode(): (passcode: string) => Observable<boolean> {
+    return (passcode: string) => this.healthAuthorityResource.checkHealthAuthorityPasscode(passcode);
   }
 }
