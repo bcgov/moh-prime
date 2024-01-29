@@ -22,6 +22,8 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 @Component({
   selector: 'app-site-registration-tabs',
@@ -47,6 +49,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
 
   private tabIndexToCareSettingMap: Record<number, CareSettingEnum>;
   private careSettingToTabIndexMap: { [key in CareSettingEnum]?: number };
+  private adminUserId: string;
 
   constructor(
     protected route: ActivatedRoute,
@@ -56,6 +59,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthResource: HealthAuthorityResource,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
+    private authService: AuthService,
     private organizationResource: OrganizationResource,
   ) {
     super(route, router, dialog, siteResource, adjudicationResource, healthAuthoritySiteResource);
@@ -97,6 +101,10 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
       [CareSettingEnum.HEALTH_AUTHORITY]: 3
     };
     this.healthAuthoritySites = [];
+
+    this.authService.getUser$()
+      .subscribe((user: BcscUser) =>
+        this.adminUserId = user.userId);
   }
 
   public onSearch(textSearch: string | null): void {
@@ -105,6 +113,22 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
 
   public onFilter(status: any | null): void {
     this.routeUtils.updateQueryParams({ status, page: null });
+  }
+
+  public onSiteStatusChange(statusId: any | null): void {
+    this.routeUtils.updateQueryParams({ statusId, page: null });
+  }
+
+  public onVendorChange(vendorId: any | null): void {
+    this.routeUtils.updateQueryParams({ vendorId, page: null });
+  }
+
+  public onCareTypeChange(careType: any | null): void {
+    this.routeUtils.updateQueryParams({ careType, page: null });
+  }
+
+  public onAssignToMeChange(assignToMe: any | null): void {
+    this.routeUtils.updateQueryParams({ assignToMe, page: null });
   }
 
   public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
@@ -130,14 +154,18 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     }
   }
 
-  protected getDataset(queryParams: { careSetting?: CareSettingEnum, textSearch?: string }): void {
+  protected getDataset(queryParams: {
+    careSetting?: CareSettingEnum, textSearch?: string,
+    careType?: string, statusId?: number, vendorId?: number, assignToMe?: boolean
+  }): void {
     let careSettingCode = +queryParams?.careSetting ?? CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
     if (!(careSettingCode in this.careSettingToTabIndexMap)) {
       careSettingCode = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
     }
 
     if (careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
-      this.healthAuthResource.getAllHealthAuthoritySites()
+      const { textSearch, careType, statusId, vendorId, assignToMe } = queryParams;
+      this.healthAuthResource.getHealthAuthoritySitesByQeury({ textSearch, careType, statusId, vendorId, assignToMe })
         .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = sites)
     } else {
       this.busy = this.getPaginatedSites({ careSettingCode, ...queryParams })
