@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240103232732_UpdateOralHealthProfessional")]
+    partial class UpdateOralHealthProfessional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2152,7 +2154,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 6,
-                            Name = "Certified Dental Assistant",
+                            Name = "Dental Assistant",
                             Weight = 8
                         },
                         new
@@ -5698,9 +5700,6 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Passcode")
-                        .HasColumnType("text");
-
                     b.HasKey("Code");
 
                     b.ToTable("HealthAuthorityLookup");
@@ -5709,38 +5708,32 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
-                            Name = "Northern Health",
-                            Passcode = "HA@PRIME"
+                            Name = "Northern Health"
                         },
                         new
                         {
                             Code = 2,
-                            Name = "Interior Health",
-                            Passcode = "HA@PRIME"
+                            Name = "Interior Health"
                         },
                         new
                         {
                             Code = 3,
-                            Name = "Vancouver Coastal Health",
-                            Passcode = "HA@PRIME"
+                            Name = "Vancouver Coastal Health"
                         },
                         new
                         {
                             Code = 4,
-                            Name = "Island Health",
-                            Passcode = "HA@PRIME"
+                            Name = "Island Health"
                         },
                         new
                         {
                             Code = 5,
-                            Name = "Fraser Health",
-                            Passcode = "HA@PRIME"
+                            Name = "Fraser Health"
                         },
                         new
                         {
                             Code = 6,
-                            Name = "Provincial Health Services Authority",
-                            Passcode = "HA@PRIME"
+                            Name = "Provincial Health Services Authority"
                         });
                 });
 
