@@ -8,6 +8,7 @@ import { Configuration } from '@config/config.model';
 import { IConfigService, ConfigService } from '@config/config.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { UtilsService } from '@core/services/utils.service';
+import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,10 @@ import { UtilsService } from '@core/services/utils.service';
 export class MockConfigService extends ConfigService implements IConfigService {
   constructor(
     protected apiResource: ApiResource,
-    protected utilsService: UtilsService
+    protected utilsService: UtilsService,
+    protected apiResourceUtilsService: ApiResourceUtilsService
   ) {
-    super(apiResource, utilsService);
+    super(apiResource, utilsService, apiResourceUtilsService);
 
     // Load the runtime configuration
     this.load().subscribe();
