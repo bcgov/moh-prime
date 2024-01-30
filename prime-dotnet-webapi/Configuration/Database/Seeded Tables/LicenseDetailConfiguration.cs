@@ -23,6 +23,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime EmployedStudentNurseChangeAug28th2023 = new(2023, 8, 28, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime PhysicianAssistantChange = new(2023, 11, 27, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime OralProfessionalDec112023 = new(2023, 12, 11, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime RemoteAccessChangeJan23rd2024 = new(2024, 1, 23, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -363,6 +364,14 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id =  301, LicenseCode = 117, Prefix = "", Manual = true, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalDec112023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id =  302, LicenseCode = 118, Prefix = "", Manual = true, Validate = false, LicensedToProvideCare = false, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalDec112023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id =  303, LicenseCode = 119, Prefix = "", Manual = false, Validate = false, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false, EffectiveDate = OralProfessionalDec112023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Provisional - Family & Specially Physicians, Provisional NP, and Midwife should not have remote access
+                    new LicenseDetail { Id = 304, LicenseCode = 5, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = false,  EffectiveDate = RemoteAccessChangeJan23rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id = 305, LicenseCode = 6, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = false,  EffectiveDate = RemoteAccessChangeJan23rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id = 306, LicenseCode = 48, Prefix = "96", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "NX", EffectiveDate = RemoteAccessChangeJan23rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id = 307, LicenseCode = 60, Prefix = "98", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = RemoteAccessChangeJan23rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 308, LicenseCode = 61, Prefix = "98", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = RemoteAccessChangeJan23rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 309, LicenseCode = 62, Prefix = "98", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = RemoteAccessChangeJan23rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }
