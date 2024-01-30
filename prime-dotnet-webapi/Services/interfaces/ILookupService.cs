@@ -11,5 +11,6 @@ namespace Prime.Services
         Task<LookupEntity> GetLookupsAsync();
         Task<int> GetCareSettingCountAsync();
         Task<List<SelfDeclarationVersion>> GetSelfDeclarationVersion(DateTimeOffset targetDate, bool isDeviceProvider);
+        Task<List<HealthAuthority>> GetHealthAuthorityByPasscode(string passcode);
     }
 }
