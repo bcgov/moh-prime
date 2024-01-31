@@ -107,5 +107,10 @@ namespace Prime.Services
                     .ToListAsync(),
             };
         }
+
+        public async Task<List<HealthAuthority>> GetHealthAuthorityByPasscode(string passcode)
+        {
+            return await _context.Set<HealthAuthority>().Where(ha => ha.Passcode == passcode).ToListAsync();
+        }
     }
 }

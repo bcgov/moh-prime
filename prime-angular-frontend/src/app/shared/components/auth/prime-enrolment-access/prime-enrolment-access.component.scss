@@ -130,3 +130,13 @@ a.tab-link:visited {
   margin: 10px 20px 0;
 }
 
+.input,
+.mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: #ffffff;
+}
+
+.mat-input-element,
+.mat-select-value {
+  color: #ffffff !important;
+}
