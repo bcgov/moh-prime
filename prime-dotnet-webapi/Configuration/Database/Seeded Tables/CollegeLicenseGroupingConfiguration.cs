@@ -20,7 +20,7 @@ namespace Prime.Configuration.Database
                     //Oral Health Professional Groups
                     new CollegeLicenseGrouping { Code = 10, Name = "Dentist",                                 Weight = 6 },
                     new CollegeLicenseGrouping { Code = 9, Name = "Dental Therapist",                         Weight = 7 },
-                    new CollegeLicenseGrouping { Code = 6, Name = "Dental Assistant",                         Weight = 8 },
+                    new CollegeLicenseGrouping { Code = 6, Name = "Certified Dental Assistant",               Weight = 8 },
                     new CollegeLicenseGrouping { Code = 7, Name = "Dental Hygienist",                         Weight = 9 },
                     new CollegeLicenseGrouping { Code = 8, Name = "Dental Technician",                        Weight = 10 },
                     new CollegeLicenseGrouping { Code = 11, Name = "Denturist",                               Weight = 11 }
