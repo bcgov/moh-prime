@@ -22,9 +22,9 @@ export class DateUtils {
 
   /**
  * @description
- * Check that a date is within a number of days before another date.
+ * Check if a date is a number of days after another date or today's date.
  */
-  public static withinDaysAfterDate(
+  public static daysAfterDate(
     date: string | Moment | null,
     daysBeforeDate: number,
     todayOrOtherDate: string | Moment = moment()

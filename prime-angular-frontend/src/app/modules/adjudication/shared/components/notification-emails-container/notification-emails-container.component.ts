@@ -33,10 +33,6 @@ export class NotificationEmailsContainerComponent implements OnInit {
   public getTemplateProperties(template: EmailTemplate) {
     return [
       {
-        key: 'Subject',
-        value: template.subject
-      },
-      {
         key: 'Description',
         value: template.description
       },
@@ -45,9 +41,13 @@ export class NotificationEmailsContainerComponent implements OnInit {
         value: template.recipient
       },
       {
+        key: 'Subject',
+        value: template.subject
+      },
+      {
         key: 'Last Modified',
         value: this.formatDatePipe.transform(template.modifiedDate),
-        danger: DateUtils.withinDaysAfterDate(template.modifiedDate, 182)
+        danger: DateUtils.daysAfterDate(template.modifiedDate, 182)
       },
     ];
   }

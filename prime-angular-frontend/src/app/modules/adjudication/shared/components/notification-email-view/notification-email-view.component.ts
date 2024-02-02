@@ -110,8 +110,8 @@ export class NotificationEmailViewComponent implements OnInit {
   public saveTitle(): void {
     if (this.emailTitle.valid) {
       const data: DialogOptions = {
-        title: 'Save Email Title',
-        message: `Are you sure you want to overwrite the email title?`,
+        title: 'Save Email Template Title',
+        message: `Are you sure you want to overwrite the email template title?`,
         actionText: 'Save Title'
       };
 
