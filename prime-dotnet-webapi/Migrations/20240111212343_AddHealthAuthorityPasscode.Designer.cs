@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240111212343_AddHealthAuthorityPasscode")]
+    partial class AddHealthAuthorityPasscode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1137,9 +1139,6 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Weight")
-                        .HasColumnType("integer");
-
                     b.HasKey("Code");
 
                     b.ToTable("CollegeLookup");
@@ -1148,122 +1147,97 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
-                            Name = "College of Physicians and Surgeons of BC (CPSBC)",
-                            Weight = 10
+                            Name = "College of Physicians and Surgeons of BC (CPSBC)"
                         },
                         new
                         {
                             Code = 2,
-                            Name = "College of Pharmacists of BC (CPBC)",
-                            Weight = 20
+                            Name = "College of Pharmacists of BC (CPBC)"
                         },
                         new
                         {
                             Code = 3,
-                            Name = "BC College of Nurses and Midwives (BCCNM)",
-                            Weight = 30
+                            Name = "BC College of Nurses and Midwives (BCCNM)"
                         },
                         new
                         {
                             Code = 4,
-                            Name = "College of Chiropractors of BC",
-                            Weight = 50
+                            Name = "College of Chiropractors of BC"
                         },
                         new
                         {
                             Code = 5,
-                            Name = "College of Dental Hygenists of BC",
-                            Weight = 999
+                            Name = "College of Dental Hygenists of BC"
                         },
                         new
                         {
                             Code = 6,
-                            Name = "College of Dental Technicians of BC",
-                            Weight = 999
+                            Name = "College of Dental Technicians of BC"
                         },
                         new
                         {
                             Code = 7,
-                            Name = "College of Dental Surgeons of BC",
-                            Weight = 999
+                            Name = "College of Dental Surgeons of BC"
                         },
                         new
                         {
                             Code = 8,
-                            Name = "College of Denturists of BC",
-                            Weight = 60
+                            Name = "College of Denturists of BC"
                         },
                         new
                         {
                             Code = 9,
-                            Name = "College of Dietitians of BC",
-                            Weight = 70
+                            Name = "College of Dietitians of BC"
                         },
                         new
                         {
                             Code = 10,
-                            Name = "College of Massage Therapists of BC",
-                            Weight = 80
+                            Name = "College of Massage Therapists of BC"
                         },
                         new
                         {
                             Code = 11,
-                            Name = "College of Naturopathic Physicians of BC",
-                            Weight = 90
+                            Name = "College of Naturopathic Physicians of BC"
                         },
                         new
                         {
                             Code = 12,
-                            Name = "College of Occupational Therapists of BC",
-                            Weight = 100
+                            Name = "College of Occupational Therapists of BC"
                         },
                         new
                         {
                             Code = 13,
-                            Name = "College of Opticians of BC",
-                            Weight = 110
+                            Name = "College of Opticians of BC"
                         },
                         new
                         {
                             Code = 14,
-                            Name = "College of Optometrists of BC",
-                            Weight = 120
+                            Name = "College of Optometrists of BC"
                         },
                         new
                         {
                             Code = 15,
-                            Name = "College of Physical Therapists of BC",
-                            Weight = 130
+                            Name = "College of Physical Therapists of BC"
                         },
                         new
                         {
                             Code = 16,
-                            Name = "College of Psychologists of BC",
-                            Weight = 140
+                            Name = "College of Psychologists of BC"
                         },
                         new
                         {
                             Code = 17,
-                            Name = "College of Speech and Hearing Health Professionals of BC",
-                            Weight = 160
+                            Name = "College of Speech and Hearing Health Professionals of BC"
                         },
                         new
                         {
                             Code = 18,
-                            Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC",
-                            Weight = 170
+                            Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC"
                         },
                         new
                         {
                             Code = 19,
-                            Name = "BC College of Social Workers",
-                            Weight = 180
-                        },
-                        new
-                        {
-                            Code = 20,
-                            Name = "BC College of Oral Health Professionals",
-                            Weight = 40
+                            Name = "BC College of Social Workers"
                         });
                 });
 
@@ -1278,9 +1252,6 @@ namespace Prime.Migrations
                     b.Property<int?>("CollegeLicenseGroupingCode")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("Discontinued")
-                        .HasColumnType("boolean");
-
                     b.HasKey("CollegeCode", "LicenseCode");
 
                     b.HasIndex("CollegeLicenseGroupingCode");
@@ -1293,799 +1264,513 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 1,
-                            Discontinued = false
+                            LicenseCode = 1
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 2,
-                            Discontinued = false
+                            LicenseCode = 2
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 3,
-                            Discontinued = false
+                            LicenseCode = 3
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 4,
-                            Discontinued = false
+                            LicenseCode = 4
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 5,
-                            Discontinued = false
+                            LicenseCode = 5
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 6,
-                            Discontinued = false
+                            LicenseCode = 6
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 7,
-                            Discontinued = false
+                            LicenseCode = 7
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 8,
-                            Discontinued = false
+                            LicenseCode = 8
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 9,
-                            Discontinued = false
+                            LicenseCode = 9
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 10,
-                            Discontinued = false
+                            LicenseCode = 10
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 11,
-                            Discontinued = false
+                            LicenseCode = 11
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 12,
-                            Discontinued = false
+                            LicenseCode = 12
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 13,
-                            Discontinued = false
+                            LicenseCode = 13
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 14,
-                            Discontinued = false
+                            LicenseCode = 14
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 15,
-                            Discontinued = false
+                            LicenseCode = 15
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 16,
-                            Discontinued = false
+                            LicenseCode = 16
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 17,
-                            Discontinued = false
+                            LicenseCode = 17
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 18,
-                            Discontinued = false
+                            LicenseCode = 18
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 19,
-                            Discontinued = false
+                            LicenseCode = 19
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 20,
-                            Discontinued = false
+                            LicenseCode = 20
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 21,
-                            Discontinued = true
+                            LicenseCode = 21
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 22,
-                            Discontinued = false
+                            LicenseCode = 22
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 23,
-                            Discontinued = false
+                            LicenseCode = 23
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 24,
-                            Discontinued = true
+                            LicenseCode = 24
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 59,
-                            Discontinued = false
+                            LicenseCode = 59
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 65,
-                            Discontinued = false
+                            LicenseCode = 65
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 66,
-                            Discontinued = false
+                            LicenseCode = 66
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 67,
-                            Discontinued = false
+                            LicenseCode = 67
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 87,
-                            Discontinued = false
+                            LicenseCode = 87
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 88,
-                            Discontinued = false
+                            LicenseCode = 88
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 89,
-                            Discontinued = false
+                            LicenseCode = 89
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 90,
-                            Discontinued = false
+                            LicenseCode = 90
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 91,
-                            Discontinued = false
+                            LicenseCode = 91
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 92,
-                            Discontinued = false
+                            LicenseCode = 92
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 25,
-                            Discontinued = false
+                            LicenseCode = 25
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 26,
-                            Discontinued = false
+                            LicenseCode = 26
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 27,
-                            Discontinued = false
+                            LicenseCode = 27
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 28,
-                            Discontinued = false
+                            LicenseCode = 28
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 29,
-                            Discontinued = false
+                            LicenseCode = 29
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 30,
-                            Discontinued = false
+                            LicenseCode = 30
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 31,
-                            Discontinued = false
+                            LicenseCode = 31
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 68,
-                            Discontinued = false
+                            LicenseCode = 68
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 32,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 33,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 34,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 35,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 36,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 37,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 39,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 40,
-                            CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 41,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 42,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 43,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 45,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 46,
-                            CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 47,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 48,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 49,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 51,
-                            CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 52,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 53,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 54,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 55,
-                            CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 60,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 61,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 62,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 63,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 69,
-                            CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 70,
-                            Discontinued = true
+                            LicenseCode = 70
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 75,
-                            Discontinued = true
+                            LicenseCode = 75
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 76,
-                            Discontinued = true
+                            LicenseCode = 76
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 77,
-                            Discontinued = true
+                            LicenseCode = 77
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 78,
-                            Discontinued = false
+                            LicenseCode = 78
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 79,
-                            Discontinued = false
+                            LicenseCode = 79
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 80,
-                            Discontinued = false
+                            LicenseCode = 80
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 81,
-                            Discontinued = false
+                            LicenseCode = 81
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 71,
-                            Discontinued = false
+                            LicenseCode = 71
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 72,
-                            Discontinued = false
+                            LicenseCode = 72
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 73,
-                            Discontinued = false
+                            LicenseCode = 73
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 74,
-                            Discontinued = false
+                            LicenseCode = 74
                         },
                         new
                         {
                             CollegeCode = 4,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 5,
-                            LicenseCode = 64,
-                            Discontinued = true
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 6,
-                            LicenseCode = 64,
-                            Discontinued = true
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 8,
-                            LicenseCode = 64,
-                            Discontinued = true
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 9,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 10,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 12,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 13,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 15,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 16,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 17,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 18,
-                            LicenseCode = 64,
-                            Discontinued = false
+                            LicenseCode = 64
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 82,
-                            Discontinued = false
+                            LicenseCode = 82
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 83,
-                            Discontinued = false
+                            LicenseCode = 83
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 84,
-                            Discontinued = false
+                            LicenseCode = 84
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 85,
-                            Discontinued = false
+                            LicenseCode = 85
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 86,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 93,
-                            CollegeLicenseGroupingCode = 6,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 94,
-                            CollegeLicenseGroupingCode = 6,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 95,
-                            CollegeLicenseGroupingCode = 6,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 96,
-                            CollegeLicenseGroupingCode = 6,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 97,
-                            CollegeLicenseGroupingCode = 7,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 98,
-                            CollegeLicenseGroupingCode = 7,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 99,
-                            CollegeLicenseGroupingCode = 7,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 100,
-                            CollegeLicenseGroupingCode = 7,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 101,
-                            CollegeLicenseGroupingCode = 8,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 102,
-                            CollegeLicenseGroupingCode = 8,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 103,
-                            CollegeLicenseGroupingCode = 8,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 104,
-                            CollegeLicenseGroupingCode = 8,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 105,
-                            CollegeLicenseGroupingCode = 9,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 106,
-                            CollegeLicenseGroupingCode = 10,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 107,
-                            CollegeLicenseGroupingCode = 10,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 108,
-                            CollegeLicenseGroupingCode = 10,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 109,
-                            CollegeLicenseGroupingCode = 10,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 110,
-                            CollegeLicenseGroupingCode = 10,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 111,
-                            CollegeLicenseGroupingCode = 10,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 112,
-                            CollegeLicenseGroupingCode = 10,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 113,
-                            CollegeLicenseGroupingCode = 10,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 114,
-                            CollegeLicenseGroupingCode = 11,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 115,
-                            CollegeLicenseGroupingCode = 11,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 116,
-                            CollegeLicenseGroupingCode = 11,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 117,
-                            CollegeLicenseGroupingCode = 11,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 118,
-                            CollegeLicenseGroupingCode = 11,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 20,
-                            LicenseCode = 119,
-                            CollegeLicenseGroupingCode = 11,
-                            Discontinued = false
+                            LicenseCode = 86
                         });
                 });
 
@@ -2136,42 +1821,6 @@ namespace Prime.Migrations
                             Code = 5,
                             Name = "Midwife",
                             Weight = 5
-                        },
-                        new
-                        {
-                            Code = 10,
-                            Name = "Dentist",
-                            Weight = 6
-                        },
-                        new
-                        {
-                            Code = 9,
-                            Name = "Dental Therapist",
-                            Weight = 7
-                        },
-                        new
-                        {
-                            Code = 6,
-                            Name = "Certified Dental Assistant",
-                            Weight = 8
-                        },
-                        new
-                        {
-                            Code = 7,
-                            Name = "Dental Hygienist",
-                            Weight = 9
-                        },
-                        new
-                        {
-                            Code = 8,
-                            Name = "Dental Technician",
-                            Weight = 10
-                        },
-                        new
-                        {
-                            Code = 11,
-                            Name = "Denturist",
-                            Weight = 11
                         });
                 });
 
@@ -4307,25 +3956,13 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
                     b.Property<int>("EmailType")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Recipient")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Subject")
-                        .HasColumnType("text");
-
                     b.Property<string>("Template")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TemplateName")
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
@@ -4347,14 +3984,10 @@ namespace Prime.Migrations
                             Id = 1,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered when adjudicator approves the enrolment, or change the status to editable.",
                             EmailType = 1,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Enrollee",
-                            Subject = "PRIME Requires your Attention",
-                            Template = "<p> Your PRIME application status has changed since you last viewed it. Please click <a href=\"@Model.Url\">here</a> to log into PRIME and view your status. </p><p> You may need to share your approval email to get your PharmaNet access is set up. Please connect by phone or email if you have any questions. </p><p> Thank you, </p><p> PRIME Support team<br/>1-844-397-7463 <br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Enrollee Status Change",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "<p> Your PRIME application status has changed since you last viewed it. Please click <a href=\"@Model.Url\">here</a> to log into PRIME and view your status. </p>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4362,14 +3995,10 @@ namespace Prime.Migrations
                             Id = 2,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Enrollee send out the Provisioner Link Email.",
                             EmailType = 2,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Provisioner, CC: Enrollee",
-                            Subject = "New Access Request",
-                            Template = "<style> .underline { text-decoration: underline; } .list-item-mb { margin-bottom: 0.75rem; } </style>To: Who it may concern:<br/><br/>@Model.EnrolleeFullName has been approved for private community health practice access to PharmaNet.<br/><br/><strong> To set up their access, forward this notification and the information below to <span class=\"underline\">whoever sets up PharmaNet user accounts. This is usually your PharmaNet software vendor but can also be someone like an IT department or authorized individual</span>. </strong><br/><br/><ol><li class=\"list-item-mb\"> Name of the community health practice ___________________ </li><li class=\"list-item-mb\"> Practice address ___________________ </li><li class=\"list-item-mb\"> PharmaNet site ID, if you have it ___________________</li></ol> If @Model.EnrolleeFullName accesses PharmaNet on behalf of another user, the PharmaNet software vendor should know who they are, and they should be enrolled in PRIME.<br/><br/> Your software vendor can find @Model.EnrolleeFullName's details by following this link: <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <strong>This link will expire in 10 days.</strong><br/><br/>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Community Practice Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "<style> .underline { text-decoration: underline; } .list-item-mb { margin-bottom: 0.75rem; } </style>To: PharmaNet administrator (person responsible for coordinating PharmaNet access):<br><br>@Model.EnrolleeFullName has been approved for access to PharmaNet.<br><br><strong> To set up their access, you must forward this notification and the information below to <span class=\"underline\">whoever sets up PharmaNet user accounts. This is usually your PharmaNet software vendor but can also be someone like an IT department or authorized individual</span>. </strong><br><br><ol><li class=\"list-item-mb\"> Name of the community health practice: </li><li class=\"list-item-mb\"> Practice address: </li><li class=\"list-item-mb\"> PharmaNet site ID, if you have it:</li><li class=\"list-item-mb\"> If @Model.EnrolleeFullName accesses PharmaNet on behalf of another user, please ensure your PharmaNet software vendor knows who the other users are, and those users enrol in PRIME.<br><br></li></ol> Your software vendor can find @Model.EnrolleeFullName's details by following this link: <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <strong>This link will expire in 10 days.</strong><br><br>Thank you,<br><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4377,14 +4006,10 @@ namespace Prime.Migrations
                             Id = 3,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Enrollee send out the Provisioner Link Email.",
                             EmailType = 3,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Provisioner, CC: Enrollee",
-                            Subject = "New Access Request",
-                            Template = "To: Whom it may concern, <br/> <br/> @Model.EnrolleeFullName has been approved for <strong>community pharmacy access to PharmaNet.</strong> Their PharmaNet access account can now be set up in your local software. You must include their <strong>global PharmaNet ID (GPID)</strong> on their account profile. You can access their GPID at the link below. <br/><br/> If @Model.EnrolleeFullName accesses PharmaNet on behalf of another user, the PharmaNet software vendor should know who they are, and they should be enrolled in PRIME.<br/> <br/> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br/> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br/> <br/>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Community Pharmacy Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "To: Whom it may concern, <br> <br> @Model.EnrolleeFullName has been approved for <strong>Community Pharmacy Access to PharmaNet.</strong> They can now be set up with their PharmaNet Access account in your local software. You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile. You can access their GPID via this link below. <br> <br> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br> <br> Thank you.",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4392,14 +4017,10 @@ namespace Prime.Migrations
                             Id = 4,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Enrollee send out the Provisioner Link Email.",
                             EmailType = 4,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Provisioner, CC: Enrollee",
-                            Subject = "New Access Request",
-                            Template = "To: PharmNet administrator <br/> <br/> @Model.EnrolleeFullName has been approved for <strong>health authority access to PharmaNet.</strong> <br/> They can now be set up with their PharmaNet access account in your local software. Their <strong>Global PharmaNet ID (GPID)</strong> must be on their account profile. <br/><br/> You can access their GPID here: <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br/> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br/><br/>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Device Provider Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "To: PharmNet Access administrator <br> <br> @Model.EnrolleeFullName has been approved for <strong>Health Authority Access to PharmaNet.</strong> <br> They can now be set up with their PharmaNet Access account in your local software. You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile. <br> You can access their GPID via this link here. <br> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br> <strong>This link will expire after @Model.ExpiresInDays days</strong>.",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4407,14 +4028,10 @@ namespace Prime.Migrations
                             Id = 5,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered when an adjudicator approves a community site with remote user.",
                             EmailType = 5,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Remote User",
-                            Subject = "Remote Practitioner Notification",
-                            Template = "<p>The Ministry of Health has been notified that you require remote access to PharmaNet at:<br/> <br/> Organization name: @Model.OrganizationName <br/> Site address: @Model.SiteStreetAddress, @Model.SiteCity <br/> <br/>To access PharmaNet remotely, you must enrol in PRIME and indicate that you require remote access. If you have already enrolled in PRIME, you must log into PRIME and add remote access to your profile. Refer to <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides\">PRIME user guides</a> for instructions. </p><p>You can enrol or update your profile at <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>.</p> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Remote User Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "The Ministry of Health has been notified that you require Remote Access at <br> Organization Name: @Model.OrganizationName <br> Site Address: @Model.SiteStreetAddress, @Model.SiteCity <br> <br> To complete your approval for Remote Access, please ensure you have indicated you require Remote Access on your profile at <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>.",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4422,14 +4039,10 @@ namespace Prime.Migrations
                             Id = 6,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered when the remote user has been updated and the site is completed.",
                             EmailType = 6,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: MOH & PRIME Support",
-                            Subject = "Remote Practitioners Changed",
-                            Template = "@{ var pecText = string.IsNullOrWhiteSpace(Model.SitePec) ? \"Not Assigned\" : Model.SitePec; } <p> Notification: The list of Remote Practitioners at @Model.SiteStreetAddress of @Model.OrganizationName (PEC: @pecText) has been updated. <br/><br/>The remote practitioners at this site are: </p> <h2 class=\"mb-2\">Remote Users</h2> @foreach (var name in Model.RemoteUserNames) { <div class=\"ml-2 mb-2\"> <h5>Name</h5> <span class=\"ml-2\">@name</span> </div> } <h2 class=\"mb-2\">Site Information</h2> <p> See the attached registration and organization agreement for more information. @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.DocumentUrl\" target=\"_blank\">link</a>@(\".\") } </p>",
-                            TemplateName = "Remote User Updated Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "@{ var pecText = string.IsNullOrWhiteSpace(Model.SitePec) ? \"Not Assigned\" : Model.SitePec; } <p> Notification: The list of Remote Practitioners at @Model.SiteStreetAddress of @Model.OrganizationName (PEC: @pecText) has been updated. The Remote Practitioners at this site are: </p> <h2 class=\"mb-2\">Remote Users</h2> @foreach (var name in Model.RemoteUserNames) { <div class=\"ml-2 mb-2\"> <h5>Name</h5> <span class=\"ml-2\">@name</span> </div> } <h2 class=\"mb-2\">Site Information</h2> <p> See the attached registration and organization agreement for more information. @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.DocumentUrl\" target=\"_blank\">link</a>@(\".\") } </p>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4437,14 +4050,10 @@ namespace Prime.Migrations
                             Id = 7,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered when a site is approved.",
                             EmailType = 7,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: MOH",
-                            Subject = "[{siteId}] Site Registration Approved",
-                            Template = "<p>@Model.DoingBusinessAs with SiteID @Model.Pec has been approved by the Ministry of Health for PharmaNet access. Please notify the PharmaNet software vendor for this site and complete any remaining tasks to activate the site.</p><p>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "HIBC Site Submission",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "<p>@Model.DoingBusinessAs with PEC/SiteID @Model.Pec has been approved by the Ministry of Health for PharmaNet access. Please notify the PharmaNet software vendor for this site and complete any remaining tasks to activate the site.</p><p>Thank you.</p><p>PRIME Support Team.</p>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4452,14 +4061,10 @@ namespace Prime.Migrations
                             Id = 8,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered daily at 3pm in a batch process. The email will send to the enrollee, whose ToA expiry date is coming in 14,  7, 3, 2, 1, 0 days.",
                             EmailType = 8,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Enrollee",
-                            Subject = "Renew Your PRIME Enrolment",
-                            Template = "@{ var renewalDate = Model.RenewalDate.Date.ToShortDateString(); } <p>Dear @Model.EnrolleeName,</p><p>It is time to renew your PRIME enrolment. If you still need PharmaNet to care for patients, you must ensure that your PRIME profile is current. Update/ renew your profile  and sign the terms of access every year. </p><p>Please renew by @renewalDate.</p><ol><li>Log in to PRIME <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.</li><li>Click <b>Renew or Update Information</b> (top of screen).</li><li>On the PRIME Profile screen, review your information.<ol style='list-style-type:lower-alpha;'><li>Select the edit button to revise sections that are out of date. Click <strong>Continue</strong> at the bottom of updated screens to save changes.</li><li>Once changes are saved, <strong> check the \"I certify\" box and click the submit button</strong>.</li></ol></li><li>If instructed to go on, click <b>Continue.</b></li><li>If you are notified that your renewal is approved, go to the next screen to review and accept the PharmaNet user terms of access. This step completes your renewal. The terms of access may have changed, so please read carefully.</li> If your renewal is sent for review, you will either be contacted by the PRIME Support team or notified to log in to PRIME to complete the remaining steps.<li> You will be prompted to share your renewal approval with the person or team in your workplace who sets up PharmaNet accounts if you changed workplaces or care setting (new clinic, health authority, etc.) since you last updated your account, or you did not share the approval notification with your PharmaNet administrator earlier. You do this by entering their email address(es) and clicking the send button. <ol style='list-style-type:lower-alpha;'> </li></ol></li></ol><p>Please connect by phone or email if you have any questions. <br/>Thank you for renewing your PRIME enrolment.</p> </p> <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Enrollee Renewal Required",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "@{ var renewalDate = Model.RenewalDate.Date.ToShortDateString(); } <p>Dear @Model.EnrolleeName,</p><p>It is time to renew your PRIME enrolment. If you still need PharmaNet to care for patients, you must ensure that your PRIME profile is current by reviewing and updating every year. To renew, log in to your PRIME profile, update your information as needed, and read and sign the terms of access.</p><p>Please renew by @renewalDate.</p><ol><li>Log in to PRIME <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.</li><li>Click <b>Renew or Update Information</b> (top of screen).</li><li>On the PRIME Profile screen, review your information.<ol style='list-style-type:lower-alpha;'><li>Select the edit button to revise sections that are out of date. Click <strong>Continue</strong> at the bottom of updated screens to save changes.</li><li>Once changes are saved, <strong>certify and submit</strong> at the bottom of the PRIME Profile page.</li></ol></li><li>If instructed to go on, click <b>Continue</b></li><li>Most renewals will be approved automatically. If you are notified that your renewal is approved, go to the next page to review and accept the PharmaNet user terms of access. This step completes renewal. Note that the terms of access may have changed, so please read carefully.</li><p>In some cases, renewals are sent for review. If your renewal is sent for review, you will either be contacted by the PRIME Support team, or you will be notified to log in to PRIME to complete the remaining steps.</p><li>You will next be prompted to share your renewal approval with the person or team in your workplace who sets up PharmaNet accounts. You do this by entering their email address(es) and sending. <strong>Only share the renewal approval if:</strong><ol style='list-style-type:lower-alpha;'><li>You changed workplaces or care setting (new clinic, health authority, etc.) since you last updated your account, or you did not share the approval notification with your PharmaNet administrator earlier, and/or</li><li>You previously enrolled as an RN, RPN, LPN or midwife, and have since been issued a PharmaNet ID by BCCNM. Your access type may have changed, and the people in your workplace who set up PharmaNet access need to know this.</li></ol></li></ol><p>Thank you for renewing your PRIME enrolment,</p><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4467,14 +4072,10 @@ namespace Prime.Migrations
                             Id = 9,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered when SA uploads a business license and click 'Save and Continue'.",
                             EmailType = 9,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Adjudicator",
-                            Subject = "Site Business Licence Uploaded",
-                            Template = "<p> A user has uploaded a business licence to their PharmaNet site registration. @if (!string.IsNullOrWhiteSpace(Model.Url)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.Url\" target=\"_blank\">link</a>@(\".\") } </p> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Business Licence Upload",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "<p> A user has uploaded business licence to their PharmaNet site registration. @if (!string.IsNullOrWhiteSpace(Model.Url)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.Url\" target=\"_blank\">link</a>@(\".\") } </p>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4482,14 +4083,10 @@ namespace Prime.Migrations
                             Id = 10,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered daily at 3pm in a batch process. The email will send to the enrollee, whose ToA has expired.",
                             EmailType = 10,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Enrollee",
-                            Subject = "Your PRIME Renewal Date Has Passed",
-                            Template = "Dear @Model.EnrolleeName,<br/><br/><p>Your PRIME renewal is overdue.</p><p>  If you still need access to PharmaNet to care for patients, renew your PRIME enrolment now by logging in to PRIME at <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>. Update your information as needed, submit, and then read and sign the terms of access. PRIME profiles must be renewed annually.</p><p> Add us to your email contacts to make sure our emails don't land in your spam folder.</p><br/>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Forced Renewal Passed Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "Dear @Model.EnrolleeName,<br /><br /><p>Your PRIME renewal is overdue.</p><p><strong>Once a year, you must ensure that your PRIME profile is current.</strong> If you still need access to PharmaNet to care for patients, renew your PRIME enrolment now by logging in to PRIME at <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>. Update your information as needed, submit, and then read and sign the terms of access.</p><p>You may also wish to confirm that your email accepts messages from PRIME, particularly if they are going to your email junk folder (e.g., the previous notices to renew).</p><br>Thank you,<br><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4497,14 +4094,10 @@ namespace Prime.Migrations
                             Id = 11,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "(To be Deleted - Disabled) When Admin/Ajudicator approves a site.",
                             EmailType = 11,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Site PharmaNet Admin",
-                            Subject = "Site Registration Approved",
-                            Template = "<p> Your site registration has been approved. The site will now be set up and activated in PharmaNet. Your PharmaNet software vendor will be notified when the site has been activated, and you will hear from them when you access PharmaNet. </p> <p> Individuals who will be accessing PharmaNet at your site should enrol in PRIME now if they have not already done so. For more information, please visit <a href=\"https://www.gov.bc.ca/pharmanet/PRIME\" target=\"_blank\">https://www.gov.bc.ca/pharmanet/PRIME</a>. </p> Private community practice only: Physicians or nurse practitioners must indicate in their PRIME profile that they require remote access if needed. They can do this here: <a href=\"https://pharmanetenrolment.gov.bc.ca\" target=\"_blank\">https://pharmanetenrolment.gov.bc.ca</a>. </p> <p> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Site Approved Pharma Net Administrator",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "<p> Your site registration has been approved. The site must now be set up and activated in PharmaNet. Your PharmaNet software vendor will be notified when the site has been activated, and you will hear from them when you can start to use PharmaNet. </p> <p> Individuals who will be accessing PharmaNet at your site should enrol in PRIME now if they have not already done so. For more information, please visit <a href=\"https://www.gov.bc.ca/pharmanet/PRIME\" target=\"_blank\">https://www.gov.bc.ca/pharmanet/PRIME</a>. [for private community practice only: If you have registered any physicians or nurse practitioners for remote access to PharmaNet, they must enroll in PRIME before they use remote access, which they can do here: <a href=\"https://pharmanetenrolment.gov.bc.ca\" target=\"_blank\">https://pharmanetenrolment.gov.bc.ca</a>. You must not permit remote use of PharmaNet until these users are approved in PRIME.] </p> <p> If you have any questions or concerns, please phone 1-844-397-7463 or email <a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMESupport@gov.bc.ca</a>. </p> <p> Thank you. </p>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4512,14 +4105,10 @@ namespace Prime.Migrations
                             Id = 12,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "(To be Deleted - Disabled) When Admin/Ajudicator approves a site.",
                             EmailType = 12,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Signing Authority",
-                            Subject = "Site Registration Approved",
-                            Template = "<p> The site you registered in PRIME, @Model.DoingBusinessAs, has been approved by the Ministry of Health. Your SiteID is @Model.Pec. </p> <p> Health Insurance BC has been notified of the site’s approval and will contact your software vendor. Your vendor will be notified of your site activation. As they complete any remaining setup for your site, they may reach out for additional information. </p> <p> If you need to update any information in PRIME regarding your site, you may log in at any time using your BC Services Card App. If you have any questions or concerns, please phone 1-844-397-7463 or email PRIMESupport@gov.bc.ca. </p> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Site Approved Signing Authority",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "<p> The site you registered in PRIME, @Model.DoingBusinessAs, has been approved by the Ministry of Health. Your SiteID is @Model.Pec. </p> <p> Health Insurance BC has been notified of the site’s approval and will contact your software vendor. Your vendor will complete any remaining setup for your site and may contact you or the PharmaNet Administrator at your site. </p> <p> If you need to update any information in PRIME regarding your site, you may log in at any time using your mobile BC Services Card. If you have any questions or concerns, please phone 1-844-397-7463 or email PRIMESupport@gov.bc.ca. </p> <p> Thank you. </p>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4527,14 +4116,10 @@ namespace Prime.Migrations
                             Id = 13,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered when a SA or AU submits a site.",
                             EmailType = 13,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: MOH, cc: PRIME Support",
-                            Subject = "Priority! New Pharmacy - [Care Setting]",
-                            Template = "<p> A new PharmaNet site registration has been received. See the attached registration and organization agreement for more information. @if (!string.IsNullOrWhiteSpace(Model.Url)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.Url\" target=\"_blank\">link</a>@(\".\") } <br/><br/> Thank you, <br/><br/> PRIME Support team <br/><br/> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Site Registration Submission",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "<p> A new PharmaNet site registration has been received. See the attached registration and organization agreement for more information. @if (!string.IsNullOrWhiteSpace(Model.Url)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.Url\" target=\"_blank\">link</a>@(\".\") } </p>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4542,14 +4127,10 @@ namespace Prime.Migrations
                             Id = 14,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered when PRIME admin approves a organization claim.",
                             EmailType = 14,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: New SA",
-                            Subject = "Organization Claim was Approved",
-                            Template = "Your claim of the organization @Model.OrganizationName, which the site with SiteID/PEC @Model.ProvidedSiteId is part of, has been approved.  You may now access to site registration for this organization. < br >< br >You must sign the Organization Agreement before you will be able to update or add any sites.This is a click-to-accept online signature that is linked to your BC Services Card identity.If you are not qualified to accept legal agreements on behalf of your organization, or if your organization does not allow you to sign online agreements, please contact PRIMESupport @gov.bc.ca for further guidance before you proceed further.",
-                            TemplateName = "Organization Claim Approval Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "Your claim of the organization @Model.OrganizationName, of which the site with site ID/PEC @Model.ProvidedSiteId is part of, has been approved.  You now have access to site registration for this organization.",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4557,14 +4138,10 @@ namespace Prime.Migrations
                             Id = 15,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered when an adjudicator send notification from site overview page for Community Pharmacy or Device Provider site.",
                             EmailType = 15,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Lori.Haggstrom@gov.bc.ca",
-                            Subject = "PRIME Site Registration review complete",
                             Template = "A PRIME Admin has reviewed the site registration for PEC/SiteID# @Model.Pec. @(!string.IsNullOrWhiteSpace(Model.Note) ? $\"The following notes were added: {Model.Note}\" : \"\")",
-                            TemplateName = "Site Reviewed Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4572,14 +4149,10 @@ namespace Prime.Migrations
                             Id = 16,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "(To be Deleted) The email will be triggered when a community site is approved and it is marked as 'Active Before Registration'.",
                             EmailType = 16,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: SA",
-                            Subject = "PRIME Site Registration Submission",
-                            Template = "Thank you for registering your site (SiteID: @Model.Pec) in PRIME. If you need to update any site information in PRIME, you may log in at any time using your BC Services Card app. Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Site Active Before Registration Submission",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "Thank you for registering your site (SiteID: @Model.Pec) in PRIME. If you need to update any site information in PRIME, you may log in at any time using your mobile BC Services Card. If you have any questions, please phone 1 - 844 - 397 - 7463 or email PRIMESupport@@gov.bc.ca. Thank you.",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4587,14 +4160,10 @@ namespace Prime.Migrations
                             Id = 17,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "(To be Deleted) The email will be triggered when a paper enrolment is submitted.",
                             EmailType = 17,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Enrollee",
-                            Subject = "Paper Enrolment Submission",
-                            Template = "Your request for PharmaNet access has been approved and recorded in PRIME. When it is possible for you to do so, you must enrol in PRIME using your BC Services Card app. <br/> <br/> <strong> Your temporary GPID is @Model.GPID. </strong> <br/> <br/> The first time you log in to PRIME, you should be asked if you have previously received permission to access PharmaNet via an offline process. If you do not see this prompt, please stop your enrolment and contact <a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a><br/><br/>Thank you,<br/> <br/>PRIME Support <br/>1-844-397-7463<br/><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
-                            TemplateName = "Paper Enrollee Submission",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "Your request for PharmaNet access has been approved and recorded in PRIME. When it is possible for you to do so, you must enrol in PRIME using your mobile BC Services Card. <br> <br> <strong> Your temporary GPID is @Model.GPID. </strong> <br> <br> The first time you log into PRIME you should be asked if you have previously received permission to access PharmaNet via an offline process. If you do not see this prompt, please stop your enrollment and contact <a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4602,14 +4171,10 @@ namespace Prime.Migrations
                             Id = 18,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "(Disabled) The email will be triggered by a batch process, and the email will send to the enrollee, who has not signed the ToA.",
                             EmailType = 18,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Enrollee",
-                            Subject = "PharmaNet Terms of Access requires signing",
-                            Template = "Dear @Model.EnrolleeName, <br/> <br/><p> Please log in to PRIME and accept your PharmaNet terms of access to complete your enrolment.</p><p>You can access PRIME here <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.  If you are not directed to the terms of access, select \"Terms of Access\" from the menu on the lefthand side of the screen.</p>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Enrollee Unsigned Toa",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "Dear @Model.EnrolleeName, <br> <br><p>Your PharmaNet Terms of Access must be accepted in PRIME before your enrolment is complete. Please log in to PRIME and accept your terms of access now.</p><p>You can access PRIME here <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.  If you are not directed to the user terms of access page, you can reach it by selecting Terms of Access from the menu on the left-hand side of the PRIME Profile page.</p><br>Thank you,<br><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4617,14 +4182,10 @@ namespace Prime.Migrations
                             Id = 19,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Enrollee send email notification for the absence entry.",
                             EmailType = 19,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: User entered email",
-                            Subject = "PRIME Absence Notification",
-                            Template = "This is an automated generated email from PRIME. <br/> <br/> @(Model.FirstName + \" \" +  Model.LastName + \" is going to be absent \") @if (Model.End.HasValue) {@(\"from \" + Model.Start.ToShortDateString() + \" to \" + Model.End.Value.ToShortDateString() + \".  Please consider deactivating the user during this period. Any access during this period by the user will be considered as an unauthorized access.\")} else {@(\"indefinitely, starting \" + Model.Start.ToShortDateString() + \". Please deactivate the user on the start date. Any access during this period by the user will be considered as an unauthorized access.\")} Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Enrollee Absence Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "This is an automated generated email from PRIME. <br> <br> @(Model.FirstName + \" \" +  Model.LastName + \" is going to be absent \") @if (Model.End.HasValue) {@(\"from \" + Model.Start.ToShortDateString() + \" to \" + Model.End.Value.ToShortDateString() + \".  Please consider deactivating the user during this period. Any access during this period by the user will be considered as an unauthorized access.\")} else {@(\"indefinitely, starting \" + Model.Start.ToShortDateString() + \". Please deactivate the user on the start date. Any access during this period by the user will be considered as an unauthorized access.\")}",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4632,14 +4193,10 @@ namespace Prime.Migrations
                             Id = 20,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered daily at 3pm in a batch process. The email will send to the enrollee, whose ToA expiry date is coming in 14,  7, 3, 2, 1, 0 days and it is marked as forced renewal.",
                             EmailType = 20,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Enrollee",
-                            Subject = "PRIME Renewal Required",
-                            Template = "Hello @Model.EnrolleeName, <br/> <br/> You are receiving this message as your PharmaNet user status has changed from on-behalf-of user to independent user following changes to legislation governing access to PharmaNet. <br/> <br/> Being an independent PharmaNet user means you will now access PharmaNet as yourself instead of on behalf of another practitioner. <br/> <br/> Log back in to PRIME by @Model.RenewalDate.ToString(\"d MMMM yyyy\") to confirm your profile information and review and accept the user terms of access for independent users. These will automatically be presented to you. This is a requirement for you to maintain access to PharmaNet, as the new terms of access are different from those you may have accepted earlier. <br/> <br/> For information about PRIME, visit the <a href=\"@Model.PrimeUrl\">PRIME web page</a>.  If you have questions or difficulties using PRIME, please contact us at the email address below.<br/> <br/> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Forced Renewal Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "Hello @Model.EnrolleeName, <br> <br> You are receiving this message as your PharmaNet user status has changed from on-behalf-of user to independent user following changes to legislation governing access to PharmaNet. <br> <br> Being an independent PharmaNet user means you will now access PharmaNet as yourself instead of on behalf of another practitioner. <br> <br> Log back in to PRIME by @Model.RenewalDate.ToString(\"d MMMM yyyy\") to confirm your profile information and review and accept the user terms of access for independent users. These will automatically be presented to you. This is a requirement for you to maintain access to PharmaNet, as the new terms of access are quite different from those you may have accepted earlier. <br> <br> For information about PRIME, visit the <a href=\"@Model.PrimeUrl\">PRIME web page</a>.  If you have questions or difficulties using PRIME, please contact us at the email address below.<br> <br> Thank you, <br> <br> PRIME Support<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4647,14 +4204,10 @@ namespace Prime.Migrations
                             Id = 21,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered daily at 3pm in a batch process. The email will send to the enrollee, whose ToA has expired and it is marked as forced renewal.",
                             EmailType = 21,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Enrollee",
-                            Subject = "Your PRIME Renewal Date Has Passed",
-                            Template = "Hello @Model.EnrolleeName, <br/> <br/> <b>This is your last day</b> to log back in to PRIME to confirm your profile information and review and accept the new user terms of access for independent users. These will automatically be presented to you. This is a requirement for you to maintain access to PharmaNet. <br/><br/>You are receiving this message as your PharmaNet user status has changed from on-behalf-of user to independent user following changes to legislation governing access to PharmaNet. <br/> <br/> Being an independent user of PharmaNet means you will now access PharmaNet as yourself instead of on behalf of another practitioner. <br/>  <br/> For information about PRIME, visit the <a href=\"@Model.PrimeUrl\">PRIME web page</a>. Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Enrollee Renewal Passed",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "Hello @Model.EnrolleeName, <br> <br> You are receiving this message as your PharmaNet user status has changed from on-behalf-of user to independent user following changes to legislation governing access to PharmaNet. <br> <br> Being an independent user of PharmaNet means you now will access PharmaNet as yourself instead of on behalf of another practitioner. <br> <br> <b>This is your last day</b> to log back in to PRIME to confirm your profile information and review and accept the new user terms of access for independent users. These will automatically be presented to you. This is a requirement for you to maintain access to PharmaNet. <br> <br> For information about PRIME, visit the <a href=\"@Model.PrimeUrl\">PRIME web page</a>.  If you have questions or difficulties using PRIME, please contact us at the email address below.<br> <br> Thank you, <br> <br> PRIME Support<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4662,14 +4215,10 @@ namespace Prime.Migrations
                             Id = 22,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Enrollee send out the Provisioner Link Email.",
                             EmailType = 22,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Recipient = "To: Provisioner, CC: Enrollee",
-                            Subject = "New Access Request",
-                            Template = "To: Whom it may concern, <br/> <br/> @Model.EnrolleeFullName has been approved for <strong>device provider access to PharmaNet.</strong> Their PharmaNet access account can now be set up in your local software. You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile. You can access their GPID at the link below. <br/> <br/> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br/> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br/> <br/> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
-                            TemplateName = "Device Provider Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Template = "To: Whom it may concern, <br> <br> @Model.EnrolleeFullName has been approved for <strong>Device Provider Access to PharmaNet.</strong> They can now be set up with their PharmaNet Access account in your local software. You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile. You can access their GPID via this link below. <br> <br> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br> <br> Thank you.",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -6674,168 +6223,6 @@ namespace Prime.Migrations
                             Code = 86,
                             Name = "Temporary registration",
                             Weight = 4
-                        },
-                        new
-                        {
-                            Code = 93,
-                            Name = "Full Certified Dental Assisant",
-                            Weight = 120
-                        },
-                        new
-                        {
-                            Code = 94,
-                            Name = "Limited Certified Dental Assistant",
-                            Weight = 121
-                        },
-                        new
-                        {
-                            Code = 95,
-                            Name = "Non-Practising Certified Dental Assistant",
-                            Weight = 123
-                        },
-                        new
-                        {
-                            Code = 96,
-                            Name = "Temporary Certified Dental Assistant",
-                            Weight = 124
-                        },
-                        new
-                        {
-                            Code = 97,
-                            Name = "Registered Dental Hygienist",
-                            Weight = 131
-                        },
-                        new
-                        {
-                            Code = 98,
-                            Name = "Dental Hygiene Practitioner",
-                            Weight = 132
-                        },
-                        new
-                        {
-                            Code = 99,
-                            Name = "Non-Practising Dental Hygienist",
-                            Weight = 133
-                        },
-                        new
-                        {
-                            Code = 100,
-                            Name = "Temporary Dental Hygienist",
-                            Weight = 134
-                        },
-                        new
-                        {
-                            Code = 101,
-                            Name = "Dental Technician",
-                            Weight = 141
-                        },
-                        new
-                        {
-                            Code = 102,
-                            Name = "Student Dental Technician",
-                            Weight = 142
-                        },
-                        new
-                        {
-                            Code = 103,
-                            Name = "Non-Practising Dental Technician",
-                            Weight = 143
-                        },
-                        new
-                        {
-                            Code = 104,
-                            Name = "Temporary Dental Technician",
-                            Weight = 144
-                        },
-                        new
-                        {
-                            Code = 105,
-                            Name = "Dental Therapist",
-                            Weight = 110
-                        },
-                        new
-                        {
-                            Code = 106,
-                            Name = "Full Dentist",
-                            Weight = 100
-                        },
-                        new
-                        {
-                            Code = 107,
-                            Name = "Limited (Academic) Dentist",
-                            Weight = 102
-                        },
-                        new
-                        {
-                            Code = 108,
-                            Name = "Limited (Armed Services or Government) Dentist",
-                            Weight = 103
-                        },
-                        new
-                        {
-                            Code = 109,
-                            Name = "Limited (Education & Volunteer) Dentist",
-                            Weight = 104
-                        },
-                        new
-                        {
-                            Code = 110,
-                            Name = "Limited (Restricted-to-Specialty) Dentist",
-                            Weight = 105
-                        },
-                        new
-                        {
-                            Code = 111,
-                            Name = "Student Dentist",
-                            Weight = 106
-                        },
-                        new
-                        {
-                            Code = 112,
-                            Name = "Non-Practising Dentist",
-                            Weight = 107
-                        },
-                        new
-                        {
-                            Code = 113,
-                            Name = "Temporary Dentist",
-                            Weight = 108
-                        },
-                        new
-                        {
-                            Code = 114,
-                            Name = "Full Denturist",
-                            Weight = 151
-                        },
-                        new
-                        {
-                            Code = 115,
-                            Name = "Limited Denturist",
-                            Weight = 152
-                        },
-                        new
-                        {
-                            Code = 116,
-                            Name = "Limited (Grandfathered) Denturist",
-                            Weight = 153
-                        },
-                        new
-                        {
-                            Code = 117,
-                            Name = "Student Denturist",
-                            Weight = 154
-                        },
-                        new
-                        {
-                            Code = 118,
-                            Name = "Non-Practising Denturist",
-                            Weight = 155
-                        },
-                        new
-                        {
-                            Code = 119,
-                            Name = "Temporary Denturist",
-                            Weight = 156
                         },
                         new
                         {
@@ -10985,539 +10372,6 @@ namespace Prime.Migrations
                             Manual = true,
                             NamedInImReg = false,
                             Prefix = "M9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 277,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 93,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 278,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 94,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 279,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 95,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 280,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 96,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 281,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 97,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 282,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 98,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 283,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 99,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 284,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 100,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 285,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 101,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 286,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 102,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 287,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 103,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 288,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 104,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 289,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 105,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 290,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 106,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "95",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 291,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 107,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "95",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 292,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 108,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "95",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 293,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 109,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "95",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 294,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 110,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "95",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 295,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 111,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "95",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 296,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 112,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = true,
-                            Prefix = "95",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 297,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 113,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "95",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 298,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 114,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 299,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 115,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 300,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 116,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 301,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 117,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 302,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 118,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 303,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 119,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 304,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 5,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 305,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 6,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 306,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 48,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            NonPrescribingPrefix = "NX",
-                            Prefix = "96",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 307,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 60,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "98",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 308,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 61,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "98",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 309,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 62,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "98",
-                            PrescriberIdType = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
