@@ -114,7 +114,8 @@ namespace Prime.Services
                 .If(!string.IsNullOrWhiteSpace(searchOptions.CareType),
                     q => q.Where(s => s.HealthAuthorityCareType.CareType == searchOptions.CareType))
                 .ProjectTo<HealthAuthoritySiteAdminListViewModel>(_mapper.ConfigurationProvider)
-                .DecompileAsync();
+                .DecompileAsync()
+                .OrderBy(s => s.SiteName);
 
             return await query.ToListAsync();
         }

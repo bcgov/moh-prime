@@ -8,6 +8,7 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { LocalStorageService } from '@core/services/local-storage.service';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-search-ha-form',
@@ -51,7 +52,7 @@ export class SearchHAFormComponent implements OnInit {
     this.siteStatuses.push(inReviewStatus, editableStatus, lockedStatus);
 
     this.careTypes = this.configService.careTypes;
-    this.vendors = this.configService.vendors;
+    this.vendors = this.configService.vendors.filter(v => v.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
 
     this.search = new EventEmitter<string>();
     this.siteStatus = new EventEmitter<number>();
