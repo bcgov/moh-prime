@@ -10,7 +10,6 @@ import { tap } from 'rxjs/operators';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { PaginatedList } from '@core/models/paginated-list.model';
 import { Pagination } from '@core/models/pagination.model';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
@@ -49,7 +48,6 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
 
   private tabIndexToCareSettingMap: Record<number, CareSettingEnum>;
   private careSettingToTabIndexMap: { [key in CareSettingEnum]?: number };
-  private adminUserId: string;
 
   constructor(
     protected route: ActivatedRoute,
@@ -60,7 +58,6 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     protected healthAuthResource: HealthAuthorityResource,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
     private authService: AuthService,
-    private organizationResource: OrganizationResource,
   ) {
     super(route, router, dialog, siteResource, adjudicationResource, healthAuthoritySiteResource);
 
@@ -101,10 +98,6 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
       [CareSettingEnum.HEALTH_AUTHORITY]: 3
     };
     this.healthAuthoritySites = [];
-
-    this.authService.getUser$()
-      .subscribe((user: BcscUser) =>
-        this.adminUserId = user.userId);
   }
 
   public onSearch(textSearch: string | null): void {
