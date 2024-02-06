@@ -47,7 +47,7 @@ export class NotificationEmailsContainerComponent implements OnInit {
       {
         key: 'Last Modified',
         value: this.formatDatePipe.transform(template.modifiedDate),
-        danger: DateUtils.isDaysAfterDate(182, template.modifiedDate)
+        danger: DateUtils.isDaysAfterDate(180, template.modifiedDate)
       },
     ];
   }
