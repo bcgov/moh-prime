@@ -33,7 +33,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -56,7 +56,7 @@ namespace Prime.Services.EmailInternal
                 to: recipientEmails,
                 cc: cc,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -69,7 +69,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -82,7 +82,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -95,7 +95,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: new[] { MohEmail, PrimeSupportEmail },
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -109,7 +109,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -123,7 +123,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -137,7 +137,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -151,7 +151,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -164,7 +164,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: MohEmail,
                 subject: emailTemplate.Subject.Replace("{siteId}", siteId.ToString()),
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -177,7 +177,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -190,7 +190,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -217,7 +217,7 @@ namespace Prime.Services.EmailInternal
                 to: MohEmail,
                 cc: PrimeSupportEmail,
                 subject: subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -230,7 +230,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: ProviderEnrolmentTeamEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -243,7 +243,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: newSigningAuthorityEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -256,7 +256,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: signingAuthorityEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -269,7 +269,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: enrolleeEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -283,7 +283,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
 
@@ -296,7 +296,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: email,
                 subject: emailTemplate.Subject,
-                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
         }
     }
