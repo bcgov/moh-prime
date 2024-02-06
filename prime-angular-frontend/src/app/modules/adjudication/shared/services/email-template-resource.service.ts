@@ -89,13 +89,13 @@ export class EmailTemplateResourceService {
       );
   }
 
-  public updateEmailDescription(id: number, subject: string): Observable<EmailTemplate> {
-    const payload = { data: subject };
+  public updateEmailDescription(id: number, description: string): Observable<EmailTemplate> {
+    const payload = { data: description };
     return this.apiResource.put<EmailTemplate>(`emails/management/description/${id}`, payload)
       .pipe(
         map((response: ApiHttpResponse<EmailTemplate>) => response.result),
         tap(() => this.toastService.openSuccessToast('Email Description has been updated.')),
-        tap((emailTemplate: EmailTemplate) => this.logger.info('EMAIL_SUBJECT', emailTemplate)),
+        tap((emailTemplate: EmailTemplate) => this.logger.info('EMAIL_DESCRIPTION', emailTemplate)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Email Description could not be updated');
           this.logger.error('[Adjudication] EmailTemplateResource::updateEmailDescription error has occurred: ', error);
