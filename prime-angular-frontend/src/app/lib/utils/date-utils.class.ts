@@ -24,17 +24,17 @@ export class DateUtils {
  * @description
  * Check if a date is a number of days after another date or today's date.
  */
-  public static daysAfterDate(
-    date: string | Moment | null,
+  public static isDaysAfterDate(
     daysBeforeDate: number,
+    anchorDate: string | Moment | null,
     todayOrOtherDate: string | Moment = moment()
   ): boolean {
-    if (!date || !todayOrOtherDate) {
+    if (!anchorDate || !todayOrOtherDate) {
       return false;
     }
 
     const minusDaysBeforeDate = moment(todayOrOtherDate).subtract(daysBeforeDate, 'days');
-    return moment(date).isBefore(minusDaysBeforeDate);
+    return moment(anchorDate).isBefore(minusDaysBeforeDate);
   }
 
   /**

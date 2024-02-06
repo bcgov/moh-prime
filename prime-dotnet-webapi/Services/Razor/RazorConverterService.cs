@@ -66,7 +66,7 @@ namespace Prime.Services
             return output.ToString();
         }
 
-        public async Task<string> RenderEmailTemplateToString<TModel>(EmailTemplate template, TModel viewModel)
+        public string RenderEmailTemplateToString<TModel>(EmailTemplate template, TModel viewModel)
         {
             return Engine.Razor.RunCompile(template.Template, template.VersionedName(), typeof(TModel), viewModel);
         }

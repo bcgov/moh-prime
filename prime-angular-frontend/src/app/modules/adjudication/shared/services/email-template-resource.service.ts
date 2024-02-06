@@ -79,10 +79,10 @@ export class EmailTemplateResourceService {
     return this.apiResource.put<EmailTemplate>(`emails/management/title/${id}`, payload)
       .pipe(
         map((response: ApiHttpResponse<EmailTemplate>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Email Title has been updated.')),
+        tap(() => this.toastService.openSuccessToast('Email Template Title has been updated.')),
         tap((emailTemplate: EmailTemplate) => this.logger.info('EMAIL_TITLE', emailTemplate)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Email Title could not be updated');
+          this.toastService.openErrorToast('Email Template Title could not be updated');
           this.logger.error('[Adjudication] EmailTemplateResource::updateEmailTitle error has occurred: ', error);
           throw error;
         })
@@ -94,11 +94,11 @@ export class EmailTemplateResourceService {
     return this.apiResource.put<EmailTemplate>(`emails/management/description/${id}`, payload)
       .pipe(
         map((response: ApiHttpResponse<EmailTemplate>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Email Subject has been updated.')),
+        tap(() => this.toastService.openSuccessToast('Email Description has been updated.')),
         tap((emailTemplate: EmailTemplate) => this.logger.info('EMAIL_SUBJECT', emailTemplate)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Email Subject could not be updated');
-          this.logger.error('[Adjudication] EmailTemplateResource::updateEmailSubject error has occurred: ', error);
+          this.toastService.openErrorToast('Email Description could not be updated');
+          this.logger.error('[Adjudication] EmailTemplateResource::updateEmailDescription error has occurred: ', error);
           throw error;
         })
       );
