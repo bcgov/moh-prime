@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -38,7 +38,6 @@ export class SearchHAFormComponent implements OnInit {
   private assignToMeCodeKey: string = "ha-search-form-assignToMeCode";
 
   constructor(
-    private route: ActivatedRoute,
     private fb: FormBuilder,
     private configService: ConfigService,
     private localStorage: LocalStorageService
@@ -87,8 +86,6 @@ export class SearchHAFormComponent implements OnInit {
   }
 
   public ngOnInit() {
-
-
     this.createFormInstance();
     this.initForm();
   }
