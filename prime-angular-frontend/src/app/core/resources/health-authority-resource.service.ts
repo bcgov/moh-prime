@@ -73,6 +73,25 @@ export class HealthAuthorityResource {
       );
   }
 
+  public getHealthAuthoritySitesByQuery(
+    queryParam: {
+      textSearch?: string, adjudicatorId?: number, vendorId?: number,
+      careType?: string, statusId?: number, healthAuthorityId?: number, assignToMe: boolean
+    }
+  ): Observable<HealthAuthoritySiteAdminList[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
+    return this.apiResource.get<HealthAuthoritySiteAdminList[]>(`health-authorities/sites-query`, params)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthoritySiteAdminList[]>) => response.result),
+        tap((healthAuthoritySites: HealthAuthoritySiteAdminList[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority sites could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySitesByQuery error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getHealthAuthorityAdminSite(healthAuthorityId: number, siteId: number): Observable<HealthAuthoritySiteAdmin> {
     return this.apiResource.get<HealthAuthoritySiteAdmin>(`health-authorities/${healthAuthorityId}/sites/${siteId}/admin-view`)
       .pipe(
