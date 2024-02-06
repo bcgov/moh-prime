@@ -20,7 +20,7 @@ export class SearchHAFormComponent implements OnInit {
   @Output() public search: EventEmitter<string>;
   @Output() public siteStatus: EventEmitter<number>;
   @Output() public vendor: EventEmitter<number>;
-  @Output() public careType: EventEmitter<number>;
+  @Output() public careType: EventEmitter<string>;
   @Output() public assignToMe: EventEmitter<boolean>;
   @Output() public refresh: EventEmitter<void>;
 
@@ -58,7 +58,7 @@ export class SearchHAFormComponent implements OnInit {
     this.search = new EventEmitter<string>();
     this.siteStatus = new EventEmitter<number>();
     this.vendor = new EventEmitter<number>();
-    this.careType = new EventEmitter<number>();
+    this.careType = new EventEmitter<string>();
     this.assignToMe = new EventEmitter<boolean>();
     this.refresh = new EventEmitter<void>();
   }
@@ -131,7 +131,7 @@ export class SearchHAFormComponent implements OnInit {
     this.careTypeCode.valueChanges
       .pipe(debounceTime(500))
       // Passing `null` removes the query parameter from the URL
-      .subscribe((careType: number) => {
+      .subscribe((careType: string) => {
         this.localStorage.set(this.careTypeCodeKey, careType?.toString());
         this.careType.emit(careType || null);
       });
@@ -148,7 +148,7 @@ export class SearchHAFormComponent implements OnInit {
       textSearch: this.localStorage.get(this.textSearchKey),
       siteStatusCode: this.localStorage.getInteger(this.siteStatusCodeKey) || null,
       vendorCode: this.localStorage.getInteger(this.vendorCodeKey) || null,
-      careTypeCode: this.localStorage.getInteger(this.careTypeCodeKey) || null,
+      careTypeCode: this.localStorage.get(this.careTypeCodeKey) || null,
       assignToMe: Boolean(JSON.parse(this.localStorage.get(this.assignToMeCodeKey) || "false")),
     });
   }
