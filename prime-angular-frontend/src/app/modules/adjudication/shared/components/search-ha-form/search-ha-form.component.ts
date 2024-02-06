@@ -51,7 +51,9 @@ export class SearchHAFormComponent implements OnInit {
     this.siteStatuses.push(inReviewStatus, editableStatus, lockedStatus);
 
     this.careTypes = this.configService.careTypes;
-    this.vendors = this.configService.vendors.filter(v => v.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
+    this.vendors = this.configService.vendors
+      .filter(v => v.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
+      .sort((a, b) => a.name.localeCompare(b.name));
 
     this.search = new EventEmitter<string>();
     this.siteStatus = new EventEmitter<number>();
