@@ -369,6 +369,34 @@ namespace Prime.Controllers
             }
         }
 
+        // POST: api/Organizations/5/agreements/care-settings/2/invalidate
+        /// <summary>
+        /// Invalidate signed organization agreement
+        /// </summary>
+        /// <param name="organizationId"></param>
+        /// <param name="careSettingCode"></param>
+        [HttpPost("{organizationId}/agreements/care-settings/{careSettingCode}/invalidate", Name = nameof(InvalidateOrganizationAgreement))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> InvalidateOrganizationAgreement(int organizationId, int careSettingCode)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound($"Organization not found with id {organizationId}");
+            }
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _organizationService.InvalidateOrgAgreementAsync(organizationId, careSettingCode, organization.SigningAuthorityId);
+            return NoContent();
+        }
+
         // GET: api/Organizations/5/care-settings/pending-transfer
         /// <summary>
         /// Get the care setting codes for an organization that require agreements

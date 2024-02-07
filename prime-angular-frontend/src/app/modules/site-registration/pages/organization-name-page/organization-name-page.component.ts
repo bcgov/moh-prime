@@ -45,6 +45,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   public orgBookTotalResults: number;
   public orgBookDoingBusinessAsNames: string[];
   public SiteRoutes = SiteRoutes;
+  private changedLegalName: boolean = false;
 
   constructor(
     protected dialog: MatDialog,
@@ -137,6 +138,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
         // Assumed only a single name per organization is relevant
         this.orgBookOrganizations = response.results.map(o => o.names[0]?.text).filter(o => o);
         this.orgBookTotalResults = response.total;
+        this.changedLegalName = true;
       });
   }
 
@@ -186,11 +188,29 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected afterSubmitIsSuccessful(siteId?: number): void {
-    const redirectPath = this.route.snapshot.queryParams.redirect;
+    const redirectPath: string = this.route.snapshot.queryParams.redirect;
     let routePath: string | string[];
 
+    if (this.changedLegalName && this.isCompleted) {
+      if (redirectPath && redirectPath.startsWith('sites/')) {
+        // Attempt to get site ID
+        const matches = redirectPath.match(/(\d+)$/g);
+        if (matches && matches[0]) {
+          this.siteResource.getSiteById(+matches[0]).pipe(
+            exhaustMap((site: Site) => this.organizationResource.invalidateOrganizationAgreement(this.organizationService.organization.id, site.careSettingCode))
+          ).subscribe();
+        }
+        else {
+          throw new RangeError(`Could not determine site ID from redirectPath ${redirectPath}`);
+        }
+      }
+      else {
+        throw new RangeError(`Expected valid redirectPath but was ${redirectPath}`);
+      }
+    }
+
     if (redirectPath) {
-      routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
+      routePath = (this.changedLegalName && this.isCompleted) ? [redirectPath, SiteRoutes.ORGANIZATION_AGREEMENT] : [redirectPath, SiteRoutes.SITE_REVIEW];
     } else {
       routePath = (!this.isCompleted)
         ? [SiteRoutes.SITES, `${siteId}`, SiteRoutes.CARE_SETTING]
