@@ -10,10 +10,8 @@ namespace Prime.ViewModels.Profiles
     {
         public EmailMappingProfile()
         {
-            CreateMap<EmailTemplate, EmailTemplateViewModel>()
-                .ForMember(dest => dest.TemplateName, opt => opt.MapFrom(src => Regex.Replace(src.EmailType.ToString(), "(\\B([A-Z])[a-z])", " $1")));
-            CreateMap<EmailTemplate, EmailTemplateListViewModel>()
-                .ForMember(dest => dest.TemplateName, opt => opt.MapFrom(src => Regex.Replace(src.EmailType.ToString(), "(\\B([A-Z])[a-z])", " $1")));
+            CreateMap<EmailTemplate, EmailTemplateViewModel>();
+            CreateMap<EmailTemplate, EmailTemplateListViewModel>();
         }
     }
 }

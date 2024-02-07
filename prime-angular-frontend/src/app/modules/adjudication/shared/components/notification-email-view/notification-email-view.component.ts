@@ -21,7 +21,11 @@ import { EmailTemplateResourceService } from '@adjudication/shared/services/emai
 export class NotificationEmailViewComponent implements OnInit {
   @Input() public busy: Subscription;
   public emailTemplate: EmailTemplate;
-  public editable: boolean;
+  public subjectEditable: boolean;
+  public templateEditable: boolean;
+  public titleEditable: boolean;
+  public descriptionEditable: boolean;
+  public recipientEditable: boolean;
   public form: FormGroup;
 
   public Role = Role;
@@ -32,15 +36,31 @@ export class NotificationEmailViewComponent implements OnInit {
     private emailTemplateResource: EmailTemplateResourceService,
     private route: ActivatedRoute,
   ) {
-    this.editable = false;
+    this.templateEditable = false;
   }
 
   public get template(): FormControl {
     return this.form.get('template') as FormControl;
   }
 
-  public onSubmit(): void {
-    if (this.form.valid) {
+  public get subject(): FormControl {
+    return this.form.get('subject') as FormControl;
+  }
+
+  public get emailTitle(): FormControl {
+    return this.form.get("emailTitle") as FormControl;
+  }
+
+  public get description(): FormControl {
+    return this.form.get("description") as FormControl;
+  }
+
+  public get recipient(): FormControl {
+    return this.form.get("recipient") as FormControl;
+  }
+
+  public saveTemplate(): void {
+    if (this.template.valid) {
       const data: DialogOptions = {
         title: 'Save Email Template',
         message: `Are you sure you want to overwrite the email template?`,
@@ -58,14 +78,130 @@ export class NotificationEmailViewComponent implements OnInit {
         )
         .subscribe((emailTemplate: EmailTemplate) => {
           this.emailTemplate = emailTemplate;
-          this.editable = false;
+          this.templateEditable = false;
         });
     }
   }
 
-  public toggleEdit(value: boolean): void {
-    this.editable = value;
+  public saveSubject(): void {
+    if (this.subject.valid) {
+      const data: DialogOptions = {
+        title: 'Save Email Subject',
+        message: `Are you sure you want to overwrite the email subject?`,
+        actionText: 'Save Subject'
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: { output: string }) =>
+            (result)
+              ? this.emailTemplateResource.updateEmailSubject(this.route.snapshot.params.eid, this.subject.value)
+              : EMPTY
+          ),
+        )
+        .subscribe((emailTemplate: EmailTemplate) => {
+          this.emailTemplate = emailTemplate;
+          this.subjectEditable = false;
+        });
+    }
+  }
+
+  public saveTitle(): void {
+    if (this.emailTitle.valid) {
+      const data: DialogOptions = {
+        title: 'Save Email Template Title',
+        message: `Are you sure you want to overwrite the email template title?`,
+        actionText: 'Save Title'
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: { output: string }) =>
+            (result)
+              ? this.emailTemplateResource.updateEmailTitle(this.route.snapshot.params.eid, this.emailTitle.value)
+              : EMPTY
+          ),
+        )
+        .subscribe((emailTemplate: EmailTemplate) => {
+          this.emailTemplate = emailTemplate;
+          this.titleEditable = false;
+        });
+    }
+  }
+
+  public saveDescription(): void {
+    if (this.description.valid) {
+      const data: DialogOptions = {
+        title: 'Save Email Description',
+        message: `Are you sure you want to overwrite the email description?`,
+        actionText: 'Save Description'
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: { output: string }) =>
+            (result)
+              ? this.emailTemplateResource.updateEmailDescription(this.route.snapshot.params.eid, this.description.value)
+              : EMPTY
+          ),
+        )
+        .subscribe((emailTemplate: EmailTemplate) => {
+          this.emailTemplate = emailTemplate;
+          this.descriptionEditable = false;
+        });
+    }
+  }
+
+  public saveRecipient(): void {
+    if (this.recipient.valid) {
+      const data: DialogOptions = {
+        title: 'Save Email Recipient',
+        message: `Are you sure you want to overwrite the email recipient?`,
+        actionText: 'Save Recipient'
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: { output: string }) =>
+            (result)
+              ? this.emailTemplateResource.updateEmailRecipient(this.route.snapshot.params.eid, this.recipient.value)
+              : EMPTY
+          ),
+        )
+        .subscribe((emailTemplate: EmailTemplate) => {
+          this.emailTemplate = emailTemplate;
+          this.recipientEditable = false;
+        });
+    }
+  }
+
+  public toggleEditTemplate(value: boolean): void {
+    this.templateEditable = value;
     this.template.patchValue(this.emailTemplate?.template);
+  }
+
+  public toggleEditSubject(value: boolean): void {
+    this.subjectEditable = value;
+    this.subject.patchValue(this.emailTemplate?.subject);
+  }
+
+  public toggleEditTitle(value: boolean): void {
+    this.titleEditable = value;
+    this.emailTitle.patchValue(this.emailTemplate?.templateName);
+  }
+
+  public toggleEditDescription(value: boolean): void {
+    this.descriptionEditable = value;
+    this.description.patchValue(this.emailTemplate?.description);
+  }
+
+  public toggleEditRecipient(value: boolean): void {
+    this.recipientEditable = value;
+    this.recipient.patchValue(this.emailTemplate.recipient);
   }
 
   public ngOnInit(): void {
@@ -76,6 +212,10 @@ export class NotificationEmailViewComponent implements OnInit {
   private createFormInstance(): void {
     this.form = this.fb.group({
       template: [this.emailTemplate?.template, [Validators.required]],
+      subject: [this.emailTemplate?.subject, [Validators.required]],
+      emailTitle: [this.emailTemplate?.templateName, [Validators.required]],
+      description: [this.emailTemplate?.description, [Validators.required]],
+      recipient: [this.emailTemplate?.recipient, [Validators.required]],
     });
   }
 
