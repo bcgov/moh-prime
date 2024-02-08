@@ -261,12 +261,12 @@ parameters:
     displayName: Name
     description: The name assigned to all of the resources.  Use 'backup-{database name}' depending on your database provider
     required: true
-    value: backup-postgres
+    value: backup-container
   - name: SOURCE_IMAGE_NAME
     displayName: Source Image Name
     description: The name of the image to use for this resource.  Use 'backup-{database name}' depending on your database provider
     required: true
-    value: backup-postgres
+    value: backup-container
   - name: APP_NAME
     displayName: App Name
     description: Used to group resources together.  Defaults to backup-container
@@ -316,12 +316,12 @@ parameters:
     displayName: Database User Key Name
     description: The database user key name stored in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
     required: true
-    value: database-user
+    value: app-db-username
   - name: DATABASE_PASSWORD_KEY_NAME
     displayName: Database Password Key Name
     description: The database password key name stored in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
     required: true
-    value: database-password
+    value: app-db-password
   - name: MSSQL_SA_PASSWORD
     displayName: MSSQL SA Password
     description: The database password to use for the local backup database.
@@ -380,7 +380,7 @@ parameters:
     displayName: Environment Name (Environment Id)
     description: The name or Id of the environment.  This variable is used by the webhook integration and by the NetworkSecurityPolicies to identify the environment in which the backup notifications originate.
     required: true
-    value: ""
+    value: 9c33a9-dev
   - name: BACKUP_DIR
     displayName: The root backup directory
     description: The name of the root backup directory.  The backup volume will be mounted to this directory.
@@ -490,19 +490,19 @@ parameters:
     displayName: S3 Access key
     description: The username for the S3 compatible object store. This may also be referred to as the "Access key" in AWS S3.
     required: false
-    value: ""
+    value: S3_USER
   - name: S3_PASSWORD
     displayName: S3 Secret key
     description: The password for the S3 compatible object store. This may also be referred to as the "Secret key" in AWS.
     required: false
-    value: ""
+    value: S3_PASSWORD
   - name: S3_ENDPOINT
     displayName: AWS endpoint
     description: The AWS endpoint to use for S3 compatible object storage. For OpenShift minio use http://minio-service:9000
     required: false
-    value: ""
+    value: S3_ENDPOINT
   - name: S3_BUCKET
     displayName: S3 Bucket
     description: The bucket where you backups will be transferd to.
     required: false
-    value: "" 
+    value: S3_BUCKET 

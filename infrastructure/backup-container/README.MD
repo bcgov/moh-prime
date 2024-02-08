@@ -1,18 +1,18 @@
 # Deployments
 
-<details><summary>Postgres deployment</summary>
+<summary>Postgres deployment</summary>
 
-The following outlines the deployment of a simple backup of three PostgreSQL databases in the 9c33a9-tools project namespace, on OCP v4.x.
+The following outlines the deployment of a simple backup of a PostgreSQL database in the 9c33a9-dev project namespace, on OCP v4.x.
 
-1. As per OCP4 [docs](https://developer.gov.bc.ca/OCP4-Backup-and-Restore), 25G of the storage class `netapp-file-sta` is the default quota. If this is insufficient, you may [request](https://github.com/BCDevOps/devops-requests/issues/new/choose) more.
+1. As per OCP4 [docs](https://developer.gov.bc.ca/OCP4-Backup-and-Restore), 5 of the storage class `netapp-file-standard` is the default quota. If this is insufficient, you may [request](https://github.com/BCDevOps/devops-requests/issues/new/choose) more.
 
 2. `git clone https://github.com/bcgov/moh-prime.git && cd infrastructure\backup-container`.
 
 Create the image and tag the image.
 
 ```bash
-oc -n 599f0a-tools process -f ./openshift/templates/backup/backup-build.yaml \
-  -p NAME=backup-container OUTPUT_IMAGE_TAG=dev| oc -n 599f0a-tools create -f -
+oc -n 9c33a9-tools process -f ./openshift/templates/backup/backup-build.yaml \
+  -p NAME=backup-container OUTPUT_IMAGE_TAG=dev| oc -n 9c33a9-tools create -f -
 
 oc tag --alias=true backup-container:latest backup-container:dev
 ```
@@ -29,15 +29,15 @@ postgres=dev-patroni:5432/prime_dev
 4. Configure references to your DB credentials in [backup-deploy.yaml](./openshift/templates/backup/backup-deploy.yaml), replacing the boilerplate `DATABASE_USER` and `DATABASE_PASSWORD` environment variables.
 
 ```yaml
-- name: EAOFIDER_POSTGRESQL_USER
+- name: DATABASE_USER
   valueFrom:
     secretKeyRef:
-      name: eaofider-postgresql
+      name: "${DATABASE_DEPLOYMENT_NAME}"
       key: "${DATABASE_USER_KEY_NAME}"
-- name: EAOFIDER_POSTGRESQL_PASSWORD
+- name: DATABASE_PASSWORD
   valueFrom:
     secretKeyRef:
-      name: eaofider-postgresql
+      name: "${DATABASE_DEPLOYMENT_NAME}"
       key: "${DATABASE_PASSWORD_KEY_NAME}"
 ```
 
@@ -75,5 +75,3 @@ To clean up the image stream and build configuration
 ```bash
 oc -n 9c33a9-tools delete buildconfig/backup-container imagestream/backup-container
 ```
-
-</details>
