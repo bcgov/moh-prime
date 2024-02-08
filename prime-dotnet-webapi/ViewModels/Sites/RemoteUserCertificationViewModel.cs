@@ -5,5 +5,6 @@ namespace Prime.ViewModels.Sites
         public int CollegeCode { get; set; }
         public string LicenseNumber { get; set; }
         public int LicenseCode { get; set; }
+        public string PractitionerId { get; set; }
     }
 }

@@ -62,6 +62,10 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
       {
         key: 'College Licence',
         value: remoteUserCertification.value.licenseNumber
+      },
+      {
+        key: 'PharmaNet ID/Prescriber ID',
+        value: remoteUserCertification.value.practitionerId
       }
     ];
   }

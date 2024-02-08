@@ -230,6 +230,17 @@ export class CollegeCertificationFormComponent implements OnInit {
       const prescriberIdType = this.enrolmentService.getPrescriberIdType(this.licenseCode.value);
       const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
       this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
+
+      const initialLicenceCode = +this.licenseCode?.value ?? null;
+      this.licenseCode.valueChanges
+        // Allow for initialization of the licence code when
+        // the code already exists
+        .pipe(startWith(initialLicenceCode))
+        .subscribe((licenseCode: number) => {
+          if (licenseCode) {
+            this.setPractitionerInformation(licenseCode);
+          }
+        });
     }
   }
 
@@ -278,8 +289,9 @@ export class CollegeCertificationFormComponent implements OnInit {
     } else {
       licenseNumberValidators.push(FormControlValidators.alphanumeric);
     }
-    this.formUtilsService.setValidators(this.licenseNumber, licenseNumberValidators);
-
+    if (!this.condensed && this.collegeCode.value === CollegeLicenceClassEnum.CPSBC) {
+      this.formUtilsService.setValidators(this.licenseNumber, licenseNumberValidators);
+    }
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, [Validators.required, FormControlValidators.mustBeFutureDate]);
     }
@@ -290,6 +302,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.licenseClassDiscontinued) {
       this.licenseNumber.reset(null);
     }
+    this.resetPractitionerIdStateAndValidators();
 
     if (!this.condensed) {
       this.category.reset(null);
@@ -297,24 +310,25 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.renewalDate.reset(null);
       }
       this.practiceCode.reset(null);
-      this.resetPractitionerIdStateAndValidators();
     }
   }
 
   private setNursingCategoryValidators(): void {
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
-    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
+    this.formUtilsService.setValidators(this.practitionerId, [Validators.required, FormControlValidators.alphanumeric]);
 
     if (!this.condensed) {
+      this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
       this.formUtilsService.setValidators(this.renewalDate, [Validators.required, FormControlValidators.mustBeFutureDate]);
     }
   }
 
   private clearNursingCategoryValidators(): void {
     this.formUtilsService.setValidators(this.licenseCode, []);
-    this.formUtilsService.setValidators(this.licenseNumber, []);
+    this.formUtilsService.setValidators(this.practitionerId, []);
 
     if (!this.condensed) {
+      this.formUtilsService.setValidators(this.licenseNumber, []);
       this.formUtilsService.setValidators(this.renewalDate, []);
     }
   }
@@ -352,7 +366,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.isPrescribing = isPrescribing;
 
     if (
-      !this.condensed &&
+      //!this.condensed &&
       (prescriberIdType === PrescriberIdTypeEnum.Mandatory || (isPrescribing && prescriberIdType !== PrescriberIdTypeEnum.NA))
     ) {
       this.formUtilsService.setValidators(this.practitionerId, [
@@ -364,6 +378,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private resetPractitionerIdStateAndValidators() {
+    this.prescriberIdType = PrescriberIdTypeEnum.NA;
     this.isPrescribing = false;
     this.formUtilsService.resetAndClearValidators(this.practitionerId);
   }
@@ -372,10 +387,12 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.formUtilsService.setValidators(this.licenseCode, []);
     this.formUtilsService.setValidators(this.licenseNumber, []);
 
+
+    this.formUtilsService.setValidators(this.practitionerId, []);
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.category, []);
       this.formUtilsService.setValidators(this.renewalDate, []);
-      this.formUtilsService.setValidators(this.practitionerId, []);
+      //this.formUtilsService.setValidators(this.practitionerId, []);
     }
   }
 
