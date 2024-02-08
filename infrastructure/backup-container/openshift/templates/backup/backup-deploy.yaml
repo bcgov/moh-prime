@@ -94,6 +94,22 @@ objects:
       ftp-user: ${FTP_USER}
       ftp-password: ${FTP_PASSWORD}
       ftp-url-host: ${FTP_URL_HOST}
+  
+  # - kind: Secret
+  #   apiVersion: v1
+  #   metadata:
+  #     name: ${S3_SECRET_KEY}
+  #     labels:
+  #       name: ${NAME}
+  #       app: ${APP_NAME}
+  #       role: ${ROLE}
+  #       env: ${TAG_NAME}
+  #   type: Opaque
+  #   stringData:
+  #     S3-bucket: ${S3_BUCKET}
+  #     S3-user: ${S3_USER}
+  #     S3-password: ${S3_PASSWORD}
+  #     S3-endpoint: ${S3_ENDPOINT}
 
   - kind: DeploymentConfig
     apiVersion: v1
@@ -195,6 +211,26 @@ objects:
                     secretKeyRef:
                       name: ${FTP_SECRET_KEY}
                       key: ftp-password
+                - name: S3_ENDPOINT
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${S3_SECRET_KEY}
+                      key: S3_ENDPOINT
+                - name: S3_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${S3_SECRET_KEY}
+                      key: S3_USER
+                - name: S3_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${S3_SECRET_KEY}
+                      key: S3_PASSWORD
+                - name: S3_BUCKET
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${S3_SECRET_KEY}
+                      key: S3_BUCKET            
                 - name: WEBHOOK_URL
                   valueFrom:
                     secretKeyRef:
@@ -245,12 +281,12 @@ parameters:
     displayName: Namespace Name
     description: The name of the namespace being deployed to..
     required: true
-    value: devex-von-image
+    value: 9c33a9-dev
   - name: IMAGE_NAMESPACE
     displayName: Image Namespace
     description: The namespace of the OpenShift project containing the imagestream for the application.
     required: true
-    value:
+    value: 9c33a9-tools
   - name: TAG_NAME
     displayName: Environment TAG name
     description: The TAG name for this environment, e.g., dev, test, prod
@@ -445,3 +481,28 @@ parameters:
     description: The resources Memory limit (in Mi, Gi, etc) for this build.
     required: true
     value: 0Mi
+  - name: S3_SECRET_KEY
+    displayName: S3 Secret Key
+    description: The S3 secret key is used to wire up the credentials associated to the S3.
+    required: false
+    value: s3-secret
+  - name: S3_USER
+    displayName: S3 Access key
+    description: The username for the S3 compatible object store. This may also be referred to as the "Access key" in AWS S3.
+    required: false
+    value: ""
+  - name: S3_PASSWORD
+    displayName: S3 Secret key
+    description: The password for the S3 compatible object store. This may also be referred to as the "Secret key" in AWS.
+    required: false
+    value: ""
+  - name: S3_ENDPOINT
+    displayName: AWS endpoint
+    description: The AWS endpoint to use for S3 compatible object storage. For OpenShift minio use http://minio-service:9000
+    required: false
+    value: ""
+  - name: S3_BUCKET
+    displayName: S3 Bucket
+    description: The bucket where you backups will be transferd to.
+    required: false
+    value: "" 
