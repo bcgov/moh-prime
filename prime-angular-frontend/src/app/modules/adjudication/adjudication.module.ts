@@ -25,6 +25,7 @@ import { AdjudicationDashboardComponent } from './shared/components/adjudication
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
+import { SearchHAFormComponent } from './shared/components/search-ha-form/search-ha-form.component';
 import { ReviewStatusContentComponent } from './shared/components/review-status-content/review-status-content.component';
 import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
 import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
@@ -97,6 +98,7 @@ import { SiteDocumentsPageComponent } from './pages/health-authorities/site-docu
     EnrolleeAccessTermEnrolmentComponent,
     EnrolleeTableComponent,
     SearchFormComponent,
+    SearchHAFormComponent,
     DatedContentTableComponent,
     ReviewStatusContentComponent,
     SiteRegistrationsComponent,
