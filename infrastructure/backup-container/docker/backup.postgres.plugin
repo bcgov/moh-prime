@@ -28,7 +28,7 @@ function onBackupDatabase(){
     echoGreen "Backing up '${_hostname}${_port:+:${_port}}${_database:+/${_database}}' to '${_backupFile}' ..."
 
     export PGPASSWORD=${_password}
-    pg_dump -Fp -T 'PharmanetTransactionLog*' -h "${_hostname}" ${_portArg} -U "${_username}" "${_database}" > "${BACKUP_DIR}backup.sql"
+    pg_dump -Fp -T '"PharmanetTransactionLog"' -T 'pharmanettransactionlog*' -h "${_hostname}" ${_portArg} -U "${_username}" "${_database}" > "${BACKUP_DIR}backup.sql"
     pg_dumpall -h "${_hostname}" ${_portArg} -U "${_username}"  --roles-only --no-role-passwords > "${BACKUP_DIR}roles.sql"
     tar -C ${BACKUP_DIR} -cvzf ${_backupFile} backup.sql roles.sql
     rm "${BACKUP_DIR}roles.sql" && rm "${BACKUP_DIR}backup.sql"
