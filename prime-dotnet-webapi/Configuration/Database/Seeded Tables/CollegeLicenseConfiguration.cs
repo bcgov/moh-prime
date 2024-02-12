@@ -32,10 +32,10 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 18 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 19 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 20 },
-                    new CollegeLicense { CollegeCode = 1, LicenseCode = 21 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 21, Discontinued = true },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 22 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 23 },
-                    new CollegeLicense { CollegeCode = 1, LicenseCode = 24 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 24, Discontinued = true },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 59 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 65 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 66 },
@@ -45,6 +45,7 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 89 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 90 },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 91 },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 92 },
 
                     // Pharmacists
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 25 },
@@ -85,10 +86,10 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 69, CollegeLicenseGroupingCode = 5 },
 
                     // College of Dental Surgeons of BC
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 70 },
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 75 },
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 76 },
-                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 77 },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 70, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 75, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 76, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 7,  LicenseCode = 77, Discontinued = true },
 
                     // College of Naturopathic Physicians of BC
                     new CollegeLicense { CollegeCode = 11,  LicenseCode = 78 },
@@ -104,9 +105,10 @@ namespace Prime.Configuration.Database
 
                     // All other colleges are assigned the "Not Displayed" Licence
                     new CollegeLicense { CollegeCode = 4,  LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 5,  LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 6,  LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 8,  LicenseCode = 64 },
+                    new CollegeLicense { CollegeCode = 5,  LicenseCode = 64, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 6,  LicenseCode = 64, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 8,  LicenseCode = 64, Discontinued = true },
+
                     new CollegeLicense { CollegeCode = 9,  LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 10, LicenseCode = 64 },
                     new CollegeLicense { CollegeCode = 12, LicenseCode = 64 },
@@ -122,6 +124,42 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 19, LicenseCode = 84 },
                     new CollegeLicense { CollegeCode = 19, LicenseCode = 85 },
                     new CollegeLicense { CollegeCode = 19, LicenseCode = 86 },
+
+                    //College of Oral Health Professionals
+                    // Dental Assistant
+
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 93, CollegeLicenseGroupingCode = 6},
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 94, CollegeLicenseGroupingCode = 6 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 95, CollegeLicenseGroupingCode = 6 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 96, CollegeLicenseGroupingCode = 6 },
+                    // Dental Hygienist
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 97, CollegeLicenseGroupingCode = 7 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 98, CollegeLicenseGroupingCode = 7 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 99, CollegeLicenseGroupingCode = 7 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 100, CollegeLicenseGroupingCode = 7 },
+                    // Dental Therapist
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 101, CollegeLicenseGroupingCode = 8 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 102, CollegeLicenseGroupingCode = 8 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 103, CollegeLicenseGroupingCode = 8 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 104, CollegeLicenseGroupingCode = 8 },
+                    // Dental Therapist
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 105, CollegeLicenseGroupingCode = 9 },
+                    // Dentist
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 106, CollegeLicenseGroupingCode = 10 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 107, CollegeLicenseGroupingCode = 10 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 108, CollegeLicenseGroupingCode = 10 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 109, CollegeLicenseGroupingCode = 10 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 110, CollegeLicenseGroupingCode = 10 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 111, CollegeLicenseGroupingCode = 10 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 112, CollegeLicenseGroupingCode = 10 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 113, CollegeLicenseGroupingCode = 10 },
+                    // Denturist
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 114, CollegeLicenseGroupingCode = 11 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 115, CollegeLicenseGroupingCode = 11 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 116, CollegeLicenseGroupingCode = 11 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 117, CollegeLicenseGroupingCode = 11 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 118, CollegeLicenseGroupingCode = 11 },
+                    new CollegeLicense { CollegeCode = 20, LicenseCode = 119, CollegeLicenseGroupingCode = 11 },
                 };
             }
         }

@@ -18,5 +18,14 @@ namespace Prime.Services
         /// 3. Have one or more Status Reasons relating to the Parmanet College Validation API
         /// </summary>
         Task BulkRerunRulesAsync();
+
+        /// <summary>
+        /// Similar to `BulkRerunRulesAsync` but runs against enrollees that:
+        /// 3. Have a BirthdateDiscrepancy Status Reason
+        /// 4. Are Full Naturopaths
+        /// </summary>
+        /// <param name="listOnly">If `true`, only writes to console the matching enrollees</param>
+        /// <returns></returns>
+        Task RerunRulesForNaturopathsAsync(bool listOnly);
     }
 }

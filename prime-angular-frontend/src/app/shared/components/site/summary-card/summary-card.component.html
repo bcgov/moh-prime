@@ -31,6 +31,6 @@
              let-property="property">
   <div>
     <strong>{{ property.key }}</strong>
-    {{ property.value | default }}
+    <span [ngClass]="{ 'text-danger font-weight-bold' : property.danger }">{{ property.value | default }}</span>
   </div>
 </ng-template>

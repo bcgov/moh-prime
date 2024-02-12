@@ -77,6 +77,7 @@ namespace Prime
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Site> Sites { get; set; }
+        public DbSet<SiteVendor> SiteVendors { get; set; }
         public DbSet<CommunitySite> CommunitySites { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
@@ -119,6 +120,7 @@ namespace Prime
         public DbSet<Party> Parties { get; set; }
         public DbSet<PartySubmission> PartySubmissions { get; set; }
         public DbSet<PartyCertification> PartyCertifications { get; set; }
+        public DbSet<PartyEnrolment> PartyEnrolments { get; set; }
 
         // PLR Integration
         public DbSet<PlrProvider> PlrProviders { get; set; }
