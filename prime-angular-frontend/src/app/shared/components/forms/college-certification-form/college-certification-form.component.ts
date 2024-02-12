@@ -366,8 +366,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.isPrescribing = isPrescribing;
 
     if (
-      //!this.condensed &&
-      (prescriberIdType === PrescriberIdTypeEnum.Mandatory || (isPrescribing && prescriberIdType !== PrescriberIdTypeEnum.NA))
+      prescriberIdType === PrescriberIdTypeEnum.Mandatory || (isPrescribing && prescriberIdType !== PrescriberIdTypeEnum.NA)
     ) {
       this.formUtilsService.setValidators(this.practitionerId, [
         Validators.required,
@@ -392,7 +391,6 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.category, []);
       this.formUtilsService.setValidators(this.renewalDate, []);
-      //this.formUtilsService.setValidators(this.practitionerId, []);
     }
   }
 
