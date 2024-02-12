@@ -16,14 +16,19 @@ oc -n 9c33a9-tools process -f ./openshift/templates/backup/backup-build.yaml \
 
 oc tag --alias=true backup-container:latest backup-container:dev
 ```
+Build a new image
+
+```bash
+oc start-build -n 9c33a9-tools backup-container
+```
 
 3. Configure (./config/backup.conf) (listing your database(s), and setting your cron schedule).
 
 ```bash
 postgres=dev-patroni:5432/prime_dev
 
-0 1 * * * default ./backup.sh -s
-0 4 * * * default ./backup.sh -s -v all
+0 1 * * * default bash ./backup.sh -s
+0 4 * * * default bash ./backup.sh -s -v all
 ```
 
 4. Configure references to your DB credentials in [backup-deploy.yaml](./openshift/templates/backup/backup-deploy.yaml), replacing the boilerplate `DATABASE_USER` and `DATABASE_PASSWORD` environment variables.
