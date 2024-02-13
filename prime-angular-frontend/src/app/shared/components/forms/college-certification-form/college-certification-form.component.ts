@@ -289,7 +289,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     } else {
       licenseNumberValidators.push(FormControlValidators.alphanumeric);
     }
-    if (!this.condensed && this.collegeCode.value === CollegeLicenceClassEnum.CPSBC) {
+    if (this.collegeCode.value === CollegeLicenceClassEnum.CPSBC) {
       this.formUtilsService.setValidators(this.licenseNumber, licenseNumberValidators);
     }
     if (!this.condensed) {
@@ -311,6 +311,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       }
       this.practiceCode.reset(null);
     }
+    this.removeValidations();
   }
 
   private setNursingCategoryValidators(): void {
