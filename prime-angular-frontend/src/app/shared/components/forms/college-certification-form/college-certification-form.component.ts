@@ -310,6 +310,8 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.renewalDate.reset(null);
       }
       this.practiceCode.reset(null);
+    } else {
+      this.prescriberIdType = PrescriberIdTypeEnum.NA;
     }
     this.removeValidations();
   }
@@ -378,7 +380,6 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private resetPractitionerIdStateAndValidators() {
-    this.prescriberIdType = PrescriberIdTypeEnum.NA;
     this.isPrescribing = false;
     this.formUtilsService.resetAndClearValidators(this.practitionerId);
   }
