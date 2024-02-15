@@ -1,11 +1,11 @@
 # Backup Deployments of Postgres
-From GitHub -bcgov/backup-container, copy openshift/templates, config and docker folders. Together, the scripts and templates which will automatically deploy the backup app are provided in the openshift/templates directory. 
-The following outlines the deployment of a simple backup of a PostgreSQL database in the 9c33a9-dev project namespace, on OCP v4.x.
+From [bcgov/backup-container](https://github.com/BCDevOps/backup-container), copy openshift/templates, config and docker folders. Together, the scripts and templates which will automatically deploy the backup app are provided in the openshift/templates directory. 
+The following outlines the deployment of a simple backup of a PostgreSQL database to S3 Storage in the 9c33a9-dev project namespace, on OCP v4.x.
 
-<summary>Build backup-container image</summary>
+### Build backup-container image
 
-In order to build an image and buildConfig in openshift, the backup-build.yaml file in backup directory is used. 
-1. The value of GIT_REPO_URL, GIT_REF and SOURCE_CONTEXT_DIR in backup-build.yaml file needs to be modified.  (GIT_REPO_URL: https://github.com/bcgov/moh-prime.git, GIT_REF : s3storage, SOURCE_CONTEXT_DIR : /infrastructure/backup-container/docker) 
+First, in order to build an image and buildConfig in openshift, the backup-build.yaml file in the backup directory is used. 
+1. The value of `GIT_REPO_URL`, `GIT_REF` and `SOURCE_CONTEXT_DIR` in backup-build.yaml file needs to be modified.  (`GIT_REPO_URL: https://github.com/bcgov/moh-prime.git`, `GIT_REF:s3storage', `SOURCE_CONTEXT_DIR: /infrastructure/backup-container/docker`) 
 
 2. `git clone https://github.com/bcgov/moh-prime.git && cd infrastructure\backup-container`.
 
@@ -24,8 +24,9 @@ Build a new image
 oc start-build -n 9c33a9-tools backup-container
 ```
 
-<summary>Configure your DBs and set the cron schedule</summary>
-. Configure (./config/backup.conf) (listing your database(s) and setting your cron schedule).
+### Configure your DBs and set the cron schedule
+
+Configure [./config/backup.conf](./config/backup.conf) (ConfigMap), make sure to specify the DatabaseType for each listed database, list your database(s) and set your cron schedule.
 
 ```bash
 postgres=dev-patroni:5432/prime_dev
@@ -33,8 +34,10 @@ postgres=dev-patroni:5432/prime_dev
 0 1 * * * default bash ./backup.sh -s
 0 4 * * * default bash ./backup.sh -s -v all
 ```
+### Backup Strategies
+The backup app supports the rolling backup strategy. It allows you to keep a number of recent daily backups, a number of weekly backups, and a number of monthly backups. There are retention settings in [docker/backup.settings file](./docker/backup.settings). The defaults provide you with a week's worth of `daily` backups, a month's worth of `weekly` backups, and a single backup for the previous month. Backups are identified using a core name derived from the host/database specification and a timestamp. All backups are compressed using gzip.
 
-<summary>Deploy the app</summary>
+### Deploy the app
 
 1. Configure references to your DB credentials in [backup-deploy.yaml](./openshift/templates/backup/backup-deploy.yaml), replacing the boilerplate `DATABASE_USER` and `DATABASE_PASSWORD` environment variables.
 
@@ -55,10 +58,12 @@ Note that underscores should be used in the environment variable names.
 
 2. Create your customized `./openshift/backup-deploy.overrides.param` parameter file, if required.
 
-3. In this example, the namespace is `9c33a9-dev` and the app name is `backup-container`:
-If you would like to utilize s3 storage and store backup files in a s3 bucket, create a secret in openshift for s3. 
+3.The backup container utilizes two volumes: one for storing the backups and another for restore/verification testing. The deployment template deliberately separates these volumes. Because we are utilizing S3 storag, we use the `netapp-file-standard` storage class for both backup storage (BACKUP_VOLUME_CLASS) and restore/verification storage (VERIFICATION_VOLUME_CLASS).
+
+4. In this example, the namespace is `9c33a9-dev` and the app name is `backup-container`:
+If you would like to utilize S3 storage and store backup files in a s3 bucket, create a secret in openshift for s3. 
 Note that the key names within the database secret referencing database username and password are `app-db-username` and `app-db-password`, respectively. If this is not the case for your deployment, specify the correct key names as parameters `DATABASE_USER_KEY_NAME` and `DATABASE_PASSWORD_KEY_NAME`. Also note that `BACKUP_VOLUME_CLASS` is netapp-file-standard since the backup files are stored in S3 storage.
- the key names within the s3 secret referencing s3 username, password, endpoint and bucket are `S3_USER`, `S3_PASSWORD``, `S3_ENDPOINT`, and `S3_BUCKET`, respectively.
+ the key names within the s3 secret referencing s3 username, password, endpoint and bucket are `S3_USER`, `S3_PASSWORD``, `S3_ENDPOINT`, and `S3_BUCKET`, respectively. Customize [backup-deploy.yaml](./openshift/templates/backup/backup-deploy.yaml) before running the following command:
 
 
 ```bash
