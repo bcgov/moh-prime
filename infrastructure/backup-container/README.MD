@@ -1,16 +1,18 @@
-# Deployments
-
-<summary>Postgres deployment</summary>
-
+# Backup Deployments of Postgres
+From GitHub -bcgov/backup-container, copy openshift/templates, config and docker folders. Together, the scripts and templates which will automatically deploy the backup app are provided in the openshift/templates directory. 
 The following outlines the deployment of a simple backup of a PostgreSQL database in the 9c33a9-dev project namespace, on OCP v4.x.
 
-1. As per OCP4 [docs](https://developer.gov.bc.ca/OCP4-Backup-and-Restore), 5 of the storage class `netapp-file-standard` is the default quota. If this is insufficient, you may [request](https://github.com/BCDevOps/devops-requests/issues/new/choose) more.
+<summary>Build backup-container image</summary>
+
+In order to build an image and buildConfig in openshift, the backup-build.yaml file in backup directory is used. 
+1. The value of GIT_REPO_URL, GIT_REF and SOURCE_CONTEXT_DIR in backup-build.yaml file needs to be modified.  (GIT_REPO_URL: https://github.com/bcgov/moh-prime.git, GIT_REF : s3storage, SOURCE_CONTEXT_DIR : /infrastructure/backup-container/docker) 
 
 2. `git clone https://github.com/bcgov/moh-prime.git && cd infrastructure\backup-container`.
 
 Create the image and tag the image.
 
 ```bash
+oc login --token=<token>
 oc -n 9c33a9-tools process -f ./openshift/templates/backup/backup-build.yaml \
   -p NAME=backup-container OUTPUT_IMAGE_TAG=dev| oc -n 9c33a9-tools create -f -
 
@@ -22,7 +24,8 @@ Build a new image
 oc start-build -n 9c33a9-tools backup-container
 ```
 
-3. Configure (./config/backup.conf) (listing your database(s), and setting your cron schedule).
+<summary>Configure your DBs and set the cron schedule</summary>
+. Configure (./config/backup.conf) (listing your database(s) and setting your cron schedule).
 
 ```bash
 postgres=dev-patroni:5432/prime_dev
@@ -31,7 +34,9 @@ postgres=dev-patroni:5432/prime_dev
 0 4 * * * default bash ./backup.sh -s -v all
 ```
 
-4. Configure references to your DB credentials in [backup-deploy.yaml](./openshift/templates/backup/backup-deploy.yaml), replacing the boilerplate `DATABASE_USER` and `DATABASE_PASSWORD` environment variables.
+<summary>Deploy the app</summary>
+
+1. Configure references to your DB credentials in [backup-deploy.yaml](./openshift/templates/backup/backup-deploy.yaml), replacing the boilerplate `DATABASE_USER` and `DATABASE_PASSWORD` environment variables.
 
 ```yaml
 - name: DATABASE_USER
@@ -48,9 +53,9 @@ postgres=dev-patroni:5432/prime_dev
 
 Note that underscores should be used in the environment variable names.
 
-5. Create your customized `./openshift/backup-deploy.overrides.param` parameter file, if required.
+2. Create your customized `./openshift/backup-deploy.overrides.param` parameter file, if required.
 
-6. Deploy the app. In this example, the namespace is `9c33a9-dev` and the app name is `backup-container`:
+3. In this example, the namespace is `9c33a9-dev` and the app name is `backup-container`:
 If you would like to utilize s3 storage and store backup files in a s3 bucket, create a secret in openshift for s3. 
 Note that the key names within the database secret referencing database username and password are `app-db-username` and `app-db-password`, respectively. If this is not the case for your deployment, specify the correct key names as parameters `DATABASE_USER_KEY_NAME` and `DATABASE_PASSWORD_KEY_NAME`. Also note that `BACKUP_VOLUME_CLASS` is netapp-file-standard since the backup files are stored in S3 storage.
  the key names within the s3 secret referencing s3 username, password, endpoint and bucket are `S3_USER`, `S3_PASSWORD``, `S3_ENDPOINT`, and `S3_BUCKET`, respectively.
@@ -69,7 +74,7 @@ oc -n 9c33a9-dev process -f ./openshift/templates/backup/backup-deploy.yaml \
 
 ```
 
-To clean up the deployment
+<summary>clean up the deployment</summary>
 
 ```bash
 oc -n 9c33a9-dev delete pvc/backup-container pvc/backup-verification secret/backup-container secret/ftp-secret secret/S3-secret dc/backup-container networkpolicy/backup-container configmap/backup-conf
