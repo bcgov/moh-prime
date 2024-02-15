@@ -31,7 +31,6 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
-  public isClaimExistingOrg: boolean;
   public hasOrgClaimError: boolean;
 
   constructor(
@@ -50,8 +49,6 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   }
 
   public onClaimOrgChange(event: MatSlideToggleChange): void {
-    this.isClaimExistingOrg = event.checked;
-    this.toggleClaimFormValidators(event.checked);
   }
 
   public onBack(): void {
@@ -60,46 +57,34 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.isClaimExistingOrg = !!this.formState.json.pec && !!this.formState.json.claimDetail;
-    this.toggleClaimFormValidators(this.isClaimExistingOrg);
   }
 
   protected createFormInstance(): void {
     this.formState = this.organizationFormStateService.organizationClaimPageFormState;
+    this.formUtilsService.setValidators(this.formState.pec, [Validators.required]);
+    this.formUtilsService.setValidators(this.formState.claimDetail, [Validators.required]);
   }
 
   protected patchForm(): void { }
 
   protected performSubmission(): NoContent {
-    return (this.isClaimExistingOrg)
-      ? this.authService.getUser$()
-        .pipe(
-          exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUsername(bcscUser.username)),
-          exhaustMap((party: Party) =>
-            this.organizationResource.claimOrganization(party.id, this.formState.json)
-              .pipe(
-                catchError(_ => {
-                  this.hasOrgClaimError = true;
-                  return EMPTY;
-                })
-              )),
-          NoContentResponse
-        )
-      : of(NoContentResponse);
+    return this.authService.getUser$()
+      .pipe(
+        exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUsername(bcscUser.username)),
+        exhaustMap((party: Party) =>
+          this.organizationResource.claimOrganization(party.id, this.formState.json)
+            .pipe(
+              catchError(_ => {
+                this.hasOrgClaimError = true;
+                return EMPTY;
+              })
+            )),
+        NoContentResponse
+      );
   }
 
   protected afterSubmitIsSuccessful(): void {
     this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION]);
   }
 
-  private toggleClaimFormValidators(isOrgClaim: boolean): void {
-    if (isOrgClaim) {
-      this.formUtilsService.setValidators(this.formState.pec, [Validators.required]);
-      this.formUtilsService.setValidators(this.formState.claimDetail, [Validators.required]);
-    }
-    else {
-      this.formUtilsService.resetAndClearValidators(this.formState.pec);
-      this.formUtilsService.resetAndClearValidators(this.formState.claimDetail);
-    }
-  }
 }
