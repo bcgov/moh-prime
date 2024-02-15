@@ -289,7 +289,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     } else {
       licenseNumberValidators.push(FormControlValidators.alphanumeric);
     }
-    if (this.collegeCode.value === CollegeLicenceClassEnum.CPSBC) {
+    if (!(this.condensed && this.collegeCode.value === CollegeLicenceClassEnum.BCCNM)) {
       this.formUtilsService.setValidators(this.licenseNumber, licenseNumberValidators);
     }
     if (!this.condensed) {
