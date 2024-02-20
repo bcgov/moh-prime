@@ -72,7 +72,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
         value: remoteUserCertification.value.licenseNumber,
       },
       {
-        key: 'PharmaNet ID/Prescriber ID',
+        key: 'PharmaNet ID',
         value: remoteUserCertification.value.practitionerId,
       },
     ];
