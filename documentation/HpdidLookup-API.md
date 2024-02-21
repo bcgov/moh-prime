@@ -28,16 +28,16 @@ The response will be something like this, with the token embedded:
 
 ## Step 2:  Call HpdidLookup API with one or more HPDID values
 
-An HPDID is associated with an enrollee's BCSC in a 1-to-1 manner.  In the call to this API, pass along the interested HPDIDs (for multiple PRIME enrollees) as well as the token obtained in the previous step, e.g.:
+An HPDID is associated with an enrollee's BCSC in a 1-to-1 manner.  In the call to this API, pass along the interested HPDIDs (for multiple PRIME enrollees) that share the same `careSetting`, the `careSetting` value (see Appendix for possible values), as well as the token obtained in the previous step, e.g.:
 
 ```
-curl --location --request GET 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/provisioner-access/gpids?hpdids=gtcochh2vajdtodkby27kspv554dn4is&hpdids=kax2r4lbr2ejsew4ba5bivvsk5onfqaj' \
+curl --location --request GET 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/provisioner-access/gpids?hpdids=gtcochh2vajdtodkby27kspv554dn4is&hpdids=kax2r4lbr2ejsew4ba5bivvsk5onfqaj&careSetting=NHA' \
 --header 'Authorization: Bearer eyTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT'
 ```
 
 There is a limit to the number of HPDIDs accepted in a single call:  10 (subject to change depending on performance testing results).  If too many HPDIDs are provided, a HTTP status code of 400 (Bad Request) is returned.
 
-The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement.  E.g.
+The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement, when the given `careSetting` value matches the care setting of the enrollee as known in PRIME.  Example response:
 ```
 {
     "result": [
@@ -162,12 +162,28 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 
 ## Appendix
 
-|Possible values for `status`|
-|----------------------------|
-|Incomplete|
-|Complete|
-|Indefinite absence|
-|Past Renewal|
+|Possible value for `careSetting` input parameter|Human-readable definition|
+|------------------------------------------------|-------------------------|
+|PCHP                                            |Private Community Health Practice|
+|CP                                              |Community Pharmacy|
+|NHA                                             |Northern Health Authority|
+|IHA                                             |Interior Health Authority|
+|VCHA                                            |Vancouver Coastal Health Authority|
+|VIHA                                            |Vancouver Island Health Authority|
+|FHA                                             |Fraser Health Authority|
+|PHSA                                            |Provincial Health Services Authority|
+|CC                                              |CareConnect|
+
+
+|Possible values for `status`|Conditions for `status`|
+|----------------------------|-----------------------|
+|*no status or other details*|BCSC user has not submitted the enrollment yet or never enrolled| 
+|CareSetting mismatch        |Provided careSetting value does not match care setting of enrollee|
+|Incomplete                  |Under Review or enrollee hasn't signed TOA|
+|Indefinite absence          |TOA signed but reporting indefinite absence|
+|Past Renewal                |TOA signed but agreement expired|
+|Complete                    |TOA signed and none of other conditions applicable| 
+
 
 |Possible values for `accessType`|
 |--------------------------------|
