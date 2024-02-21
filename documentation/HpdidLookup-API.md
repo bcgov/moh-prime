@@ -35,6 +35,10 @@ curl --location --request GET 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/p
 --header 'Authorization: Bearer eyTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT'
 ```
 
+
+**CareConnect 🤔 ?!? 🤔**
+
+
 There is a limit to the number of HPDIDs accepted in a single call:  10 (subject to change depending on performance testing results).  If too many HPDIDs are provided, a HTTP status code of 400 (Bad Request) is returned.
 
 The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement, when the given `careSetting` value matches the care setting of the enrollee as known in PRIME.  Example response:
@@ -62,6 +66,35 @@ The response will contain the GPID associated with each enrollee that has signed
 > **Note:**
 > `renewalDate` will no longer be provided in the response.
 
+
+If a BCSC user has not submitted the enrollment yet or never enrolled, nothing is returned:
+```
+{
+    "result": []
+}
+```
+
+
+**CareSetting mismatch**
+
+
+For enrollees that have been `locked` by PRIME administrators (such that they cannot view or edit their enrollment details, even if
+previously approved), the API response will be:
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": null,
+            "status": null,
+            "accessType": "",
+            "licences": [
+            ]
+        }
+    ]
+}
+```
+
 Enrollees that are Under Review or that haven't signed a TOA (Requires TOA) have a `status` of `Incomplete`, e.g.
 ```
 {
@@ -74,13 +107,6 @@ Enrollees that are Under Review or that haven't signed a TOA (Requires TOA) have
             "licences": null
         }
     ]
-}
-```
-
-If a BCSC user has not submitted the enrollment yet or never enrolled, nothing is returned:
-```
-{
-    "result": []
 }
 ```
 
@@ -109,23 +135,6 @@ For enrollees that have their renewal period expired and have not renewed, they 
             "status": "Past Renewal",
             "accessType": null,
             "licences": null
-        }
-    ]
-}
-```
-
-For enrollees that have been `locked` by PRIME administrators (such that they cannot view or edit their enrollment details, even if
-previously approved), the API response will be:
-```
-{
-    "result": [
-        {
-            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
-            "gpid": null,
-            "status": null,
-            "accessType": "",
-            "licences": [
-            ]
         }
     ]
 }
@@ -177,8 +186,9 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 
 |Possible values for `status`|Conditions for `status`|
 |----------------------------|-----------------------|
-|*no status or other details*|BCSC user has not submitted the enrollment yet or never enrolled| 
+|*no details whatsoever*     |BCSC user has not submitted the enrollment yet or never enrolled| 
 |CareSetting mismatch        |Provided careSetting value does not match care setting of enrollee|
+|*no status or other details*|Enrollee has been `locked` by PRIME administrators|
 |Incomplete                  |Under Review or enrollee hasn't signed TOA|
 |Indefinite absence          |TOA signed but reporting indefinite absence|
 |Past Renewal                |TOA signed but agreement expired|
