@@ -10,7 +10,7 @@ First, in order to build an image and buildConfig in openshift, the [backup-buil
 2. Run the following command in cmd:
 `git clone https://github.com/bcgov/moh-prime.git && cd infrastructure\backup-container`.
 
-3. Create the image and tag the image.
+3. Create the image and tag the image. You can change the value of `OUTPUT_IMAGE_TAG` depending on the namespace you will deploy the backup-container app, which is dev by default.
 
 ```bash
 oc login --token=<token>
@@ -67,16 +67,16 @@ oc -n 9c33a9-dev label configmap backup-conf app=backup-container
 oc -n 9c33a9-dev process -f ./openshift/templates/backup/backup-deploy.yaml \
 -p NAME=backup-container \
 -p IMAGE_NAMESPACE=9c33a9-tools -p SOURCE_IMAGE_NAME=backup-container -p TAG_NAME=dev \
--p BACKUP_VOLUME_NAME=backup-container -p BACKUP_VOLUME_SIZE=5Gi -p BACKUP_VOLUME_CLASS=netapp-file-standard \
+-p BACKUP_VOLUME_NAME=backup-container -p BACKUP_VOLUME_CLASS=netapp-file-standard \
 -p VERIFICATION_VOLUME_SIZE=5Gi -p ENVIRONMENT_FRIENDLY_NAME='PRIME DB Backups' \
--p CPU_REQUEST=50m -p CPU_LIMIT=250m -p MEMORY_REQUEST=128Mi -p MEMORY_LIMIT=256Mi -p DATABASE_DEPLOYMENT_NAME=dev-patroni-secret -p DATABASE_USER_KEY_NAME=app-db-username -p DATABASE_PASSWORD_KEY_NAME=app-db-password -p ENVIRONMENT_NAME=9c33a9-dev | oc -n 9c33a9-dev create -f -
+-p CPU_REQUEST=50m -p CPU_LIMIT=250m -p MEMORY_REQUEST=128Mi -p MEMORY_LIMIT=256Mi -p DATABASE_DEPLOYMENT_NAME=dev-patroni-secret -p DATABASE_USER_KEY_NAME=app-db-username -p DATABASE_PASSWORD_KEY_NAME=app-db-password -p DATABASE_SERVICE_NAME=test-patroni -p DATABASE_NAME=prime-test -p ENVIRONMENT_NAME=9c33a9-dev | oc -n 9c33a9-dev create -f -
 
 ```
 
 <summary>clean up the deployment</summary>
 
 ```bash
-oc -n 9c33a9-dev delete pvc/backup-container pvc/backup-verification secret/backup-container secret/ftp-secret secret/S3-secret dc/backup-container networkpolicy/backup-container configmap/backup-conf
+oc -n 9c33a9-dev delete pvc/backup-container pvc/backup-verification secret/backup-container secret/ftp-secret dc/backup-container networkpolicy/backup-container configmap/backup-conf
 ```
 
 To clean up the image stream and build configuration
