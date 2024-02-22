@@ -132,7 +132,7 @@ export class SearchHAFormComponent implements OnInit {
       .pipe(debounceTime(500))
       // Passing `null` removes the query parameter from the URL
       .subscribe((careType: string) => {
-        this.localStorage.set(this.careTypeCodeKey, careType?.toString());
+        this.localStorage.set(this.careTypeCodeKey, careType);
         this.careType.emit(careType || null);
       });
 
@@ -144,11 +144,14 @@ export class SearchHAFormComponent implements OnInit {
         this.assignToMe.emit(assignToMe);
       });
 
+    let savedCaretype = this.localStorage.get(this.careTypeCodeKey);
+    if (savedCaretype === 'null') savedCaretype = null;
+
     this.form.patchValue({
       textSearch: this.localStorage.get(this.textSearchKey),
       siteStatusCode: this.localStorage.getInteger(this.siteStatusCodeKey) || null,
       vendorCode: this.localStorage.getInteger(this.vendorCodeKey) || null,
-      careTypeCode: this.localStorage.get(this.careTypeCodeKey) || null,
+      careTypeCode: savedCaretype || null,
       assignToMe: Boolean(JSON.parse(this.localStorage.get(this.assignToMeCodeKey) || "false")),
     });
   }
