@@ -3,4 +3,5 @@ export interface RemoteUserCertification {
   collegeCode: number;
   licenseNumber: string;
   licenseCode: number;
+  practitionerId: string;
 }

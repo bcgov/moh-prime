@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { inject, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -16,6 +16,10 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUsersPageComponent } from './remote-users-page.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { LicenseNumberLabelPipe } from '@shared/pipes/license-number-label.pipe';
+import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 describe('RemoteUsersPageComponent', () => {
   let component: RemoteUsersPageComponent;
@@ -37,6 +41,8 @@ describe('RemoteUsersPageComponent', () => {
         FullnamePipe
       ],
       providers: [
+        LicenseNumberLabelPipe,
+        CollegeNamePipe,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
@@ -44,6 +50,10 @@ describe('RemoteUsersPageComponent', () => {
         {
           provide: SiteService,
           useClass: MockCommunitySiteService
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
         },
         AddressPipe,
         KeycloakService
@@ -58,7 +68,7 @@ describe('RemoteUsersPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', inject([LicenseNumberLabelPipe, CollegeNamePipe], () => {
     expect(component).toBeTruthy();
-  });
+  }));
 });
