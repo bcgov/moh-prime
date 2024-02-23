@@ -83,7 +83,7 @@
     </button>
     <button mat-flat-button
             color="warn"
-            *ngIf="user?.status === AccessStatusEnum.APPROVED"
+            *ngIf="user?.status === AccessStatusEnum.APPROVED || user?.status === AccessStatusEnum.ACTIVE"
             [disabled]="!(Role.SUPER_ADMIN | inRole)"
             (click)="onDisable()">Disable Authorized User
     </button>
