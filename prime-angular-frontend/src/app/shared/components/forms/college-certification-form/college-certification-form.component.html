@@ -82,7 +82,7 @@
           </mat-form-field>
 
         </div>
-        <div *ngIf="collegeCode.value !== CollegeLicenceClassEnum.CPSBC"
+        <div *ngIf="!condensed && collegeCode.value !== CollegeLicenceClassEnum.CPSBC"
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
@@ -166,7 +166,7 @@
           </mat-form-field>
         </div>
 
-        <div *ngIf="!condensed && prescriberIdType !== PrescriberIdTypeEnum.NA"
+        <div *ngIf=" prescriberIdType !== PrescriberIdTypeEnum.NA"
              class="col-sm-12 pl-5">
           <div *ngIf="prescriberIdType === PrescriberIdTypeEnum.Optional"
                class="mb-3">

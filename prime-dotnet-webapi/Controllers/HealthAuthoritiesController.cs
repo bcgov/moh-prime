@@ -14,6 +14,7 @@ using Prime.ViewModels.HealthAuthoritySites;
 using System.Linq;
 using System;
 using Prime.Models;
+using Prime.Models.Api;
 
 namespace Prime.Controllers
 {
@@ -113,6 +114,33 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetAllHealthAuthoritySites()
         {
             var sites = await _healthAuthoritySiteService.GetSitesAsync();
+
+            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
+            foreach (var site in sites)
+            {
+                site.HasNotification = notifiedIds.Contains(site.Id);
+            }
+
+            return Ok(sites);
+        }
+
+        // GET: api/health-authorities/sites-query
+        /// <summary>
+        /// Gets all sites for any health authority.
+        /// </summary>
+        [HttpGet("sites-query", Name = nameof(SearchHealthAuthoritySites))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteAdminListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> SearchHealthAuthoritySites([FromQuery] HealthAuthoritySiteSearchOptions search)
+        {
+            if (search.AssignToMe)
+            {
+                search.AdminUserName = User.GetPrimeUsername();
+            }
+
+            var sites = await _healthAuthoritySiteService.GetSitesAsync(search);
 
             var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
             foreach (var site in sites)
