@@ -12,6 +12,8 @@ using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Parties;
 using DelegateDecompiler.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Prime.Services
 {
@@ -59,13 +61,27 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// return all HA sites from Authorized User's HA
+        /// </summary>
+        /// <param name="authorizedUserId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<HealthAuthoritySiteListViewModel>> GetAuthorizedUserSitesAsync(int authorizedUserId)
         {
+            var authorizedUser = await _context.AuthorizedUsers.SingleOrDefaultAsync(au => au.Id == authorizedUserId);
+            var orgId = (int)authorizedUser.HealthAuthorityCode;
+
             return await _context.HealthAuthoritySites
-                .Where(has => has.AuthorizedUserId == authorizedUserId)
+                .Where(has => has.HealthAuthorityOrganizationId == orgId)
                 .ProjectTo<HealthAuthoritySiteListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        public async Task<int> GetAuthorizedUserSiteCountAsync(int authorizedUserId)
+        {
+            var sites = await _context.HealthAuthoritySites.Where(s => s.AuthorizedUserId == authorizedUserId).ToListAsync();
+            return sites.Count;
         }
 
         public async Task<int> CreateOrUpdateAuthorizedUserAsync(AuthorizedUserChangeModel changeModel, ClaimsPrincipal user)
@@ -145,6 +161,14 @@ namespace Prime.Services
             }
             _context.AuthorizedUsers.Remove(authorizedUser);
             _context.PartyEnrolments.Remove(auPartyEnrolment);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAuthorizedUserStatus(int authorizedUserId, AccessStatusType statusId)
+        {
+            var authorizedUser = await _context.AuthorizedUsers.Where(u => u.Id == authorizedUserId).SingleOrDefaultAsync();
+            authorizedUser.Status = statusId;
 
             await _context.SaveChangesAsync();
         }

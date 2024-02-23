@@ -77,13 +77,20 @@
   <div>
     <button mat-flat-button
             color="warn"
-            *ngIf="user?.status !== AccessStatusEnum.APPROVED"
+            *ngIf="user?.status === AccessStatusEnum.UNDER_REVIEW"
             [disabled]="!(Role.SUPER_ADMIN | inRole)"
             (click)="onDelete()">Delete Authorized User
     </button>
     <button mat-flat-button
+            color="warn"
+            *ngIf="user?.status === AccessStatusEnum.APPROVED"
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            (click)="onDisable()">Disable Authorized User
+    </button>
+    <button mat-flat-button
             color="primary"
             class="ml-1"
+            *ngIf="user?.status === AccessStatusEnum.UNDER_REVIEW"
             [disabled]="!(Role.SUPER_ADMIN | inRole) || user?.status === AccessStatusEnum.APPROVED"
             (click)="onApprove()">Approve Authorized User
     </button>

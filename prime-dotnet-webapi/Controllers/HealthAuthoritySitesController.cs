@@ -11,6 +11,7 @@ using Prime.Services;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Sites;
 using System.Linq;
+using System.Security.Permissions;
 
 namespace Prime.Controllers
 {
@@ -197,6 +198,7 @@ namespace Prime.Controllers
             }
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
+            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUserId(), "Health Authority Site Updated");
 
             return NoContent();
         }
@@ -226,6 +228,8 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.SetSiteCompletedAsync(siteId);
 
+            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUserId(), "Health Authority Site Completed");
+
             return NoContent();
         }
 
@@ -249,11 +253,12 @@ namespace Prime.Controllers
                 return NotFound($"No editable Health Authority Site found with Id {siteId}");
             }
 
-            var record = await _healthAuthoritySiteService.GetPermissionsRecordAsync(siteId);
-            if (!record.AccessableBy(User))
+            // Check if the user is belong to the same HA as the site's HA
+            if (!await _healthAuthoritySiteService.AllowToSubmitSite(siteId, User.GetPrimeUsername()))
             {
                 return Forbid();
             }
+
             if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, siteId))
             {
                 return Conflict("Cannot submit Site, one or more selections dependent on the Health Authority are invalid.");
@@ -267,9 +272,46 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUserId(), "Health Authority Site Submitted");
 
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
-            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Notified of health authority site registration submission");
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, User.GetPrimeUserId(), "Notified of health authority site registration submission");
+
+            return NoContent();
+        }
+
+
+        // POST: api/health-authorities/5/sites/transfer/from/10/to/11
+        /// <summary>
+        /// Transfer site from one authorized user to another within a health authority.
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="currentAuthorizedUserId"></param>
+        /// <param name="newAuthorizedUserId"></param>
+        [HttpPost("transfer/from/{currentAuthorizedUserId}/to/{newAuthorizedUserId}", Name = nameof(HealthAuthoritySiteTransfer))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> HealthAuthoritySiteTransfer(int healthAuthorityId, int currentAuthorizedUserId, int newAuthorizedUserId)
+        {
+            var authorizedUsers = await _healthAuthorityService.GetAuthorizedUsersAsync(healthAuthorityId);
+
+            if (authorizedUsers.Any() &&
+                authorizedUsers.Any(au => au.Id == currentAuthorizedUserId) &&
+                authorizedUsers.Any(au => au.Id == newAuthorizedUserId))
+            {
+                var siteIds = await _healthAuthoritySiteService.TransferAuthorizedUserAsync(currentAuthorizedUserId, newAuthorizedUserId);
+                foreach (int siteId in siteIds)
+                {
+                    await _businessEventService.CreateSiteEventAsync(siteId, "Health Authorized Site is transfered to other authorized user");
+                }
+            }
+            else
+            {
+                return NotFound("Authorized Uesr not found");
+            }
 
             return NoContent();
         }
