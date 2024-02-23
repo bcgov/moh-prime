@@ -35,11 +35,13 @@ curl --location --request GET 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/p
 --header 'Authorization: Bearer eyTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT'
 ```
 
+### Guidance on parameters
 
-**CareConnect 🤔 ?!? 🤔**
-
+The `careSetting` parameter should be set to the Health Authority code that the enrollee(s) works at.  If the enrollee(s) works in a Private Community Health Practice (PCHP) setting, `CC` (CareConnect) should be passed in this parameter.  If an enrollee works in multiple care settings, this API should be called multiple times, once with each care setting value.
 
 There is a limit to the number of HPDIDs accepted in a single call:  10 (subject to change depending on performance testing results).  If too many HPDIDs are provided, a HTTP status code of 400 (Bad Request) is returned.
+
+### API Response scenarios
 
 The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement, when the given `careSetting` value matches the care setting of the enrollee as known in PRIME.  Example response:
 ```
@@ -74,9 +76,21 @@ If a BCSC user has not submitted the enrollment yet or never enrolled, nothing i
 }
 ```
 
-
-**CareSetting mismatch**
-
+If the given `careSetting` value does not match any of the enrollee's care settings in PRIME, the API response will be:
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": null,
+            "status": "CareSetting mismatch",
+            "accessType": null,
+            "licences": null
+        }
+    ]
+}
+```
+Note that `CC` will match a PCHP care setting.
 
 For enrollees that have been `locked` by PRIME administrators (such that they cannot view or edit their enrollment details, even if
 previously approved), the API response will be:
@@ -173,8 +187,6 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 
 |Possible value for `careSetting` input parameter|Human-readable definition|
 |------------------------------------------------|-------------------------|
-|PCHP                                            |Private Community Health Practice|
-|CP                                              |Community Pharmacy|
 |NHA                                             |Northern Health Authority|
 |IHA                                             |Interior Health Authority|
 |VCHA                                            |Vancouver Coastal Health Authority|
