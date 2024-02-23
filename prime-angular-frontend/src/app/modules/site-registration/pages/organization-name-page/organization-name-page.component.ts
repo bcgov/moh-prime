@@ -152,7 +152,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
           return this.organizationResource.getSigningAuthorityOrganizationByUsername(bcscUser.username)
         }),
         map((orgs: Organization[]) => {
-          return !orgs.some(org => org.name === name);
+          return !orgs || !orgs.some(org => org.name === name);
         }),
       );
   }
