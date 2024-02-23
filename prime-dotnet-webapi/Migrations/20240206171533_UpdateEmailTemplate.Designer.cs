@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240206171533_UpdateEmailTemplate")]
+    partial class UpdateEmailTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -15286,9 +15288,7 @@ namespace Prime.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("LicenseNumber")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PractitionerId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("RemoteUserId")
@@ -15974,11 +15974,6 @@ namespace Prime.Migrations
                         {
                             Code = 5,
                             Name = "Declined"
-                        },
-                        new
-                        {
-                            Code = 6,
-                            Name = "Disabled"
                         });
                 });
 

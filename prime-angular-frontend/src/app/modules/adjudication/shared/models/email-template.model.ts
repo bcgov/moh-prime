@@ -3,4 +3,7 @@ export interface EmailTemplate {
   template: string;
   templateName: string;
   modifiedDate?: string;
+  subject: string;
+  description: string;
+  recipient: string;
 }

@@ -33,6 +33,8 @@ import { JoinPipe } from '@shared/pipes/join.pipe';
 import { RolePipe } from '@shared/pipes/role-pipe';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { ContainsPipe } from '@shared/pipes/contains.pipe';
+import { LicenseNumberLabelPipe } from '@shared/pipes/license-number-label.pipe';
+import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
 import { HealthAuthorityVendorPipe } from '@shared/pipes/health-authority-vendor.pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -150,6 +152,8 @@ import { TransferHASiteComponent } from './components/dialogs/content/transfer-h
     JoinPipe,
     PartyTypePipe,
     HealthAuthorityVendorPipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
     AddressFormComponent,
     ConfirmDialogComponent,
     HtmlComponent,
@@ -274,6 +278,8 @@ import { TransferHASiteComponent } from './components/dialogs/content/transfer-h
     ContainsPipe,
     PartyTypePipe,
     HealthAuthorityVendorPipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
@@ -352,7 +358,9 @@ import { TransferHASiteComponent } from './components/dialogs/content/transfer-h
     FullnamePipe,
     AddressPipe,
     CasePipe,
-    CapitalizePipe
+    CapitalizePipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
   ]
 })
 export class SharedModule { }

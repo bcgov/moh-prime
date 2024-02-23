@@ -11,6 +11,7 @@ using DelegateDecompiler.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
 using Sentry.Protocol;
+using Prime.Models.Api;
 
 namespace Prime.Services
 {
@@ -98,6 +99,39 @@ namespace Prime.Services
                 .ProjectTo<HealthAuthoritySiteAdminListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<HealthAuthoritySiteAdminListViewModel>> GetSitesAsync(HealthAuthoritySiteSearchOptions searchOptions)
+        {
+            searchOptions ??= new HealthAuthoritySiteSearchOptions();
+
+            var query = _context.HealthAuthoritySites
+                .AsNoTracking()
+                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch),
+                    q => q.Search(
+                        s => s.SiteName,
+                        s => s.PEC,
+                        s => s.AuthorizedUser.Party.FirstName,
+                        s => s.AuthorizedUser.Party.LastName,
+                        s => s.HealthAuthorityOrganization.Name,
+                        s => s.HealthAuthorityVendor.Vendor.Name,
+                        s => s.HealthAuthorityCareType.CareType)
+                        .Containing(searchOptions.TextSearch)
+                        )
+                .If(searchOptions.StatusId.HasValue,
+                    q => q.Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
+                    .FirstOrDefault().StatusType == searchOptions.StatusId))
+                .If(!string.IsNullOrWhiteSpace(searchOptions.AdminUserName),
+                    q => q.Where(s => s.Adjudicator.Username == searchOptions.AdminUserName))
+                .If(searchOptions.VendorId.HasValue,
+                    q => q.Where(s => s.HealthAuthorityVendor.Vendor.Code == searchOptions.VendorId))
+                .If(!string.IsNullOrWhiteSpace(searchOptions.CareType),
+                    q => q.Where(s => s.HealthAuthorityCareType.CareType == searchOptions.CareType))
+                .ProjectTo<HealthAuthoritySiteAdminListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .OrderBy(s => s.SiteName);
+
+            return await query.ToListAsync();
         }
 
         public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)

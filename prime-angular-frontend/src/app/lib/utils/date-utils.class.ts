@@ -21,6 +21,23 @@ export class DateUtils {
   }
 
   /**
+ * @description
+ * Check if a date is a number of days after another date or today's date.
+ */
+  public static isDaysAfterDate(
+    daysBeforeDate: number,
+    anchorDate: string | Moment | null,
+    todayOrOtherDate: string | Moment = moment()
+  ): boolean {
+    if (!anchorDate || !todayOrOtherDate) {
+      return false;
+    }
+
+    const minusDaysBeforeDate = moment(todayOrOtherDate).subtract(daysBeforeDate, 'days');
+    return moment(anchorDate).isBefore(minusDaysBeforeDate);
+  }
+
+  /**
    * @description
    * Check that a date is within the renewal period.
    */
