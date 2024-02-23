@@ -173,9 +173,6 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
     if (this.formState.json.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER) {
       this.siteFormStateService.deviceProviderFormState.clearIndividualDeviceProviders();
     }
-    if (this.formState.json.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
-      this.siteFormStateService.businessLicenceFormState.presetCommunityPharmacySiteId();
-    }
     if (this.formState.json.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
       this.siteFormStateService.businessLicenceFormState.resetSiteId();
     }
