@@ -173,6 +173,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
               selfDeclarationCompletedDate: stateSelfDeclarationCompletedDate && selfDeclarationCompletedDate < stateSelfDeclarationCompletedDate ?
                 stateSelfDeclarationCompletedDate : selfDeclarationCompletedDate,
               requireRedoSelfDeclaration: !stateSelfDeclarationCompletedDate && requireRedoSelfDeclaration,
+              expiryDate: this.enrolmentService.enrolment.expiryDate,
+              enrollee: this.enrolmentService.enrolment.enrollee,
             };
           }
 
