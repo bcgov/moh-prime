@@ -140,9 +140,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
         this.orgBookTotalResults = response.total;
       });
 
-    if (this.organizationId === 0) {
-      this.formState.name.addAsyncValidators(asyncValidator(this.checkOrganizationName$(), 'duplicate'));
-    }
+    this.formState.name.addAsyncValidators(asyncValidator(this.checkOrganizationName$(), 'duplicate'));
   }
 
   private checkOrganizationName$(): (name: string) => Observable<boolean> {
@@ -152,7 +150,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
           return this.organizationResource.getSigningAuthorityOrganizationByUsername(bcscUser.username)
         }),
         map((orgs: Organization[]) => {
-          return !orgs || !orgs.some(org => org.name === name);
+          return !orgs || !orgs.some(org => org.name === name && org.id !== this.organizationId);
         }),
       );
   }
