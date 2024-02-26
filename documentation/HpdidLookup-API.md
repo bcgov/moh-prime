@@ -37,7 +37,7 @@ curl --location --request GET 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/p
 
 ### Guidance on parameters
 
-The `careSetting` parameter should be set to the Health Authority code that the enrollee(s) works at.  If the enrollee(s) works in a Private Community Health Practice (PCHP) setting, `CC` (CareConnect) should be passed in this parameter.  If an enrollee works in multiple care settings, this API should be called multiple times, once with each care setting value.
+The `careSetting` parameter should be set to the Health Authority code of the "calling entity" (e.g. VCH when using the "VPP Connector" API client).   
 
 There is a limit to the number of HPDIDs accepted in a single call:  10 (subject to change depending on performance testing results).  If too many HPDIDs are provided, a HTTP status code of 400 (Bad Request) is returned.
 
@@ -90,7 +90,7 @@ If the given `careSetting` value does not match any of the enrollee's care setti
     ]
 }
 ```
-Note that `CC` will match a PCHP care setting.
+Note that `CC` will match a Private Community Health Practice (PCHP) care setting.
 
 For enrollees that have been `locked` by PRIME administrators (such that they cannot view or edit their enrollment details, even if
 previously approved), the API response will be:
@@ -153,6 +153,7 @@ For enrollees that have their renewal period expired and have not renewed, they 
     ]
 }
 ```
+In the case the enrollee is past their renewal period and has also reported an indefinite absence, PRIME will return a status of `Indefinite absence`.
 
 Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has more than one licence, for each licence, the licence-related information would be blanked-out and a licence-level Boolean field `redacted` would be set to `true`, e.g.
 ```
