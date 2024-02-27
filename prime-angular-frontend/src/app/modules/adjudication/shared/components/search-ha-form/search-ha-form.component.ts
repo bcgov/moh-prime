@@ -45,10 +45,11 @@ export class SearchHAFormComponent implements OnInit {
     this.siteStatuses = new Array<Config<number>>();
 
     const inReviewStatus = new Config<number>(SiteStatusType.IN_REVIEW, 'In Review');
-    const editableStatus = new Config<number>(SiteStatusType.EDITABLE, 'Editable');
-    const lockedStatus = new Config<number>(SiteStatusType.LOCKED, 'Locked');
+    const editableStatus = new Config<number>(SiteStatusType.EDITABLE, 'Editable - approved');
+    const editiableNotApprovedStatus = new Config<number>(SiteStatusType.EDITABLE_NOT_APPROVED, 'Editable - not approved');
+    const flaggedStatus = new Config<number>(SiteStatusType.FLAGGED, 'Flagged');
 
-    this.siteStatuses.push(inReviewStatus, editableStatus, lockedStatus);
+    this.siteStatuses.push(inReviewStatus, editableStatus, editiableNotApprovedStatus, flaggedStatus);
 
     this.careTypes = this.configService.careTypes;
     this.vendors = this.configService.vendors
