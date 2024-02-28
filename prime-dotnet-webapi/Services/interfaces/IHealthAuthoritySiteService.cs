@@ -20,6 +20,6 @@ namespace Prime.Services
         Task SetSiteCompletedAsync(int siteId);
         Task SiteSubmissionAsync(int siteId);
         Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId);
-        Task<List<int>> TransferAuthorizedUserAsync(int currentAuthorizedUseId, int newAuthorizeduserId);
+        Task<List<int>> TransferAuthorizedUserAsync(int currentAuthorizedUserId, int newAuthorizedUserId);
     }
 }
