@@ -197,18 +197,22 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 |CC                                              |CareConnect|
 
 
-|Possible values for `status`|Conditions for `status`|
-|----------------------------|-----------------------|
-|*no details whatsoever*     |BCSC user has not submitted the enrollment yet or never enrolled| 
-|CareSetting mismatch        |Provided careSetting value does not match care setting of enrollee|
-|*no status or other details*|Enrollee has been `locked` by PRIME administrators|
-|Incomplete                  |Under Review or enrollee hasn't signed TOA|
-|Indefinite absence          |TOA signed but reporting indefinite absence|
-|Past Renewal                |TOA signed but agreement expired|
-|Complete                    |TOA signed and none of other conditions applicable| 
+### PRIME API behavior/`status` output 
+
+The PRIME API returns enrollee data only under certain conditions.  Data is not returned if the person is not in the PRIME system, if the API client should not receive the data (`CareSetting mismatch`), or if PRIME administrators do not want the data shared with any external systems.  Then if the enrollee has not fully completed their enrollment, some or most data is also withheld.  Finally if all conditions are met, enrollee data is returned to the API client.
+
+|Possible values for `status` output|Conditions for `status`|
+|-----------------------------------|-----------------------|
+|*no details whatsoever*            |BCSC user has not submitted the enrollment yet or never enrolled| 
+|CareSetting mismatch               |Provided careSetting value does not match care setting of enrollee|
+|*no status or other details*       |Enrollee has been `locked` by PRIME administrators|
+|Incomplete                         |Under Review or enrollee hasn't signed TOA|
+|Indefinite absence                 |TOA signed but reporting indefinite absence|
+|Past Renewal                       |TOA signed but agreement expired|
+|Complete                           |TOA signed and none of other conditions applicable| 
 
 
-|Possible values for `accessType`|
+|Possible values for `accessType` output|
 |--------------------------------|
 |Independent User – with OBOs, Pharmacy|
 |Independent User – with OBOs|
