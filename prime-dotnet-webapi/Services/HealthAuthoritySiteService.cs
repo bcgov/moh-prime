@@ -122,10 +122,10 @@ namespace Prime.Services
                 .If(statusId.HasValue,
                     q => q.Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
                     .FirstOrDefault().StatusType == statusId &&
-                    ((searchOptions.StatusId == 1 && s.ApprovedDate.HasValue) ||
-                    (searchOptions.StatusId == 4 && !s.ApprovedDate.HasValue) ||
-                    searchOptions.StatusId == 2 ||
-                    searchOptions.StatusId == 3)))
+                    ((searchOptions.StatusId == (int)SiteStatusType.Editable && s.ApprovedDate.HasValue) ||
+                    (searchOptions.StatusId == (int)SiteStatusType.EditableNotApproved && !s.ApprovedDate.HasValue) ||
+                    searchOptions.StatusId == (int)SiteStatusType.InReview ||
+                    searchOptions.StatusId == (int)SiteStatusType.Locked)))
                 .If(flagged, q => q.Where(s => s.Flagged))
                 .If(!string.IsNullOrWhiteSpace(searchOptions.AdminUserName),
                     q => q.Where(s => s.Adjudicator.Username == searchOptions.AdminUserName))
