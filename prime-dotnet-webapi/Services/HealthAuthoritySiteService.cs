@@ -95,13 +95,14 @@ namespace Prime.Services
             bool flagged = false;
             if (searchOptions.StatusId.HasValue)
             {
-                if (searchOptions.StatusId == 5)
+                if (searchOptions.StatusId == (int)SiteStatusType.Flagged)
                 {
                     flagged = true;
                 }
                 else
                 {
-                    statusId = searchOptions.StatusId == 4 ? 1 : searchOptions.StatusId;
+                    statusId = searchOptions.StatusId == (int)SiteStatusType.EditableNotApproved ?
+                        (int)SiteStatusType.Editable : searchOptions.StatusId;
                 }
             }
 

@@ -49,7 +49,7 @@ export class SearchHAFormComponent implements OnInit {
     const editiableNotApprovedStatus = new Config<number>(SiteStatusType.EDITABLE_NOT_APPROVED, 'Editable - not approved');
     const flaggedStatus = new Config<number>(SiteStatusType.FLAGGED, 'Flagged');
 
-    this.siteStatuses.push(inReviewStatus, editableStatus, editiableNotApprovedStatus, flaggedStatus);
+    this.siteStatuses.push(editiableNotApprovedStatus, inReviewStatus, editableStatus, flaggedStatus);
 
     this.careTypes = this.configService.careTypes;
     this.vendors = this.configService.vendors
