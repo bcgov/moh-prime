@@ -20,8 +20,14 @@
           {{ remoteUser.remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
         </app-enrollee-property>
 
-        <app-enrollee-property title="Licence">
+        <app-enrollee-property *ngIf="remoteUser.remoteUserCertification.licenseNumber"
+                               [title]="remoteUser.remoteUserCertification.collegeCode | licenseNumberLabel">
           {{ remoteUser.remoteUserCertification.licenseNumber | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property *ngIf="remoteUser.remoteUserCertification.practitionerId"
+                               title="PharmaNet ID">
+          {{ remoteUser.remoteUserCertification.practitionerId | default }}
         </app-enrollee-property>
       </div>
     </ng-container>
