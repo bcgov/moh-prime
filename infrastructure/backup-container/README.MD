@@ -23,7 +23,7 @@ oc -n 9c33a9-tools tag --alias=true backup-container:test backup-container:prod
 
 ### Configure your DBs and set the cron schedule
 
-Configure [./config/backup.conf](./config/backup.conf) (ConfigMap), make sure to specify the DatabaseType for each listed database, list your database(s) and set your cron schedule. Right now, the full backup is taken hourly and verification is 30 minutes after backup job is complated.
+Configure [./config/backup.conf](./config/backup.conf) (ConfigMap), list your database(s), make sure to specify the DatabaseType for each listed database, and set your cron schedule. Right now, the full backup is taken hourly and verification is 30 minutes after backup job is complated.
 
 ```bash
 postgres=dev-patroni:5432/prime_dev
@@ -46,6 +46,7 @@ The backup app supports the rolling backup strategy. It allows you to keep a num
 ### Deploy the app
 
 1. Configure references to your DB credentials in [backup-deploy.yaml](./openshift/templates/backup/backup-deploy.yaml), replacing the boilerplate `DATABASE_USER` and `DATABASE_PASSWORD` environment variables.
+When using the backup.conf file the following environment variables are ignored, since you list all of your host/database pairs in the file; DATABASE_SERVICE_NAME, DATABASE_NAME. To provide the credentials needed for the listed databases you extend the deployment configuration to include hostname_USER and hostname_PASSWORD credential pairs which are wired to the appropriate secrets (where hostname matches the hostname/servicename, in all caps and underscores, of the database). For example, if you are backing up two database named prod-patroni/prime_prod and metabase-database/metabase, you would have to extend the backup-deploy configuration to include a PROD_PATRONI_USER and PROD_PATRONI_PASSWORD as well as METABASE_DATABASE_USER and METABASE_DATABASE_PASSWORD credential pairs, wired to the appropriate secrets, to access the database(s) on the prod-patroni server and metabase-dataset server.
 
 ```yaml
 - name: DATABASE_USER
@@ -76,7 +77,7 @@ Note that the key names within the database secret referencing database username
 ```bash
 oc -n 9c33a9-dev process -f ./openshift/templates/backup/backup-deploy.yaml \
 -p ENVIRONMENT_FRIENDLY_NAME='PRIME DB Backups' \
--p DATABASE_DEPLOYMENT_NAME=dev-patroni-secret  -p DATABASE_SERVICE_NAME=test-patroni -p DATABASE_NAME=prime-test -p ENVIRONMENT_NAME=9c33a9-dev | oc -n 9c33a9-dev create -f -
+-p DATABASE_DEPLOYMENT_NAME=dev-patroni-secret -p ENVIRONMENT_NAME=9c33a9-dev | oc -n 9c33a9-dev create -f -
 
 ```
 
