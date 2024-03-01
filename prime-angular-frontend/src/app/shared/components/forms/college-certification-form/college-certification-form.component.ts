@@ -241,6 +241,11 @@ export class CollegeCertificationFormComponent implements OnInit {
             this.setPractitionerInformation(licenseCode);
           }
         });
+
+      if (this.collegeCode.value == CollegeLicenceClassEnum.BCCNM && prescriberIdType == PrescriberIdTypeEnum.Mandatory &&
+        this.licenseNumber.value != null) {
+        this.licenseNumber.reset();
+      }
     }
   }
 
