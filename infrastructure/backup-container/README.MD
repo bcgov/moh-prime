@@ -14,22 +14,32 @@ First, in order to build an image and buildConfig in openshift, the [backup-buil
 
 ```bash
 oc login --token=<token>
+oc project <namespace>
 oc -n 9c33a9-tools process -f ./openshift/templates/backup/backup-build.yaml \
   -p NAME=backup-container OUTPUT_IMAGE_TAG=dev| oc -n 9c33a9-tools create -f -
 
-oc tag --alias=true backup-container:latest backup-container:dev
+oc -n 9c33a9-tools tag --alias=true backup-container:test backup-container:prod
 ```
 
 ### Configure your DBs and set the cron schedule
 
-Configure [./config/backup.conf](./config/backup.conf) (ConfigMap), make sure to specify the DatabaseType for each listed database, list your database(s) and set your cron schedule.
+Configure [./config/backup.conf](./config/backup.conf) (ConfigMap), make sure to specify the DatabaseType for each listed database, list your database(s) and set your cron schedule. Right now, the full backup is taken hourly and verification is 30 minutes after backup job is complated.
 
 ```bash
 postgres=dev-patroni:5432/prime_dev
 
-0 1 * * * default bash ./backup.sh -s
-0 4 * * * default bash ./backup.sh -s -v all
+0 * * * * default bash ./backup.sh -s
+30 * * * * default bash ./backup.sh -s -v all
 ```
+
+<summary>Create backup.conf config map</summary>
+
+```bash
+oc -n 9c33a9-dev create configmap backup-conf --from-file=./config/backup.conf
+oc -n 9c33a9-dev label configmap backup-conf app=backup-container
+
+```
+
 ### Backup Strategies
 The backup app supports the rolling backup strategy. It allows you to keep a number of recent daily backups, a number of weekly backups, and a number of monthly backups. There are retention settings in [docker/backup.settings file](./docker/backup.settings). The defaults provide you with a week's worth of `daily` backups, a month's worth of `weekly` backups, and a single backup for the previous month. Backups are identified using a core name derived from the host/database specification and a timestamp. All backups are compressed using gzip.
 
@@ -54,22 +64,19 @@ The backup app supports the rolling backup strategy. It allows you to keep a num
 
 2. The backup container utilizes two volumes: one for storing the backups and another for restore/verification testing. The deployment template deliberately separates these volumes. Because we are utilizing S3 storag, we use the `netapp-file-standard` storage class for both backup storage (BACKUP_VOLUME_CLASS) and restore/verification storage (VERIFICATION_VOLUME_CLASS).
 
-3. In this example, the namespace is `9c33a9-dev` and the app name is `backup-container`:
+3. In this example, the namespace is `9c33a9-dev` and the app name is `backup-container`. You can customize [backup-deploy.yaml](./openshift/templates/backup/backup-deploy.yaml) and change the value of parameters before creting backup container deployment.
 If you would like to utilize S3 storage and store backup files in a s3 bucket, create a secret in openshift for s3. 
 Note that the key names within the database secret referencing database username and password are `app-db-username` and `app-db-password`, respectively. If this is not the case for your deployment, specify the correct key names as parameters `DATABASE_USER_KEY_NAME` and `DATABASE_PASSWORD_KEY_NAME`. Also note that `BACKUP_VOLUME_CLASS` is netapp-file-standard since the backup files are stored in S3 storage.
- the key names within the s3 secret referencing s3 username, password, endpoint and bucket are `S3_USER`, `S3_PASSWORD`, `S3_ENDPOINT`, and `S3_BUCKET`, respectively. Customize [backup-deploy.yaml](./openshift/templates/backup/backup-deploy.yaml) before running the following command:
+ the key names within the s3 secret referencing s3 username, password, endpoint and bucket are `S3_USER`, `S3_PASSWORD`, `S3_ENDPOINT`, and `S3_BUCKET`, respectively.
 
+
+
+<summary>Create backup-container deployment</summary>
 
 ```bash
-oc -n 9c33a9-dev create configmap backup-conf --from-file=./config/backup.conf
-oc -n 9c33a9-dev label configmap backup-conf app=backup-container
-
 oc -n 9c33a9-dev process -f ./openshift/templates/backup/backup-deploy.yaml \
--p NAME=backup-container \
--p IMAGE_NAMESPACE=9c33a9-tools -p SOURCE_IMAGE_NAME=backup-container -p TAG_NAME=dev \
--p BACKUP_VOLUME_NAME=backup-container -p BACKUP_VOLUME_CLASS=netapp-file-standard \
--p VERIFICATION_VOLUME_SIZE=5Gi -p ENVIRONMENT_FRIENDLY_NAME='PRIME DB Backups' \
--p CPU_REQUEST=50m -p CPU_LIMIT=250m -p MEMORY_REQUEST=128Mi -p MEMORY_LIMIT=256Mi -p DATABASE_DEPLOYMENT_NAME=dev-patroni-secret -p DATABASE_USER_KEY_NAME=app-db-username -p DATABASE_PASSWORD_KEY_NAME=app-db-password -p DATABASE_SERVICE_NAME=test-patroni -p DATABASE_NAME=prime-test -p ENVIRONMENT_NAME=9c33a9-dev | oc -n 9c33a9-dev create -f -
+-p ENVIRONMENT_FRIENDLY_NAME='PRIME DB Backups' \
+-p DATABASE_DEPLOYMENT_NAME=dev-patroni-secret  -p DATABASE_SERVICE_NAME=test-patroni -p DATABASE_NAME=prime-test -p ENVIRONMENT_NAME=9c33a9-dev | oc -n 9c33a9-dev create -f -
 
 ```
 

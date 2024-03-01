@@ -311,7 +311,7 @@ parameters:
     displayName: Database Deployment Name
     description: The name associated to the database deployment resources.  In particular, this is used to wire up the credentials associated to the database.
     required: true
-    value: postgresql
+    value: dev-patroni-secret
   - name: DATABASE_USER_KEY_NAME
     displayName: Database User Key Name
     description: The database user key name stored in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
@@ -430,17 +430,17 @@ parameters:
     displayName: Backup Volume Name
     description: The name of the persistent volume used to store the backups.
     required: true
-    value: backup
+    value: backup-container
   - name: BACKUP_VOLUME_SIZE
     displayName: Backup Volume Size
     description: The size of the persistent volume used to store the backups, e.g. 512Mi, 1Gi, 2Gi.  Ensure this is sized correctly.  Refer to the container documentation for details.
     required: true
-    value: 5Gi
+    value: 2Gi
   - name: BACKUP_VOLUME_CLASS
     displayName: Backup Volume Class
     description: The class of the persistent volume used to store the backups; netapp-file-standard is the recommended default.
     required: true
-    value: netapp-file-backup
+    value: netapp-file-standard
   - name: VERIFICATION_VOLUME_NAME
     displayName: Verification Volume Name
     description: The name for the verification volume, used for restoring and verifying backups.
@@ -465,22 +465,22 @@ parameters:
     displayName: Resources CPU Request
     description: The resources CPU request (in cores) for this build.
     required: true
-    value: "0"
+    value: "50m"
   - name: CPU_LIMIT
     displayName: Resources CPU Limit
     description: The resources CPU limit (in cores) for this build.
     required: true
-    value: "0"
+    value: "250m"
   - name: MEMORY_REQUEST
     displayName: Resources Memory Request
     description: The resources Memory request (in Mi, Gi, etc) for this build.
     required: true
-    value: 0Mi
+    value: 128Mi
   - name: MEMORY_LIMIT
     displayName: Resources Memory Limit
     description: The resources Memory limit (in Mi, Gi, etc) for this build.
     required: true
-    value: 0Mi
+    value: 256Mi
   - name: S3_SECRET_KEY
     displayName: S3 Secret Key
     description: The S3 secret key is used to wire up the credentials associated to the S3.
