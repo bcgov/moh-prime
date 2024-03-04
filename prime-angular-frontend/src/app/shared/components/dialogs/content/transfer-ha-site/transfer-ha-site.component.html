@@ -6,7 +6,7 @@
 </h2>
 <mat-dialog-content>
   <p>
-    There are {{this.siteCount}} site(s) belong to {{this.currentAuthorizedUserName}}.
+    There are {{this.siteCount}} site(s) belonging to {{this.currentAuthorizedUserName}}.
     Please select a new authorized user for these sites and then deactivate {{this.currentAuthorizedUserName}}.
   </p>
   <form [formGroup]="form">
@@ -24,7 +24,7 @@
   </form>
   <div class="text_red"
        *ngIf="!authorizedUsers || authorizedUsers?.length === 0">
-    No authorized user available, Please contact health authority for new authorized user.
+    No authorized user available. Please contact health authority for new authorized user.
   </div>
   <div class="mt-4">
     <div class="row">
