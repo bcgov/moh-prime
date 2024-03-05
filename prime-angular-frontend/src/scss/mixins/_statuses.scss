@@ -4,13 +4,14 @@
 /// status colours are not Enrolment or Site Registration specific
 @mixin statuses() {
   .status {
+
     &.under-review,
     &.locked {
       color: theme-palette(yellow);
     }
 
     &.editable {
-      color: theme-palette(blue);
+      color: theme-palette(blue, bright);
     }
 
     &.approved {

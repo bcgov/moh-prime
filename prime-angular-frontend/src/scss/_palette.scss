@@ -7,24 +7,17 @@
 //
 
 $palettes: (
-  blue: (
-    lightest: #f8f9fb,
+  blue: (lightest: #f8f9fb,
     lighter: #d6ddec,
     light: #0f48ae,
+    bright: #3565BB,
     base: #003366, // BC Gov. Primary
-    dark: #001b4a
+    dark: #001b4a),
+  yellow: (base: #ffb200 // BC Gov. Secondary
   ),
-  yellow: (
-    base: #ffb200 // BC Gov. Secondary
-  ),
-  red: (
-    base: #ed202a
-  ),
-  green: (
-    base: green
-  ),
-  grey: (
-    lightest: #eeeeee,
+  red: (base: #ed202a),
+  green: (base: green),
+  grey: (lightest: #eeeeee,
     lighter: #e1e1e1,
     light: #bdbdbd, // divider colour
     base: #575757, // secondary text colour
