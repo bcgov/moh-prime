@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
 
 import { EmailUtils } from '@lib/utils/email-utils.class';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
@@ -8,8 +7,7 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { AuthorizedUser } from '@shared/models/authorized-user.model';
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 
 @Component({
   selector: 'app-site-registration-actions',
@@ -30,10 +28,8 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public Role = Role;
   public SiteStatusType = SiteStatusType;
   public SiteAdjudicationAction = SiteAdjudicationAction;
-  public busy: Subscription;
 
   constructor(
-    protected healthAuthorityResource: HealthAuthorityResource,
     private permissionService: PermissionService
   ) {
     this.delete = new EventEmitter<{ [key: string]: number }>();
@@ -96,33 +92,13 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public onContactAuthorizedUser() {
     const healthAuthoritySite = this.siteRegistration as HealthAuthoritySiteAdminList;
-    this.busy = this.healthAuthorityResource.getAuthorizedUsersByHealthAuthority(healthAuthoritySite.healthAuthorityOrganizationId)
-      .subscribe((au_list: AuthorizedUser[]) => {
-
-        if (au_list?.length > 0) {
-          let auEmails = au_list.map(au => {
-            return au.email;
-          });
-          let toEmails = "";
-          auEmails.forEach(e => {
-            if (toEmails.indexOf(e) < 0) {
-              toEmails += e + ";";
-            }
-          });
-
-          let authorizedUserName = "Dear Authorized Users";
-          if (toEmails.split("@").length === 2) {
-            let au = au_list.find(au => toEmails.indexOf(au.email) >= 0);
-            authorizedUserName = `Dear ${au.firstName} ${au.lastName}`;
-          }
-
-          EmailUtils.openEmailClient(
-            toEmails,
-            `PRIME Site Registration - ${healthAuthoritySite.healthAuthorityName}`,
-            authorizedUserName
-          );
-        }
-      });
+    if (healthAuthoritySite.authorizedUserName) {
+      EmailUtils.openEmailClient(
+        healthAuthoritySite.authorizedUserEmail,
+        `PRIME Site Registration - ${healthAuthoritySite.healthAuthorityName}`,
+        `Dear ${healthAuthoritySite.authorizedUserName},`
+      );
+    }
   }
 
   public onToggleFlagSite() {
