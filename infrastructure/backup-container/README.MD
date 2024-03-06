@@ -25,7 +25,7 @@ oc -n 9c33a9-tools tag --alias=true backup-container:latest backup-container:dev
 
 ### Configure your DBs and set the cron schedule
 
-Configure [./config/backup.conf](./config/backup.conf) (ConfigMap), list your database(s), make sure to specify the DatabaseType for each listed database, and set your cron schedule. Right now, the full backup is taken hourly and verification is 30 minutes after backup job is complated.
+Configure [./config/backup.conf](./config/backup.conf) (ConfigMap), list your database(s), make sure to specify the DatabaseType for each listed database, and set your cron schedule. Right now, the full backup is taken hourly and verification is 30 minutes after backup job is completed.
 
 ```bash
 postgres=dev-patroni:5432/prime_dev
