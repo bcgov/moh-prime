@@ -174,8 +174,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
                 stateSelfDeclarationCompletedDate : selfDeclarationCompletedDate,
               requireRedoSelfDeclaration: !stateSelfDeclarationCompletedDate && requireRedoSelfDeclaration,
               expiryDate: this.enrolmentService.enrolment.expiryDate,
-              enrollee: this.enrolmentService.enrolment.enrollee,
             };
+            enrolment.enrollee.gpid = this.enrolmentService.enrolment.enrollee.gpid;
           }
 
           // Allow for BCSC information to be updated on each submission of the enrolment
