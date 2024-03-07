@@ -272,7 +272,7 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
-            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUserId(), "Health Authority Site Submitted");
+            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUserId(), "Health Authority Site has been updated and submitted");
 
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
             await _businessEventService.CreateSiteEmailEventAsync(siteId, User.GetPrimeUserId(), "Notified of health authority site registration submission");
