@@ -37,9 +37,12 @@
                 {{ orgBookOrganization }}
               </mat-option>
             </mat-autocomplete>
-            <mat-error>Required</mat-error>
+            <mat-error *ngIf="formState.name.hasError('required')">
+              Required</mat-error>
+            <mat-error *ngIf="formState.name.hasError('duplicate')">
+              Duplicate Organization - Organization can be added only once.
+            </mat-error>
           </mat-form-field>
-
         </div>
       </div>
 

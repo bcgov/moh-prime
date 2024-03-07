@@ -33,6 +33,8 @@ import { JoinPipe } from '@shared/pipes/join.pipe';
 import { RolePipe } from '@shared/pipes/role-pipe';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { ContainsPipe } from '@shared/pipes/contains.pipe';
+import { LicenseNumberLabelPipe } from '@shared/pipes/license-number-label.pipe';
+import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
 import { HealthAuthorityVendorPipe } from '@shared/pipes/health-authority-vendor.pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -149,6 +151,8 @@ import { ChangeVendorNoteComponent } from './components/dialogs/content/change-v
     JoinPipe,
     PartyTypePipe,
     HealthAuthorityVendorPipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
     AddressFormComponent,
     ConfirmDialogComponent,
     HtmlComponent,
@@ -234,7 +238,7 @@ import { ChangeVendorNoteComponent } from './components/dialogs/content/change-v
     DateOfBirthComponent,
     UnlistedCollegeLicenceFormComponent,
     EmailFormComponent,
-    SelfDeclarationTermComponent
+    SelfDeclarationTermComponent,
   ],
   imports: [
     CommonModule,
@@ -272,6 +276,8 @@ import { ChangeVendorNoteComponent } from './components/dialogs/content/change-v
     ContainsPipe,
     PartyTypePipe,
     HealthAuthorityVendorPipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
@@ -350,7 +356,9 @@ import { ChangeVendorNoteComponent } from './components/dialogs/content/change-v
     FullnamePipe,
     AddressPipe,
     CasePipe,
-    CapitalizePipe
+    CapitalizePipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
   ]
 })
 export class SharedModule { }
