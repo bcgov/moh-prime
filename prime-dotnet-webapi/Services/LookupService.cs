@@ -54,6 +54,7 @@ namespace Prime.Services
                     .AsNoTracking()
                     .Include(c => c.CollegeLicenses)
                     .Include(c => c.CollegePractices)
+                    .OrderBy(c => c.Weight)
                     .ToListAsync(),
                 JobNames = await _context.Set<JobName>()
                     .AsNoTracking()
@@ -105,6 +106,11 @@ namespace Prime.Services
                     .AsNoTracking()
                     .ToListAsync(),
             };
+        }
+
+        public async Task<List<HealthAuthority>> GetHealthAuthorityByPasscode(string passcode)
+        {
+            return await _context.Set<HealthAuthority>().Where(ha => ha.Passcode == passcode).ToListAsync();
         }
     }
 }

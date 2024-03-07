@@ -10,6 +10,7 @@ using DelegateDecompiler;
 using DelegateDecompiler.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
+using Prime.Models.Api;
 
 namespace Prime.Services
 {
@@ -84,6 +85,59 @@ namespace Prime.Services
                 .ProjectTo<HealthAuthoritySiteAdminListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<HealthAuthoritySiteAdminListViewModel>> GetSitesAsync(HealthAuthoritySiteSearchOptions searchOptions)
+        {
+            searchOptions ??= new HealthAuthoritySiteSearchOptions();
+
+            int? statusId = null;
+            bool flagged = false;
+            if (searchOptions.StatusId.HasValue)
+            {
+                if (searchOptions.StatusId == (int)SiteStatusType.Flagged)
+                {
+                    flagged = true;
+                }
+                else
+                {
+                    statusId = searchOptions.StatusId == (int)SiteStatusType.EditableNotApproved ?
+                        (int)SiteStatusType.Editable : searchOptions.StatusId;
+                }
+            }
+
+            var query = _context.HealthAuthoritySites
+                .AsNoTracking()
+                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch),
+                    q => q.Search(
+                        s => s.SiteName,
+                        s => s.PEC,
+                        s => s.AuthorizedUser.Party.FirstName,
+                        s => s.AuthorizedUser.Party.LastName,
+                        s => s.HealthAuthorityOrganization.Name,
+                        s => s.HealthAuthorityVendor.Vendor.Name,
+                        s => s.HealthAuthorityCareType.CareType)
+                        .Containing(searchOptions.TextSearch)
+                        )
+                .If(statusId.HasValue,
+                    q => q.Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
+                    .FirstOrDefault().StatusType == statusId &&
+                    ((searchOptions.StatusId == (int)SiteStatusType.Editable && s.ApprovedDate.HasValue) ||
+                    (searchOptions.StatusId == (int)SiteStatusType.EditableNotApproved && !s.ApprovedDate.HasValue) ||
+                    searchOptions.StatusId == (int)SiteStatusType.InReview ||
+                    searchOptions.StatusId == (int)SiteStatusType.Locked)))
+                .If(flagged, q => q.Where(s => s.Flagged))
+                .If(!string.IsNullOrWhiteSpace(searchOptions.AdminUserName),
+                    q => q.Where(s => s.Adjudicator.Username == searchOptions.AdminUserName))
+                .If(searchOptions.VendorId.HasValue,
+                    q => q.Where(s => s.HealthAuthorityVendor.Vendor.Code == searchOptions.VendorId))
+                .If(!string.IsNullOrWhiteSpace(searchOptions.CareType),
+                    q => q.Where(s => s.HealthAuthorityCareType.CareType == searchOptions.CareType))
+                .ProjectTo<HealthAuthoritySiteAdminListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .OrderBy(s => s.SiteName);
+
+            return await query.ToListAsync();
         }
 
         public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)

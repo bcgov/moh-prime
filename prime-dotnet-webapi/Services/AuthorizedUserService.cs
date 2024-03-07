@@ -132,7 +132,21 @@ namespace Prime.Services
                 return;
             }
 
-            await _partyService.DeletePartyAsync(authorizedUser.Party.Id);
+            var auPartyEnrolment = await _context.PartyEnrolments.Where(p => p.PartyId == authorizedUser.PartyId && p.PartyType == PartyType.AuthorizedUser).FirstOrDefaultAsync();
+            var nonAUPartyEnrolment = await _context.PartyEnrolments.Where(p => p.PartyId == authorizedUser.PartyId && p.PartyType != PartyType.AuthorizedUser).FirstOrDefaultAsync();
+
+            if (nonAUPartyEnrolment == null)
+            {
+                var party = await _context.Parties.Where(p => p.Id == authorizedUser.PartyId).FirstOrDefaultAsync();
+                if (party != null)
+                {
+                    _context.Parties.Remove(party);
+                }
+            }
+            _context.AuthorizedUsers.Remove(authorizedUser);
+            _context.PartyEnrolments.Remove(auPartyEnrolment);
+
+            await _context.SaveChangesAsync();
         }
 
         private IQueryable<AuthorizedUser> GetBaseAuthorizedUserQuery()

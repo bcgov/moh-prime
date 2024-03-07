@@ -14,6 +14,7 @@ import { Party } from '@lib/models/party.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { asyncValidator } from '@lib/validators/form-async.validators';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -138,6 +139,20 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
         this.orgBookOrganizations = response.results.map(o => o.names[0]?.text).filter(o => o);
         this.orgBookTotalResults = response.total;
       });
+
+    this.formState.name.addAsyncValidators(asyncValidator(this.checkOrganizationName$(), 'duplicate'));
+  }
+
+  private checkOrganizationName$(): (name: string) => Observable<boolean> {
+    return (name: string) => this.authService.getUser$()
+      .pipe(
+        exhaustMap((bcscUser: BcscUser) => {
+          return this.organizationResource.getSigningAuthorityOrganizationByUsername(bcscUser.username)
+        }),
+        map((orgs: Organization[]) => {
+          return !orgs || !orgs.some(org => org.name === name && org.id !== this.organizationId);
+        }),
+      );
   }
 
   protected performSubmission(): Observable<number | null> {

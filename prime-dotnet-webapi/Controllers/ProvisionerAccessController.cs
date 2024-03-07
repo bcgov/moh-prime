@@ -60,16 +60,16 @@ namespace Prime.Controllers
         {
             var certificate = await _certificateService.GetEnrolmentCertificateAsync(accessTokenId);
 
-            //update care setting
+            if (certificate == null)
+            {
+                return NotFound($"No valid Enrolment Certificate Access Token found with id {accessTokenId}");
+            }
+
+            //set health authority
             if (certificate.HealthAuthories.Count() > 0)
             {
                 var careSetting = certificate.CareSettings.First(cs => cs.Code == (int)CareSettingType.HealthAuthority);
                 careSetting.Name += $" - {string.Join(", ", certificate.HealthAuthories.Select(ha => ha.Name))}";
-            }
-
-            if (certificate == null)
-            {
-                return NotFound($"No valid Enrolment Certificate Access Token found with id {accessTokenId}");
             }
 
             return Ok(certificate);
@@ -265,34 +265,6 @@ namespace Prime.Controllers
 
                 return Ok(result);
             }
-        }
-
-        // POST: api/provisioner-access/gpids/123456789/validate
-        /// <summary>
-        /// Validates the supplied information against the enrollee record with the given GPID. Requires a valid direct access grant token.
-        /// </summary>
-        [HttpPost("gpids/{gpid}/validate", Name = nameof(ValidateGpid))]
-        [Authorize(Roles = Roles.ExternalGpidValidation)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<GpidValidationResponse>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> ValidateGpid(string gpid, GpidValidationParameters parameters)
-        {
-            if (parameters == null)
-            {
-                return BadRequest($"Must supply validation parameters");
-            }
-
-            var response = await _enrolleeService.ValidateProvisionerDataAsync(gpid, parameters);
-
-            if (response == null)
-            {
-                return NotFound($"Enrollee not found with GPID {gpid}");
-            }
-
-            return Ok(response);
         }
 
         private static string SerializeObjectForLog(object obj)
