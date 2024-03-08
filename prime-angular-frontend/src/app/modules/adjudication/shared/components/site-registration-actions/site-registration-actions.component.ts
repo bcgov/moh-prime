@@ -118,7 +118,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
           EmailUtils.openEmailClient(
             toEmails,
-            `PRIME Site Registration - ${healthAuthoritySite.healthAuthorityName}`,
+            `PRIME Health Authority Site Registration - ${healthAuthoritySite.healthAuthorityName}`,
             authorizedUserName
           );
         }
