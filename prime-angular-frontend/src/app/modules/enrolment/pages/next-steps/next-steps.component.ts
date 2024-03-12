@@ -187,7 +187,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
               return {
                 emails: config.formArray.value.map(email => email.email),
                 careSettingCode: config.settingCode,
-                healthAuthorityCode: config.healthAuthorityCode,
+                healthAuthorityCode: config.settingCode === CareSettingEnum.HEALTH_AUTHORITY ? config.healthAuthorityCode : null,
               }
             });
 

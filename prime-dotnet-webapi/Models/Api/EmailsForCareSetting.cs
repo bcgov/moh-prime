@@ -4,6 +4,6 @@ namespace Prime.Models.Api
     {
         public string[] Emails { get; set; }
         public int CareSettingCode { get; set; }
-        public int HealthAuthorityCode { get; set; }
+        public int? HealthAuthorityCode { get; set; }
     }
 }
