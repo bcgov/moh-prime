@@ -67,7 +67,13 @@ export class CollegeCertificationFormComponent implements OnInit {
     private enrolmentService: EnrolmentService
   ) {
     this.remove = new EventEmitter<number>();
-    this.licenses = this.configService.licenses.filter(l => l.collegeLicenses.filter(cl => cl.discontinued).length === 0);
+    // filter the college licenses that have been discontinued
+    this.licenses = this.configService.licenses.map(l => {
+      l.collegeLicenses = l.collegeLicenses.filter(cl => !cl.discontinued);
+      return l;
+    });
+    // filter the licenses that have no college license (possibly by action above)
+    this.licenses = this.licenses.filter(l => l.collegeLicenses.length !== 0);
     var collegeCodes: Array<number> = [];
     this.configService.licenses.forEach(l => {
       l.collegeLicenses.forEach(cl => {
