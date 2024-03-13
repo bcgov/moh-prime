@@ -12059,6 +12059,60 @@ namespace Prime.Migrations
                     b.ToTable("PharmanetTransactionLog");
                 });
 
+            modelBuilder.Entity("Prime.Models.PharmanetTransactionLogTemp", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("CollegePrefix")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LocationIpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PharmacyId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PractitionerId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderSoftwareId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderSoftwareVersion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SourceIpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<long>("TransactionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TransactionOutcome")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TransactionSubType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TransactionType")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("TxDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PharmanetTransactionLogTemp");
+                });
+
             modelBuilder.Entity("Prime.Models.Plr.CollegeForPlrRoleType", b =>
                 {
                     b.Property<string>("ProviderRoleType")
