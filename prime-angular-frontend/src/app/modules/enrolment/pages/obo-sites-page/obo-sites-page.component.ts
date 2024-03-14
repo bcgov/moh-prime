@@ -19,6 +19,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-obo-sites-page',
@@ -213,9 +214,29 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     } else {
       //for renewal, pull the enrolment from enrolment service instead
       this.enrolment = this.enrolmentService.enrolment;
-      this.enrolmentFormStateService.patchOboSitesForm(this.enrolment.oboSites);
+      this.enrolmentFormStateService.patchOboSitesForm(this.filterOboSitesByCareSetting(this.enrolment.oboSites));
       this.setOboSites();
     }
+  }
+
+  //filter obo site by the care setting in the form - remove any site not in the care settings
+  private filterOboSitesByCareSetting(oboSites: OboSite[]): OboSite[] {
+    for (var i = 0; i < oboSites.length;) {
+      if (oboSites[i].careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
+        if (oboSites[i].healthAuthorityCode && this.enrolleeHealthAuthorities.some(ha => ha.code !== oboSites[i].healthAuthorityCode)) {
+          oboSites.splice(i, 1);
+        } else {
+          i++;
+        }
+      } else {
+        if (this.careSettings.some(cs => cs.careSettingCode !== oboSites[i].careSettingCode)) {
+          oboSites.splice(i, 1);
+        } else {
+          i++;
+        }
+      }
+    }
+    return oboSites;
   }
 
   private setOboSites() {
