@@ -370,7 +370,7 @@
       </button>
     </app-page-subheader>
   </ng-container>
-  <app-alert *ngIf="this.enrolmentErrors.missingOboSite && !this.enrolmentErrors.certificateOrOboSite"
+  <app-alert *ngIf="this.enrolmentErrors?.missingOboSite && !this.enrolmentErrors?.certificateOrOboSite"
              type="danger"
              icon="error">
     <ng-container #alertContent
