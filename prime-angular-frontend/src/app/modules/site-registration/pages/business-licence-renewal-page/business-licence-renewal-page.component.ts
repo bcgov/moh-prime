@@ -34,6 +34,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
   public businessLicenceDocuments: BusinessLicenceDocument[];
   public uploadedFile: boolean;
   public hasNoBusinessLicenceError: boolean;
+  public showExpiryDate: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
   public site: Site;
@@ -99,6 +100,12 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
+    if (site.doingBusinessAs && site.businessLicence && site.businessLicence.expiryDate === null) {
+      this.showExpiryDate = false;
+    } else {
+      //this.formState.businessLicenceExpiry.patchValue(site.businessLicence.expiryDate);
+      this.showExpiryDate = true;
+    }
   }
 
   protected initForm(): void {
