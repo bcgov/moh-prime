@@ -236,7 +236,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       case AgreementTypeGroup.ON_BEHALF_OF:
         return 'You are an on behalf of user';
       case AgreementTypeGroup.REGULATED_USER:
-        return 'You are an independant user';
+        return 'You are an independent user';
       default:
         return '';
     }

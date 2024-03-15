@@ -46,7 +46,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     } = this.formInstance.getRawValue();
 
     const certifications = rawCertifications.map(c => {
-      const { nurseCategory, ...collegeCertification } = c;
+      const { category, ...collegeCertification } = c;
       return collegeCertification;
     });
 

@@ -47,12 +47,12 @@
     <div class="col-sm-auto tab-mid"
          [ngClass]="{'selected-tab': mode === 'community'}"
          (click)="goTo(this.communitySiteUrl)">
-      Community sites
+      Community site registration
     </div>
     <div class="col-sm-auto tab"
          [ngClass]="{'selected-tab': mode === 'health-authority'}"
          (click)="goTo(this.healthAuthorityUrl)">
-      Health authority sites
+      Health authority site registration
     </div>
   </div>
 </div>
@@ -73,41 +73,34 @@
         <button mat-flat-button
                 color="primary"
                 class="large"
-                (click)="onLogin()">Access Individual Enrolment</button>
+                (click)="onLogin(false)">Access Individual Enrolment</button>
       </div>
     </div>
   </div>
   <div *ngIf="mode === 'health-authority'"
        class="container mt-0 mb-1">
-    <div class="mid-content">
-      <div class="mt1">Are you authorized by your health authority to register sites?
-      </div>
+    <div class="mid-content pb-50">
       <div class="mst1">
-        <mat-radio-group class="radio-group"
-                         (change)="isAuthorizedUser($event)">
-
-          <div class="radio_button">
-            <mat-radio-button *ngFor="let option of [true, false]"
-                              [value]="option"
-                              class="radio_button">
-              {{ option | yesNo }}
-            </mat-radio-button>
-          </div>
-        </mat-radio-group>
+        Please enter the passcode provided by your health authority to continue.
+        <br/> Otherwise, choose another tab.
       </div>
-    </div>
-    <div class="pb-50"
-         *ngIf="showHealthAuthorityAccessBtn">
-      <button mat-flat-button
-              color="primary"
-              class="large"
-              (click)="onLogin()">Access Site Registration</button>
-    </div>
-    <div class="pb-50 button_title"
-         *ngIf="showNonAuthorizedUserPanel">
-      This section is for an authorized user to register health authority sites.
-      <br/>
-      Please select a different tab.
+      <form [formGroup]="form"
+            novalidate
+            autocomplete="off">
+        <label>Passcode</label>
+        <mat-form-field class="w-100">
+          <input matInput
+                 class="input"
+                 type="password"
+                 formControlName="passcode">
+          <mat-error *ngIf="passcode.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="passcode.hasError('validPasscode')">Invalid Passcode</mat-error>
+        </mat-form-field>
+        <button mat-flat-button
+                color="primary"
+                class="large"
+                (click)="onLogin(true)">Access Site Registration</button>
+      </form>
     </div>
   </div>
   <div *ngIf="mode === 'community'"
@@ -125,7 +118,7 @@
         <button mat-flat-button
                 color="primary"
                 class="large"
-                (click)="onLogin()">Access Site Registration</button>
+                (click)="onLogin(false)">Access Site Registration</button>
       </div>
     </div>
   </div>

@@ -67,5 +67,18 @@ namespace Prime.Controllers
 
             return Ok(record);
         }
+
+        // Get /api/lookups/ha-by-passcode
+        /// <summary>
+        /// Used to check health authority authorized user request passcode
+        /// </summary>
+        [HttpGet("ha-by-passcode", Name = nameof(GetHealthAuthorityByPasscode))]
+        [ProducesResponseType(typeof(ApiResultResponse<List<HealthAuthority>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetHealthAuthorityByPasscode(string passcode)
+        {
+            var record = await _lookupService.GetHealthAuthorityByPasscode(passcode);
+
+            return Ok(record);
+        }
     }
 }

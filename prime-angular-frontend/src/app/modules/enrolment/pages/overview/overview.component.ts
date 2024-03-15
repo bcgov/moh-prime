@@ -173,7 +173,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
               selfDeclarationCompletedDate: stateSelfDeclarationCompletedDate && selfDeclarationCompletedDate < stateSelfDeclarationCompletedDate ?
                 stateSelfDeclarationCompletedDate : selfDeclarationCompletedDate,
               requireRedoSelfDeclaration: !stateSelfDeclarationCompletedDate && requireRedoSelfDeclaration,
+              expiryDate: this.enrolmentService.enrolment.expiryDate,
             };
+            enrolment.enrollee.gpid = this.enrolmentService.enrolment.enrollee.gpid;
           }
 
           // Allow for BCSC information to be updated on each submission of the enrolment
@@ -234,7 +236,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         && !enrolment.enrolleeHealthAuthorities?.some(ha => ha.healthAuthorityCode),
       expiredCertification: enrolment.certifications.some(cert => moment(cert.renewalDate).isBefore(moment())),
       requiresLicenceUpdate: enrolment.certifications.some((cert: CollegeCertification) =>
-        !this.configService.licenses.some(l => l.code === cert.licenseCode && l.collegeLicenses.some(cl => cl.collegeCode === cert.collegeCode))),
+        this.configService.licenses.some(l => l.code === cert.licenseCode && l.collegeLicenses.some(cl => cl.collegeCode === cert.collegeCode && cl.discontinued))),
       requireRedoSelfDeclaration: enrolment.requireRedoSelfDeclaration,
     };
   }

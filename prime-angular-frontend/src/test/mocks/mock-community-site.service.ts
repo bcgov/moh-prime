@@ -61,6 +61,7 @@ export class MockCommunitySiteService {
             collegeCode: faker.random.number(),
             licenseNumber: faker.random.words(1),
             licenseCode: faker.random.number(),
+            practitionerId: faker.random.words(5),
           },
           notified: faker.random.boolean()
         }
