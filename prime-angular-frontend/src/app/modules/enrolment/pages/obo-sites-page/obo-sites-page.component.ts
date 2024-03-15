@@ -223,13 +223,13 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   private filterOboSitesByCareSetting(oboSites: OboSite[]): OboSite[] {
     for (var i = 0; i < oboSites.length;) {
       if (oboSites[i].careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
-        if (oboSites[i].healthAuthorityCode && this.enrolleeHealthAuthorities.some(ha => ha.code !== oboSites[i].healthAuthorityCode)) {
+        if (oboSites[i].healthAuthorityCode && !this.enrolleeHealthAuthorities.some(ha => ha.code === oboSites[i].healthAuthorityCode)) {
           oboSites.splice(i, 1);
         } else {
           i++;
         }
       } else {
-        if (this.careSettings.some(cs => cs.careSettingCode !== oboSites[i].careSettingCode)) {
+        if (!this.careSettings.some(cs => cs.careSettingCode === oboSites[i].careSettingCode)) {
           oboSites.splice(i, 1);
         } else {
           i++;
@@ -348,10 +348,15 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('physicalAddress').value.city;
         const careSetting = control.get('careSettingCode').value;
+        const healthAuthCode = control.get('healthAuthorityCode').value;
 
         // Remove when empty, default option, or group is invalid
         if (!value || value === this.defaultOptionLabel || control.invalid) {
-          this.removeOboSite(index, careSetting);
+          if (healthAuthCode) {
+            this.removeOboSite(index, careSetting, healthAuthCode);
+          } else {
+            this.removeOboSite(index, careSetting);
+          }
         }
       });
 
