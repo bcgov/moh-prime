@@ -320,12 +320,12 @@ parameters:
     value: dev-patroni-secret
   - name: PATRONI_USER_KEY_NAME
     displayName: Database User Key Name
-    description: The database user key name stored in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
+    description: The database user key name stored in database deployment resources specified by PATRONI_DEPLOYMENT_NAME.
     required: true
     value: app-db-username
   - name: PATRONI_PASSWORD_KEY_NAME
     displayName: Database Password Key Name
-    description: The database password key name stored in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
+    description: The database password key name stored in database deployment resources specified by PATRONI_DEPLOYMENT_NAME.
     required: true
     value: app-db-password
   - name: METABASE_DEPLOYMENT_NAME
@@ -335,12 +335,12 @@ parameters:
     value: metabase-database
   - name: METABASE_USER_KEY_NAME
     displayName: Database User Key Name
-    description: The database user key name stored in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
+    description: The database user key name stored in database deployment resources specified by METABASE_DEPLOYMENT_NAME.
     required: true
     value: database-user
   - name: METABASE_PASSWORD_KEY_NAME
     displayName: Database Password Key Name
-    description: The database password key name stored in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
+    description: The database password key name stored in database deployment resources specified by METABASE_DEPLOYMENT_NAME.
     required: true
     value: database-password
   - name: MSSQL_SA_PASSWORD
