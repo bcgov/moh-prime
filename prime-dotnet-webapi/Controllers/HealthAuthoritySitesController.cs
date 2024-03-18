@@ -25,6 +25,7 @@ namespace Prime.Controllers
         private readonly IBusinessEventService _businessEventService;
         private readonly IHealthAuthorityService _healthAuthorityService;
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
+        private readonly IAuthorizedUserService _authorizedUserService;
         private readonly ISiteService _siteService;
 
         public HealthAuthoritySitesController(
@@ -32,7 +33,8 @@ namespace Prime.Controllers
             IBusinessEventService businessEventService,
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
-            ISiteService siteService
+            ISiteService siteService,
+            IAuthorizedUserService authorizedUserService
         )
         {
             _emailService = emailService;
@@ -40,6 +42,7 @@ namespace Prime.Controllers
             _healthAuthorityService = healthAuthorityService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
             _siteService = siteService;
+            _authorizedUserService = authorizedUserService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -196,8 +199,8 @@ namespace Prime.Controllers
             {
                 return BadRequest();
             }
-
-            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUsernameAsync(User.GetPrimeUsername());
+            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel, authorizedUser.Id);
             await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUserId(), "Health Authority Site Updated");
 
             return NoContent();
@@ -269,8 +272,9 @@ namespace Prime.Controllers
             {
                 return BadRequest("Action could not be performed.");
             }
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUsernameAsync(User.GetPrimeUsername());
 
-            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
+            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel, authorizedUser.Id);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
             await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUserId(), "Health Authority Site has been updated and submitted");
 

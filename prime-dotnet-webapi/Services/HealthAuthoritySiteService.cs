@@ -172,12 +172,14 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel)
+        public async Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel, int authorizedUserId)
         {
             var site = await _context.HealthAuthoritySites
                 .Include(site => site.PhysicalAddress)
                 .Include(site => site.BusinessHours)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            site.AuthorizedUserId = authorizedUserId;
 
             _context.Entry(site).CurrentValues.SetValues(updateModel);
 

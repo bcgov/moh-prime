@@ -16,7 +16,7 @@ namespace Prime.Services
         Task<IEnumerable<HealthAuthoritySiteAdminListViewModel>> GetSitesAsync(HealthAuthoritySiteSearchOptions searchOptions);
         Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
         Task<HealthAuthoritySiteAdminViewModel> GetAdminSiteAsync(int siteId);
-        Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel);
+        Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel, int authorizedUserId);
         Task SetSiteCompletedAsync(int siteId);
         Task SiteSubmissionAsync(int siteId);
         Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId);
