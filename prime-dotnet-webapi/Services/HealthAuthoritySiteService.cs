@@ -91,6 +91,21 @@ namespace Prime.Services
         {
             searchOptions ??= new HealthAuthoritySiteSearchOptions();
 
+            int? statusId = null;
+            bool flagged = false;
+            if (searchOptions.StatusId.HasValue)
+            {
+                if (searchOptions.StatusId == (int)SiteStatusType.Flagged)
+                {
+                    flagged = true;
+                }
+                else
+                {
+                    statusId = searchOptions.StatusId == (int)SiteStatusType.EditableNotApproved ?
+                        (int)SiteStatusType.Editable : searchOptions.StatusId;
+                }
+            }
+
             var query = _context.HealthAuthoritySites
                 .AsNoTracking()
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch),
@@ -104,9 +119,14 @@ namespace Prime.Services
                         s => s.HealthAuthorityCareType.CareType)
                         .Containing(searchOptions.TextSearch)
                         )
-                .If(searchOptions.StatusId.HasValue,
+                .If(statusId.HasValue,
                     q => q.Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
-                    .FirstOrDefault().StatusType == searchOptions.StatusId))
+                    .FirstOrDefault().StatusType == statusId &&
+                    ((searchOptions.StatusId == (int)SiteStatusType.Editable && s.ApprovedDate.HasValue) ||
+                    (searchOptions.StatusId == (int)SiteStatusType.EditableNotApproved && !s.ApprovedDate.HasValue) ||
+                    searchOptions.StatusId == (int)SiteStatusType.InReview ||
+                    searchOptions.StatusId == (int)SiteStatusType.Locked)))
+                .If(flagged, q => q.Where(s => s.Flagged))
                 .If(!string.IsNullOrWhiteSpace(searchOptions.AdminUserName),
                     q => q.Where(s => s.Adjudicator.Username == searchOptions.AdminUserName))
                 .If(searchOptions.VendorId.HasValue,

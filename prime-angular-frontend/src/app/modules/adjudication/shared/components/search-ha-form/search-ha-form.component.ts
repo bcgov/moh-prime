@@ -45,10 +45,11 @@ export class SearchHAFormComponent implements OnInit {
     this.siteStatuses = new Array<Config<number>>();
 
     const inReviewStatus = new Config<number>(SiteStatusType.IN_REVIEW, 'In Review');
-    const editableStatus = new Config<number>(SiteStatusType.EDITABLE, 'Editable');
-    const lockedStatus = new Config<number>(SiteStatusType.LOCKED, 'Locked');
+    const editableStatus = new Config<number>(SiteStatusType.EDITABLE, 'Editable - approved');
+    const editableNotApprovedStatus = new Config<number>(SiteStatusType.EDITABLE_NOT_APPROVED, 'Editable - not approved');
+    const flaggedStatus = new Config<number>(SiteStatusType.FLAGGED, 'Flagged');
 
-    this.siteStatuses.push(inReviewStatus, editableStatus, lockedStatus);
+    this.siteStatuses.push(editableNotApprovedStatus, inReviewStatus, editableStatus, flaggedStatus);
 
     this.careTypes = this.configService.careTypes;
     this.vendors = this.configService.vendors
@@ -132,7 +133,7 @@ export class SearchHAFormComponent implements OnInit {
       .pipe(debounceTime(500))
       // Passing `null` removes the query parameter from the URL
       .subscribe((careType: string) => {
-        this.localStorage.set(this.careTypeCodeKey, careType?.toString());
+        this.localStorage.set(this.careTypeCodeKey, careType);
         this.careType.emit(careType || null);
       });
 
@@ -144,11 +145,14 @@ export class SearchHAFormComponent implements OnInit {
         this.assignToMe.emit(assignToMe);
       });
 
+    let savedCaretype = this.localStorage.get(this.careTypeCodeKey);
+    if (savedCaretype === 'null') savedCaretype = null;
+
     this.form.patchValue({
       textSearch: this.localStorage.get(this.textSearchKey),
       siteStatusCode: this.localStorage.getInteger(this.siteStatusCodeKey) || null,
       vendorCode: this.localStorage.getInteger(this.vendorCodeKey) || null,
-      careTypeCode: this.localStorage.get(this.careTypeCodeKey) || null,
+      careTypeCode: savedCaretype || null,
       assignToMe: Boolean(JSON.parse(this.localStorage.get(this.assignToMeCodeKey) || "false")),
     });
   }
