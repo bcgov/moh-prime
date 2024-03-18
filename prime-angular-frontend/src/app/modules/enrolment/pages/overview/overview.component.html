@@ -30,7 +30,7 @@
         You must accept the user terms of access to complete your renewal. Please use the link below to go to the Terms
         of Access.
         <br/>
-        <a [routerLink]="" (click)="routeTo(EnrolmentRoutes.PENDING_ACCESS_TERM)">Terms of Access</a>
+        <a class="link" [routerLink]="" (click)="routeTo(EnrolmentRoutes.PENDING_ACCESS_TERM)">Terms of Access</a>
       </ng-container>
     </app-alert>
 
@@ -126,16 +126,17 @@
       <ng-container appPageSubheaderTitle>
         {{
         (isInitialEnrolment)
-          ? 'Enrolment Review'
-          : (withinDaysOfRenewal)
-            ? 'Renew Enrolment'
-            : 'Enrolment Information'
+        ? 'Enrolment Review'
+        : (withinDaysOfRenewal)
+        ? 'Renew Enrolment'
+        : 'Enrolment Information'
         }}
       </ng-container>
 
       <ng-container *ngIf="isInitialEnrolment; else renewalSummary"
                     appPageSubheaderSummary>
-        Review all the information to ensure it is accurate. Incorrect information may result in delays. If you need to edit your information, use the pencil icon to navigate to that section and make the necessary changes.
+        Review all the information to ensure it is accurate. Incorrect information may result in delays. If you need to
+        edit your information, use the pencil icon to navigate to that section and make the necessary changes.
         <h3 *ngIf="enrolment?.expiryDate && isInitialEnrolment"
             class="text-green mt-2">Renew Enrolment by {{ enrolment?.expiryDate | formatDate }}</h3>
       </ng-container>
@@ -234,7 +235,7 @@
         You must accept the user terms of access to complete your renewal. Please use the link below to go to the Terms
         of Access.
         <br>
-        <a [routerLink]="" (click)="routeTo(EnrolmentRoutes.PENDING_ACCESS_TERM)">Terms of Access</a>
+        <a class="link" [routerLink]="" (click)="routeTo(EnrolmentRoutes.PENDING_ACCESS_TERM)">Terms of Access</a>
       </ng-container>
     </app-alert>
 
