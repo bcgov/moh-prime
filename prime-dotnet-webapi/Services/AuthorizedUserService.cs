@@ -2,7 +2,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -12,8 +11,6 @@ using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Parties;
 using DelegateDecompiler.EntityFrameworkCore;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace Prime.Services
 {
@@ -165,10 +162,10 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAuthorizedUserStatus(int authorizedUserId, AccessStatusType statusId)
+        public async Task UpdateAuthorizedUserStatus(int authorizedUserId, AccessStatusType statusType)
         {
             var authorizedUser = await _context.AuthorizedUsers.Where(u => u.Id == authorizedUserId).SingleOrDefaultAsync();
-            authorizedUser.Status = statusId;
+            authorizedUser.Status = statusType;
 
             await _context.SaveChangesAsync();
         }

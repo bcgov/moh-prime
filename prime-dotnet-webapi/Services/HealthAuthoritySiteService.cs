@@ -6,11 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DelegateDecompiler;
 using DelegateDecompiler.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
-using Sentry.Protocol;
 using Prime.Models.Api;
 
 namespace Prime.Services

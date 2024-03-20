@@ -80,7 +80,7 @@ namespace Prime.Controllers
 
         // GET: api/parties/authorized-users/5/sites
         /// <summary>
-        /// Gets a health authorized sites for an authorized user.
+        /// Gets a health authorized sites of an authorized user.
         /// </summary>
         /// <param name="authorizedUserId"></param>
         [HttpGet("{authorizedUserId:int}/sites", Name = nameof(GetAuthorizedUserSites))]
@@ -132,6 +132,7 @@ namespace Prime.Controllers
 
             return Ok(siteCount);
         }
+
         // POST: api/parties/authorized-users
         /// <summary>
         /// Creates a new AuthorizedUser.
@@ -293,7 +294,7 @@ namespace Prime.Controllers
             }
             if (authorizedUser.Status != AccessStatusType.UnderReview)
             {
-                return Forbid("Authorized User is not in under review status. User can't be deleted.");
+                return Forbid("Authorized User is not in Under Review status. User can't be deleted.");
             }
 
             await _authorizedUserService.DeleteAuthorizedUserAsync(authorizedUserId);

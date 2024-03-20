@@ -11,7 +11,6 @@ using Prime.Services;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Sites;
 using System.Linq;
-using System.Security.Permissions;
 
 namespace Prime.Controllers
 {
@@ -292,13 +291,13 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="currentAuthorizedUserId"></param>
         /// <param name="newAuthorizedUserId"></param>
-        [HttpPost("transfer/from/{currentAuthorizedUserId}/to/{newAuthorizedUserId}", Name = nameof(HealthAuthoritySiteTransfer))]
+        [HttpPost("transfer/from/{currentAuthorizedUserId}/to/{newAuthorizedUserId}", Name = nameof(TransferHealthAuthoritySite))]
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> HealthAuthoritySiteTransfer(int healthAuthorityId, int currentAuthorizedUserId, int newAuthorizedUserId)
+        public async Task<ActionResult> TransferHealthAuthoritySite(int healthAuthorityId, int currentAuthorizedUserId, int newAuthorizedUserId)
         {
             var authorizedUsers = await _healthAuthorityService.GetAuthorizedUsersAsync(healthAuthorityId);
 
@@ -306,15 +305,19 @@ namespace Prime.Controllers
                 authorizedUsers.Any(au => au.Id == currentAuthorizedUserId) &&
                 authorizedUsers.Any(au => au.Id == newAuthorizedUserId))
             {
+                var currentAuthorizedUser = authorizedUsers.First(au => au.Id == currentAuthorizedUserId);
+                var newAuthorizedUser = authorizedUsers.First(au => au.Id == newAuthorizedUserId);
+
                 var siteIds = await _healthAuthoritySiteService.TransferAuthorizedUserAsync(currentAuthorizedUserId, newAuthorizedUserId);
                 foreach (int siteId in siteIds)
                 {
-                    await _businessEventService.CreateSiteEventAsync(siteId, "Health Authorized Site is transfered to other authorized user");
+                    await _businessEventService.CreateSiteEventAsync(siteId,
+                        $"Health Authorized Site is transfered from {currentAuthorizedUser.FirstName} {currentAuthorizedUser.LastName} to {newAuthorizedUser.FirstName} {newAuthorizedUser.LastName}");
                 }
             }
             else
             {
-                return NotFound("Authorized Uesr not found");
+                return NotFound("Authorized User not found");
             }
 
             return NoContent();
