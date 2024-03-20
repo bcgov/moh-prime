@@ -27,6 +27,10 @@ namespace Prime.Models
 
         public bool Active { get; set; }
 
+        public int? CareSettingCode { get; set; }
+
+        public int? HealthAuthorityCode { get; set; }
+
         [NotMapped]
         public string FrontendUrl
         {

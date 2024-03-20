@@ -217,12 +217,12 @@ export class EnrolmentResource {
 
   public sendProvisionerAccessLink(
     emailPairs: EmailsForCareSetting[] = [], enrolleeId: number
-  ): Observable<EnrolmentCertificateAccessToken> {
+  ): Observable<EnrolmentCertificateAccessToken[]> {
     return this.apiResource
-      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link`, emailPairs)
+      .post<EnrolmentCertificateAccessToken[]>(`enrollees/${enrolleeId}/provisioner-access/send-link`, emailPairs)
       .pipe(
-        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
-        tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
+        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken[]>) => response.result),
+        tap((token: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKEN', token)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Email could not be sent');
           this.logger.error('[Enrolment] EnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);

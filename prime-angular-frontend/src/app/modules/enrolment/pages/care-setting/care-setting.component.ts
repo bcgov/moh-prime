@@ -14,6 +14,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { Role } from '@auth/shared/enum/role.enum';
 
+import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
@@ -29,6 +30,9 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
   styleUrls: ['./care-setting.component.scss']
 })
 export class CareSettingComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
+
+  public HealthAuthorityEnum = HealthAuthorityEnum;
+
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
   public healthAuthorities: Config<number>[];
