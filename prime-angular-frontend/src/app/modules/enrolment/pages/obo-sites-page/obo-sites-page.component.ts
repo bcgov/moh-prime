@@ -90,6 +90,10 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     return this.form.get('healthAuthoritySites') as FormGroup;
   }
 
+  public get lastUpdatedDatetime(): FormGroup {
+    return this.form.get('lastUpdatedDatetime') as FormGroup;
+  }
+
   public get chosenHealthAuthorityCodes(): string[] {
     return Object.keys(this.healthAuthoritySites.value);
   }
@@ -197,6 +201,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.showHAJobSiteError = !this.eachSelectedHAHasOboJobSite();
     if (!this.showHAJobSiteError) {
       super.onSubmit();
+      this.lastUpdatedDatetime.setValue(Date.now);
     } else {
       this.utilService.scrollTop();
     }
@@ -212,9 +217,16 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         this.setOboSites();
       });
     } else {
-      //for renewal, pull the enrolment from enrolment service instead
+
       this.enrolment = this.enrolmentService.enrolment;
-      this.enrolmentFormStateService.patchOboSitesForm(this.filterOboSitesByCareSetting(this.enrolment.oboSites));
+      if (this.lastUpdatedDatetime.value == null) {
+        //for renewal, pull the enrolment from enrolment service instead
+        this.enrolmentFormStateService.patchOboSitesForm(this.filterOboSitesByCareSetting(this.enrolment.oboSites));
+      } else {
+        let oboSites = this.enrolmentFormStateService.json.oboSites;
+        this.enrolmentFormStateService.patchOboSitesForm(oboSites);
+      }
+
       this.setOboSites();
     }
   }

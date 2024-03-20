@@ -332,6 +332,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   public buildOboSitesForm(): FormGroup {
     return this.fb.group({
+      lastUpdatedDatetime: [null, []],
       oboSites: this.fb.array([]),
       communityHealthSites: this.fb.array([]),
       communityPharmacySites: this.fb.array([]),
