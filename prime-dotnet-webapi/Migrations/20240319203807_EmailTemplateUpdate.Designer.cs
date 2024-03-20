@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240319203807_EmailTemplateUpdate")]
+    partial class EmailTemplateUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5177,9 +5179,6 @@ namespace Prime.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("CareSettingCode")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -5191,9 +5190,6 @@ namespace Prime.Migrations
 
                     b.Property<DateTimeOffset>("Expires")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("HealthAuthorityCode")
-                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -12063,60 +12059,6 @@ namespace Prime.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLog");
-                });
-
-            modelBuilder.Entity("Prime.Models.PharmanetTransactionLogTemp", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("CollegePrefix")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LocationIpAddress")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PharmacyId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PractitionerId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProviderSoftwareId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProviderSoftwareVersion")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SourceIpAddress")
-                        .HasColumnType("text");
-
-                    b.Property<long>("TransactionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("TransactionOutcome")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransactionSubType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransactionType")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("TxDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PharmanetTransactionLogTemp");
                 });
 
             modelBuilder.Entity("Prime.Models.Plr.CollegeForPlrRoleType", b =>

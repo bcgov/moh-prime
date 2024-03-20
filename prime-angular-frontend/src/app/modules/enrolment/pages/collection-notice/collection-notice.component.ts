@@ -27,11 +27,17 @@ export class CollectionNoticeComponent implements OnInit {
   public onAccept() {
     this.authService.hasJustLoggedIn = false;
 
-    const route = (!this.enrolmentService.isProfileComplete)
-      ? EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION
-      : EnrolmentRoutes.OVERVIEW;
-
-    this.router.navigate([route], { relativeTo: this.route.parent });
+    switch (this.enrolmentService.enrolment?.currentStatus.statusCode) {
+      case EnrolmentStatusEnum.UNDER_REVIEW:
+        this.router.navigate([EnrolmentRoutes.SUBMISSION_CONFIRMATION], { relativeTo: this.route.parent });
+        break;
+      case EnrolmentStatusEnum.REQUIRES_TOA:
+        this.router.navigate([EnrolmentRoutes.PENDING_ACCESS_TERM], { relativeTo: this.route.parent });
+        break;
+      default:
+        this.router.navigate([EnrolmentRoutes.OVERVIEW], { relativeTo: this.route.parent });
+        break;
+    }
   }
 
   public ngOnInit(): void {
