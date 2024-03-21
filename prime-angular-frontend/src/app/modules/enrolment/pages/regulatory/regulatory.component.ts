@@ -204,7 +204,24 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
               super.handleSubmission();
             }
           });
+      } else if (this.cannotRequestRemoteAccess) {
+        const data: DialogOptions = {
+          title: 'Remote Access Removal',
+          message: 'Only physicians and practicing nurse practitioners are permitted to access PharmaNet remotely, ' +
+            'and your remote user information will be deleted from your enrolment if you choose a different license type.',
+          actionText: "Continue"
+        };
+
+        this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+          .afterClosed()
+          .subscribe((result: boolean) => {
+            if (result) {
+              this.removeRemoteAccessData();
+              super.handleSubmission();
+            }
+          });
       } else {
+
         super.handleSubmission();
       }
     } else {
