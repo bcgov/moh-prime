@@ -79,6 +79,7 @@ export class TransferHASiteComponent implements OnInit {
 
   private getAuthorizedUser(): void {
     this.healthAuthorityResource.getAuthorizedUsersByHealthAuthority(this.healthAuthorityId)
-      .subscribe((result) => this.authorizedUsers = result.filter(au => au.id != this.currentAuthorizedUserId && au.status === AccessStatusEnum.APPROVED));
+      .subscribe((result) => this.authorizedUsers = result.filter(au => au.id != this.currentAuthorizedUserId &&
+        (au.status === AccessStatusEnum.APPROVED || au.status === AccessStatusEnum.ACTIVE)));
   }
 }

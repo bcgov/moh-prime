@@ -161,7 +161,7 @@ export class AuthorizedUserResource {
         tap(() => this.toastService.openSuccessToast('Authorized user has been disabled')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized user could not be disabled');
-          this.logger.error('[Core] AuthorizedUserResource::disabledAuthorizedUser error has occurred: ', error);
+          this.logger.error('[Core] AuthorizedUserResource::disableAuthorizedUser error has occurred: ', error);
           throw error;
         })
       );
