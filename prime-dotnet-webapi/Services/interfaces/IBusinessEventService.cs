@@ -20,10 +20,10 @@ namespace Prime.Services
         /// <param name="siteId"></param>
         /// <param name="description"></param>
         Task<BusinessEvent> CreateSiteEventAsync(int siteId, string description);
-        Task<BusinessEvent> CreateSiteEventAsync(int siteId, Guid userId, string description);
+        Task<BusinessEvent> CreateSiteEventAsync(int siteId, string username, string description);
         Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, int partyId, string description);
         Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, string description);
-        Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, Guid userId, string description);
+        Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, string username, string description);
         Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int partyId, string description);
         Task<BusinessEvent> CreatePharmanetApiCallEventAsync(int enrolleeId, string licencePrefix, string licenceNumber, string description, bool overrideWithDesc = false);
         Task<BusinessEvent> CreatePaperEnrolmentLinkEventAsync(int enrolleeId, string description);

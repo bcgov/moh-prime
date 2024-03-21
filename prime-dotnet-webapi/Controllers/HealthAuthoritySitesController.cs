@@ -200,7 +200,7 @@ namespace Prime.Controllers
             }
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUsernameAsync(User.GetPrimeUsername());
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel, authorizedUser.Id);
-            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUserId(), "Health Authority Site Updated");
+            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUsername(), "Health Authority Site Updated");
 
             return NoContent();
         }
@@ -230,7 +230,7 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.SetSiteCompletedAsync(siteId);
 
-            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUserId(), "Health Authority Site Completed");
+            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUsername(), "Health Authority Site Completed");
 
             return NoContent();
         }
@@ -275,10 +275,10 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel, authorizedUser.Id);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
-            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUserId(), "Health Authority Site has been updated and submitted");
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, User.GetPrimeUsername(), "Health Authority Site has been updated and submitted");
 
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
-            await _businessEventService.CreateSiteEmailEventAsync(siteId, User.GetPrimeUserId(), "Notified of health authority site registration submission");
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, User.GetPrimeUsername(), "Notified of health authority site registration submission");
 
             return NoContent();
         }

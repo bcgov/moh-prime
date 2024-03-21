@@ -151,10 +151,10 @@ namespace Prime.Services
             return businessEvent;
         }
 
-        public async Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, Guid userId, string description)
+        public async Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, string username, string description)
         {
             var partyId = await _context.Parties
-                .Where(p => p.UserId == userId)
+                .Where(p => p.Username == username)
                 .Select(p => p.Id)
                 .SingleOrDefaultAsync();
 
@@ -207,13 +207,13 @@ namespace Prime.Services
             return await CreateSiteEventAsync(siteId, partyId, description);
         }
 
-        public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, Guid userId, string description)
+        public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, string username, string description)
         {
             var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             var partyId = await _context.Parties
-                .Where(p => p.UserId == userId)
+                .Where(p => p.Username == username)
                 .Select(p => p.Id)
                 .SingleOrDefaultAsync();
 
