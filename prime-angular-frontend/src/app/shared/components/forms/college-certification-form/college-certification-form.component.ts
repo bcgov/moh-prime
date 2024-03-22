@@ -447,6 +447,18 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private isCertificationDiscontinued(collegeCode: number, licenseCode: number): boolean {
     let license = this.configService.licenses.find(l => l.code === licenseCode);
-    return license.collegeLicenses.find(cl => cl.collegeCode === collegeCode && cl.licenseCode === licenseCode).discontinued;
+    let collegeLicense = license.collegeLicenses.find(cl => cl.collegeCode === collegeCode && cl.licenseCode === licenseCode);
+    if (collegeLicense) {
+      return collegeLicense.discontinued;
+    } else {
+      let college = this.configService.colleges.find(c => c.code === collegeCode);
+      if (college) {
+        // Likely college itself discontinued
+        return college.collegeLicenses.find(cl => cl.collegeCode === collegeCode && cl.licenseCode === licenseCode).discontinued;
+      } else {
+        // Unusual scenario
+        throw new Error(`Unable to find collegeLicense with collegeCode=${collegeCode} and licenseCode=${licenseCode}`)
+      }
+    }
   }
 }
