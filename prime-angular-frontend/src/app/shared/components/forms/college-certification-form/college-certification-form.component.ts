@@ -67,14 +67,16 @@ export class CollegeCertificationFormComponent implements OnInit {
     private enrolmentService: EnrolmentService
   ) {
     this.remove = new EventEmitter<number>();
-    // filter the college licenses that have been discontinued
+    // copy the master list of license lookup from configService to local
     this.licenses = this.configService.licenses.map(x => Object.assign({}, x));
+
+    // filter the college licenses that have been discontinued (collegeLicenses.discontinued = true)
+    // so that they will not appear in the dropdown
     this.licenses.forEach(l => {
       l.collegeLicenses = l.collegeLicenses.filter(cl => !cl.discontinued);
-      return l;
     });
-    // filter the licenses that have no college license (possibly by action above)
     this.licenses = this.licenses.filter(l => l.collegeLicenses.length !== 0);
+
     var collegeCodes: Array<number> = [];
     this.configService.licenses.forEach(l => {
       l.collegeLicenses.forEach(cl => {
@@ -437,7 +439,6 @@ export class CollegeCertificationFormComponent implements OnInit {
     return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
   }
 
-
   private checkLicenseIfDiscontinued() {
     if (this.collegeCode.value && this.licenseCode.value) {
       this.licenseClassDiscontinued = this.isCertificationDiscontinued(this.collegeCode.value, this.licenseCode.value);
@@ -446,6 +447,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
   }
 
+  // check the license master list from configService if the license and college pair is discontinued.
   private isCertificationDiscontinued(collegeCode: number, licenseCode: number): boolean {
     let license = this.configService.licenses.find(l => l.code === licenseCode);
     return license.collegeLicenses.find(cl => cl.collegeCode === collegeCode && cl.licenseCode === licenseCode).discontinued;
