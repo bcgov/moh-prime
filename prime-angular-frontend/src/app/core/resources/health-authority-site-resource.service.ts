@@ -170,7 +170,7 @@ export class HealthAuthoritySiteResource {
         NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be transfered');
-          this.logger.error('[Core] HealthAuthoritySiteResource::transferSite error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthoritySiteResource::transferHealthAuthoritySite error has occurred: ', error);
           throw error;
         })
       );
