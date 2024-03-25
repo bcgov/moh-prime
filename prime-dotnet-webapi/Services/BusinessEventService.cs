@@ -209,9 +209,6 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, string username, string description)
         {
-            var site = await _context.Sites
-                .SingleOrDefaultAsync(s => s.Id == siteId);
-
             var partyId = await _context.Parties
                 .Where(p => p.Username == username)
                 .Select(p => p.Id)
