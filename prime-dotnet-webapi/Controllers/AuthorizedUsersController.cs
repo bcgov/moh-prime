@@ -80,7 +80,7 @@ namespace Prime.Controllers
 
         // GET: api/parties/authorized-users/5/sites
         /// <summary>
-        /// Gets a health authorized sites of an authorized user.
+        /// Gets health authority sites of an authorized user.
         /// </summary>
         /// <param name="authorizedUserId"></param>
         [HttpGet("{authorizedUserId:int}/sites", Name = nameof(GetAuthorizedUserSites))]
