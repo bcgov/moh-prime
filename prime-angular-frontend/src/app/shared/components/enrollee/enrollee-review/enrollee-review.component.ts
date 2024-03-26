@@ -80,7 +80,7 @@ export class EnrolleeReviewComponent {
   }
 
   public get hasDeviceProvider(): boolean {
-    return (this.enrolment && !!this.enrolment.enrolleeDeviceProviders.length);
+    return (this.enrolment && !!this.enrolment.enrolleeDeviceProviders?.length);
   }
 
   public get enrolleeDeviceProvider(): EnrolleeDeviceProvider {
