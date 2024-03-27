@@ -233,21 +233,19 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
 
   //filter obo site by the care setting in the form - remove any site not in the care settings
   private filterOboSitesByCareSetting(oboSites: OboSite[]): OboSite[] {
-    for (var i = 0; i < oboSites.length;) {
+
+    for (var i = oboSites.length - 1; i >= 0; i--) {
       if (oboSites[i].careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
         if (oboSites[i].healthAuthorityCode && !this.enrolleeHealthAuthorities.some(ha => ha.code === oboSites[i].healthAuthorityCode)) {
           oboSites.splice(i, 1);
-        } else {
-          i++;
         }
       } else {
         if (!this.careSettings.some(cs => cs.careSettingCode === oboSites[i].careSettingCode)) {
           oboSites.splice(i, 1);
-        } else {
-          i++;
         }
       }
     }
+
     return oboSites;
   }
 
