@@ -73,6 +73,19 @@ export class AuthorizedUserResource {
       );
   }
 
+  public getAuthorizedUserSiteCount(authorizedUserId: number): Observable<number> {
+    return this.apiResource.get<number>(`parties/authorized-users/${authorizedUserId}/site-count`)
+      .pipe(
+        map((response: ApiHttpResponse<number>) => response.result),
+        tap((siteCount: number) => this.logger.info('siteCount', siteCount)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Authorized user site count could not be retrieved');
+          this.logger.error('[Core] AuthorizedUserResource::getAuthorizedUserSiteCount error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public createAuthorizedUser(authorizedUser: AuthorizedUser): Observable<AuthorizedUser> {
     return this.apiResource.post<AuthorizedUser>('parties/authorized-users', authorizedUser)
       .pipe(
@@ -136,6 +149,19 @@ export class AuthorizedUserResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized user could not be deleted');
           this.logger.error('[Core] AuthorizedUserResource::deleteAuthorizedUser error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public disableAuthorizedUser(authorizedUserId: number): NoContent {
+    return this.apiResource.put<NoContent>(`parties/authorized-users/${authorizedUserId}/disable`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Authorized user has been disabled')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Authorized user could not be disabled');
+          this.logger.error('[Core] AuthorizedUserResource::disableAuthorizedUser error has occurred: ', error);
           throw error;
         })
       );

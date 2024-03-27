@@ -12,6 +12,7 @@ import { AuthorizedUserPageComponent } from './pages/authorized-user-page/author
 import { AuthorizedUserNextStepsPageComponent } from './pages/authorized-user-next-steps-page/authorized-user-next-steps-page.component';
 import { AuthorizedUserApprovedPageComponent } from './pages/authorized-user-approved-page/authorized-user-approved-page.component';
 import { AuthorizedUserDeclinedPageComponent } from './pages/authorized-user-declined-page/authorized-user-declined-page.component';
+import { AuthorizedUserDisabledPageComponent } from './pages/authorized-user-disabled-page/authorized-user-disabled-page.component';
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
 import { HealthAuthCareTypePageComponent } from './pages/health-auth-care-type-page/health-auth-care-type-page.component';
 import { SiteInformationPageComponent } from './pages/site-information-page/site-information-page.component';
@@ -28,6 +29,7 @@ import { OverviewPageComponent } from './pages/overview-page/overview-page.compo
     AuthorizedUserNextStepsPageComponent,
     AuthorizedUserApprovedPageComponent,
     AuthorizedUserDeclinedPageComponent,
+    AuthorizedUserDisabledPageComponent,
     SiteManagementPageComponent,
     SiteInformationPageComponent,
     HealthAuthCareTypePageComponent,

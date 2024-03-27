@@ -20,7 +20,8 @@ namespace Prime.ViewModels.HealthAuthoritySites
                 .ForMember(dest => dest.AuthorizedUserEmail, opt => opt.MapFrom(src => src.AuthorizedUser.Party.Email))
                 .ForMember(dest => dest.HealthAuthorityName, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.Name))
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.AdjudicatorId != null ? src.Adjudicator.IDIR : null));
-            CreateMap<HealthAuthoritySite, HealthAuthoritySiteListViewModel>();
+            CreateMap<HealthAuthoritySite, HealthAuthoritySiteListViewModel>()
+                .ForMember(dest => dest.AuthorizedUserName, opt => opt.MapFrom(src => $"{src.AuthorizedUser.Party.FirstName} {src.AuthorizedUser.Party.LastName}"));
 
             CreateMap<HealthAuthorityPharmanetAdministrator, HealthAuthoritySite>();
 

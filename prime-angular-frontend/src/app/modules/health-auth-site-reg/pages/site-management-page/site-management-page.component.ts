@@ -15,11 +15,13 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteList } from '@health-auth/shared/models/health-authority-site-list.model';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 
 @Component({
   selector: 'app-site-management-page',
   templateUrl: './site-management-page.component.html',
-  styleUrls: ['./site-management-page.component.scss']
+  styleUrls: ['./site-management-page.component.scss'],
+  providers: [FormatDatePipe]
 })
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
@@ -34,7 +36,8 @@ export class SiteManagementPageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authorizedUserService: AuthorizedUserService,
-    private authorizedUserResource: AuthorizedUserResource
+    private authorizedUserResource: AuthorizedUserResource,
+    private formatDatePipe: FormatDatePipe
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
@@ -94,5 +97,9 @@ export class SiteManagementPageComponent implements OnInit {
       ]),
       pagePath
     ]);
+  }
+
+  public getLastUpdatedUser(userName: string, updatedTimeStamp: string): string {
+    return `${userName} - ${this.formatDatePipe.transform(updatedTimeStamp, "DD MMM yyyy h:mm A")}`
   }
 }

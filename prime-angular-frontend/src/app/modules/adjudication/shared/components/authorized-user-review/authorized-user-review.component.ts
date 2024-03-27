@@ -15,6 +15,8 @@ import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
+import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
+import { TransferHASiteComponent } from '@shared/components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
 
 @Component({
   selector: 'app-authorized-user-review',
@@ -33,6 +35,7 @@ export class AuthorizedUserReviewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private authorizedUserResource: AuthorizedUserResource,
+    private healthAuthoritySiteResource: HealthAuthoritySiteService,
     private configService: ConfigService,
     private dialog: MatDialog,
     private router: Router
@@ -64,6 +67,52 @@ export class AuthorizedUserReviewComponent implements OnInit {
             .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS]));
         }
       });
+  }
+
+  public onDisable() {
+
+    this.busy = this.authorizedUserResource.getAuthorizedUserSiteCount(this.route.snapshot.params.auid)
+      .subscribe((siteCount) => {
+        if (siteCount > 0) {
+
+          const data: DialogOptions = {
+            data: {
+              healthAuthorityId: this.user.healthAuthorityCode,
+              currentAuthorizedUserId: this.user.id,
+              currentAuthorizedUserName: `${this.user.firstName} ${this.user.lastName}`,
+              siteCount: siteCount,
+            }
+          };
+
+          this.dialog.open(TransferHASiteComponent, { data })
+            .afterClosed()
+            .subscribe((result: boolean) => {
+              if (result) {
+                this.authorizedUserResource
+                  .disableAuthorizedUser(this.route.snapshot.params.auid)
+                  .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS]));
+              }
+            });
+        } else {
+          const data: DialogOptions = {
+            title: 'Disable Authorized User',
+            message: 'Are you sure you want to disable this authorized user?',
+            actionText: "Yes"
+          };
+
+          this.dialog.open(ConfirmDialogComponent, { data })
+            .afterClosed()
+            .subscribe((result: boolean) => {
+              if (result) {
+                this.authorizedUserResource
+                  .disableAuthorizedUser(this.route.snapshot.params.auid)
+                  .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS]));
+              }
+            });
+        }
+      });
+
+
   }
 
   public onBack() {
