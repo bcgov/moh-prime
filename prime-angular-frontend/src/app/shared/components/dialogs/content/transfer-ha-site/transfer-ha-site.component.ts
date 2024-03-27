@@ -1,11 +1,10 @@
-import { Component, Inject, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, Inject, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '../../dialog-options.model';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
-import { BehaviorSubject } from 'rxjs';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
@@ -65,7 +64,7 @@ export class TransferHASiteComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.getAuthorizedUser();
+    this.getValidAuthorizedUsers();
     // To accommodate lengthy instruction text
     this.dialogRef.updateSize('750px', '50%');
     this.transferSiteClick = false;
@@ -77,7 +76,7 @@ export class TransferHASiteComponent implements OnInit {
     });
   }
 
-  private getAuthorizedUser(): void {
+  private getValidAuthorizedUsers(): void {
     this.healthAuthorityResource.getAuthorizedUsersByHealthAuthority(this.healthAuthorityId)
       .subscribe((result) => this.authorizedUsers = result.filter(au => au.id != this.currentAuthorizedUserId &&
         (au.status === AccessStatusEnum.APPROVED || au.status === AccessStatusEnum.ACTIVE)));
