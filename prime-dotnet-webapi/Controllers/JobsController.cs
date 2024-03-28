@@ -52,5 +52,26 @@ namespace Prime.Controllers
             var result = await _reportingService.UpdatePractitionerTableAsync();
             return Ok(result);
         }
+
+
+        // POST: api/jobs/populate/transaction-log-temp
+        /// <summary>
+        /// execute job to update the contact information in practitioner table by calling PharmaNet API
+        /// </summary>
+        [HttpPost("populate/transaction-log-temp", Name = nameof(PopulateTransactionLogTemp))]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> PopulateTransactionLogTemp(int numberOfDays)
+        {
+            if (numberOfDays <= 0)
+            {
+                return Forbid();
+            }
+
+            var result = await _reportingService.PopulateTransactionLogTempAsync(numberOfDays);
+            return Ok(result);
+        }
     }
 }
