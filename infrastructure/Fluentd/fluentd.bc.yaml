@@ -1,0 +1,100 @@
+---
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  build: ${APP_NAME}-${INSTANCE}
+  template: ${APP_NAME}-${INSTANCE}-template-bc
+metadata:
+  name: ${APP_NAME}-${INSTANCE}-template-bc
+objects:
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      name: ${APP_NAME}-custom
+    spec:
+      lookupPolicy:
+        local: false
+
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: ${APP_NAME}-${INSTANCE}
+    spec:
+      completionDeadlineSeconds: 600
+      failedBuildsHistoryLimit: 3
+      nodeSelector:
+      output:
+        to:
+          kind: ImageStreamTag
+          name: "${APP_NAME}-custom:${INSTANCE}"
+      postCommit: {}
+      resources:
+       limits:
+          cpu: "${CPU_LIMIT}"
+          memory: "${MEMORY_LIMIT}"
+       requests:
+          cpu: "${CPU_REQUEST}"
+          memory: "${MEMORY_REQUEST}"
+      runPolicy: SerialLatestOnly
+
+
+      source:
+        type: Dockerfile
+        dockerfile: |-
+          FROM BuildConfig
+
+          # Use root account to use apt
+          USER root
+
+          # below RUN includes plugins:
+          # - fluent-plugin-rewrite-tag-filter
+          # - elasticsearch (in case we ever use it)
+
+          RUN buildDeps="sudo make gcc g++ libc-dev" \
+          && apt-get update \
+          && apt-get install -y --no-install-recommends $buildDeps \
+          && sudo gem install fluent-plugin-rewrite-tag-filter \
+          && sudo gem install fluent-plugin-elasticsearch \
+          && sudo gem sources --clear-all \
+          && SUDO_FORCE_REMOVE=yes \
+              apt-get purge -y --auto-remove \
+                            -o APT::AutoRemove::RecommendsImportant=false \
+                            $buildDeps \
+          && rm -rf /var/lib/apt/lists/* \
+          && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem
+
+          USER fluent
+      strategy:
+        dockerStrategy:
+          from:
+            kind: DockerImage
+            name: docker.io/fluent/fluentd:v1.11-debian-1
+        type: Docker
+      successfulBuildsHistoryLimit: 3
+parameters:
+  - name: APP_NAME
+    description: Application name
+    displayName: Application name
+    required: true
+    value: fluentd
+  - name: INSTANCE
+    description: The deployment instance name
+    displayName: Deployment Instance
+    required: true
+    value: master
+  - name: CPU_LIMIT
+    description: Limit Peak CPU per pod (in millicores ex. 1000m)
+    displayName: CPU Limit
+    value: 4000m
+  - name: CPU_REQUEST
+    description: Requested CPU per pod (in millicores ex. 500m)
+    displayName: CPU Request
+    value: 1000m
+  - name: MEMORY_LIMIT
+    description: Limit Peak Memory per pod (in gigabytes Gi or megabytes Mi ex. 2Gi)
+    displayName: Memory Limit
+    value: 2Gi
+  - name: MEMORY_REQUEST
+    description: Requested Memory per pod (in gigabytes Gi or megabytes Mi ex. 500Mi)
+    displayName: Memory Request
+    value: 1Gi

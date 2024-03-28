@@ -1,0 +1,170 @@
+---
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  app: ${APP_NAME}-${INSTANCE}
+  role: ${APP_NAME}
+  template: ${APP_NAME}-${INSTANCE}-template
+metadata:
+  name: ${APP_NAME}-${INSTANCE}-template
+objects:
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: ${APP_NAME}-${INSTANCE}
+    spec:
+      host: ${HOST_ROUTE}
+      port:
+        targetPort: http-plugin
+      # use secure route (enable when using TLS)
+      # tls:
+      #   insecureEdgeTerminationPolicy: Redirect
+      #   termination: edge
+      to:
+        kind: Service
+        name: ${APP_NAME}-${INSTANCE}-http
+        weight: 100
+      wildcardPolicy: None
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${APP_NAME}-${INSTANCE}-http
+    spec:
+      ports:
+        - name: http-plugin
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: ${APP_NAME}-${INSTANCE}
+        role: ${APP_NAME}
+
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${APP_NAME}-${INSTANCE}
+    spec:
+      replicas: 2
+      selector:
+        app: ${APP_NAME}-${INSTANCE}
+        role: ${APP_NAME}
+      strategy:
+        type: Rolling
+        resources: {}
+        rollingParams:
+          timeoutSeconds: 600
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}-${INSTANCE}
+            role: ${APP_NAME}
+        spec:
+          volumes:
+           # fluentd config file
+            - name: fluentd-config-volume
+              configMap:
+                name: ${APP_NAME}-${INSTANCE}-config
+            # fluentd TLS (enable when using TLS)
+            # - name: fluentd-tls
+            #   secret:
+            #     secretName: fluentd-tls
+          terminationGracePeriodSeconds: 120
+          containers:
+            - image: ${IMAGE_REGISTRY}/${NAMESPACE}/${APP_NAME}:${INSTANCE}
+              name: app
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                exec:
+                  command:
+                  - "/bin/bash"
+                  - "-c"
+                  - "[[ $( pgrep ruby | wc -l)  == 1 ]]"
+                initialDelaySeconds: 10
+                periodSeconds: 60
+                successThreshold: 1
+                timeoutSeconds: 1
+              readinessProbe:
+                failureThreshold: 3
+                exec:
+                  command:
+                  - "/bin/bash"
+                  - "-c"
+                  - "[[ $( pgrep ruby | wc -l)  == 1 ]]"
+                initialDelaySeconds: 10
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources:
+                requests:
+                  cpu: "${CPU_REQUEST}"
+                  memory: "${MEMORY_REQUEST}"
+                limits:
+                  cpu: "${CPU_LIMIT}"
+                  memory: "${MEMORY_LIMIT}"
+              volumeMounts:
+                # mount fluentd config file
+                - name: fluentd-config-volume
+                  mountPath: /fluentd/etc/fluent.conf
+                  subPath: fluent.conf
+                # TLS cert for connecting to fluentd (enable when using TLS)
+                # - mountPath: /fluentd/etc/ssl
+                #   name: fluentd-tls
+              ports:
+                - containerPort: 2020
+                  protocol: TCP
+                  name: metrics
+                - containerPort: 8080
+                  name: http-plugin
+                  protocol: TCP
+      test: false
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - app
+            from:
+              kind: ImageStreamTag
+              name: "${APP_NAME}-custom:${INSTANCE}"
+              namespace: "${NAMESPACE}"
+parameters:
+  - name: APP_NAME
+    description: Application name
+    displayName: Application name
+    required: true
+  - name: INSTANCE
+    description: The deployment instance name
+    displayName: Deployment Instance
+    required: true
+  - name: NAMESPACE
+    description: Target namespace reference (i.e. 'ixhmbm-dev')
+    displayName: Target Namespace
+    required: true
+  - name: HOST_ROUTE
+    description: The host the route will use to expose service outside cluster
+    displayName: Host route
+    required: true
+  - name: IMAGE_REGISTRY
+    description: The base OpenShift docker registry
+    displayName: Docker Image Registry
+    required: true
+    value: image-registry.openshift-image-registry.svc:5000
+  - name: CPU_LIMIT
+    description: Limit Peak CPU per pod (in millicores ex. 1000m)
+    displayName: CPU Limit
+    value: 250m
+  - name: CPU_REQUEST
+    description: Requested CPU per pod (in millicores ex. 500m)
+    displayName: CPU Request
+    value: 50m
+  - name: MEMORY_LIMIT
+    description: Limit Peak Memory per pod (in gigabytes Gi or megabytes Mi ex. 2Gi)
+    displayName: Memory Limit
+    value: 256Mi
+  - name: MEMORY_REQUEST
+    description: Requested Memory per pod (in gigabytes Gi or megabytes Mi ex. 500Mi)
+    displayName: Memory Request
+    value: 128Mi
