@@ -332,6 +332,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   public buildOboSitesForm(): FormGroup {
     return this.fb.group({
+      // lastUpdateDatetime is used to keep track if user has updated the obo sites or not.
+      lastUpdatedDatetime: [null, []],
       oboSites: this.fb.array([]),
       communityHealthSites: this.fb.array([]),
       communityPharmacySites: this.fb.array([]),
