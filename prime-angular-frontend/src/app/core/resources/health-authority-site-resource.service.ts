@@ -172,4 +172,20 @@ export class HealthAuthoritySiteResource {
       );
   }
 
+
+  /**
+   * @description
+   * Transfer the health authority site(s) from one authorized user to another.
+   */
+  public transferHealthAuthoritySite(healthAuthCode: number, currentAuthorizedUserId: number, newAuthorizedUserId: number): NoContent {
+    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/transfer/from/${currentAuthorizedUserId}/to/${newAuthorizedUserId}`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site could not be transfered');
+          this.logger.error('[Core] HealthAuthoritySiteResource::transferHealthAuthoritySite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }
