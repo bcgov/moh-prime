@@ -219,8 +219,8 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     } else {
 
       this.enrolment = this.enrolmentService.enrolment;
+      //Post-initial submission, if the enrollee updated the OBO Sites form, use information from this form (the latest information) instead
       if (this.lastUpdatedDatetime.value == null) {
-        //for renewal, pull the enrolment from enrolment service instead
         this.enrolmentFormStateService.patchOboSitesForm(this.filterOboSitesByCareSetting(this.enrolment.oboSites));
       } else {
         let oboSites = this.enrolmentFormStateService.json.oboSites;
@@ -282,23 +282,19 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
               let haSiteNum = this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY
                 && s.healthAuthorityCode == ea.code).length;
 
-              if (haSiteNum === 0) {
-                let hasSiteWithoutHASpecified = false;
-                if (haSiteNum > 0) {
-                  hasSiteWithoutHASpecified = this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY && s.healthAuthorityCode === null).length > 0;
-                }
+              let hasSiteWithoutHASpecified = haSiteNum === 0 ? false :
+                this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY && s.healthAuthorityCode === null).length > 0;
 
-                if (hasSiteWithoutHASpecified) {
-                  for (let i = 0; i < (this.enrolleeHealthAuthorities.length - haSiteNum); i++) {
-                    this.addOboSite(careSettingCode);
-                  }
-                } else {
-                  this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
-                    if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
-                      this.addOboSite(careSettingCode, ha.healthAuthorityCode);
-                    }
-                  });
+              if (hasSiteWithoutHASpecified) {
+                for (let i = 0; i < (this.enrolleeHealthAuthorities.length - haSiteNum); i++) {
+                  this.addOboSite(careSettingCode);
                 }
+              } else {
+                this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
+                  if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
+                    this.addOboSite(careSettingCode, ha.healthAuthorityCode);
+                  }
+                });
               }
             });
           } else {
