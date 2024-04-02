@@ -1,0 +1,46 @@
+<h2 mat-dialog-title
+    class="d-flex align-items-stretch">
+  <span class="flex-grow-1">
+    Disable User - Transfer Site
+  </span>
+</h2>
+<mat-dialog-content>
+  <p>
+    There are {{this.siteCount}} site(s) belonging to {{this.currentAuthorizedUserName}}.
+    Please select a new authorized user for these sites and then deactivate {{this.currentAuthorizedUserName}}.
+  </p>
+  <form [formGroup]="form">
+    <mat-form-field class="w-100">
+      <mat-label>New Authorized User</mat-label>
+      <mat-select formControlName="authorizedUser">
+
+        <mat-option *ngFor="let authorizedUser of authorizedUsers"
+                    [value]="authorizedUser.id">
+          {{ authorizedUser.firstName }} {{ authorizedUser.lastName }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="authorizedUser.hasError('required')">Required</mat-error>
+    </mat-form-field>
+  </form>
+  <div class="text_red"
+       *ngIf="!authorizedUsers || authorizedUsers?.length === 0">
+    No authorized user available. Please contact health authority for new authorized user.
+  </div>
+  <div class="mt-4">
+    <div class="row">
+      <div class="col-6">
+        <button mat-stroked-button
+                (click)="onCancel()"
+                class="my-2 mr-2">Cancel</button>
+      </div>
+      <div class="col-6 text-right">
+        <button mat-flat-button
+                *ngIf=" authorizedUsers && authorizedUsers?.length> 0"
+                (click)="onTransferSite()"
+                [disabled]="transferSiteClick"
+                color="warn"
+                class="my-2 mr-1">Transfer site & disable user</button>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

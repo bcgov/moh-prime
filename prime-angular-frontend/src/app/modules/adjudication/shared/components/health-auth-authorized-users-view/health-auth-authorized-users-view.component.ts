@@ -46,6 +46,10 @@ export class HealthAuthAuthorizedUsersViewComponent implements OnInit {
     return (user.status === AccessStatusEnum.UNDER_REVIEW);
   }
 
+  public isDisabled(user: AuthorizedUser) {
+    return (user.status === AccessStatusEnum.DISABLED);
+  }
+
   public getUserProperties(user: AuthorizedUser) {
     return [
       {
