@@ -67,7 +67,7 @@ namespace Prime.Controllers
         {
             if (numberOfDays <= 0)
             {
-                return Forbid();
+                return BadRequest();
             }
 
             var result = await _reportingService.PopulateTransactionLogTempAsync(numberOfDays);
