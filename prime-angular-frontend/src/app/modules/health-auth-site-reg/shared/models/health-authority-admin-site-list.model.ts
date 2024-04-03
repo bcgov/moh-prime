@@ -34,7 +34,8 @@ export class HealthAuthoritySiteAdminList extends AbstractBaseHealthAuthoritySit
     public isNew: boolean,
     public readonly authorizedUserName: string,
     public readonly authorizedUserEmail: string,
-    public readonly adjudicatorIdir: string
+    public readonly adjudicatorIdir: string,
+    public duplicatePecSiteCount: number
   ) {
     super(id, healthAuthorityOrganizationId, completed, submittedDate, approvedDate, status);
 

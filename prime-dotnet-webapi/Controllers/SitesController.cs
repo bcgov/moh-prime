@@ -726,6 +726,34 @@ namespace Prime.Controllers
             return Ok(await _siteService.PecAssignableAsync(siteId, pec));
         }
 
+        // GET: api/sites/1/pec/abc/exists-within-ha
+        /// <summary>
+        /// Check if a given PEC exists in other site within the same health authority.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="pec"></param>
+        /// <returns></returns>
+        [HttpPost("{siteId}/pec/{pec}/exists-within-ha", Name = nameof(PecExistsWithinHA))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> PecExistsWithinHA(int siteId, string pec)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            if (string.IsNullOrWhiteSpace(pec))
+            {
+                return BadRequest("PEC cannot be empty.");
+            }
+
+            return Ok(await _siteService.PecExistsWithinHA(siteId, pec));
+        }
+
         // PUT: api/Sites/5/pec
         /// <summary>
         /// Update the PEC code.

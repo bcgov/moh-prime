@@ -26,6 +26,7 @@ export class HealthAuthorityTableComponent implements OnInit, OnChanges {
   @Output() public notify: EventEmitter<{ siteId: number, healthAuthorityOrganizationId: HealthAuthorityEnum }>;
   @Output() public reload: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
+  @Output() public pecFilter: EventEmitter<string>;
 
   public dataSource: MatTableDataSource<HealthAuthorityRow | HealthAuthoritySiteAdminList>;
   public healthAuthorities: HealthAuthorityRow[];
@@ -62,6 +63,7 @@ export class HealthAuthorityTableComponent implements OnInit, OnChanges {
     this.notify = new EventEmitter<{ siteId: number, healthAuthorityOrganizationId: HealthAuthorityEnum }>();
     this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
+    this.pecFilter = new EventEmitter<string>();
 
     this.dataSource = new MatTableDataSource<HealthAuthorityRow | HealthAuthoritySiteAdminList>([]);
   }
@@ -84,6 +86,10 @@ export class HealthAuthorityTableComponent implements OnInit, OnChanges {
 
   public onRoute(routePath: string | (string | number)[]) {
     this.route.emit(routePath);
+  }
+
+  public onPecFilter(pec: string) {
+    this.pecFilter.emit(pec);
   }
 
   public isHealthAuthority(row: HealthAuthorityRow | HealthAuthoritySiteAdminList): boolean {
@@ -109,7 +115,9 @@ export class HealthAuthorityTableComponent implements OnInit, OnChanges {
         );
         this.healthAuthorities = has;
         this.dataSource.data = Object.assign([], this.sites).concat(has).sort(this.sortData());
-      })
+      });
+
+
     } else {
       this.dataSource.data = Object.assign([], this.sites).sort(this.sortData());
     }
@@ -121,6 +129,10 @@ export class HealthAuthorityTableComponent implements OnInit, OnChanges {
         .concat((this.showHealthAuthorities) ? this.healthAuthorities : [])
         .sort(this.sortData());
     }
+  }
+
+  public getDuplicatePecText(row: HealthAuthoritySiteAdminList) {
+    return `${row.duplicatePecSiteCount + 1} sites share the same site ID.`;
   }
 
   /**
