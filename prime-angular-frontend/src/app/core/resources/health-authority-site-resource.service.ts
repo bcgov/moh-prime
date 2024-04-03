@@ -17,6 +17,8 @@ import { HealthAuthoritySite, HealthAuthoritySiteDto } from '@health-auth/shared
 import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-authority-site-create.model';
 import { HealthAuthoritySiteUpdate } from '@health-auth/shared/models/health-authority-site-update.model';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
+import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 @Injectable({
   providedIn: 'root'
@@ -89,19 +91,30 @@ export class HealthAuthoritySiteResource {
 
   // TODO [BREAKING CHANGE] in site-registration-tabs.component.ts L203 onNotify
   public getHealthAuthoritySiteContacts(healthAuthId: HealthAuthorityEnum, healthAuthSiteId: number): Observable<{ label: string, email: string }[]> {
-    return this.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+    const path = `health-authorities/${healthAuthId}/sites/${healthAuthSiteId}`;
+    return forkJoin({
+      healthAuthority: this.apiResource.get<HealthAuthority>(`health-authorities/${healthAuthId}`, null, null, true),
+      healthAuthoritySite: this.apiResource.get<Omit<HealthAuthoritySiteDto, 'businessHours'>>(`${path}`, null, null, true),
+    })
       .pipe(
-        map((healthAuthSite: HealthAuthoritySite) => [
-          // TODO what needs to happen and what is available or different endpoint
-          // ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityPharmanetAdministrator, {
-          //   label: 'PharmaNet Administrator',
-          //   email: healthAuthSite?.healthAuthorityPharmanetAdministrator?.email
-          // }),
-          // ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityTechnicalSupport.email, {
-          //   label: 'Technical Support Contact',
-          //   email: healthAuthSite?.healthAuthorityTechnicalSupport.email
-          // })
-        ]),
+        map(({
+          healthAuthority,
+          healthAuthoritySite
+        }: { healthAuthority: HealthAuthority, healthAuthoritySite: HealthAuthoritySite }) => {
+          return [
+            ...ArrayUtils.insertIf(healthAuthoritySite?.healthAuthorityPharmanetAdministratorId, {
+              label: 'PharmaNet Administrator',
+              email: healthAuthority?.pharmanetAdministrators.find(a => a.id === healthAuthoritySite?.healthAuthorityPharmanetAdministratorId)?.email
+            }),
+            ...ArrayUtils.insertIf(healthAuthoritySite?.healthAuthorityTechnicalSupportId, {
+              label: 'Technical Support Contact',
+              email: healthAuthority?.technicalSupports.find(s => s.id === healthAuthoritySite?.healthAuthorityTechnicalSupportId)?.email
+            }),
+            ...ArrayUtils.insertIf(healthAuthority?.privacyOffice?.privacyOfficer, {
+              label: 'Privacy Officer Contact',
+              email: healthAuthority?.privacyOffice?.privacyOfficer?.email
+            })];
+        }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site contacts could not be retrieved');
           this.logger.error('[Core] HealthAuthoritySiteResource::getHealthAuthoritySiteContacts error has occurred: ', error);
@@ -159,4 +172,20 @@ export class HealthAuthoritySiteResource {
       );
   }
 
+
+  /**
+   * @description
+   * Transfer the health authority site(s) from one authorized user to another.
+   */
+  public transferHealthAuthoritySite(healthAuthCode: number, currentAuthorizedUserId: number, newAuthorizedUserId: number): NoContent {
+    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/transfer/from/${currentAuthorizedUserId}/to/${newAuthorizedUserId}`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site could not be transfered');
+          this.logger.error('[Core] HealthAuthoritySiteResource::transferHealthAuthoritySite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }
