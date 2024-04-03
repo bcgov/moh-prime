@@ -14,6 +14,7 @@ import { AuthorizedUserPageComponent } from '@health-auth/pages/authorized-user-
 import { AuthorizedUserNextStepsPageComponent } from '@health-auth/pages/authorized-user-next-steps-page/authorized-user-next-steps-page.component';
 import { AuthorizedUserApprovedPageComponent } from '@health-auth/pages/authorized-user-approved-page/authorized-user-approved-page.component';
 import { AuthorizedUserDeclinedPageComponent } from '@health-auth/pages/authorized-user-declined-page/authorized-user-declined-page.component';
+import { AuthorizedUserDisabledPageComponent } from './pages/authorized-user-disabled-page/authorized-user-disabled-page.component';
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
 import { HealthAuthCareTypePageComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-page.component';
 import { SiteInformationPageComponent } from '@health-auth/pages/site-information-page/site-information-page.component';
@@ -60,6 +61,11 @@ const routes: Routes = [
             path: HealthAuthSiteRegRoutes.ACCESS_DECLINED,
             component: AuthorizedUserDeclinedPageComponent,
             data: { title: 'Access Declined' }
+          },
+          {
+            path: HealthAuthSiteRegRoutes.ACCESS_DISABLED,
+            component: AuthorizedUserDisabledPageComponent,
+            data: { title: 'Authorized user is disabled' }
           },
           {
             path: '', // Equivalent to `/` and alias for default view
