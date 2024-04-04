@@ -207,8 +207,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       } else if (this.cannotRequestRemoteAccess) {
         const data: DialogOptions = {
           title: 'Remote Access Removal',
-          message: 'Only physicians and practicing nurse practitioners are permitted to access PharmaNet remotely, ' +
-            'and your remote user information will be deleted from your enrolment if you choose a different license type.',
+          message: 'With this change you are no longer eligible to use remote access.' +
+            ' Please notify the PharmaNet Administrator of your site and stop using the remote access.',
           actionText: "Continue"
         };
 
