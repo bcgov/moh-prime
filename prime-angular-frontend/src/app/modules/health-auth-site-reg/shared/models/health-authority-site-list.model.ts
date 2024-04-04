@@ -9,6 +9,8 @@ export interface HealthAuthoritySiteListDto extends BaseHealthAuthoritySite {
   healthAuthorityVendor: HealthAuthorityVendor;
   siteName: string;
   pec: string;
+  updatedTimeStamp: string;
+  authorizedUserName: string;
 }
 
 export class HealthAuthoritySiteList extends AbstractBaseHealthAuthoritySite implements HealthAuthoritySiteListDto {
@@ -22,12 +24,15 @@ export class HealthAuthoritySiteList extends AbstractBaseHealthAuthoritySite imp
     public readonly submittedDate: string,
     public readonly approvedDate: string,
     public readonly status: SiteStatusType,
+    public readonly updatedTimeStamp: string,
+    public readonly authorizedUserName: string,
   ) {
     super(id, healthAuthorityOrganizationId, completed, submittedDate, approvedDate, status);
 
     this.healthAuthorityVendor = healthAuthorityVendor;
     this.siteName = siteName;
     this.pec = pec;
+    this.updatedTimeStamp = updatedTimeStamp;
   }
 
   /**
@@ -52,6 +57,8 @@ export class HealthAuthoritySiteList extends AbstractBaseHealthAuthoritySite imp
       healthAuthoritySiteListDto.submittedDate,
       healthAuthoritySiteListDto.approvedDate,
       healthAuthoritySiteListDto.status,
+      healthAuthoritySiteListDto.updatedTimeStamp,
+      healthAuthoritySiteListDto.authorizedUserName,
     );
 
     return (Array.isArray(healthAuthoritySiteListDtos))
