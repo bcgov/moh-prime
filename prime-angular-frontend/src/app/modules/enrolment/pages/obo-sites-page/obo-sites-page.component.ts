@@ -219,11 +219,11 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     } else {
 
       this.enrolment = this.enrolmentService.enrolment;
+      let oboSites = this.enrolmentFormStateService.json.oboSites;
       //Post-initial submission, if the enrollee updated the OBO Sites form, use information from this form (the latest information) instead
       if (this.lastUpdatedDatetime.value == null) {
-        this.enrolmentFormStateService.patchOboSitesForm(this.filterOboSitesByCareSetting(this.enrolment.oboSites));
+        this.enrolmentFormStateService.patchOboSitesForm(this.filterOboSitesByCareSetting(oboSites));
       } else {
-        let oboSites = this.enrolmentFormStateService.json.oboSites;
         this.enrolmentFormStateService.patchOboSitesForm(oboSites);
       }
 
