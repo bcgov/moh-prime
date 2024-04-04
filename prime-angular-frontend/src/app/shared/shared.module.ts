@@ -129,6 +129,7 @@ import { HealthAuthCareTypeOverviewComponent } from '@health-auth/pages/health-a
 import { HealthAuthSiteOverviewContainerComponent } from './components/health-auth-site-overview-container/health-auth-site-overview-container.component';
 import { EmailFormComponent } from './components/forms/email-form/email-form.component';
 import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
+import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
 
 @NgModule({
   declarations: [
@@ -239,6 +240,7 @@ import { ChangeVendorNoteComponent } from './components/dialogs/content/change-v
     UnlistedCollegeLicenceFormComponent,
     EmailFormComponent,
     SelfDeclarationTermComponent,
+    TransferHASiteComponent,
   ],
   imports: [
     CommonModule,

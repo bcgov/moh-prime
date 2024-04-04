@@ -252,11 +252,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     const form = this.enrolmentFormStateService.oboSitesForm;
     const oboSites = form.get('oboSites') as FormArray;
 
-    oboSites.value?.forEach((site: OboSite, index: number) => {
-      if (site.careSettingCode === careSettingCode) {
-        oboSites.removeAt(index);
+    for (var i = oboSites.length - 1; i >= 0; i--) {
+      if (oboSites.value[i].careSettingCode === careSettingCode) {
+        oboSites.removeAt(i);
       }
-    });
+    }
 
     const clear = (fa: FormArray) => {
       fa.clear();
