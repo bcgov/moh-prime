@@ -11,15 +11,14 @@ namespace Prime.Models
     {
         [Key]
         public int Id { get; set; }
-
         public string CollegeId { get; set; }
-
         public string PracRefId { get; set; }
-
         public string FirstName { get; set; }
-
+        public string MiddleInitial { get; set; }
         public string LastName { get; set; }
-
+        public DateTime DateofBirth { get; set; }
+        public string Status { get; set; }
+        public DateTimeOffset EffectiveDate { get; set; }
         public DateTime? ProcessedDate { get; set; }
     }
 }
