@@ -22,6 +22,7 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IPartyService _partyService;
+        private readonly IOrgBookClient _orgBookClient;
 
         public OrganizationService(
             ApiDbContext context,
@@ -30,7 +31,8 @@ namespace Prime.Services
             IDocumentManagerClient documentClient,
             IMapper mapper,
             IOrganizationClaimService organizationClaimService,
-            IPartyService partyService)
+            IPartyService partyService,
+            IOrgBookClient orgBookClient)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
@@ -38,6 +40,7 @@ namespace Prime.Services
             _mapper = mapper;
             _organizationClaimService = organizationClaimService;
             _partyService = partyService;
+            _orgBookClient = orgBookClient;
         }
 
         public async Task<bool> OrganizationExistsAsync(int organizationId)
@@ -380,6 +383,29 @@ namespace Prime.Services
 
             _context.RemoveRange(pendingAgreements);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> UpdateOrganizationRegistrationId()
+        {
+            var targetOrganizations = await _context.Organizations.Where(o => o.RegistrationId == null)
+                .OrderBy(o => o.Id)
+                .ToListAsync();
+            int counter = 0;
+            if (targetOrganizations.Any())
+            {
+                foreach (var org in targetOrganizations)
+                {
+                    string registrationId = await _orgBookClient.GetOrgBookSearchRecordAsync(org.Name);
+                    if (registrationId != null)
+                    {
+                        org.RegistrationId = registrationId;
+                        counter++;
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            return counter;
         }
     }
 }
