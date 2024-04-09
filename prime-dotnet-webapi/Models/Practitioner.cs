@@ -16,9 +16,9 @@ namespace Prime.Models
         public string FirstName { get; set; }
         public string MiddleInitial { get; set; }
         public string LastName { get; set; }
-        public DateTime DateofBirth { get; set; }
+        public DateTime? DateofBirth { get; set; }
         public string Status { get; set; }
-        public DateTimeOffset EffectiveDate { get; set; }
+        public DateTimeOffset? EffectiveDate { get; set; }
         public DateTime? ProcessedDate { get; set; }
     }
 }

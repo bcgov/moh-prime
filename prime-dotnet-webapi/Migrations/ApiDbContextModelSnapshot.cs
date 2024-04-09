@@ -14480,10 +14480,10 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DateofBirth")
+                    b.Property<DateTime?>("DateofBirth")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTimeOffset>("EffectiveDate")
+                    b.Property<DateTimeOffset?>("EffectiveDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
