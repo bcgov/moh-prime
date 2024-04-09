@@ -31,8 +31,6 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
 })
 export class CareSettingComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
 
-  public HealthAuthorityEnum = HealthAuthorityEnum;
-
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
   public healthAuthorities: Config<number>[];
