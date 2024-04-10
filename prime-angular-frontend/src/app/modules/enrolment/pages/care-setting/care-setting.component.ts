@@ -12,11 +12,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { Role } from '@auth/shared/enum/role.enum';
 
-import { HealthAuthorityEnum } from '@lib/enums/health-authority.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
