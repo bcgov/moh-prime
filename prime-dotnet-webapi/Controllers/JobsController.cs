@@ -56,7 +56,11 @@ namespace Prime.Controllers
 
         // POST: api/jobs/populate/transaction-log-temp
         /// <summary>
-        /// execute job to update the contact information in practitioner table by calling PharmaNet API
+        /// copy transaction log to temp table for reporting.
+        /// numberOfDays - the number of day of log to copy over. For example,set numberOfDays to 15 to copy last 15 days of log.
+        /// it is expected to be executed daily, and it will automatically remove the older record before copying the new ones.
+        /// * to decrease the number of day of log in temp table, just decrease the number in the next cycle and it will remove the unwanted log automatically
+        /// * to increase the number of day of log in temp table, it requires to purge the temp table first then run the job again
         /// </summary>
         [HttpPost("populate/transaction-log-temp", Name = nameof(PopulateTransactionLogTemp))]
         [Authorize(Roles = Roles.PrimeApiServiceAccount)]

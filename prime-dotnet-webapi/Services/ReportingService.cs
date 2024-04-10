@@ -146,7 +146,7 @@ namespace Prime.Services
             copySql.Append("from \"PharmanetTransactionLog\" ptl ");
             copySql.Append($"where \"TxDateTime\" > current_date + interval '-{numberInDays}' day ");
 
-            // if there is max transaction Id, use it in the where clause
+            // if there is existing records with the max transaction Id, use it to filter the number of records copy over
             if (maxTransactionId.HasValue)
             {
                 copySql.Append($"and \"TransactionId\" > '{maxTransactionId}' ");
