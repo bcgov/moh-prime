@@ -105,6 +105,10 @@ namespace Prime.Services
                     {
                         p.FirstName = collegeRecord.FirstName;
                         p.LastName = collegeRecord.LastName;
+                        p.MiddleInitial = collegeRecord.MiddleInitial;
+                        p.DateofBirth = collegeRecord.DateofBirth;
+                        p.Status = collegeRecord.Status;
+                        p.EffectiveDate = collegeRecord.EffectiveDate;
                     }
                     p.ProcessedDate = DateTime.Now;
 
