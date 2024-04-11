@@ -37,9 +37,12 @@ namespace Prime.Models
                 PreferredLastName = enrollee.PreferredLastName,
                 GPID = enrollee.GPID,
                 ExpiryDate = enrollee.ExpiryDate,
-                CareSettings = enrollee.EnrolleeCareSettings.Where(ecs => ecs.CareSettingCode == token.CareSettingCode).Select(org => org.CareSetting),
+                CareSettings = token.CareSettingCode == null ?
+                    enrollee.EnrolleeCareSettings.Select(org => org.CareSetting) :
+                    enrollee.EnrolleeCareSettings.Where(ecs => ecs.CareSettingCode == token.CareSettingCode).Select(org => org.CareSetting),
                 HealthAuthories = token.HealthAuthorityCode == null ?
-                    null : enrollee.EnrolleeHealthAuthorities.Where(eha => (int)eha.HealthAuthorityCode == token.HealthAuthorityCode).Select(e => e.HealthAuthority),
+                    enrollee.EnrolleeHealthAuthorities.Select(e => e.HealthAuthority) :
+                    enrollee.EnrolleeHealthAuthorities.Where(eha => (int)eha.HealthAuthorityCode == token.HealthAuthorityCode).Select(e => e.HealthAuthority),
                 Group = enrollee.Agreements.OrderByDescending(a => a.CreatedDate)
                     .Where(a => a.AcceptedDate != null)
                     .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? AgreementGroup.OnBehalfOf : AgreementGroup.RegulatedUser)
