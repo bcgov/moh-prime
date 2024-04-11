@@ -38,7 +38,7 @@ namespace Prime.Models
                 GPID = enrollee.GPID,
                 ExpiryDate = enrollee.ExpiryDate,
                 CareSettings = token.CareSettingCode == null ?
-                    enrollee.EnrolleeCareSettings.Select(org => org.CareSetting) :
+                    enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting) :
                     enrollee.EnrolleeCareSettings.Where(ecs => ecs.CareSettingCode == token.CareSettingCode).Select(org => org.CareSetting),
                 HealthAuthories = token.HealthAuthorityCode == null ?
                     enrollee.EnrolleeHealthAuthorities.Select(e => e.HealthAuthority) :
