@@ -62,8 +62,8 @@ export class SiteOverviewPageComponent implements OnInit {
       this.siteResource.pecExistsWithinHa(siteId, pec).subscribe((result) => {
         if (result) {
           const data: DialogOptions = {
-            title: 'Site ID is in used',
-            message: 'This SiteID is already in use.  Allow multiple sites?',
+            title: 'Site ID is in use',
+            message: 'This Site ID is already in use.  Allow multiple sites?',
             actionText: "Yes"
           };
           this.busy = this.dialog.open(ConfirmDialogComponent, { data })

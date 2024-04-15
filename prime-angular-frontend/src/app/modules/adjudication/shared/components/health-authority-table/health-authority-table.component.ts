@@ -132,7 +132,7 @@ export class HealthAuthorityTableComponent implements OnInit, OnChanges {
   }
 
   public getDuplicatePecText(row: HealthAuthoritySiteAdminList) {
-    return `${row.duplicatePecSiteCount + 1} sites share the same site ID.`;
+    return `${row.duplicatePecSiteCount + 1} sites share the same site ID`;
   }
 
   /**
