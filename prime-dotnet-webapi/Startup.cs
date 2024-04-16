@@ -226,6 +226,9 @@ namespace Prime
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
+            // See https://stackoverflow.com/questions/69961449/net6-and-datetime-problem-cannot-write-datetime-with-kind-utc-to-postgresql-ty/70142836#70142836
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

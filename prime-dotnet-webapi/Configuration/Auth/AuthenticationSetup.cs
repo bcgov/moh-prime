@@ -28,6 +28,8 @@ namespace Prime.Configuration.Auth
                 {
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
+                // See https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/8.0/securitytoken-events#recommended-action
+                options.UseSecurityTokenValidators = true;
             })
             .AddJwtBearer(Schemes.MohJwt, options =>
             {
@@ -38,6 +40,8 @@ namespace Prime.Configuration.Auth
                 {
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
+                // See https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/8.0/securitytoken-events#recommended-action
+                options.UseSecurityTokenValidators = true;
             });
 
             services.AddAuthorization(options =>
