@@ -35,7 +35,7 @@ export class HealthAuthoritySiteAdminList extends AbstractBaseHealthAuthoritySit
     public readonly authorizedUserName: string,
     public readonly authorizedUserEmail: string,
     public readonly adjudicatorIdir: string,
-    public duplicatePecSiteCount: number   // number of site sharing the same site ID
+    public duplicatePecSiteCount: number   // number of other sites that sharing the same site ID (excluding itself)
   ) {
     super(id, healthAuthorityOrganizationId, completed, submittedDate, approvedDate, status);
 
