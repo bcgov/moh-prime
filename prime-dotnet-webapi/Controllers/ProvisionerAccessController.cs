@@ -66,7 +66,8 @@ namespace Prime.Controllers
             }
 
             //set health authority
-            if (certificate.HealthAuthories != null && certificate.HealthAuthories.Count() > 0)
+            if (certificate.CareSettings.Any(cs => cs.Code == (int)CareSettingType.HealthAuthority) &&
+                certificate.HealthAuthories != null && certificate.HealthAuthories.Count() > 0)
             {
                 var careSetting = certificate.CareSettings.First(cs => cs.Code == (int)CareSettingType.HealthAuthority);
                 careSetting.Name += $" - {string.Join(", ", certificate.HealthAuthories.Select(ha => ha.Name))}";
