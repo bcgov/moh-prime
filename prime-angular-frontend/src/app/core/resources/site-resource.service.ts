@@ -597,7 +597,7 @@ export class SiteResource {
   }
 
   public pecExistsWithinHa(siteId: number, pec: string): Observable<boolean> {
-    return this.apiResource.post(`sites/${siteId}/pec/${pec}/exists-within-ha`)
+    return this.apiResource.get(`sites/${siteId}/pec/${pec}/exists-within-ha`)
       .pipe(
         map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {

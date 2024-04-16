@@ -90,7 +90,7 @@ namespace Prime.Services
                 .AnyAsync(site => site.PEC == pec);
         }
 
-        public async Task<bool> PecExistsWithinHA(int siteId, string pec)
+        public async Task<bool> PecExistsWithinHAAsync(int siteId, string pec)
         {
             var site = await _context.HealthAuthoritySites.Where(s => s.Id == siteId).SingleAsync();
 

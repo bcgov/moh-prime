@@ -733,7 +733,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="pec"></param>
         /// <returns></returns>
-        [HttpPost("{siteId}/pec/{pec}/exists-within-ha", Name = nameof(PecExistsWithinHA))]
+        [HttpGet("{siteId}/pec/{pec}/exists-within-ha", Name = nameof(PecExistsWithinHA))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
@@ -751,7 +751,7 @@ namespace Prime.Controllers
                 return BadRequest("PEC cannot be empty.");
             }
 
-            return Ok(await _siteService.PecExistsWithinHA(siteId, pec));
+            return Ok(await _siteService.PecExistsWithinHAAsync(siteId, pec));
         }
 
         // PUT: api/Sites/5/pec
