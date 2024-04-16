@@ -80,6 +80,9 @@ export class AuthorizedUserGuard extends BaseGuard {
       case AccessStatusEnum.DECLINED: {
         return this.manageDeclinedAuthorizedUser(routePath);
       }
+      case AccessStatusEnum.DISABLED: {
+        return this.manageDisabledAuthorizedUser(routePath);
+      }
     }
 
     // Otherwise, no authorized user exists
@@ -104,6 +107,13 @@ export class AuthorizedUserGuard extends BaseGuard {
     return this.navigate(routePath, [
       HealthAuthSiteRegRoutes.ACCESS,
       HealthAuthSiteRegRoutes.ACCESS_DECLINED
+    ]);
+  }
+
+  private manageDisabledAuthorizedUser(routePath: string): boolean {
+    return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.ACCESS,
+      HealthAuthSiteRegRoutes.ACCESS_DISABLED
     ]);
   }
 

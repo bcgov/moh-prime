@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.HttpClients;
+using System.Text;
 
 namespace Prime.Services
 {
@@ -104,6 +105,10 @@ namespace Prime.Services
                     {
                         p.FirstName = collegeRecord.FirstName;
                         p.LastName = collegeRecord.LastName;
+                        p.MiddleInitial = collegeRecord.MiddleInitial;
+                        p.DateofBirth = collegeRecord.DateofBirth;
+                        p.Status = collegeRecord.Status;
+                        p.EffectiveDate = collegeRecord.EffectiveDate;
                     }
                     p.ProcessedDate = DateTime.Now;
 
@@ -118,6 +123,40 @@ namespace Prime.Services
                 _logger.LogError($"Error: {nameof(UpdatePractitionerTableAsync)} - Message: {ex.Message}");
                 result = $"Error: {nameof(UpdatePractitionerTableAsync)} - Message: {ex.Message}";
             }
+
+            return result;
+        }
+
+        public async Task<int> PopulateTransactionLogTempAsync(int numberInDays)
+        {
+            // delete outdated records
+            StringBuilder deleteSql = new StringBuilder();
+            deleteSql.Append("delete from \"PharmanetTransactionLogTemp\"");
+            deleteSql.Append($"where \"TxDateTime\" < current_date + interval '-{numberInDays}' day");
+
+            await _context.Database.ExecuteSqlRawAsync(deleteSql.ToString());
+
+            long? maxTransactionId = await _context.PharmanetTransactionLogTemps.MaxAsync(l => (long?)l.TransactionId);
+
+            // copy records over to temp table
+            StringBuilder copySql = new StringBuilder();
+            copySql.Append("insert into \"PharmanetTransactionLogTemp\"");
+            copySql.Append("(\"Id\", \"CreatedTimeStamp\", \"TransactionId\", \"TxDateTime\", \"UserId\", \"PharmacyId\", \"TransactionType\", ");
+            copySql.Append("\"TransactionSubType\", \"PractitionerId\", \"CollegePrefix\", \"TransactionOutcome\", \"ProviderSoftwareId\", ");
+            copySql.Append("\"ProviderSoftwareVersion\", \"LocationIpAddress\", \"SourceIpAddress\")");
+            copySql.Append("SELECT \"Id\", \"CreatedTimeStamp\", \"TransactionId\", \"TxDateTime\", \"UserId\", \"PharmacyId\", \"TransactionType\", ");
+            copySql.Append("\"TransactionSubType\", \"PractitionerId\", \"CollegePrefix\", \"TransactionOutcome\", \"ProviderSoftwareId\", ");
+            copySql.Append("\"ProviderSoftwareVersion\", \"LocationIpAddress\", \"SourceIpAddress\"");
+            copySql.Append("from \"PharmanetTransactionLog\" ptl ");
+            copySql.Append($"where \"TxDateTime\" > current_date + interval '-{numberInDays}' day ");
+
+            // if there is existing records with the max transaction Id, use it to filter the number of records copy over
+            if (maxTransactionId.HasValue)
+            {
+                copySql.Append($"and \"TransactionId\" > '{maxTransactionId}' ");
+            }
+
+            int result = await _context.Database.ExecuteSqlRawAsync(copySql.ToString());
 
             return result;
         }
