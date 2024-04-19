@@ -16,8 +16,13 @@ parameters:
   required: false
 - name: MAILHOG_IMAGE
   displayName: Mailhog Docker Image
+  value: image-registry.openshift-image-registry.svc:5000/9c33a9-dev/mailhog-server:latest
+  description: The mailhog docker image to use in DeploymentConfig
+  required: true
+- name: DOCKER_IMAGE
+  displayName: Mailhog Docker Image
   value: registry.hub.docker.com/mailhog/mailhog:latest
-  description: The mailhog docker image to use
+  description: The mailhog docker image to use in ImageStream
   required: true
 message: |-
   The following service(s) have been created in your project:
@@ -50,7 +55,7 @@ objects:
     tags:
     - from:
         kind: DockerImage
-        name: ${MAILHOG_IMAGE}
+        name: ${DOCKER_IMAGE}
       generation: 2
       importPolicy: {}
       name: latest
