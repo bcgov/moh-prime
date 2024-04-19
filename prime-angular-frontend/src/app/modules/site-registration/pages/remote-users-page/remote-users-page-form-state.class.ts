@@ -113,7 +113,8 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
         // Validators are applied at the component-level when
         // fields are made visible to allow empty submissions
         licenseNumber: [null, []],
-        licenseCode: [null, []]
+        licenseCode: [null, []],
+        practitionerId: [null, []],
       }),
       notified: [
         false,

@@ -47,7 +47,8 @@
                       [properties]="[
                             { key: 'Site Name', value: healthAuthoritySite?.siteName },
                             { key: 'Site ID', value: healthAuthoritySite?.pec },
-                            { key: 'Vendor', value: healthAuthoritySite?.healthAuthorityVendor?.vendorCode | configCode : 'vendors' }
+                            { key: 'Vendor', value: healthAuthoritySite?.healthAuthorityVendor?.vendorCode | configCode : 'vendors' },
+                            { key: healthAuthoritySite?.submittedDate ? 'Last Submitted by' : 'Last Updated by', value: getLastUpdatedUser(healthAuthoritySite?.authorizedUserName, healthAuthoritySite?.updatedTimeStamp)},
                       ]">
       <ng-container *ngIf="healthAuthoritySite.isIncomplete()"
                     [ngTemplateOutlet]="notification"

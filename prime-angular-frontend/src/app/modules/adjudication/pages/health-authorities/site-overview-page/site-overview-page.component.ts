@@ -16,6 +16,7 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ChangeVendorNoteComponent } from '@shared/components/dialogs/content/change-vendor-note/change-vendor-note.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HealthAuthority } from '@shared/models/health-authority.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 interface HealthAuthorityVendorMap extends VendorConfig {
   id?: number;
@@ -57,11 +58,36 @@ export class SiteOverviewPageComponent implements OnInit {
     if (this.pec.valid) {
       const siteId = +this.route.snapshot.params.sid;
       const pec = this.form.value.pec;
-      this.busy = this.siteResource.updatePecCode(siteId, pec)
-        .subscribe(() => {
-          this.refresh.next(true);
-          this.site.pec = pec;
-        });
+
+      this.siteResource.pecExistsWithinHa(siteId, pec).subscribe((result) => {
+        if (result) {
+          const data: DialogOptions = {
+            title: 'Site ID is in use',
+            message: 'This Site ID is already in use.  Allow multiple sites?',
+            actionText: "Yes"
+          };
+          this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+            .afterClosed()
+            .subscribe((result) => {
+              if (result) {
+                this.busy = this.siteResource.updatePecCode(siteId, pec)
+                  .subscribe(() => {
+                    this.refresh.next(true);
+                    this.site.pec = pec;
+                  });
+              } else {
+                this.pec.setValue(this.site.pec);
+              }
+            });
+        } else {
+          this.busy = this.siteResource.updatePecCode(siteId, pec)
+            .subscribe(() => {
+              this.refresh.next(true);
+              this.site.pec = pec;
+            });
+        }
+      });
+
     }
   }
 
