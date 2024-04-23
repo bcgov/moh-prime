@@ -63,7 +63,7 @@ export class SiteOverviewPageComponent implements OnInit {
         if (result) {
           const data: DialogOptions = {
             title: 'Site ID is in use',
-            message: 'This Site ID is already in use.  Allow multiple sites?',
+            message: 'This Site ID is already in use in your organization.  Allow multiple sites?',
             actionText: "Yes"
           };
           this.busy = this.dialog.open(ConfirmDialogComponent, { data })
