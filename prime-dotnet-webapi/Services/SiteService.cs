@@ -135,10 +135,12 @@ namespace Prime.Services
             var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
+            var eventMessage = $"Site ID changed from {site.PEC} to {pecCode}";
+
             site.PEC = pecCode;
 
             await _context.SaveChangesAsync();
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
+            await _businessEventService.CreateSiteEventAsync(site.Id, eventMessage);
         }
 
         public async Task UpdateVendor(int siteId, int vendorCode, string rationale)

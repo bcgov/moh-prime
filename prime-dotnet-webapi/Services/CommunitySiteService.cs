@@ -184,7 +184,7 @@ namespace Prime.Services
             {
                 await _context.SaveChangesAsync();
                 //send email only when the site is completed and org. agreement should have been signed.
-                if (updateRemoteUserResult.Count > 0 && currentSite.Completed) 
+                if (updateRemoteUserResult.Count > 0 && currentSite.Completed)
                 {
                     var site = await GetSiteAsync(siteId);
                     // Send HIBC an email when remote users are updated for a submitted site
@@ -288,7 +288,7 @@ namespace Prime.Services
         {
             return contactType switch
             {
-                "AdministratorPharmaNet" => "Administrator PharmaNet",
+                "AdministratorPharmaNet" => "PharmaNet Administrator",
                 "PrivacyOfficer" => "Privacy Officer",
                 "TechnicalSupport" => "Technical Support",
                 _ => ""
@@ -309,7 +309,7 @@ namespace Prime.Services
                 {nameof(currentContact.SMSPhone), "SMS Phone"},
             };
 
-            for (var i = 0; i < (propertyNames.Length / 2) - 1; i++)
+            for (var i = 0; i < (propertyNames.Length / 2); i++)
             {
                 var property = currentContact.GetType().GetProperty(propertyNames[i, 0]);
 
