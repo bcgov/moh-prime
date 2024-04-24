@@ -434,7 +434,7 @@ namespace Prime.Services
 
             foreach (var pendingToRemoveUser in existingUsers.Values)
             {
-                result.Add($"Remote user '{pendingToRemoveUser.FirstName} {pendingToRemoveUser.LastName}' ({pendingToRemoveUser.Email}) was removed.");
+                result.Add($"Remote user '{pendingToRemoveUser.FirstName} {pendingToRemoveUser.LastName}', {pendingToRemoveUser.Email}, {pendingToRemoveUser.RemoteUserCertification.College.Name}, {pendingToRemoveUser.RemoteUserCertification.LicenseNumber} was removed.");
             }
             _context.RemoteUsers.RemoveRange(existingUsers.Values);
 
@@ -647,6 +647,7 @@ namespace Prime.Services
                 .Include(s => s.BusinessHours.OrderBy(bh => bh.Day))
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserCertification)
+                        .ThenInclude(c => c.College)
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)
