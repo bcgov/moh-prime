@@ -45,7 +45,8 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Site ID"
-                   formControlName="pec">
+                   formControlName="pec"
+                   appToUppercase>
             <mat-error *ngIf="pec.hasError('required')">
               Required
             </mat-error>
