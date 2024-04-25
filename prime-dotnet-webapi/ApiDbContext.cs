@@ -31,7 +31,7 @@ namespace Prime
             var connectionString = config.GetConnectionString("PrimeDatabase");
 
             var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseNpgsql(connectionString, opts => opts.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds));
             optionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: true);
 
             return new ApiDbContext(optionsBuilder.Options, null);
