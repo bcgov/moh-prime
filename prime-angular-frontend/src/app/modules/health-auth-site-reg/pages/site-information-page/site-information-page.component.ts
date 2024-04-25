@@ -17,6 +17,9 @@ import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/service
 import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared/classes/abstract-health-authority-site-registration-page.class';
 import { SiteInformationFormState } from './site-information-form-state.class';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { Observable, of } from 'rxjs';
+import { asyncValidator } from '@lib/validators/form-async.validators';
 
 @Component({
   selector: 'app-site-information-page',
@@ -40,6 +43,7 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
     protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
+    protected siteResource: SiteResource,
     private fb: FormBuilder,
     private configService: ConfigService,
     router: Router
@@ -69,6 +73,9 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
   public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
+
+    //add validation to PEC
+    this.formState.pec.addAsyncValidators(asyncValidator(this.checkPecIsAssignable(), 'assignable'));
   }
 
   protected createFormInstance(): void {
@@ -119,5 +126,9 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
 
   protected onSubmitFormIsInvalid(): void {
     this.showAddressFields = true;
+  }
+
+  private checkPecIsAssignable(): (value: string) => Observable<boolean> {
+    return (value: string) => value ? this.siteResource.pecAssignable(this.route.snapshot.params.sid, value) : of(true);
   }
 }
