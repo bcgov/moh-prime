@@ -365,7 +365,7 @@ namespace Prime.Services
             var newHourStr = "";
             foreach (var businessHour in updated.BusinessHours)
             {
-                newHourStr += $"   {businessHour.Day} {businessHour.StartTime} {businessHour.EndTime} " + Environment.NewLine;
+                newHourStr += $"   {businessHour.Day} {businessHour.StartTime} {businessHour.EndTime}" + Environment.NewLine;
                 businessHour.SiteId = current.Id;
                 _context.Entry(businessHour).State = EntityState.Added;
             }
