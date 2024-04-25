@@ -370,7 +370,7 @@ namespace Prime.Services
                 _context.Entry(businessHour).State = EntityState.Added;
             }
 
-            if (currentHourStr.Equals(newHourStr))
+            if (!currentHourStr.Equals(newHourStr))
             {
                 result.Add($"Hours updated from {Environment.NewLine}{currentHourStr}  to{Environment.NewLine}{newHourStr}");
             }
