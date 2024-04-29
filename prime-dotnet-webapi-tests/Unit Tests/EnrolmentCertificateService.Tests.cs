@@ -23,7 +23,8 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
             var service = MockDependenciesFor<EnrolmentCertificateService>();
 
-            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenWithCareSettingAsync(enrollee.Id,
+                enrollee.EnrolleeCareSettings.First().CareSettingCode, null);
             Assert.NotNull(token);
 
             EnrolmentCertificate cert = await service.GetEnrolmentCertificateAsync(token.Id);
@@ -38,7 +39,8 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
             var service = MockDependenciesFor<EnrolmentCertificateService>();
 
-            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenWithCareSettingAsync(enrollee.Id,
+                enrollee.EnrolleeCareSettings.First().CareSettingCode, null);
             Assert.NotNull(token);
             Assert.Equal(0, token.ViewCount);
 
@@ -59,7 +61,8 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
             var service = MockDependenciesFor<EnrolmentCertificateService>();
 
-            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenWithCareSettingAsync(enrollee.Id,
+                enrollee.EnrolleeCareSettings.First().CareSettingCode, null);
             // Assert that the difference between the computed and actual expiry date is less than some tolerance.
             Assert.True((DateTimeOffset.Now.Add(tokenLifespan) - token.Expires).Duration() < tolerance);
             Assert.NotNull(token);

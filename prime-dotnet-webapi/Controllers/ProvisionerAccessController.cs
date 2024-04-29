@@ -66,7 +66,8 @@ namespace Prime.Controllers
             }
 
             //set health authority
-            if (certificate.HealthAuthories.Count() > 0)
+            if (certificate.CareSettings.Any(cs => cs.Code == (int)CareSettingType.HealthAuthority) &&
+                certificate.HealthAuthories != null && certificate.HealthAuthories.Count() > 0)
             {
                 var careSetting = certificate.CareSettings.First(cs => cs.Code == (int)CareSettingType.HealthAuthority);
                 careSetting.Name += $" - {string.Join(", ", certificate.HealthAuthories.Select(ha => ha.Name))}";
@@ -135,9 +136,10 @@ namespace Prime.Controllers
                 return BadRequest("The enrollee for this User Id is not in an editable state.");
             }
 
-            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
+            EnrolmentCertificateAccessToken createdToken = null;
             foreach (var emailPair in providedEmails)
             {
+                createdToken = await _certificateService.CreateCertificateAccessTokenWithCareSettingAsync(enrolleeId, emailPair.CareSettingCode, emailPair.HealthAuthorityCode);
                 await _emailService.SendProvisionerLinkAsync(emailPair.Emails, createdToken, emailPair.CareSettingCode);
                 await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emailPair.Emails)}");
             }
