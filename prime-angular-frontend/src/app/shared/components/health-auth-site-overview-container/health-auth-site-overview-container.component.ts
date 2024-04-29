@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { Contact } from '@lib/models/contact.model';
 
 @Component({
@@ -16,14 +17,6 @@ export class HealthAuthSiteOverviewContainerComponent implements OnInit {
   public isIncomplete: boolean;
   public isApproved: boolean;
 
-  public get pharmanetAdministratorName(): string {
-    return (this.healthAuthoritySite as HealthAuthoritySiteAdmin)?.pharmanetAdministratorName;
-  }
-
-  public get technicalSupportName(): string {
-    return (this.healthAuthoritySite as HealthAuthoritySiteAdmin)?.technicalSupportName;
-  }
-
   constructor() {
     this.pharmanetAdministrators = [];
     this.technicalSupports = [];
@@ -33,5 +26,4 @@ export class HealthAuthSiteOverviewContainerComponent implements OnInit {
     this.isIncomplete = this.healthAuthoritySite?.isIncomplete();
     this.isApproved = this.healthAuthoritySite?.isApproved();
   }
-
 }
