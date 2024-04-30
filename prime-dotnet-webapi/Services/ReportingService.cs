@@ -156,7 +156,7 @@ namespace Prime.Services
                 copySql.Append($"and \"TransactionId\" > '{maxTransactionId}' ");
             }
 
-            _context.Database.SetCommandTimeout(180);
+            _context.Database.SetCommandTimeout(300);
             int result = await _context.Database.ExecuteSqlRawAsync(copySql.ToString());
 
             return result;
