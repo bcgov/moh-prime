@@ -188,7 +188,7 @@ namespace Prime.Services
                 {
                     var site = await GetSiteAsync(siteId);
                     // Send HIBC an email when remote users are updated for a submitted site
-                    await _emailService.SendRemoteUsersUpdatedAsync(site);
+                    await _emailService.SendRemoteUsersUpdatedAsync(site, updateRemoteUserResult);
                     await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent remote user(s) updated notification");
                 }
             }
@@ -434,7 +434,9 @@ namespace Prime.Services
 
             foreach (var pendingToRemoveUser in existingUsers.Values)
             {
-                result.Add($"Remote user '{pendingToRemoveUser.FirstName} {pendingToRemoveUser.LastName}', {pendingToRemoveUser.Email}, {pendingToRemoveUser.RemoteUserCertification.College.Name}, {pendingToRemoveUser.RemoteUserCertification.LicenseNumber} was removed.");
+                var message = $"Remote user '{pendingToRemoveUser.FirstName} {pendingToRemoveUser.LastName}', {pendingToRemoveUser.Email}, " +
+                    $"{pendingToRemoveUser.RemoteUserCertification.College.Name} - {pendingToRemoveUser.RemoteUserCertification.LicenseNumber}{pendingToRemoveUser.RemoteUserCertification.PractitionerId} was removed.";
+                result.Add(message);
             }
             _context.RemoteUsers.RemoveRange(existingUsers.Values);
 

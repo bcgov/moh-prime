@@ -118,7 +118,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendRemoteUsersUpdatedAsync(CommunitySite site)
+        public async Task SendRemoteUsersUpdatedAsync(CommunitySite site, List<string> remoteUserChanges = null)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.BusinessLicence.Id);
             var viewModel = new RemoteUsersUpdatedEmailViewModel
@@ -126,7 +126,7 @@ namespace Prime.Services
                 SiteStreetAddress = site.PhysicalAddress.Street,
                 OrganizationName = site.Organization.Name,
                 SitePec = site.PEC,
-                RemoteUserNames = site.RemoteUsers.Select(ru => $"{ru.FirstName} {ru.LastName}"),
+                RemoteUsers = remoteUserChanges != null ? remoteUserChanges : site.RemoteUsers.Select(ru => $"{ru.FirstName} {ru.LastName}"),
                 DocumentUrl = downloadUrl
             };
 
