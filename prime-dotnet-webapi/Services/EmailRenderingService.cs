@@ -101,7 +101,7 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderRenewalPassedEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
-            viewModel.PrimeUrl = $"{PrimeConfiguration.Current.FrontendUrl}/info";
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.EnrolleeRenewalPassed);
 
             return new Email
@@ -115,7 +115,7 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderForcedRenewalPassedEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
-            viewModel.PrimeUrl = $"{PrimeConfiguration.Current.FrontendUrl}/info";
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.ForcedRenewalPassedNotification);
 
             return new Email
@@ -129,7 +129,7 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderRenewalRequiredEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
-            viewModel.PrimeUrl = $"{PrimeConfiguration.Current.FrontendUrl}/info";
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.EnrolleeRenewalRequired);
 
             return new Email
@@ -143,7 +143,7 @@ namespace Prime.Services.EmailInternal
 
         public async Task<Email> RenderForcedRenewalEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
-            viewModel.PrimeUrl = $"{PrimeConfiguration.Current.FrontendUrl}/info";
+            viewModel.PrimeUrl = PrimeConfiguration.Current.FrontendUrl;
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.ForcedRenewalNotification);
 
             return new Email
