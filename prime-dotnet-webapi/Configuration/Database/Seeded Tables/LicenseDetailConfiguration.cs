@@ -375,7 +375,7 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 308, LicenseCode = 61, Prefix = "98", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = RemoteAccessChangeJan23rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 309, LicenseCode = 62, Prefix = "98", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = RemoteAccessChangeJan23rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Provisional - Family & Specially should be able to ask for remote access
+                    // Provisional - Family & Specialty should be able to ask for remote access
                     new LicenseDetail { Id = 310, LicenseCode = 5, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = ProvisionalPhysiciansMay3rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                     new LicenseDetail { Id = 311, LicenseCode = 6, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = ProvisionalPhysiciansMay3rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                 };
