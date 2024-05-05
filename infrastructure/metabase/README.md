@@ -20,7 +20,7 @@
 
 `docker push image-registry.apps.silver.devops.gov.bc.ca/<namespace>/metabase:<image-version>`
 
-### 6. Point the latest image in metabase imagestream to the newly downlowded image
+### 6. Point the latest image in metabase imagestream to the newly downloaded image
 
 `oc tag metabase:v0.47.2 metabase:latest`
 
