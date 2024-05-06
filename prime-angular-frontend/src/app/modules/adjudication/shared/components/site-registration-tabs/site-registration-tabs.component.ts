@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,7 +22,7 @@ import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-sit
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { SearchHAFormComponent } from '../search-ha-form/search-ha-form.component';
 
 @Component({
   selector: 'app-site-registration-tabs',
@@ -32,6 +32,7 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage implements OnInit {
   public busy: Subscription;
   @Input() public refresh: Observable<boolean>;
+  @ViewChild('searchHaForm') searchHaForm: SearchHAFormComponent;
 
   public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
   public healthAuthoritySites: HealthAuthoritySiteAdminList[];
@@ -128,6 +129,11 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     this.routeUtils.removeQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index], page: null });
   }
 
+  public onTextSearch(textSearch: string | null): void {
+    this.routeUtils.updateQueryParams({ textSearch, page: null });
+    this.searchHaForm.textSearch.setValue(textSearch);
+  }
+
   public ngOnInit(): void {
     // Use existing query params for initial search, and
     // update results on query param change
@@ -159,7 +165,13 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     if (careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
       const { textSearch, careType, statusId, vendorId, assignToMe } = queryParams;
       this.healthAuthResource.getHealthAuthoritySitesByQuery({ textSearch, careType, statusId, vendorId, assignToMe })
-        .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = sites)
+        .subscribe((sites: HealthAuthoritySiteAdminList[]) => {
+          sites.forEach((s: HealthAuthoritySiteAdminList) => {
+            s.duplicatePecSiteCount = sites.filter((innerSite: HealthAuthoritySiteAdminList) => innerSite.id !== s.id
+              && innerSite.pec && innerSite.pec === s.pec).length;
+          });
+          this.healthAuthoritySites = sites;
+        })
     } else {
       this.busy = this.getPaginatedSites({ careSettingCode, ...queryParams })
         .subscribe((paginatedList: PaginatedList<SiteRegistrationListViewModel>) => {

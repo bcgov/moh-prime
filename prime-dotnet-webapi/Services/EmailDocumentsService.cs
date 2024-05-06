@@ -121,7 +121,8 @@ namespace Prime.Services.EmailInternal
                         Certification = new CertViewModel
                         {
                             CollegeName = ru.RemoteUserCertification.College.Name,
-                            LicenceNumber = ru.RemoteUserCertification.LicenseNumber
+                            LicenceNumber = ru.RemoteUserCertification.LicenseNumber,
+                            PharmanetId = ru.RemoteUserCertification.PractitionerId
                         }
                     }),
                     SigningAuthority = new ContactViewModel

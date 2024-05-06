@@ -197,7 +197,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       this.siteResource.updateSite(this.siteFormStateService.json)
     );
 
-    if (this.siteFormStateService.businessLicenceFormState.pec.value) {
+    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST || this.siteFormStateService.businessLicenceFormState.pec.value) {
       return request$;
     }
 

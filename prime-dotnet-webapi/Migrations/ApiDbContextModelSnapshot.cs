@@ -4409,12 +4409,12 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "The email will be triggered when an adjudicator approves a community site with remote user.",
                             EmailType = 5,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 3, 20, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Recipient = "To: Remote User",
                             Subject = "Remote Practitioner Notification",
-                            Template = "Hello,<p><p>The Ministry of Health has been notified that you require remote access to PharmaNet at:<br/> <br/> Organization name: @Model.OrganizationName <br/> Site address: @Model.SiteStreetAddress, @Model.SiteCity <br/> <br/>To access PharmaNet remotely, you must enrol in PRIME and indicate that you require remote access. If you have already enrolled in PRIME, you must log into PRIME and add remote access to your profile. Refer to <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides\">PRIME user guides</a> for instructions. </p><p>You can enrol or update your profile at <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>.</p> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            Template = "Hello,<p><p>The Ministry of Health has been notified that you require remote access to PharmaNet at:<br/> <br/> Organization name: @Model.OrganizationName <br/> Site address: @Model.SiteStreetAddress, @Model.SiteCity <br/> <br/>To access PharmaNet remotely, you must enrol in PRIME and indicate that you require remote access. If you have already enrolled in PRIME, you must log into PRIME and add remote access for this clinic to your profile. <p><p>**Remote access is only available for practitioners on an exceptional basis, to care for patients of a clinic that has identified the practitioner in the clinic's PRIME site registration. Remote access means you are physically located outside the premises of an approved PharmaNet site. <span class=\"text-danger\">You must always be physically located in BC when using PharmaNet, even if approved for remote access.</span><p>Remote access to PharmaNet when working for a health authority is managed by that health authority, outside of PRIME. Please contact your health authority.</p> <p>If you do not require remote access to the site identified above, please advise the site so they can remove you from their remote user list in PRIME.</p><p>Once you have logged into to PRIME: </p><p> - If you are enrolling for the first time, click the toggle to request remote access if you require it. </p><p>- If you are updating your existing PRIME profile, click the <strong>Edit Remote Access</strong> button or pencil icon for that section, then click the toggle to request remote access</p><p> - Click Save and Continue to update. Refer to <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides#update\">update information or renew enrolment</a> for instructions. </p><p>You can enrol or update your profile at <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>.</p> Please connect by email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/> PRIMESupport@gov.bc.ca</br> <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides\">PRIME user guides</a>",
                             TemplateName = "Remote User Notification",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2024, 3, 20, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4454,12 +4454,12 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "The email will be triggered daily at 3pm in a batch process. The email will be sent to the enrollee, whose ToA expiry date is coming in 14,  7, 3, 2, 1, 0 days.",
                             EmailType = 8,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 3, 20, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Recipient = "To: Enrollee",
                             Subject = "Renew Your PRIME Enrolment",
-                            Template = "@{ var renewalDate = Model.RenewalDate.Date.ToShortDateString(); } <p>Hello  @Model.EnrolleeName,</p><p>It is time to renew your PRIME enrolment. If you still need PharmaNet to care for patients, you must ensure that your PRIME profile is current. Update/ renew your profile  and sign the terms of access every year. </p><p>Please renew by @renewalDate.</p><ol><li>Log in to PRIME <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.</li><li>Click <b>Renew or Update Information</b> (top of screen).</li><li>On the PRIME Profile screen, review your information.<ol style='list-style-type:lower-alpha;'><li>Select the edit button to revise sections that are out of date. Click <strong>Continue</strong> at the bottom of updated screens to save changes.</li><li>Once changes are saved, <strong> check the \"I certify\" box and click the submit button</strong>.</li></ol></li><li>If instructed to go on, click <b>Continue.</b></li><li>If you are notified that your renewal is approved, go to the next screen to review and accept the PharmaNet user terms of access. This step completes your renewal. The terms of access may have changed, so please read carefully.</li> If your renewal is sent for review, you will either be contacted by the PRIME Support team or notified to log in to PRIME to complete the remaining steps.<li> You will be prompted to share your renewal approval with the person or team in your workplace who sets up PharmaNet accounts if you changed workplaces or care setting (new clinic, health authority, etc.) since you last updated your account, or you did not share the approval notification with your PharmaNet administrator earlier. You do this by entering their email address(es) and clicking the send button. <ol style='list-style-type:lower-alpha;'> </li></ol></li></ol><p>Please connect by phone or email if you have any questions. <br/>Thank you for renewing your PRIME enrolment.</p> </p> <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            Template = "@{ var renewalDate = Model.RenewalDate.Date.ToShortDateString(); } <p>Hello  @Model.EnrolleeName,</p><p>  If you still need PharmaNet access you must renew your PRIME enrolment annually. </p><p>Please renew by @renewalDate.</p><ol><li>Go to PRIME <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.</li><li>Click <b>Access Individual Enrolment</b>.</li><li>On the PRIME Profile screen, review your information.<ol style='list-style-type:lower-alpha;'><li>Select the edit button or pencil icon to revise sections that are out of date. Click <strong>Continue</strong> at the bottom of updated screens to save changes.</li><li>Once changes are saved, check the <strong>\"I certify\"</strong> box and click the <strong>Submit Enrolment</strong> button.</li><li>If instructed to go on, click <b>Continue</b>, then go to the next screen to review and accept the PharmaNet user terms of access.  The terms of access may have changed, so please read carefully.</li></ol>This step completes your renewal and turns off notices until your next renewal cycle.</li> <li>If your renewal is sent for review, you will either be contacted by the PRIME Support team or notified to log in to PRIME to complete the remaining steps.</li><li> You may need to share your PRIME approval email with the person or team in your workplace who sets up PharmaNet accounts if something has changed since you last updated your account; for example: name change, access type, care setting, or college license information. You do this by entering their email address(es) in the line for the relevant care setting on the Next Steps to Get PharmaNet screen and clicking the send button. <ol style='list-style-type:lower-alpha;'> </li></ol></li></ol><p>Please connect by phone or email if you have any questions. <br/>Thank you for renewing your PRIME enrolment.</p> <br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca <p><a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides\">PRIME user guides</a>",
                             TemplateName = "Enrollee Renewal Required",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2024, 3, 20, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -5177,6 +5177,9 @@ namespace Prime.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("CareSettingCode")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -5188,6 +5191,9 @@ namespace Prime.Migrations
 
                     b.Property<DateTimeOffset>("Expires")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("HealthAuthorityCode")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -11521,6 +11527,38 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
+                        },
+                        new
+                        {
+                            Id = 310,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 5, 3, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 5,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 311,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 5, 3, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 6,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
                         });
                 });
 
@@ -12057,6 +12095,68 @@ namespace Prime.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLog");
+                });
+
+            modelBuilder.Entity("Prime.Models.PharmanetTransactionLogTemp", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("CollegePrefix")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LocationIpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PharmacyId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PractitionerId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderSoftwareId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderSoftwareVersion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SourceIpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<long>("TransactionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TransactionOutcome")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TransactionSubType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TransactionType")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("TxDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PharmacyId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.HasIndex("TxDateTime");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PharmanetTransactionLogTemp");
                 });
 
             modelBuilder.Entity("Prime.Models.Plr.CollegeForPlrRoleType", b =>
@@ -14426,10 +14526,19 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DateofBirth")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTimeOffset?>("EffectiveDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiddleInitial")
                         .HasColumnType("text");
 
                     b.Property<string>("PracRefId")
@@ -14437,6 +14546,9 @@ namespace Prime.Migrations
 
                     b.Property<DateTime?>("ProcessedDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -15286,7 +15398,9 @@ namespace Prime.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("LicenseNumber")
-                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PractitionerId")
                         .HasColumnType("text");
 
                     b.Property<int>("RemoteUserId")
@@ -15972,6 +16086,11 @@ namespace Prime.Migrations
                         {
                             Code = 5,
                             Name = "Declined"
+                        },
+                        new
+                        {
+                            Code = 6,
+                            Name = "Disabled"
                         });
                 });
 
