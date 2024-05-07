@@ -46,6 +46,8 @@ import { SiteNotification } from '../models/site-notification.model';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
+import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
+import { Status } from '../components/review-status-content/review-status-content.component';
 
 @Injectable({
   providedIn: 'root'
@@ -473,6 +475,7 @@ export class AdjudicationResource {
   // ---
 
   public createAdmin(admin: Admin): Observable<Admin> {
+    admin.status = AccessStatusEnum.UNDER_REVIEW;
     return this.apiResource.post<Admin>('admins', admin)
       .pipe(
         map((response: ApiHttpResponse<Admin>) => response.result),
@@ -491,6 +494,45 @@ export class AdjudicationResource {
         tap((admins: Admin[]) => this.logger.info('ADMINS', admins)),
         catchError((error: any) => {
           this.logger.error('[Adjudication] AdjudicationResource::getAdjudicators error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAdjudicatorByUserId(userId: string): Observable<Admin> {
+    return this.apiResource.get<Admin>(`admins/${userId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Admin>) => response.result),
+        tap((admin: Admin) => this.logger.info('ADMIN', admin)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
+          this.logger.error('[Adjudication] AdjudicationResource::getAdjudicatorByUserId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public enableAdmin(adminId: number): Observable<Admin> {
+    return this.apiResource.put<Admin>(`admins/${adminId}/enable`)
+      .pipe(
+        map((response: ApiHttpResponse<Admin>) => response.result),
+        tap((admin: Admin) => this.logger.info('ADMIN', admin)),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::enableAdmin error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public disableAdmin(adminId: number): Observable<Admin> {
+    return this.apiResource.put<Admin>(`admins/${adminId}/disable`)
+      .pipe(
+        map((response: ApiHttpResponse<Admin>) => response.result),
+        tap((admin: Admin) => this.logger.info('ADMIN', admin)),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::disableAdmin error has occurred: ', error);
           throw error;
         })
       );

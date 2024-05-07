@@ -58,10 +58,16 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public Task<Admin> GetAdminAsync(int adminId)
+        public Task<Admin> GetAdminAsync(int id)
         {
             return _context.Admins
-                .SingleOrDefaultAsync(a => a.Id == adminId);
+                .SingleOrDefaultAsync(a => a.Id == id);
+        }
+
+        public Task<Admin> GetAdminByUserIdAsync(string userId)
+        {
+            return _context.Admins
+                .SingleOrDefaultAsync(a => a.UserId == Guid.Parse(userId));
         }
 
         public async Task<Admin> GetAdminAsync(string username)
@@ -97,5 +103,20 @@ namespace Prime.Services
                 return 0;
             }
         }
+
+        public async Task<Admin> SetAdminEnable(int adminId, bool enable)
+        {
+            var admin = await _context.Admins
+                .Where(admin => admin.Id == adminId)
+                .Select(admin => admin)
+                .SingleAsync();
+
+            admin.Status = enable ? (int)StatusType.Editable : (int)StatusType.Disabled;
+
+            await _context.SaveChangesAsync();
+
+            return admin;
+        }
+
     }
 }

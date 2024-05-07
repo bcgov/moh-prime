@@ -54,8 +54,8 @@ namespace Prime.Controllers
             var createdAdminId = await _adminService.CreateAdminAsync(admin);
 
             return CreatedAtAction(
-                nameof(GetAdminById),
-                new { adminId = createdAdminId },
+                nameof(GetAdminByUserId),
+                new { userId = admin.UserId },
                 admin
             );
         }
@@ -75,22 +75,22 @@ namespace Prime.Controllers
         }
 
 
-        // GET: api/Admins/5
+        // GET: api/Admins/5c77e6ad-023f-4742-b95e-8beeb3052942
         /// <summary>
         /// Gets a specific Admin.
         /// </summary>
-        /// <param name="adminId"></param>
-        [HttpGet("{adminId}", Name = nameof(GetAdminById))]
+        /// <param name="userId"></param>
+        [HttpGet("{userId}", Name = nameof(GetAdminByUserId))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAdminById(int adminId)
+        public async Task<ActionResult> GetAdminByUserId(string userId)
         {
-            var admin = await _adminService.GetAdminAsync(adminId);
+            var admin = await _adminService.GetAdminByUserIdAsync(userId);
             if (admin == null)
             {
-                return NotFound($"Admin not found with id {adminId}");
+                return NotFound($"Admin not found with user id {userId}");
             }
 
             return Ok(admin);
@@ -107,6 +107,52 @@ namespace Prime.Controllers
         public ActionResult GetMetabaseEmbeddedString()
         {
             return Ok(_metabaseService.BuildMetabaseEmbeddedUrl());
+        }
+
+        // PUT: api/Admins/5/disable
+        /// <summary>
+        /// Disable admin user.
+        /// </summary>
+        /// <param name="adminId"></param>
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [HttpPut("{adminId}/disable", Name = nameof(DisableAdminById))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> DisableAdminById(int adminId)
+        {
+            var admin = await _adminService.GetAdminAsync(adminId);
+            if (admin == null)
+            {
+                return NotFound($"Admin not found with id {adminId}");
+            }
+            admin = await _adminService.SetAdminEnable(adminId, false);
+
+            return Ok(admin);
+        }
+
+        // PUT: api/Admins/5/enable
+        /// <summary>
+        /// Enable admin user.
+        /// </summary>
+        /// <param name="adminId"></param>
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [HttpPut("{adminId}/enable", Name = nameof(EnableAdminById))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> EnableAdminById(int adminId)
+        {
+            var admin = await _adminService.GetAdminAsync(adminId);
+            if (admin == null)
+            {
+                return NotFound($"Admin not found with id {adminId}");
+            }
+            admin = await _adminService.SetAdminEnable(adminId, true);
+
+            return Ok(admin);
         }
     }
 }
