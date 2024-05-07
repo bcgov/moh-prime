@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
@@ -25,6 +26,10 @@ namespace Prime.Models
 
         [Required]
         public string IDIR { get; set; }
+
+        [Required]
+        [DefaultValue(StatusType.Editable)]
+        public int Status { get; set; }
 
         /// <summary>
         /// e.g. "jsmith@idir"

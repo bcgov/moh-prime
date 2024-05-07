@@ -1,0 +1,41 @@
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { Component, OnInit } from '@angular/core';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Admin } from '@auth/shared/models/admin.model';
+
+@Component({
+  selector: 'app-admin-users-table',
+  templateUrl: './admin-users-table.component.html',
+  styleUrls: ['./admin-users-table.component.scss']
+})
+export class AdminUsersTableComponent implements OnInit {
+
+  public dataSource: Admin[];
+  public displayColumns: string[] = ['username', 'firstname', 'lastname', 'status'];
+
+  constructor(
+    private adjudicationResource: AdjudicationResource,
+  ) {
+  }
+
+  public ToggoleStatus(adminId: number, change: MatSlideToggleChange) {
+    if (change.checked) {
+      this.adjudicationResource.enableAdmin(adminId).subscribe((admin: Admin) => {
+        this.dataSource.find(admin => admin.id === adminId).status = admin.status;
+      });
+    } else {
+      this.adjudicationResource.disableAdmin(adminId).subscribe((admin: Admin) => {
+        this.dataSource.find(admin => admin.id === adminId).status = admin.status;
+      });
+    }
+  }
+
+  public ngOnInit(): void {
+    this.getAdjudicators();
+  }
+
+  private getAdjudicators(): void {
+    this.adjudicationResource.getAdjudicators()
+      .subscribe((adjudicators: Admin[]) => this.dataSource = adjudicators);
+  }
+}

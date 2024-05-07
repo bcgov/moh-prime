@@ -11,7 +11,9 @@ namespace Prime.Services
 
         Task<bool> UsernameExistsAsync(string username);
 
-        Task<Admin> GetAdminAsync(int adminId);
+        Task<Admin> GetAdminByUserIdAsync(string userId);
+
+        Task<Admin> GetAdminAsync(int id);
 
         Task<Admin> GetAdminAsync(string username);
 
@@ -24,5 +26,7 @@ namespace Prime.Services
         Task<int> UpdateAdminAsync(int adminId, Admin admin);
 
         Task DeleteAdminAsync(int adminId);
+
+        Task<Admin> SetAdminEnable(int adminId, bool enable);
     }
 }

@@ -7,5 +7,6 @@ namespace Prime.Models
         RequiresToa = 3,
         Locked = 4,
         Declined = 5,
+        Disabled = 6,
     }
 }

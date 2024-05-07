@@ -5,4 +5,5 @@ export interface Admin extends User {
   userId: string; // Keycloak identifier
   idir: string;
   username: string; // e.g. jsmith@idir
+  status: number;
 }
