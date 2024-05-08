@@ -12,6 +12,7 @@ using Prime.Models;
 using Prime.ViewModels;
 using AutoMapper.QueryableExtensions;
 using Prime.Models.Api;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Prime.Services
 {
@@ -397,8 +398,6 @@ namespace Prime.Services
                 cert.RemoteUserId = 0;
             }
 
-            //bool remoteUsersUpdated = false;
-
             var existingUsers = current.RemoteUsers.ToDictionary(x => x.Id, x => x);
 
             foreach (var updatedUser in updateRemoteUsers)
@@ -434,13 +433,29 @@ namespace Prime.Services
 
             foreach (var pendingToRemoveUser in existingUsers.Values)
             {
-                var message = $"Remote user '{pendingToRemoveUser.FirstName} {pendingToRemoveUser.LastName}', {pendingToRemoveUser.Email}, " +
-                    $"{pendingToRemoveUser.RemoteUserCertification.College.Name} - {pendingToRemoveUser.RemoteUserCertification.LicenseNumber}{pendingToRemoveUser.RemoteUserCertification.PractitionerId} was removed.";
+                var message = $"Remote user '{pendingToRemoveUser.FirstName} {pendingToRemoveUser.LastName}', " +
+                    $"{GetRemoteUserCollegeLicenseInfo(pendingToRemoveUser.RemoteUserCertification)} was removed.";
                 result.Add(message);
             }
             _context.RemoteUsers.RemoveRange(existingUsers.Values);
 
             return result;
+        }
+
+        private string GetRemoteUserCollegeLicenseInfo(RemoteUserCertification remoteUserCert)
+        {
+            if (remoteUserCert.CollegeCode == 1)
+            {
+                return $"CPSBC, CPSID Number: {remoteUserCert.LicenseNumber}";
+            }
+            else if (remoteUserCert.CollegeCode == 3)
+            {
+                return $"BCCNM, PharmaNet ID: {remoteUserCert.PractitionerId}";
+            }
+            else
+            {
+                return $"{remoteUserCert.College.Name}, Registration ID: {remoteUserCert.LicenseNumber}";
+            }
         }
 
         private List<string> UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated, List<Vendor> vendors)
