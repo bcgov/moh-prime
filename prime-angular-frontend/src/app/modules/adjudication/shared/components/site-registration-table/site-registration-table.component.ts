@@ -108,6 +108,22 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
     }
   }
 
+  public displayMissingBusinessLicence(row: SiteRegistrationListViewModel) {
+    if (row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+      if (row.missingBusinessLicence === undefined) {
+        row.missingBusinessLicence = row.businessLicence === null ||
+          row.businessLicence.businessLicenceDocument === null
+      }
+      if (row.missingBusinessLicence) {
+        return "Yes"
+      } else {
+        return "No"
+      }
+    } else {
+      return "N/A";
+    }
+  }
+
   public remoteUsers(siteRegistration: SiteRegistrationListViewModel): number | 'Yes' | 'No' | 'N/A' {
     const count = siteRegistration.remoteUserCount;
 
