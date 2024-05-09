@@ -19,18 +19,19 @@ data:
       Health_Check  On
 
     [INPUT]
-      # get logs from file written by nginx app (eg: dev-webapi)
+      # get logs from file written by nginx app
       Name        tail
       Path        /tmp/error_fluentbit.log
       Tag         app
   
     [FILTER]
+      # filter logs based on cartain keyword(s)
       name   grep
       match  app
       regex  log error
     
     [FILTER]
-      # modify log entry to include more key/value pairs
+      # modify log entry to include namespace and container name
       name    record_modifier
       match   app
       # add namespace

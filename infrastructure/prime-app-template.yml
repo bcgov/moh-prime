@@ -681,7 +681,7 @@ objects:
               - name: DB_CONNECTION_STRING
                 value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
               - name: SERVER_LOGFILE
-              value: /opt/app-root/app/logs/*.log
+                value: /opt/app-root/app/logs/*.log
             ports:
               - containerPort: 1025
                 protocol: TCP

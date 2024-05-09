@@ -4,7 +4,7 @@ metadata:
   name: webapi-fluentbit-config
   namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
   labels: 
-    app.kubernetes.io/part-of: dev
+    app.kubernetes.io/part-of: ${OC_ENV}
 data:
   fluent-bit.conf: |
     [SERVICE]
@@ -19,10 +19,25 @@ data:
       Health_Check  On
 
     [INPUT]
-      # get logs from file written by nginx app (eg: dev-webapi)
+      # get logs from file written by webapi app
       Name        tail
       Path        /opt/app-root/app/logs/*.log
       Tag         app
+
+    [FILTER]
+      # filter logs based on cartain keyword(s)
+      name   grep
+      match  app
+      regex  log ERR
+
+    [FILTER]
+      # modify log entry to include namespace and container name
+      name    record_modifier
+      match   app
+      # add namespace
+      Record namespace ${OC_LICENSE_PLATE}-${OC_ENV}
+      # add container name
+      Record product ${OC_ENV}-webapi
 
     [FILTER]
       name          parser
@@ -33,24 +48,11 @@ data:
       Preserve_Key  On
     
     [FILTER]
-      # modify log entry to include more key/value pairs
-      name    record_modifier
-      match   app
-      # add namespace
-      Record  namespace ${OC_LICENSE_PLATE}-${OC_ENV}
-      # add pod name
-      Record  product ${OC_ENV}-webapi
-
-    [FILTER]
       Name          rewrite_tag
       Match         app
       Rule          $level ([a-zA-Z]*)$ $TAG.$level true
       Emitter_Name  re_emitted
 
-    [FILTER]
-      name   grep
-      match  app
-      regex  log ERR
 
     [OUTPUT]
       name                 slack
