@@ -72,7 +72,7 @@ parameters:
   value: '0 */6 * * *'
 - name: SLACK_WEBHOOK
   description: 'A private slack channel to forward log errors from frontend and webpi pods.'
-  value: 'https://hooks.slack.com/services/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'
+  value: 'https://hooks.slack.com/services/'
 objects:
 ###########################################
 ###               Frontend              ###
