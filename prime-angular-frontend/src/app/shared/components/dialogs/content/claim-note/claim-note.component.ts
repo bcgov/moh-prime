@@ -10,6 +10,7 @@ import { Admin } from '@auth/shared/models/admin.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 
 export class AssignAction {
   public action: AssignActionEnum;
@@ -104,6 +105,6 @@ export class ClaimNoteComponent implements OnInit {
 
   private getAdjudicators(): void {
     this.adjudicationResource.getAdjudicators()
-      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));
+      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators.filter(a => a.status !== AccessStatusEnum.DISABLED)));
   }
 }
