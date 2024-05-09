@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
-import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { Contact } from '@lib/models/contact.model';
 
 @Component({
