@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: frontend-fluentbit-config
-  namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+  namespace: ${NAMESPACE}
   labels: 
     app.kubernetes.io/part-of: ${OC_ENV}
 data:
@@ -35,7 +35,7 @@ data:
       name    record_modifier
       match   app
       # add namespace
-      Record namespace ${OC_LICENSE_PLATE}-${OC_ENV}
+      Record namespace ${NAMESPACE}
       # add container name
       Record product ${OC_ENV}-frontend
 
@@ -57,7 +57,7 @@ data:
     [OUTPUT]
       name                 slack
       match                app
-      webhook              https://hooks.slack.com/services/<>
+      webhook              ${SLACK_WEBHOOK}
 
     [OUTPUT]
       Name    stdout
