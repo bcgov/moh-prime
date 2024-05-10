@@ -40,6 +40,9 @@ namespace Prime.Models
         public IEnumerable<Enrollee> Enrollees { get; set; }
 
         [JsonIgnore]
+        public IEnumerable<Site> Sites { get; set; }
+
+        [JsonIgnore]
         public IEnumerable<EnrolleeNote> AdjudicatorNotes { get; set; }
 
         [JsonIgnore]

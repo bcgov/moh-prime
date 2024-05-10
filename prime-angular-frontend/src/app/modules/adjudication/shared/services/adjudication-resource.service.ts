@@ -5,7 +5,7 @@ import { forkJoin, Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import moment from 'moment';
 
-import { Admin } from '@auth/shared/models/admin.model';
+import { Admin, AdminUser } from '@auth/shared/models/admin.model';
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
@@ -492,6 +492,18 @@ export class AdjudicationResource {
       .pipe(
         map((response: ApiHttpResponse<Admin[]>) => response.result),
         tap((admins: Admin[]) => this.logger.info('ADMINS', admins)),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::getAdjudicators error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAdminUsers(): Observable<AdminUser[]> {
+    return this.apiResource.get<AdminUser[]>('admins/adminusers')
+      .pipe(
+        map((response: ApiHttpResponse<AdminUser[]>) => response.result),
+        tap((admins: AdminUser[]) => this.logger.info('ADMIN USERS', admins)),
         catchError((error: any) => {
           this.logger.error('[Adjudication] AdjudicationResource::getAdjudicators error has occurred: ', error);
           throw error;
