@@ -57,7 +57,7 @@ data:
     [OUTPUT]
       name                 slack
       match                app
-      webhook              ${SLACK_WEBHOOK}
+      webhook              https://hooks.slack.com/services/<>
 
     [OUTPUT]
       Name    stdout
