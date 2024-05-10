@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -20,6 +21,8 @@ namespace Prime.Services
         Task<string> GetAdminIdirAsync(int adminId);
 
         Task<IEnumerable<Admin>> GetAdminsAsync();
+
+        Task<IEnumerable<AdminUserViewModel>> GetAdminUserListAsync();
 
         Task<int> CreateAdminAsync(Admin admin);
 

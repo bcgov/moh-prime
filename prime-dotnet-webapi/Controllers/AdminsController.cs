@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Services;
+using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
@@ -74,6 +75,19 @@ namespace Prime.Controllers
             return Ok(admins);
         }
 
+        // GET: api/Admins/adminusers
+        /// <summary>
+        /// Gets all the admins.
+        /// </summary>
+        [HttpGet("adminusers", Name = nameof(GetAdminUserList))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<AdminUserViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAdminUserList()
+        {
+            var admins = await _adminService.GetAdminUserListAsync();
+            return Ok(admins);
+        }
 
         // GET: api/Admins/5c77e6ad-023f-4742-b95e-8beeb3052942
         /// <summary>

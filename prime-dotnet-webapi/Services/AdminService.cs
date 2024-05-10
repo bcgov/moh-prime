@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -88,6 +89,24 @@ namespace Prime.Services
         {
             return await _context.Admins
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AdminUserViewModel>> GetAdminUserListAsync()
+        {
+
+            return await _context.Admins.Select(a =>
+                new AdminUserViewModel
+                {
+                    Id = a.Id,
+                    FirstName = a.FirstName,
+                    LastName = a.LastName,
+                    Email = a.Email,
+                    Username = a.Username,
+                    Status = a.Status,
+                    SiteAssignment = a.Sites.Count(),
+                    EnrolleeAssignment = a.Enrollees.Count()
+                }
+            ).ToListAsync();
         }
 
         public async Task<int> UpdateAdminAsync(int adminId, Admin admin)

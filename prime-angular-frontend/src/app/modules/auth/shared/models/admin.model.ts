@@ -7,3 +7,8 @@ export interface Admin extends User {
   username: string; // e.g. jsmith@idir
   status: number;
 }
+
+export interface AdminUser extends Admin {
+  siteAssignment: number;
+  enrolleeAssignment: number;
+}

@@ -1,7 +1,7 @@
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Component, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { Admin } from '@auth/shared/models/admin.model';
+import { Admin, AdminUser } from '@auth/shared/models/admin.model';
 
 @Component({
   selector: 'app-admin-users-table',
@@ -10,8 +10,8 @@ import { Admin } from '@auth/shared/models/admin.model';
 })
 export class AdminUsersTableComponent implements OnInit {
 
-  public dataSource: Admin[];
-  public displayColumns: string[] = ['username', 'firstname', 'lastname', 'status'];
+  public dataSource: AdminUser[];
+  public displayColumns: string[] = ['username', 'firstname', 'lastname', 'siteassignment', 'enrolleeassignment', 'status'];
 
   constructor(
     private adjudicationResource: AdjudicationResource,
@@ -35,7 +35,7 @@ export class AdminUsersTableComponent implements OnInit {
   }
 
   private getAdjudicators(): void {
-    this.adjudicationResource.getAdjudicators()
-      .subscribe((adjudicators: Admin[]) => this.dataSource = adjudicators);
+    this.adjudicationResource.getAdminUsers()
+      .subscribe((adminUser: AdminUser[]) => this.dataSource = adminUser);
   }
 }
