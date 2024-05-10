@@ -472,6 +472,80 @@ objects:
         }
       }
 
+#   Fluent-Bit Configuration
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: frontend-fluentbit-config
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    labels: 
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  data:
+    fluent-bit.conf: |
+      [SERVICE]
+        Flush         5
+        Daemon        Off
+        # define the log format (see additional config map key/value)
+        Parsers_File  parsers.conf
+        Log_Level     info
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+        Health_Check  On
+
+      [INPUT]
+        # get logs from file written by nginx app
+        Name        tail
+        Path        /tmp/error_fluentbit.log
+        Tag         app
+    
+      [FILTER]
+        # filter logs based on cartain keyword(s)
+        name   grep
+        match  app
+        regex  log error
+      
+      [FILTER]
+        # modify log entry to include namespace and container name
+        name    record_modifier
+        match   app
+        # add namespace
+        Record namespace ${OC_LICENSE_PLATE}-${OC_ENV}
+        # add container name
+        Record product ${OC_ENV}-frontend
+
+      [FILTER]
+        name          parser
+        match         app
+        Key_Name      log
+        Parser        json
+        Reserve_Data  On
+        Preserve_Key  On
+
+      [FILTER]
+        Name          rewrite_tag
+        Match         app
+        Rule          $level ([a-zA-Z]*)$ $TAG.$level true
+        Emitter_Name  re_emitted
+
+
+      [OUTPUT]
+        name                 slack
+        match                app
+        webhook              ${SLACK_WEBHOOK}
+
+      [OUTPUT]
+        Name    stdout
+        Match   app
+        Format  json_lines
+
+    parsers.conf: |
+      [PARSER]
+        Name             json
+        Format           json
+        Decode_Field_as  escaped_utf8 log do_next
+        Decode_Field_as  json log
+
 #   Frontend Service
 - apiVersion: v1
   kind: Service
@@ -827,6 +901,81 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_LICENSE_PLATE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
+
+#   Fluent-Bit Configuration
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: webapi-fluentbit-config
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    labels: 
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  data:
+    fluent-bit.conf: |
+      [SERVICE]
+        Flush         5
+        Daemon        Off
+        # define the log format (see additional config map key/value)
+        Parsers_File  parsers.conf
+        Log_Level     info
+        HTTP_Server   On
+        HTTP_Listen   0.0.0.0
+        HTTP_Port     2020
+        Health_Check  On
+
+      [INPUT]
+        # get logs from file written by webapi app
+        Name        tail
+        Path        /opt/app-root/app/logs/*.log
+        Tag         app
+
+      [FILTER]
+        # filter logs based on cartain keyword(s)
+        name   grep
+        match  app
+        regex  log ERR
+
+      [FILTER]
+        # modify log entry to include namespace and container name
+        name    record_modifier
+        match   app
+        # add namespace
+        Record namespace ${OC_LICENSE_PLATE}-${OC_ENV}
+        # add container name
+        Record product ${OC_ENV}-webapi
+
+      [FILTER]
+        name          parser
+        match         app
+        Key_Name      log
+        Parser        json
+        Reserve_Data  On
+        Preserve_Key  On
+      
+      [FILTER]
+        Name          rewrite_tag
+        Match         app
+        Rule          $level ([a-zA-Z]*)$ $TAG.$level true
+        Emitter_Name  re_emitted
+
+
+      [OUTPUT]
+        name                 slack
+        match                app
+        webhook              ${SLACK_WEBHOOK}
+
+      [OUTPUT]
+        Name    stdout
+        Match   app
+        Format  json_lines
+
+    parsers.conf: |
+      [PARSER]
+        Name             json
+        Format           json
+        Decode_Field_as  escaped_utf8 log do_next
+        Decode_Field_as  json log
+
 
 #   Backend Web API Service
 - apiVersion: v1
