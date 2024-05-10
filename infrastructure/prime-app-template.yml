@@ -500,7 +500,7 @@ objects:
         Tag         app
     
       [FILTER]
-        # filter logs based on cartain keyword(s)
+        # filter logs based on certain keyword(s)
         name   grep
         match  app
         regex  log error
@@ -930,7 +930,7 @@ objects:
         Tag         app
 
       [FILTER]
-        # filter logs based on cartain keyword(s)
+        # filter logs based on certain keyword(s)
         name   grep
         match  app
         regex  log ERR
