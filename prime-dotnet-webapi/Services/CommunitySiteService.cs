@@ -358,8 +358,8 @@ namespace Prime.Services
             {
                 foreach (var businessHour in current.BusinessHours)
                 {
-                    var endTime = businessHour.EndTime.Days == 1 ? "24:00:00" : $"{businessHour.EndTime}";
-                    currentHourStr += $"   {businessHour.Day} {businessHour.StartTime} {endTime}" + Environment.NewLine;
+                    var endTime = businessHour.EndTime.Days == 1 ? "24:00" : $"{businessHour.EndTime.Hours:D2}:{businessHour.EndTime.Minutes:D2}";
+                    currentHourStr += $"     {businessHour.Day}   {businessHour.StartTime.Hours:D2}:{businessHour.StartTime.Minutes:D2} - {endTime}" + Environment.NewLine;
                     _context.Remove(businessHour);
                 }
             }
@@ -367,9 +367,9 @@ namespace Prime.Services
             var newHourStr = "";
             foreach (var businessHour in updated.BusinessHours)
             {
-                var endTime = businessHour.EndTime.Days == 1 ? "24:00:00" : $"{businessHour.EndTime}";
+                var endTime = businessHour.EndTime.Days == 1 ? "24:00" : $"{businessHour.EndTime.Hours:D2}:{businessHour.EndTime.Minutes:D2}";
 
-                newHourStr += $"   {businessHour.Day} {businessHour.StartTime} {endTime}" + Environment.NewLine;
+                newHourStr += $"     {businessHour.Day}   {businessHour.StartTime.Hours:D2}:{businessHour.StartTime.Minutes:D2} - {endTime}" + Environment.NewLine;
                 businessHour.SiteId = current.Id;
                 _context.Entry(businessHour).State = EntityState.Added;
             }
