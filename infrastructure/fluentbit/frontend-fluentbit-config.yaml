@@ -31,6 +31,13 @@ data:
       regex  log error
     
     [FILTER]
+      name          parser
+      match         app
+      Key_Name      log
+      Parser        parser
+      Preserve_Key  On
+
+    [FILTER]
       # modify log entry to include namespace and container name
       name    record_modifier
       match   app
@@ -38,15 +45,7 @@ data:
       Record namespace ${NAMESPACE}
       # add container name
       Record product ${OC_ENV}-frontend
-
-    [FILTER]
-      name          parser
-      match         app
-      Key_Name      log
-      Parser        parser
-      Reserve_Data  On
-      Preserve_Key  On
-
+      
     [FILTER]
       Name          rewrite_tag
       Match         app
@@ -67,6 +66,9 @@ data:
   parsers.conf: |
     [PARSER]
       Name             parser
-      Format           json
-      Decode_Field_as  escaped_utf8 log do_next
-      Decode_Field_as  json log
+      Format regex
+      Regex  (?<timestamp>\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) \[(?<level>.*)\]\ (?<process_id>\d*)#(?<thread_id>\d*): (?<message>.*)
+      Time_Key time
+      Time_Format %d/%b/%Y:%H:%M:%S %z
+      Types thread_id:integer process_id:integer
+

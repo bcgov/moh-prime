@@ -31,6 +31,13 @@ data:
       regex  log ERR
 
     [FILTER]
+      name          parser
+      match         app
+      Key_Name      log
+      Parser        parser
+      Preserve_Key  On
+
+    [FILTER]
       # modify log entry to include namespace and container name
       name    record_modifier
       match   app
@@ -39,14 +46,6 @@ data:
       # add container name
       Record product ${OC_ENV}-webapi
 
-    [FILTER]
-      name          parser
-      match         app
-      Key_Name      log
-      Parser        parser
-      Reserve_Data  On
-      Preserve_Key  On
-    
     [FILTER]
       Name          rewrite_tag
       Match         app
@@ -68,7 +67,6 @@ data:
     [PARSER]
       Name             parser
       Format regex
-      Regex  ^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$
+      Regex  \[(?<timestamp>\d{2}:\d{2}:\d{2})(?<level>.*)]\ (?<message>.*)
       Time_Key time
-      Time_Format %d/%b/%Y:%H:%M:%S %z
-      Types code:integer size:integer
+      Time_Format %H:%M:%S
