@@ -1,10 +1,10 @@
 # A Sidecar for collecting/processing Logs
 
-[Fluent-bit](https://docs.fluentbit.io/manual/about/what-is-fluent-bit) is basically a `log forwarder` tool that can be run as a sidecar container (a docker image) in each pod containing our apps. Although it can also be deployed as a stand-alone service (servicing multiple apps). Fluent-bit can forward logs to lots of different outputs for example, HTTP, Opensearch, Slack, AWS Lamda and a lot more (see: https://docs.fluentbit.io/manual/pipeline/outputs). The steps required for deploying a Fluent-bit sidecar are shown below. Note: These steps are to deploy the sidecar.
+[Fluent-bit](https://docs.fluentbit.io/manual/about/what-is-fluent-bit) is basically a `log forwarder` tool that can be run as a sidecar container (a docker image) in each pod containing our apps, although it can also be deployed as a stand-alone service (servicing multiple apps). Fluent-bit can forward logs to lots of different outputs for example, HTTP, Opensearch, Slack, AWS Lamda and a lot more (see: https://docs.fluentbit.io/manual/pipeline/outputs). The steps required for deploying a Fluent-bit sidecar are shown below. Note: These steps are to deploy the sidecar.
 
 You can read about a common-service-showcase in BCGOV which has deployed a Fluent-bit sidecar for CDOGS node application [here](https://github.com/bcgov/common-service-showcase/wiki/Logging-to-a-Sidecar).
 
-## Implementing a Fluent-bit for PRIME application on OpenShift
+## Implementing Fluent-bit for PRIME application on OpenShift
 
 We deploy a Fluent-bit sidecar container in both backend/webapi and frontend/nginx applications to collect/process/monitor Logs inside the apps and alert the PRIME team if certain keywords, regular expressions, etc. are matched in the log stream. Each release of Fluent-bit comes with a debug version (for example: fluent-bit:2.X-debug) that includes some other Linux tools such as busybox, bash, etc. and make testing the installation easier. In this example, we use `fluent-bit:3.0.3`. We forward alerts to a private Slack channel (a webhook). So our overall flow of logs is: 
 
