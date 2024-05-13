@@ -12,7 +12,6 @@ using Prime.Models;
 using Prime.ViewModels;
 using AutoMapper.QueryableExtensions;
 using Prime.Models.Api;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Prime.Services
 {
