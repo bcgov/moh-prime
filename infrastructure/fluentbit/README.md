@@ -29,3 +29,5 @@ oc process -n $NAMESPACE -f fluentbit-configmap.yaml \
   -p SLACK_ERROR_NOTIFICATION_WEBHOOK=$SLACK_ERROR_NOTIFICATION_WEBHOOK \
   -o yaml | oc -n $NAMESPACE apply -f -
   ```
+  
+  You can find the value of `SLACK_ERROR_NOTIFICATION_WEBHOOK` parameter under a secret called `slack-error-notification-webhook` on OpenShift.
