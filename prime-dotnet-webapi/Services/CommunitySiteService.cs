@@ -160,7 +160,7 @@ namespace Prime.Services
             if (currentSite.SubmittedDate == null)
             {
                 var vendors = await GetVendorsAsync();
-                UpdateVendors(currentSite, updatedSite, vendors);
+                updateDetail.AddRange(UpdateVendors(currentSite, updatedSite, vendors));
             }
 
             var addressUpdate = UpdateAddress(currentSite, updatedSite);
