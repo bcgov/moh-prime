@@ -65,9 +65,12 @@ namespace Prime
 
             try
             {
+                Console.WriteLine($"EnvironmentName={PrimeConfiguration.EnvironmentName}, path={path}");
                 if (PrimeConfiguration.IsDevelopment())
                 {
+                    Console.WriteLine("Creating logger dir ...");
                     Directory.CreateDirectory(path);
+                    Console.WriteLine("Created logger dir 😊");
                 }
             }
             catch (Exception e)
@@ -76,7 +79,7 @@ namespace Prime
             }
 
             var name = Assembly.GetExecutingAssembly().GetName();
-            var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+            var outputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u5}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy(new LoggingLevelSwitch() { MinimumLevel = PrimeConfiguration.LogLevel })

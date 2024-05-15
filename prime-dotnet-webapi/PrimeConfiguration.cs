@@ -14,7 +14,7 @@ namespace Prime
         public static readonly LogEventLevel LogLevel = ParseLogLevel(); // Default is Information but can be optionally overridden by the environment variable "LogLevel"
         public static bool IsDevelopment() => EnvironmentName == Environments.Development;
         public static bool IsProduction() => EnvironmentName == Environments.Production;
-        private static readonly string EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        public static readonly string EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
         public string FrontendUrl { get; set; }
         public string BackendUrl { get; set; }
