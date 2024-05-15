@@ -37,6 +37,12 @@ objects:
           name   grep
           match  app
           regex  log error
+          
+        [FILTER]
+          # exclude open() error from app logs
+          name     grep
+          match    app
+          Exclude  log open()
         
         [FILTER]
           name          parser
