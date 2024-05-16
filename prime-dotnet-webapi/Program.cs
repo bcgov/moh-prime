@@ -17,11 +17,6 @@ namespace Prime
     {
         public static int Main(string[] args)
         {
-            if (Directory.Exists("logs"))
-            {
-                Console.WriteLine("'logs' exists");
-            }
-
             CreateLogger();
             Log.Information($"LOG_LEVEL={(int)PrimeConfiguration.LogLevel}");
 
