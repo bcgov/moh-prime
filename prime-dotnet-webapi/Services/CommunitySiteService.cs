@@ -219,7 +219,7 @@ namespace Prime.Services
             if (current.PhysicalAddress == null)
             {
                 current.PhysicalAddress = updated.PhysicalAddress;
-                result.Add($"Physcial Address '{AddressToString(updated.PhysicalAddress)}' was added.");
+                result.Add($"Physical Address '{AddressToString(updated.PhysicalAddress)}' was added.");
             }
             else
             {
