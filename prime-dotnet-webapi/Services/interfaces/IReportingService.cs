@@ -17,5 +17,10 @@ namespace Prime.Services
         /// Calling PharmaNet API to get the contact information and store back to practitioner table
         /// </summary>
         Task<string> UpdatePractitionerTableAsync();
+        /// <summary>
+        /// Copy number of days old records from PharmanetTransactionLog table to PharmanetTransactionLogTemp
+        /// </summary>
+        /// <returns></returns>
+        Task<int> PopulateTransactionLogTempAsync(int numberInDays);
     }
 }

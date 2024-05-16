@@ -27,6 +27,15 @@
                         }
                       }">
           </ng-container>
+          <ng-container *ngIf="isDisabled(user)"
+                        [ngTemplateOutlet]="notification"
+                        [ngTemplateOutletContext]="{ props:
+                        {
+                          icon: 'no_accounts',
+                          text: 'This Authorized User is disabled'
+                        }
+                      }">
+          </ng-container>
         </app-summary-card>
       </div>
     </ng-container>

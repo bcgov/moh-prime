@@ -151,6 +151,16 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        public async Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, string username, string description)
+        {
+            var partyId = await _context.Parties
+                .Where(p => p.Username == username)
+                .Select(p => p.Id)
+                .SingleOrDefaultAsync();
+
+            return await CreateSiteEmailEventAsync(siteId, partyId, description);
+        }
+
         public async Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, string description)
         {
             var site = await _context.Sites
@@ -193,6 +203,16 @@ namespace Prime.Services
                     .SingleAsync(),
                 _ => throw new NotImplementedException($"Unknown Site Type in {nameof(CreateSiteEventAsync)}: {site.GetType()}")
             };
+
+            return await CreateSiteEventAsync(siteId, partyId, description);
+        }
+
+        public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, string username, string description)
+        {
+            var partyId = await _context.Parties
+                .Where(p => p.Username == username)
+                .Select(p => p.Id)
+                .SingleOrDefaultAsync();
 
             return await CreateSiteEventAsync(siteId, partyId, description);
         }
