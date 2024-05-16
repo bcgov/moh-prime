@@ -13,6 +13,7 @@ using Prime.Models;
 using Prime.Services.EmailInternal;
 using Prime.ViewModels.Emails;
 using Prime.ViewModels;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
 {
@@ -217,6 +218,18 @@ namespace Prime.Services
             };
 
             var email = await _emailRenderingService.RenderSiteApprovedHibcEmailAsync(viewModel, site.Id);
+            await Send(email);
+        }
+
+        public async Task SendHealthAuthoritySiteApprovedAsync(HealthAuthoritySiteViewModel site)
+        {
+            var viewModel = new SiteApprovalEmailViewModel
+            {
+                DoingBusinessAs = site.SiteName,
+                Pec = site.PEC
+            };
+
+            var email = await _emailRenderingService.RenderHealthAuthoritySiteApprovedEmailAsync(viewModel, site.Id);
             await Send(email);
         }
 

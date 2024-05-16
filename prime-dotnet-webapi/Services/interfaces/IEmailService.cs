@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
 using Prime.ViewModels;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
 {
@@ -13,6 +14,7 @@ namespace Prime.Services
         Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers);
         Task SendRemoteUsersUpdatedAsync(CommunitySite site);
         Task SendSiteApprovedHIBCAsync(CommunitySite site);
+        Task SendHealthAuthoritySiteApprovedAsync(HealthAuthoritySiteViewModel site);
         Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site);
         Task SendSiteApprovedSigningAuthorityAsync(CommunitySite site);
         Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode, bool isNew = false);

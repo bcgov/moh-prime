@@ -168,6 +168,20 @@ namespace Prime.Services.EmailInternal
             );
         }
 
+        public async Task<Email> RenderHealthAuthoritySiteApprovedEmailAsync(SiteApprovalEmailViewModel viewModel, int siteId)
+        {
+            var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.HASiteApproval);
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: MohEmail,
+                subject: emailTemplate.Subject.Replace("{siteId}", siteId.ToString()),
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+            );
+        }
+
+
         public async Task<Email> RenderSiteApprovedPharmaNetAdministratorEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel)
         {
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.SiteApprovedPharmaNetAdministrator);
