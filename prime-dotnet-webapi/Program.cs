@@ -70,12 +70,9 @@ namespace Prime
 
             try
             {
-                Console.WriteLine($"EnvironmentName={PrimeConfiguration.EnvironmentName}, path={path}");
                 if (PrimeConfiguration.IsDevelopment())
                 {
-                    Console.WriteLine("Creating logger dir ...");
                     Directory.CreateDirectory(path);
-                    Console.WriteLine("... created logger dir!");
                 }
             }
             catch (Exception e)
