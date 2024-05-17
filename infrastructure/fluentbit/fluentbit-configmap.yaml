@@ -39,7 +39,7 @@ objects:
           regex  log error
           
         [FILTER]
-          # exclude "No such file or directory" error from app logs
+          # Ignore "No such file or directory" error, exclude from fluentbit output
           name     grep
           match    app
           Exclude  log No\ssuch\sfile\sor\sdirectory
