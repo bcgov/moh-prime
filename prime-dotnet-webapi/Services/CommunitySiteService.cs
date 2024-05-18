@@ -12,6 +12,7 @@ using Prime.Models;
 using Prime.ViewModels;
 using AutoMapper.QueryableExtensions;
 using Prime.Models.Api;
+using System.Text;
 
 namespace Prime.Services
 {
@@ -180,7 +181,12 @@ namespace Prime.Services
 
             await UpdateIndividualDeviceProviders(siteId, updatedSite.IndividualDeviceProviders);
 
-            await _businessEventService.CreateSiteEventAsync(currentSite.Id, $"Site Updated {Environment.NewLine + "- "}{string.Join(Environment.NewLine + "- ", updateDetail.ToArray())}");
+            var logMessage = new StringBuilder("Site Updated");
+            if (updateDetail.Count > 0)
+            {
+                logMessage.Append($"{Environment.NewLine + "- "}{string.Join(Environment.NewLine + "- ", updateDetail.ToArray())}");
+            }
+            await _businessEventService.CreateSiteEventAsync(currentSite.Id, logMessage.ToString());
 
             try
             {
@@ -448,11 +454,11 @@ namespace Prime.Services
 
         private string GetRemoteUserCollegeLicenseInfo(RemoteUserCertification remoteUserCert)
         {
-            if (remoteUserCert.CollegeCode == 1)
+            if (remoteUserCert.CollegeCode == CollegeCode.CPSBC)
             {
                 return $"CPSBC, CPSID Number: {remoteUserCert.LicenseNumber}";
             }
-            else if (remoteUserCert.CollegeCode == 3)
+            else if (remoteUserCert.CollegeCode == CollegeCode.BCCNM)
             {
                 return $"BCCNM, PharmaNet ID: {remoteUserCert.PractitionerId}";
             }
