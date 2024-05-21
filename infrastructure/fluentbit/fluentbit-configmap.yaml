@@ -37,6 +37,12 @@ objects:
           name   grep
           match  app
           regex  log error
+          
+        [FILTER]
+          # Ignore "No such file or directory" error, exclude from fluentbit output
+          name     grep
+          match    app
+          Exclude  log No\ssuch\sfile\sor\sdirectory
         
         [FILTER]
           name          parser
@@ -148,7 +154,7 @@ objects:
         [PARSER]
           Name   parser
           Format regex
-          Regex  \[(?<timestamp>\d{2}:\d{2}:\d{2})(?<level>.*)]\ (?<message>.*)
+          Regex  \[(?<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})(?<level>.*)]\ (?<message>.*)
           Time_Key time
           Time_Format %H:%M:%S
 
