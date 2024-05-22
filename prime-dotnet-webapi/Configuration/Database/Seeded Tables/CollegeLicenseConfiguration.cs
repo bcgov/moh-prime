@@ -92,31 +92,31 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 7,  LicenseCode = 77, Discontinued = true },
 
                     // College of Naturopathic Physicians of BC
-                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 78 },
-                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 79 },
-                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 80 },
-                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 81 },
+                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 78, Discontinued = true  },
+                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 79, Discontinued = true  },
+                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 80, Discontinued = true  },
+                    new CollegeLicense { CollegeCode = 11,  LicenseCode = 81, Discontinued = true  },
 
                     // College of Optometrists of BC
-                    new CollegeLicense { CollegeCode = 14,  LicenseCode = 71 },
-                    new CollegeLicense { CollegeCode = 14,  LicenseCode = 72 },
-                    new CollegeLicense { CollegeCode = 14,  LicenseCode = 73 },
-                    new CollegeLicense { CollegeCode = 14,  LicenseCode = 74 },
+                    new CollegeLicense { CollegeCode = 14,  LicenseCode = 71, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 14,  LicenseCode = 72, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 14,  LicenseCode = 73, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 14,  LicenseCode = 74, Discontinued = true },
 
                     // All other colleges are assigned the "Not Displayed" Licence
-                    new CollegeLicense { CollegeCode = 4,  LicenseCode = 64 },
+                    new CollegeLicense { CollegeCode = 4,  LicenseCode = 64, Discontinued = true  },
                     new CollegeLicense { CollegeCode = 5,  LicenseCode = 64, Discontinued = true },
                     new CollegeLicense { CollegeCode = 6,  LicenseCode = 64, Discontinued = true },
                     new CollegeLicense { CollegeCode = 8,  LicenseCode = 64, Discontinued = true },
 
-                    new CollegeLicense { CollegeCode = 9,  LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 10, LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 12, LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 13, LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 15, LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 16, LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 17, LicenseCode = 64 },
-                    new CollegeLicense { CollegeCode = 18, LicenseCode = 64 },
+                    new CollegeLicense { CollegeCode = 9,  LicenseCode = 64, Discontinued = true  },
+                    new CollegeLicense { CollegeCode = 10, LicenseCode = 64, Discontinued = true  },
+                    new CollegeLicense { CollegeCode = 12, LicenseCode = 64, Discontinued = true  },
+                    new CollegeLicense { CollegeCode = 13, LicenseCode = 64, Discontinued = true  },
+                    new CollegeLicense { CollegeCode = 15, LicenseCode = 64, Discontinued = true  },
+                    new CollegeLicense { CollegeCode = 16, LicenseCode = 64, Discontinued = true  },
+                    new CollegeLicense { CollegeCode = 17, LicenseCode = 64, Discontinued = true  },
+                    new CollegeLicense { CollegeCode = 18, LicenseCode = 64, Discontinued = true  },
 
                     //BC College of Social Workers
                     new CollegeLicense { CollegeCode = 19, LicenseCode = 82 },
@@ -160,6 +160,28 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 20, LicenseCode = 117, CollegeLicenseGroupingCode = 11 },
                     new CollegeLicense { CollegeCode = 20, LicenseCode = 118, CollegeLicenseGroupingCode = 11 },
                     new CollegeLicense { CollegeCode = 20, LicenseCode = 119, CollegeLicenseGroupingCode = 11 },
+
+                    //College of Health and Care Professionals of BC
+                    new CollegeLicense { CollegeCode = 21,  LicenseCode = 71},
+                    new CollegeLicense { CollegeCode = 21,  LicenseCode = 72},
+                    new CollegeLicense { CollegeCode = 21,  LicenseCode = 73},
+                    new CollegeLicense { CollegeCode = 21,  LicenseCode = 74},
+
+                    new CollegeLicense { CollegeCode = 21,  LicenseCode = 120},
+                    new CollegeLicense { CollegeCode = 21,  LicenseCode = 121},
+                    new CollegeLicense { CollegeCode = 21,  LicenseCode = 122},
+                    new CollegeLicense { CollegeCode = 21,  LicenseCode = 123},
+                    new CollegeLicense { CollegeCode = 21,  LicenseCode = 124},
+                    new CollegeLicense { CollegeCode = 21,  LicenseCode = 125},
+
+                    //College of Complementary Health Professionals of BC
+                    new CollegeLicense { CollegeCode = 22,  LicenseCode = 126},
+                    new CollegeLicense { CollegeCode = 22,  LicenseCode = 127},
+                    new CollegeLicense { CollegeCode = 22,  LicenseCode = 128},
+                    new CollegeLicense { CollegeCode = 22,  LicenseCode = 129},
+                    new CollegeLicense { CollegeCode = 22,  LicenseCode = 130},
+                    new CollegeLicense { CollegeCode = 22,  LicenseCode = 131},
+                    new CollegeLicense { CollegeCode = 22,  LicenseCode = 132},
                 };
             }
         }

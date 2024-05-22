@@ -25,6 +25,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime OralProfessionalDec112023 = new(2023, 12, 11, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime RemoteAccessChangeJan23rd2024 = new(2024, 1, 23, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime ProvisionalPhysiciansMay3rd2024 = new(2024, 5, 3, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime NewCollegeLicenseChangeMay22nd2024 = new(2024, 5, 22, 8, 0, 0, DateTimeKind.Utc);
 
 
         public override IEnumerable<LicenseDetail> SeedData
@@ -378,6 +379,22 @@ namespace Prime.Configuration.Database
                     // Provisional - Family & Specialty should be able to ask for remote access
                     new LicenseDetail { Id = 310, LicenseCode = 5, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = ProvisionalPhysiciansMay3rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                     new LicenseDetail { Id = 311, LicenseCode = 6, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = ProvisionalPhysiciansMay3rd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+
+                    // New license class detail for College of Health and Care Professionals of BC
+                    new LicenseDetail { Id = 312, LicenseCode = 120, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 313, LicenseCode = 121, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 314, LicenseCode = 122, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 315, LicenseCode = 123, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 316, LicenseCode = 124, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 317, LicenseCode = 125, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    new LicenseDetail { Id = 318, LicenseCode = 126, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 319, LicenseCode = 127, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 320, LicenseCode = 128, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 321, LicenseCode = 129, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 322, LicenseCode = 130, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 323, LicenseCode = 131, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 324, LicenseCode = 132, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeMay22nd2024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }

@@ -150,6 +150,23 @@ namespace Prime.Configuration.Database
                     new License { Code = 118, Weight = 155, Name = "Non-Practising Denturist" },
                     new License { Code = 119, Weight = 156, Name = "Temporary Denturist" },
 
+                    // New license class for College of Health and Care Professionals of British Columbia
+                    new License { Code = 120, Weight = 10, Name = "Dietitian" },
+                    new License { Code = 121, Weight = 20, Name = "Occupational Therapist" },
+                    new License { Code = 122, Weight = 30, Name = "Optician" },
+                    new License { Code = 123, Weight = 40, Name = "Physical Therapist" },
+                    new License { Code = 124, Weight = 50, Name = "Psychologist" },
+                    new License { Code = 125, Weight = 60, Name = "Speech and Hearing Health Professional" },
+
+                    // New License class for College of Complementary Health Professionals of British Columbia
+                    new License { Code = 126, Weight = 10, Name = "Chiropractor" },
+                    new License { Code = 127, Weight = 20, Name = "Massage Therapist" },
+                    new License { Code = 128, Weight = 30, Name = "Full Naturopathic Physician" },
+                    new License { Code = 129, Weight = 40, Name = "Non-practicing Naturopathic Physician" },
+                    new License { Code = 130, Weight = 50, Name = "Temporary Naturopathic Physician" },
+                    new License { Code = 131, Weight = 60, Name = "Student Naturopathic Physician" },
+                    new License { Code = 132, Weight = 70, Name = "Traditional Chinese Medicine Practitioner and Acupuncturist" },
+
                     // All other colleges are assigned the "Not Displayed" Type
                     new License { Code = 64, Weight = 1, Name = "Not Displayed" },
                 };
