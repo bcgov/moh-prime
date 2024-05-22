@@ -973,6 +973,7 @@ namespace Prime.Controllers
                 await _siteService.ApproveSite(siteId);
                 var haSite = await _healthAuthoritySiteService.GetSiteAsync(siteId);
                 await _emailService.SendHealthAuthoritySiteApprovedAsync(haSite);
+                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent HA site approval email to Connections");
             }
 
             return Ok();
