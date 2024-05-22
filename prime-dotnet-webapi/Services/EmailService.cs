@@ -221,12 +221,14 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendHealthAuthoritySiteApprovedAsync(HealthAuthoritySiteViewModel site)
+        public async Task SendHealthAuthoritySiteApprovedAsync(HealthAuthoritySite site)
         {
             var viewModel = new SiteApprovalEmailViewModel
             {
                 DoingBusinessAs = site.SiteName,
-                Pec = site.PEC
+                Pec = site.PEC,
+                HealthAuthority = site.HealthAuthorityOrganization.Name,
+                Vendor = site.HealthAuthorityVendor.Vendor.Name
             };
 
             var email = await _emailRenderingService.RenderHealthAuthoritySiteApprovedEmailAsync(viewModel, site.Id);

@@ -14,7 +14,7 @@ namespace Prime.Services
         Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers);
         Task SendRemoteUsersUpdatedAsync(CommunitySite site);
         Task SendSiteApprovedHIBCAsync(CommunitySite site);
-        Task SendHealthAuthoritySiteApprovedAsync(HealthAuthoritySiteViewModel site);
+        Task SendHealthAuthoritySiteApprovedAsync(HealthAuthoritySite site);
         Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site);
         Task SendSiteApprovedSigningAuthorityAsync(CommunitySite site);
         Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode, bool isNew = false);

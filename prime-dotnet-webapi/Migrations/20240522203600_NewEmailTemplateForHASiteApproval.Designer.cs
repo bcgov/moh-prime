@@ -10,7 +10,7 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20240516221028_NewEmailTemplateForHASiteApproval")]
+    [Migration("20240522203600_NewEmailTemplateForHASiteApproval")]
     partial class NewEmailTemplateForHASiteApproval
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -4684,7 +4684,7 @@ namespace Prime.Migrations
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             Recipient = "To: HLTH.HnetConnection@gov.bc.ca",
                             Subject = "[{siteId}] HA Site Registration Approved",
-                            Template = "Hello, <p><p>@Model.DoingBusinessAs with SiteID @Model.Pec has been approved by the Ministry of Health for PharmaNet access. Please notify the PharmaNet software vendor for this site and complete any remaining tasks to activate the site.</p><p>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            Template = "Hello, <p><p>@Model.DoingBusinessAs (@Model.HealthAuthority) with SiteID @Model.Pec has been approved by the Ministry of Health for PharmaNet access. Please notify the PharmaNet software vendor (@Model.Vendor) for this site and complete any remaining tasks to activate the site.</p><p>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
                             TemplateName = "HA Site Approval",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
