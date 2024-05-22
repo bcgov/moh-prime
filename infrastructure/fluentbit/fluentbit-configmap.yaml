@@ -41,6 +41,7 @@ objects:
           regex  log crit
           regex  log alert
           regex  log emerg
+          regex  log fatal
           
         [FILTER]
           # Ignore "No such file or directory" error, exclude from fluentbit output
