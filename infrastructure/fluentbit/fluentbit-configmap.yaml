@@ -41,6 +41,7 @@ objects:
           regex  log crit
           regex  log alert
           regex  log emerg
+          # In case fatal message happens
           regex  log fatal
           
         [FILTER]
