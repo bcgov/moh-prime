@@ -24,5 +24,6 @@ namespace Prime.Models
         ForcedRenewalNotification = 20,
         ForcedRenewalPassedNotification = 21,
         DeviceProviderNotification = 22,
+        HASiteApproval = 23,
     }
 }
