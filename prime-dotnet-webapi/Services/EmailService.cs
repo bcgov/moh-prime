@@ -13,7 +13,6 @@ using Prime.Models;
 using Prime.Services.EmailInternal;
 using Prime.ViewModels.Emails;
 using Prime.ViewModels;
-using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
 {
