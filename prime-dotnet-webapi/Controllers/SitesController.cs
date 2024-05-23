@@ -26,6 +26,7 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly ICommunitySiteService _communitySiteService;
+        private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly IDocumentService _documentService;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
@@ -37,6 +38,7 @@ namespace Prime.Controllers
             IAdminService adminService,
             IBusinessEventService businessEventService,
             ICommunitySiteService communitySiteService,
+            IHealthAuthoritySiteService healthAuthoritySiteService,
             IDocumentService documentService,
             IEmailService emailService,
             IMapper mapper,
@@ -53,6 +55,7 @@ namespace Prime.Controllers
             _organizationService = organizationService;
             _siteService = siteService;
             _deviceProviderService = deviceProviderService;
+            _healthAuthoritySiteService = healthAuthoritySiteService;
         }
 
         // GET: api/Sites
@@ -968,6 +971,9 @@ namespace Prime.Controllers
             else
             {
                 await _siteService.ApproveSite(siteId);
+                var haSite = await _healthAuthoritySiteService.GetHealthAuthoritySiteAsync(siteId);
+                await _emailService.SendHealthAuthoritySiteApprovedAsync(haSite);
+                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent HA site approval email to Connections");
             }
 
             return Ok();
