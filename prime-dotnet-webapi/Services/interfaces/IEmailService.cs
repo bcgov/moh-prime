@@ -11,7 +11,7 @@ namespace Prime.Services
         Task SendProvisionerLinkAsync(string[] recipientEmails, EnrolmentCertificateAccessToken token, int careSettingCode);
         Task SendReminderEmailAsync(int enrolleeId);
         Task SendRemoteUserNotificationsAsync(CommunitySite site, IEnumerable<RemoteUser> remoteUsers);
-        Task SendRemoteUsersUpdatedAsync(CommunitySite site);
+        Task SendRemoteUsersUpdatedAsync(CommunitySite site, List<string> remoteUserChanges = null);
         Task SendSiteApprovedHIBCAsync(CommunitySite site);
         Task SendHealthAuthoritySiteApprovedAsync(HealthAuthoritySite site);
         Task SendSiteApprovedPharmaNetAdministratorAsync(CommunitySite site);
