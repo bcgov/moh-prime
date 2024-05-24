@@ -220,6 +220,20 @@ namespace Prime.Services
             await Send(email);
         }
 
+        public async Task SendHealthAuthoritySiteApprovedAsync(HealthAuthoritySite site)
+        {
+            var viewModel = new SiteApprovalEmailViewModel
+            {
+                DoingBusinessAs = site.SiteName,
+                Pec = site.PEC,
+                HealthAuthority = site.HealthAuthorityOrganization.Name,
+                Vendor = site.HealthAuthorityVendor.Vendor.Name
+            };
+
+            var email = await _emailRenderingService.RenderHealthAuthoritySiteApprovedEmailAsync(viewModel, site.Id);
+            await Send(email);
+        }
+
         public async Task<IEnumerable<int>> SendEnrolleeRenewalEmails()
         {
             var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
