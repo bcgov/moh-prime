@@ -189,7 +189,7 @@
   </app-overview-section>
 
   <app-overview-section title="Hours of Operation"
-                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
+                        [showEditRedirect]="showEditRedirect && site.status === SiteStatusType.EDITABLE"
                         [editRoute]="SiteRoutes.HOURS_OPERATION"
                         (route)="onRouteRelative($event)">
     <ng-container *ngFor="let businessDay of site?.businessHours">
