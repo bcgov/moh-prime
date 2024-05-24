@@ -59,8 +59,9 @@ COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
 COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configuration/
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 
-# TODO: Likely unnecessary
-# RUN apt-get update && \
+# psql needed to run Database Migrations
+RUN apt-get update && \
+    apt-get -y install postgresql-client
 #     apt-get install -yqq gpgv gnupg2 wget && \
 #     echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
 #     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
