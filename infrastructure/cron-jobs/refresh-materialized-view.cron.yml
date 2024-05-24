@@ -60,7 +60,7 @@ objects:
                           name: ${SVC_NAME}-patroni-secret
                           key: app-db-password
                   image: >-
-                    image-registry.apps.silver.devops.gov.bc.ca/9c33a9-prod/python-curl-psql:latest
+                    image-registry.apps.silver.devops.gov.bc.ca/9c33a9-tools/python-curl-psql:latest
                   limits:
                     cpu: 500m
                     memory: 2Gi
