@@ -161,6 +161,17 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
+        public async Task<HealthAuthoritySite> GetHealthAuthoritySiteAsync(int siteId)
+        {
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Include(s => s.HealthAuthorityOrganization)
+                .Include(s => s.HealthAuthorityVendor)
+                    .ThenInclude(v => v.Vendor)
+                .Where(s => s.Id == siteId)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<HealthAuthoritySiteAdminViewModel> GetAdminSiteAsync(int siteId)
         {
             return await _context.HealthAuthoritySites
