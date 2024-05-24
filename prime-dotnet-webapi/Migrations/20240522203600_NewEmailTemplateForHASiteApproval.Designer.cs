@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -9,9 +10,10 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240522203600_NewEmailTemplateForHASiteApproval")]
+    partial class NewEmailTemplateForHASiteApproval
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,9 +142,6 @@ namespace Prime.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4425,12 +4424,12 @@ namespace Prime.Migrations
                             Id = 6,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered when the remote user has been updated and the site is re-submitted.",
+                            Description = "The email will be triggered when the remote user has been updated and the site is completed.",
                             EmailType = 6,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             Recipient = "To: HLTH.HnetConnection@gov.bc.ca & primesupport@gov.bc.ca",
                             Subject = "Remote Practitioners Changed",
-                            Template = "Hello, <p><p>@{ var pecText = string.IsNullOrWhiteSpace(Model.SitePec) ? \"Not Assigned\" : Model.SitePec; } <p> Notification: The list of Remote Practitioners at @Model.SiteStreetAddress of @Model.OrganizationName (PEC: @pecText) has been updated.</p> <h2 class=\"mb-2\">Remote Users</h2> @foreach (var remoteUser in Model.RemoteUsers) { <p> <span class=\"ml-2\">@remoteUser</span> </p> } <h2 class=\"mb-2\">Site Information</h2> <p> See the attached registration and organization agreement for more information.</p> <br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            Template = "Hello, <p><p>@{ var pecText = string.IsNullOrWhiteSpace(Model.SitePec) ? \"Not Assigned\" : Model.SitePec; } <p> Notification: The list of Remote Practitioners at @Model.SiteStreetAddress of @Model.OrganizationName (PEC: @pecText) has been updated. <br/><br/>The remote practitioners at this site are: </p> <h2 class=\"mb-2\">Remote Users</h2> @foreach (var name in Model.RemoteUserNames) { <div class=\"ml-2 mb-2\"> <h5>Name</h5> <span class=\"ml-2\">@name</span> </div> } <h2 class=\"mb-2\">Site Information</h2> <p> See the attached registration and organization agreement for more information. @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.DocumentUrl\" target=\"_blank\">link</a>@(\".\") } </p> <br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
                             TemplateName = "Remote User Updated Notification",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")

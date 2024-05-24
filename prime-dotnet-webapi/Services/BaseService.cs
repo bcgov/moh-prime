@@ -2,6 +2,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Prime.Services
 {
+    static class CollegeCode
+    {
+        public const int CPSBC = 1;
+        public const int BCCNM = 3;
+    }
+
+
     public abstract class BaseService
     {
         protected const int InvalidId = -1;

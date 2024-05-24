@@ -17,11 +17,14 @@ namespace Prime.Services.EmailInternal
 
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailTemplateService _emailTemplateService;
+        private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
 
-        public EmailRenderingService(IRazorConverterService razorConverterService, IEmailTemplateService emailTemplateService)
+        public EmailRenderingService(IRazorConverterService razorConverterService,
+            IEmailTemplateService emailTemplateService, IHealthAuthoritySiteService healthAuthoritySiteService)
         {
             _razorConverterService = razorConverterService;
             _emailTemplateService = emailTemplateService;
+            _healthAuthoritySiteService = healthAuthoritySiteService;
         }
 
         public async Task<Email> RenderBusinessLicenceUploadedEmailAsync(string recipientEmail, LinkedEmailViewModel viewModel)
@@ -168,6 +171,20 @@ namespace Prime.Services.EmailInternal
             );
         }
 
+        public async Task<Email> RenderHealthAuthoritySiteApprovedEmailAsync(SiteApprovalEmailViewModel viewModel, int siteId)
+        {
+            var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.HASiteApproval);
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: MohEmail,
+                subject: emailTemplate.Subject.Replace("{siteId}", siteId.ToString()),
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+            );
+        }
+
+
         public async Task<Email> RenderSiteApprovedPharmaNetAdministratorEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel)
         {
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.SiteApprovedPharmaNetAdministrator);
@@ -205,6 +222,13 @@ namespace Prime.Services.EmailInternal
                 CareSettingType.DeviceProvider => "Device Provider",
                 _ => ""
             };
+
+            // add Health Authority in subject line
+            if (careSettingCode == CareSettingType.HealthAuthority)
+            {
+                var site = await _healthAuthoritySiteService.GetHealthAuthoritySiteAsync(siteId);
+                careSetting = $"{careSetting} ({site.HealthAuthorityOrganization.Name})";
+            }
 
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.SiteRegistrationSubmission);
             var isNewPrefix = isNew ? "Priority! New Pharmacy - " : "";
