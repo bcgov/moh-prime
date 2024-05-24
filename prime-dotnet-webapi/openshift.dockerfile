@@ -26,10 +26,8 @@ ENV DB_HOST "$DB_HOST"
 ENV KEYCLOAK_REALM_URL $KEYCLOAK_REALM_URL
 ENV MOH_KEYCLOAK_REALM_URL $MOH_KEYCLOAK_REALM_URL
 ENV API_PORT 8080
-COPY *.csproj /opt/app-root/app
-RUN dotnet restore
-COPY . /opt/app-root/app
 
+COPY . /opt/app-root/app
 RUN dotnet restore "prime.csproj"
 RUN dotnet build "prime.csproj" -c Release -o /opt/app-root/app/out
 RUN dotnet publish "prime.csproj" -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
@@ -61,16 +59,19 @@ COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
 COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configuration/
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 
+# TODO: Likely unnecessary
+# RUN apt-get update && \
+#     apt-get install -yqq gpgv gnupg2 wget && \
+#     echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
+#     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+#     apt-get update && \
+#     apt-get install -yqq --no-install-recommends postgresql-client-10 net-tools moreutils
 RUN apt-get update && \
-    apt-get install -yqq gpgv gnupg2 wget && \
-    echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-    apt-get update && \
-    apt-get install -yqq --no-install-recommends postgresql-client-10 net-tools moreutils && \
     apt-get install -yf libfontconfig1 libxrender1 libgdiplus xvfb && \
     chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
-    /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
-    chmod +x entrypoint.sh && \
+    /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version
+# TODO: Tighten file system permissions
+RUN chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
     chmod -R 777 /var/run/ && \
     chmod -R 777 /opt/app-root && \
