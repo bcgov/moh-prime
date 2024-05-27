@@ -28,18 +28,20 @@ The response will be something like this, with the token embedded:
 
 ## Step 2:  Call HpdidLookup API with one or more HPDID values
 
-An HPDID is associated with an enrollee's BCSC in a 1-to-1 manner.  In the call to this API, pass along the interested HPDIDs (for multiple PRIME enrollees) that share the same `careSetting`, the `careSetting` value (see Appendix for possible values), as well as the token obtained in the previous step, e.g.:
+An HPDID is associated with an enrollee's BCSC in a 1-to-1 manner.  In the call to this API, pass along the interested HPDIDs (for multiple PRIME enrollees) from the calling system, the `careSetting` value (see Appendix for possible values), as well as the token obtained in the previous step, e.g.:
 
 ```
 curl --location --request GET 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/provisioner-access/gpids?hpdids=gtcochh2vajdtodkby27kspv554dn4is&hpdids=kax2r4lbr2ejsew4ba5bivvsk5onfqaj&careSetting=NHA' \
 --header 'Authorization: Bearer eyTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT'
 ```
 
-### Guidance on parameters
+### About the parameters
 
-The `careSetting` parameter should be set to the Health Authority code of the "calling entity" (e.g. VCH when using the "VPP Connector" API client).   
+Values for `hpdids` should only be for the users of the system permitting them to access PharmaNet (???).  Whether or not a user may potentially work at another care setting, for privacy and security reasons, the `hpdids` can only be sourced from the data of that installation of software.  
 
-There is a limit to the number of HPDIDs accepted in a single call:  10 (subject to change depending on performance testing results).  If too many HPDIDs are provided, a HTTP status code of 400 (Bad Request) is returned.
+The `careSetting` parameter should be set to the Health Authority code where the software used by potential PRIME enrollees is installed.  For example, in the special case of CareConnect software, if it is installed in a Health Authority care setting, the code of that Health Authority should be passed.  However if it is installed in a PCHP care setting, `CC` should be passed.  
+
+Also there is a limit to the number of HPDIDs accepted in a single call:  10 (subject to change depending on performance testing results).  If too many HPDIDs are provided, a HTTP status code of 400 (Bad Request) is returned.
 
 ### API Response scenarios
 
