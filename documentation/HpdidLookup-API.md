@@ -185,6 +185,10 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 }
 ```
 
+### About using the data in the API Response
+
+The data should only be used for the purpose of provisioning the PRIME enrollee with the given HPDID into the local software system.  The data should not be shared with another system that permits access to PharmaNet (System B) even if the user may use that other system (System B) in a different care setting.  That is, each system (System A and System B, e.g.) should call this API only for the PRIME enrollees stored in its individual database.  
+
 
 ## Appendix
 
@@ -199,7 +203,7 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 |CC                                              |CareConnect|
 
 
-### PRIME API behavior/`status` output 
+### PRIME API behavior/`status` output ... rename to `next action`?
 
 The PRIME API returns enrollee data only under certain conditions.  Data is not returned if the person is not in the PRIME system, if the API client should not receive the data (`CareSetting mismatch`), or if PRIME administrators do not want the data shared with any external systems.  Then if the enrollee has not fully completed their enrollment, some or most data is also withheld.  Finally if all conditions are met, enrollee data is returned to the API client.
 
@@ -212,6 +216,12 @@ The PRIME API returns enrollee data only under certain conditions.  Data is not 
 |Indefinite absence                 |TOA signed but reporting indefinite absence|
 |Past Renewal                       |TOA signed but agreement expired|
 |Complete                           |TOA signed and none of other conditions applicable| 
+
+|Provision  |  |
+|Re-Provision
+|De-Provision   
+|No action  
+
 
 
 |Possible values for `accessType` output|
