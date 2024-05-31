@@ -10,6 +10,11 @@
           {{ remoteUser | fullname | default }}
         </app-enrollee-property>
       </div>
+      <div class="mb-3">
+        <app-enrollee-property title="Email">
+          {{ remoteUser.email }}
+        </app-enrollee-property>
+      </div>
 
       <div class="mb-3">
         <strong>College Licence Information</strong>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace Prime.Configuration.Auth
 {
@@ -59,12 +60,11 @@ namespace Prime.Configuration.Auth
 
                 FlattenRealmAccessRoles(identity);
 
-                // // Don't rely on mapper in KeyCloak to assign `prime_user` role
-                // var idp = accessToken.Payload.GetValueOrDefault(Claims.IdentityProvider);
-                // if (AuthConstants.BCServicesCard.Equals(idp))
-                // {
-                //     identity.AddClaim(new Claim(ClaimTypes.Role, Roles.PrimeEnrollee));
-                // }
+                if (context.Request.Path.ToString().Contains("gpid-detail"))
+                {
+                    JwtPayload payload = ((JwtSecurityToken)context.SecurityToken).Payload;
+                    Log.Logger.Debug($"Token for gpid-detail:  Issuer: {payload.Iss}, Authorized Party: {payload.Azp}, Audiences: [{string.Join(",", payload.Aud.ToArray())}], Expires at: {payload.Exp}");
+                }
             }
 
             return Task.CompletedTask;
