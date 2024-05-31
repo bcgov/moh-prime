@@ -54,6 +54,28 @@
                 </ng-template>
               </app-overview-section>
 
+              <app-overview-section title="Health Authority Care Type to Vendor"
+                                    [showEditRedirect]="true"
+                                    [editRoute]="AdjudicationRoutes.HEALTH_AUTH_CARE_TYPE_VENDOR"
+                                    (route)="onRouteRelative($event)">
+                <ng-container *ngIf="healthAuthority?.careTypes.length; else noCareTypes">
+                  <app-enrollee-property *ngFor="let healthAuthorityCareType of healthAuthority.careTypes"
+                                         title="Care Type - Vendors">
+                    {{ healthAuthorityCareType.careType }}
+                    <app-enrollee-property *ngFor="let vendor of healthAuthorityCareType.vendors"
+                                           title="">
+                      - {{ vendor.vendorCode | configCode: 'vendors' }}
+                    </app-enrollee-property>
+                  </app-enrollee-property>
+                </ng-container>
+
+                <ng-template #noCareTypes>
+                  <app-enrollee-property>
+                    None
+                  </app-enrollee-property>
+                </ng-template>
+              </app-overview-section>
+
               <app-overview-section title="Privacy Office"
                                     [showEditRedirect]="true"
                                     [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE"
