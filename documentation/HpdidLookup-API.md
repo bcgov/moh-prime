@@ -216,11 +216,11 @@ The PRIME API returns enrollee data only under certain conditions.  Data is not 
 |Indefinite absence                 |TOA signed but reporting indefinite absence|
 |Past Renewal                       |TOA signed but agreement expired|
 |Complete                           |TOA signed and none of other conditions applicable| 
-
-|Provision  |  |
-|Re-Provision
-|De-Provision   
-|No action  
+| OR simply  |  |
+|`Provision`  |  |
+|`Re-Provision`  |  |
+|`De-Provision`  |  |   
+|`No action`  |  |  
 
 
 
