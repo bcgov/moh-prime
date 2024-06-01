@@ -18,7 +18,7 @@ Fluent-bit has its own configuration file that we can create using an OpenShift 
 
 ### Fluent-bit for backend/webapi app
 
-Our webapi app outputs logs to a directory (`/opt/app-root/app/logs/`) and the Fluent-bit container will mount this directory to a log-storage path. A [Fluent-bit configmap](./fluentbit-configmap.yaml) with the same configuration is used to read the log files `*.log` from mounted path, filter the log streams based on keyword `ERR` and output the logs to the PRIME Team's Slack channel. 
+Our webapi app outputs logs to a directory (`/opt/app-root/app/logs/`) and the Fluent-bit container will mount this directory to a log-storage path. A [Fluent-bit configmap](./fluentbit-configmap.yaml) with the same configuration is used to read the log files `*.log` from mounted path, filter the log streams based on keyword `ERR` and `FTL` and output the logs to the PRIME Team's Slack channel. 
 
 ### create the configmaps for nginx and webapi apps using the [fluentbit-configmap template](./fluentbit-configmap.yaml)
 
