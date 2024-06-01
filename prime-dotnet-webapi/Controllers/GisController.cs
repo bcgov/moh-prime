@@ -181,7 +181,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            Response.Headers.Add("Unlocked", ldapResponse.Unlocked);
+            Response.Headers.Append("Unlocked", ldapResponse.Unlocked);
 
             return Unauthorized();
         }
