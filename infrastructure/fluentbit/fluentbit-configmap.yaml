@@ -49,6 +49,7 @@ objects:
           name     grep
           match    app
           Exclude  log No\ssuch\sfile\sor\sdirectory
+          Exclude  worker process (\d)+ exited on signal
         
         [FILTER]
           name          parser
@@ -122,7 +123,7 @@ objects:
           name   grep
           match  app
           Logical_Op or
-          regex log ERR
+          regex log \b(ERR)\b
           regex log FTL
 
         [FILTER]
