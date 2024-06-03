@@ -19,6 +19,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-obo-sites-page',
@@ -87,6 +88,10 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
 
   public get healthAuthoritySites(): FormGroup {
     return this.form.get('healthAuthoritySites') as FormGroup;
+  }
+
+  public get lastUpdatedDatetime(): FormGroup {
+    return this.form.get('lastUpdatedDatetime') as FormGroup;
   }
 
   public get chosenHealthAuthorityCodes(): string[] {
@@ -196,6 +201,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.showHAJobSiteError = !this.eachSelectedHAHasOboJobSite();
     if (!this.showHAJobSiteError) {
       super.onSubmit();
+      this.lastUpdatedDatetime.setValue(Date.now);
     } else {
       this.utilService.scrollTop();
     }
@@ -211,11 +217,36 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         this.setOboSites();
       });
     } else {
-      //for renewal, pull the enrolment from enrolment service instead
+
       this.enrolment = this.enrolmentService.enrolment;
-      this.enrolmentFormStateService.patchOboSitesForm(this.enrolment.oboSites);
+      let oboSites = this.enrolmentFormStateService.json.oboSites;
+      //Post-initial submission, if the enrollee updated the OBO Sites form, use information from this form (the latest information) instead
+      if (this.lastUpdatedDatetime.value == null) {
+        this.enrolmentFormStateService.patchOboSitesForm(this.filterOboSitesByCareSetting(oboSites));
+      } else {
+        this.enrolmentFormStateService.patchOboSitesForm(oboSites);
+      }
+
       this.setOboSites();
     }
+  }
+
+  //filter obo site by the care setting in the form - remove any site not in the care settings
+  private filterOboSitesByCareSetting(oboSites: OboSite[]): OboSite[] {
+
+    for (var i = oboSites.length - 1; i >= 0; i--) {
+      if (oboSites[i].careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
+        if (oboSites[i].healthAuthorityCode && !this.enrolleeHealthAuthorities.some(ha => ha.code === oboSites[i].healthAuthorityCode)) {
+          oboSites.splice(i, 1);
+        }
+      } else {
+        if (!this.careSettings.some(cs => cs.careSettingCode === oboSites[i].careSettingCode)) {
+          oboSites.splice(i, 1);
+        }
+      }
+    }
+
+    return oboSites;
   }
 
   private setOboSites() {
@@ -246,12 +277,13 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         case CareSettingEnum.HEALTH_AUTHORITY: {
           //determine if necessary to add HA job site
           if (this.oboSites?.length) {
-            let haSiteNum = this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY).length;
-            if (haSiteNum < this.enrolleeHealthAuthorities.length) {
-              let hasSiteWithoutHASpecified = false;
-              if (haSiteNum > 0) {
-                hasSiteWithoutHASpecified = this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY && s.healthAuthorityCode === null).length > 0;
-              }
+
+            this.enrolleeHealthAuthorities.forEach(ea => {
+              let haSiteNum = this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY
+                && s.healthAuthorityCode == ea.code).length;
+
+              let hasSiteWithoutHASpecified = haSiteNum === 0 ? false :
+                this.oboSites?.value.filter((s) => s.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY && s.healthAuthorityCode === null).length > 0;
 
               if (hasSiteWithoutHASpecified) {
                 for (let i = 0; i < (this.enrolleeHealthAuthorities.length - haSiteNum); i++) {
@@ -264,7 +296,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
                   }
                 });
               }
-            }
+            });
           } else {
             this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
               if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
@@ -322,10 +354,15 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('physicalAddress').value.city;
         const careSetting = control.get('careSettingCode').value;
+        const healthAuthCode = control.get('healthAuthorityCode').value;
 
         // Remove when empty, default option, or group is invalid
         if (!value || value === this.defaultOptionLabel || control.invalid) {
-          this.removeOboSite(index, careSetting);
+          if (healthAuthCode) {
+            this.removeOboSite(index, careSetting, healthAuthCode);
+          } else {
+            this.removeOboSite(index, careSetting);
+          }
         }
       });
 

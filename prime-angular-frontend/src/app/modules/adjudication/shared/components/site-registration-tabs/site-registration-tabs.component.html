@@ -41,13 +41,23 @@
     <mat-tab label="Health Authorities"
              [id]="CareSettingEnum.HEALTH_AUTHORITY">
       <ng-template matTabContent>
+        <div class="mt-3">
+          <app-search-ha-form #searchHaForm
+                              (search)="onSearch($event)"
+                              (siteStatus)="onSiteStatusChange($event)"
+                              (vendor)="onVendorChange($event)"
+                              (careType)="onCareTypeChange($event)"
+                              (assignToMe)="onAssignToMeChange($event)"
+                              (refresh)="onRefresh()"></app-search-ha-form>
+        </div>
         <div class="pt-3">
           <app-health-authority-table [sites]="healthAuthoritySites"
                                       (assign)="onAssign($event)"
                                       (reassign)="onReassign($event)"
                                       (notify)="onNotify($event)"
                                       (route)="onRoute($event)"
-                                      (reload)="onRefresh()"></app-health-authority-table>
+                                      (reload)="onRefresh()"
+                                      (pecFilter)="onTextSearch($event)"></app-health-authority-table>
         </div>
       </ng-template>
     </mat-tab>

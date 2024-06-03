@@ -60,16 +60,17 @@ namespace Prime.Controllers
         {
             var certificate = await _certificateService.GetEnrolmentCertificateAsync(accessTokenId);
 
-            //set health authority
-            if (certificate.HealthAuthories.Count() > 0)
-            {
-                var careSetting = certificate.CareSettings.First(cs => cs.Code == (int)CareSettingType.HealthAuthority);
-                careSetting.Name += $" - {string.Join(", ", certificate.HealthAuthories.Select(ha => ha.Name))}";
-            }
-
             if (certificate == null)
             {
                 return NotFound($"No valid Enrolment Certificate Access Token found with id {accessTokenId}");
+            }
+
+            //set health authority
+            if (certificate.CareSettings.Any(cs => cs.Code == (int)CareSettingType.HealthAuthority) &&
+                certificate.HealthAuthories != null && certificate.HealthAuthories.Count() > 0)
+            {
+                var careSetting = certificate.CareSettings.First(cs => cs.Code == (int)CareSettingType.HealthAuthority);
+                careSetting.Name += $" - {string.Join(", ", certificate.HealthAuthories.Select(ha => ha.Name))}";
             }
 
             return Ok(certificate);
@@ -135,9 +136,10 @@ namespace Prime.Controllers
                 return BadRequest("The enrollee for this User Id is not in an editable state.");
             }
 
-            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
+            EnrolmentCertificateAccessToken createdToken = null;
             foreach (var emailPair in providedEmails)
             {
+                createdToken = await _certificateService.CreateCertificateAccessTokenWithCareSettingAsync(enrolleeId, emailPair.CareSettingCode, emailPair.HealthAuthorityCode);
                 await _emailService.SendProvisionerLinkAsync(emailPair.Emails, createdToken, emailPair.CareSettingCode);
                 await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emailPair.Emails)}");
             }
@@ -262,34 +264,6 @@ namespace Prime.Controllers
 
                 return Ok(result);
             }
-        }
-
-        // POST: api/provisioner-access/gpids/123456789/validate
-        /// <summary>
-        /// Validates the supplied information against the enrollee record with the given GPID. Requires a valid direct access grant token.
-        /// </summary>
-        [HttpPost("gpids/{gpid}/validate", Name = nameof(ValidateGpid))]
-        [Authorize(Roles = Roles.ExternalGpidValidation)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<GpidValidationResponse>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> ValidateGpid(string gpid, GpidValidationParameters parameters)
-        {
-            if (parameters == null)
-            {
-                return BadRequest($"Must supply validation parameters");
-            }
-
-            var response = await _enrolleeService.ValidateProvisionerDataAsync(gpid, parameters);
-
-            if (response == null)
-            {
-                return NotFound($"Enrollee not found with GPID {gpid}");
-            }
-
-            return Ok(response);
         }
 
         private static string SerializeObjectForLog(object obj)

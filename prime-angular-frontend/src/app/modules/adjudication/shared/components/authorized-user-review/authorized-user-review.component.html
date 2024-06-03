@@ -21,6 +21,10 @@
       {{ user?.preferredLastName | default }}
     </app-enrollee-property>
   </ng-container>
+
+  <app-enrollee-property title="Submitted Date">
+    {{ user?.submittedDate | formatDate | default }}
+  </app-enrollee-property>
 </app-overview-section>
 
 <app-address-view title="Verified Address"
@@ -70,9 +74,25 @@
           [disabled]="!(Role.SUPER_ADMIN | inRole)"
           (click)="onBack()">Back
   </button>
-  <button mat-flat-button
-          color="primary"
-          [disabled]="!(Role.SUPER_ADMIN | inRole) || user?.status === AccessStatusEnum.APPROVED"
-          (click)="onApprove()">Approve Authorized User
-  </button>
+  <div>
+    <button mat-flat-button
+            color="warn"
+            *ngIf="user?.status === AccessStatusEnum.UNDER_REVIEW"
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            (click)="onDelete()">Delete Authorized User
+    </button>
+    <button mat-flat-button
+            color="warn"
+            *ngIf="user?.status === AccessStatusEnum.APPROVED || user?.status === AccessStatusEnum.ACTIVE"
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            (click)="onDisable()">Disable Authorized User
+    </button>
+    <button mat-flat-button
+            color="primary"
+            class="ml-1"
+            *ngIf="user?.status === AccessStatusEnum.UNDER_REVIEW"
+            [disabled]="!(Role.SUPER_ADMIN | inRole) || user?.status === AccessStatusEnum.APPROVED"
+            (click)="onApprove()">Approve Authorized User
+    </button>
+  </div>
 </div>

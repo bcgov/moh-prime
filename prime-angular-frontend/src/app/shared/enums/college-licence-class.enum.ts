@@ -3,5 +3,6 @@ export enum CollegeLicenceClassEnum {
   CPBC = 2,
   BCCNM = 3,
   CDSBC = 7,
-  OptometryBC = 14
+  OptometryBC = 14,
+  OralHealth = 20
 }

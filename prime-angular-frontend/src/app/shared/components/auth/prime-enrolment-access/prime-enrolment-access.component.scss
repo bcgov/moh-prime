@@ -15,7 +15,7 @@
 }
 
 .mid-gary {
-  background-color: #606B75;
+  background-color: #38598A;
   color: #fff;
 }
 
@@ -26,29 +26,39 @@
 
 .mst1 {
   font-size: 1.75rem;
-  color: #C5E5FB;
+  color: #fff;
 }
 
 .tab,
 .tab-mid {
-  border-top: 1px solid #606B75;
+  border-top: 1px solid #38598A;
   padding: 15px 55px 15px 55px;
-  color: #606B75;
+  color: #fff;
   font-weight: 500;
   font-size: 1.25rem;
+  background-color: #748BAE;
   cursor: pointer;
 }
 
 .tab {
-  border-left: 1px solid #606B75;
-  border-right: 1px solid #606B75;
+  border-left: 1px solid #38598A;
+  border-right: 1px solid #38598A;
 }
 
 .selected-tab,
 .selected-tab .tab-link {
   color: #ffffff;
-  background-color: #606B75;
+  background-color: #38598A;
   cursor: inherit;
+}
+
+.selected-tab:before {
+  content: '\203A';
+  font-size: 2rem;
+  position: absolute;
+  left: 40px;
+  top: 3px;
+  font-weight: normal;
 }
 
 .mid-content {
@@ -58,6 +68,7 @@
 .button_title {
   font-size: 1.75rem;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .graphic {
@@ -101,7 +112,11 @@ a:hover,
 a:visited {
   color: #007bff;
   text-decoration: underline;
+}
 
+.link-button {
+  color: #007bff;
+  text-decoration: underline;
 }
 
 a.tab-link,
@@ -111,4 +126,27 @@ a.tab-link:visited {
   font-weight: 500;
   font-size: 1.25rem;
   text-decoration: none;
+}
+
+.radio_button {
+  color: #ffffff;
+  margin-right: 20px;
+}
+
+.radio-group {
+  //display: flex;
+  //flex-direction: column;
+  display: grid;
+  margin: 10px 20px 0;
+}
+
+.input,
+.mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: #ffffff;
+}
+
+.mat-input-element,
+.mat-select-value {
+  color: #ffffff !important;
 }

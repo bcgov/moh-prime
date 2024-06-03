@@ -33,6 +33,8 @@ import { JoinPipe } from '@shared/pipes/join.pipe';
 import { RolePipe } from '@shared/pipes/role-pipe';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { ContainsPipe } from '@shared/pipes/contains.pipe';
+import { LicenseNumberLabelPipe } from '@shared/pipes/license-number-label.pipe';
+import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
 import { HealthAuthorityVendorPipe } from '@shared/pipes/health-authority-vendor.pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -127,6 +129,7 @@ import { HealthAuthCareTypeOverviewComponent } from '@health-auth/pages/health-a
 import { HealthAuthSiteOverviewContainerComponent } from './components/health-auth-site-overview-container/health-auth-site-overview-container.component';
 import { EmailFormComponent } from './components/forms/email-form/email-form.component';
 import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
+import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
 
 @NgModule({
   declarations: [
@@ -149,6 +152,8 @@ import { ChangeVendorNoteComponent } from './components/dialogs/content/change-v
     JoinPipe,
     PartyTypePipe,
     HealthAuthorityVendorPipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
     AddressFormComponent,
     ConfirmDialogComponent,
     HtmlComponent,
@@ -234,7 +239,8 @@ import { ChangeVendorNoteComponent } from './components/dialogs/content/change-v
     DateOfBirthComponent,
     UnlistedCollegeLicenceFormComponent,
     EmailFormComponent,
-    SelfDeclarationTermComponent
+    SelfDeclarationTermComponent,
+    TransferHASiteComponent,
   ],
   imports: [
     CommonModule,
@@ -272,6 +278,8 @@ import { ChangeVendorNoteComponent } from './components/dialogs/content/change-v
     ContainsPipe,
     PartyTypePipe,
     HealthAuthorityVendorPipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
@@ -350,7 +358,9 @@ import { ChangeVendorNoteComponent } from './components/dialogs/content/change-v
     FullnamePipe,
     AddressPipe,
     CasePipe,
-    CapitalizePipe
+    CapitalizePipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
   ]
 })
 export class SharedModule { }

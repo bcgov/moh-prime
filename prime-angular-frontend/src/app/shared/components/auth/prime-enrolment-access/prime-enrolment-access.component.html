@@ -47,12 +47,12 @@
     <div class="col-sm-auto tab-mid"
          [ngClass]="{'selected-tab': mode === 'community'}"
          (click)="goTo(this.communitySiteUrl)">
-      Community sites
+      Community site registration
     </div>
     <div class="col-sm-auto tab"
          [ngClass]="{'selected-tab': mode === 'health-authority'}"
          (click)="goTo(this.healthAuthorityUrl)">
-      Health authority sites
+      Health authority site registration
     </div>
   </div>
 </div>
@@ -60,49 +60,65 @@
   <div *ngIf="mode === 'enrolment'"
        class="container mt-0 mb-1">
     <div class="mid-content">
-      <div class="mt1">Request approval to access PharmaNet</div>
-      <div class="mt1">Renew or update existing enrolment</div>
+      <div class="mt1">Request approval to access PharmaNet, renew or update existing enrolment</div>
+      <div class="mt1"></div>
+      <div class="button_title">
+        Healthcare professionals working in health authority facilities, private community health practices, pharmacies,
+        and device providers located in B.C. who need PharmaNet access to deliver patient care must enrol in PRIME. This
+        includes those who access PharmaNet on behalf of someone else, e.g., medical office assistants.
+      </div>
     </div>
     <div class="row pb-50">
       <div class="col-sm-12">
         <button mat-flat-button
                 color="primary"
                 class="large"
-                (click)="onLogin()">Access Individual Enrolment</button>
+                (click)="onLogin(false)">Access Individual Enrolment</button>
       </div>
     </div>
   </div>
   <div *ngIf="mode === 'health-authority'"
        class="container mt-0 mb-1">
-    <div class="mid-content">
-      <div class="mt1">For people authorized by their health authority to register sites
+    <div class="mid-content pb-50">
+      <div class="mst1">
+        Please enter the passcode provided by your health authority to continue.
+        <br/> Otherwise, choose another tab.
       </div>
-    </div>
-    <div class="row pb-50">
-      <div class="col-sm-12">
+      <form [formGroup]="form"
+            novalidate
+            autocomplete="off">
+        <label>Passcode</label>
+        <mat-form-field class="w-100">
+          <input matInput
+                 class="input"
+                 type="password"
+                 formControlName="passcode">
+          <mat-error *ngIf="passcode.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="passcode.hasError('validPasscode')">Invalid Passcode</mat-error>
+        </mat-form-field>
         <button mat-flat-button
                 color="primary"
                 class="large"
-                (click)="onLogin()">Access Site Registration</button>
-      </div>
+                (click)="onLogin(true)">Access Site Registration</button>
+      </form>
     </div>
   </div>
   <div *ngIf="mode === 'community'"
        class="container mt-0 mb-1">
     <div class="mid-content">
       <div class="mt1">Site registration for:</div>
+      <div class="button_title">
+        - Private community health practice<br/>
+        - Community pharmacy<br/>
+        - Device providers
+      </div>
     </div>
     <div class="row pb-50">
       <div class="col-sm-6">
-        <div class="button_title">
-          - Private community health practice<br/>
-          - Community pharmacy<br/>
-          - Device providers
-        </div>
         <button mat-flat-button
                 color="primary"
                 class="large"
-                (click)="onLogin()">Access Site Registration</button>
+                (click)="onLogin(false)">Access Site Registration</button>
       </div>
     </div>
   </div>
@@ -111,7 +127,8 @@
 <div class="container">
   <div class="row">
 
-    <div class="col-sm-12 col-md-4">
+    <div class="col-sm-12 col-md-4"
+         *ngIf="mode === 'enrolment'">
       <div>
         <div class="graphic-wrapper">
           <img class="graphic"
@@ -124,6 +141,33 @@
           <p>
             Set up the BC Services Card app on a mobile device if you haven’t done so already. Once finished, come back
             to PRIME and complete your enrolment.
+
+            <br>
+            <br>
+
+            <a [href]="bcscMobileSetupUrl"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                How to set up the BC Services Card app.
+              </a>
+          </p>
+        </section>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-4"
+         *ngIf="mode !== 'enrolment'">
+      <div>
+        <div class="graphic-wrapper">
+          <img class="graphic"
+               src="/assets/bc_services_card_v2.svg"
+               alt="BC Services Card Icon">
+        </div>
+        <section class="content">
+          <h2>BC Services Card App</h2>
+
+          <p>
+            Set up the BC Services Card app on a mobile device if you haven’t done so already. Once finished, come back
+            to PRIME and complete your registration.
 
             <br>
             <br>
@@ -152,7 +196,7 @@
           <p>
             Complete your PRIME enrolment. It usually only takes a few minutes. If you are a
             regulated health professional, you will need your BC college information (licence number/ registration
-            number/ CPSID/ BCCNM ID) and next renewal date.
+            number/ CPSID/ PharmaNet ID) and next renewal date.
           </p>
         </section>
       </div>

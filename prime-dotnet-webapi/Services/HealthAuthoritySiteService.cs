@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DelegateDecompiler;
 using DelegateDecompiler.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels.HealthAuthoritySites;
+using Prime.Models.Api;
 
 namespace Prime.Services
 {
@@ -36,6 +36,19 @@ namespace Prime.Services
                 .Where(s => s.Id == siteId)
                 .Select(s => new PermissionsRecord { Username = s.AuthorizedUser.Party.Username })
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<bool> AllowToSubmitSite(int siteId, string username)
+        {
+            var healthAuthorityCode = (int)await _context.AuthorizedUsers
+            .Where(au => au.Party.Username == username)
+            .Select(au => au.HealthAuthorityCode)
+            .SingleOrDefaultAsync();
+
+            return await _context.HealthAuthoritySites
+            .AsNoTracking()
+            .Where(s => s.Id == siteId)
+            .Where(s => s.HealthAuthorityOrganization.Id == healthAuthorityCode).AnyAsync();
         }
 
         public async Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId)
@@ -86,6 +99,59 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<HealthAuthoritySiteAdminListViewModel>> GetSitesAsync(HealthAuthoritySiteSearchOptions searchOptions)
+        {
+            searchOptions ??= new HealthAuthoritySiteSearchOptions();
+
+            int? statusId = null;
+            bool flagged = false;
+            if (searchOptions.StatusId.HasValue)
+            {
+                if (searchOptions.StatusId == (int)SiteStatusType.Flagged)
+                {
+                    flagged = true;
+                }
+                else
+                {
+                    statusId = searchOptions.StatusId == (int)SiteStatusType.EditableNotApproved ?
+                        (int)SiteStatusType.Editable : searchOptions.StatusId;
+                }
+            }
+
+            var query = _context.HealthAuthoritySites
+                .AsNoTracking()
+                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch),
+                    q => q.Search(
+                        s => s.SiteName,
+                        s => s.PEC,
+                        s => s.AuthorizedUser.Party.FirstName,
+                        s => s.AuthorizedUser.Party.LastName,
+                        s => s.HealthAuthorityOrganization.Name,
+                        s => s.HealthAuthorityVendor.Vendor.Name,
+                        s => s.HealthAuthorityCareType.CareType)
+                        .Containing(searchOptions.TextSearch)
+                        )
+                .If(statusId.HasValue,
+                    q => q.Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
+                    .FirstOrDefault().StatusType == statusId &&
+                    ((searchOptions.StatusId == (int)SiteStatusType.Editable && s.ApprovedDate.HasValue) ||
+                    (searchOptions.StatusId == (int)SiteStatusType.EditableNotApproved && !s.ApprovedDate.HasValue) ||
+                    searchOptions.StatusId == (int)SiteStatusType.InReview ||
+                    searchOptions.StatusId == (int)SiteStatusType.Locked)))
+                .If(flagged, q => q.Where(s => s.Flagged))
+                .If(!string.IsNullOrWhiteSpace(searchOptions.AdminUserName),
+                    q => q.Where(s => s.Adjudicator.Username == searchOptions.AdminUserName))
+                .If(searchOptions.VendorId.HasValue,
+                    q => q.Where(s => s.HealthAuthorityVendor.Vendor.Code == searchOptions.VendorId))
+                .If(!string.IsNullOrWhiteSpace(searchOptions.CareType),
+                    q => q.Where(s => s.HealthAuthorityCareType.CareType == searchOptions.CareType))
+                .ProjectTo<HealthAuthoritySiteAdminListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .OrderBy(s => s.SiteName);
+
+            return await query.ToListAsync();
+        }
+
         public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
         {
             return await _context.HealthAuthoritySites
@@ -93,6 +159,17 @@ namespace Prime.Services
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
+        }
+
+        public async Task<HealthAuthoritySite> GetHealthAuthoritySiteAsync(int siteId)
+        {
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Include(s => s.HealthAuthorityOrganization)
+                .Include(s => s.HealthAuthorityVendor)
+                    .ThenInclude(v => v.Vendor)
+                .Where(s => s.Id == siteId)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<HealthAuthoritySiteAdminViewModel> GetAdminSiteAsync(int siteId)
@@ -104,12 +181,14 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel)
+        public async Task UpdateSiteAsync(int siteId, HealthAuthoritySiteUpdateModel updateModel, int authorizedUserId)
         {
             var site = await _context.HealthAuthoritySites
                 .Include(site => site.PhysicalAddress)
                 .Include(site => site.BusinessHours)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            site.AuthorizedUserId = authorizedUserId;
 
             _context.Entry(site).CurrentValues.SetValues(updateModel);
 
@@ -139,8 +218,6 @@ namespace Prime.Services
             site.Completed = true;
 
             await _context.SaveChangesAsync();
-
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Completed");
         }
 
         public async Task SiteSubmissionAsync(int siteId)
@@ -152,8 +229,22 @@ namespace Prime.Services
             site.AddStatus(SiteStatusType.InReview);
 
             await _context.SaveChangesAsync();
+        }
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Health Authority Site Submitted");
+        public async Task<List<int>> TransferAuthorizedUserAsync(int currentAuthorizedUseId, int newAuthorizeduserId)
+        {
+            var sites = await _context.HealthAuthoritySites
+                .Where(s => s.AuthorizedUserId == currentAuthorizedUseId)
+                .ToListAsync();
+
+            foreach (var site in sites)
+            {
+                site.AuthorizedUserId = newAuthorizeduserId;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return sites.Select(s => s.Id).ToList();
         }
     }
 }

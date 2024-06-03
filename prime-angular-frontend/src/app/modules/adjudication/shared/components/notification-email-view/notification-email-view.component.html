@@ -1,30 +1,170 @@
-<app-page-subheader *ngIf="emailTemplate"
-                    class="mb-4"
-                    [divider]="false">
-  <ng-container appPageSubheaderTitle>
-    {{ emailTemplate.templateName }}
-  </ng-container>
-</app-page-subheader>
-
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>
-    {{ (editable) ? 'Editing' : 'Preview' }}
+    Email Template Title
+  </ng-container>
+  <button *ngIf="Role.MAINTENANCE | inRole"
+          mat-icon-button
+          [matTooltip]="(!titleEditable) ? 'Edit Email Title' : 'Cancel Editing'"
+          (click)="toggleEditTitle(!titleEditable)">
+    <mat-icon>{{ (!titleEditable) ? 'edit' : 'close' }}</mat-icon>
+  </button>
+</app-page-subheader>
+<ng-container *ngIf="!titleEditable">
+  {{ emailTemplate?.templateName }}
+</ng-container>
+<ng-container *ngIf="titleEditable">
+  <form [formGroup]="form"
+        (ngSubmit)="saveTitle()">
+    <mat-form-field appearance="fill"
+                    class="w-100">
+      <mat-label>Email Template Title</mat-label>
+      <textarea formControlName="emailTitle"
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="0"></textarea>
+    </mat-form-field>
+    <div class="d-flex justify-content-end">
+      <button mat-flat-button
+              color="primary">
+        Save
+      </button>
+    </div>
+  </form>
+</ng-container>
+<br/>
+<br/>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>
+    Description
+  </ng-container>
+  <button *ngIf="Role.MAINTENANCE | inRole"
+          mat-icon-button
+          [matTooltip]="(!descriptionEditable) ? 'Edit Email Description' : 'Cancel Editing'"
+          (click)="toggleEditDescription(!descriptionEditable)">
+    <mat-icon>{{ (!descriptionEditable) ? 'edit' : 'close' }}</mat-icon>
+  </button>
+</app-page-subheader>
+<ng-container *ngIf="!descriptionEditable">
+  {{ emailTemplate?.description }}
+</ng-container>
+<ng-container *ngIf="descriptionEditable">
+  <form [formGroup]="form"
+        (ngSubmit)="saveDescription()">
+    <mat-form-field appearance="fill"
+                    class="w-100">
+      <mat-label>Description</mat-label>
+      <textarea formControlName="description"
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="0"></textarea>
+    </mat-form-field>
+    <div class="d-flex justify-content-end">
+      <button mat-flat-button
+              color="primary">
+        Save
+      </button>
+    </div>
+  </form>
+</ng-container>
+<br/>
+<br/>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>
+    Recipient
+  </ng-container>
+  <button *ngIf="Role.MAINTENANCE | inRole"
+          mat-icon-button
+          [matTooltip]="(!recipientEditable) ? 'Edit Email Recipient' : 'Cancel Editing'"
+          (click)="toggleEditRecipient(!recipientEditable)">
+    <mat-icon>{{ (!recipientEditable) ? 'edit' : 'close' }}</mat-icon>
+  </button>
+</app-page-subheader>
+<ng-container *ngIf="!recipientEditable">
+  {{ emailTemplate?.recipient }}
+</ng-container>
+<ng-container *ngIf="recipientEditable">
+  <form [formGroup]="form"
+        (ngSubmit)="saveRecipient()">
+    <mat-form-field appearance="fill"
+                    class="w-100">
+      <mat-label>Recipient</mat-label>
+      <textarea formControlName="recipient"
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="0"></textarea>
+    </mat-form-field>
+    <div class="d-flex justify-content-end">
+      <button mat-flat-button
+              color="primary">
+        Save
+      </button>
+    </div>
+  </form>
+</ng-container>
+<br/>
+<br/>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>
+    Subject
+  </ng-container>
+  <button *ngIf="Role.MAINTENANCE | inRole"
+          mat-icon-button
+          [matTooltip]="(!subjectEditable) ? 'Edit Email Subject' : 'Cancel Editing'"
+          (click)="toggleEditSubject(!subjectEditable)">
+    <mat-icon>{{ (!subjectEditable) ? 'edit' : 'close' }}</mat-icon>
+  </button>
+</app-page-subheader>
+<ng-container *ngIf="!subjectEditable">
+  {{ emailTemplate?.subject }}
+</ng-container>
+<ng-container *ngIf="subjectEditable">
+  <form [formGroup]="form"
+        (ngSubmit)="saveSubject()">
+    <mat-form-field appearance="fill"
+                    class="w-100">
+      <mat-label>Subject</mat-label>
+      <textarea formControlName="subject"
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="0"></textarea>
+    </mat-form-field>
+    <div class="d-flex justify-content-end">
+      <button mat-flat-button
+              color="primary">
+        Save
+      </button>
+    </div>
+  </form>
+</ng-container>
+<br/>
+<br/>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>
+    {{ (templateEditable) ? 'Editing' : 'Preview' }}
   </ng-container>
 
   <button *ngIf="Role.MAINTENANCE | inRole"
           mat-icon-button
-          [matTooltip]="(!editable) ? 'Edit Email Template' : 'Cancel Editing'"
-          (click)="toggleEdit(!editable)">
-    <mat-icon>{{ (!editable) ? 'edit' : 'close' }}</mat-icon>
+          [matTooltip]="(!templateEditable) ? 'Edit Email Template' : 'Cancel Editing'"
+          (click)="toggleEditTemplate(!templateEditable)">
+    <mat-icon>{{ (!templateEditable) ? 'edit' : 'close' }}</mat-icon>
   </button>
 </app-page-subheader>
 
-<ng-container *ngIf="!editable">
+<ng-container *ngIf="!templateEditable">
   <div [innerHtml]="emailTemplate?.template"></div>
 </ng-container>
-<ng-container *ngIf="editable">
+<ng-container *ngIf="templateEditable">
   <form [formGroup]="form"
-        (ngSubmit)="onSubmit()">
+        (ngSubmit)="saveTemplate()">
     <mat-form-field appearance="fill"
                     class="w-100">
       <mat-label>Template</mat-label>
