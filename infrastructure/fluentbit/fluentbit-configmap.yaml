@@ -49,7 +49,7 @@ objects:
           name     grep
           match    app
           Exclude  log No\ssuch\sfile\sor\sdirectory
-          Exclude  worker process (\d)+ exited on signal
+          Exclude  worker\sprocess\s(\d)+\sexited\son\ssignal\s9
         
         [FILTER]
           name          parser
