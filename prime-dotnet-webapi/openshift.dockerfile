@@ -72,9 +72,9 @@ RUN apt-get update && \
     chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version
 RUN chmod 755 entrypoint.sh && \
-    chmod -R 755 /var/run/ && \
+    chmod -R 777 /var/run/ && \
     chmod -R 777 /opt/app-root && \
-    chmod -R 755 /opt/app-root/.*
+    chmod -R 777 /opt/app-root/.*
 
 EXPOSE 8080 5001 1025
 ENTRYPOINT [ "./entrypoint.sh" ]
