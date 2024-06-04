@@ -73,7 +73,7 @@ RUN apt-get update && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version
 RUN chmod 755 entrypoint.sh && \
     chmod -R 755 /var/run/ && \
-    chmod -R 755 /opt/app-root && \
+    chmod -R 760 /opt/app-root && \
     chmod -R 755 /opt/app-root/.*
 
 EXPOSE 8080 5001 1025
