@@ -71,12 +71,10 @@ RUN apt-get update && \
     apt-get install -yf libfontconfig1 libxrender1 libgdiplus xvfb && \
     chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version
-# TODO: Tighten file system permissions
-RUN chmod +x entrypoint.sh && \
-    chmod 777 entrypoint.sh && \
-    chmod -R 777 /var/run/ && \
-    chmod -R 777 /opt/app-root && \
-    chmod -R 777 /opt/app-root/.*
+RUN chmod 755 entrypoint.sh && \
+    chmod -R 755 /var/run/ && \
+    chmod -R 755 /opt/app-root && \
+    chmod -R 755 /opt/app-root/.*
 
 EXPOSE 8080 5001 1025
 ENTRYPOINT [ "./entrypoint.sh" ]
