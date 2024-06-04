@@ -100,7 +100,7 @@ jobs:
       - name: Install ReportGenerator
         run: |
           cd ../
-          dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.1.26
+          dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.3.6
         
       - uses: amancevice/setup-code-climate@v0
         with:
