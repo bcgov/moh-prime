@@ -37,7 +37,7 @@ curl --location --request GET 'https://dev.pharmanetenrolment.gov.bc.ca/api/v1/p
 
 ### About the parameters
 
-Values for `hpdids` should only be for the users of the system permitting them to access PharmaNet (???).  Whether or not a user may potentially work at another care setting, for privacy and security reasons, the `hpdids` can only be sourced from the data of that installation of software.  
+Values for `hpdids` should only be for the users of "the system permitting them to access PharmaNet" \[term for this???\].  Whether or not a user may potentially work at another care setting, for privacy and security reasons, the `hpdids` can only be sourced from the data of that installation of software.  
 
 The `careSetting` parameter should be set to the Health Authority code where the software used by potential PRIME enrollees is installed.  For example, in the special case of CareConnect software, if it is installed in a Health Authority care setting, the code of that Health Authority should be passed.  However if it is installed in a PCHP care setting, `CC` should be passed.  
 
@@ -45,23 +45,31 @@ Also there is a limit to the number of HPDIDs accepted in a single call:  10 (su
 
 ### API Response scenarios
 
+When appropriate, this API will return information necessary to provision a user for proper PharmaNet access.  In most other situations, the `status` field will include next steps instructions for the software calling the API, for the noted user (identified by the `hpdid` field).        
 
-
-If a BCSC user has not submitted the enrollment yet or never enrolled, nothing is returned:
-```
-{
-    "result": []
-}
-```
-
-If the given `careSetting` value does not match any of the enrollee's care settings in PRIME, the API response will be:
+If a BCSC user has never enrolled, the following is returned:
 ```
 {
     "result": [
         {
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": null,
-            "status": "CareSetting mismatch",
+            "status": "User not found in PRIME, refer user to PRIME",
+            "accessType": null,
+            "licences": null
+        }
+    ]
+}
+```
+
+When provided `careSetting` value does not match care settings of enrollee:
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": null,
+            "status": "Care Setting not selected, refer user to PRIME",
             "accessType": null,
             "licences": null
         }
@@ -70,31 +78,29 @@ If the given `careSetting` value does not match any of the enrollee's care setti
 ```
 Note that `CC` will match a Private Community Health Practice (PCHP) care setting.
 
-For enrollees that have been `locked` by PRIME administrators (such that they cannot view or edit their enrollment details, even if
-previously approved), the API response will be:
+PRIME administrators may not want enrollee information to be returned:
 ```
 {
     "result": [
         {
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": null,
-            "status": null,
-            "accessType": "",
-            "licences": [
-            ]
+            "status": "None",
+            "accessType": null,
+            "licences": null
         }
     ]
 }
 ```
 
-Enrollees that are Under Review or that haven't signed a TOA (Requires TOA) have a `status` of `Incomplete`, e.g.
+If the PRIME enrollment is not finished, the following is returned:
 ```
 {
     "result": [
         {
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": null,
-            "status": "Incomplete",
+            "status": "Incomplete enrollment, refer user to PRIME",
             "accessType": null,
             "licences": null
         }
@@ -102,14 +108,14 @@ Enrollees that are Under Review or that haven't signed a TOA (Requires TOA) have
 }
 ```
 
-In the case of an indefinite absence (absence From date provided, starting today or in the past, but no To date given), the status will be `Indefinite absence` and the vendor should deprovision this user, e.g.
+In the case of an indefinite absence (absence From date provided, starting today or in the past, but no To date given):
 ```
 {
     "result": [
         {
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
-            "status": "Indefinite absence",
+            "status": "Indefinite absence, deprovision user",
             "accessType": null,
             "licences": null
         }
@@ -117,26 +123,39 @@ In the case of an indefinite absence (absence From date provided, starting today
 }
 ```
 
-For enrollees that have their renewal period expired and have not renewed, they will have a `status` of `Past Renewal`.
+When the enrollee is *currently* absent (both absent From and To dates provided):
 ```
 {
     "result": [
         {
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
-            "status": "Past Renewal",
+            "status": "Enrollee is in defined absence period, deactivate user. Call again the day after <absence end date>",
             "accessType": null,
             "licences": null
         }
     ]
 }
 ```
-In the case the enrollee is past their renewal period and has also reported an indefinite absence, PRIME will return a status of `Indefinite absence`.
+
+For enrollees that have their renewal period expired and have not renewed:
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
+            "status": "User past renewal, refer user to PRIME",
+            "accessType": null,
+            "licences": null
+        }
+    ]
+}
+```
+In the case the enrollee is past their renewal period and has also reported an indefinite absence, PRIME will return a status of `Indefinite absence, deprovision user`. \[confirm???\]
 
 
-
-
-The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement, when the given `careSetting` value matches the care setting of the enrollee as known in PRIME.  Example response:
+When none of the previously mentioned conditions is the case, the response will contain details to provision each enrollee that has signed a Terms of Access (TOA) agreement, when the given `careSetting` value matches the care setting of the enrollee as known in PRIME.  Example response for a single enrollee:
 ```
 {
     "result": [
@@ -161,7 +180,42 @@ The response will contain the GPID associated with each enrollee that has signed
 > **Note:**
 > `renewalDate` will no longer be provided in the response.
 
+When the PRIME enrollment has changed from the information previously returned to the API client for the enrollee, the response will be similar to:
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
+            "status": "Enrollee information updated, update user",
+            "accessType": "Independent User - with OBOs",
+            "licences": [
+                {
+                    "practRefId": "91",
+                    "collegeLicenseNumber": "98765",
+                    "pharmaNetId": null,
+                    "redacted": false
+                }
+            ]
+        }
+    ]
+}
+```
 
+However if the relevant information is unchanged from the information previously returned to the API client for the enrollee, the response will be similar to:
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
+            "status": "No change to enrollee information, do nothing",
+            "accessType": null,
+            "licences": null
+        }
+    ]
+}
+```
 
 
 Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has more than one licence, for each licence, the licence-related information would be blanked-out and a licence-level Boolean field `redacted` would be set to `true`, e.g.
@@ -171,7 +225,7 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
         {
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
-            "status": "None???",
+            "status": "\[what to output here???\]",
             "accessType": "Independent User - with OBOs",
             "licences": [
                 {
@@ -192,7 +246,7 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 }
 ```
 
-### About using the data in the API Response
+### About limits to using the data in the API Response
 
 The data should only be used for the purpose of provisioning the PRIME enrollee with the given HPDID into the local software system.  The data should not be shared with another system that permits access to PharmaNet (System B) even if the user may use that other system (System B) in a different care setting.  That is, each system (System A and System B, e.g.) should call this API only for the PRIME enrollees stored in its individual database.  
 
@@ -212,7 +266,7 @@ The data should only be used for the purpose of provisioning the PRIME enrollee 
 
 ### PRIME API behavior/`status` output
 
-The PRIME API returns enrollee data only under certain conditions.  Data is not returned if the person is not in the PRIME system, if the API client should not receive the data (`CareSetting mismatch`), or if PRIME administrators do not want the data shared with any external systems.  Then if the enrollee has not fully completed their enrollment, some or most data is also withheld.  Finally if all conditions are met, enrollee data is returned to the API client.
+The PRIME API returns enrollee data only under certain conditions.  Data is not returned if the person is not in the PRIME system, if the API client should not receive the data (a care setting mismatch), or if PRIME administrators do not want the data shared with any external systems.  Then if the enrollee has not fully completed their enrollment, some or most data is also withheld.  Finally if all conditions are met, enrollee data is returned to the API client.
 
 |Possible values for `status` output                |
 |---------------------------------------------------|
@@ -221,8 +275,8 @@ The PRIME API returns enrollee data only under certain conditions.  Data is not 
 |None                                               |
 |Incomplete enrollment, refer user to PRIME         |
 |User past renewal, refer user to PRIME             | 
-|Indefinite absence, deprovision user               |
-|Enrollee is in defined absence period, deactivate user.  Call again the day after <absence end date>|
+|Indefinite absence, deprovision user \[higher rank???\]              |
+|Enrollee is in defined absence period, deactivate user.  Call again the day after &lt;absence end date&gt; \[higher rank???\]|
 |Provision user                                     |
 |Enrollee information updated, update user          |
 |No change to enrollee information, do nothing      | 
