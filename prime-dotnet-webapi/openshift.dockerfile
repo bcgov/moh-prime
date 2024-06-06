@@ -62,15 +62,11 @@ COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 # psql needed to run Database Migrations
 RUN apt-get update && \
     apt-get -y install postgresql-client
-#     apt-get install -yqq gpgv gnupg2 wget && \
-#     echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
-#     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-#     apt-get update && \
-#     apt-get install -yqq --no-install-recommends postgresql-client-10 net-tools moreutils
 RUN apt-get update && \
     apt-get install -yf libfontconfig1 libxrender1 libgdiplus xvfb && \
     chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version
+# Permissions on /opt/app-root necessary for Wkhtmltopdf operation and writing of application logs
 RUN chmod 755 entrypoint.sh && \
     chmod -R 770 /var/run/ && \
     chmod -R 770 /opt/app-root && \
