@@ -45,30 +45,6 @@ Also there is a limit to the number of HPDIDs accepted in a single call:  10 (su
 
 ### API Response scenarios
 
-The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement, when the given `careSetting` value matches the care setting of the enrollee as known in PRIME.  Example response:
-```
-{
-    "result": [
-        {
-            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
-            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
-            "status": "Complete",
-            "accessType": "Independent User - with OBOs",
-            "licences": [
-                {
-                    "practRefId": "91",
-                    "collegeLicenseNumber": "00002",
-                    "pharmaNetId": null,
-                    "redacted": false
-                }
-            ]
-        }
-    ]
-}
-```
-
-> **Note:**
-> `renewalDate` will no longer be provided in the response.
 
 
 If a BCSC user has not submitted the enrollment yet or never enrolled, nothing is returned:
@@ -157,6 +133,37 @@ For enrollees that have their renewal period expired and have not renewed, they 
 ```
 In the case the enrollee is past their renewal period and has also reported an indefinite absence, PRIME will return a status of `Indefinite absence`.
 
+
+
+
+The response will contain the GPID associated with each enrollee that has signed a Terms of Access (TOA) agreement, when the given `careSetting` value matches the care setting of the enrollee as known in PRIME.  Example response:
+```
+{
+    "result": [
+        {
+            "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
+            "gpid": "H86$J0C3Z$6DYHDFUZ@N",
+            "status": "Provision user",
+            "accessType": "Independent User - with OBOs",
+            "licences": [
+                {
+                    "practRefId": "91",
+                    "collegeLicenseNumber": "00002",
+                    "pharmaNetId": null,
+                    "redacted": false
+                }
+            ]
+        }
+    ]
+}
+```
+
+> **Note:**
+> `renewalDate` will no longer be provided in the response.
+
+
+
+
 Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has more than one licence, for each licence, the licence-related information would be blanked-out and a licence-level Boolean field `redacted` would be set to `true`, e.g.
 ```
 {
@@ -164,7 +171,7 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
         {
             "hpdid": "kax2r4lbr2ejsew4ba5bivvsk5onfqaj",
             "gpid": "H86$J0C3Z$6DYHDFUZ@N",
-            "status": "Complete",
+            "status": "None???",
             "accessType": "Independent User - with OBOs",
             "licences": [
                 {
@@ -203,34 +210,32 @@ The data should only be used for the purpose of provisioning the PRIME enrollee 
 |CC                                              |CareConnect|
 
 
-### PRIME API behavior/`status` output ... rename to `next action`?
+### PRIME API behavior/`status` output
 
 The PRIME API returns enrollee data only under certain conditions.  Data is not returned if the person is not in the PRIME system, if the API client should not receive the data (`CareSetting mismatch`), or if PRIME administrators do not want the data shared with any external systems.  Then if the enrollee has not fully completed their enrollment, some or most data is also withheld.  Finally if all conditions are met, enrollee data is returned to the API client.
 
-|Possible values for `status` output|Conditions for `status`|
-|-----------------------------------|-----------------------|
-|*no details whatsoever*            |BCSC user has not submitted the enrollment yet or never enrolled| 
-|CareSetting mismatch               |Provided careSetting value does not match care setting of enrollee|
-|*no status or other details*       |Enrollee has been `locked` by PRIME administrators|
-|Incomplete                         |Under Review or enrollee hasn't signed TOA|
-|Indefinite absence                 |TOA signed but reporting indefinite absence|
-|Past Renewal                       |TOA signed but agreement expired|
-|Complete                           |TOA signed and none of other conditions applicable| 
-| OR simply  |  |
-|`Provision`  |  |
-|`Re-Provision`  |  |
-|`De-Provision`  |  |   
-|`No action`  |  |  
+|Possible values for `status` output                |
+|---------------------------------------------------|
+|User not found in PRIME, refer user to PRIME       | 
+|Care Setting not selected, refer user to PRIME     |
+|None                                               |
+|Incomplete enrollment, refer user to PRIME         |
+|User past renewal, refer user to PRIME             | 
+|Indefinite absence, deprovision user               |
+|Enrollee is in defined absence period, deactivate user.  Call again the day after <absence end date>|
+|Provision user                                     |
+|Enrollee information updated, update user          |
+|No change to enrollee information, do nothing      | 
 
 
 
-|Possible values for `accessType` output|
-|--------------------------------|
-|Independent User – with OBOs, Pharmacy|
-|Independent User – with OBOs|
-|Independent User – without OBOs|
-|On-behalf-of User|
-|On-behalf-of User – Pharmacy|
-|Device Provider Agent – with OBOs|
-|On-behalf-of User – Device Provider|
+|Possible values for `accessType` output        |
+|-----------------------------------------------|
+|Independent User – with OBOs, Pharmacy         |
+|Independent User – with OBOs                   |
+|Independent User – without OBOs                |
+|On-behalf-of User                              |
+|On-behalf-of User – Pharmacy                   |
+|Device Provider Agent – with OBOs              |
+|On-behalf-of User – Device Provider            |
 |On-behalf-of User (can prescribe independently)|
