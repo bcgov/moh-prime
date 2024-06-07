@@ -335,8 +335,10 @@ namespace Prime.Services
                 }
             }
 
-            var currentAddress = AddressToString(currentContact.PhysicalAddress);
-            var newAddress = AddressToString(newContact.PhysicalAddress);
+            var currentAddress = currentContact.PhysicalAddress == null ?
+                "Same address as the site's address" : AddressToString(currentContact.PhysicalAddress);
+            var newAddress = newContact.PhysicalAddress == null ?
+                "Same address as the site's address" : AddressToString(newContact.PhysicalAddress);
 
             if (!currentAddress.Equals(newAddress))
             {
