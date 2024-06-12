@@ -64,11 +64,11 @@ namespace Prime.Configuration.Auth
 
                 FlattenRealmAccessRoles(identity);
 
-                // if (context.Request.Path.ToString().Contains("gpid-detail"))
-                // {
-                JwtPayload payload = ((JwtSecurityToken)context.SecurityToken).Payload;
-                Log.Logger.Debug($"Token for gpid-detail:  Issuer: {payload.Iss}, Authorized Party: {payload.Azp}, Audiences: [{string.Join(",", payload.Aud.ToArray())}], Expires at: {payload.Expiration}, resource_access: {identity.Claims.SingleOrDefault(claim => claim.Type == Claims.ResourceAccess)?.Value}");
-                // }
+                if (context.Request.Path.ToString().Contains("gpid-detail"))
+                {
+                    JwtPayload payload = ((JwtSecurityToken)context.SecurityToken).Payload;
+                    Log.Logger.Debug($"Token for gpid-detail:  Issuer: {payload.Iss}, Authorized Party: {payload.Azp}, Audiences: [{string.Join(",", payload.Aud.ToArray())}], Expires at: {payload.Expiration}, resource_access: {identity.Claims.SingleOrDefault(claim => claim.Type == Claims.ResourceAccess)?.Value}");
+                }
             }
             return Task.CompletedTask;
         }
