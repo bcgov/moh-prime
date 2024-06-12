@@ -213,6 +213,31 @@ namespace Prime.Services
             }
         }
 
+        public async Task InvalidateOrgAgreementAsync(int organizationId, int careSettingCode, int signingAuthorityId)
+        {
+            var agreement = await EnsureUpdatedOrgAgreementAsync(organizationId, careSettingCode, signingAuthorityId);
+            if (agreement != null)
+            {
+                agreement.AcceptedDate = null;
+                var signedAgreementDoc = await _context.SignedAgreementDocuments
+                    .Where(a => a.AgreementId == agreement.Id)
+                    .FirstOrDefaultAsync();
+                if (signedAgreementDoc != null)
+                {
+                    _context.SignedAgreementDocuments.Remove(signedAgreementDoc);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new InvalidOperationException($"No signed agreement document found to delete.");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException($"No agreement found to invalidate.");
+            }
+        }
+
         public async Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId)
         {
             // Get a list of the care settings used on sites that exist for an organization
