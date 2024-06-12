@@ -29,6 +29,8 @@ namespace Prime.Configuration.Auth
                 {
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
+                // See https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/8.0/securitytoken-events#recommended-action
+                options.UseSecurityTokenValidators = true;
             })
             .AddJwtBearer(Schemes.MohJwt, options =>
             {
@@ -39,6 +41,8 @@ namespace Prime.Configuration.Auth
                 {
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
+                // See https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/8.0/securitytoken-events#recommended-action
+                options.UseSecurityTokenValidators = true;
             });
 
             services.AddAuthorization(options =>
@@ -63,7 +67,7 @@ namespace Prime.Configuration.Auth
                 if (context.Request.Path.ToString().Contains("gpid-detail"))
                 {
                     JwtPayload payload = ((JwtSecurityToken)context.SecurityToken).Payload;
-                    Log.Logger.Debug($"Token for gpid-detail:  Issuer: {payload.Iss}, Authorized Party: {payload.Azp}, Audiences: [{string.Join(",", payload.Aud.ToArray())}], Expires at: {payload.Exp}");
+                    Log.Logger.Debug($"Token for gpid-detail:  Issuer: {payload.Iss}, Authorized Party: {payload.Azp}, Audiences: [{string.Join(",", payload.Aud.ToArray())}], Expires at: {payload.Expiration}");
                 }
             }
 
