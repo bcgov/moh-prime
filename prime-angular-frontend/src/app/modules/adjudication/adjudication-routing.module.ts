@@ -414,7 +414,7 @@ const routes: Routes = [
       {
         path: AdjudicationRoutes.ADMIN_USERS,
         component: AdminUsersPageComponent,
-        data: { title: 'Metabase Reports' }
+        data: { title: 'Administrator User List' }
       },
       {
         path: AdjudicationRoutes.METABASE_REPORTS,
