@@ -103,8 +103,8 @@ namespace Prime.Services
                     Email = a.Email,
                     Username = a.Username,
                     Status = a.Status,
-                    SiteAssignment = a.Sites.Count(),
-                    EnrolleeAssignment = a.Enrollees.Count()
+                    SiteAssigned = a.Sites.Count(),
+                    EnrolleeAssigned = a.Enrollees.Count()
                 }
             ).OrderBy(a => a.FirstName).ToListAsync();
         }
