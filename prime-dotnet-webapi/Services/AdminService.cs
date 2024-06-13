@@ -106,7 +106,7 @@ namespace Prime.Services
                     SiteAssignment = a.Sites.Count(),
                     EnrolleeAssignment = a.Enrollees.Count()
                 }
-            ).ToListAsync();
+            ).OrderBy(a => a.FirstName).ToListAsync();
         }
 
         public async Task<int> UpdateAdminAsync(int adminId, Admin admin)
