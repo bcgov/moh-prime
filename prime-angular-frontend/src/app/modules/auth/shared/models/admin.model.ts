@@ -9,6 +9,6 @@ export interface Admin extends User {
 }
 
 export interface AdminUser extends Admin {
-  siteAssignment: number;
-  enrolleeAssignment: number;
+  siteAssigned: number;
+  enrolleeAssigned: number;
 }

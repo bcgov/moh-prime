@@ -11,7 +11,7 @@ import { Admin, AdminUser } from '@auth/shared/models/admin.model';
 export class AdminUsersTableComponent implements OnInit {
 
   public dataSource: AdminUser[];
-  public displayColumns: string[] = ['username', 'firstname', 'lastname', 'siteassignment', 'enrolleeassignment', 'status'];
+  public displayColumns: string[] = ['username', 'firstname', 'lastname', 'siteassigned', 'enrolleeassigned', 'status'];
 
   constructor(
     private adjudicationResource: AdjudicationResource,
