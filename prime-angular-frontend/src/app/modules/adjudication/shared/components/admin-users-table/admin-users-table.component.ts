@@ -18,7 +18,7 @@ export class AdminUsersTableComponent implements OnInit {
   ) {
   }
 
-  public ToggoleStatus(adminId: number, change: MatSlideToggleChange) {
+  public toggoleStatus(adminId: number, change: MatSlideToggleChange) {
     if (change.checked) {
       this.adjudicationResource.enableAdmin(adminId).subscribe((admin: Admin) => {
         this.dataSource.find(admin => admin.id === adminId).status = admin.status;
