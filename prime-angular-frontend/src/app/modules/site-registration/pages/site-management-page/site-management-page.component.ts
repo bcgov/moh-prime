@@ -231,7 +231,9 @@ export class SiteManagementPageComponent implements OnInit {
                 : expiryDates;
             }, []);
           this.organizations = organizations;
-          return this.organization = organization;
+          this.organization = organization;
+          this.organization.sites = this.organization.sites.sort((a, b) => b.doingBusinessAs.toLocaleLowerCase().localeCompare(a.doingBusinessAs.toLocaleLowerCase()) * -1);
+          return this.organization;
         }),
         exhaustMap((organization: Organization) =>
           this.organizationResource.getOrganizationAgreements(organization.id)
