@@ -1,26 +1,19 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isCompleted"
+                               noContent="true"></app-site-progress-indicator>
 
   <app-page-section>
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>{{ title }}</ng-container>
       <ng-container appPageSubheader2Summary>
-        You can create an Organization and its site(s), or claim an existing Organization to add or update sites.
-        Choose “Claim Organization” if you are taking over an Organization that already has sites registered in PRIME.
+        You can claim an existing Organization to add or update sites.
         You will need to know at least one of your organization’s SiteID/PEC codes.
       </ng-container>
     </app-page-subheader2>
-    <mat-slide-toggle #claimExistingOrganization
-                      color="primary"
-                      [checked]="isClaimExistingOrg"
-                      (change)="onClaimOrgChange($event)">
-      Claim an existing organization.
-    </mat-slide-toggle>
   </app-page-section>
 
-  <form *ngIf="claimExistingOrganization.checked"
-        [formGroup]="formState.form"
+  <form [formGroup]="formState.form"
         (ngSubmit)="onSubmit()"
         novalidate
         autocomplete="off">
@@ -37,8 +30,8 @@
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Site ID/PEC Code</ng-container>
         <ng-container appPageSubheader2Summary>
-          Provide the SiteID/PEC for one of the sites associated with your organization. If you do not have this
-          information, contact <app-prime-support-email></app-prime-support-email>
+          Provide the SiteID/PEC for one of the sites associated with their organization. If you do not have this
+          information, contact the other organization.
         </ng-container>
       </app-page-subheader2>
       <mat-form-field class="w-100">
@@ -71,7 +64,6 @@
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
                    primaryActionLabel="Save and Continue"
-                   [disableSave]="!claimExistingOrganization.checked"
                    [hasSecondaryAction]="true"
                    (back)="onBack()"
                    (save)="onSubmit()"></app-page-footer>

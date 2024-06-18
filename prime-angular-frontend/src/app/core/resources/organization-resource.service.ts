@@ -116,6 +116,30 @@ export class OrganizationResource {
       );
   }
 
+  /**
+ * @description
+ * Get the organization claim in progress for a signing authority by user ID, and provide null when
+ * a signing authority could not be found.
+ */
+  public getSigningAuthorityOrganizationClaimByUsername(username: string): Observable<Organization[] | null> {
+    return this.apiResource.get<Organization[]>(`parties/signing-authorities/${username}/organization-claims`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization[]>) => response.result),
+        map((organizations: Organization[]) => (organizations?.length) ? organizations : null),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            // No organization exists for the provided user ID
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Organization claims could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getSigningAuthorityOrganizationClaimByUsername error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getOrganizationById(organizationId: number): Observable<Organization> {
     return this.apiResource.get<Organization>(`organizations/${organizationId}`)
       .pipe(

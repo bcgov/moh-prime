@@ -12,6 +12,7 @@ using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Prime.Services
 {
@@ -57,6 +58,30 @@ namespace Prime.Services
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationClaimsByPartyIdAsync(int partyId)
+        {
+            var claimedOrgIds = await _context.OrganizationClaims
+                .Where(c => c.NewSigningAuthorityId == partyId)
+                .Select(c => c.OrganizationId)
+                .ToListAsync();
+
+            var orgs = await _context.Organizations
+                .Include(o => o.SigningAuthority)
+                    .ThenInclude(sa => sa.Addresses)
+                        .ThenInclude(pa => pa.Address)
+                .Where(o => claimedOrgIds.Contains(o.Id))
+                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .ToListAsync();
+
+            foreach (var org in orgs)
+            {
+                org.HasClaim = true;
+            }
+
+            return orgs;
         }
 
         public async Task<Organization> GetOrganizationAsync(int organizationId)

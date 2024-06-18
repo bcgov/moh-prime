@@ -10,6 +10,7 @@ namespace Prime.Services
     {
         Task<bool> OrganizationExistsAsync(int organizationId);
         Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
+        Task<IEnumerable<OrganizationListViewModel>> GetOrganizationClaimsByPartyIdAsync(int partyId);
         Task<Organization> GetOrganizationAsync(int organizationId);
         Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId);
         Task<Organization> GetOrganizationByPecAsync(string pec);
