@@ -9,18 +9,22 @@ using Prime.HttpClients.PharmanetCollegeApiDefinitions;
 using System.Web;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace Prime.HttpClients
 {
     public class OrgBookClient : BaseClient, IOrgBookClient
     {
         private readonly HttpClient _client;
+        private readonly ILogger _logger;
 
-        public OrgBookClient(HttpClient client)
+        public OrgBookClient(HttpClient client,
+        ILogger<OrgBookClient> logger)
             : base(PropertySerialization.CamelCase)
         {
             // Auth header and cert are injected in Startup.cs
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _logger = logger;
         }
 
         public async Task<string> GetOrgBookSearchRecordAsync(string orgName)
@@ -52,7 +56,7 @@ namespace Prime.HttpClients
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Exception: ${ex.Message} for orgName: ${orgName}");
+                    _logger.LogError($"Exception: ${ex.Message} for orgName: ${orgName}");
                 }
             }
 

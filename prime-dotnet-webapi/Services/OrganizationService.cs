@@ -385,6 +385,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        // update organization registration ID calling OrgBook API with organization name in PRIME
         public async Task<int> UpdateOrganizationRegistrationId()
         {
             var targetOrganizations = await _context.Organizations.Where(o => o.RegistrationId == null)

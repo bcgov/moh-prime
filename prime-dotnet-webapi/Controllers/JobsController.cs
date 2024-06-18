@@ -83,7 +83,7 @@ namespace Prime.Controllers
 
         // POST: api/jobs/populate/organization-registration-id
         /// <summary>
-        /// execute job to update the contact information in practitioner table by calling PharmaNet API
+        /// execute job to update organization registration ID where the registration ID is missing
         /// </summary>
         [HttpPost("populate/organization-registration-id", Name = nameof(UpdateOrganizationRegistrationId))]
         [Authorize(Roles = Roles.PrimeApiServiceAccount)]
