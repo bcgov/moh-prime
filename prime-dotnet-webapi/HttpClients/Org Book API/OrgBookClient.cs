@@ -37,7 +37,7 @@ namespace Prime.HttpClients
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: ${ex.Message} for orgName: ${orgName}");
+                _logger.LogError($"Exception: ${ex.Message} for orgName: ${orgName}");
             }
 
             if (response != null)
