@@ -33,7 +33,7 @@
             *matHeaderCellDef> Sites Assigned
         </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.siteAssigned }} </td>
+            *matCellDef="let row;"> {{ row.sitesAssigned }} </td>
       </ng-container>
 
       <ng-container matColumnDef="enrolleeassigned">
@@ -41,7 +41,7 @@
             *matHeaderCellDef> Enrollees Assigned
         </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.enrolleeAssigned }} </td>
+            *matCellDef="let row;"> {{ row.enrolleesAssigned }} </td>
       </ng-container>
 
       <ng-container matColumnDef="status">
@@ -51,9 +51,9 @@
         <td mat-cell
             *matCellDef="let row;">
           <mat-slide-toggle color="primary"
-                            (change)="toggoleStatus(row.id, $event)"
+                            (change)="toggleStatus(row.id, $event)"
                             [checked]="row.status === 1">
-            {{ row.status === 1 ? 'Enabled' : 'Disabled' }}
+            {{ isEnabled(row.status) ? 'Enabled' : 'Disabled' }}
           </mat-slide-toggle>
         </td>
       </ng-container>

@@ -28,7 +28,7 @@ namespace Prime.Models
         public string IDIR { get; set; }
 
         [Required]
-        [DefaultValue(StatusType.Editable)]
+        [DefaultValue(AdminStatusType.Enabled)]
         public int Status { get; set; }
 
         /// <summary>

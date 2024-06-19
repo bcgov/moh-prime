@@ -103,8 +103,8 @@ namespace Prime.Services
                     Email = a.Email,
                     Username = a.Username,
                     Status = a.Status,
-                    SiteAssigned = a.Sites.Count(),
-                    EnrolleeAssigned = a.Enrollees.Count()
+                    SitesAssigned = a.Sites.Count(),
+                    EnrolleesAssigned = a.Enrollees.Count()
                 }
             ).OrderBy(a => a.FirstName).ToListAsync();
         }
@@ -123,14 +123,14 @@ namespace Prime.Services
             }
         }
 
-        public async Task<Admin> SetAdminEnable(int adminId, bool enable)
+        public async Task<Admin> SetAdminEnable(int adminId, bool enabled)
         {
             var admin = await _context.Admins
                 .Where(admin => admin.Id == adminId)
                 .Select(admin => admin)
                 .SingleAsync();
 
-            admin.Status = enable ? (int)StatusType.Editable : (int)StatusType.Disabled;
+            admin.Status = enabled ? (int)AdminStatusType.Enabled : (int)AdminStatusType.Disabled;
 
             await _context.SaveChangesAsync();
 

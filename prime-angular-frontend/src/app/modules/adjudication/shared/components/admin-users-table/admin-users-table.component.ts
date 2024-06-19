@@ -2,6 +2,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Component, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Admin, AdminUser } from '@auth/shared/models/admin.model';
+import { AdminStatusType } from '@adjudication/shared/models/admin-status.enum';
 
 @Component({
   selector: 'app-admin-users-table',
@@ -12,13 +13,14 @@ export class AdminUsersTableComponent implements OnInit {
 
   public dataSource: AdminUser[];
   public displayColumns: string[] = ['username', 'firstname', 'lastname', 'siteassigned', 'enrolleeassigned', 'status'];
+  public AdminStatus: AdminStatusType;
 
   constructor(
     private adjudicationResource: AdjudicationResource,
   ) {
   }
 
-  public toggoleStatus(adminId: number, change: MatSlideToggleChange) {
+  public toggleStatus(adminId: number, change: MatSlideToggleChange) {
     if (change.checked) {
       this.adjudicationResource.enableAdmin(adminId).subscribe((admin: Admin) => {
         this.dataSource.find(admin => admin.id === adminId).status = admin.status;
@@ -37,5 +39,9 @@ export class AdminUsersTableComponent implements OnInit {
   private getAdjudicators(): void {
     this.adjudicationResource.getAdminUsers()
       .subscribe((adminUser: AdminUser[]) => this.dataSource = adminUser);
+  }
+
+  public isEnabled(status: number) {
+    return status === AdminStatusType.ENABLED
   }
 }
