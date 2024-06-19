@@ -17,8 +17,8 @@ namespace Prime.ViewModels
 
         public int Status { get; set; }
 
-        public int SiteAssigned { get; set; }
+        public int SitesAssigned { get; set; }
 
-        public int EnrolleeAssigned { get; set; }
+        public int EnrolleesAssigned { get; set; }
     }
 }

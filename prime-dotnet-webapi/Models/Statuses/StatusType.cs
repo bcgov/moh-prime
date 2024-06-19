@@ -9,4 +9,10 @@ namespace Prime.Models
         Declined = 5,
         Disabled = 6,
     }
+
+    public enum AdminStatusType
+    {
+        Enabled = 1,
+        Disabled = 6
+    }
 }
