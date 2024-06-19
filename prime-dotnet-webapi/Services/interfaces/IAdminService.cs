@@ -30,6 +30,6 @@ namespace Prime.Services
 
         Task DeleteAdminAsync(int adminId);
 
-        Task<Admin> SetAdminEnable(int adminId, bool enabld);
+        Task<Admin> SetAdminEnable(int adminId, bool enabled);
     }
 }
