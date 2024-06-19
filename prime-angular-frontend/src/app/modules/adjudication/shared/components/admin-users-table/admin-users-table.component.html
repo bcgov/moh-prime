@@ -52,7 +52,7 @@
             *matCellDef="let row;">
           <mat-slide-toggle color="primary"
                             (change)="toggleStatus(row.id, $event)"
-                            [checked]="row.status === 1">
+                            [checked]="isEnabled(row.status)">
             {{ isEnabled(row.status) ? 'Enabled' : 'Disabled' }}
           </mat-slide-toggle>
         </td>

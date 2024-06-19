@@ -42,6 +42,6 @@ export class AdminUsersTableComponent implements OnInit {
   }
 
   public isEnabled(status: number) {
-    return status === AdminStatusType.ENABLED
+    return status === AdminStatusType.ENABLED;
   }
 }
