@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Admin, AdminUser } from '@auth/shared/models/admin.model';
 import { AdminStatusType } from '@adjudication/shared/models/admin-status.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 
 @Component({
   selector: 'app-admin-users-table',
@@ -14,6 +15,7 @@ export class AdminUsersTableComponent implements OnInit {
   public dataSource: AdminUser[];
   public displayColumns: string[] = ['username', 'firstname', 'lastname', 'siteassigned', 'enrolleeassigned', 'status'];
   public AdminStatus: AdminStatusType;
+  public Role = Role;
 
   constructor(
     private adjudicationResource: AdjudicationResource,
