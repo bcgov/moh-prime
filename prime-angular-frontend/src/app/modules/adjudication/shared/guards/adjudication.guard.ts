@@ -51,7 +51,7 @@ export class AdjudicationGuard extends BaseGuard {
             admin.status = primeAdmin.status
           } else {
             // if PRIME does not have any admin user with the user id, create it
-            this.adjudicationResource.createAdmin(admin);
+            this.adjudicationResource.createAdmin(admin).subscribe();
           }
           return of(admin);
         }),
