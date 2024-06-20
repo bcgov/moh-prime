@@ -52,7 +52,7 @@
             *matCellDef="let row;">
           <mat-slide-toggle color="primary"
                             (change)="toggleStatus(row.id, $event)"
-                            [checked]="row.status === 1"
+                            [checked]="isEnabled(row.status)"
                             [disabled]="!(Role.SUPER_ADMIN | inRole)">
             {{ isEnabled(row.status) ? 'Enabled' : 'Disabled' }}
           </mat-slide-toggle>
@@ -60,8 +60,7 @@
       </ng-container>
 
       <tr mat-header-row
-          *matHeaderRowDef="
-                            displayColumns"></tr>
+          *matHeaderRowDef="displayColumns"></tr>
       <tr mat-row
           *matRowDef="let row; columns: displayColumns;">
       </tr>
