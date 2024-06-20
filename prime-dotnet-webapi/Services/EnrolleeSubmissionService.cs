@@ -102,7 +102,7 @@ namespace Prime.Services
             // set the self declaration version Id and add unanswered items
             // *** answered Yes - it should have self declaration ID set
             // *** answered No - it should NOT have self declaration ID
-            foreach (var sd in selfDeclarationQuestions)
+            foreach (var sd in selfDeclarationQuestions.Where(q => q != null))
             {
                 if (enrollee.SelfDeclarations == null)
                 {
