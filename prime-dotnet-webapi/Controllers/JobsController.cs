@@ -83,16 +83,16 @@ namespace Prime.Controllers
 
         // POST: api/jobs/populate/organization-registration-id
         /// <summary>
-        /// execute job to update organization registration ID where the registration ID is missing
+        /// execute job to update organization registration ID where the registration ID is missing, then return the number of organizations updated.
         /// </summary>
-        [HttpPost("populate/organization-registration-id", Name = nameof(UpdateOrganizationRegistrationId))]
+        [HttpPost("populate/organization-registration-id", Name = nameof(UpdateMissingRegistrationIds))]
         [Authorize(Roles = Roles.PrimeApiServiceAccount)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateOrganizationRegistrationId()
+        public async Task<ActionResult> UpdateMissingRegistrationIds()
         {
-            var result = await _organizationService.UpdateOrganizationRegistrationId();
+            var result = await _organizationService.UpdateMissingRegistrationIds();
             return Ok(result);
         }
     }

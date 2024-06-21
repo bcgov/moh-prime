@@ -2,13 +2,8 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-
-using Prime.HttpClients.PharmanetCollegeApiDefinitions;
 using System.Web;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 
 namespace Prime.HttpClients
@@ -22,12 +17,11 @@ namespace Prime.HttpClients
         ILogger<OrgBookClient> logger)
             : base(PropertySerialization.CamelCase)
         {
-            // Auth header and cert are injected in Startup.cs
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger;
         }
 
-        public async Task<string> GetOrgBookSearchRecordAsync(string orgName)
+        public async Task<string> GetOrgBookRegistrationIdAsync(string orgName)
         {
             string registrationId = null;
             HttpResponseMessage response = null;
@@ -37,18 +31,18 @@ namespace Prime.HttpClients
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Exception: ${ex.Message} for orgName: ${orgName}");
+                _logger.LogError($"Exception: {ex.Message} for orgName: {orgName}");
             }
 
             if (response != null)
             {
                 string searchResult = await response.Content.ReadAsStringAsync();
 
-                var d = JObject.Parse(searchResult);
-
                 try
                 {
-                    var objectResults = d["objects"]["results"].Where(r => r["topic"]["names"][0]["text"].ToString() == orgName);
+                    var json = JObject.Parse(searchResult);
+
+                    var objectResults = json["objects"]["results"].Where(r => r["topic"]["names"][0]["text"].ToString() == orgName);
                     if (objectResults.Count() > 0)
                     {
                         registrationId = objectResults.First()["topic"]["source_id"].ToString();
@@ -56,7 +50,7 @@ namespace Prime.HttpClients
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Exception: ${ex.Message} for orgName: ${orgName}");
+                    _logger.LogError($"Exception: {ex.Message} for orgName: {orgName}");
                 }
             }
 

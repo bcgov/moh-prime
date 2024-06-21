@@ -385,28 +385,29 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        // update organization registration ID calling OrgBook API with organization name in PRIME
-        public async Task<int> UpdateOrganizationRegistrationId()
+        // update organization registration ID calling OrgBook API with organization name in PRIME, then return the number of organizations updated
+        public async Task<int> UpdateMissingRegistrationIds()
         {
             var targetOrganizations = await _context.Organizations.Where(o => o.RegistrationId == null)
                 .OrderBy(o => o.Id)
                 .ToListAsync();
-            int counter = 0;
+            int numUpdated = 0;
             if (targetOrganizations.Any())
             {
                 foreach (var org in targetOrganizations)
                 {
-                    string registrationId = await _orgBookClient.GetOrgBookSearchRecordAsync(org.Name);
+                    string registrationId = await _orgBookClient.GetOrgBookRegistrationIdAsync(org.Name);
                     if (registrationId != null)
                     {
                         org.RegistrationId = registrationId;
-                        counter++;
+                        numUpdated++;
+                        _logger.LogInformation($"Organization (ID:{org.Id}) registration ID is set to {registrationId}.");
                     }
                 }
                 await _context.SaveChangesAsync();
             }
 
-            return counter;
+            return numUpdated;
         }
     }
 }

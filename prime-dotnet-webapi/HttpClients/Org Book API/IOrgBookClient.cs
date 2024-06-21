@@ -6,6 +6,6 @@ namespace Prime.HttpClients
 {
     public interface IOrgBookClient
     {
-        Task<string> GetOrgBookSearchRecordAsync(string orgName);
+        Task<string> GetOrgBookRegistrationIdAsync(string orgName);
     }
 }
