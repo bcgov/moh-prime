@@ -46,8 +46,8 @@
             <mat-select formControlName="careTypeCode">
               <mat-option value="all">All</mat-option>
               <mat-option *ngFor="let careType of careTypes"
-                          [value]="careType.name">
-                {{ careType.name }}
+                          [value]="careType">
+                {{ careType }}
               </mat-option>
             </mat-select>
           </mat-form-field>

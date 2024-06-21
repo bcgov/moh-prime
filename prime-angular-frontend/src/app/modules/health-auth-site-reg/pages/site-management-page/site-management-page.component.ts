@@ -37,7 +37,7 @@ export class SiteManagementPageComponent implements OnInit {
   public HealthAuthorityEnum = HealthAuthorityEnum;
   public SiteStatusType = SiteStatusType;
   public vendors: Config<number>[];
-  public careTypes: Config<number>[];
+  public careTypes: string[];
   public form: FormGroup;
 
   constructor(
@@ -52,7 +52,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
 
-    this.careTypes = this.configService.careTypes;
+    this.careTypes = ["All"];
     this.vendors = this.configService.vendors
       .filter(v => v.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
       .sort((a, b) => a.name.localeCompare(b.name));
@@ -121,7 +121,7 @@ export class SiteManagementPageComponent implements OnInit {
           return s.healthAuthorityCareType.careType;
         });
 
-        this.careTypes = this.careTypes.filter((c) => haCareTypes.some((hac) => hac === c.name));
+        this.careTypes = [... new Set(haCareTypes)];
         this.vendors = this.vendors.filter((v) => haVendors.some((hav) => hav === v.code));
       });
   }
