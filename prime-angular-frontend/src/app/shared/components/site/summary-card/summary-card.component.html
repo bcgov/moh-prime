@@ -33,6 +33,7 @@
              let-property="property">
   <div *ngIf="property.value"
        [ngClass]="property._50 ? 'col-md-6' : 'col-12'">
+    <!-- if _50 is true, take 50% wide by using col-md-6, otherwise 100% wide -->
     <strong>{{ property.key }}</strong>
     <span [ngClass]="
        { 'text-danger font-weight-bold'

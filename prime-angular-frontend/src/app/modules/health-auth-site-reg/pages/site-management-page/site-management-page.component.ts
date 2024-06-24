@@ -32,7 +32,6 @@ export class SiteManagementPageComponent implements OnInit {
   public title: string;
   public healthAuthorityId: number;
   public healthAuthoritySites: HealthAuthoritySiteList[];
-  public displaySites: HealthAuthoritySiteList[];
   public routeUtils: RouteUtils;
   public HealthAuthorityEnum = HealthAuthorityEnum;
   public SiteStatusType = SiteStatusType;
@@ -111,7 +110,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.healthAuthorityId = authorizedUser.healthAuthorityCode;
     this.authorizedUserResource.getAuthorizedUserSites(authorizedUser.id)
       .subscribe((sites: HealthAuthoritySiteList[]) => {
-        this.healthAuthoritySites = sites.sort((a, b) => a.siteName.toLocaleLowerCase().localeCompare(b.siteName.toLocaleLowerCase()))
+        this.healthAuthoritySites = sites.sort((a, b) => a.siteName && b.siteName ? a.siteName.toLocaleLowerCase().localeCompare(b.siteName.toLocaleLowerCase()) : 0)
 
         const haVendors = this.healthAuthoritySites.map((s) => {
           return s.healthAuthorityVendor.vendorCode;
@@ -121,8 +120,8 @@ export class SiteManagementPageComponent implements OnInit {
           return s.healthAuthorityCareType.careType;
         });
 
-        this.careTypes = [... new Set(haCareTypes)];
-        this.vendors = this.vendors.filter((v) => haVendors.some((hav) => hav === v.code));
+        this.careTypes = [... new Set(haCareTypes)].sort((a, b) => a.localeCompare(b));
+        this.vendors = this.vendors.filter((v) => haVendors.some((hav) => hav === v.code)).sort((a, b) => a.name.localeCompare(b.name));
       });
   }
 
@@ -146,7 +145,7 @@ export class SiteManagementPageComponent implements OnInit {
     const authorizedUser = this.authorizedUserService.authorizedUser;
     this.authorizedUserResource.getAuthorizedUserSites(authorizedUser.id)
       .subscribe((sites: HealthAuthoritySiteList[]) => {
-        this.healthAuthoritySites = sites.sort((a, b) => a.siteName.toLocaleLowerCase().localeCompare(b.siteName.toLocaleLowerCase()));
+        this.healthAuthoritySites = sites.sort((a, b) => a.siteName && b.siteName ? a.siteName.toLocaleLowerCase().localeCompare(b.siteName.toLocaleLowerCase()) : 0);
         if (this.careTypeCode.value !== "all") {
           this.healthAuthoritySites = this.healthAuthoritySites.filter((s) => {
             return s.healthAuthorityCareType.careType === this.careTypeCode.value;
