@@ -172,6 +172,12 @@
     <ng-container #alertContent
                   class="alert-content">
       Your enrolment contains an error that will need to be updated before submission.
+      <ul class="mt-3 mb-1"
+          *ngIf="requireLicenceUpdate()">
+        <li>
+          Licence class requires Update
+        </li>
+      </ul>
     </ng-container>
   </app-alert>
 
