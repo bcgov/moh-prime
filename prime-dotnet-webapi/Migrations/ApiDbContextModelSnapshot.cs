@@ -12639,13 +12639,13 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 132,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -12655,13 +12655,13 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 133,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -12671,13 +12671,13 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 134,
-                            LicensedToProvideCare = false,
+                            LicensedToProvideCare = true,
                             Manual = true,
                             NamedInImReg = false,
-                            Prefix = "",
+                            Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -12687,13 +12687,13 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 135,
-                            LicensedToProvideCare = false,
+                            LicensedToProvideCare = true,
                             Manual = true,
                             NamedInImReg = false,
-                            Prefix = "",
+                            Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -12703,13 +12703,13 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 136,
-                            LicensedToProvideCare = false,
+                            LicensedToProvideCare = true,
                             Manual = true,
                             NamedInImReg = false,
-                            Prefix = "",
+                            Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -13183,13 +13183,13 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 166,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -13199,13 +13199,13 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 167,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -13215,13 +13215,13 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 168,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "",
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
@@ -13232,12 +13232,12 @@ namespace Prime.Migrations
                             EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 169,
                             LicensedToProvideCare = false,
-                            Manual = true,
+                            Manual = false,
                             NamedInImReg = false,
-                            Prefix = "",
+                            Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
+                            Validate = true
                         },
                         new
                         {
