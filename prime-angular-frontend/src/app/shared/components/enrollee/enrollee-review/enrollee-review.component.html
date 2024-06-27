@@ -264,7 +264,7 @@
     </app-enrollee-property>
 
     <app-enrollee-property [hasError]="enrolmentErrors?.requiresLicenceUpdate"
-                           errorMessage="Licence class requires update."
+                           errorMessage="College licence information requires update."
                            title="Licence Class">
       {{ getLicenceClassCategory(certification) }}
       {{ certification.licenseCode | configCode: 'licenses' | default }}
