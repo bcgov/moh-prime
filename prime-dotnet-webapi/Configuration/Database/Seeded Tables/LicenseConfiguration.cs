@@ -150,6 +150,82 @@ namespace Prime.Configuration.Database
                     new License { Code = 118, Weight = 155, Name = "Non-Practising Denturist" },
                     new License { Code = 119, Weight = 156, Name = "Temporary Denturist" },
 
+
+
+
+                    // New license class for College of Health and Care Professionals of British Columbia
+                    // Dietetics
+                    new License { Code = 120, Weight = 10, Name = "Full" },
+                    new License { Code = 121, Weight = 20, Name = "Emergency" },
+                    new License { Code = 122, Weight = 30, Name = "Temporary" },
+                    new License { Code = 123, Weight = 40, Name = "Non-Practising" },
+                    // Occupational Therapy
+                    new License { Code = 124, Weight = 10, Name = "Full" },
+                    new License { Code = 125, Weight = 20, Name = "Provisional" },
+                    new License { Code = 126, Weight = 30, Name = "Temporary" },
+                    new License { Code = 127, Weight = 40, Name = "Non-Practising" },
+                    // Opticianry
+                    new License { Code = 128, Weight = 10, Name = "Registered Optician" },
+                    new License { Code = 129, Weight = 20, Name = "Registered Contact Lens Fitter" },
+                    new License { Code = 130, Weight = 30, Name = "Temporary" },
+                    new License { Code = 131, Weight = 40, Name = "Non-Practising" },
+                    // Optometry
+                    new License { Code = 132, Weight = 10, Name = "Therapeutic Qualified" },
+                    new License { Code = 133, Weight = 20, Name = "Non-Therapeutic Qualified" },
+                    new License { Code = 134, Weight = 30, Name = "Limited" },
+                    new License { Code = 135, Weight = 40, Name = "Academic" },
+                    new License { Code = 136, Weight = 50, Name = "Non-Practising" },
+                    // Physical Therapy
+                    new License { Code = 137, Weight = 10, Name = "Full" },
+                    new License { Code = 138, Weight = 20, Name = "Student" },
+                    new License { Code = 139, Weight = 30, Name = "Temporary" },
+                    // Psychology
+                    new License { Code = 140, Weight = 10, Name = "Registered Psychologist" },
+                    new License { Code = 141, Weight = 20, Name = "Associate Psychologist (corrections)" },
+                    new License { Code = 142, Weight = 30, Name = "School Psychologist" },
+                    new License { Code = 143, Weight = 40, Name = "Psychology Assistant" },
+                    new License { Code = 144, Weight = 50, Name = "Temporary (supervised)" },
+                    new License { Code = 145, Weight = 60, Name = "Temporary (visitor)" },
+                    new License { Code = 146, Weight = 70, Name = "Temporary (emergency)" },
+                    new License { Code = 147, Weight = 80, Name = "Non-Practising" },
+                    // Audiology
+                    new License { Code = 148, Weight = 10, Name = "Full" },
+                    new License { Code = 149, Weight = 20, Name = "Conditional" },
+                    new License { Code = 150, Weight = 30, Name = "Temporary" },
+                    new License { Code = 151, Weight = 40, Name = "Non-Practising" },
+                    // Hearing Instrument Dispensing
+                    new License { Code = 152, Weight = 10, Name = "Full" },
+                    new License { Code = 153, Weight = 20, Name = "Conditional" },
+                    new License { Code = 154, Weight = 30, Name = "Temporary" },
+                    new License { Code = 155, Weight = 40, Name = "Non-Practising" },
+                    // Speech-Language Pathology
+                    new License { Code = 156, Weight = 10, Name = "Full" },
+                    new License { Code = 157, Weight = 20, Name = "Conditional" },
+                    new License { Code = 158, Weight = 30, Name = "Temporary" },
+                    new License { Code = 159, Weight = 40, Name = "Non-Practising" },
+
+                    // New License class for College of Complementary Health Professionals of British Columbia
+                    // Chiropractic
+                    new License { Code = 160, Weight = 10, Name = "Full" },
+                    new License { Code = 161, Weight = 10, Name = "Student" },
+                    new License { Code = 162, Weight = 10, Name = "Non-Practising" },
+                    new License { Code = 163, Weight = 10, Name = "Temporary" },
+                    // Massage Therapy
+                    new License { Code = 164, Weight = 10, Name = "Practising" },
+                    new License { Code = 165, Weight = 10, Name = "Non-Practising" },
+                    // Naturopathic Medicine
+                    new License { Code = 166, Weight = 10, Name = "Full" },
+                    new License { Code = 167, Weight = 10, Name = "Temporary" },
+                    new License { Code = 168, Weight = 10, Name = "Student" },
+                    new License { Code = 169, Weight = 10, Name = "Non-Practising" },
+                    // Traditional Chinese Medicine and Acupuncture
+                    new License { Code = 170, Weight = 10, Name = "Full" },
+                    new License { Code = 171, Weight = 10, Name = "Limited" },
+                    new License { Code = 172, Weight = 10, Name = "Temporary" },
+                    new License { Code = 173, Weight = 10, Name = "Student" },
+                    new License { Code = 174, Weight = 10, Name = "Non-Practising" },
+
+
                     // All other colleges are assigned the "Not Displayed" Type
                     new License { Code = 64, Weight = 1, Name = "Not Displayed" },
                 };
