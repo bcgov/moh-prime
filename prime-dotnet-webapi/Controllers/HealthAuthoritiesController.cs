@@ -242,10 +242,6 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateCareTypeVendor(int healthAuthorityId, IEnumerable<HealthAuthorityCareTypeVendorModel> careTypeVendors)
         {
-            if (careTypeVendors == null)
-            {
-                return BadRequest("Health authority vendors cannot be null.");
-            }
 
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
@@ -255,6 +251,11 @@ namespace Prime.Controllers
             if (careTypeVendors.Count() == 0)
             {
                 return BadRequest("Unable to update care type vendor ");
+            }
+
+            if (careTypeVendors == null)
+            {
+                return BadRequest("Health authority vendors cannot be null.");
             }
 
             if (!await _healthAuthorityService.UpdateCareTypeVendorsAsync(healthAuthorityId, careTypeVendors))
