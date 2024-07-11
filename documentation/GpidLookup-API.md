@@ -123,6 +123,7 @@ In the case of an indefinite absence (absence From date provided, starting today
 ```
 
 When the enrollee is *currently* absent (both absent From and To dates provided):
+```
 {
     "result": [
         {
@@ -133,6 +134,7 @@ When the enrollee is *currently* absent (both absent From and To dates provided)
         }
     ]
 }
+```
 
 For enrollees that have their renewal period expired and have not renewed:
 ```
@@ -254,8 +256,8 @@ Lastly, due to privacy issues, in the very rare cases that a PRIME enrollee has 
 |None                                               |
 |Incomplete enrollment, refer user to PRIME         |
 |User past renewal, refer user to PRIME             | 
-|Indefinite absence, deprovision user \[higher rank???\]              |
-|Enrollee is in defined absence period, deactivate user.  Call again the day after &lt;absence end date&gt; \[higher rank???\]|
+|Indefinite absence, deprovision user               |
+|Enrollee is in defined absence period, deactivate user.  Call again the day after &lt;absence end date&gt;|
 |Provision user                                     |
 |Enrollee information updated, update user          |
 |No change to enrollee information, do nothing      | 
