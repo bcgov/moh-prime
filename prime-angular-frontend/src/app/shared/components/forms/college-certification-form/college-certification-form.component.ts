@@ -16,6 +16,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { NurseGrouping } from '@shared/enums/college-licence-grouping.enum';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -59,6 +60,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   public minRenewalDate: moment.Moment;
   public CollegeLicenceClassEnum = CollegeLicenceClassEnum;
   public PrescriberIdTypeEnum = PrescriberIdTypeEnum;
+
+  public nurseGrouping = NurseGrouping;
 
   constructor(
     private configService: ConfigService,
@@ -172,7 +175,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   public showLicenceClass(): boolean {
-    return this.filteredLicenses.some(l => l.name !== 'Not Displayed');
+    return this.filteredLicenses && this.filteredLicenses.some(l => l.name !== 'Not Displayed');
   }
 
   /**
@@ -232,7 +235,9 @@ export class CollegeCertificationFormComponent implements OnInit {
           )
         )
         .subscribe((collegeLicenseGroupingCode: number) => {
-          this.setNursingCategoryValidators();
+          if (this.nurseGrouping.some(g => g === collegeLicenseGroupingCode)) {
+            this.setNursingCategoryValidators();
+          }
           this.loadLicensesByCategory(collegeLicenseGroupingCode);
         });
     } else {
@@ -252,6 +257,7 @@ export class CollegeCertificationFormComponent implements OnInit {
         });
     }
   }
+
 
   private setCollegeCertification(collegeCode: number): void {
     if (!collegeCode) {
