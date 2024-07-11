@@ -143,6 +143,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     return (this.enrolmentErrors) ? Object.values(this.enrolmentErrors).some(value => value) : false;
   }
 
+  public requireLicenceUpdate(): boolean {
+    return (this.enrolmentErrors) ? this.enrolmentErrors.requiresLicenceUpdate : false;
+  }
+
   public ngOnInit(): void {
     this.isMatchingPaperEnrollee = this.enrolmentService.isMatchingPaperEnrollee;
     this.authService.getUser$()
