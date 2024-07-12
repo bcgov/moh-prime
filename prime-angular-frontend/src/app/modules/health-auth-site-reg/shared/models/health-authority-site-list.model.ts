@@ -4,9 +4,11 @@ import { SiteStatusType } from '@lib/enums/site-status.enum';
 
 import { AbstractBaseHealthAuthoritySite } from '@health-auth/shared/models/abstract-base-health-authority-site.class';
 import { BaseHealthAuthoritySite } from '@health-auth/shared/models/base-health-authority-site.model';
+import { HealthAuthorityCareType } from './health-authority-care-type.model';
 
 export interface HealthAuthoritySiteListDto extends BaseHealthAuthoritySite {
   healthAuthorityVendor: HealthAuthorityVendor;
+  healthAuthorityCareType: HealthAuthorityCareType;
   siteName: string;
   pec: string;
   updatedTimeStamp: string;
@@ -18,6 +20,7 @@ export class HealthAuthoritySiteList extends AbstractBaseHealthAuthoritySite imp
     public id: number,
     public healthAuthorityOrganizationId: HealthAuthorityEnum,
     public healthAuthorityVendor: HealthAuthorityVendor,
+    public healthAuthorityCareType: HealthAuthorityCareType,
     public siteName,
     public pec: string,
     public readonly completed: boolean,
@@ -30,6 +33,7 @@ export class HealthAuthoritySiteList extends AbstractBaseHealthAuthoritySite imp
     super(id, healthAuthorityOrganizationId, completed, submittedDate, approvedDate, status);
 
     this.healthAuthorityVendor = healthAuthorityVendor;
+    this.healthAuthorityCareType = healthAuthorityCareType;
     this.siteName = siteName;
     this.pec = pec;
     this.updatedTimeStamp = updatedTimeStamp;
@@ -51,6 +55,7 @@ export class HealthAuthoritySiteList extends AbstractBaseHealthAuthoritySite imp
       healthAuthoritySiteListDto.id,
       healthAuthoritySiteListDto.healthAuthorityOrganizationId,
       healthAuthoritySiteListDto.healthAuthorityVendor,
+      healthAuthoritySiteListDto.healthAuthorityCareType,
       healthAuthoritySiteListDto.siteName,
       healthAuthoritySiteListDto.pec,
       healthAuthoritySiteListDto.completed,
