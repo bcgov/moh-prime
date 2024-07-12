@@ -169,11 +169,6 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.remove.emit(this.index);
   }
 
-  public shouldShowPractices(): boolean {
-    // Only display Advanced Practices for certain nursing licences
-    return CollegeCertification.hasPractice(this.collegeCode.value, this.licenseCode.value);
-  }
-
   public showLicenceClass(): boolean {
     return this.filteredLicenses && this.filteredLicenses.some(l => l.name !== 'Not Displayed');
   }

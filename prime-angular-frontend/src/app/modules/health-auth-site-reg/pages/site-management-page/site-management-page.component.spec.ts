@@ -15,6 +15,8 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { SiteManagementPageComponent } from './site-management-page.component';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('SiteManagementPageComponent', () => {
   let component: SiteManagementPageComponent;
@@ -23,9 +25,11 @@ describe('SiteManagementPageComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
+        ReactiveFormsModule,
         HttpClientTestingModule,
         RouterTestingModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        BrowserAnimationsModule
       ],
       declarations: [
         SiteManagementPageComponent,
