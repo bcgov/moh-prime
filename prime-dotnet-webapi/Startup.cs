@@ -222,6 +222,8 @@ namespace Prime
                 client.BaseAddress = new Uri(PrimeConfiguration.Current.VerifiableCredentialApi.Url.EnsureTrailingSlash());
                 client.DefaultRequestHeaders.Add("x-api-key", PrimeConfiguration.Current.VerifiableCredentialApi.Key);
             });
+
+            services.AddHttpClient<IOrgBookClient, OrgBookClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
