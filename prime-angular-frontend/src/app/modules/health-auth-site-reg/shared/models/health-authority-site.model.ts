@@ -9,6 +9,7 @@ import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authori
 import { HealthAuthorityCareType } from '@health-auth/shared/models/health-authority-care-type.model';
 import { HealthAuthoritySiteUpdate } from '@health-auth/shared/models/health-authority-site-update.model';
 import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-authority-site-create.model';
+import { SiteSubmission } from '@shared/models/site-submission.model';
 
 // TODO split up Site, CommunitySite, and HealthAuthoritySite into separate interfaces/classes
 export interface HealthAuthoritySiteDto extends BaseHealthAuthoritySite {
@@ -22,6 +23,7 @@ export interface HealthAuthoritySiteDto extends BaseHealthAuthoritySite {
   businessHours: BusinessDay[];
   healthAuthorityPharmanetAdministratorId: number;
   healthAuthorityTechnicalSupportId: number;
+  currentSubmission: SiteSubmission;
 }
 
 export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite implements HealthAuthoritySiteDto {
@@ -41,7 +43,8 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
     public readonly completed: boolean,
     public readonly submittedDate: string,
     public readonly approvedDate: string,
-    public readonly status: SiteStatusType
+    public readonly status: SiteStatusType,
+    public readonly currentSubmission: SiteSubmission,
   ) {
     super(id, healthAuthorityOrganizationId, completed, submittedDate, approvedDate, status);
 
@@ -54,6 +57,7 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
     this.businessHours = businessHours;
     this.healthAuthorityPharmanetAdministratorId = healthAuthorityPharmanetAdministratorId;
     this.healthAuthorityTechnicalSupportId = healthAuthorityTechnicalSupportId;
+    this.currentSubmission = currentSubmission;
   }
 
   /**
@@ -82,7 +86,8 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
       healthAuthoritySite.completed,
       healthAuthoritySite.submittedDate,
       healthAuthoritySite.approvedDate,
-      healthAuthoritySite.status
+      healthAuthoritySite.status,
+      healthAuthoritySite.currentSubmission
     );
   }
 

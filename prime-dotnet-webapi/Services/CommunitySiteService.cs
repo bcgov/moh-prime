@@ -680,7 +680,8 @@ namespace Prime.Services
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)
-                .Include(s => s.SiteStatuses);
+                .Include(s => s.SiteStatuses)
+                .Include(s => s.SiteSubmissions);
         }
     }
 }

@@ -10,6 +10,7 @@ import { Admin } from '@auth/shared/models/admin.model';
 import { Vendor } from './vendor.model';
 import { BusinessLicence } from './business-licence.model';
 import { IndividualDeviceProvider } from './individual-device-provider.model';
+import { SiteSubmission } from '@shared/models/site-submission.model';
 
 // TODO rename to CommunitySite and split out common properties to Site interface
 export class Site {
@@ -51,6 +52,8 @@ export class Site {
   activeBeforeRegistration: boolean;
   isNew: boolean;
   deviceProviderId: string;
+  currentSubmission: SiteSubmission;
+  siteSubmissions: SiteSubmission[];
 
   public static getExpiryDate(site: Site | SiteListViewModel): string | null {
     if (!site) {
