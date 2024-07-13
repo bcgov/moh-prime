@@ -23,6 +23,7 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IPartyService _partyService;
+        private readonly IOrgBookClient _orgBookClient;
 
         public OrganizationService(
             ApiDbContext context,
@@ -31,7 +32,8 @@ namespace Prime.Services
             IDocumentManagerClient documentClient,
             IMapper mapper,
             IOrganizationClaimService organizationClaimService,
-            IPartyService partyService)
+            IPartyService partyService,
+            IOrgBookClient orgBookClient)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
@@ -39,6 +41,7 @@ namespace Prime.Services
             _mapper = mapper;
             _organizationClaimService = organizationClaimService;
             _partyService = partyService;
+            _orgBookClient = orgBookClient;
         }
 
         public async Task<bool> OrganizationExistsAsync(int organizationId)
@@ -405,6 +408,31 @@ namespace Prime.Services
 
             _context.RemoveRange(pendingAgreements);
             await _context.SaveChangesAsync();
+        }
+
+        // update organization registration ID calling OrgBook API with organization name in PRIME, then return the number of organizations updated
+        public async Task<int> UpdateMissingRegistrationIds()
+        {
+            var targetOrganizations = await _context.Organizations.Where(o => o.RegistrationId == null)
+                .OrderBy(o => o.Id)
+                .ToListAsync();
+            int numUpdated = 0;
+            if (targetOrganizations.Any())
+            {
+                foreach (var org in targetOrganizations)
+                {
+                    string registrationId = await _orgBookClient.GetOrgBookRegistrationIdAsync(org.Name);
+                    if (registrationId != null)
+                    {
+                        org.RegistrationId = registrationId;
+                        numUpdated++;
+                        _logger.LogInformation($"Organization (ID:{org.Id}) registration ID is set to {registrationId}.");
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            return numUpdated;
         }
     }
 }
