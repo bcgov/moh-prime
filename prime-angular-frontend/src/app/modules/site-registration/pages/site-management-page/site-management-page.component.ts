@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from '@angular/common';
 
-import { of, Subscription } from 'rxjs';
+import { forkJoin, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
@@ -108,9 +108,14 @@ export class SiteManagementPageComponent implements OnInit {
     this.routeUtils.routeRelativeTo([0, SiteRoutes.ORGANIZATION_NAME]);
   }
 
+  public claimOrganization(): void {
+    this.routeUtils.routeRelativeTo([0, SiteRoutes.ORGANIZATION_CLAIM]);
+  }
+
   public changeOrganization(organizationId: number): void {
-    this.organizationService.organization = this.organizationService.organizations.find((org) => org.id === organizationId);
-    this.getOrganizations();
+    //this.organizationService.organization = this.organizationService.organizations.find((org) => org.id === organizationId);
+    //this.getOrganizations();
+    this.organization = this.organizations.find(org => org.id === organizationId);
   }
 
   public getOrganizationProperties(organization: Organization): KeyValue<string, string>[] {
@@ -172,8 +177,12 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
-  public isPendingTransfer(): boolean {
-    return this.organization?.pendingTransfer;
+  public canAddOrClaimOrganization(): boolean {
+    return this.organizations.some(org => org.completed && !org.hasClaim && !org.pendingTransfer);
+  }
+
+  public orgHasPendingTransferOrClaim(): boolean {
+    return this.organization?.pendingTransfer || this.organization?.hasClaim;
   }
 
   public isLocked(site: SiteListViewModel): boolean {
@@ -217,9 +226,15 @@ export class SiteManagementPageComponent implements OnInit {
     this.busy = this.authService.getUser$()
       .pipe(
         exhaustMap((user: BcscUser) =>
-          this.organizationResource.getSigningAuthorityOrganizationByUsername(user.username)
+          forkJoin([
+            this.organizationResource.getSigningAuthorityOrganizationByUsername(user.username),
+            this.organizationResource.getSigningAuthorityOrganizationClaimByUsername(user.username)
+          ])
         ),
-        map((organizations: Organization[]) => {
+        map(([organizations, organizationClaims]: [Organization[], Organization[]]) => {
+          if (organizationClaims) {
+            organizations = organizations.concat(organizationClaims);
+          }
           const organization = this.organizationService.organization ?
             organizations.find((org) => org.id === this.organizationService.organization.id)
             : organizations[0];
