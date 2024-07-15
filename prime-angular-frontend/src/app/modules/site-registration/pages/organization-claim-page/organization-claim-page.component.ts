@@ -20,6 +20,7 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationClaimPageFormState } from './organization-claim-page-form-state.class';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
   selector: 'app-organization-claim-page',
@@ -32,6 +33,7 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public hasOrgClaimError: boolean;
+  public hasOrganization: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -52,11 +54,20 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]);
+    if (this.hasOrganization) {
+      this.routeUtils.routeRelativeTo(['../']);
+    } else {
+      this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]);
+    }
   }
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.authService.getUser$()
+      .subscribe((bcscUser: BcscUser) => {
+        this.organizationResource.getSigningAuthorityOrganizationByUsername(bcscUser.username)
+          .subscribe((orgs: Organization[]) => this.hasOrganization = orgs ? orgs.length > 0 : false);
+      });
   }
 
   protected createFormInstance(): void {
@@ -70,7 +81,12 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   protected performSubmission(): NoContent {
     return this.authService.getUser$()
       .pipe(
-        exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUsername(bcscUser.username)),
+        exhaustMap((bcscUser: BcscUser) => {
+          this.organizationResource.getSigningAuthorityOrganizationByUsername(bcscUser.username)
+            .subscribe((orgs: Organization[]) => this.hasOrganization = orgs ? orgs.length > 0 : false);
+          return this.organizationResource.getSigningAuthorityByUsername(bcscUser.username);
+        }
+        ),
         exhaustMap((party: Party) =>
           this.organizationResource.claimOrganization(party.id, this.formState.json)
             .pipe(
