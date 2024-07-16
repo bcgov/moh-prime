@@ -220,6 +220,20 @@ export class SiteResource {
       );
   }
 
+  public updateVendor(siteId: number, vendorCode: number, rationale: string): NoContent {
+    const payload = { vendorCode, rationale };
+    return this.apiResource.put<NoContent>(`sites/${siteId}/vendor`, payload)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Vendor has been updated')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Vendor could not be updated');
+          this.logger.error('[SiteRegistration] SiteResource::updateVendor error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public setSiteAdjudicator(siteId: number, adjudicatorId?: number): NoContent {
     const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
     return this.apiResource.put<NoContent>(`sites/${siteId}/adjudicator`, null, params)
@@ -577,6 +591,17 @@ export class SiteResource {
         map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] SiteResource::pecAssignable error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public pecExistsWithinHa(siteId: number, pec: string): Observable<boolean> {
+    return this.apiResource.get(`sites/${siteId}/pec/${pec}/exists-within-ha`)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::pecExistsWithinHa error has occurred: ', error);
           throw error;
         })
       );

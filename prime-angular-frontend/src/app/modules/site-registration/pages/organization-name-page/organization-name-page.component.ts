@@ -14,6 +14,7 @@ import { Party } from '@lib/models/party.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { asyncValidator } from '@lib/validators/form-async.validators';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -106,7 +107,10 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected patchForm(): void {
-    const organization = this.organizationService.organization;
+    if (this.organizationId === 0) {
+      return;
+    }
+    const organization = this.organizationService.organizations?.find((org) => org.id === this.organizationId);
     if (!organization) {
       return;
     }
@@ -135,6 +139,20 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
         this.orgBookOrganizations = response.results.map(o => o.names[0]?.text).filter(o => o);
         this.orgBookTotalResults = response.total;
       });
+
+    this.formState.name.addAsyncValidators(asyncValidator(this.checkOrganizationName$(), 'duplicate'));
+  }
+
+  private checkOrganizationName$(): (name: string) => Observable<boolean> {
+    return (name: string) => this.authService.getUser$()
+      .pipe(
+        exhaustMap((bcscUser: BcscUser) => {
+          return this.organizationResource.getSigningAuthorityOrganizationByUsername(bcscUser.username)
+        }),
+        map((orgs: Organization[]) => {
+          return !orgs || !orgs.some(org => org.name === name && org.id !== this.organizationId);
+        }),
+      );
   }
 
   protected performSubmission(): Observable<number | null> {
@@ -148,6 +166,13 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
           tap((organization: Organization) => {
             this.organizationService.organization = organization;
 
+            // Add newly created Organization
+            if (!this.organizationService.organizations) {
+              this.organizationService.organizations = [organization];
+            } else {
+              this.organizationService.organizations.push(organization);
+            }
+
             // Copy over only new information from `organization`
             payload.id = organization.id;
             payload.signingAuthorityId = organization.signingAuthorityId;
@@ -157,7 +182,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
             payload.doingBusinessAs = this.organizationFormStateService.json.doingBusinessAs;
           }),
           exhaustMap(() => this.webApiLogger.debug(`Registration ID updating to ${payload.registrationId}`, { orgName: payload.name })),
-          exhaustMap(() => this.organizationResource.updateOrganization(payload))
+          exhaustMap(() => this.organizationResource.updateOrganization(payload)),
         );
 
     return request$
@@ -170,7 +195,8 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
             ? this.siteResource.createSite(this.organizationService.organization.id)
             : of(null)
         ),
-        map((site: Site) => site?.id)
+        map((site: Site) => site?.id),
+        tap(() => this.organizationService.organization.completed = true),
       );
   }
 

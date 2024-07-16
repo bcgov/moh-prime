@@ -22,10 +22,11 @@ namespace Prime.Models
         public AgreementGroup? Group { get; set; }
         public IEnumerable<EnrolleeCertDto> Licences { get; set; }
         public string AccessType { get; set; }
-        public string DeviceProviderId {get; set;}
+        public string DeviceProviderId { get; set; }
+        public IEnumerable<HealthAuthority> HealthAuthories { get; set; }
 
 
-        public static EnrolmentCertificate Create(Enrollee enrollee)
+        public static EnrolmentCertificate Create(EnrolmentCertificateAccessToken token, Enrollee enrollee)
         {
             return new EnrolmentCertificate
             {
@@ -36,7 +37,12 @@ namespace Prime.Models
                 PreferredLastName = enrollee.PreferredLastName,
                 GPID = enrollee.GPID,
                 ExpiryDate = enrollee.ExpiryDate,
-                CareSettings = enrollee.EnrolleeCareSettings.Select(org => org.CareSetting),
+                CareSettings = token.CareSettingCode == null ?
+                    enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting) :
+                    enrollee.EnrolleeCareSettings.Where(ecs => ecs.CareSettingCode == token.CareSettingCode).Select(ecs => ecs.CareSetting),
+                HealthAuthories = token.HealthAuthorityCode == null ?
+                    enrollee.EnrolleeHealthAuthorities.Select(e => e.HealthAuthority) :
+                    enrollee.EnrolleeHealthAuthorities.Where(eha => (int)eha.HealthAuthorityCode == token.HealthAuthorityCode).Select(eha => eha.HealthAuthority),
                 Group = enrollee.Agreements.OrderByDescending(a => a.CreatedDate)
                     .Where(a => a.AcceptedDate != null)
                     .Select(a => a.AgreementVersion.AgreementType.IsOnBehalfOfAgreement() ? AgreementGroup.OnBehalfOf : AgreementGroup.RegulatedUser)

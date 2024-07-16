@@ -33,6 +33,8 @@ import { JoinPipe } from '@shared/pipes/join.pipe';
 import { RolePipe } from '@shared/pipes/role-pipe';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { ContainsPipe } from '@shared/pipes/contains.pipe';
+import { LicenseNumberLabelPipe } from '@shared/pipes/license-number-label.pipe';
+import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
 import { HealthAuthorityVendorPipe } from '@shared/pipes/health-authority-vendor.pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -126,6 +128,8 @@ import { AdministratorOverviewComponent } from '@health-auth/pages/administrator
 import { HealthAuthCareTypeOverviewComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-overview.component';
 import { HealthAuthSiteOverviewContainerComponent } from './components/health-auth-site-overview-container/health-auth-site-overview-container.component';
 import { EmailFormComponent } from './components/forms/email-form/email-form.component';
+import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
+import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
 
 @NgModule({
   declarations: [
@@ -148,6 +152,8 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     JoinPipe,
     PartyTypePipe,
     HealthAuthorityVendorPipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
     AddressFormComponent,
     ConfirmDialogComponent,
     HtmlComponent,
@@ -179,6 +185,7 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     AccessTermsTableComponent,
     AccessTermComponent,
     NoteComponent,
+    ChangeVendorNoteComponent,
     ManualFlagNoteComponent,
     ImageComponent,
     CollectionNoticeContainerComponent,
@@ -232,7 +239,8 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     DateOfBirthComponent,
     UnlistedCollegeLicenceFormComponent,
     EmailFormComponent,
-    SelfDeclarationTermComponent
+    SelfDeclarationTermComponent,
+    TransferHASiteComponent,
   ],
   imports: [
     CommonModule,
@@ -270,6 +278,8 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     ContainsPipe,
     PartyTypePipe,
     HealthAuthorityVendorPipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
@@ -348,7 +358,9 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
     FullnamePipe,
     AddressPipe,
     CasePipe,
-    CapitalizePipe
+    CapitalizePipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
   ]
 })
 export class SharedModule { }

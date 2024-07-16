@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
 
+#nullable disable
+
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
@@ -15,16 +17,18 @@ namespace Prime.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.16")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -65,8 +69,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AddressType")
                         .HasColumnType("integer");
@@ -110,14 +115,17 @@ namespace Prime.Migrations
                     b.ToTable("Address");
 
                     b.HasDiscriminator<int>("AddressType");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Prime.Models.Admin", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -165,8 +173,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset?>("AcceptedDate")
                         .HasColumnType("timestamp with time zone");
@@ -219,19 +228,21 @@ namespace Prime.Migrations
 
                     b.HasIndex("PartyId");
 
-                    b.ToTable("Agreement");
+                    b.ToTable("Agreement", t =>
+                        {
+                            t.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee", "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\r\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
 
-                    b.HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth", "((\"OrganizationId\" is null) or (\"PartyId\" is not null))");
-
-                    b.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee", "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
+                            t.HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth", "((\"OrganizationId\" is null) or (\"PartyId\" is not null))");
+                        });
                 });
 
             modelBuilder.Entity("Prime.Models.AgreementVersion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AgreementType")
                         .HasColumnType("integer");
@@ -632,6 +643,17 @@ namespace Prime.Migrations
                             Text = "<h1>ORGANIZATION PHARMANET ACCESS AGREEMENT</h1>\r\n\r\n<p>\r\n  This Organization PharmaNet Access Agreement (the &quot;Agreement&quot;) is executed as of the date first written\r\n  above, by {{organization_name}} (&quot;Organization&quot;) for the benefit of HIS MAJESTY THE KING IN RIGHT OF THE\r\n  PROVINCE OF BRITISH COLUMBIA, as represented by the Minister of\r\n  Health (the &quot;Province&quot;).\r\n</p>\r\n\r\n<p>\r\n  <strong>WHEREAS:</strong>\r\n</p>\r\n\r\n<ol type=\"A\">\r\n  <li>\r\n    The Province owns and is responsible for the operation of PharmaNet, the province-wide network that links health\r\n    care providers to a central data system. Every prescription dispensed in community pharmacies in British Columbia is\r\n    entered into PharmaNet.\r\n  </li>\r\n  <li>\r\n    PharmaNet contains highly sensitive confidential information, including personal information, and it is in the\r\n    public\r\n    interest to ensure that appropriate measures are in place to protect the confidentiality and integrity of such\r\n    information. All access to and use of PharmaNet and PharmaNet Data is subject to the Act and other applicable law.\r\n  </li>\r\n  <li>\r\n    The Province permits authorized users to access PharmaNet to provide health services to the individual whose\r\n    personal information is being accessed.\r\n  </li>\r\n  <li>\r\n    This Agreement sets out the terms by which Organization may permit its Authorized Staff to access PharmaNet in\r\n    connection with the Site(s) operated by Organization.\r\n  </li>\r\n</ol>\r\n\r\n<p>\r\n  <strong>NOW THEREFORE</strong> Organization makes this Agreement knowing that the Province will rely on it in\r\n  permitting access to and use of PharmaNet\r\n  from the Site(s) operated by Organization. Organization conclusively acknowledges that reliance by the Province on\r\n  this Agreement is in every respect justifiable and that it received fair and valuable consideration for this\r\n  Agreement, the receipt and adequacy of which is hereby acknowledged. Organization hereby agrees as follows:\r\n</p>\r\n\r\n<p class=\"text-center\">\r\n  <strong>ARTICLE 1 – INTERPRETATION</strong>\r\n</p>\r\n<ol type=\"1\"\r\n    start=\"1\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <div>\r\n          In this Agreement, terms that are used but not defined will have the same meaning as in the\r\n          <em>Information Management Regulation</em>. The following capitalized terms will have the meaning given below:\r\n        </div>\r\n        <ol type=\"a\">\r\n          <li>\r\n            <strong>&quot;Act&quot;</strong> means the <em>Pharmaceutical Services Act</em>;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Approved&quot;</strong> means approved in writing by an official in the Province’s\r\n            <strong>Pharmaceutical, Laboratory and Blood Services Division</strong>, and\r\n            <strong>&quot;Approval&quot;</strong> will have the same meaning;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Approved SSO&quot;</strong> means, in relation to a Site, the software support organization\r\n            identified\r\n            in the Site Registration as providing Organization with the SSO-Provided Technology used at the Site;\r\n          </li>\r\n\r\n          <li>\r\n            <strong>&quot;Associated Technology&quot;</strong> means, in relation to a Site, the information technology\r\n            hardware,\r\n            software or services used at the Site, other than the SSO-Provided Technology, in connection with PharmaNet\r\n            Access or to store or transmit PharmaNet Data;\r\n          </li>\r\n          <li>\r\n            <P>\r\n              <strong>&quot;Authorized Staff&quot;</strong> means any individual granted access to PharmaNet by the\r\n              Province who:\r\n            </P>\r\n            <ol type=\"i\">\r\n              <li>\r\n                is an employee or independent contractor of Organization,\r\n              </li>\r\n              <li>\r\n                if Organization operates a hospital as defined in section 1 of the <em>Hospital Act</em>, is a member of\r\n                the medical staff of the hospital, or\r\n              </li>\r\n              <li>\r\n                if Organization is an individual, is the Organization;\r\n              </li>\r\n            </ol>\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Conformance Standards&quot;</strong> means the PharmaNet Professional and Software Conformance\r\n            Standards\r\n            (<a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\"\r\n              target=\"_blank\"\r\n              rel=\"noopener noreferrer\">\r\n            https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards</a>)\r\n            as published by the Province from time to time;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Control&quot;</strong> means control of greater than fifty percent of the voting rights or\r\n            equity interests in Organization;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Device Provider Staff&quot;</strong> means Authorized Staff that are &quot;device provider\r\n            agents&quot; under the <em>Information Management Regulation</em>;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Information Management Regulation&quot;</strong> means the Information Management Regulation,\r\n            B.C. Reg. 328/2021;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;On-Behalf-Of Staff&quot;</strong> means Authorized Staff that are &quot;on-behalf-of\r\n            users&quot; under the <em>Information Management Regulation</em>;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;PharmaNet Access&quot;</strong> includes Site Access;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;PharmaNet Data&quot;</strong> includes any record or information contained in PharmaNet and\r\n            any record or\r\n            information obtained from PharmaNet that is in the custody, control or possession of Organization or any of\r\n            its employees,\r\n            independent contractors or staff;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;PRIME&quot;</strong> means the online service provided by the Province for the purposes of (i)\r\n            Authorized\r\n            Staff members being granted access to PharmaNet by the Province, and (ii) Organization’s Site Registration.\r\n            Where this\r\n            Agreement refers to submission of information &quot;through PRIME&quot;, that includes the use of any\r\n            paper-based or other alternate\r\n            mechanism provided by the Province for the submission of such information;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Registrant Staff&quot;</strong> means Authorized Staff that are &quot;registrants&quot; under\r\n            the <em>Information Management Regulation</em>;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Signing Authority&quot;</strong> means the individual identified as the &quot;Signing\r\n            Authority&quot; in the Site Registration for a Site;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Site&quot;</strong> means a premises <u>located in British Columbia</u> that is operated by\r\n            Organization and Approved pursuant to section 3.1;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Site Access&quot;</strong> means any access to PharmaNet by an individual when the individual\r\n            is at a Site;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;Site Registration&quot;</strong> means the &quot;site registration&quot; submitted by\r\n            Organization to the Province through PRIME,\r\n            which includes all information required by the Province, all as updated from time to time by Organization in\r\n            accordance with section 5.2 of this Agreement;\r\n          </li>\r\n          <li>\r\n            <strong>&quot;SSO-Provided Technology&quot;</strong> means any information technology hardware, software or\r\n            services provided to Organization by\r\n            an Approved SSO for the purpose of Site Access.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Unless otherwise specified, a reference to a statute or regulation by name means a statute or regulation of\r\n          British Columbia\r\n          of that name, as amended or replaced from time to time, and includes any enactments made under the authority\r\n          of that statute\r\n          or regulation.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          The following is the Schedule attached to and incorporated into this Agreement:\r\n        </div>\r\n        <ul>\r\n          <li>\r\n            Schedule A – Specific Privacy and Security Measures\r\n          </li>\r\n          <li>\r\n            Schedule B – On-Behalf- Staff Site Access Exceptions\r\n          </li>\r\n        </ul>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          The main body of this Agreement, the Schedule, and any documents incorporated by reference into this Agreement\r\n          are to be\r\n          interpreted so that all of the provisions are given as full effect as possible. In the event of a conflict,\r\n          unless\r\n          expressly stated to the contrary the main body of the Agreement will prevail over the Schedule, which will\r\n          prevail over\r\n          any document incorporated by reference.\r\n        </div>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center \">\r\n  <strong>ARTICLE 2 – REPRESENTATIONS AND WARRANTIES</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"2\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <div>\r\n          Organization represents and warrants to the Province, as of the date of this Agreement and throughout its\r\n          term, that:\r\n        </div>\r\n\r\n        <ol type=\"a\">\r\n          <li>\r\n            the information contained in the Site Registration for each Site is true and correct;\r\n          </li>\r\n          <li>\r\n            <p>\r\n              if Organization is not an individual:\r\n            </p>\r\n\r\n            <ol type=\"i\">\r\n              <li>\r\n                Organization has the power and capacity to enter into this Agreement and to comply with its terms;\r\n              </li>\r\n              <li>\r\n                all necessary corporate or other proceedings have been taken to authorize the execution and delivery of\r\n                this Agreement by, or on behalf of, Organization; and\r\n              </li>\r\n              <li>\r\n                this Agreement has been legally and properly executed by, or on behalf of, the Organization and is\r\n                legally binding upon and enforceable against Organization in accordance with its terms.\r\n              </li>\r\n            </ol>\r\n          </li>\r\n        </ol>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center \">\r\n  <strong>ARTICLE 3 – SITE ACCESS REQUIREMENTS</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"3\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <div>\r\n          Organization must submit a Site Registration to the Province for each physical location where it intends to\r\n          provide Site Access.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must only provide Site Access if the Site Registration for the Site has been Approved by the\r\n          Province.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must only provide Site Access using SSO-Provided Technology. Such SSO-Provided Technology must\r\n          comply\r\n          with the Conformance Standards and otherwise meet the version and currency requirements of the Province.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Unless otherwise Approved by the Province, Organization must at all times use the secure network or security\r\n          technology\r\n          that the Province certifies or makes available to Organization for the purpose of Site Access. The use of any\r\n          such\r\n          network or technology by Organization may be subject to terms and conditions of use, including acceptable use\r\n          policies,\r\n          established by the Province and communicated to Organization from time to time in writing.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must only allow Site Access by the following users:\r\n        </div>\r\n\r\n        <ol type=\"a\">\r\n          <li>\r\n            Authorized Staff when they are physically located at a Site, and\r\n          </li>\r\n          <li>\r\n            Representatives of an Approved SSO for technical support purposes, in accordance with section 15 of the\r\n            <em>Information Management Regulation</em>.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Except as may be expressly authorized in Schedule B <em>(On-Behalf-Of Staff Site Access Exceptions)</em>,\r\n          Organization must\r\n          ensure that On-Behalf-Of Staff users only access PharmaNet from the Site where the Registrant Staff or Device\r\n          Provider\r\n          Staff user that they are accessing for directly provided health services to the person in respect of whom\r\n          PharmaNet is\r\n          being accessed.\r\n        </div>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center \">\r\n  <strong>ARTICLE 4</strong>\r\n</p>\r\n<p class=\"text-center\">Article 4 is intentionally left blank</p>\r\n<ol type=\"1\"\r\n    start=\"4\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\"\r\n        class=\" hidden\">\r\n      <li></li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center \">\r\n  <strong>ARTICLE 5 – GENERAL REQUIREMENTS</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"5\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <div>\r\n          Organization must comply with the Act and all applicable law.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must immediately notify the Province:\r\n        </div>\r\n        <ol type=\"a\">\r\n          <li>\r\n            if a Site, or any portion thereof, is leased or transferred to another person;\r\n          </li>\r\n          <li>\r\n            if Organization ceases to operate a Site;\r\n          </li>\r\n          <li>\r\n            if Organization acquires a premises that already has PharmaNet access, whether or not Organization intends\r\n            to provide\r\n            Site Access from that location;\r\n          </li>\r\n          <li>\r\n            of any change to the information contained in a Site Registration, including any change to the Site’s\r\n            status, location,\r\n            normal operating hours, Approved SSO, or the name and contact information of the Signing Authority or any of\r\n            the other\r\n            specific roles set out in the Site Registration; and\r\n          </li>\r\n          <li>\r\n            of a change of Control of Organization.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must ensure that Authorized Staff:\r\n        </div>\r\n        <ol type=\"a\">\r\n          <li>\r\n            only access PharmaNet to the extent necessary to provide health services to the individual whose personal\r\n            information is being accessed;\r\n          </li>\r\n          <li>\r\n            only submit claims through PharmaNet if the Site is enrolled as a provider under the Provider Regulation,\r\n            B.C. Reg. 76/2022;\r\n          </li>\r\n          <li>\r\n            first complete any mandatory training program(s) that the Site’s Approved SSO or the Province makes\r\n            available in relation to PharmaNet;\r\n          </li>\r\n          <li>\r\n            access PharmaNet using their own separate login identifications and credentials, and do not share or have\r\n            multiple\r\n            use of any such login identifications and credentials;\r\n          </li>\r\n          <li>\r\n            secure all devices, codes and credentials that enable access to PharmaNet against unauthorized use;\r\n          </li>\r\n          <li>\r\n            are correctly identified as required by the Province on all transactions submitted to PharmaNet, including\r\n            &quot;batch jobs&quot; or similar;\r\n          </li>\r\n          <li>\r\n            only use PharmaNet in accordance with the most current PharmaCare Policy Manual.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          If notified by the Province that an Authorized Staff user’s PharmaNet Access has been suspended or revoked by\r\n          the\r\n          Province, Organization will immediately take any local measures necessary to remove that individual’s\r\n          PharmaNet Access.\r\n          Organization will only restore PharmaNet Access to a previously suspended or revoked Authorized Staff user\r\n          upon the\r\n          Province’s specific written direction.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          The PharmaNet Data disclosed pursuant to this Agreement is disclosed by the Province solely for the Use of the\r\n          Registrant Staff or Device Provider Staff user to whom it is disclosed (or on whose behalf it was obtained by\r\n          an\r\n          On-Behalf-Of Staff user).\r\n        </div>\r\n        <div>\r\n          Organization must not Use any PharmaNet Data, or permit any third party to Use PharmaNet Data, for\r\n          Organization’s (or\r\n          the third party’s) own purposes, except as necessary for the Registrant Staff or Device Provider Staff user’s\r\n          provision\r\n          of health services.\r\n        </div>\r\n        <div>\r\n          For the purposes of this section, &quot;<strong>Use</strong>&quot; includes to collect, access, retain, use,\r\n          process, link, de-identify, modify or\r\n          disclose.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must make reasonable arrangements to protect PharmaNet Data against such risks as unauthorized\r\n          access,\r\n          collection, use, modification, retention, disclosure or disposal, including by:\r\n        </div>\r\n        <ol type=\"a\">\r\n          <li>\r\n            taking all reasonable physical, technical and operational measures necessary at Organization’s Site(s) to\r\n            ensure\r\n            PharmaNet Access operate in accordance with the requirements of Articles 3, 4 and 5 of this Agreement, and\r\n          </li>\r\n          <li>\r\n            complying with the requirements of Schedule A <em>(Specific Privacy and Security Measures)</em>.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center \">\r\n  <strong>ARTICLE 6 – NON-COMPLIANCE AND INVESTIGATIONS</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"6\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <div>\r\n          Organization must promptly notify the Province, and provide particulars, if Organization does not comply, or\r\n          anticipates\r\n          that it will be unable to comply, with the terms of this Agreement, or if Organization has knowledge of any\r\n          circumstances, incidents or events which have or may jeopardize the security, confidentiality or integrity of\r\n          PharmaNet,\r\n          including any attempt by any person to gain unauthorized access to PharmaNet or the networks or equipment used\r\n          to\r\n          connect to PharmaNet or convey PharmaNet Data.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must immediately investigate any suspected breaches of this Agreement and take all reasonable\r\n          steps to prevent recurrences of any such breaches.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must cooperate with any audits or investigations conducted by the Province (including any\r\n          independent\r\n          auditor appointed by the Province) regarding compliance with this Agreement, including by providing access\r\n          upon request\r\n          to a Site and any associated facilities, networks, equipment, systems, books, records and personnel for the\r\n          purposes of\r\n          such audit or investigation.\r\n        </div>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center \">\r\n  <strong>ARTICLE 7 – SITE TERMINATION</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"7\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <div>\r\n          Unless otherwise Approved by the Province, Organization must take all measures necessary to prevent further\r\n          PharmaNet\r\n          Access from a Site, or any portion thereof, that is leased or transferred to another person, or otherwise\r\n          ceases to be\r\n          operated by Organization.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          The Province may change the type of PharmaNet Access it provides to a Site at any time and in its sole\r\n          discretion and\r\n          without notice to any person.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          The Province may terminate all PharmaNet Access at a Site immediately, upon notice to the Signing\r\n          Authority for the Site, if:\r\n        </div>\r\n        <ol type=\"a\">\r\n          <li>\r\n            the Approved SSO for the Site is no longer approved by the Province to provide information technology\r\n            hardware, software, or service in connection with PharmaNet, or\r\n          </li>\r\n          <li>\r\n            the Province determines that the SSO-Provided Technology or Associated Technology in use at the Site,\r\n            or any component thereof, is obsolete, unsupported, or otherwise poses an unacceptable security risk,\r\n          </li>\r\n        </ol>\r\n        <div>\r\n          and the Organization is unable or unwilling to remedy the problem within a timeframe acceptable to the\r\n          Province.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          As a security precaution, the Province may suspend PharmaNet Access at a Site after a period of inactivity. If\r\n          PharmaNet\r\n          Access at a Site remains inactive for a period of 90 days or more, the Province may, immediately upon notice\r\n          to the\r\n          Signing Authority for the Site, terminate all further PharmaNet Access at the Site.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must take all measures necessary to prevent further PharmaNet Access at a Site immediately upon\r\n          the Signing\r\n          Authority’s receipt of notice from the Province under sections 7.3 or 7.4.\r\n        </div>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center \">\r\n  <strong>ARTICLE 8 – TERM AND TERMINATION</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"8\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <div>\r\n          The term of this Agreement begins on the date first noted above and continues until it is terminated in\r\n          accordance with this Article 8.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization may terminate this Agreement at any time on written notice to the Province.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          The Province may terminate this Agreement immediately upon notice to Organization if:\r\n        </div>\r\n        <ol type=\"a\">\r\n          <li>\r\n            the Province determines that Organization has failed to comply with any provision of this Agreement;\r\n          </li>\r\n          <li>\r\n            Organization no longer operates any Site from which PharmaNet Access is permitted by the Province; or\r\n          </li>\r\n          <li>\r\n            there is a change of Control of Organization without the Province’s Approval.\r\n          </li>\r\n        </ol>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          In addition to the Province’s right to terminate under section 8.3, the Province may terminate this Agreement\r\n          for any reason upon two (2) months advance notice to Organization.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must prevent any further PharmaNet Access immediately upon termination of this Agreement.\r\n        </div>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center \">\r\n  <strong>ARTICLE 9 – DISCLAIMER AND INDEMNITY</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"9\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <div>\r\n          The PharmaNet Access and PharmaNet Data provided under this Agreement are provided &quot;as is&quot; without\r\n          warranty of\r\n          any kind,\r\n          whether express or implied. All implied warranties, including, without limitation, implied warranties of\r\n          merchantability, fitness for a particular purpose, and non-infringement, are hereby expressly disclaimed. The\r\n          Province\r\n          does not warrant the accuracy, completeness or reliability of the PharmaNet Data or the availability of\r\n          PharmaNet, or\r\n          that access to or the operation of PharmaNet will function without error, failure or interruption.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Under no circumstances will the Province be liable to any person or business entity for any direct, indirect,\r\n          special,\r\n          incidental, consequential, or other damages based on any use of PharmaNet or the PharmaNet Data, including\r\n          without\r\n          limitation any lost profits, business interruption, or loss of programs or information, even if the Province\r\n          has been\r\n          specifically advised of the possibility of such damages.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          Organization must indemnify and save harmless the Province, and the Province’s employees and agents (each\r\n          an &quot;Indemnified Person&quot;) from any losses, claims, damages, actions, causes of action, costs and\r\n          expenses that an Indemnified Person may sustain, incur, suffer or be put to at any time, either before or\r\n          after this Agreement ends, which are based upon, arise out of or occur directly or indirectly by reason of\r\n          any act or omission by Organization, or by any Authorized Staff, in connection with this Agreement.\r\n        </div>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center \">\r\n  <strong>ARTICLE 10 – GENERAL</strong>\r\n</p>\r\n\r\n<ol type=\"1\"\r\n    start=\"10\"\r\n    class=\"decimal\">\r\n  <li>\r\n    <ol type=\"1\">\r\n      <li>\r\n        <div>\r\n          <strong class=\"underline\">Notice.</strong> Except where this Agreement expressly provides for another method\r\n          of delivery, any notice to be given to the Province must be in writing and mailed or emailed to:\r\n        </div>\r\n\r\n        <address class=\"address\">\r\n          Director, Information and PharmaNet Innovation<br>\r\n          Ministry of Health<br>\r\n          PO Box 9652, STN PROV GOVT<br>\r\n          Victoria, BC V8W 9P4<br>\r\n\r\n          <br>\r\n\r\n          Email: <a href=\"mailto:PRIMESupport@gov.bc.ca\">PRIMESupport@gov.bc.ca</a>\r\n        </address>\r\n        <div>\r\n          Any notice to be given to a Signing Authority or the Organization will be in writing and emailed, mailed,or\r\n          text\r\n          messaged to the Signing Authority (in the case of notice to a Signing Authority) or all Signing Authorities\r\n          (in the case\r\n          of notice to the Organization). A Signing Authority may be required to click a URL link or to log in to PRIME\r\n          to receive\r\n          the content of any such notice.\r\n        </div>\r\n        <div>\r\n          Any written notice from a party, if sent electronically, will be deemed to have been received on the day of\r\n          transmittal\r\n          unless transmitted after the normal business hours of the addressee or on a day that is not a Business Day, in\r\n          which\r\n          case it will be deemed to have been received on the next following Business Day. If sent by mail, the notice\r\n          will be\r\n          deemed to have been received on the third Business Day after its mailing. For the purposes of this section,\r\n          “Business\r\n          Day” means a day, other than a Saturday or Sunday, on which Provincial government offices are open for normal\r\n          business\r\n          in British Columbia.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          <strong class=\"underline\">Assignment.</strong> Organization must not assign any of Organization’s rights or\r\n          obligations under this Agreement without the Province’s Approval.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          <strong class=\"underline\">Waiver.</strong> The failure of the Province at any time to insist on performance of\r\n          any provision of this Agreement by Organization is\r\n          not a waiver of its right subsequently to insist on performance of that or any other provision of this\r\n          Agreement. A\r\n          waiver of any provision or breach of this Agreement is effective only if it is writing and signed by, or on\r\n          behalf of,\r\n          the waiving party.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          <strong class=\"underline\">Modification.</strong> No modification to this Agreement is effective\r\n          unless it is in writing and signed by, or on behalf of, the parties.\r\n        </div>\r\n        <div>\r\n          Notwithstanding the foregoing, the Province may unilaterally amend this Agreement, including the Schedule and\r\n          this\r\n          section, at any time in its sole discretion, by written notice to Organization, in which case the amendment\r\n          will become\r\n          effective upon the later of: (i) the date notice of the amendment is delivered to Organization; and (ii) the\r\n          effective\r\n          date of the amendment specified by the Province. The Province will make reasonable efforts to provide at least\r\n          thirty\r\n          (30) days advance notice of any such amendment, subject to any determination by the Province that a shorter\r\n          notice\r\n          period is necessary due to changes in the Act, applicable law or applicable policies of the Province, or is\r\n          necessary to\r\n          maintain privacy and security in relation to PharmaNet or PharmaNet Data.\r\n        </div>\r\n        <div>\r\n          If Organization does not agree with any amendment for which notice has been provided by the Province in\r\n          accordance with\r\n          this section, Organization must promptly (and in any event prior to the effective date) cease PharmaNet Access\r\n          at all\r\n          Sites and take the steps necessary to terminate this Agreement in accordance with Article 8.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          <strong class=\"underline\">Time is of the Essence.</strong> Time is of the essence in this Agreement.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          <strong class=\"underline\">Relationship of the Parties.</strong> This Agreement does not create any agency,\r\n          partnership or joint venture between the Parties.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          <strong class=\"underline\">Entire Agreement.</strong> This Agreement constitutes the entire agreement\r\n          between the Parties and supersedes all other agreements between the Parties relating to its subject matter.\r\n        </div>\r\n      </li>\r\n      <li>\r\n        <div>\r\n          <strong class=\"underline\">Governing Law.</strong> This Agreement will be governed by and will be\r\n          construed and interpreted in accordance with the laws of British Columbia and the laws of Canada applicable\r\n          therein.\r\n        </div>\r\n      </li>\r\n    </ol>\r\n  </li>\r\n</ol>\r\n\r\n{{signature_block}}\r\n\r\n<p class=\"text-center break-before\">\r\n  <strong>SCHEDULE A – SPECIFIC PRIVACY AND SECURITY MEASURES</strong>\r\n</p>\r\n\r\n<p>\r\n  Organization must, in relation to each Site and in relation to PharmaNet Access:\r\n</p>\r\n\r\n<ol type=\"a\">\r\n  <li>\r\n    secure all workstations and printers at the Site to prevent any viewing of PharmaNet Data by persons other than\r\n    Authorized Staff;\r\n  </li>\r\n  <li>\r\n    <p>\r\n      implement all privacy and security measures specified in the following documents published by the Province, as\r\n      amended from time to time:\r\n    </p>\r\n\r\n    <ol type=\"i\">\r\n      <li>\r\n        <p>\r\n          the Conformance Standards\r\n        </p>\r\n\r\n        (<a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\"\r\n           target=\"_blank\"\r\n           rel=\"noopener noreferrer\">\r\n          https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards\r\n        </a>)\r\n      </li>\r\n\r\n    </ol>\r\n  </li>\r\n  <li>\r\n    ensure that a qualified technical support person is engaged to provide security support for the Site. This person\r\n    should be familiar with the Site’s network configurations, hardware and software, including all SSO-Provided\r\n    Technology\r\n    and Associated Technology, and should be capable of understanding and adhering to the standards set forth in this\r\n    Agreement and Schedule. Note that any such qualified technical support person must not be permitted by Organization\r\n    to access or use PharmaNet in any manner, except as expressly permitted under this Agreement;\r\n  </li>\r\n  <li>\r\n    establish and maintain documented privacy policies that detail how Organization will meet its privacy obligations in\r\n    relation to the Site;\r\n  </li>\r\n  <li>\r\n    establish breach reporting and response processes in relation to the Site;\r\n  </li>\r\n  <li>\r\n    detail expectations for privacy protection in contracts and service agreements as applicable at the Site;\r\n  </li>\r\n  <li>\r\n    regularly review the administrative, physical and technological safeguards at the Site;\r\n  </li>\r\n  <li>\r\n    establish and maintain a program for monitoring PharmaNet Access, including by making appropriate monitoring and\r\n    reporting mechanisms available to Authorized Staff for this purpose.\r\n  </li>\r\n</ol>\r\n\r\n<p class=\"text-center break-before\">\r\n  <strong>SCHEDULE B – ON-BEHALF- STAFF SITE ACCESS EXCEPTIONS</strong>\r\n</p>\r\n<p>\r\n  On-Behalf-Of Staff acting on behalf of a Device Provider Staff user may access PharmaNet at a Site that is different\r\n  from the one where the Device Provider Staff user provided health services to the person in respect of whom PharmaNet\r\n  is\r\n  being accessed only if that different Site is registered by the Device Provider Staff user for the purpose of their\r\n  submission of claims as permitted under the Provider Regulation.\r\n</p>",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 35,
+                            AgreementType = 12,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTimeOffset(new DateTime(2023, 11, 29, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Text = "<h1>\n  PHARMANET TERMS OF ACCESS FOR ON-BEHALF-OF USER<br>\n</h1>\n\n<p class=\"bold\">\n  By enrolling for PharmaNet access, you agree to the following terms (the “Agreement”). Please read them carefully.\n</p>\n\n<p class=\"bold underline\">\n  On Behalf-of-User Access\n</p>\n\n<ol>\n  <li>\n    <p>\n      You represent and warrant to the Province that:\n    </p>\n\n    <ol type=\"a\">\n      <li>\n        your employment duties in relation to a Practitioner require you to access PharmaNet (and PharmaNet Data) to\n        support the Practitioner’s delivery of Direct Patient Care;\n      </li>\n      <li>\n        you are directly supervised by a Practitioner who has been granted access to PharmaNet by the Province; and\n      </li>\n      <li>\n        all information provided by you in connection with your application for PharmaNet access, including all\n        information submitted through PRIME, is true and correct.\n      </li>\n    </ol>\n\n  </li>\n</ol>\n\n<p class=\"bold underline\">\n  Definitions\n</p>\n\n<ol start=\"2\">\n  <li>\n    <p>\n      In these terms, capitalized terms will have the following meanings:\n    </p>\n\n    <ul class=\"list-unstyled\">\n      <li>\n        <strong>“Approved Practice Site”</strong> means the physical site at which a Practitioner provides Direct\n        Patient Care and which is approved by the Province for PharmaNet access. For greater certainty, “Approved\n        Practice Site” does not include a location from which remote access to PharmaNet takes place.\n      </li>\n      <li>\n        <strong>“Direct Patient Care”</strong> means, for the purposes of this Agreement, the provision of health\n        services to an individual to whom a Practitioner provides direct patient care in the context of their Practice.\n      </li>\n      <li>\n        <strong>“PharmaCare Newsletter”</strong> means the PharmaCare newsletter published by the Province on the\n        following website (or such other website as may be specified by the Province from time to time for this\n        purpose):\n\n        <br><br>\n\n        <a href=\"http://www.gov.bc.ca/pharmacarenewsletter\" target=\"_blank\" rel=\"noopener noreferrer\">www.gov.bc.ca/pharmacarenewsletter</a>\n      </li>\n      <li>\n        <strong>“PharmaNet”</strong> means PharmaNet as continued under section 2 of the <em>Information Management\n        Regulation</em>, B.C. Reg. 74/2015.\n      </li>\n      <li>\n        <strong>“PharmaNet Data”</strong> includes any record or information contained in PharmaNet and any record or\n        information in the custody, control or possession of you or a Practitioner that was obtained through access to\n        PharmaNet by anyone.\n      </li>\n      <li>\n        <strong>“Practice”</strong> means a Practitioner’s practice of their health profession.\n      </li>\n      <li>\n        <strong>“Practitioner”</strong> means a health professional regulated under the <em>Health Professions Act</em>,\n        or an enrolled device provide under the <em>Provider Regulation</em> B.C. Reg. 222/2014, who supervises your\n        access to and use of PharmaNet and who has been granted access to PharmaNet by the Province.\n      </li>\n      <li>\n        <strong>“PRIME”</strong> means the online service provided by the Province that allows users to apply for, and\n        manage, their access to PharmaNet, and through which users are granted access by the Province.\n      </li>\n      <li>\n        <strong>“Province”</strong> means His Majesty the King in Right of British Columbia, as represented by the\n        Minister of Health.\n      </li>\n    </ul>\n\n  </li>\n  <li>\n    Unless otherwise specified, a reference to a statute or regulation by name means the statute or regulation of\n    British Columbia of that name, as amended or replaced from time to time, and includes any enactment made under the\n    authority of that statute or regulation.\n  </li>\n</ol>\n\n<p class=\"bold underline\">\n  Terms of Access to PharmaNet\n</p>\n\n<ol start=\"4\">\n  <li>\n\n    <p>\n      You must:\n    </p>\n\n    <ol type=\"a\">\n      <li>\n        access and use PharmaNet and PharmaNet Data only at the Approved Practice Site of a Practitioner;\n      </li>\n      <li>\n        access and use PharmaNet and PharmaNet Data only to support Direct Patient Care delivered by a Practitioner to\n        the individuals whose PharmaNet Data you are accessing, and only if the Practitioner is or will be delivering\n        Direct Patient Care requiring that access to those individuals at the same Approved Practice Site at which the\n        access occurs;\n      </li>\n      <li>\n        only access PharmaNet as permitted by law and directed by a Practitioner;\n      </li>\n      <li>\n        maintain all PharmaNet Data, whether accessed on PharmaNet or otherwise disclosed to you in any manner, in\n        strict confidence;\n      </li>\n      <li>\n        maintain the security of PharmaNet, and any applications, connections, or networks used to access PharmaNet;\n      </li>\n      <li>\n        complete all training required by the Approved Practice Site’s PharmaNet software vendor and the Province before\n        accessing PharmaNet;\n      </li>\n      <li>\n        notify the Province if you have any reason to suspect that PharmaNet, or any PharmaNet Data, is or has been\n        accessed or used inappropriately by any person.\n      </li>\n    </ol>\n\n  </li>\n  <li>\n\n    <p>\n      You must not:\n    </p>\n\n    <ol type=\"a\">\n      <li>\n        disclose PharmaNet Data for any purpose other than Direct Patient Care, except as permitted by law and\n        directed by a Practitioner;\n      </li>\n      <li>\n        permit any person to use any user IDs, passwords or credentials provided to you to access PharmaNet;\n      </li>\n      <li>\n        reveal, share or compromise any user IDs, passwords or credentials for PharmaNet;\n      </li>\n      <li>\n        use, or attempt to use, the user IDs, passwords or credentials of any other person to access PharmaNet;\n      </li>\n      <li>\n        take any action that might compromise the integrity of PharmaNet, its information, or the provincial drug plan,\n        such as altering information or submitting false information;\n      </li>\n      <li>\n        test the security related to PharmaNet;\n      </li>\n      <li>\n        attempt to access PharmaNet from any location other than the Approved Practice Site of a Practitioner,\n        including by VPN or other remote access technology;\n      </li>\n      <li>\n        access PharmaNet unless the access is for the purpose of supporting a Practitioner in providing Direct\n        Patient Care to a patient at the same Approved Practice Site at which your access occurs.\n      </li>\n    </ol>\n  </li>\n</ol>\n<ol start=\"6\">\n  <li>\n    Your access to PharmaNet and use of PharmaNet Data are governed by the <em>Pharmaceutical Services Act</em> and you\n    must comply with all your duties under that Act.\n  </li>\n  <li>\n    The Province may, in writing and from time to time, set further limits and conditions in respect of PharmaNet,\n    either for you or for the Practitioner(s), and that you must comply with any such further limits and conditions.\n  </li>\n</ol>\n\n<p class=\"bold underline\">\n  How to Notify the Province\n</p>\n\n<ol start=\"8\">\n  <li>\n\n    <p>\n      Notice to the Province may be sent in writing to:\n    </p>\n\n    <address>\n      Director, Information and PharmaNet Development<br>\n      Ministry of Health<br>\n      PO Box 9652, STN PROV GOVT<br>\n      Victoria, BC V8W 9P4<br>\n\n      <br>\n\n      <a href=\"mailto:PRIMESupport@gov.bc.ca\">PRIMESupport@gov.bc.ca</a>\n    </address>\n\n  </li>\n</ol>\n\n<p class=\"bold underline\">\n  Province May Modify These Terms\n</p>\n\n<ol start=\"9\">\n  <li>\n    <p>\n      The Province may amend these terms, including this section, at any time in its sole discretion:\n    </p>\n\n    <ol type=\"i\">\n      <li>\n        by written notice to you, in which case the amendment will become effective upon the later of (A) the date\n        notice of the amendment is first delivered to you, or (B) the effective date of the amendment specified by the\n        Province, if any; or\n      </li>\n      <li>\n        by publishing notice of any such amendment in the PharmaCare Newsletter, in which case the notice will specify\n        the effective date of the amendment, which date will be at least thirty (30) days after the date that the\n        PharmaCare Newsletter containing the notice is first published.\n      </li>\n    </ol>\n\n    <p>\n      If you do not agree with any amendment for which notice has been provided by the Province in accordance with (i)\n      or (ii) above, you must promptly (and in any event before the effective date) cease all access or use of\n      PharmaNet.\n    </p>\n\n    <p>\n      Any written notice to you under (i) above will be in writing and delivered by the Province to you using any of the\n      contact mechanisms identified by you in PRIME, including by mail to a specified postal address, email to a\n      specified email address or text message to a specified cell phone number. You may be required to click a URL link\n      or log into PRIME to receive the contents of any such notice.\n    </p>\n\n  </li>\n</ol>\n\n<p class=\"bold underline\">\n  Governing Law\n</p>\n\n<ol start=\"10\">\n  <li>\n\n    <p>\n      These terms will be governed by and will be construed and interpreted in accordance with the laws of British\n      Columbia and the laws of Canada applicable therein.\n    </p>\n\n  </li>\n</ol>\n",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -666,8 +688,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -703,8 +726,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BannerLocationCode")
                         .HasColumnType("integer");
@@ -745,8 +769,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -783,8 +808,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AdminId")
                         .HasColumnType("integer");
@@ -843,8 +869,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -910,8 +937,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -948,8 +976,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BusinessLicenceId")
                         .HasColumnType("integer");
@@ -987,8 +1016,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1025,8 +1055,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CollegeCode")
                         .HasColumnType("integer");
@@ -1082,8 +1113,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
@@ -1119,12 +1151,16 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Weight")
+                        .HasColumnType("integer");
 
                     b.HasKey("Code");
 
@@ -1134,97 +1170,134 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
-                            Name = "College of Physicians and Surgeons of BC (CPSBC)"
+                            Name = "College of Physicians and Surgeons of BC (CPSBC)",
+                            Weight = 10
                         },
                         new
                         {
                             Code = 2,
-                            Name = "College of Pharmacists of BC (CPBC)"
+                            Name = "College of Pharmacists of BC (CPBC)",
+                            Weight = 20
                         },
                         new
                         {
                             Code = 3,
-                            Name = "BC College of Nurses and Midwives (BCCNM)"
+                            Name = "BC College of Nurses and Midwives (BCCNM)",
+                            Weight = 30
                         },
                         new
                         {
                             Code = 4,
-                            Name = "College of Chiropractors of BC"
+                            Name = "College of Chiropractors of BC",
+                            Weight = 50
                         },
                         new
                         {
                             Code = 5,
-                            Name = "College of Dental Hygenists of BC"
+                            Name = "College of Dental Hygenists of BC",
+                            Weight = 999
                         },
                         new
                         {
                             Code = 6,
-                            Name = "College of Dental Technicians of BC"
+                            Name = "College of Dental Technicians of BC",
+                            Weight = 999
                         },
                         new
                         {
                             Code = 7,
-                            Name = "College of Dental Surgeons of BC"
+                            Name = "College of Dental Surgeons of BC",
+                            Weight = 999
                         },
                         new
                         {
                             Code = 8,
-                            Name = "College of Denturists of BC"
+                            Name = "College of Denturists of BC",
+                            Weight = 60
                         },
                         new
                         {
                             Code = 9,
-                            Name = "College of Dietitians of BC"
+                            Name = "College of Dietitians of BC",
+                            Weight = 70
                         },
                         new
                         {
                             Code = 10,
-                            Name = "College of Massage Therapists of BC"
+                            Name = "College of Massage Therapists of BC",
+                            Weight = 80
                         },
                         new
                         {
                             Code = 11,
-                            Name = "College of Naturopathic Physicians of BC"
+                            Name = "College of Naturopathic Physicians of BC",
+                            Weight = 90
                         },
                         new
                         {
                             Code = 12,
-                            Name = "College of Occupational Therapists of BC"
+                            Name = "College of Occupational Therapists of BC",
+                            Weight = 100
                         },
                         new
                         {
                             Code = 13,
-                            Name = "College of Opticians of BC"
+                            Name = "College of Opticians of BC",
+                            Weight = 110
                         },
                         new
                         {
                             Code = 14,
-                            Name = "College of Optometrists of BC"
+                            Name = "College of Optometrists of BC",
+                            Weight = 120
                         },
                         new
                         {
                             Code = 15,
-                            Name = "College of Physical Therapists of BC"
+                            Name = "College of Physical Therapists of BC",
+                            Weight = 130
                         },
                         new
                         {
                             Code = 16,
-                            Name = "College of Psychologists of BC"
+                            Name = "College of Psychologists of BC",
+                            Weight = 140
                         },
                         new
                         {
                             Code = 17,
-                            Name = "College of Speech and Hearing Health Professionals of BC"
+                            Name = "College of Speech and Hearing Health Professionals of BC",
+                            Weight = 160
                         },
                         new
                         {
                             Code = 18,
-                            Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC"
+                            Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC",
+                            Weight = 170
                         },
                         new
                         {
                             Code = 19,
-                            Name = "BC College of Social Workers"
+                            Name = "BC College of Social Workers",
+                            Weight = 180
+                        },
+                        new
+                        {
+                            Code = 20,
+                            Name = "BC College of Oral Health Professionals",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 21,
+                            Name = "College of Health and Care Professionals of BC",
+                            Weight = 70
+                        },
+                        new
+                        {
+                            Code = 22,
+                            Name = "College of Complementary Health Professionals of BC",
+                            Weight = 50
                         });
                 });
 
@@ -1239,6 +1312,9 @@ namespace Prime.Migrations
                     b.Property<int?>("CollegeLicenseGroupingCode")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("Discontinued")
+                        .HasColumnType("boolean");
+
                     b.HasKey("CollegeCode", "LicenseCode");
 
                     b.HasIndex("CollegeLicenseGroupingCode");
@@ -1251,508 +1327,1184 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 1
+                            LicenseCode = 1,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 2
+                            LicenseCode = 2,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 3
+                            LicenseCode = 3,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 4
+                            LicenseCode = 4,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 5
+                            LicenseCode = 5,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 6
+                            LicenseCode = 6,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 7
+                            LicenseCode = 7,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 8
+                            LicenseCode = 8,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 9
+                            LicenseCode = 9,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 10
+                            LicenseCode = 10,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 11
+                            LicenseCode = 11,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 12
+                            LicenseCode = 12,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 13
+                            LicenseCode = 13,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 14
+                            LicenseCode = 14,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 15
+                            LicenseCode = 15,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 16
+                            LicenseCode = 16,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 17
+                            LicenseCode = 17,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 18
+                            LicenseCode = 18,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 19
+                            LicenseCode = 19,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 20
+                            LicenseCode = 20,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 21
+                            LicenseCode = 21,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 22
+                            LicenseCode = 22,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 23
+                            LicenseCode = 23,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 24
+                            LicenseCode = 24,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 59
+                            LicenseCode = 59,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 65
+                            LicenseCode = 65,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 66
+                            LicenseCode = 66,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 67
+                            LicenseCode = 67,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 87
+                            LicenseCode = 87,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 88
+                            LicenseCode = 88,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 89
+                            LicenseCode = 89,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 90
+                            LicenseCode = 90,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
-                            LicenseCode = 91
+                            LicenseCode = 91,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 1,
+                            LicenseCode = 92,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 25
+                            LicenseCode = 25,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 26
+                            LicenseCode = 26,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 27
+                            LicenseCode = 27,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 28
+                            LicenseCode = 28,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 29
+                            LicenseCode = 29,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 30
+                            LicenseCode = 30,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 31
+                            LicenseCode = 31,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 2,
-                            LicenseCode = 68
+                            LicenseCode = 68,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 32,
-                            CollegeLicenseGroupingCode = 2
+                            CollegeLicenseGroupingCode = 2,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 33,
-                            CollegeLicenseGroupingCode = 2
+                            CollegeLicenseGroupingCode = 2,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 34,
-                            CollegeLicenseGroupingCode = 2
+                            CollegeLicenseGroupingCode = 2,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 35,
-                            CollegeLicenseGroupingCode = 2
+                            CollegeLicenseGroupingCode = 2,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 36,
-                            CollegeLicenseGroupingCode = 2
+                            CollegeLicenseGroupingCode = 2,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 37,
-                            CollegeLicenseGroupingCode = 2
+                            CollegeLicenseGroupingCode = 2,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 39,
-                            CollegeLicenseGroupingCode = 2
+                            CollegeLicenseGroupingCode = 2,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 40,
-                            CollegeLicenseGroupingCode = 2
+                            CollegeLicenseGroupingCode = 2,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 41,
-                            CollegeLicenseGroupingCode = 3
+                            CollegeLicenseGroupingCode = 3,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 42,
-                            CollegeLicenseGroupingCode = 3
+                            CollegeLicenseGroupingCode = 3,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 43,
-                            CollegeLicenseGroupingCode = 3
+                            CollegeLicenseGroupingCode = 3,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 45,
-                            CollegeLicenseGroupingCode = 3
+                            CollegeLicenseGroupingCode = 3,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 46,
-                            CollegeLicenseGroupingCode = 3
+                            CollegeLicenseGroupingCode = 3,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 47,
-                            CollegeLicenseGroupingCode = 4
+                            CollegeLicenseGroupingCode = 4,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 48,
-                            CollegeLicenseGroupingCode = 4
+                            CollegeLicenseGroupingCode = 4,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 49,
-                            CollegeLicenseGroupingCode = 4
+                            CollegeLicenseGroupingCode = 4,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 51,
-                            CollegeLicenseGroupingCode = 4
+                            CollegeLicenseGroupingCode = 4,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 52,
-                            CollegeLicenseGroupingCode = 1
+                            CollegeLicenseGroupingCode = 1,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 53,
-                            CollegeLicenseGroupingCode = 1
+                            CollegeLicenseGroupingCode = 1,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 54,
-                            CollegeLicenseGroupingCode = 1
+                            CollegeLicenseGroupingCode = 1,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 55,
-                            CollegeLicenseGroupingCode = 1
+                            CollegeLicenseGroupingCode = 1,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 60,
-                            CollegeLicenseGroupingCode = 5
+                            CollegeLicenseGroupingCode = 5,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 61,
-                            CollegeLicenseGroupingCode = 5
+                            CollegeLicenseGroupingCode = 5,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 62,
-                            CollegeLicenseGroupingCode = 5
+                            CollegeLicenseGroupingCode = 5,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 63,
-                            CollegeLicenseGroupingCode = 5
+                            CollegeLicenseGroupingCode = 5,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 69,
-                            CollegeLicenseGroupingCode = 5
+                            CollegeLicenseGroupingCode = 5,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 70
+                            LicenseCode = 70,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 75
+                            LicenseCode = 75,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 76
+                            LicenseCode = 76,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 7,
-                            LicenseCode = 77
+                            LicenseCode = 77,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 78
+                            LicenseCode = 78,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 79
+                            LicenseCode = 79,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 80
+                            LicenseCode = 80,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 11,
-                            LicenseCode = 81
+                            LicenseCode = 81,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 71
+                            LicenseCode = 71,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 72
+                            LicenseCode = 72,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 73
+                            LicenseCode = 73,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 14,
-                            LicenseCode = 74
+                            LicenseCode = 74,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 4,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 5,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 6,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 8,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 9,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 10,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 12,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 13,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 15,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 16,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 17,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 18,
-                            LicenseCode = 64
+                            LicenseCode = 64,
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 82
+                            LicenseCode = 82,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 83
+                            LicenseCode = 83,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 84
+                            LicenseCode = 84,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 85
+                            LicenseCode = 85,
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 19,
-                            LicenseCode = 86
+                            LicenseCode = 86,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 93,
+                            CollegeLicenseGroupingCode = 6,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 94,
+                            CollegeLicenseGroupingCode = 6,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 95,
+                            CollegeLicenseGroupingCode = 6,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 96,
+                            CollegeLicenseGroupingCode = 6,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 97,
+                            CollegeLicenseGroupingCode = 7,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 98,
+                            CollegeLicenseGroupingCode = 7,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 99,
+                            CollegeLicenseGroupingCode = 7,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 100,
+                            CollegeLicenseGroupingCode = 7,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 101,
+                            CollegeLicenseGroupingCode = 8,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 102,
+                            CollegeLicenseGroupingCode = 8,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 103,
+                            CollegeLicenseGroupingCode = 8,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 104,
+                            CollegeLicenseGroupingCode = 8,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 105,
+                            CollegeLicenseGroupingCode = 9,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 106,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 107,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 108,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 109,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 110,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 111,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 112,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 113,
+                            CollegeLicenseGroupingCode = 10,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 114,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 115,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 116,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 117,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 118,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 20,
+                            LicenseCode = 119,
+                            CollegeLicenseGroupingCode = 11,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 120,
+                            CollegeLicenseGroupingCode = 12,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 121,
+                            CollegeLicenseGroupingCode = 12,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 122,
+                            CollegeLicenseGroupingCode = 12,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 123,
+                            CollegeLicenseGroupingCode = 12,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 124,
+                            CollegeLicenseGroupingCode = 13,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 125,
+                            CollegeLicenseGroupingCode = 13,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 126,
+                            CollegeLicenseGroupingCode = 13,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 127,
+                            CollegeLicenseGroupingCode = 13,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 128,
+                            CollegeLicenseGroupingCode = 14,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 129,
+                            CollegeLicenseGroupingCode = 14,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 130,
+                            CollegeLicenseGroupingCode = 14,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 131,
+                            CollegeLicenseGroupingCode = 14,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 132,
+                            CollegeLicenseGroupingCode = 15,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 133,
+                            CollegeLicenseGroupingCode = 15,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 134,
+                            CollegeLicenseGroupingCode = 15,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 135,
+                            CollegeLicenseGroupingCode = 15,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 136,
+                            CollegeLicenseGroupingCode = 15,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 137,
+                            CollegeLicenseGroupingCode = 16,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 138,
+                            CollegeLicenseGroupingCode = 16,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 139,
+                            CollegeLicenseGroupingCode = 16,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 140,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 141,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 142,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 143,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 144,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 145,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 146,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 147,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 148,
+                            CollegeLicenseGroupingCode = 18,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 149,
+                            CollegeLicenseGroupingCode = 18,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 150,
+                            CollegeLicenseGroupingCode = 18,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 151,
+                            CollegeLicenseGroupingCode = 18,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 152,
+                            CollegeLicenseGroupingCode = 19,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 153,
+                            CollegeLicenseGroupingCode = 19,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 154,
+                            CollegeLicenseGroupingCode = 19,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 155,
+                            CollegeLicenseGroupingCode = 19,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 156,
+                            CollegeLicenseGroupingCode = 20,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 157,
+                            CollegeLicenseGroupingCode = 20,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 158,
+                            CollegeLicenseGroupingCode = 20,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 159,
+                            CollegeLicenseGroupingCode = 20,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 160,
+                            CollegeLicenseGroupingCode = 21,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 161,
+                            CollegeLicenseGroupingCode = 21,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 162,
+                            CollegeLicenseGroupingCode = 21,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 163,
+                            CollegeLicenseGroupingCode = 21,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 164,
+                            CollegeLicenseGroupingCode = 22,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 165,
+                            CollegeLicenseGroupingCode = 22,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 166,
+                            CollegeLicenseGroupingCode = 23,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 167,
+                            CollegeLicenseGroupingCode = 23,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 168,
+                            CollegeLicenseGroupingCode = 23,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 169,
+                            CollegeLicenseGroupingCode = 23,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 170,
+                            CollegeLicenseGroupingCode = 24,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 171,
+                            CollegeLicenseGroupingCode = 24,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 172,
+                            CollegeLicenseGroupingCode = 24,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 173,
+                            CollegeLicenseGroupingCode = 24,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 174,
+                            CollegeLicenseGroupingCode = 24,
+                            Discontinued = false
                         });
                 });
 
@@ -1760,8 +2512,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -1803,6 +2556,120 @@ namespace Prime.Migrations
                             Code = 5,
                             Name = "Midwife",
                             Weight = 5
+                        },
+                        new
+                        {
+                            Code = 10,
+                            Name = "Dentist",
+                            Weight = 6
+                        },
+                        new
+                        {
+                            Code = 9,
+                            Name = "Dental Therapist",
+                            Weight = 7
+                        },
+                        new
+                        {
+                            Code = 6,
+                            Name = "Certified Dental Assistant",
+                            Weight = 8
+                        },
+                        new
+                        {
+                            Code = 7,
+                            Name = "Dental Hygienist",
+                            Weight = 9
+                        },
+                        new
+                        {
+                            Code = 8,
+                            Name = "Dental Technician",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 11,
+                            Name = "Denturist",
+                            Weight = 11
+                        },
+                        new
+                        {
+                            Code = 12,
+                            Name = "Designated Health Profession of Dietetics",
+                            Weight = 12
+                        },
+                        new
+                        {
+                            Code = 13,
+                            Name = "Designated Health Profession of Occupational Therapy",
+                            Weight = 13
+                        },
+                        new
+                        {
+                            Code = 14,
+                            Name = "Designated Health Profession of Opticianry",
+                            Weight = 14
+                        },
+                        new
+                        {
+                            Code = 15,
+                            Name = "Designated Health Profession of Optometry",
+                            Weight = 15
+                        },
+                        new
+                        {
+                            Code = 16,
+                            Name = "Designated Health Profession of Physical Therapy",
+                            Weight = 16
+                        },
+                        new
+                        {
+                            Code = 17,
+                            Name = "Designated Health Profession of Psychology",
+                            Weight = 17
+                        },
+                        new
+                        {
+                            Code = 18,
+                            Name = "Designated Health Profession of Audiology",
+                            Weight = 18
+                        },
+                        new
+                        {
+                            Code = 19,
+                            Name = "Designated Health Profession of Hearing Instrument Dispensing",
+                            Weight = 19
+                        },
+                        new
+                        {
+                            Code = 20,
+                            Name = "Designated Health Profession of Speech-Language Pathology",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 21,
+                            Name = "Designated Health Profession of Chiropractic",
+                            Weight = 21
+                        },
+                        new
+                        {
+                            Code = 22,
+                            Name = "Designated Health Profession of Massage Therapy",
+                            Weight = 22
+                        },
+                        new
+                        {
+                            Code = 23,
+                            Name = "Designated Health Profession of Naturopathic Medicine",
+                            Weight = 23
+                        },
+                        new
+                        {
+                            Code = 24,
+                            Name = "Designated Health Profession of Traditional Chinese Medicine and Acupuncture",
+                            Weight = 24
                         });
                 });
 
@@ -1847,8 +2714,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -3822,8 +4690,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -3875,8 +4744,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Body")
                         .HasColumnType("text");
@@ -3929,8 +4799,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -3938,13 +4809,25 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<int>("EmailType")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("ModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Recipient")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("text");
+
                     b.Property<string>("Template")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TemplateName")
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
@@ -3966,10 +4849,14 @@ namespace Prime.Migrations
                             Id = 1,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when the adjudicator approves the enrolment, or changes the status to editable.",
                             EmailType = 1,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "<p> Your PRIME application status has changed since you last viewed it. Please click <a href=\"@Model.Url\">here</a> to log into PRIME and view your status. </p>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Enrollee",
+                            Subject = "PRIME Requires your Attention",
+                            Template = "Hello, <p><p> Your PRIME application status has changed since you last viewed it. Please click <a href=\"@Model.Url\">here</a> to log into PRIME and view your status. </p><p> You may need to share your approval email to get your PharmaNet access is set up. Please connect by phone or email if you have any questions. </p><p> Thank you, </p><p> PRIME Support team<br/>1-844-397-7463 <br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Enrollee Status Change",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -3977,10 +4864,14 @@ namespace Prime.Migrations
                             Id = 2,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "Enrollee send out the Provisioner Link Email and access instructions.",
                             EmailType = 2,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Template = "<style> .underline { text-decoration: underline; } .list-item-mb { margin-bottom: 0.75rem; } </style>To: PharmaNet administrator (person responsible for coordinating PharmaNet access):<br><br>@Model.EnrolleeFullName has been approved for access to PharmaNet.<br><br><strong> To set up their access, you must forward this notification and the information below to <span class=\"underline\">whoever sets up PharmaNet user accounts. This is usually your PharmaNet software vendor but can also be someone like an IT department or authorized individual</span>. </strong><br><br><ol><li class=\"list-item-mb\"> Name of the community health practice: </li><li class=\"list-item-mb\"> Practice address: </li><li class=\"list-item-mb\"> PharmaNet site ID, if you have it:</li><li class=\"list-item-mb\"> If @Model.EnrolleeFullName accesses PharmaNet on behalf of another user, please ensure your PharmaNet software vendor knows who the other users are, and those users enrol in PRIME.<br><br></li></ol> Your software vendor can find @Model.EnrolleeFullName's details by following this link: <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <strong>This link will expire in 10 days.</strong><br><br>Thank you,<br><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Provisioner, CC: Enrollee",
+                            Subject = "New Access Request",
+                            Template = "<style> .underline { text-decoration: underline; } .list-item-mb { margin-bottom: 0.75rem; } </style>Hello:<br/><br/>@Model.EnrolleeFullName has been approved for private community health practice access to PharmaNet.<br/><br/><strong> To set up their access, forward this notification and the information below to <span class=\"underline\">whoever sets up PharmaNet user accounts. This is usually your PharmaNet software vendor but can also be someone like an IT department or authorized individual</span>. </strong><br/><br/><ol><li class=\"list-item-mb\"> Name of the community health practice ___________________ </li><li class=\"list-item-mb\"> Practice address ___________________ </li><li class=\"list-item-mb\"> PharmaNet site ID, if you have it ___________________</li></ol> If @Model.EnrolleeFullName accesses PharmaNet on behalf of another user, the PharmaNet software vendor should know who they are, and they should be enrolled in PRIME.<br/><br/> Your software vendor can find @Model.EnrolleeFullName's details by following this link: <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <strong>This link will expire in 10 days.</strong><br/><br/>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Community Practice Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -3988,10 +4879,14 @@ namespace Prime.Migrations
                             Id = 3,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "Triggered by the enrollee; the Provisioner Link Email for PharmaNet access at a community pharmacy.",
                             EmailType = 3,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "To: Whom it may concern, <br> <br> @Model.EnrolleeFullName has been approved for <strong>Community Pharmacy Access to PharmaNet.</strong> They can now be set up with their PharmaNet Access account in your local software. You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile. You can access their GPID via this link below. <br> <br> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br> <br> Thank you.",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Provisioner, CC: Enrollee",
+                            Subject = "New Access Request",
+                            Template = "Hello, <br/> <br/> @Model.EnrolleeFullName has been approved for <strong>community pharmacy access to PharmaNet.</strong> Their PharmaNet access account can now be set up in your local software. You must include their <strong>global PharmaNet ID (GPID)</strong> on their account profile. You can access their GPID at the link below. <br/><br/> If @Model.EnrolleeFullName accesses PharmaNet on behalf of another user, the PharmaNet software vendor should know who they are, and they should be enrolled in PRIME.<br/> <br/> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br/> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br/> <br/>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Community Pharmacy Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -3999,10 +4894,14 @@ namespace Prime.Migrations
                             Id = 4,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "Enrollee triggered Provisioner Link Email for health authority access.",
                             EmailType = 4,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "To: PharmNet Access administrator <br> <br> @Model.EnrolleeFullName has been approved for <strong>Health Authority Access to PharmaNet.</strong> <br> They can now be set up with their PharmaNet Access account in your local software. You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile. <br> You can access their GPID via this link here. <br> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br> <strong>This link will expire after @Model.ExpiresInDays days</strong>.",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Provisioner, CC: Enrollee",
+                            Subject = "New Access Request",
+                            Template = "To: PharmNet administrator <br/> <br/> @Model.EnrolleeFullName has been approved for <strong>health authority access to PharmaNet.</strong> <br/> They can now be set up with their PharmaNet access account in your local software. Their <strong>Global PharmaNet ID (GPID)</strong> must be on their account profile. <br/><br/> You can access their GPID here: <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br/> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br/><br/>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Health Authority Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4010,10 +4909,14 @@ namespace Prime.Migrations
                             Id = 5,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when an adjudicator approves a community site with remote user.",
                             EmailType = 5,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "The Ministry of Health has been notified that you require Remote Access at <br> Organization Name: @Model.OrganizationName <br> Site Address: @Model.SiteStreetAddress, @Model.SiteCity <br> <br> To complete your approval for Remote Access, please ensure you have indicated you require Remote Access on your profile at <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>.",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 3, 20, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Recipient = "To: Remote User",
+                            Subject = "Remote Practitioner Notification",
+                            Template = "Hello,<p><p>The Ministry of Health has been notified that you require remote access to PharmaNet at:<br/> <br/> Organization name: @Model.OrganizationName <br/> Site address: @Model.SiteStreetAddress, @Model.SiteCity <br/> <br/>To access PharmaNet remotely, you must enrol in PRIME and indicate that you require remote access. If you have already enrolled in PRIME, you must log into PRIME and add remote access for this clinic to your profile. <p><p>**Remote access is only available for practitioners on an exceptional basis, to care for patients of a clinic that has identified the practitioner in the clinic's PRIME site registration. Remote access means you are physically located outside the premises of an approved PharmaNet site. <span class=\"text-danger\">You must always be physically located in BC when using PharmaNet, even if approved for remote access.</span><p>Remote access to PharmaNet when working for a health authority is managed by that health authority, outside of PRIME. Please contact your health authority.</p> <p>If you do not require remote access to the site identified above, please advise the site so they can remove you from their remote user list in PRIME.</p><p>Once you have logged into to PRIME: </p><p> - If you are enrolling for the first time, click the toggle to request remote access if you require it. </p><p>- If you are updating your existing PRIME profile, click the <strong>Edit Remote Access</strong> button or pencil icon for that section, then click the toggle to request remote access</p><p> - Click Save and Continue to update. Refer to <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides#update\">update information or renew enrolment</a> for instructions. </p><p>You can enrol or update your profile at <a href=\"@Model.PrimeUrl\">@Model.PrimeUrl</a>.</p> Please connect by email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/> PRIMESupport@gov.bc.ca</br> <a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides\">PRIME user guides</a>",
+                            TemplateName = "Remote User Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2024, 3, 20, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4021,10 +4924,14 @@ namespace Prime.Migrations
                             Id = 6,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when the remote user has been updated and the site is re-submitted.",
                             EmailType = 6,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "@{ var pecText = string.IsNullOrWhiteSpace(Model.SitePec) ? \"Not Assigned\" : Model.SitePec; } <p> Notification: The list of Remote Practitioners at @Model.SiteStreetAddress of @Model.OrganizationName (PEC: @pecText) has been updated. The Remote Practitioners at this site are: </p> <h2 class=\"mb-2\">Remote Users</h2> @foreach (var name in Model.RemoteUserNames) { <div class=\"ml-2 mb-2\"> <h5>Name</h5> <span class=\"ml-2\">@name</span> </div> } <h2 class=\"mb-2\">Site Information</h2> <p> See the attached registration and organization agreement for more information. @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.DocumentUrl\" target=\"_blank\">link</a>@(\".\") } </p>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: HLTH.HnetConnection@gov.bc.ca & primesupport@gov.bc.ca",
+                            Subject = "Remote Practitioners Changed",
+                            Template = "Hello, <p><p>@{ var pecText = string.IsNullOrWhiteSpace(Model.SitePec) ? \"Not Assigned\" : Model.SitePec; } <p> Notification: The list of Remote Practitioners at @Model.SiteStreetAddress of @Model.OrganizationName (PEC: @pecText) has been updated.</p> <h2 class=\"mb-2\">Remote Users</h2> @foreach (var remoteUser in Model.RemoteUsers) { <p> <span class=\"ml-2\">@remoteUser</span> </p> } <h2 class=\"mb-2\">Site Information</h2> <p> See the attached registration and organization agreement for more information.</p> <br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Remote User Updated Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4032,10 +4939,14 @@ namespace Prime.Migrations
                             Id = 7,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when a site is approved.",
                             EmailType = 7,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "<p>@Model.DoingBusinessAs with PEC/SiteID @Model.Pec has been approved by the Ministry of Health for PharmaNet access. Please notify the PharmaNet software vendor for this site and complete any remaining tasks to activate the site.</p><p>Thank you.</p><p>PRIME Support Team.</p>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: HLTH.HnetConnection@gov.bc.ca",
+                            Subject = "[{siteId}] Site Registration Approved",
+                            Template = "Hello, <p><p>@Model.DoingBusinessAs with SiteID @Model.Pec has been approved by the Ministry of Health for PharmaNet access. Please notify the PharmaNet software vendor for this site and complete any remaining tasks to activate the site.</p><p>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "HIBC Site Submission",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4043,10 +4954,14 @@ namespace Prime.Migrations
                             Id = 8,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered daily at 3pm in a batch process. The email will be sent to the enrollee, whose ToA expiry date is coming in 14,  7, 3, 2, 1, 0 days.",
                             EmailType = 8,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Template = "@{ var renewalDate = Model.RenewalDate.Date.ToShortDateString(); } <p>Dear @Model.EnrolleeName,</p><p>It is time to renew your PRIME enrolment. If you still need PharmaNet to care for patients, you must ensure that your PRIME profile is current by reviewing and updating every year. To renew, log in to your PRIME profile, update your information as needed, and read and sign the terms of access.</p><p>Please renew by @renewalDate.</p><ol><li>Log in to PRIME <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.</li><li>Click <b>Renew or Update Information</b> (top of screen).</li><li>On the PRIME Profile screen, review your information.<ol style='list-style-type:lower-alpha;'><li>Select the edit button to revise sections that are out of date. Click <strong>Continue</strong> at the bottom of updated screens to save changes.</li><li>Once changes are saved, <strong>certify and submit</strong> at the bottom of the PRIME Profile page.</li></ol></li><li>If instructed to go on, click <b>Continue</b></li><li>Most renewals will be approved automatically. If you are notified that your renewal is approved, go to the next page to review and accept the PharmaNet user terms of access. This step completes renewal. Note that the terms of access may have changed, so please read carefully.</li><p>In some cases, renewals are sent for review. If your renewal is sent for review, you will either be contacted by the PRIME Support team, or you will be notified to log in to PRIME to complete the remaining steps.</p><li>You will next be prompted to share your renewal approval with the person or team in your workplace who sets up PharmaNet accounts. You do this by entering their email address(es) and sending. <strong>Only share the renewal approval if:</strong><ol style='list-style-type:lower-alpha;'><li>You changed workplaces or care setting (new clinic, health authority, etc.) since you last updated your account, or you did not share the approval notification with your PharmaNet administrator earlier, and/or</li><li>You previously enrolled as an RN, RPN, LPN or midwife, and have since been issued a PharmaNet ID by BCCNM. Your access type may have changed, and the people in your workplace who set up PharmaNet access need to know this.</li></ol></li></ol><p>Thank you for renewing your PRIME enrolment,</p><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2024, 3, 20, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Recipient = "To: Enrollee",
+                            Subject = "Renew Your PRIME Enrolment",
+                            Template = "@{ var renewalDate = Model.RenewalDate.Date.ToShortDateString(); } <p>Hello  @Model.EnrolleeName,</p><p>  If you still need PharmaNet access you must renew your PRIME enrolment annually. </p><p>Please renew by @renewalDate.</p><ol><li>Go to PRIME <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.</li><li>Click <b>Access Individual Enrolment</b>.</li><li>On the PRIME Profile screen, review your information.<ol style='list-style-type:lower-alpha;'><li>Select the edit button or pencil icon to revise sections that are out of date. Click <strong>Continue</strong> at the bottom of updated screens to save changes.</li><li>Once changes are saved, check the <strong>\"I certify\"</strong> box and click the <strong>Submit Enrolment</strong> button.</li><li>If instructed to go on, click <b>Continue</b>, then go to the next screen to review and accept the PharmaNet user terms of access.  The terms of access may have changed, so please read carefully.</li></ol>This step completes your renewal and turns off notices until your next renewal cycle.</li> <li>If your renewal is sent for review, you will either be contacted by the PRIME Support team or notified to log in to PRIME to complete the remaining steps.</li><li> You may need to share your PRIME approval email with the person or team in your workplace who sets up PharmaNet accounts if something has changed since you last updated your account; for example: name change, access type, care setting, or college license information. You do this by entering their email address(es) in the line for the relevant care setting on the Next Steps to Get PharmaNet screen and clicking the send button. <ol style='list-style-type:lower-alpha;'> </li></ol></li></ol><p>Please connect by phone or email if you have any questions. <br/>Thank you for renewing your PRIME enrolment.</p> <br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca <p><a href=\"https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides\">PRIME user guides</a>",
+                            TemplateName = "Enrollee Renewal Required",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2024, 3, 20, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4054,10 +4969,14 @@ namespace Prime.Migrations
                             Id = 9,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when SA uploads a business license and clicks 'Save and Continue'.",
                             EmailType = 9,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "<p> A user has uploaded business licence to their PharmaNet site registration. @if (!string.IsNullOrWhiteSpace(Model.Url)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.Url\" target=\"_blank\">link</a>@(\".\") } </p>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Adjudicator",
+                            Subject = "Site Business Licence Uploaded",
+                            Template = "Hello,<p><p> A user has uploaded a business licence to their PharmaNet site registration. @if (!string.IsNullOrWhiteSpace(Model.Url)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.Url\" target=\"_blank\">link</a>@(\".\") } </p> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Site Business Licence Upload",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4065,10 +4984,14 @@ namespace Prime.Migrations
                             Id = 10,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered daily at 3pm in a batch process. The email will be sent to the enrollee, whose ToA has expired.",
                             EmailType = 10,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Template = "Dear @Model.EnrolleeName,<br /><br /><p>Your PRIME renewal is overdue.</p><p><strong>Once a year, you must ensure that your PRIME profile is current.</strong> If you still need access to PharmaNet to care for patients, renew your PRIME enrolment now by logging in to PRIME at <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>. Update your information as needed, submit, and then read and sign the terms of access.</p><p>You may also wish to confirm that your email accepts messages from PRIME, particularly if they are going to your email junk folder (e.g., the previous notices to renew).</p><br>Thank you,<br><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Enrollee",
+                            Subject = "Your PRIME Renewal Date Has Passed",
+                            Template = "Hello @Model.EnrolleeName,<br/><br/><p>Your PRIME renewal is overdue.</p><p>  If you still need access to PharmaNet to care for patients, renew your PRIME enrolment now by logging in to PRIME at <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>. Update your information as needed, submit, and then read and sign the terms of access. PRIME profiles must be renewed annually.</p><p> Add us to your email contacts to make sure our emails don't land in your spam folder.<br/>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Forced Renewal Passed Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4076,10 +4999,14 @@ namespace Prime.Migrations
                             Id = 11,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "(To be Deleted - Disabled) When Admin/Ajudicator approves a site.",
                             EmailType = 11,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "<p> Your site registration has been approved. The site must now be set up and activated in PharmaNet. Your PharmaNet software vendor will be notified when the site has been activated, and you will hear from them when you can start to use PharmaNet. </p> <p> Individuals who will be accessing PharmaNet at your site should enrol in PRIME now if they have not already done so. For more information, please visit <a href=\"https://www.gov.bc.ca/pharmanet/PRIME\" target=\"_blank\">https://www.gov.bc.ca/pharmanet/PRIME</a>. [for private community practice only: If you have registered any physicians or nurse practitioners for remote access to PharmaNet, they must enroll in PRIME before they use remote access, which they can do here: <a href=\"https://pharmanetenrolment.gov.bc.ca\" target=\"_blank\">https://pharmanetenrolment.gov.bc.ca</a>. You must not permit remote use of PharmaNet until these users are approved in PRIME.] </p> <p> If you have any questions or concerns, please phone 1-844-397-7463 or email <a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMESupport@gov.bc.ca</a>. </p> <p> Thank you. </p>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Site PharmaNet Admin",
+                            Subject = "Site Registration Approved",
+                            Template = "<p> Your site registration has been approved. The site will now be set up and activated in PharmaNet. Your PharmaNet software vendor will be notified when the site has been activated, and you will hear from them when you access PharmaNet. </p> <p> Individuals who will be accessing PharmaNet at your site should enrol in PRIME now if they have not already done so. For more information, please visit <a href=\"https://www.gov.bc.ca/pharmanet/PRIME\" target=\"_blank\">https://www.gov.bc.ca/pharmanet/PRIME</a>. </p> Private community practice only: Physicians or nurse practitioners must indicate in their PRIME profile that they require remote access if needed. They can do this here: <a href=\"https://pharmanetenrolment.gov.bc.ca\" target=\"_blank\">https://pharmanetenrolment.gov.bc.ca</a>. </p> <p> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Site Approved Pharma Net Administrator",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4087,10 +5014,14 @@ namespace Prime.Migrations
                             Id = 12,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "(To be Deleted - Disabled) When Admin/Ajudicator approves a site.",
                             EmailType = 12,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "<p> The site you registered in PRIME, @Model.DoingBusinessAs, has been approved by the Ministry of Health. Your SiteID is @Model.Pec. </p> <p> Health Insurance BC has been notified of the site’s approval and will contact your software vendor. Your vendor will complete any remaining setup for your site and may contact you or the PharmaNet Administrator at your site. </p> <p> If you need to update any information in PRIME regarding your site, you may log in at any time using your mobile BC Services Card. If you have any questions or concerns, please phone 1-844-397-7463 or email PRIMESupport@gov.bc.ca. </p> <p> Thank you. </p>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Signing Authority",
+                            Subject = "Site Registration Approved",
+                            Template = "<p> The site you registered in PRIME, @Model.DoingBusinessAs, has been approved by the Ministry of Health. Your SiteID is @Model.Pec. </p> <p> Health Insurance BC has been notified of the site’s approval and will contact your software vendor. Your vendor will be notified of your site activation. As they complete any remaining setup for your site, they may reach out for additional information. </p> <p> If you need to update any information in PRIME regarding your site, you may log in at any time using your BC Services Card App. If you have any questions or concerns, please phone 1-844-397-7463 or email PRIMESupport@gov.bc.ca. </p> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Site Approved Signing Authority",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4098,10 +5029,14 @@ namespace Prime.Migrations
                             Id = 13,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when a SA or AU submits a site. In the subject line, “{isNewPrefix}” will be replaced with “Priority! New Pharmacy” if the site is marked as a new pharmacy. Also, “{careSetting}” will be replaced with  the site care setting, and “{siteId}” will be replaced with the internal site ID",
                             EmailType = 13,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "<p> A new PharmaNet site registration has been received. See the attached registration and organization agreement for more information. @if (!string.IsNullOrWhiteSpace(Model.Url)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.Url\" target=\"_blank\">link</a>@(\".\") } </p>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: HLTH.HnetConnection@gov.bc.ca, cc: primesupport@gov.bc.ca",
+                            Subject = "[{siteId}] {isNewPrefix} PRIME Site Registration Submission - {careSetting}",
+                            Template = "Hello,<p> A new PharmaNet site registration has been received. See the attached registration and organization agreement for more information. @if (!string.IsNullOrWhiteSpace(Model.Url)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.Url\" target=\"_blank\">link</a>@(\".\") } <br/><br/> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Site Registration Submission",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4109,10 +5044,14 @@ namespace Prime.Migrations
                             Id = 14,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when PRIME admin approves a organization claim.",
                             EmailType = 14,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "Your claim of the organization @Model.OrganizationName, of which the site with site ID/PEC @Model.ProvidedSiteId is part of, has been approved.  You now have access to site registration for this organization.",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: New SA",
+                            Subject = "Organization Claim was Approved",
+                            Template = "Hello, <p><p>Your claim of the organization @Model.OrganizationName, which the site with SiteID/PEC @Model.ProvidedSiteId is part of, has been approved.  You may now access to site registration for this organization. <br/><br/>You must sign the Organization Agreement before you will be able to update or add any sites. This is a click-to-accept online signature that is linked to your BC Services Card identity. If you are not qualified to accept legal agreements on behalf of your organization, or if your organization does not allow you to sign online agreements, please contact PRIMESupport@gov.bc.ca for further guidance before you proceed further. <p><p> Thank you, <p><p> PRIME Support Team<br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Organization Claim Approval Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4120,10 +5059,14 @@ namespace Prime.Migrations
                             Id = 15,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when an adjudicator sends a notification from the site overview page for Community Pharmacy or Device Provider site.",
                             EmailType = 15,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "A PRIME Admin has reviewed the site registration for PEC/SiteID# @Model.Pec. @(!string.IsNullOrWhiteSpace(Model.Note) ? $\"The following notes were added: {Model.Note}\" : \"\")",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Lori.Haggstrom@gov.bc.ca",
+                            Subject = "PRIME Site Registration review complete",
+                            Template = "Hello, <p><p>A PRIME Admin has reviewed the site registration for PEC/SiteID# @Model.Pec. @(!string.IsNullOrWhiteSpace(Model.Note) ? $\"The following notes were added: {Model.Note}\" : \"\") <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Site Reviewed Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4131,10 +5074,14 @@ namespace Prime.Migrations
                             Id = 16,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "(To be Deleted) The email will be triggered when a community site is approved and it is marked as 'Active Before Registration'.",
                             EmailType = 16,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "Thank you for registering your site (SiteID: @Model.Pec) in PRIME. If you need to update any site information in PRIME, you may log in at any time using your mobile BC Services Card. If you have any questions, please phone 1 - 844 - 397 - 7463 or email PRIMESupport@@gov.bc.ca. Thank you.",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: SA",
+                            Subject = "PRIME Site Registration Submission",
+                            Template = "Thank you for registering your site (SiteID: @Model.Pec) in PRIME. If you need to update any site information in PRIME, you may log in at any time using your BC Services Card app. Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Site Active Before Registration Submission",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4142,10 +5089,14 @@ namespace Prime.Migrations
                             Id = 17,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "(To be Deleted) The email will be triggered when a paper enrolment is submitted.",
                             EmailType = 17,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "Your request for PharmaNet access has been approved and recorded in PRIME. When it is possible for you to do so, you must enrol in PRIME using your mobile BC Services Card. <br> <br> <strong> Your temporary GPID is @Model.GPID. </strong> <br> <br> The first time you log into PRIME you should be asked if you have previously received permission to access PharmaNet via an offline process. If you do not see this prompt, please stop your enrollment and contact <a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Enrollee",
+                            Subject = "Paper Enrolment Submission",
+                            Template = "Your request for PharmaNet access has been approved and recorded in PRIME. When it is possible for you to do so, you must enrol in PRIME using your BC Services Card app. <br/> <br/> <strong> Your temporary GPID is @Model.GPID. </strong> <br/> <br/> The first time you log in to PRIME, you should be asked if you have previously received permission to access PharmaNet via an offline process. If you do not see this prompt, please stop your enrolment and contact <a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a><br/><br/>Thank you,<br/> <br/>PRIME Support <br/>1-844-397-7463<br/><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
+                            TemplateName = "Paper Enrollee Submission",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4153,10 +5104,14 @@ namespace Prime.Migrations
                             Id = 18,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "(Disabled) The email will be triggered by a batch process, and the email will send to the enrollee, who has not signed the ToA.",
                             EmailType = 18,
-                            ModifiedDate = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Template = "Dear @Model.EnrolleeName, <br> <br><p>Your PharmaNet Terms of Access must be accepted in PRIME before your enrolment is complete. Please log in to PRIME and accept your terms of access now.</p><p>You can access PRIME here <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.  If you are not directed to the user terms of access page, you can reach it by selecting Terms of Access from the menu on the left-hand side of the PRIME Profile page.</p><br>Thank you,<br><br>PRIME Support <br>1-844-397-7463<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2022, 11, 30, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Enrollee",
+                            Subject = "PharmaNet Terms of Access requires signing",
+                            Template = "Dear @Model.EnrolleeName, <br/> <br/><p> Please log in to PRIME and accept your PharmaNet terms of access to complete your enrolment.</p><p>You can access PRIME here <a href='@Model.PrimeUrl'>@Model.PrimeUrl</a>.  If you are not directed to the terms of access, select \"Terms of Access\" from the menu on the lefthand side of the screen.</p>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Enrollee Unsigned Toa",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4164,10 +5119,14 @@ namespace Prime.Migrations
                             Id = 19,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "Enrollee send email notification for the absence entry/ period of deactivation.",
                             EmailType = 19,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "This is an automated generated email from PRIME. <br> <br> @(Model.FirstName + \" \" +  Model.LastName + \" is going to be absent \") @if (Model.End.HasValue) {@(\"from \" + Model.Start.ToShortDateString() + \" to \" + Model.End.Value.ToShortDateString() + \".  Please consider deactivating the user during this period. Any access during this period by the user will be considered as an unauthorized access.\")} else {@(\"indefinitely, starting \" + Model.Start.ToShortDateString() + \". Please deactivate the user on the start date. Any access during this period by the user will be considered as an unauthorized access.\")}",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: User entered email",
+                            Subject = "PRIME Absence Notification",
+                            Template = "Hello:<p><p>This is an automated generated email from PRIME. <br/> <br/> @(Model.FirstName + \" \" +  Model.LastName + \" is going to be absent \") @if (Model.End.HasValue) {@(\"from \" + Model.Start.ToShortDateString() + \" to \" + Model.End.Value.ToShortDateString() + \".  Please consider deactivating the user during this period. Any access during this period by the user will be considered as an unauthorized access.\")} else {@(\"indefinitely, starting \" + Model.Start.ToShortDateString() + \". Please deactivate the user on the start date. Any access during this period by the user will be considered as an unauthorized access.\")} Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Enrollee Absence Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4175,10 +5134,14 @@ namespace Prime.Migrations
                             Id = 20,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered daily at 3pm in a batch process. The email will be sent to the enrollee, whose ToA expiry date is coming in 14,  7, 3, 2, 1, 0 days and it is marked as forced renewal.",
                             EmailType = 20,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "Hello @Model.EnrolleeName, <br> <br> You are receiving this message as your PharmaNet user status has changed from on-behalf-of user to independent user following changes to legislation governing access to PharmaNet. <br> <br> Being an independent PharmaNet user means you will now access PharmaNet as yourself instead of on behalf of another practitioner. <br> <br> Log back in to PRIME by @Model.RenewalDate.ToString(\"d MMMM yyyy\") to confirm your profile information and review and accept the user terms of access for independent users. These will automatically be presented to you. This is a requirement for you to maintain access to PharmaNet, as the new terms of access are quite different from those you may have accepted earlier. <br> <br> For information about PRIME, visit the <a href=\"@Model.PrimeUrl\">PRIME web page</a>.  If you have questions or difficulties using PRIME, please contact us at the email address below.<br> <br> Thank you, <br> <br> PRIME Support<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Enrollee",
+                            Subject = "PRIME Renewal Required",
+                            Template = "Hello @Model.EnrolleeName, <br/> <br/> You are receiving this message as your PharmaNet user status has changed from on-behalf-of user to independent user following changes to legislation governing access to PharmaNet. <br/> <br/> Being an independent PharmaNet user means you will now access PharmaNet as yourself instead of on behalf of another practitioner. <br/> <br/> Log back in to PRIME by @Model.RenewalDate.ToString(\"d MMMM yyyy\") to confirm your profile information and review and accept the user terms of access for independent users. These will automatically be presented to you. This is a requirement for you to maintain access to PharmaNet, as the new terms of access are different from those you may have accepted earlier. <br/> <br/> For information about PRIME, visit the <a href=\"@Model.PrimeUrl\">PRIME web page</a>.  If you have questions or difficulties using PRIME, please contact us at the email address below.<br/> <br/> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Forced Renewal Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4186,10 +5149,14 @@ namespace Prime.Migrations
                             Id = 21,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered daily at 3pm in a batch process. The email will be sent to the enrollee, whose ToA has expired and it is marked as forced renewal.",
                             EmailType = 21,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "Hello @Model.EnrolleeName, <br> <br> You are receiving this message as your PharmaNet user status has changed from on-behalf-of user to independent user following changes to legislation governing access to PharmaNet. <br> <br> Being an independent user of PharmaNet means you now will access PharmaNet as yourself instead of on behalf of another practitioner. <br> <br> <b>This is your last day</b> to log back in to PRIME to confirm your profile information and review and accept the new user terms of access for independent users. These will automatically be presented to you. This is a requirement for you to maintain access to PharmaNet. <br> <br> For information about PRIME, visit the <a href=\"@Model.PrimeUrl\">PRIME web page</a>.  If you have questions or difficulties using PRIME, please contact us at the email address below.<br> <br> Thank you, <br> <br> PRIME Support<br><a href=\"mailto:PRIMEsupport@gov.bc.ca\" target=\"_top\">PRIMEsupport@gov.bc.ca</a>",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Enrollee",
+                            Subject = "Your PRIME Renewal Date Has Passed",
+                            Template = "Hello @Model.EnrolleeName, <br/> <br/> <b>This is your last day</b> to log back in to PRIME to confirm your profile information and review and accept the new user terms of access for independent users. These will automatically be presented to you. This is a requirement for you to maintain access to PharmaNet. <br/><br/>You are receiving this message as your PharmaNet user status has changed from on-behalf-of user to independent user following changes to legislation governing access to PharmaNet. <br/> <br/> Being an independent user of PharmaNet means you will now access PharmaNet as yourself instead of on behalf of another practitioner. <br/>  <br/> For information about PRIME, visit the <a href=\"@Model.PrimeUrl\">PRIME web page</a>. Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Enrollee Renewal Passed",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -4197,10 +5164,29 @@ namespace Prime.Migrations
                             Id = 22,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "Enrollee send out the Provisioner Link Email and access instructions.",
                             EmailType = 22,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "To: Whom it may concern, <br> <br> @Model.EnrolleeFullName has been approved for <strong>Device Provider Access to PharmaNet.</strong> They can now be set up with their PharmaNet Access account in your local software. You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile. You can access their GPID via this link below. <br> <br> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br> <br> Thank you.",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: Provisioner, CC: Enrollee",
+                            Subject = "New Access Request",
+                            Template = "Hello: <br/> <br/> @Model.EnrolleeFullName has been approved for <strong>device provider access to PharmaNet.</strong> Their PharmaNet access account can now be set up in your local software. You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile. You can access their GPID at the link below. <br/> <br/> <a href=\"@Model.TokenUrl\">@Model.TokenUrl</a> <br/> <strong>This link will expire after @Model.ExpiresInDays days</strong>. <br/> <br/> Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Device Provider Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when a HA site is approved.",
+                            EmailType = 23,
+                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: HLTH.HnetConnection@gov.bc.ca",
+                            Subject = "[{siteId}] HA Site Registration Approved",
+                            Template = "Hello, <p><p>@Model.DoingBusinessAs (@Model.HealthAuthority) with SiteID @Model.Pec has been approved by the Ministry of Health for PharmaNet access. Please notify the PharmaNet software vendor (@Model.Vendor) for this site and complete any remaining tasks to activate the site.</p><p>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "HA Site Approval",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -4209,8 +5195,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -4316,8 +5303,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4351,8 +5339,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AddressId")
                         .HasColumnType("integer");
@@ -4386,8 +5375,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -4432,8 +5422,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CareSettingCode")
                         .HasColumnType("integer");
@@ -4469,8 +5460,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CertificationNumber")
                         .HasColumnType("text");
@@ -4509,8 +5501,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("ConsentForAutoPull")
                         .HasColumnType("boolean");
@@ -4546,8 +5539,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4588,8 +5582,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -4629,8 +5624,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdminId")
                         .HasColumnType("integer");
@@ -4669,8 +5665,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4708,6 +5705,9 @@ namespace Prime.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("CareSettingCode")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -4719,6 +5719,9 @@ namespace Prime.Migrations
 
                     b.Property<DateTimeOffset>("Expires")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("HealthAuthorityCode")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4740,8 +5743,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4777,8 +5781,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4814,8 +5819,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AdjudicatorNoteId")
                         .HasColumnType("integer");
@@ -4896,8 +5902,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4934,8 +5941,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -4961,8 +5969,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CareType")
                         .IsRequired()
@@ -4994,8 +6003,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5028,8 +6038,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ContactId")
                         .HasColumnType("integer");
@@ -5042,7 +6053,8 @@ namespace Prime.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(55)
+                        .HasColumnType("character varying(55)");
 
                     b.Property<int>("HealthAuthorityOrganizationId")
                         .HasColumnType("integer");
@@ -5060,14 +6072,17 @@ namespace Prime.Migrations
                     b.ToTable("HealthAuthorityContact");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("HealthAuthorityContact");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5154,8 +6169,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5188,8 +6204,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5222,8 +6239,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5329,6 +6347,9 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Passcode")
+                        .HasColumnType("text");
+
                     b.HasKey("Code");
 
                     b.ToTable("HealthAuthorityLookup");
@@ -5337,32 +6358,38 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
-                            Name = "Northern Health"
+                            Name = "Northern Health",
+                            Passcode = "HA@PRIME"
                         },
                         new
                         {
                             Code = 2,
-                            Name = "Interior Health"
+                            Name = "Interior Health",
+                            Passcode = "HA@PRIME"
                         },
                         new
                         {
                             Code = 3,
-                            Name = "Vancouver Coastal Health"
+                            Name = "Vancouver Coastal Health",
+                            Passcode = "HA@PRIME"
                         },
                         new
                         {
                             Code = 4,
-                            Name = "Island Health"
+                            Name = "Island Health",
+                            Passcode = "HA@PRIME"
                         },
                         new
                         {
                             Code = 5,
-                            Name = "Fraser Health"
+                            Name = "Fraser Health",
+                            Passcode = "HA@PRIME"
                         },
                         new
                         {
                             Code = 6,
-                            Name = "Provincial Health Services Authority"
+                            Name = "Provincial Health Services Authority",
+                            Passcode = "HA@PRIME"
                         });
                 });
 
@@ -5370,8 +6397,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5403,8 +6431,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5582,8 +6611,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CommunitySiteId")
                         .HasColumnType("integer");
@@ -5629,8 +6659,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -5672,8 +6703,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -5863,27 +6895,33 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 92,
+                            Name = "Certified Physician Assistant",
+                            Weight = 30
+                        },
+                        new
+                        {
                             Code = 59,
                             Name = "Full - Podiatric Surgeon",
-                            Weight = 30
+                            Weight = 31
                         },
                         new
                         {
                             Code = 65,
                             Name = "Educational - Podiatric Surgeon Student (Elective)",
-                            Weight = 31
+                            Weight = 32
                         },
                         new
                         {
                             Code = 66,
                             Name = "Educational - Podiatric Surgeon Resident (Elective)",
-                            Weight = 32
+                            Weight = 33
                         },
                         new
                         {
                             Code = 67,
                             Name = "Conditional - Podiatric Surgeon Disciplined",
-                            Weight = 33
+                            Weight = 34
                         },
                         new
                         {
@@ -6193,6 +7231,498 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 93,
+                            Name = "Full Certified Dental Assisant",
+                            Weight = 120
+                        },
+                        new
+                        {
+                            Code = 94,
+                            Name = "Limited Certified Dental Assistant",
+                            Weight = 121
+                        },
+                        new
+                        {
+                            Code = 95,
+                            Name = "Non-Practising Certified Dental Assistant",
+                            Weight = 123
+                        },
+                        new
+                        {
+                            Code = 96,
+                            Name = "Temporary Certified Dental Assistant",
+                            Weight = 124
+                        },
+                        new
+                        {
+                            Code = 97,
+                            Name = "Registered Dental Hygienist",
+                            Weight = 131
+                        },
+                        new
+                        {
+                            Code = 98,
+                            Name = "Dental Hygiene Practitioner",
+                            Weight = 132
+                        },
+                        new
+                        {
+                            Code = 99,
+                            Name = "Non-Practising Dental Hygienist",
+                            Weight = 133
+                        },
+                        new
+                        {
+                            Code = 100,
+                            Name = "Temporary Dental Hygienist",
+                            Weight = 134
+                        },
+                        new
+                        {
+                            Code = 101,
+                            Name = "Dental Technician",
+                            Weight = 141
+                        },
+                        new
+                        {
+                            Code = 102,
+                            Name = "Student Dental Technician",
+                            Weight = 142
+                        },
+                        new
+                        {
+                            Code = 103,
+                            Name = "Non-Practising Dental Technician",
+                            Weight = 143
+                        },
+                        new
+                        {
+                            Code = 104,
+                            Name = "Temporary Dental Technician",
+                            Weight = 144
+                        },
+                        new
+                        {
+                            Code = 105,
+                            Name = "Dental Therapist",
+                            Weight = 110
+                        },
+                        new
+                        {
+                            Code = 106,
+                            Name = "Full Dentist",
+                            Weight = 100
+                        },
+                        new
+                        {
+                            Code = 107,
+                            Name = "Limited (Academic) Dentist",
+                            Weight = 102
+                        },
+                        new
+                        {
+                            Code = 108,
+                            Name = "Limited (Armed Services or Government) Dentist",
+                            Weight = 103
+                        },
+                        new
+                        {
+                            Code = 109,
+                            Name = "Limited (Education & Volunteer) Dentist",
+                            Weight = 104
+                        },
+                        new
+                        {
+                            Code = 110,
+                            Name = "Limited (Restricted-to-Specialty) Dentist",
+                            Weight = 105
+                        },
+                        new
+                        {
+                            Code = 111,
+                            Name = "Student Dentist",
+                            Weight = 106
+                        },
+                        new
+                        {
+                            Code = 112,
+                            Name = "Non-Practising Dentist",
+                            Weight = 107
+                        },
+                        new
+                        {
+                            Code = 113,
+                            Name = "Temporary Dentist",
+                            Weight = 108
+                        },
+                        new
+                        {
+                            Code = 114,
+                            Name = "Full Denturist",
+                            Weight = 151
+                        },
+                        new
+                        {
+                            Code = 115,
+                            Name = "Limited Denturist",
+                            Weight = 152
+                        },
+                        new
+                        {
+                            Code = 116,
+                            Name = "Limited (Grandfathered) Denturist",
+                            Weight = 153
+                        },
+                        new
+                        {
+                            Code = 117,
+                            Name = "Student Denturist",
+                            Weight = 154
+                        },
+                        new
+                        {
+                            Code = 118,
+                            Name = "Non-Practising Denturist",
+                            Weight = 155
+                        },
+                        new
+                        {
+                            Code = 119,
+                            Name = "Temporary Denturist",
+                            Weight = 156
+                        },
+                        new
+                        {
+                            Code = 120,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 121,
+                            Name = "Emergency",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 122,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 123,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 124,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 125,
+                            Name = "Provisional",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 126,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 127,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 128,
+                            Name = "Registered Optician",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 129,
+                            Name = "Registered Contact Lens Fitter",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 130,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 131,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 132,
+                            Name = "Therapeutic Qualified",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 133,
+                            Name = "Non-Therapeutic Qualified",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 134,
+                            Name = "Limited",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 135,
+                            Name = "Academic",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 136,
+                            Name = "Non-Practising",
+                            Weight = 50
+                        },
+                        new
+                        {
+                            Code = 137,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 138,
+                            Name = "Student",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 139,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 140,
+                            Name = "Registered Psychologist",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 141,
+                            Name = "Associate Psychologist (corrections)",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 142,
+                            Name = "School Psychologist",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 143,
+                            Name = "Psychology Assistant",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 144,
+                            Name = "Temporary (supervised)",
+                            Weight = 50
+                        },
+                        new
+                        {
+                            Code = 145,
+                            Name = "Temporary (visitor)",
+                            Weight = 60
+                        },
+                        new
+                        {
+                            Code = 146,
+                            Name = "Temporary (emergency)",
+                            Weight = 70
+                        },
+                        new
+                        {
+                            Code = 147,
+                            Name = "Non-Practising",
+                            Weight = 80
+                        },
+                        new
+                        {
+                            Code = 148,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 149,
+                            Name = "Conditional",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 150,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 151,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 152,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 153,
+                            Name = "Conditional",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 154,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 155,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 156,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 157,
+                            Name = "Conditional",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 158,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 159,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 160,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 161,
+                            Name = "Student",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 162,
+                            Name = "Non-Practising",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 163,
+                            Name = "Temporary",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 164,
+                            Name = "Practising",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 165,
+                            Name = "Non-Practising",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 166,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 167,
+                            Name = "Temporary",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 168,
+                            Name = "Student",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 169,
+                            Name = "Non-Practising",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 170,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 171,
+                            Name = "Limited",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 172,
+                            Name = "Temporary",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 173,
+                            Name = "Student",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 174,
+                            Name = "Non-Practising",
+                            Weight = 10
+                        },
+                        new
+                        {
                             Code = 64,
                             Name = "Not Displayed",
                             Weight = 1
@@ -6203,8 +7733,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("AllowRequestRemoteAccess")
                         .HasColumnType("boolean");
@@ -10326,6 +11857,1467 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
+                        },
+                        new
+                        {
+                            Id = 276,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 11, 27, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 92,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "M9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 277,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 93,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 278,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 94,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 279,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 95,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 280,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 96,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 281,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 97,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 282,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 98,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 283,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 99,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 284,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 100,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 285,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 101,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 286,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 102,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 287,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 103,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 288,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 104,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 289,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 105,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 290,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 106,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "95",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 291,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 107,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "95",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 292,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 108,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "95",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 293,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 109,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "95",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 294,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 110,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "95",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 295,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 111,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "95",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 296,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 112,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "95",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 297,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 113,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "95",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 298,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 114,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 299,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 115,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 300,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 116,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 301,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 117,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 302,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 118,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 303,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 12, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 119,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 304,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 5,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 305,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 6,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 306,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 48,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            NonPrescribingPrefix = "NX",
+                            Prefix = "96",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 307,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 60,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "98",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 308,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 61,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "98",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 309,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 1, 23, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 62,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "98",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 310,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 5, 3, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 5,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 311,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 5, 3, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 6,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 312,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 120,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 313,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 121,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 314,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 122,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 315,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 123,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 316,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 124,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 317,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 125,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 318,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 126,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 319,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 127,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 320,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 128,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 321,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 129,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 322,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 130,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 323,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 131,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 324,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 132,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 325,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 133,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 326,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 134,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 327,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 135,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 328,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 136,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 329,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 137,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 330,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 138,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 331,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 139,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 332,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 140,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 333,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 141,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 334,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 142,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 335,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 143,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 336,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 144,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 337,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 145,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 338,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 146,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 339,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 147,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 340,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 148,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 341,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 149,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 342,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 150,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 343,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 151,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 344,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 152,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 345,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 153,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 346,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 154,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 347,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 155,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 348,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 156,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 349,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 157,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 350,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 158,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 351,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 159,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 352,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 160,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 353,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 161,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 354,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 162,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 355,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 163,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 356,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 164,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 357,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 165,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 358,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 166,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 359,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 167,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 360,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 168,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 361,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 169,
+                            LicensedToProvideCare = false,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 362,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 170,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 363,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 171,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 364,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 172,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 365,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 173,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 366,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 174,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
                         });
                 });
 
@@ -10333,8 +13325,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -10363,8 +13356,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CareSettingCode")
                         .HasColumnType("integer");
@@ -10417,8 +13411,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("text");
@@ -10477,8 +13472,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Completed")
                         .HasColumnType("boolean");
@@ -10524,8 +13520,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -10564,8 +13561,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -10644,8 +13642,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AddressId")
                         .HasColumnType("integer");
@@ -10679,8 +13678,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CollegeCode")
                         .HasColumnType("integer");
@@ -10733,8 +13733,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -10765,8 +13766,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Approved")
                         .HasColumnType("boolean");
@@ -10803,8 +13805,9 @@ namespace Prime.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("CollegePrefix")
                         .HasColumnType("text");
@@ -10862,6 +13865,69 @@ namespace Prime.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLog");
+                });
+
+            modelBuilder.Entity("Prime.Models.PharmanetTransactionLogTemp", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CollegePrefix")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LocationIpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PharmacyId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PractitionerId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderSoftwareId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderSoftwareVersion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SourceIpAddress")
+                        .HasColumnType("text");
+
+                    b.Property<long>("TransactionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TransactionOutcome")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TransactionSubType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TransactionType")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("TxDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PharmacyId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.HasIndex("TxDateTime");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PharmanetTransactionLogTemp");
                 });
 
             modelBuilder.Entity("Prime.Models.Plr.CollegeForPlrRoleType", b =>
@@ -13046,8 +16112,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address1Line1")
                         .HasColumnType("text");
@@ -13181,8 +16248,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -13219,8 +16287,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CollegeId")
                         .HasColumnType("text");
@@ -13231,10 +16300,19 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DateofBirth")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTimeOffset?>("EffectiveDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiddleInitial")
                         .HasColumnType("text");
 
                     b.Property<string>("PracRefId")
@@ -13242,6 +16320,9 @@ namespace Prime.Migrations
 
                     b.Property<DateTime?>("ProcessedDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -13258,8 +16339,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -13300,8 +16382,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -13444,8 +16527,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -13490,8 +16574,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -13959,8 +17044,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -13997,8 +17083,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -14031,8 +17118,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -14075,8 +17163,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CollegeCode")
                         .HasColumnType("integer");
@@ -14091,7 +17180,9 @@ namespace Prime.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("LicenseNumber")
-                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PractitionerId")
                         .HasColumnType("text");
 
                     b.Property<int>("RemoteUserId")
@@ -14119,8 +17210,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -14161,8 +17253,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -14207,8 +17300,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -14258,8 +17352,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CareSettingCodeStr")
                         .HasColumnType("text");
@@ -14406,8 +17501,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AgreementId")
                         .HasColumnType("integer");
@@ -14445,8 +17541,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("ActiveBeforeRegistration")
                         .HasColumnType("boolean");
@@ -14505,14 +17602,17 @@ namespace Prime.Migrations
                     b.HasIndex("PhysicalAddressId");
 
                     b.ToTable("Site");
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Prime.Models.SiteAdjudicationDocument", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -14554,8 +17654,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdminId")
                         .HasColumnType("integer");
@@ -14594,8 +17695,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -14635,8 +17737,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -14673,8 +17776,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -14708,8 +17812,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -14742,8 +17847,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -14777,6 +17883,11 @@ namespace Prime.Migrations
                         {
                             Code = 5,
                             Name = "Declined"
+                        },
+                        new
+                        {
+                            Code = 6,
+                            Name = "Disabled"
                         });
                 });
 
@@ -14784,8 +17895,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -14906,8 +18018,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AgreementType")
                         .HasColumnType("integer");
@@ -14951,8 +18064,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CollegeName")
                         .HasColumnType("text");
@@ -14989,8 +18103,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<int>("CareSettingCode")
                         .HasColumnType("integer");
@@ -15203,8 +18318,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -15244,8 +18360,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset?>("AcceptedCredentialDate")
                         .HasColumnType("timestamp with time zone");

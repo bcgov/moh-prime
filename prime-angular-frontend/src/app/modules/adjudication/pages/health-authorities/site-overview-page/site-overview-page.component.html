@@ -18,7 +18,9 @@
 
     <mat-card>
       <mat-card-content>
-        <app-health-auth-site-overview-container [healthAuthoritySite]="site"></app-health-auth-site-overview-container>
+        <app-health-auth-site-overview-container [healthAuthoritySite]="site"
+                                                 [pharmanetAdministrators]="pharmanetAdministrators"
+                                                 [technicalSupports]="technicalSupports"></app-health-auth-site-overview-container>
       </mat-card-content>
     </mat-card>
   </app-page-section>
@@ -35,7 +37,7 @@
       </ng-container>
     </app-page-subheader2>
 
-    <form (ngSubmit)="onSubmit()"
+    <form (ngSubmit)="saveSiteId()"
           [formGroup]="form"
           novalidate>
 
@@ -45,12 +47,13 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Site ID"
-                   formControlName="pec">
+                   formControlName="pec"
+                   appToUppercase>
             <mat-error *ngIf="pec.hasError('required')">
               Required
             </mat-error>
             <mat-error *ngIf="pec.hasError('assignable')">
-              Site ID has already been used by another site
+              Site ID already used by another organization
             </mat-error>
           </mat-form-field>
 
@@ -59,6 +62,39 @@
 
           <button mat-flat-button
                   color="primary">Save Site ID
+          </button>
+
+        </div>
+      </div>
+
+    </form>
+  </app-page-section>
+
+  <app-page-section class="mb-5">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Enter Vendor</ng-container>
+    </app-page-subheader2>
+
+    <form (ngSubmit)="saveVendor()"
+          [formGroup]="form"
+          novalidate>
+
+      <div class="row">
+        <div class="col-sm-12 col-lg-9 col-xl-5 pb-2">
+
+          <mat-form-field class="w-100">
+            <mat-select placeholder="Vendor"
+                        formControlName="vendors">
+              <mat-option *ngFor="let vendor of healthAuthorityVendors"
+                          [value]="vendor">{{ vendor.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+        <div class="col-sm-12">
+
+          <button mat-flat-button
+                  color="primary">Save Vendor
           </button>
 
         </div>

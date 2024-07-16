@@ -37,6 +37,9 @@ namespace Prime.Models
 
         [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.OnBehalfOf)]
         DeviceProviderOBOTOA = 11,
+
+        [AgreementGroups(AgreementGroup.Enrollee, AgreementGroup.OnBehalfOf)]
+        PrescriberOBOTOA = 12,
     }
 
     public static class AgreementTypeExtensions
