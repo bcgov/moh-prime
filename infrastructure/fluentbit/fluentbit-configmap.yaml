@@ -36,13 +36,20 @@ objects:
           # filter logs based on certain keyword(s)
           name   grep
           match  app
+          Logical_Op or
           regex  log error
+          regex  log crit
+          regex  log alert
+          regex  log emerg
+          # In case fatal message happens
+          regex  log fatal
           
         [FILTER]
           # Ignore "No such file or directory" error, exclude from fluentbit output
           name     grep
           match    app
           Exclude  log No\ssuch\sfile\sor\sdirectory
+          Exclude  worker\sprocess\s\d+\sexited\son\ssignal\s9
         
         [FILTER]
           name          parser
@@ -58,7 +65,7 @@ objects:
           # add namespace
           Record namespace ${NAMESPACE}
           # add container name
-          Record product ${OC_ENV}-frontend
+          Record container ${OC_ENV}-frontend
 
         [FILTER]
           Name          rewrite_tag
@@ -115,7 +122,9 @@ objects:
           # filter logs based on certain keyword(s)
           name   grep
           match  app
-          regex  log ERR
+          Logical_Op or
+          regex log \bERR\b
+          regex log FTL
 
         [FILTER]
           name          parser
@@ -131,7 +140,7 @@ objects:
           # add namespace
           Record namespace ${NAMESPACE}
           # add container name
-          Record product ${OC_ENV}-webapi
+          Record container ${OC_ENV}-webapi
 
         [FILTER]
           Name          rewrite_tag
@@ -156,7 +165,6 @@ objects:
           Format regex
           Regex  \[(?<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})(?<level>.*)]\ (?<message>.*)
           Time_Key time
-          Time_Format %H:%M:%S
 
 parameters:
   - name: APP_NAME

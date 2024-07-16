@@ -44,11 +44,6 @@ parameters:
   description: Development or Production
   required: true
   value: Development
-- name: DOCMAN_VOLUME_CAPACITY
-  displayName: Document Manager Persistent Volume Capacity
-  description: Volume space available for Document Manager Backend data e.g. 512Mi, 2Gi.
-  required: true
-  value: 5Gi
 - name: WEB_PORT
   displayName: Web Port for NGINX
   description: Termination port on NGINX (8080 or 8443)
@@ -1037,20 +1032,6 @@ objects:
         targetPort: 6001
     selector:
       name: ${SVC_NAME}-document-manager
-#   Document Manager (backend) Persistent Volume Claim
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: ${SVC_NAME}-document-manager-pvc
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
-    labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
-  spec:
-    accessModes:
-      - ReadWriteOnce
-    resources:
-      requests:
-        storage: ${DOCMAN_VOLUME_CAPACITY}
 
 ###########################################
 ###                Redis                ###

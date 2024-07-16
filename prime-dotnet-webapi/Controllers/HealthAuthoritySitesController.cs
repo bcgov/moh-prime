@@ -230,8 +230,6 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.SetSiteCompletedAsync(siteId);
 
-            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUsername(), "Health Authority Site Completed");
-
             return NoContent();
         }
 
