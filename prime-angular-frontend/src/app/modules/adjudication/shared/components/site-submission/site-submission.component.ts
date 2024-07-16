@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { UtilsService } from '@core/services/utils.service';
 import { HttpSite, SiteSubmission } from '@shared/models/site-submission.model';
 
 @Component({
@@ -15,6 +16,7 @@ export class SiteSubmissionComponent implements OnInit {
 
   constructor(
     private siteResource: SiteResource,
+    private utilsService: UtilsService,
   ) { }
 
   ngOnInit(): void {
@@ -30,5 +32,10 @@ export class SiteSubmissionComponent implements OnInit {
     } else {
       return time.split(":").slice(0, 2).join(":");
     }
+  }
+
+  public downloadBusinessLicenceDocument(siteId: number, businessLicenceId: number): void {
+    this.siteResource.getBusinessLicenceDocumentToken(siteId, businessLicenceId)
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 }

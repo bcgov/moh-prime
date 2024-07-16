@@ -77,10 +77,15 @@
       <strong>Business Licence Document</strong>
     </div>
     <div class="ml-4 mb-3">
-      <app-enrollee-property *ngIf="submission?.businessLicence?.businessLicenceDocument.filename"
-                             title="Filename">
+      <button *ngIf="submission?.businessLicence?.businessLicenceDocument.filename"
+              mat-stroked-button
+              color="primary"
+              class="pl-2 mb-2 mt-2"
+              (click)="downloadBusinessLicenceDocument(submission?.businessLicence?.siteId, submission?.businessLicence?.businessLicenceDocument.businessLicenceId)">
+        <mat-icon class="mr-1">attachment</mat-icon>
         {{ submission?.businessLicence?.businessLicenceDocument.filename | default }}
-      </app-enrollee-property>
+      </button>
+
       <app-enrollee-property *ngIf="submission?.businessLicence?.businessLicenceDocument.uploadedDate"
                              title="Upload Date">
         {{ submission?.businessLicence?.businessLicenceDocument.uploadedDate | formatDate | default }}
