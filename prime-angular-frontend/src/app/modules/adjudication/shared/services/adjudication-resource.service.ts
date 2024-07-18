@@ -48,6 +48,7 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 import { Status } from '../components/review-status-content/review-status-content.component';
+import { AdminStatusType } from '../models/admin-status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -475,7 +476,7 @@ export class AdjudicationResource {
   // ---
 
   public createAdmin(admin: Admin): Observable<Admin> {
-    admin.status = AccessStatusEnum.UNDER_REVIEW;
+    admin.status = AdminStatusType.ENABLED;
     return this.apiResource.post<Admin>('admins', admin)
       .pipe(
         map((response: ApiHttpResponse<Admin>) => response.result),
