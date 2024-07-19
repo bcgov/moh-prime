@@ -49,7 +49,7 @@ namespace Prime.Controllers
                 return NotFound();
             }
 
-            Response.Headers.Add("Content-Disposition", content.Headers.ContentDisposition.ToString());
+            Response.Headers.Append("Content-Disposition", content.Headers.ContentDisposition.ToString());
             return File(await content.ReadAsStreamAsync(), "application/octet-stream");
         }
 

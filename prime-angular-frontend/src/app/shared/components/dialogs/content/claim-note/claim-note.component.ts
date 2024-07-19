@@ -97,7 +97,7 @@ export class ClaimNoteComponent implements OnInit {
           value: '',
           disabled: false,
         },
-        [Validators.required]
+        []
       ]
     });
   }
