@@ -13,6 +13,7 @@ using Prime.Models;
 using Prime.Models.HealthAuthorities;
 using Prime.Models.Plr;
 using Prime.Models.VerifiableCredentials;
+using System.Runtime.CompilerServices;
 
 namespace Prime
 {
@@ -35,6 +36,15 @@ namespace Prime
             optionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: true);
 
             return new ApiDbContext(optionsBuilder.Options, null);
+        }
+    }
+
+    public static class PRIMEInitializer
+    {
+        [ModuleInitializer]
+        public static void Initialize()
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
     }
 

@@ -19,7 +19,9 @@
           </mat-chip-list>
         </th>
         <td class="d-flex justify-content-between">
-          <div>{{ item.content }}</div>
+          <div>
+            <pre>{{ item.content }}</pre>
+          </div>
           <div class="margin-right">{{ item?.marginRight | capitalize: true }}</div>
         </td>
       </tr>
