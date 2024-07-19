@@ -16,6 +16,8 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ChangeVendorNoteComponent } from '@shared/components/dialogs/content/change-vendor-note/change-vendor-note.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HealthAuthority } from '@shared/models/health-authority.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { Contact } from '@lib/models/contact.model';
 
 interface HealthAuthorityVendorMap extends VendorConfig {
   id?: number;
@@ -32,6 +34,8 @@ export class SiteOverviewPageComponent implements OnInit {
   public form: FormGroup;
   public healthAuthorityVendors: HealthAuthorityVendorMap[];
   public refresh: BehaviorSubject<boolean>;
+  public pharmanetAdministrators: Contact[];
+  public technicalSupports: Contact[];
 
   constructor(
     private healthAuthorityResource: HealthAuthorityResource,
@@ -57,11 +61,36 @@ export class SiteOverviewPageComponent implements OnInit {
     if (this.pec.valid) {
       const siteId = +this.route.snapshot.params.sid;
       const pec = this.form.value.pec;
-      this.busy = this.siteResource.updatePecCode(siteId, pec)
-        .subscribe(() => {
-          this.refresh.next(true);
-          this.site.pec = pec;
-        });
+
+      this.siteResource.pecExistsWithinHa(siteId, pec).subscribe((result) => {
+        if (result) {
+          const data: DialogOptions = {
+            title: 'Site ID is in use',
+            message: 'This Site ID is already in use in your organization.  Allow multiple sites?',
+            actionText: "Yes"
+          };
+          this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+            .afterClosed()
+            .subscribe((result) => {
+              if (result) {
+                this.busy = this.siteResource.updatePecCode(siteId, pec)
+                  .subscribe(() => {
+                    this.refresh.next(true);
+                    this.site.pec = pec;
+                  });
+              } else {
+                this.pec.setValue(this.site.pec);
+              }
+            });
+        } else {
+          this.busy = this.siteResource.updatePecCode(siteId, pec)
+            .subscribe(() => {
+              this.refresh.next(true);
+              this.site.pec = pec;
+            });
+        }
+      });
+
     }
   }
 
@@ -103,6 +132,8 @@ export class SiteOverviewPageComponent implements OnInit {
         }),
       )
       .subscribe((hao: HealthAuthority) => {
+        this.pharmanetAdministrators = hao.pharmanetAdministrators;
+        this.technicalSupports = hao.technicalSupports;
         let careTypeVendors = hao.careTypes.find(t => t.careType === this.site.healthAuthorityCareType.careType).vendors;
         this.healthAuthorityVendors = this.configService.vendors
           .filter((vendorConfig: VendorConfig) => careTypeVendors.findIndex(v => v.vendorCode === vendorConfig.code) >= 0) as HealthAuthorityVendorMap[];

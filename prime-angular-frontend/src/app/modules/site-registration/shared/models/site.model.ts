@@ -51,6 +51,7 @@ export class Site {
   activeBeforeRegistration: boolean;
   isNew: boolean;
   deviceProviderId: string;
+  missingBusinessLicence: boolean;
 
   public static getExpiryDate(site: Site | SiteListViewModel): string | null {
     if (!site) {
@@ -67,7 +68,7 @@ export class Site {
   }
 }
 
-export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'mnemonic' | 'status' | 'businessLicence' | 'flagged' | 'approvedDate' | 'isNew'> {
+export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'mnemonic' | 'status' | 'businessLicence' | 'flagged' | 'approvedDate' | 'isNew' | 'missingBusinessLicence'> {
   adjudicatorIdir: string;
   remoteUserCount: number;
   flagged: boolean;

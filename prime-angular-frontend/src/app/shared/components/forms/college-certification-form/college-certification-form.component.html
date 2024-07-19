@@ -125,21 +125,6 @@
             </mat-form-field>
 
           </div>
-          <div *ngIf="hasPractices && shouldShowPractices()"
-               class="col-sm-12 pl-5">
-
-            <mat-form-field class="w-100">
-              <mat-label>Advanced Practices (Optional)</mat-label>
-              <mat-select formControlName="practiceCode">
-                <mat-option value=""></mat-option>
-                <mat-option *ngFor="let practice of filteredPractices"
-                            [value]="practice.code">
-                  {{ practice.name }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="practiceCode.hasError('required')">Required</mat-error>
-            </mat-form-field>
-          </div>
 
         </ng-container>
 

@@ -143,6 +143,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     return (this.enrolmentErrors) ? Object.values(this.enrolmentErrors).some(value => value) : false;
   }
 
+  public requireLicenceUpdate(): boolean {
+    return (this.enrolmentErrors) ? this.enrolmentErrors.requiresLicenceUpdate : false;
+  }
+
   public ngOnInit(): void {
     this.isMatchingPaperEnrollee = this.enrolmentService.isMatchingPaperEnrollee;
     this.authService.getUser$()
@@ -231,6 +235,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       deviceProvider: enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
         && (!enrolment.enrolleeDeviceProviders || enrolment.enrolleeDeviceProviders.length === 0),
       missingHAOboSite: enrolment.oboSites?.length && enrolment.oboSites.some(s => s.careSettingCode == CareSettingEnum.HEALTH_AUTHORITY && s.healthAuthorityCode === null),
+      missingOboSite: this.isMissingOboSite(enrolment),
       missingPharmaNetId: this.isMissingPharmaNetId(enrolment.certifications),
       missingHealthAuthorityCareSetting: enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
         && !enrolment.enrolleeHealthAuthorities?.some(ha => ha.healthAuthorityCode),
@@ -249,5 +254,24 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       }
       else { return false; }
     });
+  }
+
+  private isMissingOboSite(enrolment: Enrolment): boolean {
+    if (!enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
+      if (!enrolment.certifications?.length) {
+        let missingOboJob = false;
+        enrolment.careSettings.forEach(cs => {
+          if (cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
+            enrolment.enrolleeHealthAuthorities.forEach(ha => {
+              missingOboJob = missingOboJob || !enrolment.oboSites.some(s => ha.healthAuthorityCode === s.healthAuthorityCode);
+            });
+          } else {
+            missingOboJob = missingOboJob || !enrolment.oboSites.some(s => s.careSettingCode === cs.careSettingCode);
+          }
+        })
+        if (missingOboJob) return true;
+      }
+    }
+    return false;
   }
 }
