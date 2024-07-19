@@ -90,6 +90,15 @@ namespace Prime.Services
                 .AnyAsync(site => site.PEC == pec);
         }
 
+        public async Task<bool> PecExistsWithinHAAsync(int siteId, string pec)
+        {
+            var site = await _context.HealthAuthoritySites.Where(s => s.Id == siteId).SingleAsync();
+
+            return await _context.Sites
+                .Where(s => (s as HealthAuthoritySite).HealthAuthorityOrganizationId == site.HealthAuthorityOrganizationId
+                    && s.Id != siteId && s.PEC == pec).AnyAsync();
+        }
+
         public async Task UpdateCompletedAsync(int siteId, bool completed)
         {
             var site = await _context.Sites
@@ -126,10 +135,12 @@ namespace Prime.Services
             var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
+            var eventMessage = $"Site ID changed from {site.PEC} to {pecCode}";
+
             site.PEC = pecCode;
 
             await _context.SaveChangesAsync();
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
+            await _businessEventService.CreateSiteEventAsync(site.Id, eventMessage);
         }
 
         public async Task UpdateVendor(int siteId, int vendorCode, string rationale)
@@ -281,8 +292,8 @@ namespace Prime.Services
             {
                 // For BCCNM (college code = 3), matching license number to practitioner ID.
                 matchesAnyCert.Or(ruc => ruc.CollegeCode == searchedCert.CollegeCode &&
-                    ((ruc.LicenseNumber == searchedCert.LicenceNumber && searchedCert.CollegeCode != 3) ||
-                    (ruc.PractitionerId == searchedCert.PractitionerId && searchedCert.CollegeCode == 3)));
+                    ((ruc.LicenseNumber == searchedCert.LicenceNumber && searchedCert.CollegeCode != CollegeCode.BCCNM) ||
+                    (ruc.PractitionerId == searchedCert.PractitionerId && searchedCert.CollegeCode == CollegeCode.BCCNM)));
             }
 
             IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications

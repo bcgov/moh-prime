@@ -13,6 +13,7 @@ namespace Prime.Services
         Task<bool> SiteExistsAsync(int siteId);
         Task<SiteStatusType> GetSiteCurrentStatusAsync(int siteId);
         Task<bool> PecAssignableAsync(int siteId, string pec);
+        Task<bool> PecExistsWithinHAAsync(int siteId, string pec);
         Task UpdateCompletedAsync(int siteId, bool completed);
         Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null);
         Task UpdatePecCode(int siteId, string pecCode);

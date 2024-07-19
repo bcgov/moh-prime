@@ -26,14 +26,14 @@ namespace Prime.Configuration.Database
                 .HasForeignKey(toa => toa.PartyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder
-                .HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth",
-                    @"((""OrganizationId"" is null) or (""PartyId"" is not null))");
+            builder.ToTable(t =>
+                t.HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth",
+                    @"((""OrganizationId"" is null) or (""PartyId"" is not null))"));
 
-            builder
-                .HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee",
+            builder.ToTable(t =>
+                t.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee",
                     @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
-                     + CASE WHEN ""PartyId"" IS NULL THEN 0 ELSE 1 END) = 1");
+                     + CASE WHEN ""PartyId"" IS NULL THEN 0 ELSE 1 END) = 1"));
         }
     }
 }
