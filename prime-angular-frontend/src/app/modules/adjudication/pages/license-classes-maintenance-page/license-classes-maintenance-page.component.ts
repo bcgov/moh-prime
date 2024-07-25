@@ -21,6 +21,7 @@ export class LicenseMaintenanceConfig implements IWeightedConfig {
   validate?: boolean;
   prescriberIdType?: PrescriberIdTypeEnum;
   weight: number;
+  collegeLicenseGroupingCode: number;
 }
 
 @Component({
@@ -69,9 +70,10 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
             collegeName: college.name,
             licenseCode: collegeLicense.licenseCode,
             discontinued: collegeLicense.discontinued,
+            collegeLicenseGroupingCode: collegeLicense.collegeLicenseGroupingCode,
             ...license
           } as LicenseMaintenanceConfig;
-        }).sort(this.utilsService.sortByKey<LicenseMaintenanceConfig>('weight'))
+        })
         : { collegeName: college.name } as LicenseMaintenanceConfig;
     });
 
