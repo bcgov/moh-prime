@@ -1,0 +1,18 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+.mat-card {
+  min-width: 325px;
+  max-width: 375px;
+}
+
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  small:last-child:not(:first-child) {
+    font-weight: bold;
+    color: theme-palette(blue);
+  }
+}

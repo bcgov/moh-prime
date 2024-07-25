@@ -103,7 +103,7 @@ export class HealthAuthorityResource {
           });
           return healthAuthoritySite;
         }),
-        tap((healthAuthoritySite: HealthAuthoritySiteAdmin) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
+        tap((healthAuthoritySite: HealthAuthoritySiteAdmin) => this.logger.info('HEALTH_AUTHORITY_SITE 2', healthAuthoritySite)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityAdminSite error has occurred: ', error);
