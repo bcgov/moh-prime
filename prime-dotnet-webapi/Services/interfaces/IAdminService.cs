@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -11,7 +12,9 @@ namespace Prime.Services
 
         Task<bool> UsernameExistsAsync(string username);
 
-        Task<Admin> GetAdminAsync(int adminId);
+        Task<Admin> GetAdminByUserIdAsync(string userId);
+
+        Task<Admin> GetAdminAsync(int id);
 
         Task<Admin> GetAdminAsync(string username);
 
@@ -19,10 +22,14 @@ namespace Prime.Services
 
         Task<IEnumerable<Admin>> GetAdminsAsync();
 
+        Task<IEnumerable<AdminUserViewModel>> GetAdminUserListAsync();
+
         Task<int> CreateAdminAsync(Admin admin);
 
         Task<int> UpdateAdminAsync(int adminId, Admin admin);
 
         Task DeleteAdminAsync(int adminId);
+
+        Task<Admin> SetAdminEnable(int adminId, bool enabled);
     }
 }

@@ -41,6 +41,8 @@ export class AdjudicationRoutes {
 
   public static METABASE_REPORTS = 'metabase-reports';
 
+  public static ADMIN_USERS = "admin-users";
+
   public static routePath(route: string): string {
     return `/${AdjudicationRoutes.MODULE_PATH}/${route}`;
   }
