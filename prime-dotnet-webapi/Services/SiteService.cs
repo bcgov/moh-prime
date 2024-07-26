@@ -73,15 +73,7 @@ namespace Prime.Services
                     .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
                     .AnyAsync();
 
-                var otherHealthAuthoritySites = await _context.HealthAuthoritySites
-                    .AsNoTracking()
-                    .Where(
-                        s => s.PEC == pec
-                        && s.HealthAuthorityOrganizationId != siteDto.healthAuthorityId
-                        )
-                    .AnyAsync();
-
-                return !sites && !otherHealthAuthoritySites;
+                return !sites;
             }
 
             return !await _context.Sites
