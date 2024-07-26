@@ -9,10 +9,9 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { Admin } from '@auth/shared/models/admin.model';
-import { Role } from '@auth/shared/enum/role.enum';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
+import { AdminStatusType } from '../models/admin-status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -60,7 +59,7 @@ export class AdjudicationGuard extends BaseGuard {
           if (!this.authService.isLoggedIn()) {
             destinationRoute = this.config.routes.auth;
           } else {
-            if (admin.status !== AccessStatusEnum.DISABLED) {
+            if (admin.status !== AdminStatusType.DISABLED) {
               return of(true);
             }
           }

@@ -29,7 +29,7 @@ namespace Prime.Models
 
         [Required]
         [DefaultValue(AdminStatusType.Enabled)]
-        public int Status { get; set; }
+        public AdminStatusType Status { get; set; }
 
         /// <summary>
         /// e.g. "jsmith@idir"

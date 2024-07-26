@@ -1,3 +1,4 @@
+import { AdminStatusType } from '@adjudication/shared/models/admin-status.enum';
 import { User } from './user.model';
 
 export interface Admin extends User {
@@ -5,7 +6,7 @@ export interface Admin extends User {
   userId: string; // Keycloak identifier
   idir: string;
   username: string; // e.g. jsmith@idir
-  status: number;
+  status: AdminStatusType;
 }
 
 export interface AdminUser extends Admin {

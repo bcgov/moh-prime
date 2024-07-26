@@ -15,7 +15,7 @@ namespace Prime.ViewModels
 
         public string Username { get; set; }
 
-        public int Status { get; set; }
+        public AdminStatusType Status { get; set; }
 
         public int SitesAssigned { get; set; }
 

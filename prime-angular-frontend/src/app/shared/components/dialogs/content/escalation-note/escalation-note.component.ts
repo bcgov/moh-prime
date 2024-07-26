@@ -13,7 +13,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '../../dialog-options.model';
-import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
+import { AdminStatusType } from '@adjudication/shared/models/admin-status.enum';
 
 export enum EscalationType {
   ENROLLEE = 1,
@@ -86,7 +86,7 @@ export class EscalationNoteComponent implements OnInit {
 
   private getAdjudicators() {
     this.adjudicationResource.getAdjudicators()
-      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators.filter(a => a.status !== AccessStatusEnum.DISABLED)));
+      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators.filter(a => a.status !== AdminStatusType.DISABLED)));
   }
 
   private createSiteRegistrationEscalation(assigneeId) {

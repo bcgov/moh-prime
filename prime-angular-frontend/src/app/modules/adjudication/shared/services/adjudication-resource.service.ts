@@ -46,8 +46,6 @@ import { SiteNotification } from '../models/site-notification.model';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
-import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
-import { Status } from '../components/review-status-content/review-status-content.component';
 import { AdminStatusType } from '../models/admin-status.enum';
 
 @Injectable({

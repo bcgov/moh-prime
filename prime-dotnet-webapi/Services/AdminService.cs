@@ -130,7 +130,7 @@ namespace Prime.Services
                 .Select(admin => admin)
                 .SingleAsync();
 
-            admin.Status = enabled ? (int)AdminStatusType.Enabled : (int)AdminStatusType.Disabled;
+            admin.Status = enabled ? AdminStatusType.Enabled : AdminStatusType.Disabled;
 
             await _context.SaveChangesAsync();
 
