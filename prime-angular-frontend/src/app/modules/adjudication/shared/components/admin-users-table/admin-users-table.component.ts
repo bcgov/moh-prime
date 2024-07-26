@@ -40,7 +40,7 @@ export class AdminUsersTableComponent implements OnInit {
 
   private getAdjudicators(): void {
     this.adjudicationResource.getAdminUsers()
-      .subscribe((adminUser: AdminUser[]) => this.dataSource = adminUser);
+      .subscribe((adminUsers: AdminUser[]) => this.dataSource = adminUsers);
   }
 
   public isEnabled(status: number) {
