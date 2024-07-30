@@ -136,9 +136,27 @@ namespace Prime.Controllers
                 return BadRequest("The enrollee for this User Id is not in an editable state.");
             }
 
+            var haSiteEmailAddress = new List<string>();
+
             EnrolmentCertificateAccessToken createdToken = null;
+
             foreach (var emailPair in providedEmails)
             {
+                // for Health Authority, skip the ones with the same email address
+                if (emailPair.CareSettingCode == (int)CareSettingType.HealthAuthority)
+                {
+                    // convert email array to a string for easy comparison
+                    var emailsStr = string.Join(",", emailPair.Emails);
+                    if (haSiteEmailAddress.Count == 0 || !haSiteEmailAddress.Contains(emailsStr))
+                    {
+                        haSiteEmailAddress.Add(emailsStr);
+                    }
+                    else if (haSiteEmailAddress.Contains(emailsStr))
+                    {
+                        continue;
+                    }
+                }
+
                 createdToken = await _certificateService.CreateCertificateAccessTokenWithCareSettingAsync(enrolleeId, emailPair.CareSettingCode, emailPair.HealthAuthorityCode);
                 await _emailService.SendProvisionerLinkAsync(emailPair.Emails, createdToken, emailPair.CareSettingCode);
                 await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emailPair.Emails)}");
