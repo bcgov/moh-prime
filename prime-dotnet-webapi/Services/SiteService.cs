@@ -73,11 +73,25 @@ namespace Prime.Services
                     .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
                     .AnyAsync();
 
+                // add exception for checking duplicate site ID
+                // only VCH and PHSA can share same site ID
+                var exceptionHAList = new List<int>();
+
+                if (siteDto.healthAuthorityId == (int)HealthAuthorityCode.VancouverCoastalHealth)
+                {
+                    exceptionHAList.Add((int)HealthAuthorityCode.ProvincialHealthServicesAuthority);
+                }
+                else if (siteDto.healthAuthorityId == (int)HealthAuthorityCode.ProvincialHealthServicesAuthority)
+                {
+                    exceptionHAList.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
+                }
+
                 var otherHealthAuthoritySites = await _context.HealthAuthoritySites
                     .AsNoTracking()
                     .Where(
                         s => s.PEC == pec
                         && s.HealthAuthorityOrganizationId != siteDto.healthAuthorityId
+                        && !exceptionHAList.Contains(s.HealthAuthorityOrganizationId)
                         )
                     .AnyAsync();
 
