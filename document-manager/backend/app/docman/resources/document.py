@@ -5,7 +5,7 @@ from datetime import datetime
 
 from werkzeug.exceptions import BadRequest, NotFound, Conflict, RequestEntityTooLarge, InternalServerError
 from flask import request, current_app, send_file, make_response, jsonify
-from flask_restplus import Resource, reqparse
+from flask_restx import Resource, reqparse
 
 from app.docman.models.document import Document
 from app.extensions import api, cache, jwt
