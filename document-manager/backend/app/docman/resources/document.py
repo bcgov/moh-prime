@@ -308,7 +308,7 @@ class DocumentResource(Resource):
             raise NotFound()
 
         return send_file(path_or_file=doc.full_storage_path,
-                         attachment_filename=doc.filename,
+                         download_name=doc.filename,
                          as_attachment=True)
 
 
@@ -349,5 +349,5 @@ class DocumentDownloadResource(Resource):
             raise NotFound('Could not find document')
 
         return send_file(path_or_file=doc.full_storage_path,
-                         attachment_filename=doc.filename,
+                         download_name=doc.filename,
                          as_attachment=True)
