@@ -2,6 +2,7 @@
 
 The backup service is used to perform database backups for our Postgres databases: the prime-prod (or dev, or test) database, which is the primary data store for PRIME and for storing data for Metabase for reporting purposes.
 
+**Made obsolete in favor of https://github.com/BCDevOps/backup-container which is running in PRIME Production**
 
 
 ## How to
