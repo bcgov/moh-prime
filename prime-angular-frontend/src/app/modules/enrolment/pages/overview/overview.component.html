@@ -69,6 +69,19 @@
       </ng-container>
     </app-alert>
 
+    <app-alert *ngIf="hasTOAToEditableChange"
+               type="info"
+               icon="info">
+      <ng-container #alertTitle
+                    class="alert-title">
+        hasTOAToEditableChange
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        TBD from Leanne
+      </ng-container>
+    </app-alert>
+
     <ng-container *ngIf="!isInitialEnrolment && enrolment?.expiryDate">
 
       <app-alert type="success"

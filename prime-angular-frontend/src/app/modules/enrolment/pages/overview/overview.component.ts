@@ -53,6 +53,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public hasOboToRuAgreementTypeChange: boolean;
+  public hasTOAToEditableChange: boolean;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -81,6 +82,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
           : EnrolmentRoutes.BCSC_DEMOGRAPHIC;
       });
+
+    route.queryParams.subscribe(params => {
+      this.hasTOAToEditableChange = params['forcedToA2Editable'];
+    });
   }
 
   public onSubmit(): void {

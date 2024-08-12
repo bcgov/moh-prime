@@ -184,6 +184,22 @@ export class EnrolmentResource {
       );
   }
 
+  public returnToEditing(enrolleeId: number): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/status-actions/return-to-editing`)
+      .pipe(
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => {
+          this.toastService.openErrorToast('Enrolment is now editable');
+          this.logger.info('UPDATED_ENROLLEE', enrollee);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment status could not be updated');
+          this.logger.error('[Enrolment] EnrolmentResource::returnToEditing error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getCurrentStatus(enrolleeId: number): Observable<EnrolmentStatusAdmin> {
     return this.apiResource.get<EnrolmentStatusAdmin>(`enrollees/${enrolleeId}/current-status`)
       .pipe(
