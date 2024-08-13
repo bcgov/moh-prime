@@ -59,6 +59,8 @@ namespace Prime.HttpClients
                 folder = destinationFolder
             });
 
+            _client.Timeout = TimeSpan.FromMinutes(5);
+
             var response = await _client.PostAsync(url, new StreamContent(document));
             var documentResponse = await response.Content.ReadAsAsync<DocumentGuidResponse>();
 
