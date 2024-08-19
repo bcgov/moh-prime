@@ -218,7 +218,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
                   healthAuthorityCode: config.healthAuthorityCode,
                 }
               });
-              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs, this.enrolment.id);
+              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0]), this.enrolment.id);
             } else {
               return EMPTY;
             }
@@ -227,7 +227,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         .subscribe(() => {
           let emails = new Array<string>();
           this.careSettingConfigs.forEach((config) => {
-            emails.push(config.formArray.value.map(email => email.email));
+            if (config.formArray.value[0].email) {
+              emails.push(config.formArray.value.map(email => email.email));
+            }
           });
           this.toastService.openSuccessToast(`Email was successfully sent to ${emails.join(", ")}`);
           this.emailForm.reset();

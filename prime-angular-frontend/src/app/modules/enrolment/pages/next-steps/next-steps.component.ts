@@ -204,7 +204,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
                 }
               });
 
-              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs, this.enrolment.id);
+              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0]), this.enrolment.id);
             } else {
               return EMPTY;
             }
