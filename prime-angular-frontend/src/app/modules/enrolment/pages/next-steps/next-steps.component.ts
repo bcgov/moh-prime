@@ -436,17 +436,18 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
   }
 
   public atLeastOneEmailFilled(): boolean {
+    let emailFilled = false;
 
     Object.keys(this.emailForm.controls).forEach((emailArrayKey) => {
       const emailArray = this.emailForm.controls[emailArrayKey] as FormArray;
       Object.keys(emailArray.controls).forEach((emailKey) => {
         let emailControl = emailArray.controls[emailKey] as FormGroup;
         if (emailControl.controls['email'].value && emailControl.controls['email'].value !== "") {
-          return true;
+          emailFilled = true;
         }
       });
     });
 
-    return false;
+    return emailFilled;
   }
 }
