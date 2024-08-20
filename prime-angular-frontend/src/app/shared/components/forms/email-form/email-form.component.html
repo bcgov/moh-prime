@@ -8,6 +8,7 @@
           <input matInput
                  placeholder="Email"
                  formControlName="email"
+                 (keydown.space)="$event.preventDefault()"
                  maxlength="50">
           <mat-error *ngIf="email.hasError('required')">Required</mat-error>
           <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
