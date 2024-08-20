@@ -5,7 +5,7 @@ from datetime import datetime
 
 from werkzeug.exceptions import BadRequest, NotFound, Conflict, RequestEntityTooLarge, InternalServerError
 from flask import request, current_app, send_file, make_response, jsonify
-from flask_restplus import Resource, reqparse
+from flask_restx import Resource, reqparse
 
 from app.docman.models.document import Document
 from app.extensions import api, cache, jwt
@@ -307,8 +307,8 @@ class DocumentResource(Resource):
         if not doc:
             raise NotFound()
 
-        return send_file(filename_or_fp=doc.full_storage_path,
-                         attachment_filename=doc.filename,
+        return send_file(path_or_file=doc.full_storage_path,
+                         download_name=doc.filename,
                          as_attachment=True)
 
 
@@ -348,6 +348,6 @@ class DocumentDownloadResource(Resource):
         if not doc:
             raise NotFound('Could not find document')
 
-        return send_file(filename_or_fp=doc.full_storage_path,
-                         attachment_filename=doc.filename,
+        return send_file(path_or_file=doc.full_storage_path,
+                         download_name=doc.filename,
                          as_attachment=True)
