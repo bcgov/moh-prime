@@ -176,8 +176,9 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
     if (!this.atLeastOneEmailFilled()) {
       const data: DialogOptions = {
         title: 'Missing Email',
-        message: `Please enter at least one email for the Approval Notification?`,
+        message: `Please enter at least one email for the Approval Notification.`,
         cancelText: 'Close',
+        actionType: 'warn',
         actionHide: true,
       };
       this.dialog.open(ConfirmDialogComponent, { data }).afterClosed();
