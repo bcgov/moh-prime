@@ -102,8 +102,7 @@ namespace Prime.Services
             // set the self declaration version Id and add unanswered items
             // *** answered Yes - it should have self declaration ID set
             // *** answered No - it should NOT have self declaration ID
-            // At a given point in time, a SD question may not exist for a particular SD type so the `selfDeclarationQuestions` list may contain null elements
-            foreach (var sd in selfDeclarationQuestions.Where(q => q != null))
+            foreach (var sd in selfDeclarationQuestions)
             {
                 if (enrollee.SelfDeclarations == null)
                 {
