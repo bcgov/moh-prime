@@ -86,7 +86,8 @@ export class MockAuthService implements IAuthService {
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
       idir: `${faker.random.uuid()}`,
-      username: `${faker.random.uuid()}@idir`
+      username: `${faker.random.uuid()}@idir`,
+      status: faker.random.number(),
     }));
   }
 
