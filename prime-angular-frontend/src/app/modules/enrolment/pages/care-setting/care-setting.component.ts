@@ -12,10 +12,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { Role } from '@auth/shared/enum/role.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -29,6 +27,7 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
   styleUrls: ['./care-setting.component.scss']
 })
 export class CareSettingComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
+
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
   public healthAuthorities: Config<number>[];
@@ -248,11 +247,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     const form = this.enrolmentFormStateService.oboSitesForm;
     const oboSites = form.get('oboSites') as FormArray;
 
-    oboSites.value?.forEach((site: OboSite, index: number) => {
-      if (site.careSettingCode === careSettingCode) {
-        oboSites.removeAt(index);
+    for (var i = oboSites.length - 1; i >= 0; i--) {
+      if (oboSites.value[i].careSettingCode === careSettingCode) {
+        oboSites.removeAt(i);
       }
-    });
+    }
 
     const clear = (fa: FormArray) => {
       fa.clear();

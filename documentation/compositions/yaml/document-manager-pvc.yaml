@@ -1,0 +1,14 @@
+#   Document Manager (backend) Persistent Volume Claim
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: ${SVC_NAME}-document-manager-pvc
+    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 8Gi

@@ -47,7 +47,7 @@ namespace Prime.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error when contacting the Document Manager");
             }
 
-            HttpContext.Response.Headers.Add("Location", response.Headers.GetValues("Location").FirstOrDefault());
+            HttpContext.Response.Headers.Append("Location", response.Headers.GetValues("Location").FirstOrDefault());
             return Ok();
         }
 

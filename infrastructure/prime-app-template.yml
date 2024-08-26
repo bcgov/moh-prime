@@ -44,11 +44,6 @@ parameters:
   description: Development or Production
   required: true
   value: Development
-- name: DOCMAN_VOLUME_CAPACITY
-  displayName: Document Manager Persistent Volume Capacity
-  description: Volume space available for Document Manager Backend data e.g. 512Mi, 2Gi.
-  required: true
-  value: 5Gi
 - name: WEB_PORT
   displayName: Web Port for NGINX
   description: Termination port on NGINX (8080 or 8443)
@@ -122,15 +117,17 @@ objects:
           - name: nginx-config
             configMap:
               name: ${SVC_NAME}-nginx-config
-              defaultMode: 420
           - name: plr-integration-volume
             secret:
               secretName: plr-integration
-              defaultMode: 420
           - name: env-config
             configMap:
               name: ${SVC_NAME}-env-config
-              defaultMode: 420
+          - name: log-storage
+            emptyDir: {}
+          - name: fluentbit-config
+            configMap:
+              name: frontend-fluentbit-config
         containers:
           - name: ${SVC_NAME}-frontend
             image: >-
@@ -161,6 +158,8 @@ objects:
               readOnly: true
               mountPath: /opt/app-root/src/assets/config-map.json
               subPath: config-map.json
+            - name: log-storage
+              mountPath: /tmp/
             resources:
               limits:
                 cpu: 50m
@@ -174,6 +173,8 @@ objects:
             env:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${VANITY_URL}/api/docman
+              - name: SERVER_LOGFILE
+                value: /tmp/error_fluentbit.log
             readinessProbe:
               httpGet:
                 path: /
@@ -187,6 +188,53 @@ objects:
               initialDelaySeconds: 5
               failureThreshold: 1
               periodSeconds: 5
+          - name: fluent-bit
+            image: 'docker.io/fluent/fluent-bit:3.0.3'
+            imagePullPolicy: IfNotPresent
+            resources:
+              limits:
+                cpu: 100m
+                memory: 64Mi
+              requests:
+                cpu: 10m
+                memory: 16Mi
+            readinessProbe:
+              httpGet:
+                path: /
+                port: 2020
+                scheme: HTTP
+              initialDelaySeconds: 10
+              timeoutSeconds: 1
+              periodSeconds: 60
+              successThreshold: 1
+              failureThreshold: 3
+            livenessProbe:
+              httpGet:
+                path: /
+                port: 2020
+                scheme: HTTP
+              initialDelaySeconds: 10
+              timeoutSeconds: 1
+              periodSeconds: 60
+              successThreshold: 1
+              failureThreshold: 3
+            env:
+              - name: SERVER_LOGFILE
+                value: /tmp/error_fluentbit.log
+            ports:
+              - name: metrics
+                containerPort: 2020
+                protocol: TCP
+              - name: http-plugin
+                containerPort: 80
+                protocol: TCP
+            volumeMounts:
+              - name: fluentbit-config
+                mountPath: /fluent-bit/etc
+              - name: log-storage
+                mountPath: /tmp/
+            terminationMessagePolicy: File
+            
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -214,6 +262,7 @@ objects:
 
       worker_processes  auto;
       error_log         "/opt/bitnami/nginx/logs/error.log";
+      error_log         "/tmp/error_fluentbit.log";
       pid               "/opt/bitnami/nginx/tmp/nginx.pid";
 
       events {
@@ -623,6 +672,8 @@ objects:
                     key: app-db-name
               - name: DB_CONNECTION_STRING
                 value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
+              - name: SERVER_LOGFILE
+                value: /opt/app-root/app/logs/*.log
             ports:
               - containerPort: 1025
                 protocol: TCP
@@ -699,10 +750,63 @@ objects:
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs
                 readOnly: true
+              - name: log-storage
+                mountPath: /opt/app-root/app/logs
+          - name: fluent-bit
+            image: 'docker.io/fluent/fluent-bit:3.0.3'
+            resources:
+              limits:
+                cpu: 100m
+                memory: 64Mi
+              requests:
+                cpu: 10m
+                memory: 16Mi
+            readinessProbe:
+              httpGet:
+                path: /
+                port: 2020
+                scheme: HTTP
+              initialDelaySeconds: 10
+              timeoutSeconds: 1
+              periodSeconds: 60
+              successThreshold: 1
+              failureThreshold: 3
+            livenessProbe:
+              httpGet:
+                path: /
+                port: 2020
+                scheme: HTTP
+              initialDelaySeconds: 10
+              timeoutSeconds: 1
+              periodSeconds: 60
+              successThreshold: 1
+              failureThreshold: 3
+            env:
+              - name: SERVER_LOGFILE
+                value: /opt/app-root/app/logs/*.log
+            ports:
+              - name: metrics
+                containerPort: 2020
+                protocol: TCP
+              - name: http-plugin
+                containerPort: 80
+                protocol: TCP
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+              - name: fluentbit-config
+                mountPath: /fluent-bit/etc
+              - name: log-storage
+                mountPath: /opt/app-root/app/logs
+            terminationMessagePolicy: File
         volumes:
           - name: cert-volume
             secret:
               secretName: pharmanet-api-ssl-certs
+          - name: log-storage
+            emptyDir: {}
+          - name: fluentbit-config
+            configMap:
+              name: webapi-fluentbit-config
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -811,7 +915,7 @@ objects:
                   name: keycloak
                   key: JWT_WELL_KNOWN_CONFIG
             - name: SQLALCHEMY_DATABASE_URI
-              value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
+              value: "postgresql://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
           envFrom:
             - configMapRef:
                 name: document-manager
@@ -864,7 +968,7 @@ objects:
                     name: keycloak
                     key: JWT_WELL_KNOWN_CONFIG
               - name: SQLALCHEMY_DATABASE_URI
-                value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
+                value: "postgresql://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
             envFrom:
               - configMapRef:
                   name: document-manager
@@ -928,20 +1032,6 @@ objects:
         targetPort: 6001
     selector:
       name: ${SVC_NAME}-document-manager
-#   Document Manager (backend) Persistent Volume Claim
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: ${SVC_NAME}-document-manager-pvc
-    namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
-    labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
-  spec:
-    accessModes:
-      - ReadWriteOnce
-    resources:
-      requests:
-        storage: ${DOCMAN_VOLUME_CAPACITY}
 
 ###########################################
 ###                Redis                ###

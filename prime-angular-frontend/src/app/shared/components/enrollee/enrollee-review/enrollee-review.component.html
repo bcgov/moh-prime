@@ -264,8 +264,9 @@
     </app-enrollee-property>
 
     <app-enrollee-property [hasError]="enrolmentErrors?.requiresLicenceUpdate"
-                           errorMessage="Licence class requires update."
+                           errorMessage="College licence information requires update."
                            title="Licence Class">
+      {{ getLicenceClassCategory(certification) }}
       {{ certification.licenseCode | configCode: 'licenses' | default }}
     </app-enrollee-property>
 
@@ -370,6 +371,15 @@
       </button>
     </app-page-subheader>
   </ng-container>
+  <app-alert *ngIf="this.enrolmentErrors?.missingOboSite && !this.enrolmentErrors?.certificateOrOboSite"
+             type="danger"
+             icon="error">
+    <ng-container #alertContent
+                  class="alert-content">
+      Missing job site information for selected care setting(s).
+    </ng-container>
+  </app-alert>
+
   <ng-container *ngIf="enrolment.oboSites?.length || (enrolmentErrors?.certificateOrOboSite); else legacyJobInfo">
     <ng-container *ngFor="let careSetting of enrolment.careSettings">
       <ng-container *ngFor="let site of enrolment?.oboSites">

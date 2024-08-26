@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
 
+#nullable disable
+
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
@@ -15,16 +17,18 @@ namespace Prime.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.16")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -65,8 +69,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AddressType")
                         .HasColumnType("integer");
@@ -110,14 +115,17 @@ namespace Prime.Migrations
                     b.ToTable("Address");
 
                     b.HasDiscriminator<int>("AddressType");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Prime.Models.Admin", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -140,6 +148,9 @@ namespace Prime.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -165,8 +176,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset?>("AcceptedDate")
                         .HasColumnType("timestamp with time zone");
@@ -219,19 +231,21 @@ namespace Prime.Migrations
 
                     b.HasIndex("PartyId");
 
-                    b.ToTable("Agreement");
+                    b.ToTable("Agreement", t =>
+                        {
+                            t.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee", "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\r\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
 
-                    b.HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth", "((\"OrganizationId\" is null) or (\"PartyId\" is not null))");
-
-                    b.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee", "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
+                            t.HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth", "((\"OrganizationId\" is null) or (\"PartyId\" is not null))");
+                        });
                 });
 
             modelBuilder.Entity("Prime.Models.AgreementVersion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AgreementType")
                         .HasColumnType("integer");
@@ -677,8 +691,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -714,8 +729,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BannerLocationCode")
                         .HasColumnType("integer");
@@ -756,8 +772,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -794,8 +811,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AdminId")
                         .HasColumnType("integer");
@@ -854,8 +872,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -921,8 +940,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -959,8 +979,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BusinessLicenceId")
                         .HasColumnType("integer");
@@ -998,8 +1019,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1036,8 +1058,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CollegeCode")
                         .HasColumnType("integer");
@@ -1093,8 +1116,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
@@ -1130,8 +1154,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1264,6 +1289,18 @@ namespace Prime.Migrations
                             Code = 20,
                             Name = "BC College of Oral Health Professionals",
                             Weight = 40
+                        },
+                        new
+                        {
+                            Code = 21,
+                            Name = "College of Health and Care Professionals of BC",
+                            Weight = 70
+                        },
+                        new
+                        {
+                            Code = 22,
+                            Name = "College of Complementary Health Professionals of BC",
+                            Weight = 50
                         });
                 });
 
@@ -1752,55 +1789,55 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 11,
                             LicenseCode = 78,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 11,
                             LicenseCode = 79,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 11,
                             LicenseCode = 80,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 11,
                             LicenseCode = 81,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 14,
                             LicenseCode = 71,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 14,
                             LicenseCode = 72,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 14,
                             LicenseCode = 73,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 14,
                             LicenseCode = 74,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 4,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1824,49 +1861,49 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 9,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 10,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 12,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 13,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 15,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 16,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 17,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 18,
                             LicenseCode = 64,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -2086,6 +2123,391 @@ namespace Prime.Migrations
                             LicenseCode = 119,
                             CollegeLicenseGroupingCode = 11,
                             Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 120,
+                            CollegeLicenseGroupingCode = 12,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 121,
+                            CollegeLicenseGroupingCode = 12,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 122,
+                            CollegeLicenseGroupingCode = 12,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 123,
+                            CollegeLicenseGroupingCode = 12,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 124,
+                            CollegeLicenseGroupingCode = 13,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 125,
+                            CollegeLicenseGroupingCode = 13,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 126,
+                            CollegeLicenseGroupingCode = 13,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 127,
+                            CollegeLicenseGroupingCode = 13,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 128,
+                            CollegeLicenseGroupingCode = 14,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 129,
+                            CollegeLicenseGroupingCode = 14,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 130,
+                            CollegeLicenseGroupingCode = 14,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 131,
+                            CollegeLicenseGroupingCode = 14,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 132,
+                            CollegeLicenseGroupingCode = 15,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 133,
+                            CollegeLicenseGroupingCode = 15,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 134,
+                            CollegeLicenseGroupingCode = 15,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 135,
+                            CollegeLicenseGroupingCode = 15,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 136,
+                            CollegeLicenseGroupingCode = 15,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 137,
+                            CollegeLicenseGroupingCode = 16,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 138,
+                            CollegeLicenseGroupingCode = 16,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 139,
+                            CollegeLicenseGroupingCode = 16,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 140,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 141,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 142,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 143,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 144,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 145,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 146,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 147,
+                            CollegeLicenseGroupingCode = 17,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 148,
+                            CollegeLicenseGroupingCode = 18,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 149,
+                            CollegeLicenseGroupingCode = 18,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 150,
+                            CollegeLicenseGroupingCode = 18,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 151,
+                            CollegeLicenseGroupingCode = 18,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 152,
+                            CollegeLicenseGroupingCode = 19,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 153,
+                            CollegeLicenseGroupingCode = 19,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 154,
+                            CollegeLicenseGroupingCode = 19,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 155,
+                            CollegeLicenseGroupingCode = 19,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 156,
+                            CollegeLicenseGroupingCode = 20,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 157,
+                            CollegeLicenseGroupingCode = 20,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 158,
+                            CollegeLicenseGroupingCode = 20,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 21,
+                            LicenseCode = 159,
+                            CollegeLicenseGroupingCode = 20,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 160,
+                            CollegeLicenseGroupingCode = 21,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 161,
+                            CollegeLicenseGroupingCode = 21,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 162,
+                            CollegeLicenseGroupingCode = 21,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 163,
+                            CollegeLicenseGroupingCode = 21,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 164,
+                            CollegeLicenseGroupingCode = 22,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 165,
+                            CollegeLicenseGroupingCode = 22,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 166,
+                            CollegeLicenseGroupingCode = 23,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 167,
+                            CollegeLicenseGroupingCode = 23,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 168,
+                            CollegeLicenseGroupingCode = 23,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 169,
+                            CollegeLicenseGroupingCode = 23,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 170,
+                            CollegeLicenseGroupingCode = 24,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 171,
+                            CollegeLicenseGroupingCode = 24,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 172,
+                            CollegeLicenseGroupingCode = 24,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 173,
+                            CollegeLicenseGroupingCode = 24,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 22,
+                            LicenseCode = 174,
+                            CollegeLicenseGroupingCode = 24,
+                            Discontinued = false
                         });
                 });
 
@@ -2093,8 +2515,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -2172,6 +2595,84 @@ namespace Prime.Migrations
                             Code = 11,
                             Name = "Denturist",
                             Weight = 11
+                        },
+                        new
+                        {
+                            Code = 12,
+                            Name = "Designated Health Profession of Dietetics",
+                            Weight = 12
+                        },
+                        new
+                        {
+                            Code = 13,
+                            Name = "Designated Health Profession of Occupational Therapy",
+                            Weight = 13
+                        },
+                        new
+                        {
+                            Code = 14,
+                            Name = "Designated Health Profession of Opticianry",
+                            Weight = 14
+                        },
+                        new
+                        {
+                            Code = 15,
+                            Name = "Designated Health Profession of Optometry",
+                            Weight = 15
+                        },
+                        new
+                        {
+                            Code = 16,
+                            Name = "Designated Health Profession of Physical Therapy",
+                            Weight = 16
+                        },
+                        new
+                        {
+                            Code = 17,
+                            Name = "Designated Health Profession of Psychology",
+                            Weight = 17
+                        },
+                        new
+                        {
+                            Code = 18,
+                            Name = "Designated Health Profession of Audiology",
+                            Weight = 18
+                        },
+                        new
+                        {
+                            Code = 19,
+                            Name = "Designated Health Profession of Hearing Instrument Dispensing",
+                            Weight = 19
+                        },
+                        new
+                        {
+                            Code = 20,
+                            Name = "Designated Health Profession of Speech-Language Pathology",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 21,
+                            Name = "Designated Health Profession of Chiropractic",
+                            Weight = 21
+                        },
+                        new
+                        {
+                            Code = 22,
+                            Name = "Designated Health Profession of Massage Therapy",
+                            Weight = 22
+                        },
+                        new
+                        {
+                            Code = 23,
+                            Name = "Designated Health Profession of Naturopathic Medicine",
+                            Weight = 23
+                        },
+                        new
+                        {
+                            Code = 24,
+                            Name = "Designated Health Profession of Traditional Chinese Medicine and Acupuncture",
+                            Weight = 24
                         });
                 });
 
@@ -2216,8 +2717,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4191,8 +4693,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4244,8 +4747,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Body")
                         .HasColumnType("text");
@@ -4298,8 +4802,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4422,12 +4927,12 @@ namespace Prime.Migrations
                             Id = 6,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "The email will be triggered when the remote user has been updated and the site is completed.",
+                            Description = "The email will be triggered when the remote user has been updated and the site is re-submitted.",
                             EmailType = 6,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             Recipient = "To: HLTH.HnetConnection@gov.bc.ca & primesupport@gov.bc.ca",
                             Subject = "Remote Practitioners Changed",
-                            Template = "Hello, <p><p>@{ var pecText = string.IsNullOrWhiteSpace(Model.SitePec) ? \"Not Assigned\" : Model.SitePec; } <p> Notification: The list of Remote Practitioners at @Model.SiteStreetAddress of @Model.OrganizationName (PEC: @pecText) has been updated. <br/><br/>The remote practitioners at this site are: </p> <h2 class=\"mb-2\">Remote Users</h2> @foreach (var name in Model.RemoteUserNames) { <div class=\"ml-2 mb-2\"> <h5>Name</h5> <span class=\"ml-2\">@name</span> </div> } <h2 class=\"mb-2\">Site Information</h2> <p> See the attached registration and organization agreement for more information. @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl)) { @(\"To access the Business Licence, click this\") <a href=\"@Model.DocumentUrl\" target=\"_blank\">link</a>@(\".\") } </p> <br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            Template = "Hello, <p><p>@{ var pecText = string.IsNullOrWhiteSpace(Model.SitePec) ? \"Not Assigned\" : Model.SitePec; } <p> Notification: The list of Remote Practitioners at @Model.SiteStreetAddress of @Model.OrganizationName (PEC: @pecText) has been updated.</p> <h2 class=\"mb-2\">Remote Users</h2> @foreach (var remoteUser in Model.RemoteUsers) { <p> <span class=\"ml-2\">@remoteUser</span> </p> } <h2 class=\"mb-2\">Site Information</h2> <p> See the attached registration and organization agreement for more information.</p> <br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
                             TemplateName = "Remote User Updated Notification",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -4671,6 +5176,21 @@ namespace Prime.Migrations
                             TemplateName = "Device Provider Notification",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when a HA site is approved.",
+                            EmailType = 23,
+                            ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            Recipient = "To: HLTH.HnetConnection@gov.bc.ca",
+                            Subject = "[{siteId}] HA Site Registration Approved",
+                            Template = "Hello, <p><p>@Model.DoingBusinessAs (@Model.HealthAuthority) with SiteID @Model.Pec has been approved by the Ministry of Health for PharmaNet access. Please notify the PharmaNet software vendor (@Model.Vendor) for this site and complete any remaining tasks to activate the site.</p><p>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "HA Site Approval",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -4678,8 +5198,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -4785,8 +5306,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -4820,8 +5342,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AddressId")
                         .HasColumnType("integer");
@@ -4855,8 +5378,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -4901,8 +5425,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CareSettingCode")
                         .HasColumnType("integer");
@@ -4938,8 +5463,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CertificationNumber")
                         .HasColumnType("text");
@@ -4978,8 +5504,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("ConsentForAutoPull")
                         .HasColumnType("boolean");
@@ -5015,8 +5542,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5057,8 +5585,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -5098,8 +5627,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdminId")
                         .HasColumnType("integer");
@@ -5138,8 +5668,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5177,6 +5708,9 @@ namespace Prime.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("CareSettingCode")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -5188,6 +5722,9 @@ namespace Prime.Migrations
 
                     b.Property<DateTimeOffset>("Expires")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("HealthAuthorityCode")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5209,8 +5746,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5246,8 +5784,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5283,8 +5822,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AdjudicatorNoteId")
                         .HasColumnType("integer");
@@ -5365,8 +5905,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5403,8 +5944,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -5430,8 +5972,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CareType")
                         .IsRequired()
@@ -5463,8 +6006,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5497,8 +6041,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ContactId")
                         .HasColumnType("integer");
@@ -5511,7 +6056,8 @@ namespace Prime.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(55)
+                        .HasColumnType("character varying(55)");
 
                     b.Property<int>("HealthAuthorityOrganizationId")
                         .HasColumnType("integer");
@@ -5529,14 +6075,17 @@ namespace Prime.Migrations
                     b.ToTable("HealthAuthorityContact");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("HealthAuthorityContact");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5623,8 +6172,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5657,8 +6207,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5691,8 +6242,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5848,8 +6400,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -5881,8 +6434,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -6060,8 +6614,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CommunitySiteId")
                         .HasColumnType("integer");
@@ -6107,8 +6662,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -6150,8 +6706,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -6839,6 +7396,336 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 120,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 121,
+                            Name = "Emergency",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 122,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 123,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 124,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 125,
+                            Name = "Provisional",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 126,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 127,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 128,
+                            Name = "Registered Optician",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 129,
+                            Name = "Registered Contact Lens Fitter",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 130,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 131,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 132,
+                            Name = "Therapeutic Qualified",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 133,
+                            Name = "Non-Therapeutic Qualified",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 134,
+                            Name = "Limited",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 135,
+                            Name = "Academic",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 136,
+                            Name = "Non-Practising",
+                            Weight = 50
+                        },
+                        new
+                        {
+                            Code = 137,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 138,
+                            Name = "Student",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 139,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 140,
+                            Name = "Registered Psychologist",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 141,
+                            Name = "Associate Psychologist (corrections)",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 142,
+                            Name = "School Psychologist",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 143,
+                            Name = "Psychology Assistant",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 144,
+                            Name = "Temporary (supervised)",
+                            Weight = 50
+                        },
+                        new
+                        {
+                            Code = 145,
+                            Name = "Temporary (visitor)",
+                            Weight = 60
+                        },
+                        new
+                        {
+                            Code = 146,
+                            Name = "Temporary (emergency)",
+                            Weight = 70
+                        },
+                        new
+                        {
+                            Code = 147,
+                            Name = "Non-Practising",
+                            Weight = 80
+                        },
+                        new
+                        {
+                            Code = 148,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 149,
+                            Name = "Conditional",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 150,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 151,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 152,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 153,
+                            Name = "Conditional",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 154,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 155,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 156,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 157,
+                            Name = "Conditional",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 158,
+                            Name = "Temporary",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 159,
+                            Name = "Non-Practising",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 160,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 161,
+                            Name = "Student",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 162,
+                            Name = "Non-Practising",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 163,
+                            Name = "Temporary",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 164,
+                            Name = "Practising",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 165,
+                            Name = "Non-Practising",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 166,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 167,
+                            Name = "Temporary",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 168,
+                            Name = "Student",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 169,
+                            Name = "Non-Practising",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 170,
+                            Name = "Full",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 171,
+                            Name = "Limited",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 172,
+                            Name = "Temporary",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 173,
+                            Name = "Student",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 174,
+                            Name = "Non-Practising",
+                            Weight = 10
+                        },
+                        new
+                        {
                             Code = 64,
                             Name = "Not Displayed",
                             Weight = 1
@@ -6849,8 +7736,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("AllowRequestRemoteAccess")
                         .HasColumnType("boolean");
@@ -11521,6 +12409,918 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
+                        },
+                        new
+                        {
+                            Id = 310,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 5, 3, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 5,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 311,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 5, 3, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 6,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 312,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 120,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 313,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 121,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 314,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 122,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 315,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 123,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 316,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 124,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 317,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 125,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 318,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 126,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 319,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 127,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 320,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 128,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 321,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 129,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 322,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 130,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 323,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 131,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 324,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 132,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 325,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 133,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 326,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 134,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 327,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 135,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 328,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 136,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 329,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 137,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 330,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 138,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 331,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 139,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 332,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 140,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 333,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 141,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 334,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 142,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 335,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 143,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 336,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 144,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 337,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 145,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 338,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 146,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 339,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 147,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 340,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 148,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 341,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 149,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 342,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 150,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 343,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 151,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 344,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 152,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 345,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 153,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 346,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 154,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 347,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 155,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 348,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 156,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 349,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 157,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 350,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 158,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 351,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 159,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 352,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 160,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 353,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 161,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 354,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 162,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 355,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 163,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 356,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 164,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 357,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 165,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 358,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 166,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 359,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 167,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 360,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 168,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 361,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 169,
+                            LicensedToProvideCare = false,
+                            Manual = false,
+                            NamedInImReg = false,
+                            Prefix = "97",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 362,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 170,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 363,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 171,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 364,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 172,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 365,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 173,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
+                        },
+                        new
+                        {
+                            Id = 366,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 174,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            NamedInImReg = false,
+                            Prefix = "",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = false
                         });
                 });
 
@@ -11528,8 +13328,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -11558,8 +13359,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CareSettingCode")
                         .HasColumnType("integer");
@@ -11612,8 +13414,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("text");
@@ -11672,8 +13475,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Completed")
                         .HasColumnType("boolean");
@@ -11719,8 +13523,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -11759,8 +13564,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -11839,8 +13645,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AddressId")
                         .HasColumnType("integer");
@@ -11874,8 +13681,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CollegeCode")
                         .HasColumnType("integer");
@@ -11928,8 +13736,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -11960,8 +13769,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Approved")
                         .HasColumnType("boolean");
@@ -11998,8 +13808,9 @@ namespace Prime.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("CollegePrefix")
                         .HasColumnType("text");
@@ -12063,8 +13874,9 @@ namespace Prime.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("CollegePrefix")
                         .HasColumnType("text");
@@ -12109,6 +13921,14 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PharmacyId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.HasIndex("TxDateTime");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLogTemp");
                 });
@@ -14295,8 +16115,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address1Line1")
                         .HasColumnType("text");
@@ -14430,8 +16251,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -14468,8 +16290,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CollegeId")
                         .HasColumnType("text");
@@ -14480,10 +16303,19 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DateofBirth")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTimeOffset?>("EffectiveDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiddleInitial")
                         .HasColumnType("text");
 
                     b.Property<string>("PracRefId")
@@ -14491,6 +16323,9 @@ namespace Prime.Migrations
 
                     b.Property<DateTime?>("ProcessedDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -14507,8 +16342,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -14549,8 +16385,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -14693,8 +16530,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -14739,8 +16577,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -15208,8 +17047,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -15246,8 +17086,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -15280,8 +17121,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -15324,8 +17166,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CollegeCode")
                         .HasColumnType("integer");
@@ -15370,8 +17213,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -15412,8 +17256,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -15458,8 +17303,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -15509,8 +17355,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CareSettingCodeStr")
                         .HasColumnType("text");
@@ -15657,8 +17504,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AgreementId")
                         .HasColumnType("integer");
@@ -15696,8 +17544,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("ActiveBeforeRegistration")
                         .HasColumnType("boolean");
@@ -15756,14 +17605,17 @@ namespace Prime.Migrations
                     b.HasIndex("PhysicalAddressId");
 
                     b.ToTable("Site");
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Prime.Models.SiteAdjudicationDocument", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -15805,8 +17657,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdminId")
                         .HasColumnType("integer");
@@ -15845,8 +17698,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdjudicatorId")
                         .HasColumnType("integer");
@@ -15886,8 +17740,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -15924,8 +17779,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -15959,8 +17815,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -15993,8 +17850,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -16040,8 +17898,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -16162,8 +18021,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AgreementType")
                         .HasColumnType("integer");
@@ -16207,8 +18067,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CollegeName")
                         .HasColumnType("text");
@@ -16245,8 +18106,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
 
                     b.Property<int>("CareSettingCode")
                         .HasColumnType("integer");
@@ -16459,8 +18321,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -16500,8 +18363,9 @@ namespace Prime.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset?>("AcceptedCredentialDate")
                         .HasColumnType("timestamp with time zone");
