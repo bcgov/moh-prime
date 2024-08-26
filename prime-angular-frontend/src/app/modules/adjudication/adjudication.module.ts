@@ -88,6 +88,9 @@ import { HaSiteSubmissionListPageComponent } from './pages/health-authorities/ha
 import { HaSiteSubmissionPageComponent } from './pages/health-authorities/ha-site-submission-page/ha-site-submission-page.component';
 import { SiteSubmissionListComponent } from './shared/components/site-submission-list/site-submission-list.component';
 import { SiteSubmissionComponent } from './shared/components/site-submission/site-submission.component';
+import { AdminUsersContainerComponent } from './shared/components/admin-users-container/admin-users-container.component';
+import { AdminUsersPageComponent } from './pages/admin-users-page/admin-users-page.component';
+import { AdminUsersTableComponent } from './shared/components/admin-users-table/admin-users-table.component';
 
 @NgModule({
   declarations: [
@@ -170,6 +173,9 @@ import { SiteSubmissionComponent } from './shared/components/site-submission/sit
     HaSiteSubmissionPageComponent,
     SiteSubmissionComponent,
     SiteSubmissionListComponent,
+    AdminUsersContainerComponent,
+    AdminUsersPageComponent,
+    AdminUsersTableComponent,
   ],
   imports: [
     AdjudicationRoutingModule,

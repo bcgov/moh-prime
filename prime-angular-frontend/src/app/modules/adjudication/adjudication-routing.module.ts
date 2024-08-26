@@ -59,6 +59,7 @@ import { HaSiteSubmissionListPageComponent } from './pages/health-authorities/ha
 import { HaSiteSubmissionPageComponent } from './pages/health-authorities/ha-site-submission-page/ha-site-submission-page.component';
 import { CommunitySiteSubmissionPageComponent } from './pages/community-site-submission-page/community-site-submission-page.component';
 import { CommunitySiteSubmissionListPageComponent } from './pages/community-site-submission-list-page/community-site-submission-list-page.component';
+import { AdminUsersPageComponent } from './pages/admin-users-page/admin-users-page.component';
 
 const routes: Routes = [
   {
@@ -444,6 +445,11 @@ const routes: Routes = [
             ]
           }
         ]
+      },
+      {
+        path: AdjudicationRoutes.ADMIN_USERS,
+        component: AdminUsersPageComponent,
+        data: { title: 'Administrator User List' }
       },
       {
         path: AdjudicationRoutes.METABASE_REPORTS,
