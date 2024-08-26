@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -9,9 +9,9 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { Admin } from '@auth/shared/models/admin.model';
-import { Role } from '@auth/shared/enum/role.enum';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { AdminStatusType } from '../models/admin-status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -33,35 +33,40 @@ export class AdjudicationGuard extends BaseGuard {
    * Check the user is authenticated, otherwise redirect
    * them to an appropriate destination.
    */
-  // TODO update to be two observables merged and resolved using combineLatest,
-  // but requires wrapping the Keycloak service so it uses obseravables first
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
-    const admin$ = this.authService.getAdmin$()
+
+    return this.authService.getAdmin$()
       .pipe(
         exhaustMap((admin: Admin) => {
-          // Attempt to create an admin if they don't exist
-          return (this.permissionService.hasRoles(Role.ADMIN))
-            ? this.adjudicationResource.createAdmin(admin)
-            : Promise.resolve(admin);
+          return this.adjudicationResource.getAdjudicatorByUserId(admin.userId)
+            .pipe(
+              exhaustMap((primeAdmin: Admin) => {
+                return of([primeAdmin, admin]);
+              }));
+        }),
+        exhaustMap(([primeAdmin, admin]: [Admin, Admin]) => {
+          if (primeAdmin) {
+            //if PRIME admin record found, pass the status to next step
+            admin.status = primeAdmin.status
+          } else {
+            // if PRIME does not have any admin user with the user id, create it
+            this.adjudicationResource.createAdmin(admin).subscribe();
+          }
+          return of(admin);
+        }),
+        exhaustMap((admin: Admin) => {
+          let destinationRoute = this.config.routes.denied;
+          if (!this.authService.isLoggedIn()) {
+            destinationRoute = this.config.routes.auth;
+          } else {
+            if (admin.status !== AdminStatusType.DISABLED) {
+              return of(true);
+            }
+          }
+
+          this.router.navigate([destinationRoute]);
+          return of(false);
         })
       );
-
-    const redirect$ = new Promise(async (resolve, reject) => {
-      const authenticated = await this.authService.isLoggedIn();
-      let destinationRoute = this.config.routes.denied;
-      if (!authenticated) {
-        destinationRoute = this.config.routes.auth;
-      } else if (this.permissionService.hasRoles(Role.ADMIN)) {
-        // Allow route to resolve
-        return resolve(true);
-      }
-
-      // Otherwise, redirect to an appropriate destination
-      this.router.navigate([destinationRoute]);
-      return reject(false);
-    });
-
-    return Promise.all([admin$.toPromise(), redirect$])
-      .then(([admin, result]: [Admin, boolean]) => result);
   }
 }
