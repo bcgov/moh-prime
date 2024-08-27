@@ -83,6 +83,9 @@ import { SiteEventsPageComponent } from './pages/health-authorities/site-events-
 import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
 import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
 import { CareTypeVendorPageComponent } from './pages/health-authorities/care-type-vendor-page/care-type-vendor-page.component';
+import { AdminUsersContainerComponent } from './shared/components/admin-users-container/admin-users-container.component';
+import { AdminUsersPageComponent } from './pages/admin-users-page/admin-users-page.component';
+import { AdminUsersTableComponent } from './shared/components/admin-users-table/admin-users-table.component';
 
 @NgModule({
   declarations: [
@@ -159,7 +162,10 @@ import { CareTypeVendorPageComponent } from './pages/health-authorities/care-typ
     SiteOverviewPageComponent,
     SiteEventsPageComponent,
     SiteNotesPageComponent,
-    SiteDocumentsPageComponent
+    SiteDocumentsPageComponent,
+    AdminUsersContainerComponent,
+    AdminUsersPageComponent,
+    AdminUsersTableComponent,
   ],
   imports: [
     AdjudicationRoutingModule,
