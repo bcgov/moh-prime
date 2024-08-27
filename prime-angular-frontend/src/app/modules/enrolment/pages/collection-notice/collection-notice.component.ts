@@ -36,7 +36,7 @@ export class CollectionNoticeComponent implements OnInit {
       case EnrolmentStatusEnum.REQUIRES_TOA:
         if (this.enrolmentService.enrolment?.requireRedoSelfDeclaration) {
           this.enrolmentResource.returnToEditing(this.enrolmentService.enrolment.id).subscribe(() =>
-            this.router.navigate([EnrolmentRoutes.OVERVIEW], { relativeTo: this.route.parent, queryParams: { forcedToA2Editable: true } })
+            this.router.navigate([EnrolmentRoutes.OVERVIEW], { relativeTo: this.route.parent })
           );
         } else {
           this.router.navigate([EnrolmentRoutes.PENDING_ACCESS_TERM], { relativeTo: this.route.parent });
