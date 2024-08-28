@@ -130,6 +130,7 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
 import { EmailFormComponent } from './components/forms/email-form/email-form.component';
 import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
 import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
+import { TrimSpaceInputDirective } from '@lib/modules/forms/trim-space.directive';
 
 @NgModule({
   declarations: [
@@ -169,6 +170,7 @@ import { TransferHASiteComponent } from './components/dialogs/content/transfer-h
     PageSubheader2MoreInfoDirective,
     NotificationInfoSummaryDirective,
     UpperCaseInputDirective,
+    TrimSpaceInputDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
@@ -293,6 +295,7 @@ import { TransferHASiteComponent } from './components/dialogs/content/transfer-h
     PageSubheader2MoreInfoDirective,
     NotificationInfoSummaryDirective,
     UpperCaseInputDirective,
+    TrimSpaceInputDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
