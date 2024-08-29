@@ -75,6 +75,8 @@ namespace Prime.Configuration.Environment
 
                 "LDAP_API_URL" => "LdapApi__Url",
 
+                "PROVIDER_TEAM_EMAIL" => "ProviderTeam__EmailAddress",
+
                 _ => envKey
             };
 
