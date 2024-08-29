@@ -5,6 +5,6 @@ export enum CollegeLicenceClassEnum {
   CDSBC = 7,
   OptometryBC = 14,
   OralHealth = 20,
-  HealthCareProferssionals = 21,
+  HealthCareProfessionals = 21,
   ComplementaryHealthProfessionals = 22
 }

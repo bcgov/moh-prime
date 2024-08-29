@@ -262,7 +262,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     if ((collegeCode === CollegeLicenceClassEnum.BCCNM ||
       collegeCode === CollegeLicenceClassEnum.OralHealth ||
-      collegeCode === CollegeLicenceClassEnum.HealthCareProferssionals ||
+      collegeCode === CollegeLicenceClassEnum.HealthCareProfessionals ||
       collegeCode === CollegeLicenceClassEnum.ComplementaryHealthProfessionals) && !this.condensed) {
       this.formUtilsService.setValidators(this.category, [Validators.required]);
       return;
