@@ -51,7 +51,7 @@ namespace Prime
 
         public SentryConfiguration Sentry { get; set; }
 
-        public ProviderTeamConfiguration ProviderTeam { get; set; }
+        public ProviderEnrolmentTeamConfiguration ProviderEnrolmentTeam { get; set; }
 
         private static LogEventLevel ParseLogLevel()
         {

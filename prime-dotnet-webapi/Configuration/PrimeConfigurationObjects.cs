@@ -109,7 +109,7 @@ namespace Prime.Configuration.Internal
         public string Dsn { get; set; }
     }
 
-    public class ProviderTeamConfiguration
+    public class ProviderEnrolmentTeamConfiguration
     {
         public string EmailAddress { get; set; }
     }

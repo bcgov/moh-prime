@@ -252,7 +252,7 @@ namespace Prime.Services.EmailInternal
             return new Email
             (
                 from: PrimeEmail,
-                to: PrimeConfiguration.Current.ProviderTeam.EmailAddress.Split(";"),
+                to: PrimeConfiguration.Current.ProviderEnrolmentTeam.EmailAddress.Split(";"),
                 subject: emailTemplate.Subject,
                 body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
