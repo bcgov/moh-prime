@@ -28,6 +28,7 @@ import { DeviceProviderSite } from '@shared/models/device-provider-site.model';
 
 import { RegulatoryFormState } from './regulatory-form-state';
 import { ConfigService } from '@config/config.service';
+import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
 @Component({
   selector: 'app-regulatory',
@@ -41,6 +42,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   public hasOtherCareSetting: boolean;
   public deviceProviderRoles: DeviceProviderRoleConfig[];
   public deviceProviderSite: DeviceProviderSite;
+  public hasUnlistedCertification: boolean;
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -100,7 +102,12 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.hasOtherCareSetting = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER);
     this.createFormInstance();
-    this.patchForm().subscribe(() => this.initForm());
+    this.patchForm().subscribe(() => {
+      this.initForm();
+      if (this.formState.json.unlistedCertifications.length > 0) {
+        this.hasUnlistedCertification = true;
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -166,8 +173,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
 
     // Replace previous values on deactivation so updates are discarded
-    const { certifications, enrolleeDeviceProviders } = this.enrolmentService.enrolment;
-    this.formState.patchValue({ certifications, enrolleeDeviceProviders });
+    const { certifications, enrolleeDeviceProviders, unlistedCertifications } = this.enrolmentService.enrolment;
+    this.formState.patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications });
   }
 
   public onSubmit() {
@@ -308,6 +315,25 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       this.formUtilsService.resetAndClearValidators(this.formState.certificationNumber);
       this.formState.certificationNumber.markAsUntouched();
       this.formState.certificationNumber.disable();
+    }
+  }
+
+  public onUnlistedCertification({ checked }: ToggleContentChange) {
+    if (!checked) {
+      this.hasUnlistedCertification = false;
+      this.formState.json.unlistedCertifications = [];
+    } else {
+      this.hasUnlistedCertification = true;
+      if (!this.formState.unlistedCertifications.length) {
+        this.formState.addEmptyUnlistedCollegeCertification();
+      }
+    }
+  }
+
+  public removeUnlistedCertification(index: number): void {
+    this.formState.unlistedCertifications.removeAt(index);
+    if (!this.formState.unlistedCertifications.length) {
+      this.hasUnlistedCertification = false;
     }
   }
 }

@@ -1,8 +1,7 @@
-
 <ng-container [formGroup]="form">
 
   <app-form-icon-group [show]="total >= 1"
-    (event)="removeUnlistedCertification()">
+                       (event)="removeUnlistedCertification()">
     <div class="row">
       <div class="col">
 
@@ -21,6 +20,17 @@
 
         <mat-form-field class="w-100">
           <input matInput
+                 placeholder="Licence Class"
+                 formControlName="licenceClass">
+          <mat-error *ngIf="licenceNumber.hasError('required')">Required</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 pl-5">
+
+        <mat-form-field class="w-100">
+          <input matInput
                  placeholder="College Licence"
                  formControlName="licenceNumber"
                  maxlength="7">
@@ -29,7 +39,6 @@
             Must contain only alphanumeric characters
           </mat-error>
         </mat-form-field>
-
       </div>
     </div>
     <div class="row">
@@ -53,6 +62,6 @@
 
       </div>
     </div>
-</app-form-icon-group>
+  </app-form-icon-group>
 
 </ng-container>
