@@ -198,7 +198,7 @@ objects:
             "url": "",
             "realm": "",
             "clientId": ""
-          }      
+          }
         }
       }
 
@@ -688,6 +688,8 @@ objects:
                   name: pharmanet-api
               - configMapRef:
                   name: verifiable-credential
+              - configMapRef:
+                  name: provider-enrolment-team
               - secretRef:
                   name: canada-post-addresscomplete-secrets
               - secretRef:
@@ -997,7 +999,7 @@ objects:
                 memory: 100Mi
               requests:
                 cpu: 5m
-                memory: 50Mi 
+                memory: 50Mi
             readinessProbe:
               exec:
                 command:
