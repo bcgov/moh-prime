@@ -71,7 +71,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     private dialog: MatDialog,
     private toastService: ToastService,
     private configService: ConfigService,
-    private formUtilsService: FormUtilsService,
   ) {
     super(route, router);
     this.showCommunityHealth = true;
