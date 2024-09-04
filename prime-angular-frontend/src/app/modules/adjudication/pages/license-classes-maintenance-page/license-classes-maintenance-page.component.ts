@@ -3,13 +3,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { CollegeConfig, CollegeLicenseConfig } from '@config/config.model';
+import { CollegeConfig, CollegeLicenseConfig, IWeightedConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { UtilsService } from '@core/services/utils.service';
 
-export class LicenseMaintenanceConfig {
+export class LicenseMaintenanceConfig implements IWeightedConfig {
   collegeName: string;
   licenseCode: number;
   prefix: string;
@@ -19,6 +20,8 @@ export class LicenseMaintenanceConfig {
   manual?: boolean;
   validate?: boolean;
   prescriberIdType?: PrescriberIdTypeEnum;
+  weight: number;
+  collegeLicenseGroupingCode: number;
 }
 
 @Component({
@@ -36,7 +39,8 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
   constructor(
     private configService: ConfigService,
     protected route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private utilsService: UtilsService
   ) {
     this.columns = [
       'collegeName',
@@ -65,9 +69,11 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
           return {
             collegeName: college.name,
             licenseCode: collegeLicense.licenseCode,
+            discontinued: collegeLicense.discontinued,
+            collegeLicenseGroupingCode: collegeLicense.collegeLicenseGroupingCode,
             ...license
           } as LicenseMaintenanceConfig;
-        })
+        }).sort((a: LicenseMaintenanceConfig, b: LicenseMaintenanceConfig) => a.weight - b.weight)
         : { collegeName: college.name } as LicenseMaintenanceConfig;
     });
 

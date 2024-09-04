@@ -127,10 +127,20 @@ Site Registration Review
     <span class="ml-2">@user.Certification.CollegeName</span>
   </div>
 
-  <div class="ml-2 mb-2">
-    <h5>Licence Number</h5>
-    <span class="ml-2">@user.Certification.LicenceNumber</span>
-  </div>
+  @if (user.Certification.LicenceNumber != null)
+  {
+    <div class="ml-2 mb-2">
+      <h5>Licence Number</h5>
+      <span class="ml-2">@user.Certification.LicenceNumber</span>
+    </div>
+  }
+  @if (user.Certification.PharmanetId != null)
+  {
+    <div class="ml-2 mb-2">
+      <h5>PharmaNet ID/Prescriber ID</h5>
+      <span class="ml-2">@user.Certification.PharmanetId</span>
+    </div>
+  }
 }
 
 <h2 class="mb-3">Signing Authority</h2>

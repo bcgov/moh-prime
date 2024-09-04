@@ -1,3 +1,16 @@
+<app-alert *ngIf="licenseClassDiscontinued"
+           type="danger"
+           icon="warning"
+           class="mb-4">
+  <ng-container #alertContent
+                class="alert-content">
+    {{ this.collegeDiscontinued ?
+    "The name of your college has changed. Please select the new name from the dropdown list for college name, " +
+    "then " : "Your previous licence class is no longer available, please " }}
+    use the dropdown menu to select the licence you currently hold.
+  </ng-container>
+</app-alert>
+
 <ng-container [formGroup]="form">
 
   <app-form-icon-group [show]="total > 1"
@@ -5,7 +18,7 @@
 
     <ng-template #collegeLicences>
       <mat-form-field class="w-100">
-        <mat-label>College Licences</mat-label>
+        <mat-label>College</mat-label>
         <mat-select formControlName="collegeCode">
           <mat-option *ngIf="!condensed && defaultOption"
                       value="">
@@ -38,22 +51,22 @@
       </div>
 
       <div class="col-sm-12">
-        <ng-container *ngIf="!condensed && collegeCode?.value === CollegeLicenceClassEnum.BCCNM">
+        <ng-container *ngIf="!condensed && collegeHasGrouping(collegeCode?.value)">
           <mat-form-field class="w-100">
-            <mat-label>Nurse Category</mat-label>
-            <mat-select formControlName="nurseCategory">
-              <mat-option *ngFor="let group of nurseGroups"
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let group of getGrouping(collegeCode?.value)"
                           [value]="group.code">
                 {{ group.name }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="nurseCategory.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="category.hasError('required')">Required</mat-error>
           </mat-form-field>
         </ng-container>
       </div>
 
       <ng-container
-                    *ngIf="collegeCode.value !== CollegeLicenceClassEnum.BCCNM && collegeCode.value || collegeCode.value === CollegeLicenceClassEnum.BCCNM && (condensed || nurseCategory?.value)">
+                    *ngIf="!collegeHasGrouping(collegeCode?.value) && collegeCode.value || collegeHasGrouping(collegeCode?.value) && (condensed || category?.value)">
         <div *ngIf="showLicenceClass()"
              class="col-sm-12 pl-5">
 
@@ -69,7 +82,7 @@
           </mat-form-field>
 
         </div>
-        <div *ngIf="collegeCode.value !== CollegeLicenceClassEnum.CPSBC"
+        <div *ngIf="!condensed && collegeCode.value !== CollegeLicenceClassEnum.CPSBC"
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
@@ -112,21 +125,6 @@
             </mat-form-field>
 
           </div>
-          <div *ngIf="hasPractices && shouldShowPractices()"
-               class="col-sm-12 pl-5">
-
-            <mat-form-field class="w-100">
-              <mat-label>Advanced Practices (Optional)</mat-label>
-              <mat-select formControlName="practiceCode">
-                <mat-option value=""></mat-option>
-                <mat-option *ngFor="let practice of filteredPractices"
-                            [value]="practice.code">
-                  {{ practice.name }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="practiceCode.hasError('required')">Required</mat-error>
-            </mat-form-field>
-          </div>
 
         </ng-container>
 
@@ -153,7 +151,7 @@
           </mat-form-field>
         </div>
 
-        <div *ngIf="!condensed && prescriberIdType !== PrescriberIdTypeEnum.NA"
+        <div *ngIf=" prescriberIdType !== PrescriberIdTypeEnum.NA"
              class="col-sm-12 pl-5">
           <div *ngIf="prescriberIdType === PrescriberIdTypeEnum.Optional"
                class="mb-3">

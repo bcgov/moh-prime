@@ -25,6 +25,7 @@ import { AdjudicationDashboardComponent } from './shared/components/adjudication
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
+import { SearchHAFormComponent } from './shared/components/search-ha-form/search-ha-form.component';
 import { ReviewStatusContentComponent } from './shared/components/review-status-content/review-status-content.component';
 import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
 import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
@@ -81,6 +82,9 @@ import { SiteOverviewPageComponent } from './pages/health-authorities/site-overv
 import { SiteEventsPageComponent } from './pages/health-authorities/site-events-page/site-events-page.component';
 import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
 import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
+import { AdminUsersContainerComponent } from './shared/components/admin-users-container/admin-users-container.component';
+import { AdminUsersPageComponent } from './pages/admin-users-page/admin-users-page.component';
+import { AdminUsersTableComponent } from './shared/components/admin-users-table/admin-users-table.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +101,7 @@ import { SiteDocumentsPageComponent } from './pages/health-authorities/site-docu
     EnrolleeAccessTermEnrolmentComponent,
     EnrolleeTableComponent,
     SearchFormComponent,
+    SearchHAFormComponent,
     DatedContentTableComponent,
     ReviewStatusContentComponent,
     SiteRegistrationsComponent,
@@ -155,7 +160,10 @@ import { SiteDocumentsPageComponent } from './pages/health-authorities/site-docu
     SiteOverviewPageComponent,
     SiteEventsPageComponent,
     SiteNotesPageComponent,
-    SiteDocumentsPageComponent
+    SiteDocumentsPageComponent,
+    AdminUsersContainerComponent,
+    AdminUsersPageComponent,
+    AdminUsersTableComponent,
   ],
   imports: [
     AdjudicationRoutingModule,

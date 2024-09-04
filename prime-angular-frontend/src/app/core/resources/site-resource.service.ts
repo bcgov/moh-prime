@@ -104,17 +104,17 @@ export class SiteResource {
       .pipe(
         map((site: Site) => [
           { label: 'Signing Authority', email: site.provisioner.email },
-          ...ArrayUtils.insertIf(site?.administratorPharmaNet, {
+          ...ArrayUtils.insertIf(site?.administratorPharmaNet?.email, {
             label: 'PharmaNet Administrator',
-            email: site?.administratorPharmaNet.email
+            email: site?.administratorPharmaNet?.email
           }),
-          ...ArrayUtils.insertIf(site?.privacyOfficer.email, {
+          ...ArrayUtils.insertIf(site?.privacyOfficer?.email, {
             label: 'Privacy Officer',
-            email: site?.privacyOfficer.email
+            email: site?.privacyOfficer?.email
           }),
-          ...ArrayUtils.insertIf(site?.technicalSupport.email, {
+          ...ArrayUtils.insertIf(site?.technicalSupport?.email, {
             label: 'Technical Support Contact',
-            email: site?.technicalSupport.email
+            email: site?.technicalSupport?.email
           })
         ])
       );
@@ -215,6 +215,20 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site ID/PEC could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updatePecCode error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateVendor(siteId: number, vendorCode: number, rationale: string): NoContent {
+    const payload = { vendorCode, rationale };
+    return this.apiResource.put<NoContent>(`sites/${siteId}/vendor`, payload)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Vendor has been updated')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Vendor could not be updated');
+          this.logger.error('[SiteRegistration] SiteResource::updateVendor error has occurred: ', error);
           throw error;
         })
       );
@@ -577,6 +591,17 @@ export class SiteResource {
         map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] SiteResource::pecAssignable error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public pecExistsWithinHa(siteId: number, pec: string): Observable<boolean> {
+    return this.apiResource.get(`sites/${siteId}/pec/${pec}/exists-within-ha`)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::pecExistsWithinHa error has occurred: ', error);
           throw error;
         })
       );

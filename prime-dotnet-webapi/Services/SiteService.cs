@@ -73,11 +73,25 @@ namespace Prime.Services
                     .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
                     .AnyAsync();
 
+                // add exception for checking duplicate site ID
+                // only VCH and PHSA can share same site ID
+                var exceptionHAList = new List<int>();
+
+                if (siteDto.healthAuthorityId == (int)HealthAuthorityCode.VancouverCoastalHealth)
+                {
+                    exceptionHAList.Add((int)HealthAuthorityCode.ProvincialHealthServicesAuthority);
+                }
+                else if (siteDto.healthAuthorityId == (int)HealthAuthorityCode.ProvincialHealthServicesAuthority)
+                {
+                    exceptionHAList.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
+                }
+
                 var otherHealthAuthoritySites = await _context.HealthAuthoritySites
                     .AsNoTracking()
                     .Where(
                         s => s.PEC == pec
                         && s.HealthAuthorityOrganizationId != siteDto.healthAuthorityId
+                        && !exceptionHAList.Contains(s.HealthAuthorityOrganizationId)
                         )
                     .AnyAsync();
 
@@ -88,6 +102,15 @@ namespace Prime.Services
                 .AsNoTracking()
                 .Where(s => s.PEC != "BC00000")
                 .AnyAsync(site => site.PEC == pec);
+        }
+
+        public async Task<bool> PecExistsWithinHAAsync(int siteId, string pec)
+        {
+            var site = await _context.HealthAuthoritySites.Where(s => s.Id == siteId).SingleAsync();
+
+            return await _context.Sites
+                .Where(s => (s as HealthAuthoritySite).HealthAuthorityOrganizationId == site.HealthAuthorityOrganizationId
+                    && s.Id != siteId && s.PEC == pec).AnyAsync();
         }
 
         public async Task UpdateCompletedAsync(int siteId, bool completed)
@@ -126,10 +149,40 @@ namespace Prime.Services
             var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
+            var eventMessage = $"Site ID changed from {site.PEC} to {pecCode}";
+
             site.PEC = pecCode;
 
             await _context.SaveChangesAsync();
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
+            await _businessEventService.CreateSiteEventAsync(site.Id, eventMessage);
+        }
+
+        public async Task UpdateVendor(int siteId, int vendorCode, string rationale)
+        {
+            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
+
+            if (site.CareSettingCode.Value == (int)CareSettingType.HealthAuthority)
+            {
+                var healthAuthSite = await _context.HealthAuthoritySites
+                    .SingleOrDefaultAsync(s => s.Id == siteId);
+
+                var healthAuthVendor = await _context.HealthAuthorityVendors
+                    .SingleOrDefaultAsync(v => v.VendorCode == vendorCode &&
+                    healthAuthSite.HealthAuthorityOrganizationId == v.HealthAuthorityOrganizationId);
+
+                healthAuthSite.HealthAuthorityVendorId = healthAuthVendor.Id;
+            }
+            else
+            {
+                var siteVendor = await _context.SiteVendors
+                    .SingleOrDefaultAsync(s => s.SiteId == siteId);
+
+                siteVendor.VendorCode = vendorCode;
+            }
+
+            string rationaleEvent = $"Vendor changed {rationale}";
+            await _context.SaveChangesAsync();
+            await _businessEventService.CreateSiteEventAsync(siteId, rationaleEvent);
         }
 
         public async Task DeleteSiteAsync(int siteId)
@@ -253,8 +306,8 @@ namespace Prime.Services
             {
                 // For BCCNM (college code = 3), matching license number to practitioner ID.
                 matchesAnyCert.Or(ruc => ruc.CollegeCode == searchedCert.CollegeCode &&
-                    ((ruc.LicenseNumber == searchedCert.LicenceNumber && searchedCert.CollegeCode != 3) ||
-                    (ruc.LicenseNumber == searchedCert.PractitionerId && searchedCert.CollegeCode == 3)));
+                    ((ruc.LicenseNumber == searchedCert.LicenceNumber && searchedCert.CollegeCode != CollegeCode.BCCNM) ||
+                    (ruc.PractitionerId == searchedCert.PractitionerId && searchedCert.CollegeCode == CollegeCode.BCCNM)));
             }
 
             IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications

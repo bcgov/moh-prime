@@ -31,6 +31,7 @@ export class Config<T> {
 
 export interface CollegeConfig extends PracticeConfig {
   collegeLicenses: CollegeLicenseConfig[];
+  weight: number;
 }
 
 export interface PracticeConfig extends Config<number> {
@@ -53,6 +54,7 @@ export interface CollegeLicenseConfig {
   collegeCode: number;
   licenseCode: number;
   collegeLicenseGroupingCode: number;
+  discontinued: boolean;
 }
 
 export class CollegeLicenseGroupingConfig extends Config<number> implements IWeightedConfig {

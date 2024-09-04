@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -15,29 +15,54 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthoritySiteList } from '@health-auth/shared/models/health-authority-site-list.model';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+import { Config } from '@config/config.model';
+import { ConfigService } from '@config/config.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-site-management-page',
   templateUrl: './site-management-page.component.html',
-  styleUrls: ['./site-management-page.component.scss']
+  styleUrls: ['./site-management-page.component.scss'],
+  providers: [FormatDatePipe]
 })
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public healthAuthorityId: number;
-  public healthAuthoritySites$: Observable<HealthAuthoritySiteList[] | null>;
+  public healthAuthoritySites: HealthAuthoritySiteList[];
   public routeUtils: RouteUtils;
   public HealthAuthorityEnum = HealthAuthorityEnum;
   public SiteStatusType = SiteStatusType;
+  public vendors: Config<number>[];
+  public careTypes: string[];
+  public form: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
+    private fb: FormBuilder,
     private router: Router,
     private authorizedUserService: AuthorizedUserService,
-    private authorizedUserResource: AuthorizedUserResource
+    private authorizedUserResource: AuthorizedUserResource,
+    private formatDatePipe: FormatDatePipe,
+    private configService: ConfigService,
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+
+    this.careTypes = ["All"];
+    this.vendors = this.configService.vendors
+      .filter(v => v.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  public get vendorCode(): FormControl {
+    return this.form.get('vendorCode') as FormControl;
+  }
+
+  public get careTypeCode(): FormControl {
+    return this.form.get('careTypeCode') as FormControl;
   }
 
   public viewAuthorizedUser(healthAuthorityId: number): void {
@@ -79,10 +104,61 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.createFormInstance();
+    this.initForm();
     const authorizedUser = this.authorizedUserService.authorizedUser;
     this.healthAuthorityId = authorizedUser.healthAuthorityCode;
-    this.healthAuthoritySites$ = this.authorizedUserResource.getAuthorizedUserSites(authorizedUser.id);
+    this.authorizedUserResource.getAuthorizedUserSites(authorizedUser.id)
+      .subscribe((sites: HealthAuthoritySiteList[]) => {
+        this.healthAuthoritySites = sites.sort((a, b) => a.siteName && b.siteName ? a.siteName.toLocaleLowerCase().localeCompare(b.siteName.toLocaleLowerCase()) : 0)
+
+        const haVendors = this.healthAuthoritySites.map((s) => {
+          return s.healthAuthorityVendor.vendorCode;
+        });
+
+        const haCareTypes = this.healthAuthoritySites.map((s) => {
+          return s.healthAuthorityCareType.careType;
+        });
+
+        this.careTypes = [... new Set(haCareTypes)].sort((a, b) => a.localeCompare(b));
+        this.vendors = this.vendors.filter((v) => haVendors.some((hav) => hav === v.code)).sort((a, b) => a.name.localeCompare(b.name));
+      });
   }
+
+  private createFormInstance() {
+    this.form = this.fb.group({
+      vendorCode: ['all', []],
+      careTypeCode: ['all', []],
+    });
+  }
+
+  private initForm() {
+    this.vendorCode.valueChanges.subscribe(() => {
+      this.filterSites();
+    });
+    this.careTypeCode.valueChanges.subscribe(() => {
+      this.filterSites();
+    })
+  }
+
+  public filterSites() {
+    const authorizedUser = this.authorizedUserService.authorizedUser;
+    this.authorizedUserResource.getAuthorizedUserSites(authorizedUser.id)
+      .subscribe((sites: HealthAuthoritySiteList[]) => {
+        this.healthAuthoritySites = sites.sort((a, b) => a.siteName && b.siteName ? a.siteName.toLocaleLowerCase().localeCompare(b.siteName.toLocaleLowerCase()) : 0);
+        if (this.careTypeCode.value !== "all") {
+          this.healthAuthoritySites = this.healthAuthoritySites.filter((s) => {
+            return s.healthAuthorityCareType.careType === this.careTypeCode.value;
+          })
+        }
+        if (this.vendorCode.value !== "all") {
+          this.healthAuthoritySites = this.healthAuthoritySites.filter((s) => {
+            return s.healthAuthorityVendor.vendorCode === this.vendorCode.value;
+          })
+        }
+      });
+  }
+
 
   private redirectTo(healthAuthorityId: number, healthAuthoritySiteId: number, pagePath: string): void {
     this.routeUtils.routeRelativeTo([
@@ -94,5 +170,9 @@ export class SiteManagementPageComponent implements OnInit {
       ]),
       pagePath
     ]);
+  }
+
+  public getLastUpdatedUser(userName: string, updatedTimeStamp: string): string {
+    return `${userName} - ${this.formatDatePipe.transform(updatedTimeStamp, "DD MMM yyyy h:mm A")}`
   }
 }

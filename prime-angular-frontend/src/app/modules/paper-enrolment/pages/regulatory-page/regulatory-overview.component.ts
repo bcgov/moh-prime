@@ -64,11 +64,11 @@ import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.
           {{ certification?.licenseCode | configCode: 'licenses' | default }}
         </app-enrollee-property>
 
-        <app-enrollee-property title="Licence Number">
+        <app-enrollee-property [title]="certification?.collegeCode | licenseNumberLabel">
           {{ certification?.licenseNumber | default }}
         </app-enrollee-property>
 
-        <app-enrollee-property title="PharmaNet ID">
+        <app-enrollee-property *ngIf="certification?.practitionerId" title="PharmaNet ID">
           {{ certification?.practitionerId | default }}
         </app-enrollee-property>
 
@@ -76,7 +76,8 @@ import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.
           {{ certification?.renewalDate | formatDate | default }}
         </app-enrollee-property>
 
-        <app-enrollee-property title="Advanced Practices">
+        <app-enrollee-property *ngIf="certification?.practiceCode"
+                              title="Advanced Practices">
           {{ certification?.practiceCode | configCode: 'practices' | default }}
         </app-enrollee-property>
 

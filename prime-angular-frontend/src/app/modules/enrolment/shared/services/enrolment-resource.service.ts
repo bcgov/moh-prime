@@ -184,6 +184,22 @@ export class EnrolmentResource {
       );
   }
 
+  public returnToEditing(enrolleeId: number): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/status-actions/return-to-editing`)
+      .pipe(
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => {
+          this.toastService.openErrorToast('Enrolment is now editable');
+          this.logger.info('UPDATED_ENROLLEE', enrollee);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment status could not be updated');
+          this.logger.error('[Enrolment] EnrolmentResource::returnToEditing error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getCurrentStatus(enrolleeId: number): Observable<EnrolmentStatusAdmin> {
     return this.apiResource.get<EnrolmentStatusAdmin>(`enrollees/${enrolleeId}/current-status`)
       .pipe(
@@ -217,12 +233,12 @@ export class EnrolmentResource {
 
   public sendProvisionerAccessLink(
     emailPairs: EmailsForCareSetting[] = [], enrolleeId: number
-  ): Observable<EnrolmentCertificateAccessToken> {
+  ): Observable<EnrolmentCertificateAccessToken[]> {
     return this.apiResource
-      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link`, emailPairs)
+      .post<EnrolmentCertificateAccessToken[]>(`enrollees/${enrolleeId}/provisioner-access/send-link`, emailPairs)
       .pipe(
-        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
-        tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
+        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken[]>) => response.result),
+        tap((token: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKEN', token)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Email could not be sent');
           this.logger.error('[Enrolment] EnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);

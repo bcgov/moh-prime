@@ -20,15 +20,18 @@ namespace Prime.Controllers
         private readonly ISubmissionService _submissionService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
 
         public SubmissionsController(
             ISubmissionService submissionService,
             IEnrolleeService enrolleeService,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IEnrolleeAgreementService enrolleeAgreementService)
         {
             _submissionService = submissionService;
             _enrolleeService = enrolleeService;
             _businessEventService = businessEventService;
+            _enrolleeAgreementService = enrolleeAgreementService;
         }
 
         // POST: api/enrollees/5/submissions
@@ -237,6 +240,34 @@ namespace Prime.Controllers
             return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.UnlockedProfile);
         }
 
+        // POST: api/enrollees/5/status-actions/return-to-editing
+        /// <summary>
+        /// Return the Enrollee back into an editable state if certain conditions apply
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/status-actions/return-to-editing", Name = nameof(ReturnToEditing))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> ReturnToEditing(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            if (enrollee.CurrentStatus.IsType(StatusType.RequiresToa) && enrollee.RequireRedoSelfDeclaration)
+            {
+                // Remove obsolete TOA
+                await _enrolleeAgreementService.DeleteObsoleteEnrolleeAgreementAsync(enrolleeId);
+
+                return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.EnableEditing);
+            }
+            else
+            {
+                return BadRequest("Enrollee not in valid state to execute request.");
+            }
+        }
+
         // POST: api/enrollees/rerun-rules
         /// <summary>
         /// Re-runs the automatic adjudication rules for all applicable Enrollees.
@@ -248,6 +279,20 @@ namespace Prime.Controllers
         public async Task<ActionResult> RerunAutomaticAdjudicationRules()
         {
             await _submissionService.BulkRerunRulesAsync();
+            return Ok();
+        }
+
+        // POST: api/enrollees/rerun-rules-for-naturopaths
+        /// <summary>
+        /// Re-runs (most) adjudication rules for applicable naturopaths
+        /// </summary>
+        [HttpPost("rerun-rules-for-naturopaths", Name = nameof(RerunRulesForNaturopaths))]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> RerunRulesForNaturopaths([FromQuery] bool listOnly = true)
+        {
+            await _submissionService.RerunRulesForNaturopathsAsync(listOnly);
             return Ok();
         }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,7 +10,6 @@ import { tap } from 'rxjs/operators';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { PaginatedList } from '@core/models/paginated-list.model';
 import { Pagination } from '@core/models/pagination.model';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
@@ -22,6 +21,8 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { SearchHAFormComponent } from '../search-ha-form/search-ha-form.component';
 
 @Component({
   selector: 'app-site-registration-tabs',
@@ -31,6 +32,7 @@ import { SiteRegistrationListViewModel } from '@registration/shared/models/site-
 export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage implements OnInit {
   public busy: Subscription;
   @Input() public refresh: Observable<boolean>;
+  @ViewChild('searchHaForm') searchHaForm: SearchHAFormComponent;
 
   public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
   public healthAuthoritySites: HealthAuthoritySiteAdminList[];
@@ -56,7 +58,7 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthResource: HealthAuthorityResource,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
-    private organizationResource: OrganizationResource,
+    private authService: AuthService,
   ) {
     super(route, router, dialog, siteResource, adjudicationResource, healthAuthoritySiteResource);
 
@@ -107,8 +109,29 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     this.routeUtils.updateQueryParams({ status, page: null });
   }
 
+  public onSiteStatusChange(statusId: any | null): void {
+    this.routeUtils.updateQueryParams({ statusId, page: null });
+  }
+
+  public onVendorChange(vendorId: any | null): void {
+    this.routeUtils.updateQueryParams({ vendorId, page: null });
+  }
+
+  public onCareTypeChange(careType: any | null): void {
+    this.routeUtils.updateQueryParams({ careType, page: null });
+  }
+
+  public onAssignToMeChange(assignToMe: any | null): void {
+    this.routeUtils.updateQueryParams({ assignToMe, page: null });
+  }
+
   public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
     this.routeUtils.removeQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index], page: null });
+  }
+
+  public onTextSearch(textSearch: string | null): void {
+    this.routeUtils.updateQueryParams({ textSearch, page: null });
+    this.searchHaForm.textSearch.setValue(textSearch);
   }
 
   public ngOnInit(): void {
@@ -130,15 +153,25 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     }
   }
 
-  protected getDataset(queryParams: { careSetting?: CareSettingEnum, textSearch?: string }): void {
+  protected getDataset(queryParams: {
+    careSetting?: CareSettingEnum, textSearch?: string,
+    careType?: string, statusId?: number, vendorId?: number, assignToMe?: boolean
+  }): void {
     let careSettingCode = +queryParams?.careSetting ?? CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
     if (!(careSettingCode in this.careSettingToTabIndexMap)) {
       careSettingCode = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
     }
 
     if (careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
-      this.healthAuthResource.getAllHealthAuthoritySites()
-        .subscribe((sites: HealthAuthoritySiteAdminList[]) => this.healthAuthoritySites = sites)
+      const { textSearch, careType, statusId, vendorId, assignToMe } = queryParams;
+      this.healthAuthResource.getHealthAuthoritySitesByQuery({ textSearch, careType, statusId, vendorId, assignToMe })
+        .subscribe((sites: HealthAuthoritySiteAdminList[]) => {
+          sites.forEach((s: HealthAuthoritySiteAdminList) => {
+            s.duplicatePecSiteCount = sites.filter((innerSite: HealthAuthoritySiteAdminList) => innerSite.id !== s.id
+              && innerSite.pec && innerSite.pec === s.pec).length;
+          });
+          this.healthAuthoritySites = sites;
+        })
     } else {
       this.busy = this.getPaginatedSites({ careSettingCode, ...queryParams })
         .subscribe((paginatedList: PaginatedList<SiteRegistrationListViewModel>) => {

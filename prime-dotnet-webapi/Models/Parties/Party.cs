@@ -18,7 +18,6 @@ namespace Prime.Models
         [StringLength(255)]
         public string HPDID { get; set; }
 
-        [Required]
         public string FirstName { get; set; }
 
         public string GivenNames { get; set; }

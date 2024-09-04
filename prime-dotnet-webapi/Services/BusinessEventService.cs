@@ -151,6 +151,16 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        public async Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, string username, string description)
+        {
+            var partyId = await _context.Parties
+                .Where(p => p.Username == username)
+                .Select(p => p.Id)
+                .SingleOrDefaultAsync();
+
+            return await CreateSiteEmailEventAsync(siteId, partyId, description);
+        }
+
         public async Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, string description)
         {
             var site = await _context.Sites
@@ -197,6 +207,16 @@ namespace Prime.Services
             return await CreateSiteEventAsync(siteId, partyId, description);
         }
 
+        public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, string username, string description)
+        {
+            var partyId = await _context.Parties
+                .Where(p => p.Username == username)
+                .Select(p => p.Id)
+                .SingleOrDefaultAsync();
+
+            return await CreateSiteEventAsync(siteId, partyId, description);
+        }
+
         public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int partyId, string description)
         {
             var username = _httpContext.HttpContext.User.GetPrimeUsername();
@@ -224,16 +244,26 @@ namespace Prime.Services
             return businessEvent;
         }
 
-        public async Task<BusinessEvent> CreatePharmanetApiCallEventAsync(int enrolleeId, string licencePrefix, string licenceNumber, string description)
+        public async Task<BusinessEvent> CreatePharmanetApiCallEventAsync(int enrolleeId, string licencePrefix, string licenceNumber, string description, bool overrideWithDesc)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.PharmanetApiCall, enrolleeId,
-                $"Called Pharmanet API with licence prefix {licencePrefix} and licence number {licenceNumber}:  {description}");
+            string message;
+
+            if (overrideWithDesc)
+            {
+                message = description;
+            }
+            else
+            {
+                message = $"Called PharmaNet API with licence prefix {licencePrefix} and licence number {licenceNumber}:  {description}";
+            }
+
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.PharmanetApiCall, enrolleeId, message);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not create Pharmanet API call event.");
+                throw new InvalidOperationException("Could not create PharmaNet API call event.");
             }
 
             return businessEvent;
