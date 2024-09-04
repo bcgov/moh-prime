@@ -286,6 +286,7 @@ namespace Prime.Services
                     break;
 
                 case EnrolleeStatusAction.CancelToaAssignment:
+                    await _enrolleeAgreementService.DeleteObsoleteEnrolleeAgreementAsync(enrollee.Id);
                     await CancelToaAssignmentAsync(enrollee);
                     break;
 
