@@ -16,7 +16,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { NurseGrouping } from '@shared/enums/college-licence-grouping.enum';
+import { LicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -61,7 +61,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public CollegeLicenceClassEnum = CollegeLicenceClassEnum;
   public PrescriberIdTypeEnum = PrescriberIdTypeEnum;
 
-  public nurseGrouping = NurseGrouping;
+  public licenseGrouping = LicenseGrouping;
 
   constructor(
     private configService: ConfigService,
@@ -230,7 +230,7 @@ export class CollegeCertificationFormComponent implements OnInit {
           )
         )
         .subscribe((collegeLicenseGroupingCode: number) => {
-          if (this.nurseGrouping.some(g => g === collegeLicenseGroupingCode)) {
+          if (this.licenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
             this.setNursingCategoryValidators();
           }
           this.loadLicensesByCategory(collegeLicenseGroupingCode);
@@ -260,7 +260,10 @@ export class CollegeCertificationFormComponent implements OnInit {
       return;
     }
 
-    if ((collegeCode === CollegeLicenceClassEnum.BCCNM || collegeCode === CollegeLicenceClassEnum.OralHealth) && !this.condensed) {
+    if ((collegeCode === CollegeLicenceClassEnum.BCCNM ||
+      collegeCode === CollegeLicenceClassEnum.OralHealth ||
+      collegeCode === CollegeLicenceClassEnum.HealthCareProfessionals ||
+      collegeCode === CollegeLicenceClassEnum.ComplementaryHealthProfessionals) && !this.condensed) {
       this.formUtilsService.setValidators(this.category, [Validators.required]);
       return;
     }

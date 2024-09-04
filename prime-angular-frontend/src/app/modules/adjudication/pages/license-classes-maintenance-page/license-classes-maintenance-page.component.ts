@@ -73,7 +73,7 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
             collegeLicenseGroupingCode: collegeLicense.collegeLicenseGroupingCode,
             ...license
           } as LicenseMaintenanceConfig;
-        })
+        }).sort((a: LicenseMaintenanceConfig, b: LicenseMaintenanceConfig) => a.weight - b.weight)
         : { collegeName: college.name } as LicenseMaintenanceConfig;
     });
 
