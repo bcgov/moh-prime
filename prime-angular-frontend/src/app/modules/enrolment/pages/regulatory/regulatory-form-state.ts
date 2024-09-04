@@ -77,7 +77,7 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     return { certifications, enrolleeDeviceProviders, unlistedCertifications }
   }
 
-  public patchValue({ certifications, enrolleeDeviceProviders }: EnrolmentRegulatoryForm): void {
+  public patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications }: EnrolmentRegulatoryForm): void {
 
     if (!this.formInstance || !Array.isArray(certifications)) {
       return;
@@ -87,6 +87,9 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
 
     if (certifications.length) {
       certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
+    }
+    if (unlistedCertifications.length) {
+      unlistedCertifications.forEach((c: UnlistedCertification) => this.addUnlistedCertification(c));
     }
     if (enrolleeDeviceProviders && enrolleeDeviceProviders.length) {
       const { deviceProviderId, deviceProviderRoleCode, certificationNumber } = enrolleeDeviceProviders[0];

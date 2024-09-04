@@ -608,12 +608,12 @@ namespace Prime.Services
                 }
                 if (enrolleeUnlistedCertifications.Count > 0)
                 {
-                    _context.Remove(enrolleeUnlistedCertifications);
+                    enrolleeUnlistedCertifications.ForEach(uc => _context.Remove(uc));
                 }
             }
             else
             {
-                _context.Remove(enrolleeUnlistedCertifications);
+                enrolleeUnlistedCertifications.ForEach(uc => _context.Remove(uc));
             }
         }
 
