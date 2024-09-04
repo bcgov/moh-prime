@@ -167,6 +167,7 @@ describe('RegulatoryComponent', () => {
               licenseCode: 1,
               licenseNumber: "12345"
             }],
+            unlistedCertifications: [],
             enrolleeDeviceProviders: [],
           } as EnrolmentRegulatoryForm;
 
@@ -191,6 +192,7 @@ describe('RegulatoryComponent', () => {
               licenseCode: 1,
               licenseNumber: "12345"
             }],
+            unlistedCertifications: [],
             enrolleeDeviceProviders: [],
           } as EnrolmentRegulatoryForm;
 
