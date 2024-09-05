@@ -181,7 +181,7 @@
 <app-overview-section *ngIf="submission?.administratorPharmaNet"
                       title="PharmaNet Administrator"
                       [showEditRedirect]="false">
-  <app-party-review [party]="submission?.administratorPharmaNet.contact"></app-party-review>
+  <app-party-review [party]="submission?.administratorPharmaNet"></app-party-review>
 </app-overview-section>
 
 <app-overview-section *ngIf="submission?.healthAuthorityPharmanetAdministrator"
@@ -193,13 +193,13 @@
 <app-overview-section *ngIf="submission?.privacyOfficer"
                       title="Privacy Officer"
                       [showEditRedirect]="false">
-  <app-party-review [party]="submission?.privacyOfficer.contact"></app-party-review>
+  <app-party-review [party]="submission?.privacyOfficer"></app-party-review>
 </app-overview-section>
 
 <app-overview-section *ngIf="submission?.technicalSupport"
                       title="Technical Support"
                       [showEditRedirect]="false">
-  <app-party-review [party]="submission?.technicalSupport.contact"></app-party-review>
+  <app-party-review [party]="submission?.technicalSupport"></app-party-review>
 </app-overview-section>
 
 <app-overview-section *ngIf="submission?.healthAuthorityTechnicalSupport"
