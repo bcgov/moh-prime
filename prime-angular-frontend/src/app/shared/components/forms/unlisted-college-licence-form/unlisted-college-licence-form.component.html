@@ -7,7 +7,7 @@
 
         <mat-form-field class="w-100">
           <input matInput
-                 placeholder="College Name"
+                 placeholder="College Name (Enter the college name in full, without abbreviations)"
                  formControlName="collegeName"
                  maxlength="50">
           <mat-error *ngIf="collegeName.errors?.['required']">Required</mat-error>
