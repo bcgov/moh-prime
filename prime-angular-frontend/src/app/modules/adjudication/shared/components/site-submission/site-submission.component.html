@@ -178,59 +178,35 @@
   </ng-container>
 </app-page-section>
 
-<app-page-section *ngIf="submission?.administratorPharmaNet">
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>PharmaNet Administrator</ng-container>
-  </app-page-subheader>
-  <ng-container [ngTemplateOutlet]="contact"
-                [ngTemplateOutletContext]="{
-      contact: submission.administratorPharmaNet
-    }"></ng-container>
-</app-page-section>
+<app-overview-section *ngIf="submission?.administratorPharmaNet"
+                      title="PharmaNet Administrator"
+                      [showEditRedirect]="false">
+  <app-party-review [party]="submission?.administratorPharmaNet.contact"></app-party-review>
+</app-overview-section>
 
-<app-page-section *ngIf="submission?.healthAuthorityPharmanetAdministrator">
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>PharmaNet Administrator</ng-container>
-  </app-page-subheader>
-  <ng-container [ngTemplateOutlet]="contact"
-                [ngTemplateOutletContext]="{
-      contact: submission.healthAuthorityPharmanetAdministrator.contact
-    }"></ng-container>
-</app-page-section>
+<app-overview-section *ngIf="submission?.healthAuthorityPharmanetAdministrator"
+                      title="PharmaNet Administrator"
+                      [showEditRedirect]="false">
+  <app-party-review [party]="submission?.healthAuthorityPharmanetAdministrator.contact"></app-party-review>
+</app-overview-section>
 
+<app-overview-section *ngIf="submission?.privacyOfficer"
+                      title="Privacy Officer"
+                      [showEditRedirect]="false">
+  <app-party-review [party]="submission?.privacyOfficer.contact"></app-party-review>
+</app-overview-section>
 
-<app-page-section *ngIf="submission?.privacyOfficer">
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Privacy Officer</ng-container>
-  </app-page-subheader>
-  <ng-container [ngTemplateOutlet]="contact"
-                [ngTemplateOutletContext]="{
-      contact: submission.privacyOfficer
-    }"></ng-container>
-</app-page-section>
+<app-overview-section *ngIf="submission?.technicalSupport"
+                      title="Technical Support"
+                      [showEditRedirect]="false">
+  <app-party-review [party]="submission?.technicalSupport.contact"></app-party-review>
+</app-overview-section>
 
-<app-page-section *ngIf="submission?.technicalSupport">
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Technical Support</ng-container>
-  </app-page-subheader>
-  <ng-container [ngTemplateOutlet]="contact"
-                [ngTemplateOutletContext]="{
-      contact: submission.technicalSupport
-    }"></ng-container>
-</app-page-section>
-
-<app-page-section *ngIf="submission?.healthAuthorityTechnicalSupport">
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Technical Support</ng-container>
-  </app-page-subheader>
-  <ng-container [ngTemplateOutlet]="contact"
-                [ngTemplateOutletContext]="{
-      contact: submission.healthAuthorityTechnicalSupport.contact
-    }"></ng-container>
-</app-page-section>
-
-
-
+<app-overview-section *ngIf="submission?.healthAuthorityTechnicalSupport"
+                      title="Technical Support"
+                      [showEditRedirect]="false">
+  <app-party-review [party]="submission?.healthAuthorityTechnicalSupport.contact"></app-party-review>
+</app-overview-section>
 
 <ng-template #contact
              let-contact="contact">
