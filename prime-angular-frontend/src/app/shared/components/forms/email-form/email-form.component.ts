@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ViewportService } from '@core/services/viewport.service';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 import { NextStepsFormState } from '@paper-enrolment/pages/next-steps-page/next-steps-form-state.class';
 @Component({
@@ -17,7 +16,8 @@ export class EmailFormComponent implements OnInit {
   @Input() public formState: NextStepsFormState;
   @Input() public showRemoveButton: boolean = true;
   @Input() public index: number;
-  @Input() public validate: boolean = false;
+  @Input() public validateFormat: boolean = false;
+  @Input() public required: boolean = false;
   @Output() public remove: EventEmitter<number>;
 
   constructor(
@@ -40,13 +40,20 @@ export class EmailFormComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (this.validate) {
-      this.setEmailValidators();
+    if (this.validateFormat) {
+      this.setEmailFormatValidator();
+    }
+    if (this.required) {
+      this.setRequireValidator();
     }
   }
 
-  private setEmailValidators(): void {
-    this.formUtilsService.setValidators(this.email, [Validators.required, FormControlValidators.email])
+  private setEmailFormatValidator(): void {
+    this.formUtilsService.setValidators(this.email, [Validators.email])
+  }
+
+  private setRequireValidator(): void {
+    this.formUtilsService.setValidators(this.email, [Validators.required])
   }
 
 }
