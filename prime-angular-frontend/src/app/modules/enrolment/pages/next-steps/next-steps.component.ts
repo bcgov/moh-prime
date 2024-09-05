@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -35,6 +35,7 @@ import { exhaustMap } from 'rxjs/operators';
 export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnInit {
   public title: string;
   public enrolment: Enrolment;
+  public emailForm: FormGroup;
   public hasReadAgreement: boolean;
 
   public CareSettingEnum = CareSettingEnum;
@@ -104,39 +105,39 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
   }
 
   public get communityHealthEmails(): FormArray {
-    return this.form.get('communityHealthEmails') as FormArray;
+    return this.emailForm.get('communityHealthEmails') as FormArray;
   }
 
   public get pharmacistEmails(): FormArray {
-    return this.form.get('pharmacistEmails') as FormArray;
+    return this.emailForm.get('pharmacistEmails') as FormArray;
   }
 
   public get healthAuthorityFraserEmails(): FormArray {
-    return this.form.get('healthAuthorityFraserEmails') as FormArray;
+    return this.emailForm.get('healthAuthorityFraserEmails') as FormArray;
   }
 
   public get healthAuthorityNorthernEmails(): FormArray {
-    return this.form.get('healthAuthorityNorthernEmails') as FormArray;
+    return this.emailForm.get('healthAuthorityNorthernEmails') as FormArray;
   }
 
   public get healthAuthorityIslandEmails(): FormArray {
-    return this.form.get('healthAuthorityIslandEmails') as FormArray;
+    return this.emailForm.get('healthAuthorityIslandEmails') as FormArray;
   }
 
   public get healthAuthorityInteriorEmails(): FormArray {
-    return this.form.get('healthAuthorityInteriorEmails') as FormArray;
+    return this.emailForm.get('healthAuthorityInteriorEmails') as FormArray;
   }
 
   public get healthAuthorityPHSAEmails(): FormArray {
-    return this.form.get('healthAuthorityPHSAEmails') as FormArray;
+    return this.emailForm.get('healthAuthorityPHSAEmails') as FormArray;
   }
 
   public get healthAuthorityVancouverCoastalEmails(): FormArray {
-    return this.form.get('healthAuthorityVancouverCoastalEmails') as FormArray;
+    return this.emailForm.get('healthAuthorityVancouverCoastalEmails') as FormArray;
   }
 
   public get deviceProviderEmails(): FormArray {
-    return this.form.get('deviceProviderEmails') as FormArray;
+    return this.emailForm.get('deviceProviderEmails') as FormArray;
   }
 
   public getAgreementDescription() {
@@ -171,38 +172,52 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
   }
 
   public sendProvisionerAccessLink() {
-    const data: DialogOptions = {
-      title: 'Confirm Email',
-      message: `Are you sure you want to send your Approval Notification?`,
-      actionText: 'Send',
-    };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) => {
-          if (result) {
-            this.complete = true;
 
-            let emailPairs = this.careSettingConfigs.map((config) => {
-              return {
-                emails: config.formArray.value.map(email => email.email),
-                careSettingCode: config.settingCode,
-                healthAuthorityCode: config.settingCode === CareSettingEnum.HEALTH_AUTHORITY ? config.healthAuthorityCode : null,
-              }
-            });
+    if (!this.atLeastOneEmailFilled()) {
+      const data: DialogOptions = {
+        title: 'Missing Email',
+        message: `Please enter at least one email for the Approval Notification.`,
+        cancelText: 'Close',
+        actionType: 'warn',
+        actionHide: true,
+      };
+      this.dialog.open(ConfirmDialogComponent, { data }).afterClosed();
 
-            return this.enrolmentResource.sendProvisionerAccessLink(emailPairs, this.enrolment.id);
-          } else {
-            return EMPTY;
-          }
-        })
-      )
-      .subscribe(() => {
-        this.toastService.openSuccessToast('Email was successfully sent');
-        this.router.navigate([EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
-          { relativeTo: this.route.parent, queryParams: { initialEnrolment: this.initialEnrolment } });
-      });
-    this.onPageChange({ atEnd: true });
+    } else {
+
+      const data: DialogOptions = {
+        title: 'Confirm Email',
+        message: `Are you sure you want to send your Approval Notification?`,
+        actionText: 'Send',
+      };
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) => {
+            if (result) {
+              this.complete = true;
+
+              let emailPairs = this.careSettingConfigs.map((config) => {
+                return {
+                  emails: config.formArray.value.map(email => email.email),
+                  careSettingCode: config.settingCode,
+                  healthAuthorityCode: config.settingCode === CareSettingEnum.HEALTH_AUTHORITY ? config.healthAuthorityCode : null,
+                }
+              });
+
+              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0]), this.enrolment.id);
+            } else {
+              return EMPTY;
+            }
+          })
+        )
+        .subscribe(() => {
+          this.toastService.openSuccessToast('Email was successfully sent');
+          this.router.navigate([EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
+            { relativeTo: this.route.parent, queryParams: { initialEnrolment: this.initialEnrolment } });
+        });
+      this.onPageChange({ atEnd: true });
+    }
   }
 
   public getEmailsGroup(careSettingCode: number, healthAuthorityCode: number) {
@@ -387,7 +402,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
   }
 
   protected createFormInstance(): void {
-    this.form = this.buildEmailGroup();
+    this.emailForm = this.buildEmailGroup();
   }
 
   protected nextRouteAfterSubmit() {
@@ -409,15 +424,31 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
 
   private buildEmailGroup(): FormGroup {
     return this.fb.group({
-      communityHealthEmails: this.fb.array([], [Validators.required]),
-      pharmacistEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityFraserEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityInteriorEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityIslandEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityNorthernEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityPHSAEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityVancouverCoastalEmails: this.fb.array([], [Validators.required]),
-      deviceProviderEmails: this.fb.array([], [Validators.required]),
+      communityHealthEmails: this.fb.array([], []),
+      pharmacistEmails: this.fb.array([], []),
+      healthAuthorityFraserEmails: this.fb.array([], []),
+      healthAuthorityInteriorEmails: this.fb.array([], []),
+      healthAuthorityIslandEmails: this.fb.array([], []),
+      healthAuthorityNorthernEmails: this.fb.array([], []),
+      healthAuthorityPHSAEmails: this.fb.array([], []),
+      healthAuthorityVancouverCoastalEmails: this.fb.array([], []),
+      deviceProviderEmails: this.fb.array([], []),
     });
+  }
+
+  public atLeastOneEmailFilled(): boolean {
+    let emailFilled = false;
+
+    Object.keys(this.emailForm.controls).forEach((emailArrayKey) => {
+      const emailArray = this.emailForm.controls[emailArrayKey] as FormArray;
+      Object.keys(emailArray.controls).forEach((emailKey) => {
+        let emailControl = emailArray.controls[emailKey] as FormGroup;
+        if (emailControl.controls['email'].value && emailControl.controls['email'].value !== "") {
+          emailFilled = true;
+        }
+      });
+    });
+
+    return emailFilled;
   }
 }

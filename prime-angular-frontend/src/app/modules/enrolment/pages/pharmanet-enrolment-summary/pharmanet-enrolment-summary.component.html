@@ -174,7 +174,7 @@
                           [formGroupName]="i">
               <app-email-form [form]="email"
                               [index]="i"
-                              [validate]="true"
+                              [validateFormat]="true"
                               [showRemoveButton]="i>0"
                               (remove)="removeEmail(settingCode, healthAuthorityCode, $event)">
               </app-email-form>
