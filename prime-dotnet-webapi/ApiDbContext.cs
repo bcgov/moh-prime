@@ -13,6 +13,7 @@ using Prime.Models;
 using Prime.Models.HealthAuthorities;
 using Prime.Models.Plr;
 using Prime.Models.VerifiableCredentials;
+using System.Runtime.CompilerServices;
 
 namespace Prime
 {
@@ -38,6 +39,15 @@ namespace Prime
         }
     }
 
+    public static class PRIMEInitializer
+    {
+        [ModuleInitializer]
+        public static void Initialize()
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
+    }
+
     public class ApiDbContext : DbContext
     {
         private readonly IHttpContextAccessor _context;
@@ -51,6 +61,7 @@ namespace Prime
         }
 
         public DbSet<ClientLog> ClientLogs { get; set; }
+        public DbSet<VendorApiLog> VendorApiLogs { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Address> Addresses { get; set; }
@@ -71,10 +82,12 @@ namespace Prime
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
         public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
         public DbSet<EnrolleeAbsence> EnrolleeAbsences { get; set; }
+        public DbSet<Certification> Certifications { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Site> Sites { get; set; }
+        public DbSet<SiteVendor> SiteVendors { get; set; }
         public DbSet<CommunitySite> CommunitySites { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
@@ -95,6 +108,8 @@ namespace Prime
         public DbSet<HealthAuthorityContact> HealthAuthorityContacts { get; set; }
         public DbSet<HealthAuthorityVendor> HealthAuthorityVendors { get; set; }
         public DbSet<PrivacyOffice> PrivacyOffices { get; set; }
+        public DbSet<HealthAuthorityTechnicalSupportVendor> HealthAuthorityTechnicalSupportVendors { get; set; }
+        public DbSet<HealthAuthorityCareTypeToVendor> HealthAuthorityCareTypeToVendors { get; set; }
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
         public DbSet<IdentificationDocument> IdentificationDocuments { get; set; }
@@ -108,20 +123,29 @@ namespace Prime
         public DbSet<SiteNotification> SiteNotifications { get; set; }
         public DbSet<AuthorizedUser> AuthorizedUsers { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
+        public DbSet<DoNotEmail> DoNotEmail { get; set; }
         public DbSet<Banner> Banners { get; set; }
 
         // Parties
         public DbSet<Party> Parties { get; set; }
         public DbSet<PartySubmission> PartySubmissions { get; set; }
         public DbSet<PartyCertification> PartyCertifications { get; set; }
+        public DbSet<PartyEnrolment> PartyEnrolments { get; set; }
 
         // PLR Integration
         public DbSet<PlrProvider> PlrProviders { get; set; }
+        public DbSet<PharmanetTransactionLog> PharmanetTransactionLogs { get; set; }
+        public DbSet<PharmanetTransactionLogTemp> PharmanetTransactionLogTemps { get; set; }
         public DbSet<CollegeForPlrRoleType> CollegeForPlrRoleTypes { get; set; }
+        public DbSet<Practitioner> Practitioner { get; set; }
 
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
         public DbSet<EnrolleeLinkedEnrolment> EnrolleeLinkedEnrolments { get; set; }
+
+        //Device Provider data table
+        public DbSet<OpcMember> OpcMembers { get; set; }
+        public DbSet<DeviceProviderSite> DeviceProviderSites { get; set; }
 
         public override int SaveChanges()
         {

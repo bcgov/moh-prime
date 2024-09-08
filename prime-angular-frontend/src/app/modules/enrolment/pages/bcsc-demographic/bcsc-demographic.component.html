@@ -12,9 +12,9 @@
         <ng-container appPageSubheader2Title>Enrollee Information</ng-container>
         <ng-container appPageSubheader2Summary>
           This information comes from your BC Services Card. If you use a different name professionally, please
-          select "I have a preferred name."
+          select "I have an alternate name."
           <small class="font-italic d-block">
-            Entering a preferred name in PRIME won't change your BC Services Card.<br>
+            Entering an alternate name in PRIME won't change your BC Services Card.<br>
             The name you provide must match your college registration information, if applicable.
           </small>
         </ng-container>
@@ -23,13 +23,13 @@
       <app-bcsc-profile [user]="bcscUser"
                         [showAddress]="false"></app-bcsc-profile>
 
-      <app-toggle-content label="I have a preferred name"
+      <app-toggle-content label="I have an alternate name"
                           [checked]="hasPreferredName"
                           (toggle)="onPreferredNameChange($event)">
 
         <section>
           <app-page-subheader2>
-            <ng-container appPageSubheader2Title>Preferred Name</ng-container>
+            <ng-container appPageSubheader2Title>Alternate Name</ng-container>
             <ng-container appPageSubheader2Summary>
               If you use a name professionally that is different from your legal name, enter it here.
             </ng-container>
@@ -114,6 +114,7 @@
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    [hasSecondaryAction]="isProfileComplete || isMatchingPaperEnrollee"
                    (save)="onSubmit()"
-                   (back)="onBack(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)"></app-page-footer>
+                   (back)="onBack(EnrolmentRoutes.PAPER_ENROLLEE_DECLARATION)"
+                   (continue)="onBack()"></app-page-footer>
 
 </app-enrollee-page>

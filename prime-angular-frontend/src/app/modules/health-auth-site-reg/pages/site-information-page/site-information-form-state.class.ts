@@ -1,9 +1,7 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
 
-import { asyncValidator } from '@lib/validators/form-async.validators';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { SiteResource } from '@core/resources/site-resource.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteInformationForm } from './site-information-form.model';
 
 export class SiteInformationFormState extends AbstractFormState<SiteInformationForm> {
@@ -11,7 +9,7 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
 
   public constructor(
     private fb: FormBuilder,
-    private siteResource: SiteResource
+    private formUtilsService: FormUtilsService
   ) {
     super();
 
@@ -20,6 +18,10 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
 
   public get siteName(): FormControl {
     return this.formInstance.get('siteName') as FormControl;
+  }
+
+  public get mnemonic(): FormControl {
+    return this.formInstance.get('mnemonic') as FormControl;
   }
 
   public get pec(): FormControl {
@@ -38,6 +40,10 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     return this.formInstance.getRawValue();
   }
 
+  public get physicalAddress(): FormGroup {
+    return this.formInstance.get('physicalAddress') as FormGroup;
+  }
+
   public patchValue(model: SiteInformationForm, siteId: number): void {
     if (!this.formInstance) {
       return;
@@ -51,7 +57,14 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     this.formInstance = this.fb.group({
       siteName: ['', [Validators.required]],
       pec: [null, []],
-      securityGroupCode: [null, [Validators.required]]
+      mnemonic: [null, []],
+      securityGroupCode: [null, [Validators.required]],
+      physicalAddress: this.formUtilsService.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        areDisabled: ['provinceCode', 'countryCode'],
+        useDefaults: ['provinceCode', 'countryCode'],
+        exclude: ['street2']
+      })
     });
   }
 }

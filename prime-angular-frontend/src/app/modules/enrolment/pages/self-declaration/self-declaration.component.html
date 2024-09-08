@@ -10,12 +10,9 @@
         novalidate>
 
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
+      <ng-container appPageSubheaderTitle>Self-Declaration</ng-container>
       <ng-container appPageSubheaderSummary>
-        Self-declaration information is collected under the authority of the Information Management Regulation of the
-        Pharmaceutical Services Act and is protected under the Freedom of Information and Protection of Privacy Act.
-        Self-declaration information is used to verify the applicant is in good standing with their respective colleges
-        and to determine eligibility for and access to PharmaNet.
+        <app-self-declaration-term></app-self-declaration-term>
       </ng-container>
     </app-page-subheader>
 
@@ -31,9 +28,9 @@
 
     <section class="mb-3">
 
-      <p class="question">
-        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION] }}
-      </p>
+      <div class="question"
+           [innerHtml]="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_CONVICTION) | safe: 'html'">
+      </div>
 
       <mat-radio-group formControlName="hasConviction">
         <mat-radio-button class="mr-4"
@@ -50,20 +47,20 @@
           <p class="mb-1">Provide these details:</p>
           <ol class="mb-4 pl-3">
             <li class="small">
-              Describe the events that resulted in the order or conviction, including when the events occurred
+              Describe the events that resulted in the order or conviction, including when the events occurred.
             </li>
             <li class="small">
               Provide the name and address of the organization where the events took place that resulted in the order or
-              conviction
+              conviction.
             </li>
             <li class="small">
-              Provide the name of the entity that issued the order or conviction
+              Provide the name of the entity that issued the order or conviction.
             </li>
             <li class="small">
-              Describe the penalty imposed as a result of the order or conviction (e.g. fine, imprisonment)
+              Describe the penalty imposed as a result of the order or conviction (e.g., fine, imprisonment).
             </li>
             <li class="small mb-2">
-              Provide the date of the order or conviction
+              Provide the date of the order or conviction.
             </li>
 
             <mat-form-field class="w-100">
@@ -76,7 +73,7 @@
             </mat-form-field>
 
             <li class="small mb-2">
-              Attach documents related to this self-declaration.
+              Attach a copy of the order or conviction.
             </li>
 
             <app-document-upload componentName="has-conviction"
@@ -98,11 +95,12 @@
 
     </section>
 
+
     <section class="mb-3">
 
-      <p class="question">
-        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED] }}
-      </p>
+      <div class="question"
+           [innerHtml]="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED) | safe: 'html'">
+      </div>
 
       <mat-radio-group formControlName="hasRegistrationSuspended">
         <mat-radio-button class="mr-4"
@@ -120,19 +118,21 @@
           <ol class="mb-4 pl-3">
             <li class="small">
               Describe the events that resulted in limits, conditions or prohibitions being imposed, including when the
-              events occurred
+              events occurred.
             </li>
             <li class="small">
-              Provide the name and address of the organization where the events took place
+              Provide the name and address of the organization where the events that resulted in the limits, conditions
+              or prohibitions being imposed took place.
             </li>
             <li class="small">
-              Provide the name of the organization that imposed limits, conditions or prohibitions
+              Provide the name of the governing body of a health profession that imposed limits, conditions or
+              prohibitions.
             </li>
             <li class="small">
-              Describe the limits, conditions or prohibitions imposed
+              Describe the limits, conditions or prohibitions imposed.
             </li>
             <li class="small mb-2">
-              Provide the date that the limits, conditions or prohibitions were imposed and, if applicable, removed
+              Provide the date that the limits, conditions or prohibitions were imposed and, if applicable, removed.
             </li>
 
             <mat-form-field class="w-100">
@@ -145,7 +145,7 @@
             </mat-form-field>
 
             <li class="small mb-2">
-              Attach documents related to this self-declaration.
+              Provide a copy of supporting documentation (e.g., the consent order).
             </li>
 
             <app-document-upload componentName="has-registration-suspended"
@@ -166,13 +166,15 @@
 
     </section>
 
-    <section class="mb-3">
 
-      <p class="question">
-        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION] }}
-      </p>
+    <section class="mb-3"
+             *ngIf="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER)">
 
-      <mat-radio-group formControlName="hasDisciplinaryAction">
+      <div class="question"
+           [innerHtml]="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER) | safe: 'html'">
+      </div>
+
+      <mat-radio-group formControlName="hasRegistrationSuspendedDeviceProvider">
         <mat-radio-button class="mr-4"
                           *ngFor="let decision of decisions"
                           [value]="decision.code">
@@ -180,47 +182,48 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="hasDisciplinaryAction.value"
+      <div *ngIf="hasRegistrationSuspendedDeviceProvider.value"
            class="row">
         <div class="col pt-3">
 
           <p class="mb-1">Provide these details:</p>
           <ol class="mb-4 pl-3">
             <li class="small">
-              Describe the events that resulted in the suspension or cancellation of your access, including when the
-              events occurred
+              Describe the events that resulted in discipline, suspension, or expulsion, including when the
+              events occurred.
             </li>
             <li class="small">
-              Provide the name and address of the organization that issued the suspension or cancellation of access
+              Provide the name and address of the organization where the events that resulted in the discipline,
+              suspension, or expulsion took place.
             </li>
             <li class="small">
-              Describe the suspension or cancellation imposed
+              Describe the discipline, suspension, or expulsion imposed.
             </li>
             <li class="small mb-2">
-              Provide the date that the suspension or cancellation of access was imposed and, if applicable, removed
+              Provide the date that the discipline, suspension, or expulsion were imposed and, if applicable, removed.
             </li>
 
             <mat-form-field class="w-100">
               <textarea matInput
                         placeholder="Type Here"
                         rows="5"
-                        #hasDisciplinaryAction
-                        formControlName="hasDisciplinaryActionDetails"></textarea>
-              <mat-error *ngIf="hasDisciplinaryActionDetails.hasError('required')">Required</mat-error>
+                        #hasRegistrationSuspendedDeviceProvider
+                        formControlName="hasRegistrationSuspendedDeviceProviderDetails"></textarea>
+              <mat-error *ngIf="hasRegistrationSuspendedDeviceProviderDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
             <li class="small mb-2">
-              Attach documents related to this self-declaration.
+              Provide a copy of supporting documentation (e.g., an order or letter from OPC).
             </li>
 
-            <app-document-upload componentName="has-disciplinary-action"
+            <app-document-upload componentName="has-registration-suspended-device-provider"
                                  [multiple]="true"
-                                 (completed)="onUpload('hasDisciplinaryActionDocumentGuids', $event)"
-                                 (remove)="onRemove('hasDisciplinaryActionDocumentGuids', $event)">
+                                 (completed)="onUpload('hasRegistrationSuspendedDeviceProviderDocumentGuids', $event)"
+                                 (remove)="onRemove('hasRegistrationSuspendedDeviceProviderDocumentGuids', $event)">
             </app-document-upload>
 
             <app-enrollee-property>
-              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION)
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED_DEVICE_PROVIDER)
                                        (download)="downloadSelfDeclarationDocument($event)">
               </app-document-attachment>
             </app-enrollee-property>
@@ -231,11 +234,12 @@
 
     </section>
 
+
     <section class="mb-3">
 
-      <p class="question">
-        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED] }}
-      </p>
+      <div class="question"
+           [innerHtml]="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED) | safe: 'html'">
+      </div>
 
       <mat-radio-group formControlName="hasPharmaNetSuspended">
         <mat-radio-button class="mr-4"
@@ -252,16 +256,17 @@
           <p class="mb-1">Provide these details:</p>
           <ol class="mb-4 pl-3">
             <li class="small">
-              Describe the events that resulted in the discipline or termination, including when the events occurred
+              Describe the events that resulted in the suspension or cancellation, including when the
+              events occurred.
             </li>
             <li class="small">
-              Provide the name and address of the organization that issued the discipline or termination
+              Provide the name and address of the organization that issued the suspension or cancellation.
             </li>
             <li class="small">
-              Describe the discipline imposed
+              Describe the measures imposed.
             </li>
             <li class="small mb-2">
-              Provide the date that the discipline or termination was imposed and, if applicable, removed
+              Provide the date that the suspension or cancellation began and, if applicable, ended.
             </li>
 
             <mat-form-field class="w-100">
@@ -274,7 +279,7 @@
             </mat-form-field>
 
             <li class="small mb-2">
-              Attach documents related to this self-declaration.
+              Provide a copy of supporting documentation, if any (e.g., a letter or email from the organization)
             </li>
 
             <app-document-upload componentName="has-pharmanet-suspended"
@@ -295,9 +300,76 @@
 
     </section>
 
+    <section class="mb-3">
+
+      <div class="question"
+           [innerHtml]="selfDeclarationQuestions.get(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION) | safe: 'html'">
+      </div>
+
+      <mat-radio-group formControlName="hasDisciplinaryAction">
+        <mat-radio-button class="mr-4"
+                          *ngFor="let decision of decisions"
+                          [value]="decision.code">
+          {{ decision.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="hasDisciplinaryAction.value"
+           class="row">
+        <div class="col pt-3">
+
+          <p class="mb-1">Provide these details:</p>
+          <ol class="mb-4 pl-3">
+            <li class="small">
+              Describe the events that resulted in the discipline or termination, including when the events occurred.
+            </li>
+            <li class="small">
+              Provide the name and address of the organization that issued the discipline or termination.
+            </li>
+            <li class="small">
+              Describe the discipline or termination imposed.
+            </li>
+            <li class="small mb-2">
+              Provide the date that the discipline or termination was imposed and, if discipline, removed.
+            </li>
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Type Here"
+                        rows="5"
+                        #hasDisciplinaryAction
+                        formControlName="hasDisciplinaryActionDetails"></textarea>
+              <mat-error *ngIf="hasDisciplinaryActionDetails.hasError('required')">Required</mat-error>
+            </mat-form-field>
+
+            <li class="small mb-2">
+              Provide a copy of supporting documentation, if any (e.g., a letter or email from the organization)
+            </li>
+
+            <app-document-upload componentName="has-disciplinary-action"
+                                 [multiple]="true"
+                                 (completed)="onUpload('hasDisciplinaryActionDocumentGuids', $event)"
+                                 (remove)="onRemove('hasDisciplinaryActionDocumentGuids', $event)">
+            </app-document-upload>
+
+            <app-enrollee-property>
+              <app-document-attachment [documents]=getSelfDeclarationDocuments(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION)
+                                       (download)="downloadSelfDeclarationDocument($event)">
+              </app-document-attachment>
+            </app-enrollee-property>
+
+          </ol>
+        </div>
+      </div>
+
+    </section>
+
+
+
     <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                      (save)="onSubmit()"
-                     (back)="onBack()"></app-page-footer>
+                     (back)="onBack()"
+                     (continue)="onBack()"></app-page-footer>
 
   </form>
 

@@ -1,4 +1,5 @@
 @import 'palette';
+@import 'bootstrap/bootstrap-imports';
 
 h2 {
   color: theme-palette(blue);
@@ -26,4 +27,16 @@ p {
 a {
   color: theme-palette(blue, light);
   text-decoration: underline;
+}
+
+@include media-breakpoint-down(xs) {
+  .mat-dialog-content {
+    max-height: 50vh;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  .mat-dialog-content {
+    max-height: 40vh;
+  }
 }

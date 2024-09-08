@@ -10,7 +10,6 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
-import { SiteAddressPageFormState } from '@registration/pages/site-address-page/site-address-page-form-state.class';
 import { HoursOperationPageFormState } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
 import { AdministratorPageFormState } from '@registration/pages/administrator-page/administrator-page-form-state.class';
 import { PrivacyOfficerPageFormState } from '@registration/pages/privacy-officer-page/privacy-officer-page-form-state.class';
@@ -27,7 +26,6 @@ import { DeviceProviderPageFormState } from '@registration/pages/device-provider
 export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingPageFormState: CareSettingPageFormState;
   public businessLicenceFormState: BusinessLicenceFormState;
-  public siteAddressPageFormState: SiteAddressPageFormState;
   public hoursOperationPageFormState: HoursOperationPageFormState;
   public remoteUsersPageFormState: RemoteUsersPageFormState;
   public administratorPharmaNetFormState: AdministratorPageFormState;
@@ -85,8 +83,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { businessLicence, doingBusinessAs, pec, activeBeforeRegistration } = this.businessLicenceFormState.json;
-    const physicalAddress = this.siteAddressPageFormState.json;
+    const { businessLicence, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress, isNew, deviceProviderId } = this.businessLicenceFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
     const administratorPharmaNet = this.administratorPharmaNetFormState.json;
@@ -121,7 +118,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       // approvedDate (N/A)
       // submittedDate (N/A)
       pec,
-      activeBeforeRegistration
+      activeBeforeRegistration,
+      isNew,
+      deviceProviderId
     } as Site; // Enforced type due to N/A properties
   }
 
@@ -133,7 +132,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     return [
       this.careSettingPageFormState.form,
       this.businessLicenceFormState.form,
-      this.siteAddressPageFormState.form,
       this.hoursOperationPageFormState.form,
       this.remoteUsersPageFormState.form,
       this.administratorPharmaNetFormState.form,
@@ -151,15 +149,17 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * will allow submission for an unapproved site that does not have a PEC.
    */
   public get isValidSubmission(): boolean {
-    const isCommunityPharmacy = this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+    const isCPorPCHP = this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST ||
+      this.site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
+
     const pecControl = this.businessLicenceFormState.pec;
     // Managed to make it through the registration without a PEC and is
-    // Community Pharmacy then assumed to indicate deferment, which is
+    // Community Pharmacy or PCHP then assumed to indicate deferment, which is
     // not possible after the site has been approved
     const pecDeferred = this.site.completed &&
       !this.site.approvedDate &&
       !pecControl.value &&
-      isCommunityPharmacy;
+      isCPorPCHP;
 
     // Loosen validation on submission only when the PEC is deferred, which
     // allows for submissions regardless of toggle state that is not
@@ -180,7 +180,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       businessLicenceExpiryControl.clearValidators();
       businessLicenceExpiryControl.updateValueAndValidity();
 
-      if (isCommunityPharmacy && doingBusinessAsDeferred) {
+      if (isCPorPCHP && doingBusinessAsDeferred) {
         doingBusinessAsControl.clearValidators();
         doingBusinessAsControl.updateValueAndValidity();
       }
@@ -215,7 +215,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       businessLicenceExpiryControl.setValidators([Validators.required]);
       businessLicenceExpiryControl.updateValueAndValidity();
 
-      if (isCommunityPharmacy && doingBusinessAsDeferred) {
+      if (isCPorPCHP && doingBusinessAsDeferred) {
         doingBusinessAsControl.setValidators([Validators.required]);
         doingBusinessAsControl.updateValueAndValidity();
       }
@@ -231,8 +231,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   protected buildForms(): void {
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
-    this.businessLicenceFormState = new BusinessLicenceFormState(this.fb, this.siteResource);
-    this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
+    this.businessLicenceFormState = new BusinessLicenceFormState(this.fb, this.siteResource, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersPageFormState = new RemoteUsersPageFormState(this.fb);
     this.administratorPharmaNetFormState = new AdministratorPageFormState(this.fb, this.formUtilsService);
@@ -250,11 +249,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence, activeBeforeRegistration } = site;
+    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence, activeBeforeRegistration, physicalAddress, isNew, deviceProviderId } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence, activeBeforeRegistration }, id);
-    this.siteAddressPageFormState.patchValue(site?.physicalAddress);
+    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence, activeBeforeRegistration, physicalAddress, isNew, careSettingCode, deviceProviderId }, id);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
     this.administratorPharmaNetFormState.patchValue(site?.administratorPharmaNet);

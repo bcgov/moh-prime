@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Prime.Models;
 
 namespace Prime.ViewModels
@@ -35,6 +36,8 @@ namespace Prime.ViewModels
 
         public VerifiedAddress VerifiedAddress { get; set; }
 
+        public ICollection<AdditionalAddress> AdditionalAddresses { get; set; }
+
         public string Email { get; set; }
 
         public string SmsPhone { get; set; }
@@ -55,6 +58,8 @@ namespace Prime.ViewModels
 
         public DateTimeOffset? AppliedDate { get; set; }
 
+        public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
+
         public DateTimeOffset? ApprovedDate { get; set; }
 
         public DateTimeOffset? ExpiryDate { get; set; }
@@ -70,5 +75,12 @@ namespace Prime.ViewModels
         public int LinkedEnrolleeId { get; set; }
 
         public bool PossiblePaperEnrolmentMatch { get; set; }
+
+        /// <summary>
+        /// e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc"
+        /// </summary>
+        public string Username { get; set; }
+
+        public bool HasDeviceProviderCareSetting { get; set; }
     }
 }

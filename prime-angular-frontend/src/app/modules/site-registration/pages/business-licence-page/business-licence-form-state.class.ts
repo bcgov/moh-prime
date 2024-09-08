@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, ValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
 
@@ -9,6 +9,8 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { BusinessLicenceForm } from './business-licence-form.model';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceForm> {
   private siteId: number;
@@ -17,7 +19,8 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
   public constructor(
     private fb: FormBuilder,
-    private siteResource: SiteResource
+    private siteResource: SiteResource,
+    private formUtilsService: FormUtilsService,
   ) {
     super();
     this.businessLicenceUpdated = false;
@@ -44,12 +47,18 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
     return this.formInstance.get('pec') as FormControl;
   }
 
+  public get physicalAddress(): FormGroup {
+    return this.formInstance.get('physicalAddress') as FormGroup;
+  }
+
   public get json(): BusinessLicenceForm {
     if (!this.formInstance) {
       return;
     }
 
-    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration } = this.formInstance.getRawValue();
+    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress, isNewWithSiteId, isNewWithoutSiteId, careSettingCode, deviceProviderId } = this.formInstance.getRawValue();
+
+    const isNew = isNewWithSiteId || isNewWithoutSiteId;
 
     return {
       businessLicence: {
@@ -59,7 +68,11 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       },
       doingBusinessAs,
       pec,
-      activeBeforeRegistration
+      activeBeforeRegistration,
+      physicalAddress,
+      isNew,
+      careSettingCode,
+      deviceProviderId
     };
   }
 
@@ -78,15 +91,24 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
     this.siteId = siteId;
 
-    const { doingBusinessAs, pec, businessLicence } = model;
+    const { doingBusinessAs, pec, businessLicence, physicalAddress, isNew, careSettingCode, activeBeforeRegistration, deviceProviderId } = model;
     // Preserve the business licence for use when
     // creating JSON format from the form
     this.businessLicence = businessLicence;
 
+    const isNewWithSiteId = isNew && pec && pec !== '';
+    const isNewWithoutSiteId = isNew && (!pec || pec === '');
+
     this.formInstance.patchValue({
       ...businessLicence,
       doingBusinessAs,
-      pec
+      pec,
+      physicalAddress,
+      isNewWithSiteId,
+      isNewWithoutSiteId,
+      careSettingCode,
+      activeBeforeRegistration,
+      deviceProviderId
     });
   }
 
@@ -127,11 +149,57 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       activeBeforeRegistration: [
         false,
         []
-      ]
+      ],
+      physicalAddress: this.formUtilsService.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        areDisabled: ['provinceCode', 'countryCode'],
+        useDefaults: ['provinceCode', 'countryCode'],
+        exclude: ['street2']
+      }),
+      isNewWithSiteId: [
+        false,
+        []
+      ],
+      isNewWithoutSiteId: [
+        false,
+        []
+      ],
+      careSettingCode: [
+        null,
+        []
+      ],
+      deviceProviderId: [
+        null,
+        []
+      ],
     });
+    this.formInstance.setValidators(this.validateMinOneCheckboxChecked());
+  }
+
+  public resetSiteId(): void {
+    if (this.pec.value) {
+      this.pec.setValue("");
+    }
   }
 
   private checkPecIsAssignable(): (value: string) => Observable<boolean> {
     return (value: string) => value ? this.siteResource.pecAssignable(this.siteId, value) : of(true);
+  }
+
+  public validateMinOneCheckboxChecked(): ValidatorFn {
+    return (form: FormGroup): ValidationErrors | null => {
+
+      const isNewWSiteId = form.get("isNewWithSiteId");
+      const isNewWOSiteId = form.get("isNewWithoutSiteId");
+      const activeBeforeRegistration = form.get("activeBeforeRegistration");
+      const careSettingCode = form.get("careSettingCode");
+
+      if ((careSettingCode.value === CareSettingEnum.COMMUNITY_PHARMACIST || careSettingCode.value === CareSettingEnum.DEVICE_PROVIDER) &&
+        !(isNewWOSiteId.value || isNewWSiteId.value || activeBeforeRegistration.value)) {
+        return { 'checkboxRequired': true };
+      }
+
+      return null;
+    }
   }
 }

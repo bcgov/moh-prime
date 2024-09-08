@@ -14,7 +14,9 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { PaginatedList } from '@core/models/paginated-list.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { CertSearch } from '@enrolment/shared/models/cert-search.model';
 import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
@@ -26,6 +28,7 @@ import { BusinessLicenceDocument } from '@registration/shared/models/business-li
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { IndividualDeviceProvider } from '@registration/shared/models/individual-device-provider.model';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +52,22 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getPaginatedSites(
+    queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum, page?: number }
+  ): Observable<PaginatedList<SiteRegistrationListViewModel>> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
+    return this.apiResource.get<PaginatedList<SiteRegistrationListViewModel>>('sites', params)
+      .pipe(
+        map((response: ApiHttpResponse<PaginatedList<SiteRegistrationListViewModel>>) => response.result),
+        tap((organizations: PaginatedList<SiteRegistrationListViewModel>) => this.logger.info('PAGINATED_SITES', organizations)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Sites could not be retrieved');
+          this.logger.error('[SiteRegistration] SiteResource::getPaginatedSites error has occurred: ', error);
           throw error;
         })
       );
@@ -85,17 +104,17 @@ export class SiteResource {
       .pipe(
         map((site: Site) => [
           { label: 'Signing Authority', email: site.provisioner.email },
-          ...ArrayUtils.insertIf(site?.administratorPharmaNet, {
+          ...ArrayUtils.insertIf(site?.administratorPharmaNet?.email, {
             label: 'PharmaNet Administrator',
-            email: site?.administratorPharmaNet.email
+            email: site?.administratorPharmaNet?.email
           }),
-          ...ArrayUtils.insertIf(site?.privacyOfficer.email, {
+          ...ArrayUtils.insertIf(site?.privacyOfficer?.email, {
             label: 'Privacy Officer',
-            email: site?.privacyOfficer.email
+            email: site?.privacyOfficer?.email
           }),
-          ...ArrayUtils.insertIf(site?.technicalSupport.email, {
+          ...ArrayUtils.insertIf(site?.technicalSupport?.email, {
             label: 'Technical Support Contact',
-            email: site?.technicalSupport.email
+            email: site?.technicalSupport?.email
           })
         ])
       );
@@ -196,6 +215,20 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site ID/PEC could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updatePecCode error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateVendor(siteId: number, vendorCode: number, rationale: string): NoContent {
+    const payload = { vendorCode, rationale };
+    return this.apiResource.put<NoContent>(`sites/${siteId}/vendor`, payload)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Vendor has been updated')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Vendor could not be updated');
+          this.logger.error('[SiteRegistration] SiteResource::updateVendor error has occurred: ', error);
           throw error;
         })
       );
@@ -475,6 +508,24 @@ export class SiteResource {
       );
   }
 
+  public flagIsNewSite(siteId: number, isNew: boolean): NoContent {
+    const url = `sites/${siteId}/isnew`;
+    const body = { data: isNew };
+    const request$ = this.apiResource.put<NoContent>(url, body);
+
+    return request$
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast(`Site has been ${isNew ? ' flagged is-new' : 'unflagged is-new'}`)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site is-new could not be updated');
+          this.logger.error('[Site] SiteResource::flagIsNewSite error has occurred:'
+            , error);
+          throw error;
+        })
+      );
+  }
+
   public createSiteRegistrationNote(siteId: number, note: string): Observable<SiteRegistrationNote> {
     const payload = { data: note };
     return this.apiResource.post(`sites/${siteId}/site-registration-notes`, payload)
@@ -540,6 +591,17 @@ export class SiteResource {
         map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] SiteResource::pecAssignable error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public pecExistsWithinHa(siteId: number, pec: string): Observable<boolean> {
+    return this.apiResource.get(`sites/${siteId}/pec/${pec}/exists-within-ha`)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::pecExistsWithinHa error has occurred: ', error);
           throw error;
         })
       );

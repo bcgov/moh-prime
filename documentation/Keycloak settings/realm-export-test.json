@@ -66,6 +66,15 @@
         "attributes": {}
       },
       {
+        "id": "c18fe7f9-258e-46f6-b534-b3bd3599afa4",
+        "name": "paper_enrolment_only_view",
+        "description": "Role permitting viewing Paper Enrolments only (not BCSC enrolments)",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "ce5db9c0-0914-49db-88b8-6d3602c17fc4",
         "name": "prime_api_service_account",
         "composite": false,
@@ -85,6 +94,15 @@
         "id": "8344f55e-4a94-41f7-96f2-769b0dc52075",
         "name": "feature_site_ha",
         "description": "Health Authority Site Registration feature flag",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "74d0e350-d2ae-42e8-b2d0-2b9a55be12d8",
+        "name": "paper_enrolment_only_edit",
+        "description": "Role permitting editing Paper Enrolments only (not BCSC enrolments)",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -602,6 +620,19 @@
       "subGroups": []
     },
     {
+      "id": "0359f41c-b978-4cf3-9fef-90aa5ca9985b",
+      "name": "Paper Enrolment Clerk",
+      "path": "/Paper Enrolment Clerk",
+      "attributes": {},
+      "realmRoles": [
+        "paper_enrolment_only_view",
+        "paper_enrolment_only_edit",
+        "prime_administrant"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
       "id": "56e54e6b-438c-48b4-af69-53c53ae5727f",
       "name": "Realm Administrator",
       "path": "/Realm Administrator",
@@ -825,7 +856,22 @@
       "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
-      "attributes": {},
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "client_credentials.use_refresh_token": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,

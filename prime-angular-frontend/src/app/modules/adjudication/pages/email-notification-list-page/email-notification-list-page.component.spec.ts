@@ -40,4 +40,14 @@ describe('EmailNotificationListPageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('testing onBack()', () => {
+    it('should navigate with \'../\'', () => {
+      const spyOnRouteRelativeTo = spyOn((component as any).routeUtils, 'routeRelativeTo');
+
+      component.onBack();
+      expect(spyOnRouteRelativeTo).toHaveBeenCalledTimes(1);
+      expect(spyOnRouteRelativeTo).toHaveBeenCalledOnceWith(['../']);
+    });
+  });
 });

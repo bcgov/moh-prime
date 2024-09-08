@@ -42,7 +42,7 @@ export class MockAuthService implements IAuthService {
   }
 
   public async identityProvider(): Promise<IdentityProviderEnum> {
-    return await Promise.resolve(IdentityProviderEnum.BCSC);
+    return await Promise.resolve(IdentityProviderEnum.BCSC_MOH);
   }
 
   public identityProvider$(): Observable<IdentityProviderEnum> {
@@ -68,7 +68,8 @@ export class MockAuthService implements IAuthService {
         city: faker.address.city(),
         postal: faker.address.zipCode()
       },
-      email: faker.internet.email()
+      email: faker.internet.email(),
+      username: `${faker.random.uuid()}@bcsc`
     }));
   }
 
@@ -84,7 +85,9 @@ export class MockAuthService implements IAuthService {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      idir: `${faker.random.uuid()}`
+      idir: `${faker.random.uuid()}`,
+      username: `${faker.random.uuid()}@idir`,
+      status: faker.random.number(),
     }));
   }
 

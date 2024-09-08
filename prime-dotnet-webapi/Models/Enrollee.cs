@@ -22,7 +22,7 @@ namespace Prime.Models
         }
 
         public const int DISPLAY_OFFSET = 1000;
-        public const string PaperGpidPrefix = "NOBCSC";
+        public const string PaperGpidPrefix = "NABCSC";
 
         [Key]
         public int Id { get; set; }
@@ -35,13 +35,11 @@ namespace Prime.Models
         [StringLength(255)]
         public string HPDID { get; set; }
 
-        [Required]
         public string FirstName { get; set; }
 
         [Required]
         public string LastName { get; set; }
 
-        [Required]
         public string GivenNames { get; set; }
 
         public string PreferredFirstName { get; set; }
@@ -65,7 +63,12 @@ namespace Prime.Models
 
         public ICollection<Certification> Certifications { get; set; }
 
+        public ICollection<UnlistedCertification> UnlistedCertifications { get; set; }
+
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
+
+        // Currently enrollee has only 1 device provider (1-to-1 relation) with option to support 1 to manay in the future
+        public ICollection<EnrolleeDeviceProvider> EnrolleeDeviceProviders { get; set; }
 
         public string DeviceProviderIdentifier { get; set; }
 
@@ -124,6 +127,13 @@ namespace Prime.Models
 
         public EnrolleeLinkedEnrolment PaperToEnrolleeLink { get; set; }
 
+        public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
+
+        /// <summary>
+        /// HPDID associated with BCSC, with suffix, e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc"
+        /// </summary>
+        public string Username { get; set; }
+
         [NotMapped]
         [Computed]
         public PhysicalAddress PhysicalAddress
@@ -152,6 +162,16 @@ namespace Prime.Models
                 .Select(a => a.Address)
                 .OfType<VerifiedAddress>()
                 .SingleOrDefault();
+        }
+
+        [NotMapped]
+        [Computed]
+        public ICollection<AdditionalAddress> AdditionalAddresses
+        {
+            get => Addresses
+                .Select(a => a.Address)
+                .OfType<AdditionalAddress>()
+                .ToList();
         }
 
         /// <summary>
@@ -252,6 +272,25 @@ namespace Prime.Models
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// The expiry reason of the Enrollee's most recently accepted Agreement,
+        /// defaulting to ExpiryReasonType.AnniversaryRenewalRequired if not known.
+        /// </summary>
+        [NotMapped]
+        [Computed]
+        public ExpiryReasonType ExpiryReason
+        {
+            get
+            {
+                var expiryReasonType = Agreements
+                    .OrderByDescending(at => at.CreatedDate)
+                    .Where(at => at.AcceptedDate.HasValue)
+                    .Select(at => at.ExpiryReason)
+                    .FirstOrDefault();
+                return expiryReasonType != null ? (ExpiryReasonType)expiryReasonType : ExpiryReasonType.AnniversaryRenewalRequired;
+            }
+        }
+
         [NotMapped]
         [Computed]
         public int DisplayId
@@ -328,6 +367,10 @@ namespace Prime.Models
             if (Guid.Empty.Equals(UserId))
             {
                 yield return new ValidationResult($"UserId cannot be empty");
+            }
+            if (null == Username)
+            {
+                yield return new ValidationResult($"Username cannot be empty");
             }
         }
     }

@@ -30,6 +30,8 @@ namespace Prime.Models
 
         public string PEC { get; set; }
 
+        public string Mnemonic { get; set; }
+
         public string DoingBusinessAs { get; set; }
 
         public bool ActiveBeforeRegistration { get; set; }
@@ -37,6 +39,8 @@ namespace Prime.Models
         public bool Completed { get; set; }
 
         public bool Flagged { get; set; }
+
+        public bool IsNew {get; set;}
 
         public DateTimeOffset? SubmittedDate { get; set; }
 

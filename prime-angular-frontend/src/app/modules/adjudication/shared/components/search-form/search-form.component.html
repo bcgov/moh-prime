@@ -8,12 +8,24 @@
              formControlName="textSearch">
     </mat-form-field>
 
-    <mat-form-field *ngIf="!hideStatus"
+    <mat-form-field *ngIf="!hideStatus && useEnrolleeStatuses"
                     class="filter">
-      <mat-label>Filter By Status</mat-label>
-      <mat-select formControlName="statusCode">
+      <mat-label>Filter By</mat-label>
+      <mat-select formControlName="enrolleeStatusCode">
         <mat-option value="">All</mat-option>
-        <mat-option *ngFor="let status of statuses"
+        <mat-option *ngFor="let status of enrolleeStatuses"
+                    [value]="status.code">
+          {{ status.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!hideStatus && useSiteStatuses"
+                    class="filter">
+      <mat-label>Filter By</mat-label>
+      <mat-select formControlName="siteStatusCode">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let status of siteStatuses"
                     [value]="status.code">
           {{ status.name }}
         </mat-option>

@@ -5,6 +5,20 @@ export interface IProgressIndicator {
   currentRoute: string;
   routes: string[];
 }
+/**
+ * Used to store the mapping between the display step and the route
+ */
+export interface IStep {
+  step: string;
+  routes: string[];
+}
+/**
+ * Used to store the status of each step
+ */
+export interface IProgressStep extends IStep {
+  isCurrent: boolean;
+  completed: boolean;
+}
 
 /**
  * @description
@@ -38,13 +52,13 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
   /**
    * @description
    * Prefix for the default percent complete message.
-   * e.g. "Registration" 25% Completed
+   * e.g., "Registration" 25% Completed
    */
   @Input() public prefix: string;
   /**
    * @description
    * Customized message under the progressed indicator.
-   * e.g. 100% complete and don't need percent complete,
+   * e.g., 100% complete and don't need percent complete,
    * but want to provide a message.
    */
   @Input() public message: string;
@@ -56,9 +70,20 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
   @Input() public template: TemplateRef<any>;
   /**
    * @description
-   * Acts as an override to display nothing under the progress
-   * indicator, which becomes a glorified divider.
+   * To use Step style progress bar
    */
+  @Input() public steps: IProgressStep[];
+  /**
+   * @description
+   * To indicate if the indicator needs to be centered
+   * Note: only used and tested for Step type yet
+   */
+  @Input() public isCentered: boolean;
+  /**
+  * @description
+  * Acts as an override to display nothing under the progress
+  * indicator, which becomes a glorified divider.
+  */
   @Input() public noContent: boolean;
   /**
    * @description
@@ -67,7 +92,7 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
    * follow an order of precedence of none, template, message,
    * and percent (default).
    */
-  public mode: 'none' | 'template' | 'message' | 'percent';
+  public mode: 'none' | 'template' | 'message' | 'percent' | 'step';
   /**
    * @description
    * Calculated percent complete.
@@ -120,11 +145,27 @@ export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressI
     this.mode = (this.noContent) ? 'none'
       : (this.template) ? 'template'
         : (this.message) ? 'message'
-          : 'percent'; // Default
+          : (this.steps) ? 'step'
+            : 'percent'; // Default
 
     // Update the percent complete on any changes to
     // the input bindings
-    this.updatePercentComplete();
+    if (this.mode === 'percent') {
+      this.updatePercentComplete();
+    }
+    if (this.mode === 'step') {
+      this.percentComplete = 0;
+      let stepComplete = true;
+      this.steps = this.steps.map(s => {
+        // set isCurrent to true only if in progress.
+        s.isCurrent = s.routes.some(r => r === this.currentRoute);
+        if (s.isCurrent && this.inProgress) {
+          stepComplete = false;
+        }
+        s.completed = stepComplete;
+        return s;
+      });
+    }
   }
 
   private updatePercentComplete() {

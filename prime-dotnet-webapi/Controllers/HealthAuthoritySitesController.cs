@@ -21,21 +21,27 @@ namespace Prime.Controllers
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
         private readonly IEmailService _emailService;
+        private readonly IBusinessEventService _businessEventService;
         private readonly IHealthAuthorityService _healthAuthorityService;
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
+        private readonly IAuthorizedUserService _authorizedUserService;
         private readonly ISiteService _siteService;
 
         public HealthAuthoritySitesController(
             IEmailService emailService,
+            IBusinessEventService businessEventService,
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
-            ISiteService siteService
+            ISiteService siteService,
+            IAuthorizedUserService authorizedUserService
         )
         {
             _emailService = emailService;
+            _businessEventService = businessEventService;
             _healthAuthorityService = healthAuthorityService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
             _siteService = siteService;
+            _authorizedUserService = authorizedUserService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -59,10 +65,6 @@ namespace Prime.Controllers
             if (!await _healthAuthorityService.AuthorizedUserExistsOnHealthAuthorityAsync(healthAuthorityId, payload.AuthorizedUserId))
             {
                 return Forbid();
-            }
-            if (!await _healthAuthorityService.VendorExistsOnHealthAuthorityAsync(healthAuthorityId, payload.HealthAuthorityVendorId))
-            {
-                return NotFound($"Health Authority Vendor not found with id {payload.HealthAuthorityVendorId}");
             }
 
             var createdSite = await _healthAuthoritySiteService.CreateSiteAsync(healthAuthorityId, payload);
@@ -187,12 +189,18 @@ namespace Prime.Controllers
             {
                 return NotFound($"No Editable Health Authority Site found with id {siteId}");
             }
+            if (updateModel.HealthAuthorityVendorId.HasValue &&
+                !await _healthAuthorityService.VendorExistsOnHealthAuthorityAsync(healthAuthorityId, updateModel.HealthAuthorityVendorId.Value))
+            {
+                return NotFound($"Health Authority Vendor not found with id {updateModel.HealthAuthorityVendorId}");
+            }
             if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, updateModel))
             {
                 return BadRequest();
             }
-
-            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUsernameAsync(User.GetPrimeUsername());
+            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel, authorizedUser.Id);
+            await _businessEventService.CreateSiteEventAsync(siteId, User.GetPrimeUsername(), "Health Authority Site Updated");
 
             return NoContent();
         }
@@ -245,11 +253,12 @@ namespace Prime.Controllers
                 return NotFound($"No editable Health Authority Site found with Id {siteId}");
             }
 
-            var record = await _healthAuthoritySiteService.GetPermissionsRecordAsync(siteId);
-            if (!record.AccessableBy(User))
+            // Check if the user is belong to the same HA as the site's HA
+            if (!await _healthAuthoritySiteService.AllowToSubmitSite(siteId, User.GetPrimeUsername()))
             {
                 return Forbid();
             }
+
             if (!await _healthAuthorityService.ValidateSiteSelectionsAsync(healthAuthorityId, siteId))
             {
                 return Conflict("Cannot submit Site, one or more selections dependent on the Health Authority are invalid.");
@@ -260,10 +269,54 @@ namespace Prime.Controllers
             {
                 return BadRequest("Action could not be performed.");
             }
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUsernameAsync(User.GetPrimeUsername());
 
-            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel);
+            await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel, authorizedUser.Id);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, User.GetPrimeUsername(), "Health Authority Site has been updated and submitted");
+
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, User.GetPrimeUsername(), "Notified of health authority site registration submission");
+
+            return NoContent();
+        }
+
+
+        // POST: api/health-authorities/5/sites/transfer/from/10/to/11
+        /// <summary>
+        /// Transfer site from one authorized user to another within a health authority.
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="currentAuthorizedUserId"></param>
+        /// <param name="newAuthorizedUserId"></param>
+        [HttpPost("transfer/from/{currentAuthorizedUserId}/to/{newAuthorizedUserId}", Name = nameof(TransferHealthAuthoritySite))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> TransferHealthAuthoritySite(int healthAuthorityId, int currentAuthorizedUserId, int newAuthorizedUserId)
+        {
+            var authorizedUsers = await _healthAuthorityService.GetAuthorizedUsersAsync(healthAuthorityId);
+
+            if (authorizedUsers.Any() &&
+                authorizedUsers.Any(au => au.Id == currentAuthorizedUserId) &&
+                authorizedUsers.Any(au => au.Id == newAuthorizedUserId))
+            {
+                var currentAuthorizedUser = authorizedUsers.First(au => au.Id == currentAuthorizedUserId);
+                var newAuthorizedUser = authorizedUsers.First(au => au.Id == newAuthorizedUserId);
+
+                var siteIds = await _healthAuthoritySiteService.TransferAuthorizedUserAsync(currentAuthorizedUserId, newAuthorizedUserId);
+                foreach (int siteId in siteIds)
+                {
+                    await _businessEventService.CreateSiteEventAsync(siteId,
+                        $"Health Authorized Site is transfered from {currentAuthorizedUser.FirstName} {currentAuthorizedUser.LastName} to {newAuthorizedUser.FirstName} {newAuthorizedUser.LastName}");
+                }
+            }
+            else
+            {
+                return NotFound("Authorized User not found");
+            }
 
             return NoContent();
         }

@@ -26,21 +26,25 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly ICommunitySiteService _communitySiteService;
+        private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly IDocumentService _documentService;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
+        private readonly IDeviceProviderService _deviceProviderService;
 
         public SitesController(
             IAdminService adminService,
             IBusinessEventService businessEventService,
             ICommunitySiteService communitySiteService,
+            IHealthAuthoritySiteService healthAuthoritySiteService,
             IDocumentService documentService,
             IEmailService emailService,
             IMapper mapper,
             IOrganizationService organizationService,
-            ISiteService siteService)
+            ISiteService siteService,
+            IDeviceProviderService deviceProviderService)
         {
             _adminService = adminService;
             _businessEventService = businessEventService;
@@ -50,6 +54,8 @@ namespace Prime.Controllers
             _mapper = mapper;
             _organizationService = organizationService;
             _siteService = siteService;
+            _deviceProviderService = deviceProviderService;
+            _healthAuthoritySiteService = healthAuthoritySiteService;
         }
 
         // GET: api/Sites
@@ -79,6 +85,28 @@ namespace Prime.Controllers
             }
 
             return Ok(_mapper.Map<IEnumerable<CommunitySiteListViewModel>>(sites));
+        }
+
+        // GET: api/Sites
+        /// <summary>
+        /// Gets all Sites.
+        /// </summary>
+        [HttpGet(Name = nameof(GetAllSites))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<CommunitySiteListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAllSites([FromQuery] OrganizationSearchOptions search)
+        {
+            var paginatedList = await _communitySiteService.GetSitesAsync(search);
+
+            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
+            foreach (var site in paginatedList)
+            {
+                site.HasNotification = notifiedIds.Contains(site.Id);
+            }
+
+            return Ok(paginatedList.Response);
         }
 
         // GET: api/Sites/5
@@ -243,7 +271,7 @@ namespace Prime.Controllers
 
             Admin admin = adjudicatorId.HasValue
                 ? await _adminService.GetAdminAsync(adjudicatorId.Value)
-                : await _adminService.GetAdminAsync(User.GetPrimeUserId());
+                : await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             if (admin == null)
             {
@@ -345,7 +373,8 @@ namespace Prime.Controllers
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
             await _siteService.SubmitRegistrationAsync(siteId);
 
-            await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
+            await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode, site.IsNew);
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site registration submission notification");
 
             return Ok();
         }
@@ -360,7 +389,7 @@ namespace Prime.Controllers
             }
 
             var existingLicence = site.BusinessLicence;
-            var isNewDocument = existingLicence.BusinessLicenceDocument.DocumentGuid != newLicence.DocumentGuid && newLicence.DocumentGuid != null;
+            var isNewDocument = existingLicence.BusinessLicenceDocument?.DocumentGuid != newLicence.DocumentGuid && newLicence.DocumentGuid != null;
 
             if (site.ApprovedDate == null)
             {
@@ -506,6 +535,7 @@ namespace Prime.Controllers
             if (site.SubmittedDate != null)
             {
                 await _emailService.SendSiteRegistrationSubmissionAsync(siteId, businessLicenceId, (CareSettingType)site.CareSettingCode);
+                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site registration submission notification");
             }
 
             // Send an notifying email to the adjudicator
@@ -516,6 +546,7 @@ namespace Prime.Controllers
                 && !string.IsNullOrEmpty(site.BusinessLicence.DeferredLicenceReason))
             {
                 await _emailService.SendBusinessLicenceUploadedAsync(site);
+                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent business licence upload notification");
             }
 
             return Ok(document);
@@ -606,7 +637,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             var document = await _siteService.AddSiteAdjudicationDocumentAsync(siteId, documentGuid, admin.Id);
             if (document == null)
@@ -698,6 +729,34 @@ namespace Prime.Controllers
             return Ok(await _siteService.PecAssignableAsync(siteId, pec));
         }
 
+        // GET: api/sites/1/pec/abc/exists-within-ha
+        /// <summary>
+        /// Check if a given PEC exists in other site within the same health authority.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="pec"></param>
+        /// <returns></returns>
+        [HttpGet("{siteId}/pec/{pec}/exists-within-ha", Name = nameof(PecExistsWithinHA))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> PecExistsWithinHA(int siteId, string pec)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            if (string.IsNullOrWhiteSpace(pec))
+            {
+                return BadRequest("PEC cannot be empty.");
+            }
+
+            return Ok(await _siteService.PecExistsWithinHAAsync(siteId, pec));
+        }
+
         // PUT: api/Sites/5/pec
         /// <summary>
         /// Update the PEC code.
@@ -728,6 +787,31 @@ namespace Prime.Controllers
             }
 
             await _siteService.UpdatePecCode(siteId, pecCode);
+
+            return NoContent();
+        }
+
+        // PUT: api/Sites/5/vendor
+        /// <summary>
+        /// Update the Vendor code.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="siteVendor"></param>
+        [HttpPut("{siteId}/vendor", Name = nameof(UpdateVendor))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateVendor(int siteId, SiteVendorUpdateViewModel siteVendor)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            await _siteService.UpdateVendor(siteId, siteVendor.VendorCode, siteVendor.Rationale);
 
             return NoContent();
         }
@@ -791,6 +875,7 @@ namespace Prime.Controllers
 
             var site = await _communitySiteService.GetSiteAsync(siteId);
             await _emailService.SendRemoteUsersUpdatedAsync(site);
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent remote user update notification");
             return NoContent();
         }
 
@@ -815,6 +900,7 @@ namespace Prime.Controllers
             }
 
             await _emailService.SendSiteReviewedNotificationAsync(siteId, note);
+            await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site reviewed notification");
             return NoContent();
         }
 
@@ -860,21 +946,34 @@ namespace Prime.Controllers
                 if (communitySite.ActiveBeforeRegistration)
                 {
                     await _emailService.SendSiteActiveBeforeRegistrationAsync(siteId, communitySite.Organization.SigningAuthority.Email);
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site active before registration notification");
                 }
                 else
                 {
+                    /* do not send email to SA and Admin about the approval
                     await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(communitySite);
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved PharmaNet administrator notification");
                     await _emailService.SendSiteApprovedSigningAuthorityAsync(communitySite);
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved signing authority notification");
+                    */
                 }
                 await _emailService.SendSiteApprovedHIBCAsync(communitySite);
+                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site approved HIBC notification");
 
                 var remoteUsersToNotify = communitySite.RemoteUsers.Where(ru => !ru.Notified);
                 await _emailService.SendRemoteUserNotificationsAsync(communitySite, remoteUsersToNotify);
+                if (remoteUsersToNotify.Any())
+                {
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site remote user notification(s)");
+                }
                 await _siteService.MarkUsersAsNotifiedAsync(remoteUsersToNotify);
             }
             else
             {
                 await _siteService.ApproveSite(siteId);
+                var haSite = await _healthAuthoritySiteService.GetHealthAuthoritySiteAsync(siteId);
+                await _emailService.SendHealthAuthoritySiteApprovedAsync(haSite);
+                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent HA site approval email to Connections");
             }
 
             return Ok();
@@ -989,7 +1088,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
 
@@ -1108,7 +1207,7 @@ namespace Prime.Controllers
                 return NotFound($"Site Registration Note not found with id {siteRegistrationNoteId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
             var notification = await _siteService.CreateSiteNotificationAsync(note.Id, admin.Id, assigneeId);
 
             return Ok(notification);
@@ -1162,7 +1261,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUsername());
 
             var notes = await _siteService.GetNotificationsAsync(siteId, admin.Id);
 
@@ -1216,6 +1315,30 @@ namespace Prime.Controllers
             return Ok();
         }
 
+        // PUT: api/sites/5/isNew
+        /// <summary>
+        /// Sets a site's IsNew flag, which serves as a reminder
+        /// for an adjudicator to come back to this site
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="isNew"></param>
+        [HttpPut("{siteId}/isnew", Name = nameof(SetIsNew))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult> SetIsNew(int siteId, FromBodyData<bool> isNew)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            await _siteService.UpdateSiteIsNew(siteId, isNew);
+            return Ok();
+        }
+
         // GET: api/sites/5/individual-device-providers
         /// <summary>
         /// Gets the Individual Device Providers for a Device Provider Site.
@@ -1239,6 +1362,23 @@ namespace Prime.Controllers
             }
 
             return Ok(await _communitySiteService.GetIndividualDeviceProvidersAsync(siteId));
+        }
+
+        // GET: api/enrollees/device-provider-site/P1-90XXX
+        /// <summary>
+        /// Get device provider site by device provider id.
+        /// </summary>
+        /// <param name="deviceProviderId"></param>
+        [HttpGet("device-provider-site/{deviceProviderId}", Name = nameof(GetDeviceProviderSite))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<DeviceProviderSiteViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetDeviceProviderSite(string deviceProviderId)
+        {
+            var site = await _deviceProviderService.GetDeviceProviderSiteAsync(deviceProviderId);
+            return Ok(site);
         }
     }
 }

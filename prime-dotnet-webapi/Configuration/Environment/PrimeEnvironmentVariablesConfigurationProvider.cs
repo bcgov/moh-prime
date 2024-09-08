@@ -6,6 +6,10 @@ using System.Linq;
 
 namespace Prime.Configuration.Environment
 {
+    /// <summary>
+    /// Maps from environment variables (localhost or OpenShift ConfigMaps) to
+    /// in-memory Configuration objects.
+    /// </summary>
     public class PrimeEnvironmentVariablesConfigurationProvider : ConfigurationProvider
     {
         public override void Load()
@@ -35,6 +39,7 @@ namespace Prime.Configuration.Environment
                 "KEYCLOAK_REALM_URL" => "PrimeKeycloak__RealmUrl",
                 "KEYCLOAK_ADMINISTRATION_URL" => "PrimeKeycloak__AdministrationUrl",
                 "KEYCLOAK_ADMINISTRATION_CLIENT_SECRET" => "PrimeKeycloak__AdministrationClientSecret",
+                "KEYCLOAK_CLIENT_ID" => "PrimeKeycloak__KeycloakClientId",
 
                 "MOH_KEYCLOAK_REALM_URL" => "MohKeycloak__RealmUrl",
                 "MOH_KEYCLOAK_ADMINISTRATION_URL" => "MohKeycloak__AdministrationUrl",
@@ -51,6 +56,7 @@ namespace Prime.Configuration.Environment
 
                 "CHES_ENABLED" => "ChesApi__Enabled",
                 "CHES_API_URL" => "ChesApi__Url",
+                "CHES_CLIENT_ID" => "ChesApi__ClientId",
                 "CHES_CLIENT_SECRET" => "ChesApi__ClientSecret",
                 "CHES_TOKEN_URL" => "ChesApi__TokenUrl",
 
@@ -68,6 +74,8 @@ namespace Prime.Configuration.Environment
                 "PLR_INTEGRATION_CLIENT_CERT_THUMBPRINT" => "PlrIntegration__ClientCertThumbprint",
 
                 "LDAP_API_URL" => "LdapApi__Url",
+
+                "PROVIDER_ENROLMENT_TEAM_EMAIL" => "ProviderEnrolmentTeam__EmailAddress",
 
                 _ => envKey
             };

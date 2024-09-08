@@ -1,0 +1,56 @@
+<form [formGroup]="form"
+      novalidate>
+  <div class="search-container">
+
+    <mat-form-field class="search">
+      <input matInput
+             placeholder="Search"
+             formControlName="textSearch">
+    </mat-form-field>
+
+    <mat-form-field class="filter">
+      <mat-label>State</mat-label>
+      <mat-select formControlName="siteStatusCode">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let status of siteStatuses"
+                    [value]="status.code">
+          {{ status.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="filter">
+      <mat-label>Vendor</mat-label>
+      <mat-select formControlName="vendorCode">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let vendor of vendors"
+                    [value]="vendor.code">
+          {{ vendor.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="filter">
+      <mat-label>Care Type</mat-label>
+      <mat-select formControlName="careTypeCode">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let careType of careTypes"
+                    [value]="careType.name">
+          {{ careType.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox class="pr-3"
+                  formControlName="assignToMe">
+      Assigned to me
+    </mat-checkbox>
+
+    <button mat-icon-button
+            matTooltip="Refresh the results"
+            (click)="onRefresh()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+
+  </div>
+</form>

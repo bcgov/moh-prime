@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 using DelegateDecompiler.EntityFrameworkCore;
 
 using Prime.Engines;
+using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.Services.Razor;
 using Prime.ViewModels;
 
 namespace Prime.Services
@@ -25,6 +28,9 @@ namespace Prime.Services
         private readonly IPrivilegeService _privilegeService;
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IVerifiableCredentialService _verifiableCredentialService;
+        private readonly IRazorConverterService _razorConverterService;
+        private readonly IPdfService _pdfService;
+        private readonly IDocumentManagerClient _documentManagerClient;
 
         public SubmissionService(
             ApiDbContext context,
@@ -38,7 +44,10 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             IPrivilegeService privilegeService,
             ISubmissionRulesService submissionRulesService,
-            IVerifiableCredentialService verifiableCredentialService)
+            IVerifiableCredentialService verifiableCredentialService,
+            IRazorConverterService razorConverterService,
+            IPdfService pdfService,
+            IDocumentManagerClient documentManagerClient)
             : base(context, logger)
         {
             _agreementService = agreementService;
@@ -51,6 +60,9 @@ namespace Prime.Services
             _privilegeService = privilegeService;
             _submissionRulesService = submissionRulesService;
             _verifiableCredentialService = verifiableCredentialService;
+            _razorConverterService = razorConverterService;
+            _pdfService = pdfService;
+            _documentManagerClient = documentManagerClient;
         }
 
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile)
@@ -137,6 +149,7 @@ namespace Prime.Services
                     .ThenInclude(cer => cer.College)
                 .Include(e => e.Certifications)
                     .ThenInclude(l => l.License)
+                .Include(e => e.Agreements)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (!EnrolleeStatusStateEngine.AllowableAction(action, enrollee.CurrentStatus))
@@ -202,6 +215,45 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task RerunRulesForNaturopathsAsync(bool listOnly)
+        {
+            var pharmanetStatusReasons = new[]
+            {
+                (int) StatusReasonType.BirthdateDiscrepancy,
+                // NotInPharmanet included due to earlier mistake running against non-PROD PharmaNet API
+                (int) StatusReasonType.NotInPharmanet
+            };
+
+            var enrollees = GetBaseQueryForEnrolleeApplicationRules()
+                .Where(e => e.Adjudicator == null)
+                .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview)
+                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => pharmanetStatusReasons.Contains(esr.StatusReasonCode)))
+                // Looking for Full Naturopaths
+                .Where(e => e.Certifications.Any(c => c.LicenseCode == 78))
+                // Need `DecompileAsync` due to computed property `CurrentStatus`
+                .DecompileAsync()
+                .ToList();
+
+            foreach (var enrollee in enrollees)
+            {
+                Console.WriteLine($"RerunRulesAsync on {enrollee.FullName} (Id {enrollee.Id}, DOB: {enrollee.DateOfBirth})");
+                if (!listOnly)
+                {
+                    // Group results of the rules under a new enrollment status
+                    enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+                    await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Cron Job running the enrollee application rules");
+
+                    if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee, true))
+                    {
+                        Console.WriteLine($"Cron Job Automatically Approved {enrollee.FullName} (Id {enrollee.Id})");
+                        await AdjudicatedAutomatically(enrollee, "Cron Job Automatically Approved");
+                    }
+                    // We don't perform a `_enrolleeService.RemoveNotificationsAsync`
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
+
         private async Task<bool> HandleEnrolleeStatusActionAsync(EnrolleeStatusAction action, Enrollee enrollee, object additionalParameters)
         {
             switch (action)
@@ -234,7 +286,12 @@ namespace Prime.Services
                     break;
 
                 case EnrolleeStatusAction.CancelToaAssignment:
+                    await _enrolleeAgreementService.DeleteObsoleteEnrolleeAgreementAsync(enrollee.Id);
                     await CancelToaAssignmentAsync(enrollee);
+                    break;
+
+                case EnrolleeStatusAction.UnlockedProfile:
+                    await UnlockProfileAsync(enrollee);
                     break;
 
                 default:
@@ -280,6 +337,22 @@ namespace Prime.Services
                     return false;
                 }
             }
+            else
+            {
+                // for regular enrollee, get the pending agreement, create the PDF and store it in document manager
+                var pendingAgreementId = enrollee.Agreements.OrderByDescending(a => a.CreatedDate).Select(a => a.Id).First();
+                Agreement agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrollee.Id, pendingAgreementId, true);
+                var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.PdfNoSignature, agreement);
+                var pdfbinary = _pdfService.Generate(html);
+                var filename = "Terms-Of-Access.pdf";
+                var documentGuid = await _documentManagerClient.SendFileAsync(new System.IO.MemoryStream(pdfbinary), filename, DestinationFolders.SignedAgreements);
+
+                var agreementDocument = await _agreementService.AddSignedAgreementDocumentAsync(agreement.Id, documentGuid, filename);
+                if (agreementDocument == null)
+                {
+                    return false;
+                }
+            }
 
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             await SetGpid(enrollee);
@@ -319,8 +392,6 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Locked);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Locked");
             await _context.SaveChangesAsync();
-            await _emailService.SendReminderEmailAsync(enrollee.Id);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
         private async Task DeclineProfileAsync(Enrollee enrollee)
@@ -359,6 +430,13 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator cancelled TOA assignment");
+        }
+
+        private async Task UnlockProfileAsync(Enrollee enrollee)
+        {
+            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Unlocked");
+            await _context.SaveChangesAsync();
         }
 
         private async Task SetGpid(Enrollee enrollee)
@@ -406,7 +484,8 @@ namespace Prime.Services
                     .ThenInclude(es => es.EnrolmentStatusReasons)
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
-                        .ThenInclude(l => l.LicenseDetails);
+                        .ThenInclude(l => l.LicenseDetails)
+                .AsSplitQuery();
         }
     }
 }

@@ -1,6 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isSubmitted"></app-site-progress-indicator>
 
   <form [formGroup]="formState.form"
         novalidate
@@ -16,7 +16,10 @@
           Directly sets up individual PharmaNet access accounts at a site or has the authority to request accounts from
           the site's PharmaNet software vendor. May be the Signing Authority.
         </p>
-        <p>
+        <p *ngIf="isCommunityPharmacy()">
+          The PharmaNet Administrator could be, for example, the pharmacy manager.
+        </p>
+        <p *ngIf="!isCommunityPharmacy()">
           The PharmaNet Administrator could be the site's administrator, manager, HR lead, medical office assistant
           (MOA), a practitioner, software vendor, etc.
         </p>

@@ -132,7 +132,9 @@ export class DashboardV1Component implements OnInit {
 
     const user = await this.authService.getUser();
     // Identity providers don't all provide last name
-    this.username = `${user?.firstName} ${user.lastName ?? ''}`;
+    // On the other hand, BCSC mononym may only have last name
+    this.username = user?.firstName ? `${user.firstName} ${user.lastName ?? ''}`
+      : (user.lastName ?? '');
   }
 
   private getSideNavSections(): DashboardNavSectionV1[] {
@@ -148,7 +150,7 @@ export class DashboardV1Component implements OnInit {
     const hasAcceptedAtLeastOneToa = (enrolment)
       ? !!enrolment.expiryDate
       : false;
-    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa);
+    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa, enrolment?.currentTOAStatus);
     const currentRoute = this.router.url.slice(1).split('/')[1];
 
     const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatusEnum.UNDER_REVIEW)
@@ -202,7 +204,7 @@ export class DashboardV1Component implements OnInit {
                 EnrolmentStatusEnum.LOCKED,
                 EnrolmentStatusEnum.DECLINED
               ].includes(enrolmentStatus)
-            )
+            ) || enrolment?.currentTOAStatus === ""
           },
           {
             name: 'Absence Management',
@@ -248,7 +250,7 @@ export class DashboardV1Component implements OnInit {
     ];
   }
 
-  private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatusEnum, hasAcceptedAtLeastOneToa: boolean) {
+  private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatusEnum, hasAcceptedAtLeastOneToa: boolean, currentTOAStatus: string) {
     let enrollee = 'assignment_ind';
     let accessAgreement = 'assignment';
     let certificate = 'mail';
@@ -294,6 +296,8 @@ export class DashboardV1Component implements OnInit {
       }
 
     }
+
+    if (currentTOAStatus === "") certificate = 'lock'
 
     return { enrollee, accessAgreement, certificate, absence };
   }

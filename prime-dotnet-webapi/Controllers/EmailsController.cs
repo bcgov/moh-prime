@@ -18,11 +18,16 @@ namespace Prime.Controllers
     {
         private readonly IEmailService _emailService;
         private readonly IEmailTemplateService _emailTemplateService;
+        private readonly IBusinessEventService _businessEventService;
 
-        public EmailsController(IEmailService emailService, IEmailTemplateService emailTemplateService)
+        public EmailsController(
+            IEmailService emailService,
+            IEmailTemplateService emailTemplateService,
+            IBusinessEventService businessEventService)
         {
             _emailService = emailService;
             _emailTemplateService = emailTemplateService;
+            _businessEventService = businessEventService;
         }
 
         // POST: api/Emails/management/statuses
@@ -53,9 +58,15 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendEnrolleeRenewalEmails()
         {
-            await _emailService.SendEnrolleeRenewalEmails();
+            var enrolleesEmailed = await _emailService.SendEnrolleeRenewalEmails();
+            int numEmailed = 0;
+            foreach (var enrolleeId in enrolleesEmailed)
+            {
+                await _businessEventService.CreateEmailEventAsync(enrolleeId, "Notified enrollee to renew");
+                numEmailed++;
+            }
 
-            return NoContent();
+            return Ok($"Sent {numEmailed} renewal emails.");
         }
 
         // POST: api/Emails/management/enrollees/unsigned-toa
@@ -69,7 +80,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SendEnrolleeUnsignedToaReminderEmails()
         {
-            await _emailService.SendEnrolleeUnsignedToaReminderEmails();
+            var enrolleesEmailed = await _emailService.SendEnrolleeUnsignedToaReminderEmails();
+            foreach (var enrolleeId in enrolleesEmailed)
+            {
+                await _businessEventService.CreateEmailEventAsync(enrolleeId, "Notified enrollee to sign TOA");
+            }
 
             return NoContent();
         }
@@ -128,6 +143,98 @@ namespace Prime.Controllers
             }
 
             var emailTemplate = await _emailTemplateService.UpdateEmailTemplateAsync(emailTemplateId, template);
+            return Ok(emailTemplate);
+        }
+
+        // PUT: api/emails/management/subject/1
+        /// <summary>
+        /// Update email template subject
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="subject"></param>
+        [HttpPut("management/subject/{emailTemplateId}", Name = nameof(UpdateEmailSubject))]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailSubject(int emailTemplateId, FromBodyText subject)
+        {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
+            var emailTemplate = await _emailTemplateService.UpdateEmailSubjectAsync(emailTemplateId, subject);
+            return Ok(emailTemplate);
+        }
+
+        // PUT: api/emails/management/title/1
+        /// <summary>
+        /// Update email template title
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="title"></param>
+        [HttpPut("management/title/{emailTemplateId}", Name = nameof(UpdateEmailTitle))]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailTitle(int emailTemplateId, FromBodyText title)
+        {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
+            var emailTemplate = await _emailTemplateService.UpdateEmailTitleAsync(emailTemplateId, title);
+            return Ok(emailTemplate);
+        }
+
+        // PUT: api/emails/management/description/1
+        /// <summary>
+        /// Update email description
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="description"></param>
+        [HttpPut("management/description/{emailTemplateId}", Name = nameof(UpdateEmailDescription))]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailDescription(int emailTemplateId, FromBodyText description)
+        {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
+            var emailTemplate = await _emailTemplateService.UpdateEmailDescriptionAsync(emailTemplateId, description);
+            return Ok(emailTemplate);
+        }
+
+        // PUT: api/emails/management/recipient/1
+        /// <summary>
+        /// Update email recipient
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="recipient"></param>
+        [HttpPut("management/recipient/{emailTemplateId}", Name = nameof(UpdateEmailRecipient))]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailRecipient(int emailTemplateId, FromBodyText recipient)
+        {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
+            var emailTemplate = await _emailTemplateService.UpdateEmailRecipientAsync(emailTemplateId, recipient);
             return Ok(emailTemplate);
         }
     }

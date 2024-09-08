@@ -1,0 +1,19 @@
+<ng-container [formGroup]="form">
+  <app-form-icon-group (event)="removeEmailInput()"
+                       [show]="showRemoveButton">
+    <div class="row">
+      <div class="col">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Email"
+                 formControlName="email"
+                 maxlength="50"
+                 appTrimSpace>
+          <mat-error *ngIf="email.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </app-form-icon-group>
+</ng-container>

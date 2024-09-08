@@ -16,10 +16,13 @@ import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
       <app-enrollee-property title="Health Authority Care Type">
         {{ healthAuthCareType?.healthAuthorityCareType?.careType | default }}
       </app-enrollee-property>
+      <app-enrollee-property title="Vendor">
+        {{ healthAuthCareType?.healthAuthorityVendor.vendorCode | configCode: 'vendors' | default }}
+      </app-enrollee-property>
     </app-overview-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class HealthAuthCareTypeOverviewComponent extends AbstractOverview {
   @Input() public healthAuthCareType: HealthAuthCareTypeForm;
@@ -31,4 +34,5 @@ export class HealthAuthCareTypeOverviewComponent extends AbstractOverview {
   ) {
     super(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
+
 }

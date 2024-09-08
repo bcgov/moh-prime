@@ -10,6 +10,7 @@
   <app-address-view title="Physical Address"
                     [address]="organization?.signingAuthority.physicalAddress"
                     [showRedirect]="showEditRedirect"
+                    [showEditRedirect]="showEditRedirect"
                     [showIfEmpty]="true"
                     (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
   </app-address-view>
@@ -17,6 +18,7 @@
   <app-address-view title="Mailing Address"
                     [address]="organization?.signingAuthority.mailingAddress"
                     [showRedirect]="showEditRedirect"
+                    [showEditRedirect]="showEditRedirect"
                     [showIfEmpty]="true"
                     (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
   </app-address-view>
@@ -88,13 +90,13 @@
       {{ site?.pec | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property *ngIf="site.businessLicence?.deferredLicenceReason"
-                           title="Deferred Business Licence Reason">
-      {{ site.businessLicence.deferredLicenceReason | default }}
+    <app-enrollee-property title="Device Provider ID"
+                           *ngIf="showDeviceProviderId">
+      {{ site?.deviceProviderId | default }}
     </app-enrollee-property>
 
     <ng-container *ngIf="!admin; else businessLicenceListView">
-      <ng-container *ngIf="site.businessLicence?.businessLicenceDocument">
+      <ng-container *ngIf="site.businessLicence?.businessLicenceDocument; else deferredLicence">
 
         <app-enrollee-property title="Expiry"
                                [hasError]="!site.businessLicence?.expiryDate && withinRenewalPeriod"
@@ -115,8 +117,26 @@
             New business licence document has been uploaded for submission
           </ng-template>
         </app-enrollee-property>
-
+        <app-enrollee-property *ngIf="site.businessLicence.deferredLicenceReason"
+                               title="Deferred Business Licence Reason">
+          {{ site.businessLicence.deferredLicenceReason | default }}
+        </app-enrollee-property>
       </ng-container>
+
+      <ng-template #deferredLicence>
+        <ng-container *ngIf="site.businessLicence?.deferredLicenceReason; else missingLicenceAndDeferral">
+          <app-enrollee-property title="Deferred Business Licence Reason">
+            {{ site.businessLicence.deferredLicenceReason | default }}
+          </app-enrollee-property>
+        </ng-container>
+        <ng-template #missingLicenceAndDeferral>
+          <app-enrollee-property [hasError]="siteErrors?.missingBusinessLicenceOrReason"
+                                 errorMessage="Must have a valid business licence or deferred reason"
+                                 title="Business Licence">
+            {{ (businessLicenceUpdated) ? "New business licence document has been uploaded for submission" : "-"}}
+          </app-enrollee-property>
+        </ng-template>
+      </ng-template>
     </ng-container>
 
     <ng-template #businessLicenceListView>
@@ -133,13 +153,18 @@
             {{ businessLicence?.businessLicenceDocument?.filename | default }}
           </button>
         </app-enrollee-property>
+        <app-enrollee-property title="Deferred Business Licence Reason">
+          {{ businessLicence.deferredLicenceReason | default }}
+        </app-enrollee-property>
       </ng-container>
     </ng-template>
   </app-overview-section>
 
-  <app-overview-section title="Site Address"
+  <app-overview-section *ngIf="site?.physicalAddress?.street !== null && site?.physicalAddress?.city !== null &&
+                          site?.physicalAddress?.provinceCode !== null && site?.physicalAddress?.postal !== null"
+                        title="Site Address"
                         [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
-                        [editRoute]="SiteRoutes.SITE_ADDRESS"
+                        [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Address">
       {{ site?.physicalAddress?.street | default }}
@@ -164,7 +189,7 @@
   </app-overview-section>
 
   <app-overview-section title="Hours of Operation"
-                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
+                        [showEditRedirect]="showEditRedirect && site.status === SiteStatusType.EDITABLE"
                         [editRoute]="SiteRoutes.HOURS_OPERATION"
                         (route)="onRouteRelative($event)">
     <ng-container *ngFor="let businessDay of site?.businessHours">
@@ -176,52 +201,13 @@
     </ng-container>
   </app-overview-section>
 
-  <app-overview-section *ngIf="site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER"
-                        title="Individual Device Providers"
-                        [showEditRedirect]="showEditRedirect && site.status === SiteStatusType.EDITABLE"
-                        [editRoute]="SiteRoutes.DEVICE_PROVIDER"
-                        (route)="onRouteRelative($event)">
 
-    <ng-container *ngIf="site.individualDeviceProviders?.length; else noDeviceProviders">
-      <ng-container *ngFor="let provider of site.individualDeviceProviders">
-
-        <app-enrollee-property title="First Name">
-          {{ provider.firstName | default }}
-        </app-enrollee-property>
-
-        <app-enrollee-property *ngIf="provider.middleName"
-                               title="Middle Name">
-          {{ provider.middleName | default }}
-        </app-enrollee-property>
-
-        <app-enrollee-property title="Last Name">
-          {{ provider.lastName | default }}
-        </app-enrollee-property>
-
-        <app-enrollee-property title="Date of Birth">
-          {{ provider.dateOfBirth | formatDate | default }}
-        </app-enrollee-property>
-
-        <app-enrollee-property title="Email">
-          {{ provider.email | default }}
-        </app-enrollee-property>
-      </ng-container>
-    </ng-container>
-
-    <ng-template #noDeviceProviders>
-      <app-enrollee-property title="Device Providers"
-                             [hasError]="siteErrors?.deviceProviderSite"
-                             errorMessage="Device provider sites must have at least one individual device provider">
-        None
-      </app-enrollee-property>
-    </ng-template>
-
-  </app-overview-section>
-
-  <app-remote-user-review [remoteUsers]="site.remoteUsers"
+  <app-remote-user-review *ngIf="this.showRemnoteUsers"
+                          [remoteUsers]="site.remoteUsers"
                           [showEditRedirect]="showEditRedirect && site.status === SiteStatusType.EDITABLE"
                           [editRoute]="SiteRoutes.REMOTE_USERS"
                           (route)="onRouteRelative($event)"></app-remote-user-review>
+
 
   <app-overview-section title="PharmaNet Administrator"
                         [showEditRedirect]="showEditRedirect && site.status === SiteStatusType.EDITABLE"

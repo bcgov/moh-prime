@@ -13,8 +13,13 @@ namespace Prime.Engines.AgreementEngineInternal
 
     public static class CertificationDigest
     {
-        public static ICertificationDigest Create(ICollection<CertificationDto> certs)
+        public static ICertificationDigest Create(ICollection<CertificationDto> certs, ICollection<EnrolleeDeviceProvider> dps)
         {
+            if (dps != null && dps.Count > 0)
+            {
+                return new DeviceProvider(dps.First().DeviceProviderId, dps.First().CertificationNumber);
+            }
+
             if (certs.Count > 1)
             {
                 return new MultipleColleges();
@@ -47,7 +52,52 @@ namespace Prime.Engines.AgreementEngineInternal
             }
             else
             {
-                return new OtherCollege(regulated);
+                if (License.isPhysicianAssistant(cert.License.CurrentLicenseDetail))
+                {
+                    return new PhysicianAssistant();
+                }
+                else if (License.isLicensedPracticalNurse(cert.License.CurrentLicenseDetail))
+                {
+                    return new LicensedPracticalNurse(regulated);
+                }
+                else
+                {
+                    return new OtherCollege(regulated, cert);
+                }
+            }
+        }
+    }
+
+    public class PhysicianAssistant : ICertificationDigest
+    {
+        public PhysicianAssistant() { }
+
+        public AgreementType? ResolveWith(SettingsDigest settings)
+        {
+            return AgreementType.PrescriberOBOTOA;
+        }
+    }
+
+    public class DeviceProvider : ICertificationDigest
+    {
+        private string _dpId { get; set; }
+        private string _certNumber { get; set; }
+
+        public DeviceProvider(string dpId, string certNumber)
+        {
+            _dpId = dpId;
+            _certNumber = certNumber;
+        }
+
+        public AgreementType? ResolveWith(SettingsDigest settings)
+        {
+            if (!string.IsNullOrWhiteSpace(_certNumber))
+            {
+                return AgreementType.DeviceProviderRUTOA;
+            }
+            else
+            {
+                return AgreementType.DeviceProviderOBOTOA;
             }
         }
     }
@@ -135,13 +185,36 @@ namespace Prime.Engines.AgreementEngineInternal
         }
     }
 
+    public class LicensedPracticalNurse : ICertificationDigest
+    {
+        private bool Regulated { get; set; }
+        public LicensedPracticalNurse(bool regulated)
+        {
+            Regulated = regulated;
+        }
+
+        public AgreementType? ResolveWith(SettingsDigest settings)
+        {
+            if (Regulated)
+            {
+                return AgreementType.LicencedPracticalNurseTOA;
+            }
+            else
+            {
+                return AgreementType.OboTOA;
+            }
+        }
+    }
+
     public class OtherCollege : ICertificationDigest
     {
         private bool Regulated { get; set; }
+        private CertificationDto Certification { get; set; }
 
-        public OtherCollege(bool regulated)
+        public OtherCollege(bool regulated, CertificationDto certification)
         {
             Regulated = regulated;
+            Certification = certification;
         }
 
         public AgreementType? ResolveWith(SettingsDigest settings)
@@ -154,7 +227,14 @@ namespace Prime.Engines.AgreementEngineInternal
 
             if (Regulated)
             {
-                return AgreementType.RegulatedUserTOA;
+                if (!Certification.License.CurrentLicenseDetail.PrescriberIdType.HasValue || Certification.PractitionerId != null)
+                {
+                    return AgreementType.RegulatedUserTOA;
+                }
+                else
+                {
+                    return AgreementType.OboTOA;
+                }
             }
             else
             {

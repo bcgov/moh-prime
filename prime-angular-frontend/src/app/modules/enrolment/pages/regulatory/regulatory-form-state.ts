@@ -1,18 +1,22 @@
 import { FormArray, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
+import { CollegeConfig } from '@config/config.model';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ConfigService } from '@config/config.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
 import { EnrolmentRegulatoryForm } from './enrolment-regulatory-form.model';
 export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryForm> {
+  public colleges: CollegeConfig[];
+
   public constructor(
-    private fb: FormBuilder,
-    private configService: ConfigService
+    protected fb: FormBuilder,
+    protected configService: ConfigService
   ) {
     super();
     this.buildForm();
+    this.colleges = this.configService.colleges;
   }
 
   public get certifications(): FormArray {
@@ -21,6 +25,18 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
 
   public get deviceProviderIdentifier(): FormControl {
     return this.formInstance.get('deviceProviderIdentifier') as FormControl;
+  }
+
+  public get deviceProviderRoleCode(): FormControl {
+    return this.formInstance.get('deviceProviderRoleCode') as FormControl;
+  }
+
+  public get deviceProviderId(): FormControl {
+    return this.formInstance.get('deviceProviderId') as FormControl;
+  }
+
+  public get certificationNumber(): FormControl {
+    return this.formInstance.get('certificationNumber') as FormControl;
   }
 
   /**
@@ -39,16 +55,24 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
       return;
     }
 
-    const { certifications: rawCertifications, deviceProviderIdentifier } = this.formInstance.getRawValue();
-    const certifications = rawCertifications.map(c => {
-      const { nurseCategory, ...collegeCertification } = c;
+    const { certifications: rawCertifications, deviceProviderId, deviceProviderRoleCode, certificationNumber } = this.formInstance.getRawValue();
+    let certifications = rawCertifications.map(c => {
+      const { category, ...collegeCertification } = c;
       return collegeCertification;
     });
 
-    return { certifications, deviceProviderIdentifier }
+    if (certifications && certifications.length === 1 && certifications[0].collegeCode === "") {
+      //reset certifications
+      certifications = [];
+    }
+
+    const enrolleeDeviceProviders = deviceProviderRoleCode ?
+      [{ deviceProviderId, deviceProviderRoleCode, certificationNumber }] : [];
+
+    return { certifications, enrolleeDeviceProviders }
   }
 
-  public patchValue({ certifications, deviceProviderIdentifier }: EnrolmentRegulatoryForm): void {
+  public patchValue({ certifications, enrolleeDeviceProviders }: EnrolmentRegulatoryForm): void {
 
     if (!this.formInstance || !Array.isArray(certifications)) {
       return;
@@ -59,14 +83,21 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     if (certifications.length) {
       certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
     }
-
-    this.formInstance.patchValue({ certifications, deviceProviderIdentifier });
+    if (enrolleeDeviceProviders && enrolleeDeviceProviders.length) {
+      const { deviceProviderId, deviceProviderRoleCode, certificationNumber } = enrolleeDeviceProviders[0];
+      this.formInstance.patchValue({ certifications, deviceProviderId, deviceProviderRoleCode, certificationNumber });
+    } else {
+      this.formInstance.patchValue({ certifications });
+    }
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
       certifications: this.fb.array([]),
-      deviceProviderIdentifier: [null, []]
+      deviceProviderIdentifier: [null, []],
+      deviceProviderId: [null, []],
+      deviceProviderRoleCode: [null, []],
+      certificationNumber: [null, []]
     });
   }
 
@@ -74,7 +105,7 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     return this.fb.group({
       // Force selection of "None" on new certifications
       collegeCode: ['', []],
-      nurseCategory: [null, []],
+      category: [null, []],
       licenseCode: [null, []],
       // Validators are applied at the component-level when
       // fields are made visible to allow empty submissions
@@ -91,16 +122,16 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     if (collegeCertification) {
       // Nursing category is a derived field for BCCNM, which is used to filter the
       // results for the verbose number of available licence codes for nurses
-      const nurseCategory = (collegeCertification.collegeCode === CollegeLicenceClassEnum.BCCNM)
+      const category = this.collegeHasGrouping(collegeCertification.collegeCode)
         ? this.configService.colleges
-          .find(c => c.code === CollegeLicenceClassEnum.BCCNM)
+          .find(c => c.code === collegeCertification.collegeCode)
           .collegeLicenses
           .filter(cl => cl.collegeCode === collegeCertification.collegeCode && cl.licenseCode === collegeCertification.licenseCode)
           .shift()
           .collegeLicenseGroupingCode
         : null;
 
-      certification.patchValue({ ...collegeCertification, nurseCategory });
+      certification.patchValue({ ...collegeCertification, category });
     }
 
     this.certifications.push(certification);
@@ -108,5 +139,13 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
 
   public removeCollegeCertifications() {
     this.certifications.clear();
+  }
+
+  public collegeHasGrouping(collegeCode: number): boolean {
+    if (collegeCode === 0) {
+      return false;
+    }
+    const college = this.colleges.find((c) => c.code === collegeCode);
+    return college ? college.collegeLicenses.some((l) => l.collegeLicenseGroupingCode) : false;
   }
 }

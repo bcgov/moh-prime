@@ -1,3 +1,11 @@
+<app-paginator [hidePaginator]="(pagination?.totalPages ?? 1) === 1"
+               [page]="pagination?.page">
+  <mat-paginator (page)="onPage($event, true)"
+                 [pageIndex]="pagination?.page - 1"
+                 [pageSize]="pagination?.pageSize"
+                 [length]="pagination?.totalResults"></mat-paginator>
+</app-paginator>
+
 <table mat-table
        [dataSource]="dataSource"
        class="w-100">
@@ -36,7 +44,7 @@
         *matHeaderCellDef
         scope="col"> Organization Name </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.name | default: '' }} </td>
+        *matCellDef="let row;"> {{ row.organizationName | default: '' }} </td>
   </ng-container>
 
   <ng-container matColumnDef="signingAuthority">
@@ -44,7 +52,7 @@
         *matHeaderCellDef
         scope="col"> Signing Authority </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.signingAuthority | fullname | default: '' }} </td>
+        *matCellDef="let row;"> {{ row.signingAuthorityName | default: '' }} </td>
   </ng-container>
 
   <ng-container matColumnDef="siteDoingBusinessAs">
@@ -52,7 +60,10 @@
         *matHeaderCellDef
         scope="col"> Site Name (Doing Business As) </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.siteDoingBusinessAs | default }} </td>
+        *matCellDef="let row;">
+      <span *ngIf="row.isNew" class="red">NEW </span>
+      {{ row.doingBusinessAs | default }}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="submissionDate">
@@ -74,7 +85,8 @@
   <ng-container matColumnDef="state">
     <th mat-header-cell
         *matHeaderCellDef
-        scope="col"> State </th>
+        scope="col"> State
+    </th>
     <td mat-cell
         *matCellDef="let row;"
         class="status"
@@ -120,8 +132,7 @@
         *matHeaderCellDef
         scope="col"> Missing Business Licence </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ ((row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
-      ? !row.businessLicence?.businessLicenceDocument : null) | yesNo | default: 'N/A' }} </td>
+        *matCellDef="let row;"> {{ displayMissingBusinessLicence(row) }} </td>
   </ng-container>
 
   <ng-container matColumnDef="actions">
@@ -148,6 +159,15 @@
       *matRowDef="let row; columns: columns;"></tr>
 </table>
 
+<app-paginator [hidePaginator]="(pagination?.totalPages ?? 1) === 1"
+               [page]="pagination?.page">
+  <mat-paginator #secondaryPaginator
+                 (page)="onPage($event, false)"
+                 [pageIndex]="pagination?.page - 1"
+                 [pageSize]="pagination?.pageSize"
+                 [length]="pagination?.totalResults"></mat-paginator>
+</app-paginator>
+
 <p *ngIf="!dataSource?.data.length"
    class="px-4 py-2 text-muted">
   No Sites Found
@@ -162,12 +182,14 @@
 
   <mat-menu #menu="matMenu">
     <button mat-menu-item
-            (click)="onRoute([AdjudicationRoutes.BANNERS])">
+            (click)="onRoute([AdjudicationRoutes.BANNERS])"
+            [disabled]="!(Role.MAINTENANCE | inRole)">
       <mat-icon>bookmark</mat-icon>
       <span>Site Banners</span>
     </button>
     <button mat-menu-item
-            (click)="onRoute([AdjudicationRoutes.MAINTENANCE])">
+            (click)="onRoute([AdjudicationRoutes.MAINTENANCE])"
+            [disabled]="!(Role.VIEW_ENROLLEE | inRole) && !(Role.VIEW_SITE | inRole)">
       <mat-icon>build</mat-icon>
       <span>Maintenance</span>
     </button>

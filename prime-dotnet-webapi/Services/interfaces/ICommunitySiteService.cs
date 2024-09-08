@@ -4,11 +4,14 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.ViewModels;
 using System.Security.Claims;
+using Prime.Models.Api;
+
 namespace Prime.Services
 {
     public interface ICommunitySiteService
     {
         Task<IEnumerable<CommunitySite>> GetSitesAsync(int? organizationId = null);
+        Task<PaginatedList<CommunitySiteAdminListViewModel>> GetSitesAsync(OrganizationSearchOptions searchOptions);
         Task<CommunitySite> GetSiteAsync(int siteId);
         Task<int> CreateSiteAsync(int organizationId);
         Task UpdateSiteAsync(int siteId, CommunitySiteUpdateModel updatedSite);
@@ -21,5 +24,6 @@ namespace Prime.Services
         Task<bool> SiteExistsAsync(int siteId);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId);
         Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId);
+        Task UpdateSigningAuthorityForOrganization(int organizationId, int partyId);
     }
 }

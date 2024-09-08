@@ -1,10 +1,10 @@
 using AutoMapper;
 using System.Linq;
+using System;
 
 using Prime.DTOs.AgreementEngine;
 using Prime.Models;
-using System;
-
+using Prime.Models.Api;
 namespace Prime.ViewModels.Profiles
 {
     public class EnrolleeMappingProfile : Profile
@@ -33,7 +33,8 @@ namespace Prime.ViewModels.Profiles
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed == true))
                 .ForMember(dest => dest.LinkedEnrolleeId, opt => opt.MapFrom(src => (src.EnrolleeToPaperLink == null) ? src.PaperToEnrolleeLink.EnrolleeId : src.EnrolleeToPaperLink.PaperEnrolleeId))
                 .ForMember(dest => dest.PossiblePaperEnrolmentMatch, opt => opt.MapFrom(src => (src.GPID != null && src.GPID.Contains(Enrollee.PaperGpidPrefix)) ? false : unlinkedPaperEnrolments.Any(e => e.DateOfBirth.Date == src.DateOfBirth.Date)))
-                .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(id => id == src.CurrentAgreementId)));
+                .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(id => id == src.CurrentAgreementId)))
+                .ForMember(dest => dest.HasDeviceProviderCareSetting, opt => opt.MapFrom(src => src.HasCareSetting(CareSettingType.DeviceProvider)));
 
             CreateMap<EnrolleeDTO, EnrolleeViewModel>();
 
@@ -55,6 +56,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<Certification, CertificationDto>();
             CreateMap<Certification, CertificationViewModel>();
             CreateMap<EnrolleeRemoteUser, EnrolleeRemoteUserViewModel>();
+            CreateMap<EnrolleeDeviceProvider, EnrolleeDeviceProviderViewModel>();
             CreateMap<OboSite, OboSiteViewModel>();
             CreateMap<RemoteAccessLocation, RemoteAccessLocationViewModel>();
             CreateMap<RemoteAccessSite, RemoteAccessSiteViewModel>()
@@ -62,7 +64,9 @@ namespace Prime.ViewModels.Profiles
             CreateMap<CommunitySite, RemoteAccessSiteViewModel.SiteViewModel>();
             CreateMap<SiteVendor, RemoteAccessSiteViewModel.VendorViewModel>();
             CreateMap<SelfDeclaration, SelfDeclarationViewModel>()
-                .ForMember(dest => dest.Answered, opt => opt.MapFrom(src => true));
+                .ForMember(dest => dest.Answered, opt => opt.MapFrom(src => true))
+                .ForMember(dest => dest.SortingNumber, opt => opt.MapFrom(src => src.SelfDeclarationType.SortingNumber));
+
             CreateMap<RemoteAccessSiteUpdateModel, RemoteAccessSite>();
             CreateMap<SelfDeclarationDocument, SelfDeclarationDocumentViewModel>();
 
@@ -76,6 +80,11 @@ namespace Prime.ViewModels.Profiles
             CreateMap<License, LicenseViewModel>()
                 .IncludeMembers(l => l.CurrentLicenseDetail);
             CreateMap<LicenseDetail, LicenseViewModel>();
+
+            CreateMap<HpdidLookup, EnrolleeLookup>();
+            CreateMap<HpdidLookup, GpidDetailLookup>();
+
+            CreateMap<DeviceProviderSite, DeviceProviderSiteViewModel>();
         }
     }
 }

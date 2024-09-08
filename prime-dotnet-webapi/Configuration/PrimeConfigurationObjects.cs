@@ -19,6 +19,7 @@ namespace Prime.Configuration.Internal
         public string RealmUrl { get; set; }
         public string WellKnownConfig { get => KeycloakUrls.WellKnownConfig(RealmUrl); }
         public string TokenUrl { get => KeycloakUrls.Token(RealmUrl); }
+        public string KeycloakClientId { get; set; }
         public string AdministrationUrl { get; set; }
         public string AdministrationClientId { get; set; }
         public string AdministrationClientSecret { get; set; }
@@ -106,5 +107,10 @@ namespace Prime.Configuration.Internal
     public class SentryConfiguration
     {
         public string Dsn { get; set; }
+    }
+
+    public class ProviderEnrolmentTeamConfiguration
+    {
+        public string EmailAddress { get; set; }
     }
 }

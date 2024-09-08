@@ -12,6 +12,7 @@ import { optionalAddressLineItems } from '@lib/models/address.model';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -34,7 +35,9 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 })
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
+  public organizationId: number;
   public organization: Organization;
+  public organizations: Organization[];
   public organizationSitesExpiryDates: string[];
   public organizationAgreements: OrganizationAgreementViewModel[];
   public routeUtils: RouteUtils;
@@ -49,6 +52,7 @@ export class SiteManagementPageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private organizationResource: OrganizationResource,
+    private organizationService: OrganizationService,
     private siteResource: SiteResource,
     private utilsService: UtilsService,
     private authService: AuthService,
@@ -58,6 +62,7 @@ export class SiteManagementPageComponent implements OnInit {
     private configCodePipe: ConfigCodePipe
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.organizationId = this.route.snapshot.params.oid;
   }
 
   public viewOrganization(organization: Organization): void {
@@ -97,6 +102,15 @@ export class SiteManagementPageComponent implements OnInit {
 
   public addSite(organizationId: number): void {
     this.createSite(organizationId);
+  }
+
+  public addOrganization(): void {
+    this.routeUtils.routeRelativeTo([0, SiteRoutes.ORGANIZATION_NAME]);
+  }
+
+  public changeOrganization(organizationId: number): void {
+    this.organizationService.organization = this.organizationService.organizations.find((org) => org.id === organizationId);
+    this.getOrganizations();
   }
 
   public getOrganizationProperties(organization: Organization): KeyValue<string, string>[] {
@@ -196,19 +210,27 @@ export class SiteManagementPageComponent implements OnInit {
     this.getOrganizations();
   }
 
+  /**
+   *  Get organization data and bind them to this component
+   */
   private getOrganizations(): void {
     this.busy = this.authService.getUser$()
       .pipe(
         exhaustMap((user: BcscUser) =>
-          this.organizationResource.getSigningAuthorityOrganizationByUserId(user.userId)
+          this.organizationResource.getSigningAuthorityOrganizationByUsername(user.username)
         ),
-        map((organization: Organization) => {
+        map((organizations: Organization[]) => {
+          const organization = this.organizationService.organization ?
+            organizations.find((org) => org.id === this.organizationService.organization.id)
+            : organizations[0];
+
           this.organizationSitesExpiryDates = organization.sites
             .reduce((expiryDates: string[], site: Site) => {
               return (site.status === SiteStatusType.EDITABLE && !!site.approvedDate)
                 ? [...expiryDates, Site.getExpiryDate(site)]
                 : expiryDates;
             }, []);
+          this.organizations = organizations;
           return this.organization = organization;
         }),
         exhaustMap((organization: Organization) =>

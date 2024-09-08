@@ -60,8 +60,10 @@ namespace Prime.Services.Rules
                 Certifications = enrollee.Certifications.Select(c => new CertificationDto
                 {
                     CollegeCode = c.CollegeCode,
-                    License = c.License
-                }).ToList()
+                    License = c.License,
+                    PractitionerId = c.PractitionerId,
+                }).ToList(),
+                EnrolleeDeviceProviders = enrollee.EnrolleeDeviceProviders,
             };
             var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
 

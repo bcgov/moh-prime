@@ -12,14 +12,12 @@ import { AuthorizedUserPageComponent } from './pages/authorized-user-page/author
 import { AuthorizedUserNextStepsPageComponent } from './pages/authorized-user-next-steps-page/authorized-user-next-steps-page.component';
 import { AuthorizedUserApprovedPageComponent } from './pages/authorized-user-approved-page/authorized-user-approved-page.component';
 import { AuthorizedUserDeclinedPageComponent } from './pages/authorized-user-declined-page/authorized-user-declined-page.component';
+import { AuthorizedUserDisabledPageComponent } from './pages/authorized-user-disabled-page/authorized-user-disabled-page.component';
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
 import { HealthAuthCareTypePageComponent } from './pages/health-auth-care-type-page/health-auth-care-type-page.component';
 import { SiteInformationPageComponent } from './pages/site-information-page/site-information-page.component';
-import { VendorPageComponent } from './pages/vendor-page/vendor-page.component';
-import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
 import { AdministratorPageComponent } from './pages/administrator-page/administrator-page.component';
-import { TechnicalSupportPageComponent } from './pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 
 @NgModule({
@@ -31,14 +29,12 @@ import { OverviewPageComponent } from './pages/overview-page/overview-page.compo
     AuthorizedUserNextStepsPageComponent,
     AuthorizedUserApprovedPageComponent,
     AuthorizedUserDeclinedPageComponent,
+    AuthorizedUserDisabledPageComponent,
     SiteManagementPageComponent,
-    VendorPageComponent,
     SiteInformationPageComponent,
     HealthAuthCareTypePageComponent,
-    SiteAddressPageComponent,
     HoursOperationPageComponent,
     AdministratorPageComponent,
-    TechnicalSupportPageComponent,
     OverviewPageComponent
   ],
   imports: [

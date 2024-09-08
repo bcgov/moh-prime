@@ -28,6 +28,7 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public showAddressFields: boolean;
   public SiteRoutes = SiteRoutes;
 
@@ -48,6 +49,10 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
+  public isCommunityPharmacy(): boolean {
+    return this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+  }
+
   public onSelect(contact: Contact) {
     if (!contact.physicalAddress) {
       contact.physicalAddress = new Address();
@@ -63,10 +68,8 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
     } else {
       switch (this.siteService.site.careSettingCode) {
         case CareSettingEnum.COMMUNITY_PHARMACIST:
-          nextRoute = SiteRoutes.HOURS_OPERATION;
-          break;
         case CareSettingEnum.DEVICE_PROVIDER:
-          nextRoute = SiteRoutes.DEVICE_PROVIDER;
+          nextRoute = SiteRoutes.HOURS_OPERATION;
           break;
         default:
           nextRoute = SiteRoutes.REMOTE_USERS;
@@ -89,6 +92,7 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
+    this.isSubmitted = this.site?.submittedDate ? true : false;
     this.siteFormStateService.setForm(this.site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
   }

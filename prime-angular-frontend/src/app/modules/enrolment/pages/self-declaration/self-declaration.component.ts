@@ -3,13 +3,13 @@ import { Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
@@ -19,6 +19,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-self-declaration',
@@ -29,8 +30,10 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   public decisions: { code: boolean, name: string }[];
   public hasAttemptedFormSubmission: boolean;
   public showUnansweredQuestionsError: boolean;
+  public isDeviceProvider: boolean;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
-  public selfDeclarationQuestions = selfDeclarationQuestions;
+  public selfDeclarationQuestions = new Map<number, string>();
+  public selfDeclarationVersions: SelfDeclarationVersion[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -43,7 +46,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    protected authService: AuthService
+    protected authService: AuthService,
   ) {
     super(
       route,
@@ -83,6 +86,14 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     return this.form.get('hasRegistrationSuspendedDetails') as FormControl;
   }
 
+  public get hasRegistrationSuspendedDeviceProvider(): FormControl {
+    return this.form.get('hasRegistrationSuspendedDeviceProvider') as FormControl;
+  }
+
+  public get hasRegistrationSuspendedDeviceProviderDetails(): FormControl {
+    return this.form.get('hasRegistrationSuspendedDeviceProviderDetails') as FormControl;
+  }
+
   public get hasDisciplinaryAction(): FormControl {
     return this.form.get('hasDisciplinaryAction') as FormControl;
   }
@@ -100,6 +111,10 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onSubmit() {
+    if (!this.isInitialEnrolment && this.form.valid) {
+      this.enrolmentFormStateService.selfDeclarationCompletedDate = moment().format();
+    }
+
     const hasBeenThroughTheWizard = true;
     this.hasAttemptedFormSubmission = true;
     super.onSubmit(hasBeenThroughTheWizard);
@@ -135,10 +150,12 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     if (!this.isProfileComplete) {
       backRoutePath = (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
         ? EnrolmentRoutes.REMOTE_ACCESS
-        : (!certifications.length || (isDeviceProvider && !deviceProviderIdentifier))
+        : (!certifications.length && !isDeviceProvider)
           ? EnrolmentRoutes.OBO_SITES
           : EnrolmentRoutes.REGULATORY;
     }
+
+    this.enrolmentFormStateService.reset();
 
     this.routeTo(backRoutePath);
   }
@@ -153,6 +170,20 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected initForm() {
+    const careSettings = this.enrolmentFormStateService.careSettingsForm
+      .get('careSettings').value as CareSetting[];
+    this.isDeviceProvider = careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+
+    if (this.selfDeclarationQuestions.keys.length === 0) {
+      // convert time zone to utc format
+      this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format(), this.isDeviceProvider).subscribe((versions) => {
+        this.selfDeclarationVersions = versions;
+        versions.forEach(v => {
+          this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);
+        });
+      });
+    }
+
     this.hasConviction.valueChanges
       .subscribe((value: boolean) => {
         this.toggleSelfDeclarationValidators(value, this.hasConvictionDetails);
@@ -164,6 +195,16 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
         this.toggleSelfDeclarationValidators(value, this.hasRegistrationSuspendedDetails);
         this.showUnansweredQuestionsError = this.showUnansweredQuestions();
       });
+
+    if (this.isDeviceProvider) {
+      this.hasRegistrationSuspendedDeviceProvider.valueChanges
+        .subscribe((value: boolean) => {
+          this.toggleSelfDeclarationValidators(value, this.hasRegistrationSuspendedDeviceProviderDetails);
+          this.showUnansweredQuestionsError = this.showUnansweredQuestions();
+        });
+    } else {
+      this.toggleSelfDeclarationValidators(false, this.hasRegistrationSuspendedDeviceProvider);
+    }
 
     this.hasDisciplinaryAction.valueChanges
       .subscribe((value: boolean) => {
@@ -183,9 +224,15 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
       return;
     }
 
-    // Replace previous values on deactivation so updates are discarded
-    const { selfDeclarations, profileCompleted } = this.enrolmentService.enrolment;
-    this.enrolmentFormStateService.patchSelfDeclarations({ selfDeclarations, profileCompleted });
+    const { requireRedoSelfDeclaration } = this.enrolmentService.enrolment;
+
+    if (requireRedoSelfDeclaration) {
+      this.form.reset();
+    } else {
+      // Replace previous values on deactivation so updates are discarded
+      const { selfDeclarations, profileCompleted } = this.enrolmentService.enrolment;
+      this.enrolmentFormStateService.patchSelfDeclarations({ selfDeclarations, profileCompleted });
+    }
   }
 
   protected onSubmitFormIsInvalid() {
@@ -208,10 +255,19 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     let shouldShowUnansweredQuestions = false;
 
     if (this.hasAttemptedFormSubmission) {
-      shouldShowUnansweredQuestions = this.hasConviction.value === null
-        || this.hasRegistrationSuspended.value === null
-        || this.hasDisciplinaryAction.value === null
-        || this.hasPharmaNetSuspended.value === null;
+      const { careSettings } = this.enrolmentService.enrolment;
+      if (careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
+        shouldShowUnansweredQuestions = this.hasConviction.value === null
+          || this.hasRegistrationSuspended.value === null
+          || this.hasRegistrationSuspendedDeviceProvider.value === null
+          || this.hasDisciplinaryAction.value === null
+          || this.hasPharmaNetSuspended.value === null;
+      } else {
+        shouldShowUnansweredQuestions = this.hasConviction.value === null
+          || this.hasRegistrationSuspended.value === null
+          || this.hasDisciplinaryAction.value === null
+          || this.hasPharmaNetSuspended.value === null;
+      }
     }
 
     return shouldShowUnansweredQuestions;

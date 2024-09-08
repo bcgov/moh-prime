@@ -2,9 +2,9 @@ import { SiteListViewModel } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
 export interface SiteListViewModelPartial extends
-  Omit<SiteListViewModel, 'completed' | 'doingBusinessAs'> {
-  siteDoingBusinessAs: string;
+  Omit<SiteListViewModel, 'completed'> {
   flagged: boolean;
+  isNew: boolean;
 }
 
 export interface OrganizationListViewModelPartial extends
@@ -14,7 +14,6 @@ export interface OrganizationListViewModelPartial extends
 }
 
 export interface OrganizationSearchListViewModel {
-  matchOn: string[];
   organization: Organization;
 }
 
@@ -27,7 +26,7 @@ export interface OrganizationSearchListViewModel {
  * SiteRegistrationTable, and SiteRegistrationActions
  */
 export interface SiteRegistrationListViewModel extends OrganizationListViewModelPartial, SiteListViewModelPartial {
-  // Only exists when viewing a list of site registrations, and
-  // populated by the OrganizationSearchListViewModel
-  matchOn?: string[];
+  signingAuthorityName: string;
+  organizationName: string;
+
 }

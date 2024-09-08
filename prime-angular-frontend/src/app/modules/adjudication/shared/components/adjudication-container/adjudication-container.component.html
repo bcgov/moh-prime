@@ -7,14 +7,15 @@
 
   <app-search-form *ngIf="showSearchFilter"
                    localStoragePrefix="enrollee"
+                   [statusType]="SearchFormStatusType.EnrolleeStatuses"
                    (search)="onSearch($event)"
                    (filter)="onFilter($event)"
                    (refresh)="onRefresh()"></app-search-form>
 
   <app-enrollee-table *ngIf="busy.closed || enrollees?.length"
                       [enrollees]="enrollees"
+                      [pagination]="pagination"
                       [enrolleeNavigation]="enrolleeNavigation"
-                      [sort]="sort"
                       localStoragePrefix="enrollees"
                       (notify)="onNotify($event)"
                       (assign)="onAssign($event)"
@@ -22,7 +23,6 @@
                       (route)="onRoute($event)"
                       (refresh)="onRefresh()"
                       (navigateEnrollee)="onNavigateEnrollee($event)"
-                      (sortEnrollee)="onSort($event)"
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
   <ng-container *ngIf="content">

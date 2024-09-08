@@ -16,6 +16,8 @@ import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.mo
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { Job } from '@enrolment/shared/models/job.model';
+import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { EnrolleeDeviceProvider } from './enrollee-device-provider.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -24,7 +26,8 @@ export interface HttpEnrollee extends Enrollee {
   approvedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
-  deviceProviderIdentifier: string;
+  //deviceProviderIdentifier: string;
+  unlistedCertifications: UnlistedCertification[];
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
@@ -32,9 +35,12 @@ export interface HttpEnrollee extends Enrollee {
   remoteAccessLocations: RemoteAccessLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
+  selfDeclarationCompletedDate: string;
+  requireRedoSelfDeclaration: boolean;
   identificationDocuments: IdentificationDocument[];
   enrolleeCareSettings: CareSetting[];
   enrolleeHealthAuthorities: EnrolleeHealthAuthority[];
+  enrolleeDeviceProviders: EnrolleeDeviceProvider[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -79,7 +85,8 @@ export interface Enrolment {
   approvedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
-  deviceProviderIdentifier: string;
+  //deviceProviderIdentifier: string;
+  unlistedCertifications: UnlistedCertification[];
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
@@ -87,9 +94,11 @@ export interface Enrolment {
   remoteAccessLocations: RemoteAccessLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
+  selfDeclarationCompletedDate: string;
   identificationDocuments: IdentificationDocument[];
   careSettings: CareSetting[];
   enrolleeHealthAuthorities: EnrolleeHealthAuthority[];
+  enrolleeDeviceProviders: EnrolleeDeviceProvider[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -97,6 +106,7 @@ export interface Enrolment {
   assignedTOAType: number;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
+  requireRedoSelfDeclaration: boolean;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice

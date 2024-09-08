@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 
 import { ConfigCodePipe } from '@config/config-code.pipe';
-import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { RoutePath } from '@lib/utils/route-utils.class';
 import { DISPLAY_ID_OFFSET } from '@lib/constants';
 import { UtilsService } from '@core/services/utils.service';
@@ -20,6 +19,8 @@ import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.mode
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import moment from 'moment';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 export class Status {
   constructor(
@@ -54,7 +55,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   @Output() public route: EventEmitter<RoutePath>;
   public previousStatuses: Status[];
   public reasons: Reason[];
-  private questions: { [key: number]: string } = selfDeclarationQuestions;
+  private questions = new Map<number, string>();
   private enrolleeReviewStatus: EnrolleeReviewStatus;
 
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -89,7 +90,20 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     this.route.emit(routePath);
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    if (this.questions.keys.length === 0) {
+      // convert time zone to utc format
+      let targetDate = this.enrollee?.selfDeclarationCompletedDate ? moment(this.enrollee?.selfDeclarationCompletedDate).utc().format()
+        : moment().utc().format();
+      let isDeviceProvider = this.enrollee?.enrolleeCareSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+      this.enrolmentResource.getSelfDeclarationVersion(targetDate, isDeviceProvider).subscribe((versions) => {
+        versions.forEach(v => {
+          this.questions.set(v.selfDeclarationTypeCode, v.text);
+        });
+        this.reasons = this.generateReasons(this.enrollee);
+      });
+    }
+  }
 
   private getEnrolleeReviewStatus(enrollee: HttpEnrollee): void {
     if (!enrollee?.id) {
@@ -184,14 +198,15 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
           selfDeclaration.selfDeclarationDetails,
           this.getDocumentsForSelfDeclaration(reviewStatus, selfDeclaration.selfDeclarationTypeCode),
           true,
-          this.questions[selfDeclaration.selfDeclarationTypeCode]
+          this.questions.get(selfDeclaration.selfDeclarationTypeCode)
         ));
         return selfDeclarations;
       }, []);
   }
 
   private getDocumentsForSelfDeclaration(reviewStatus: EnrolleeReviewStatus, code: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
-    return reviewStatus.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
+    return reviewStatus && reviewStatus.selfDeclarationDocuments ?
+      reviewStatus.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code) : [];
   }
 
   private parsePotentialMatchIds(reason: Reason): Reason {

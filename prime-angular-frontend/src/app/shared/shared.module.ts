@@ -33,6 +33,9 @@ import { JoinPipe } from '@shared/pipes/join.pipe';
 import { RolePipe } from '@shared/pipes/role-pipe';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { ContainsPipe } from '@shared/pipes/contains.pipe';
+import { LicenseNumberLabelPipe } from '@shared/pipes/license-number-label.pipe';
+import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
+import { HealthAuthorityVendorPipe } from '@shared/pipes/health-authority-vendor.pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { HtmlComponent } from '@shared/components/dialogs/content/html/html.component';
@@ -52,6 +55,8 @@ import { PageFooterComponent } from '@shared/components/pages/page-footer/page-f
 
 import { NotificationInfoSummaryDirective } from '@shared/components/forms/contact-information-form/notification-info-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
+import { UpperCaseInputDirective } from '@lib/modules/forms/to-uppercase.directive';
+import { TrimSpaceInputDirective } from '@lib/modules/forms/trim-space.directive';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alerts/alert/alert.component';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
@@ -80,6 +85,7 @@ import { AddressAutocompleteComponent } from '@shared/components/address-autocom
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
 import { AccessCodeFormComponent } from '@shared/components/forms/access-code-form/access-code-form.component';
 import { ContactInformationFormComponent } from '@shared/components/forms/contact-information-form/contact-information-form.component';
+import { UnlistedCollegeLicenceFormComponent } from '@shared/components/forms/unlisted-college-licence-form/unlisted-college-licence-form.component';
 import {
   EnrolleeSelfDeclarationsComponent
 } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
@@ -114,16 +120,17 @@ import { DocumentAttachmentsComponent } from '@shared/components/document-attach
 import { DocumentAttachmentComponent } from '@shared/components/document-attachment/document-attachment.component';
 import { PartyTypePipe } from '@phsa/shared/pipes/party-type.pipe';
 import { DateOfBirthComponent } from './components/dialogs/content/date-of-birth/date-of-birth.component';
+import { SelfDeclarationTermComponent } from './components/enrollee/self-declaration-term/self-declaration-term.component';
 
 // Shared health authority components
 import { SiteInformationOverviewComponent } from '@health-auth/pages/site-information-page/site-information-overview.component';
-import { VendorOverviewComponent } from '@health-auth/pages/vendor-page/vendor-overview.component';
-import { SiteAddressOverviewComponent } from '@health-auth/pages/site-address-page/site-address-overview.component';
 import { HoursOperationOverviewComponent } from '@health-auth/pages/hours-operation-page/hours-operation-overview.component';
 import { AdministratorOverviewComponent } from '@health-auth/pages/administrator-page/administrator-overview.component';
-import { TechnicalSupportOverviewComponent } from '@health-auth/pages/technical-support-page/technical-support-overview.component';
 import { HealthAuthCareTypeOverviewComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-overview.component';
 import { HealthAuthSiteOverviewContainerComponent } from './components/health-auth-site-overview-container/health-auth-site-overview-container.component';
+import { EmailFormComponent } from './components/forms/email-form/email-form.component';
+import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
+import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
 
 @NgModule({
   declarations: [
@@ -145,6 +152,9 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     CareSettingPipe,
     JoinPipe,
     PartyTypePipe,
+    HealthAuthorityVendorPipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
     AddressFormComponent,
     ConfirmDialogComponent,
     HtmlComponent,
@@ -159,6 +169,8 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     PageSubheader2SummaryDirective,
     PageSubheader2MoreInfoDirective,
     NotificationInfoSummaryDirective,
+    UpperCaseInputDirective,
+    TrimSpaceInputDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
@@ -175,6 +187,7 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     AccessTermsTableComponent,
     AccessTermComponent,
     NoteComponent,
+    ChangeVendorNoteComponent,
     ManualFlagNoteComponent,
     ImageComponent,
     CollectionNoticeContainerComponent,
@@ -221,14 +234,15 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     DocumentAttachmentsComponent,
     DocumentAttachmentComponent,
     HealthAuthCareTypeOverviewComponent,
-    TechnicalSupportOverviewComponent,
     AdministratorOverviewComponent,
     HoursOperationOverviewComponent,
-    SiteAddressOverviewComponent,
-    VendorOverviewComponent,
     SiteInformationOverviewComponent,
     HealthAuthSiteOverviewContainerComponent,
-    DateOfBirthComponent
+    DateOfBirthComponent,
+    UnlistedCollegeLicenceFormComponent,
+    EmailFormComponent,
+    SelfDeclarationTermComponent,
+    TransferHASiteComponent,
   ],
   imports: [
     CommonModule,
@@ -265,6 +279,9 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     InRolePipe,
     ContainsPipe,
     PartyTypePipe,
+    HealthAuthorityVendorPipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
@@ -277,6 +294,8 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     PageSubheader2SummaryDirective,
     PageSubheader2MoreInfoDirective,
     NotificationInfoSummaryDirective,
+    UpperCaseInputDirective,
+    TrimSpaceInputDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
@@ -330,19 +349,21 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
     DocumentAttachmentsComponent,
     DocumentAttachmentComponent,
     HealthAuthCareTypeOverviewComponent,
-    TechnicalSupportOverviewComponent,
     AdministratorOverviewComponent,
     HoursOperationOverviewComponent,
-    SiteAddressOverviewComponent,
-    VendorOverviewComponent,
     SiteInformationOverviewComponent,
-    HealthAuthSiteOverviewContainerComponent
+    HealthAuthSiteOverviewContainerComponent,
+    UnlistedCollegeLicenceFormComponent,
+    EmailFormComponent,
+    SelfDeclarationTermComponent,
   ],
   providers: [
     FullnamePipe,
     AddressPipe,
     CasePipe,
-    CapitalizePipe
+    CapitalizePipe,
+    LicenseNumberLabelPipe,
+    CollegeNamePipe,
   ]
 })
 export class SharedModule { }

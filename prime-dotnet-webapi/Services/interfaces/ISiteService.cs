@@ -13,9 +13,11 @@ namespace Prime.Services
         Task<bool> SiteExistsAsync(int siteId);
         Task<SiteStatusType> GetSiteCurrentStatusAsync(int siteId);
         Task<bool> PecAssignableAsync(int siteId, string pec);
+        Task<bool> PecExistsWithinHAAsync(int siteId, string pec);
         Task UpdateCompletedAsync(int siteId, bool completed);
         Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null);
         Task UpdatePecCode(int siteId, string pecCode);
+        Task UpdateVendor(int siteId, int vendorCode, string rationale);
         Task DeleteSiteAsync(int siteId);
         Task<Site> ApproveSite(int siteId);
         Task<Site> DeclineSite(int siteId);
@@ -44,6 +46,7 @@ namespace Prime.Services
         Task<IEnumerable<SiteRegistrationNoteViewModel>> GetNotificationsAsync(int siteId, int adminId);
         Task RemoveNotificationsAsync(int siteId);
         Task UpdateSiteFlag(int siteId, bool flagged);
+        Task UpdateSiteIsNew(int siteId, bool isNew);
         Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user);
         Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId);
         Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId);

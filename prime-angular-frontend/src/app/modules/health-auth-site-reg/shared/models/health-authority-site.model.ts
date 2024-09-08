@@ -14,7 +14,8 @@ import { HealthAuthoritySiteCreate } from '@health-auth/shared/models/health-aut
 export interface HealthAuthoritySiteDto extends BaseHealthAuthoritySite {
   healthAuthorityVendor: HealthAuthorityVendor;
   healthAuthorityCareType: HealthAuthorityCareType;
-  siteName;
+  siteName: string;
+  mnemonic: string;
   pec: string;
   securityGroupCode: number;
   physicalAddress: Address;
@@ -30,6 +31,7 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
     public healthAuthorityVendor: HealthAuthorityVendor,
     public healthAuthorityCareType: HealthAuthorityCareType,
     public siteName: string,
+    public mnemonic: string,
     public pec: string,
     public securityGroupCode: number,
     public physicalAddress: Address,
@@ -70,6 +72,7 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
       healthAuthoritySite.healthAuthorityVendor,
       healthAuthoritySite.healthAuthorityCareType,
       healthAuthoritySite.siteName,
+      healthAuthoritySite.mnemonic,
       healthAuthoritySite.pec,
       healthAuthoritySite.securityGroupCode,
       healthAuthoritySite.physicalAddress,
@@ -89,17 +92,19 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
    * creating a new site.
    */
   public forCreate(authorizedUserId: number): HealthAuthoritySiteCreate {
+    const healthAuthorityCareTypeId = this.healthAuthorityCareType?.id;
     const healthAuthorityVendorId = this.healthAuthorityVendor?.id;
     if (!authorizedUserId) {
       throw Error('Authorized user identifier was not provided');
     }
-    if (!healthAuthorityVendorId) {
-      throw Error('Health authority vendor identifier was not provided');
+    if (!healthAuthorityCareTypeId) {
+      throw Error('Health Authority Care Type was not provided');
     }
 
     return {
       authorizedUserId,
-      healthAuthorityVendorId
+      healthAuthorityCareTypeId,
+      healthAuthorityVendorId,
     };
   }
 
@@ -112,6 +117,7 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
     return {
       siteName: this.siteName,
       pec: this.pec,
+      mnemonic: this.mnemonic,
       securityGroupCode: this.securityGroupCode,
       physicalAddress: { ...this.physicalAddress },
       businessHours: [...this.businessHours],

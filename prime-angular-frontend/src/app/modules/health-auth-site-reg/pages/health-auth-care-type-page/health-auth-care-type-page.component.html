@@ -1,6 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isSubmitted"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="formState.form"
@@ -35,6 +35,33 @@
       </div>
     </section>
 
+    <section *ngIf="vendors?.length"
+             class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Vendor</ng-container>
+        <ng-container appPageSubheader2Summary>
+          What PharmaNet software vendor does this site use?
+        </ng-container>
+      </app-page-subheader2>
+
+      <mat-radio-group class="radio-group"
+                       formControlName="healthAuthorityVendorId">
+        <mat-radio-button *ngFor="let vendor of vendors"
+                          class="radio-button"
+                          [value]="vendor.id">
+          {{ vendor.vendorCode | configCode: 'vendors' }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <app-alert *ngIf="hasNoVendorError"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          No vendor has been chosen.
+        </ng-container>
+      </app-alert>
+    </section>
   </form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"

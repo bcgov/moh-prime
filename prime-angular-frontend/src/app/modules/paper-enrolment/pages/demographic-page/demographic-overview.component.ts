@@ -14,7 +14,7 @@ import { DemographicForm } from './demographic-form.model';
         <ng-container appPageSubheaderTitle>Enrollee Information</ng-container>
 
         <button mat-icon-button
-                matTooltip="Edit Preferred Name"
+                matTooltip="Edit Alternate Name"
                 (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">
           <mat-icon>edit</mat-icon>
         </button>
@@ -35,6 +35,11 @@ import { DemographicForm } from './demographic-form.model';
       <app-enrollee-property title="Date of Birth">
         {{ demographic?.dateOfBirth | formatDate }}
       </app-enrollee-property>
+
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">Edit Alternate Name
+      </button>
     </app-page-section>
 
     <app-address-view title="Physical Address"
@@ -43,6 +48,25 @@ import { DemographicForm } from './demographic-form.model';
                       [showIfEmpty]="true"
                       (route)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)"></app-address-view>
 
+    <ng-container *ngIf="demographic?.additionalAddresses?.length">
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Additional Addresses</ng-container>
+        <button mat-icon-button
+                matTooltip="Edit Additional Addresses"
+                (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </app-page-subheader>
+
+      <ng-container *ngFor="let additionalAddress of demographic?.additionalAddresses; let index = index">
+        <app-page-subheader>
+          <ng-container appPageSubheaderSummary>
+            <strong> Address: {{ index + 1 }}</strong>
+          </ng-container>
+        </app-page-subheader>
+        <app-address-view [address]="additionalAddress"></app-address-view>
+      </ng-container>
+    </ng-container>
     <app-page-section>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Contact Information</ng-container>
@@ -61,6 +85,11 @@ import { DemographicForm } from './demographic-form.model';
       <app-enrollee-property title="Optional Extension Number">
         {{ demographic?.phoneExtension | default }}
       </app-enrollee-property>
+
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">Edit Contact Information
+      </button>
     </app-page-section>
 
     <app-page-section>
@@ -81,6 +110,11 @@ import { DemographicForm } from './demographic-form.model';
       <app-enrollee-property title="Optional SMS Phone Number">
         {{ demographic?.smsPhone | phone | default }}
       </app-enrollee-property>
+
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)">Edit Notification Information
+      </button>
     </app-page-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],

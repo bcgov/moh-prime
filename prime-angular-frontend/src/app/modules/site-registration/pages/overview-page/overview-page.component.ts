@@ -38,11 +38,12 @@ export class OverviewPageComponent implements OnInit {
   public organization: Organization | null;
   public site: Site | null;
   public siteExpiryDate: string | Moment | null;
-  public isUnderReview: boolean;
+  public isEditable: boolean;
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
   public siteErrors: ValidationErrors;
   public isBusinessLicenceUpdated: boolean;
+  public isCompleted: boolean;
 
   public SiteRoutes = SiteRoutes;
   public SiteStatusType = SiteStatusType;
@@ -83,7 +84,7 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    if (this.isUnderReview) {
+    if (!this.isEditable) {
       return;
     }
 
@@ -147,6 +148,10 @@ export class OverviewPageComponent implements OnInit {
       );
   }
 
+  public hasErrors(): boolean {
+    return this.siteErrors ? Object.values(this.siteErrors).some(val => val) : false;
+  }
+
   public ngOnInit(): void {
     this.organization = (
       this.overviewType === 'organization' ||
@@ -166,9 +171,10 @@ export class OverviewPageComponent implements OnInit {
 
     // Using the source of truth set values that the user has
     // no control over when interacting with the application
-    this.isUnderReview = site.status === SiteStatusType.IN_REVIEW;
-    // Once submitted and under review no submissions are allowed
-    this.showSubmissionAction = !this.isUnderReview;
+    this.isEditable = site.status === SiteStatusType.EDITABLE;
+    // Submissions are allowed only if site is in editable state
+    this.showSubmissionAction = this.isEditable;
+    this.isCompleted = site.submittedDate ? true : false;
 
     this.siteExpiryDate = (site.approvedDate)
       ? Site.getExpiryDate(site)
@@ -186,8 +192,6 @@ export class OverviewPageComponent implements OnInit {
       };
     }
 
-    this.siteErrors = this.getSiteErrors(site);
-
     // Store a local copy of the site for overview
     this.site = site;
 
@@ -199,7 +203,10 @@ export class OverviewPageComponent implements OnInit {
     // updates when not already patched and contains changes
     this.siteFormStateService.setForm(site);
 
-    this.isBusinessLicenceUpdated = this.siteFormStateService.businessLicenceFormState.isBusinessLicenceUpdated;
+    this.isBusinessLicenceUpdated = this.siteFormStateService.businessLicenceFormState.isBusinessLicenceUpdated
+      || (this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value && !this.site.businessLicence?.businessLicenceDocument);
+
+    this.siteErrors = this.getSiteErrors(site);
   }
 
   /**
@@ -226,8 +233,8 @@ export class OverviewPageComponent implements OnInit {
    */
   private getSiteErrors(site: Site): ValidationErrors {
     return {
-      deviceProviderSite: !site.individualDeviceProviders?.length
-        && site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER
+      missingBusinessLicenceOrReason: !site.businessLicence?.businessLicenceDocument
+        && !site.businessLicence?.deferredLicenceReason && !this.isBusinessLicenceUpdated
     };
   }
 }

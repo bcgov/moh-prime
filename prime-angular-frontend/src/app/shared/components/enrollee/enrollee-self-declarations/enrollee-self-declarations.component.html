@@ -2,16 +2,31 @@
          class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
+    <ng-container appPageSubheaderTitle>Self-Declaration</ng-container>
 
     <ng-content select="[mat-icon-button]"
                 ngProjectAs="[mat-icon-button]"></ng-content>
   </app-page-subheader>
 
+  <app-alert *ngIf="this.enrolment.requireRedoSelfDeclaration && !isAdjudication()"
+             type="danger"
+             icon="error">
+    <ng-container #alertContent
+                  class="alert-content">
+      These questions have been updated. Please select the 'Edit Self-Declaration' button below, or the pencil icon, to
+      display the new questions.
+    </ng-container>
+  </app-alert>
+
+  <div *ngIf="this.showDescription && !this.enrolment.requireRedoSelfDeclaration"
+       class="mb-4">
+    <app-self-declaration-term></app-self-declaration-term>
+  </div>
+
   <div *ngFor="let selfDeclarationComposite of selfDeclarationComposites"
        class="mb-3">
 
-    <app-enrollee-property [title]="selfDeclarationComposite.selfDeclarationQuestion"
+    <app-enrollee-property [safeTitle]="selfDeclarationComposite.selfDeclarationQuestion"
                            [makeBold]="false">
       {{ selfDeclarationComposite.selfDeclaration?.answered | yesNo: true }}
     </app-enrollee-property>
@@ -22,15 +37,21 @@
       {{ selfDeclarationComposite.selfDeclaration.selfDeclarationDetails }}
     </app-enrollee-property>
 
-    <button *ngFor="let selfDeclarationDocument of selfDeclarationComposite.selfDeclarationDocuments"
-            mat-stroked-button
-            color="primary"
-            class="pl-2 mb-2 mt-2"
-            (click)="downloadSelfDeclarationDocument(selfDeclarationDocument.id)">
-      <mat-icon class="mr-1">attachment</mat-icon>
-      {{ selfDeclarationDocument.filename }}
-    </button>
-
+    <div *ngIf="selfDeclarationComposite.selfDeclaration?.answered">
+      <button *ngFor="let selfDeclarationDocument of selfDeclarationComposite.selfDeclarationDocuments"
+              mat-stroked-button
+              color="primary"
+              class="pl-2 mb-2 mt-2"
+              (click)="downloadSelfDeclarationDocument(selfDeclarationDocument.id)">
+        <mat-icon class="mr-1">attachment</mat-icon>
+        {{ selfDeclarationDocument.filename }}
+      </button>
+    </div>
   </div>
 
+  <button *ngIf="showRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(redirectRoutePath)">Edit Self-Declaration
+  </button>
 </section>

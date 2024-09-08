@@ -11,6 +11,8 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.Controllers
 {
@@ -30,6 +32,7 @@ namespace Prime.Controllers
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
         private readonly IPartyService _partyService;
+        private readonly IDocumentManagerClient _documentManagerClient;
 
 
         public OrganizationsController(
@@ -42,7 +45,8 @@ namespace Prime.Controllers
             IOrganizationClaimService organizationClaimService,
             IOrganizationService organizationService,
             ISiteService siteService,
-            IPartyService partyService)
+            IPartyService partyService,
+            IDocumentManagerClient documentManagerClient)
         {
             _adminService = adminService;
             _businessEventService = businessEventService;
@@ -54,28 +58,7 @@ namespace Prime.Controllers
             _organizationService = organizationService;
             _siteService = siteService;
             _partyService = partyService;
-        }
-
-        // GET: api/Organizations
-        /// <summary>
-        /// Gets all of the Organizations.
-        /// </summary>
-        [HttpGet(Name = nameof(GetOrganizations))]
-        [Authorize(Roles = Roles.ViewSite)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationSearchViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetOrganizations([FromQuery] OrganizationSearchOptions search)
-        {
-            var organizations = await _organizationService.GetOrganizationsAsync(search);
-
-            var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
-            foreach (var site in organizations.Select(o => o.Organization).SelectMany(o => o.Sites))
-            {
-                site.HasNotification = notifiedIds.Contains(site.Id);
-            }
-
-            return Ok(organizations);
+            _documentManagerClient = documentManagerClient;
         }
 
         // GET: api/Organizations/5
@@ -142,7 +125,7 @@ namespace Prime.Controllers
                 return BadRequest("Could not claim an organization, the passed in SigningAuthority does not exist.");
             }
 
-            if (party.UserId != User.GetPrimeUserId())
+            if (party.Username != User.GetPrimeUsername())
             {
                 return BadRequest("Could not claim an organization, the passed in party does not match current user.");
             }
@@ -220,6 +203,7 @@ namespace Prime.Controllers
             var notificationRequired = existingSigningAuthorityId != orgClaim.NewSigningAuthorityId;
 
             await _organizationService.SwitchSigningAuthorityAsync(organizationId, orgClaim.NewSigningAuthorityId);
+            await _communitySiteService.UpdateSigningAuthorityForOrganization(organizationId, orgClaim.NewSigningAuthorityId);
             await _organizationService.RemoveUnsignedOrganizationAgreementsAsync(organizationId);
             await _organizationService.FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(organizationId);
 
@@ -227,9 +211,15 @@ namespace Prime.Controllers
 
             if (notificationRequired)
             {
-                await _partyService.RemovePartyEnrolmentAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
+                var organizations = await _organizationService.GetOrganizationsByPartyIdAsync(existingSigningAuthorityId);
+                if (organizations.Count() == 0)
+                {
+                    //if no organization belong to existing signing authority, remove Party Enrolment record
+                    await _partyService.RemovePartyEnrolmentAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
+                }
                 await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
                 await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
+                await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, "Sent organization claim approval notification");
             }
 
             return NoContent();
@@ -333,7 +323,7 @@ namespace Prime.Controllers
             return Ok(agreements);
         }
 
-        // POST: api/Organizations/5/agreements/4
+        // POST: api/Organizations/5/agreements/care-settings/2
         /// <summary>
         /// Creates a new un-accepted Organization Agreement based on the Care Setting supplied, if a newer version exits
         /// or if the signing authority has changed.
@@ -506,6 +496,22 @@ namespace Prime.Controllers
             if (organization.PendingTransfer && await _organizationService.IsOrganizationTransferCompleteAsync(organizationId))
             {
                 await _organizationService.FinalizeTransferAsync(organizationId);
+            }
+
+
+            if (!organizationAgreementGuid.HasValue)
+            {
+                var filename = "Organization-Agreement.pdf";
+                // get the agreement
+                var agreement = await _organizationAgreementService.GetOrgAgreementAsync(organizationId, agreementId, true);
+                // store it into document manager
+                var documentGuid = await _documentManagerClient.SendFileAsync(new System.IO.MemoryStream(Convert.FromBase64String(agreement.AgreementContent)), filename, DestinationFolders.SignedOrgAgreements);
+                // add a record in signed organization agreement table, treat it as uploaded agreement
+                var signedAgreement = await _organizationService.AddSignedAgreementAsync(organizationId, agreementId, documentGuid, filename);
+                if (signedAgreement == null)
+                {
+                    return BadRequest("Signed Organization Agreement could not be created; network error or upload is already submitted");
+                }
             }
 
             return NoContent();

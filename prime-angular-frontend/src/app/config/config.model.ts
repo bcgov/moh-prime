@@ -16,6 +16,7 @@ export interface Configuration {
   careTypes: Config<number>[];
   securityGroups: Config<number>[];
   collegeLicenseGroupings: CollegeLicenseGroupingConfig[];
+  deviceProviderRoles: DeviceProviderRoleConfig[];
 }
 
 export class Config<T> {
@@ -30,6 +31,7 @@ export class Config<T> {
 
 export interface CollegeConfig extends PracticeConfig {
   collegeLicenses: CollegeLicenseConfig[];
+  weight: number;
 }
 
 export interface PracticeConfig extends Config<number> {
@@ -41,6 +43,7 @@ export class LicenseConfig extends Config<number> implements IWeightedConfig {
   collegeLicenses: CollegeLicenseConfig[];
   licensedToProvideCare: boolean;
   namedInImReg: boolean;
+  allowRequestRemoteAccess: boolean;
   weight: number;
   validate: boolean;
   manual: boolean;
@@ -51,6 +54,7 @@ export interface CollegeLicenseConfig {
   collegeCode: number;
   licenseCode: number;
   collegeLicenseGroupingCode: number;
+  discontinued: boolean;
 }
 
 export class CollegeLicenseGroupingConfig extends Config<number> implements IWeightedConfig {
@@ -73,5 +77,11 @@ export interface ProvinceConfig extends Config<string> {
 }
 
 export interface IWeightedConfig {
+  weight: number;
+}
+
+export interface DeviceProviderRoleConfig extends Config<number> {
+  deviceProviderRoleCode: number;
+  certified: boolean;
   weight: number;
 }

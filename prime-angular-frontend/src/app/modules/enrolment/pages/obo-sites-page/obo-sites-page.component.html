@@ -5,6 +5,24 @@
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
+  <app-alert *ngIf="showHAJobSiteError && !showHASelectError"
+             type="danger"
+             icon="error">
+    <ng-container #alertContent
+                  class="alert-content">
+      Please ensure each health authority has at least one job site.
+    </ng-container>
+  </app-alert>
+
+  <app-alert *ngIf="showHASelectError"
+             type="danger"
+             icon="error">
+    <ng-container #alertContent
+                  class="alert-content">
+      Please specify the health authority for each job site.
+    </ng-container>
+  </app-alert>
+
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
         novalidate>
@@ -68,11 +86,11 @@
 
                   <ng-container *ngFor="let site of healthAuthoritySiteControl(healthAuthorityCode); let index = index; let last = last"
                                 [formArrayName]="healthAuthorityCode">
-
                     <app-obo-site-form [form]="site"
                                        [index]="index"
                                        [careSettingCode]="careSetting.careSettingCode"
                                        [healthAuthorityName]="+healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true"
+                                       [healthAuthorities]="enrolleeHealthAuthorities"
                                        [site]="site"
                                        [total]="healthAuthoritySiteControl(healthAuthorityCode).length"
                                        [last]="last"
@@ -132,6 +150,6 @@
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
-                   (back)="routeBackTo()"></app-page-footer>
-
+                   (back)="onBack(EnrolmentRoutes.REGULATORY)"
+                   (continue)="onBack(EnrolmentRoutes.OVERVIEW)"></app-page-footer>
 </app-enrollee-page>

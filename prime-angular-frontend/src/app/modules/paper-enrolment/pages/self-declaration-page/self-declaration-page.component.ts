@@ -5,7 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { map } from 'rxjs/operators';
 
-import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
+import moment from 'moment';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
@@ -17,7 +18,9 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { SelfDeclarationFormState } from './self-declaration-form-state.class';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-self-declaration-page',
@@ -32,7 +35,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   public hasAttemptedFormSubmission: boolean;
   public showUnansweredQuestionsError: boolean;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
-  public selfDeclarationQuestions = selfDeclarationQuestions;
+  public selfDeclarationQuestions = new Map<number, string>();
   public routeUtils: RouteUtils;
 
   constructor(
@@ -40,6 +43,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
+    protected enrolmentResource: EnrolmentResource,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     router: Router
@@ -67,7 +71,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   public onBack(): void {
     const backRoutePath = (this.enrollee.profileCompleted)
       ? PaperEnrolmentRoutes.OVERVIEW
-      : (this.enrollee?.certifications?.length)
+      : (this.enrollee?.certifications?.length || this.enrollee?.unlistedCertifications?.length)
         ? PaperEnrolmentRoutes.REGULATORY
         : PaperEnrolmentRoutes.OBO_SITES;
     this.routeUtils.routeRelativeTo([backRoutePath]);
@@ -99,6 +103,16 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected initForm(): void {
+    if (this.selfDeclarationQuestions.keys.length === 0) {
+      const isDeviceProvider = this.enrollee?.enrolleeCareSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+      // convert time zone to utc format
+      this.busy = this.enrolmentResource.getSelfDeclarationVersion(moment().utc().format(), isDeviceProvider).subscribe((versions) => {
+        versions.forEach(v => {
+          this.selfDeclarationQuestions.set(v.selfDeclarationTypeCode, v.text);
+        });
+      });
+    }
+
     this.formState.hasConviction.valueChanges
       .subscribe((value: boolean) => {
         this.toggleSelfDeclarationValidators(value, this.formState.hasConvictionDetails);

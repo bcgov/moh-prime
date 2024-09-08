@@ -10,16 +10,18 @@ import { SelfDeclarationForm } from './self-declaration-form.model';
   selector: 'app-self-declaration-overview',
   template: `
     <app-enrollee-self-declarations *ngIf="selfDeclarations?.selfDeclarations"
-                                    [enrolment]="selfDeclarations">
+                                    [showRedirect]="true"
+                                    [enrolment]="selfDeclarations"
+                                    (route)="onRoute(PaperEnrolmentRoutes.SELF_DECLARATION)">
       <button mat-icon-button
-              matTooltip="Edit Self-declaration"
+              matTooltip="Edit Self-Declaration"
               (click)="onRoute(PaperEnrolmentRoutes.SELF_DECLARATION)">
         <mat-icon>edit</mat-icon>
       </button>
     </app-enrollee-self-declarations>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class SelfDeclarationOverviewComponent extends AbstractOverview {
   @Input() public selfDeclarations: SelfDeclarationForm;

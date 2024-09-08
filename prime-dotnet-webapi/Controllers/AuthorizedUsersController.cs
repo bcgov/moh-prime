@@ -32,18 +32,18 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets a AuthorizedUser by user ID.
         /// </summary>
-        /// <param name="userId"></param>
-        [HttpGet("{userId:guid}", Name = nameof(GetAuthorizedUserByUserId))]
+        /// <param name="username"></param>
+        [HttpGet("{username}", Name = nameof(GetAuthorizedUserByUsername))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAuthorizedUserByUserId(Guid userId)
+        public async Task<ActionResult> GetAuthorizedUserByUsername(string username)
         {
-            var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUserIdAsync(userId);
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUsernameAsync(username);
             if (authorizedUser == null)
             {
-                return NotFound($"Authorized user not found with id {userId}");
+                return NotFound($"Authorized user not found with username {username}");
             }
             if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
@@ -80,7 +80,7 @@ namespace Prime.Controllers
 
         // GET: api/parties/authorized-users/5/sites
         /// <summary>
-        /// Gets a specific AuthorizedUser's sites.
+        /// Gets health authority sites of an authorized user.
         /// </summary>
         /// <param name="authorizedUserId"></param>
         [HttpGet("{authorizedUserId:int}/sites", Name = nameof(GetAuthorizedUserSites))]
@@ -103,6 +103,34 @@ namespace Prime.Controllers
             var healthAuthoritySites = await _authorizedUserService.GetAuthorizedUserSitesAsync(authorizedUser.Id);
 
             return Ok(healthAuthoritySites);
+        }
+
+
+        // GET: api/parties/authorized-users/5/site-count
+        /// <summary>
+        /// Gets the number of sites belong to an authorized user.
+        /// </summary>
+        /// <param name="authorizedUserId"></param>
+        [HttpGet("{authorizedUserId:int}/site-count", Name = nameof(GetAuthorizedUserSiteCount))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAuthorizedUserSiteCount(int authorizedUserId)
+        {
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
+            if (authorizedUser == null)
+            {
+                return NotFound($"Authorized user not found with id {authorizedUserId}");
+            }
+            if (!authorizedUser.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var siteCount = await _authorizedUserService.GetAuthorizedUserSiteCountAsync(authorizedUser.Id);
+
+            return Ok(siteCount);
         }
 
         // POST: api/parties/authorized-users
@@ -237,6 +265,68 @@ namespace Prime.Controllers
             }
 
             await _authorizedUserService.ApproveAuthorizedUser(authorizedUserId);
+
+            return NoContent();
+        }
+
+
+        // DELETE: api/parties/authorized-user/5
+        /// <summary>
+        /// Delete the authorized user.
+        /// </summary>
+        /// <param name="authorizedUserId"></param>
+        [HttpDelete("{authorizedUserId}", Name = nameof(DeleteAuthorizedUser))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteAuthorizedUser(int authorizedUserId)
+        {
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
+            if (authorizedUser == null)
+            {
+                return NotFound($"AuthorizedUser not found with id {authorizedUserId}");
+            }
+            if (!authorizedUser.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+            if (authorizedUser.Status != AccessStatusType.UnderReview)
+            {
+                return Forbid("Authorized User is not in Under Review status. User can't be deleted.");
+            }
+
+            await _authorizedUserService.DeleteAuthorizedUserAsync(authorizedUserId);
+
+            return NoContent();
+        }
+
+        // PUT: api/health-authorities/authorized-users/5/disable
+        /// <summary>
+        /// Disable authorized user
+        /// </summary>
+        /// <param name="authorizedUserId"></param>
+        [HttpPut("{authorizedUserId}/disable", Name = nameof(DisableAuthorizedUser))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthorityOrganizationAgreementDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> DisableAuthorizedUser(int authorizedUserId)
+        {
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
+            if (authorizedUser == null)
+            {
+                return NotFound($"AuthorizedUser not found with id {authorizedUserId}");
+            }
+            if (!authorizedUser.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _authorizedUserService.UpdateAuthorizedUserStatus(authorizedUserId, AccessStatusType.Disabled);
 
             return NoContent();
         }

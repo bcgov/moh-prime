@@ -27,7 +27,7 @@ namespace PrimeTests.UnitTests
             TestDb.SaveChanges();
 
             // Act
-            var response = await service.GetActiveGpidAsync(enrollee.UserId);
+            var response = await service.GetActiveGpidAsync(enrollee.Username);
 
             // Assert
             Assert.Equal(enrollee.GPID, response);
@@ -44,7 +44,7 @@ namespace PrimeTests.UnitTests
             TestDb.SaveChanges();
 
             // Act
-            var response = await service.GetActiveGpidAsync(enrollee.UserId);
+            var response = await service.GetActiveGpidAsync(enrollee.Username);
 
             // Assert
             Assert.Null(response);

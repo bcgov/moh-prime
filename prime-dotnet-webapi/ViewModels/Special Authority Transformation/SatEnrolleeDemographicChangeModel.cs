@@ -7,6 +7,7 @@ using Prime.ViewModels.Parties;
 
 namespace Prime.ViewModels.SpecialAuthorityTransformation
 {
+    // TODO: Obsolete?
     public class SatEnrolleeDemographicChangeModel : IPartyChangeModel
     {
         /// <summary>

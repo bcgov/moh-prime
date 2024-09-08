@@ -14,6 +14,7 @@ using Prime.ViewModels.Parties;
 
 namespace Prime.Services
 {
+    // TODO: Obsolete?
     public class GisService : BaseService, IGisService
     {
         private readonly ILdapClient _ldapClient;

@@ -17,7 +17,7 @@ export const environment: AppEnvironment = {
   apiEndpoint: 'http://localhost:5000',
   loginRedirectUrl: 'http://localhost:4200',
   documentManagerUrl: 'http://localhost:6001',
-  bcscMobileSetupUrl: 'https://www2.gov.bc.ca/gov/content?id=034E906146794F84A00535A3F9354913',
+  bcscMobileSetupUrl: 'https://id.gov.bc.ca/account/',
   bcscHelpDeskUrl: 'https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/help',
   prime: {
     displayPhone: '1-844-39PRIME',
@@ -30,12 +30,14 @@ export const environment: AppEnvironment = {
   },
   keycloakConfig: {
     config: {
-      url: 'https://dev.oidc.gov.bc.ca/auth',
-      realm: 'v4mbqqas',
-      clientId: 'prime-application-local'
+      url: 'https://common-logon-test.hlth.gov.bc.ca/auth',
+      realm: 'moh_applications',
+      clientId: 'PRIME-APPLICATION-LOCAL'
     },
     initOptions: {
-      onLoad: 'check-sso'
+      onLoad: 'check-sso',
+      pkceMethod: 'S256',
+      checkLoginIframe: false
     },
     bearerExcludedUrls: ['/provisioner-access/certificate']
   },

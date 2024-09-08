@@ -1,3 +1,3 @@
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
-export interface HealthAuthCareTypeForm extends Pick<HealthAuthoritySite, 'healthAuthorityCareType'> {}
+export interface HealthAuthCareTypeForm extends Pick<HealthAuthoritySite, 'healthAuthorityCareType' | 'healthAuthorityVendor'> { }

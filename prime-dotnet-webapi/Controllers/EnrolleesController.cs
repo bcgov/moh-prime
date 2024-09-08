@@ -20,7 +20,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee + "," + Roles.ViewPaperEnrolmentsOnly)]
     public class EnrolleesController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -51,21 +51,21 @@ namespace Prime.Controllers
         /// Gets all of the enrollees.
         /// </summary>
         [HttpGet(Name = nameof(GetEnrollees))]
-        [Authorize(Roles = Roles.ViewEnrollee)]
+        [Authorize(Roles = Roles.ViewEnrollee + "," + Roles.ViewPaperEnrolmentsOnly)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
             var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
-            var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+            var paginatedList = await _enrolleeService.GetEnrolleesAsync(searchOptions, User);
 
-            foreach (var enrollee in enrollees)
+            foreach (var enrollee in paginatedList)
             {
                 enrollee.HasNotification = notifiedIds.Contains(enrollee.Id);
             }
 
-            return Ok(enrollees);
+            return Ok(paginatedList.Response);
         }
 
         // POST: api/enrollees
@@ -84,9 +84,9 @@ namespace Prime.Controllers
                 return BadRequest("Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
-            if (await _enrolleeService.UserIdExistsAsync(User.GetPrimeUserId()))
+            if (await _enrolleeService.UsernameExistsAsync(User.GetPrimeUsername()))
             {
-                return BadRequest("An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
+                return BadRequest("An enrollee already exists for this Username, only one enrollee is allowed per Username.");
             }
 
             var createModel = payload.Enrollee;
@@ -150,6 +150,12 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
+            // Forbid viewing non-Paper Enrolments if only have `ViewPaperEnrolmentsOnly` role
+            // TODO: Refactor logic of detecting Paper Enrolment
+            if (User.IsInRole(Roles.ViewPaperEnrolmentsOnly) && (!enrollee.GPID.Contains(Enrollee.PaperGpidPrefix)))
+            {
+                return Forbid();
+            }
 
             if (User.IsAdministrant())
             {
@@ -163,18 +169,18 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets a specific Enrollee by User ID.
         /// </summary>
-        /// <param name="userId"></param>
-        [HttpGet("{userId:guid}", Name = nameof(GetEnrolleeByUserId))]
+        /// <param name="username"></param>
+        [HttpGet("{username}", Name = nameof(GetEnrolleeByUsername))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetEnrolleeByUserId(Guid userId)
+        public async Task<ActionResult> GetEnrolleeByUsername(string username)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeStubAsync(userId);
+            var enrollee = await _enrolleeService.GetEnrolleeStubAsync(username);
             if (enrollee == null)
             {
-                return NotFound($"Enrollee not found with User ID {userId}");
+                return NotFound($"Enrollee not found with User Name {username}");
             }
             if (!enrollee.PermissionsRecord().AccessableBy(User))
             {
@@ -210,7 +216,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            if (!record.MatchesUserIdOf(User))
+            if (!record.MatchesUsernameOf(User))
             {
                 return Forbid();
             }
@@ -324,6 +330,31 @@ namespace Prime.Controllers
             }
 
             return Ok(await _enrolleeService.GetCertificationsAsync(enrolleeId));
+        }
+
+        // GET: api/enrollees/5/device-provider
+        /// <summary>
+        /// Gets an Enrollee's device providers.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/device-providers", Name = nameof(GetDeviceProviders))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeDeviceProviderViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetDeviceProviders(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleeService.GetEnrolleeDeviceProvidersAsync(enrolleeId));
         }
 
         // GET: api/enrollees/5/remote-users
@@ -665,5 +696,7 @@ namespace Prime.Controllers
 
             return NoContent();
         }
+
+
     }
 }

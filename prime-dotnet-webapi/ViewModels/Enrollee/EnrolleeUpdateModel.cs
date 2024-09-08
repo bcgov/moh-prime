@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Infrastructure;
+using System;
 
 namespace Prime.ViewModels
 {
@@ -36,6 +37,8 @@ namespace Prime.ViewModels
 
         public string PhoneExtension { get; set; }
 
+        public ICollection<EnrolleeDeviceProvider> EnrolleeDeviceProviders { get; set;}
+
         public ICollection<Certification> Certifications { get; set; }
 
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
@@ -54,6 +57,7 @@ namespace Prime.ViewModels
         public string DeviceProviderIdentifier { get; set; }
 
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
+        public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
 
         // These properties are set by the backend from the JWT token; we cannot trust these properties from the frontend
         [JsonIgnore]
@@ -64,7 +68,7 @@ namespace Prime.ViewModels
 
         public void SetPropertiesFromToken(ClaimsPrincipal user)
         {
-            IdentityProvider = user.FindFirstValue(Claims.IdentityProvider);
+            IdentityProvider = user.GetIdentityProvider();
             IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
         }
 

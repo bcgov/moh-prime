@@ -1,5 +1,7 @@
 import { AbstractControl, ValidatorFn, Validators, ValidationErrors } from '@angular/forms';
 
+import moment from 'moment';
+
 export class FormControlValidators {
 
   /**
@@ -62,10 +64,10 @@ export class FormControlValidators {
    */
   public static email(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
-    const regExp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+    const regExp = /^[a-z0-9._%'+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
     // Affixed spaces does not invalidate the entry, and should
     // be sanitized by on submission and by the server
-    const valid = (control.valid && regExp.test(control.value));
+    const valid = (control.valid && regExp.test(control.value.trim()));
     return (valid) ? null : { email: true, ...FormControlValidators.trim(control) };
   }
 
@@ -76,8 +78,8 @@ export class FormControlValidators {
    */
   public static multipleEmails(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
-    const regExp = /^([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})(,(\s)?[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})*$/i;
-    const valid = (control.valid && regExp.test(control.value));
+    const regExp = /^([a-z0-9._%'+-]+@[a-z0-9.-]+\.[a-z]{2,})(,(\s)?[a-z0-9._%'+-]+@[a-z0-9.-]+\.[a-z]{2,})*$/i;
+    const valid = (control.valid && regExp.test(control.value.trim()));
     return (valid) ? null : { emails: true, ...FormControlValidators.trim(control) };
   }
 
@@ -185,6 +187,16 @@ export class FormControlValidators {
   }
 
   /**
+ * @description
+ * Checks a form control string value is representing a future date.
+ */
+  public static mustBeFutureDate(control: AbstractControl): ValidationErrors | null {
+    return (control.value && moment(control.value) && moment(control.value) > moment())
+      ? null
+      : { future: true };
+  }
+
+  /**
    * @description
    * Checks a form control is within a valid length, and
    * if no maxlength assumed to be minlength.
@@ -214,5 +226,38 @@ export class FormControlValidators {
       const valid = allowedValues.includes(control.value);
       return valid ? null : { requiredIn: true };
     };
+  }
+
+  /**
+ * @description
+ * Checks the form control value is letters and/or certain characters
+ */
+  public static validName(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) { return null; }
+    const regExp = /^[a-zA-Z\s\.\-\']+$/i;
+    const valid = (control.valid && regExp.test(control.value));
+    return (valid) ? null : { validName: true };
+  }
+
+  /**
+   * @description
+   * Checks the form control value is BC00000XXX for Community Pharmacy
+   */
+  public static communityPharmacySiteId(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) { return null; }
+    const regexp = /^BC00000[A-Z0-9]{3}$/;
+    const valid = (control.valid && regexp.test(control.value));
+    return (valid) ? null : { cpSiteId: true };
+  }
+
+  /**
+   * @description
+   * Checks the form control value is P1-90XXX for Device Provider Id
+   */
+  public static deviceProviderId(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) { return null; }
+    const regexp = /^P1-90[0-9]{3}$/;
+    const valid = (control.valid && regexp.test(control.value));
+    return (valid) ? null : { deviceProviderId: true };
   }
 }

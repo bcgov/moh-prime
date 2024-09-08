@@ -11,12 +11,15 @@ using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
 using AutoMapper.QueryableExtensions;
+using Prime.Models.Api;
+using System.Text;
 
 namespace Prime.Services
 {
     public class CommunitySiteService : BaseService, ICommunitySiteService
     {
         private readonly IBusinessEventService _businessEventService;
+        private readonly IEmailService _emailService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
 
@@ -24,11 +27,13 @@ namespace Prime.Services
             ApiDbContext context,
             ILogger<CommunitySiteService> logger,
             IBusinessEventService businessEventService,
+            IEmailService emailService,
             IDocumentManagerClient documentClient,
             IMapper mapper)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
+            _emailService = emailService;
             _documentClient = documentClient;
             _mapper = mapper;
         }
@@ -45,10 +50,73 @@ namespace Prime.Services
             return await query.ToListAsync();
         }
 
+        public async Task<PaginatedList<CommunitySiteAdminListViewModel>> GetSitesAsync(OrganizationSearchOptions searchOptions)
+        {
+            searchOptions ??= new OrganizationSearchOptions();
+
+            var query = _context.CommunitySites
+                .AsNoTracking()
+                .If(searchOptions.CareSettingCode.HasValue, q => q
+                    .Where(s => s.CareSettingCode == searchOptions.CareSettingCode)
+                )
+                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
+                    .Search(
+                        s => s.DoingBusinessAs,
+                        s => s.PEC,
+                        s => s.Organization.Name,
+                        s => s.Organization.DisplayId.ToString(),
+                        s => s.Organization.SigningAuthority.FirstName + " " + s.Organization.SigningAuthority.LastName)
+                    .Containing(searchOptions.TextSearch)
+                )
+                .If(searchOptions.Status.HasValue, q => q
+                    .Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
+                        .FirstOrDefault().StatusType == searchOptions.Status))
+                .ProjectTo<CommunitySiteAdminListViewModel>(_mapper.ConfigurationProvider)
+                .OrderBy(s => s.DisplayId).ThenByDescending(s => s.SubmittedDate.HasValue).ThenBy(s => s.SubmittedDate)
+                .DecompileAsync();
+
+            var paginatedList = await PaginatedList<CommunitySiteAdminListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
+            GroupSitesToOrgVisually(paginatedList);
+            return paginatedList;
+        }
+
+        /// <summary>
+        /// Visually group sites to their organizations by reducing the redundant information which is obscuring
+        /// </summary>
+        private static void GroupSitesToOrgVisually(PaginatedList<CommunitySiteAdminListViewModel> paginatedList)
+        {
+            int currentOrgId = int.MinValue;
+            foreach (var orgSiteViewModel in paginatedList)
+            {
+                if (currentOrgId != int.MinValue)
+                {
+                    if (orgSiteViewModel.OrganizationId == currentOrgId)
+                    {
+                        // Remove redundant clutter
+                        orgSiteViewModel.OrganizationName = String.Empty;
+                        orgSiteViewModel.SigningAuthorityName = String.Empty;
+                    }
+                    else
+                    {
+                        currentOrgId = orgSiteViewModel.OrganizationId;
+                    }
+                }
+                else
+                {
+                    currentOrgId = orgSiteViewModel.OrganizationId;
+                }
+            }
+        }
+
         public async Task<CommunitySite> GetSiteAsync(int siteId)
         {
             return await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
+        }
+
+        public async Task<List<Vendor>> GetVendorsAsync()
+        {
+            return await _context.Vendors.ToListAsync();
         }
 
         public async Task<int> CreateSiteAsync(int organizationId)
@@ -89,22 +157,48 @@ namespace Prime.Services
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
+            var updateDetail = new List<string>();
             if (currentSite.SubmittedDate == null)
             {
-                UpdateVendors(currentSite, updatedSite);
+                var vendors = await GetVendorsAsync();
+                // Returned change details are discarded because they aren't needed if site hasn't been submitted yet,
+                // and in the case of post-submit/approval, at this time, vendor can't be updated due to business rules
+                UpdateVendors(currentSite, updatedSite, vendors);
             }
 
-            UpdateAddress(currentSite, updatedSite);
-            UpdateContacts(currentSite, updatedSite);
-            UpdateBusinessHours(currentSite, updatedSite);
-            UpdateRemoteUsers(currentSite, updatedSite.RemoteUsers);
+            var addressUpdate = UpdateAddress(currentSite, updatedSite);
+            var contactsUpdate = UpdateContacts(currentSite, updatedSite);
+            var businessHoursUpdate = UpdateBusinessHours(currentSite, updatedSite);
+            var updateRemoteUserResult = UpdateRemoteUsers(currentSite, updatedSite.RemoteUsers);
+
+            if (currentSite.SubmittedDate != null)
+            {
+                updateDetail.AddRange(addressUpdate);
+                updateDetail.AddRange(contactsUpdate);
+                updateDetail.AddRange(businessHoursUpdate);
+                updateDetail.AddRange(updateRemoteUserResult);
+            }
+
             await UpdateIndividualDeviceProviders(siteId, updatedSite.IndividualDeviceProviders);
 
-            await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
+            var logMessage = new StringBuilder("Site Updated");
+            if (updateDetail.Count > 0)
+            {
+                logMessage.Append($"{Environment.NewLine + "- "}{string.Join(Environment.NewLine + "- ", updateDetail.ToArray())}");
+            }
+            await _businessEventService.CreateSiteEventAsync(currentSite.Id, logMessage.ToString());
 
             try
             {
                 await _context.SaveChangesAsync();
+                //send email only when the site is completed and org. agreement should have been signed.
+                if (updateRemoteUserResult.Count > 0 && currentSite.Completed)
+                {
+                    var site = await GetSiteAsync(siteId);
+                    // Send HIBC an email when remote users are updated for a submitted site
+                    await _emailService.SendRemoteUsersUpdatedAsync(site, updateRemoteUserResult);
+                    await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent remote user(s) updated notification");
+                }
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -117,29 +211,44 @@ namespace Prime.Services
             return await _context.CommunitySites
                 .AsNoTracking()
                 .Where(s => s.Id == siteId)
-                .Select(s => new PermissionsRecord { UserId = s.Organization.SigningAuthority.UserId })
+                .Select(s => new PermissionsRecord { Username = s.Organization.SigningAuthority.Username })
                 .SingleOrDefaultAsync();
         }
 
-        private void UpdateAddress(Site current, CommunitySiteUpdateModel updated)
+        private List<string> UpdateAddress(Site current, CommunitySiteUpdateModel updated)
         {
+            var result = new List<string>();
             if (updated.PhysicalAddress == null)
             {
-                return;
+                return result;
             }
 
             if (current.PhysicalAddress == null)
             {
                 current.PhysicalAddress = updated.PhysicalAddress;
+                result.Add($"Physical Address '{AddressToString(updated.PhysicalAddress)}' was added.");
             }
             else
             {
+                var fromAddressStr = AddressToString(current.PhysicalAddress);
+                var toAddressStr = AddressToString(updated.PhysicalAddress);
+                if (!fromAddressStr.Equals(toAddressStr))
+                {
+                    result.Add($"Physical Address changed from {Environment.NewLine}   {fromAddressStr}{Environment.NewLine}  to{Environment.NewLine}   {toAddressStr}.");
+                }
                 _context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
             }
+            return result;
         }
 
-        private void UpdateContacts(CommunitySite current, CommunitySiteUpdateModel updated)
+        private string AddressToString(PhysicalAddress address)
         {
+            return $"{address.Street} {address.Street2} {address.City} {address.ProvinceCode} {address.CountryCode} {address.Postal}";
+        }
+
+        private List<string> UpdateContacts(CommunitySite current, CommunitySiteUpdateModel updated)
+        {
+            var result = new List<string>();
             var contactTypes = new[]
             {
                 nameof(current.AdministratorPharmaNet),
@@ -159,9 +268,15 @@ namespace Prime.Services
                 if (currentContact == null)
                 {
                     _context.Entry(current).Reference(contactType).CurrentValue = updatedContact;
+                    result.Add($"New {TranslateContactType(contactType)} was added.");
                 }
                 else
                 {
+                    var contactDiff = CompareContact(currentContact, updatedContact);
+                    if (contactDiff != null)
+                    {
+                        result.Add($"{TranslateContactType(contactType)} was updated.{contactDiff}");
+                    }
                     _context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
 
                     if (currentContact.PhysicalAddress != null && updatedContact.PhysicalAddress != null)
@@ -174,35 +289,117 @@ namespace Prime.Services
                     }
                 }
             }
+            return result;
         }
 
-        private void UpdateBusinessHours(Site current, CommunitySiteUpdateModel updated)
+        private static string TranslateContactType(string contactType)
         {
-            if (updated.BusinessHours == null)
+            return contactType switch
             {
-                return;
+                "AdministratorPharmaNet" => "PharmaNet Administrator",
+                "PrivacyOfficer" => "Privacy Officer",
+                "TechnicalSupport" => "Technical Support",
+                _ => ""
+            };
+        }
+
+        private string CompareContact(Contact currentContact, Contact newContact)
+        {
+            var result = new List<string>();
+            var propertyNames = new[,]
+            {
+                {nameof(currentContact.FirstName), "First Name"},
+                {nameof(currentContact.LastName), "Last Name"},
+                {nameof(currentContact.JobRoleTitle), "Job Title"},
+                {nameof(currentContact.Email), "Email"},
+                {nameof(currentContact.Phone), "Phone"},
+                {nameof(currentContact.Fax), "Fax"},
+                {nameof(currentContact.SMSPhone), "SMS Phone"},
+            };
+
+            for (var i = 0; i < (propertyNames.Length / 2); i++)
+            {
+                var property = currentContact.GetType().GetProperty(propertyNames[i, 0]);
+
+                string currentPropertyValue = property.GetValue(currentContact, null) as string;
+                string newPropertyValue = property.GetValue(newContact, null) as string;
+
+                if (currentPropertyValue != null || newPropertyValue != null)
+                {
+                    if ((currentPropertyValue != null && newPropertyValue == null) ||
+                    (currentPropertyValue == null && newPropertyValue != null) ||
+                    !currentPropertyValue.Equals(newPropertyValue))
+                    {
+                        result.Add($"   {propertyNames[i, 1]} has changed from '{currentPropertyValue}' to '{newPropertyValue}'.");
+                    }
+                }
             }
 
+            var currentAddress = currentContact.PhysicalAddress == null ?
+                "Same address as the site's address" : AddressToString(currentContact.PhysicalAddress);
+            var newAddress = newContact.PhysicalAddress == null ?
+                "Same address as the site's address" : AddressToString(newContact.PhysicalAddress);
+
+            if (!currentAddress.Equals(newAddress))
+            {
+                result.Add($"   Address has changed from {Environment.NewLine + currentAddress + Environment.NewLine} To {Environment.NewLine + newAddress}.");
+            }
+            if (result.Count > 0)
+            {
+                return $"{Environment.NewLine}   {string.Join(Environment.NewLine + "   ", result)}";
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private List<string> UpdateBusinessHours(Site current, CommunitySiteUpdateModel updated)
+        {
+            var result = new List<string>();
+            if (updated.BusinessHours == null)
+            {
+                return result;
+            }
+
+            var currentHourStr = "";
             if (current.BusinessHours != null)
             {
                 foreach (var businessHour in current.BusinessHours)
                 {
+                    var endTime = businessHour.EndTime.Days == 1 ? "24:00" : $"{businessHour.EndTime.Hours:D2}:{businessHour.EndTime.Minutes:D2}";
+                    currentHourStr += $"     {businessHour.Day}   {businessHour.StartTime.Hours:D2}:{businessHour.StartTime.Minutes:D2} - {endTime}" + Environment.NewLine;
                     _context.Remove(businessHour);
                 }
             }
 
+            var newHourStr = "";
             foreach (var businessHour in updated.BusinessHours)
             {
+                var endTime = businessHour.EndTime.Days == 1 ? "24:00" : $"{businessHour.EndTime.Hours:D2}:{businessHour.EndTime.Minutes:D2}";
+
+                newHourStr += $"     {businessHour.Day}   {businessHour.StartTime.Hours:D2}:{businessHour.StartTime.Minutes:D2} - {endTime}" + Environment.NewLine;
                 businessHour.SiteId = current.Id;
                 _context.Entry(businessHour).State = EntityState.Added;
             }
+
+            if (!currentHourStr.Equals(newHourStr))
+            {
+                result.Add($"Hours updated from {Environment.NewLine}{currentHourStr}  to{Environment.NewLine}{newHourStr}");
+            }
+
+            return result;
         }
 
-        private void UpdateRemoteUsers(Site current, IEnumerable<SiteRemoteUserUpdateModel> updateRemoteUsers)
+        /// <summary>
+        /// Returns whether there were any changes to the site's remote users
+        /// </summary>
+        private List<string> UpdateRemoteUsers(Site current, IEnumerable<SiteRemoteUserUpdateModel> updateRemoteUsers)
         {
+            var result = new List<string>();
             if (updateRemoteUsers == null)
             {
-                return;
+                return result;
             }
 
             // All RemoteUserCertifications will be dropped and re-added, so we must set all incoming PKs/FKs to 0
@@ -221,13 +418,19 @@ namespace Prime.Services
                 {
                     existingUsers.Remove(updatedUser.Id);
 
-                    updatedUser.SiteId = current.Id;
-                    _context.Entry(existing).CurrentValues.SetValues(updatedUser);
+                    // Only considered an update if incoming and existing aren't equal
+                    if (!updatedUser.Equals(existing))
+                    {
+                        updatedUser.SiteId = current.Id;
+                        _context.Entry(existing).CurrentValues.SetValues(updatedUser);
 
-                    _context.RemoteUserCertifications.Remove(existing.RemoteUserCertification);
+                        _context.RemoteUserCertifications.Remove(existing.RemoteUserCertification);
 
-                    updatedUser.RemoteUserCertification.RemoteUserId = updatedUser.Id;
-                    _context.RemoteUserCertifications.Add(updatedUser.RemoteUserCertification);
+                        updatedUser.RemoteUserCertification.RemoteUserId = updatedUser.Id;
+                        _context.RemoteUserCertifications.Add(updatedUser.RemoteUserCertification);
+
+                        result.Add($"Remote user '{updatedUser.FirstName} {updatedUser.LastName}' was updated.");
+                    }
                 }
                 else
                 {
@@ -235,20 +438,49 @@ namespace Prime.Services
                     newRemoteUser.Id = 0;
                     newRemoteUser.SiteId = current.Id;
                     _context.RemoteUsers.Add(newRemoteUser);
+
+                    result.Add($"Remote user '{updatedUser.FirstName} {updatedUser.LastName}' was added.");
                 }
             }
 
+            foreach (var pendingToRemoveUser in existingUsers.Values)
+            {
+                var message = $"Remote user '{pendingToRemoveUser.FirstName} {pendingToRemoveUser.LastName}', " +
+                    $"{GetRemoteUserCollegeLicenseInfo(pendingToRemoveUser.RemoteUserCertification)} was removed.";
+                result.Add(message);
+            }
             _context.RemoteUsers.RemoveRange(existingUsers.Values);
+
+            return result;
         }
 
-        private void UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated)
+        private string GetRemoteUserCollegeLicenseInfo(RemoteUserCertification remoteUserCert)
         {
+            if (remoteUserCert.CollegeCode == CollegeCode.CPSBC)
+            {
+                return $"CPSBC, CPSID Number: {remoteUserCert.LicenseNumber}";
+            }
+            else if (remoteUserCert.CollegeCode == CollegeCode.BCCNM)
+            {
+                return $"BCCNM, PharmaNet ID: {remoteUserCert.PractitionerId}";
+            }
+            else
+            {
+                return $"{remoteUserCert.College.Name}, Registration ID: {remoteUserCert.LicenseNumber}";
+            }
+        }
+
+        private List<string> UpdateVendors(CommunitySite current, CommunitySiteUpdateModel updated, List<Vendor> vendors)
+        {
+            var result = new List<string>();
             if (updated?.SiteVendors != null)
             {
                 if (current.SiteVendors != null)
                 {
                     foreach (var vendor in current.SiteVendors)
                     {
+                        var vendorName = vendors.Where(v => v.Code == vendor.VendorCode).Select(v => v.Name).First();
+                        result.Add($"{vendorName} was removed.");
                         _context.Remove(vendor);
                     }
                 }
@@ -261,9 +493,12 @@ namespace Prime.Services
                         VendorCode = vendor.VendorCode
                     };
 
+                    var vendorName = vendors.Where(v => v.Code == vendor.VendorCode).Select(v => v.Name).First();
+                    result.Add($"{vendorName} was added.");
                     _context.Entry(siteVendor).State = EntityState.Added;
                 }
             }
+            return result;
         }
 
         private async Task UpdateIndividualDeviceProviders(int siteId, IEnumerable<IndividualDeviceProviderChangeModel> updated)
@@ -406,6 +641,20 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task UpdateSigningAuthorityForOrganization(int organizationId, int partyId)
+        {
+            var sites = await _context.CommunitySites
+                .Where(s => s.OrganizationId == organizationId)
+                .ToListAsync();
+
+            foreach (var site in sites)
+            {
+                site.ProvisionerId = partyId;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         private IQueryable<CommunitySite> GetBaseSiteQuery()
         {
             return _context.CommunitySites
@@ -424,9 +673,10 @@ namespace Prime.Services
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.TechnicalSupport)
                     .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.BusinessHours)
+                .Include(s => s.BusinessHours.OrderBy(bh => bh.Day))
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserCertification)
+                        .ThenInclude(c => c.College)
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)

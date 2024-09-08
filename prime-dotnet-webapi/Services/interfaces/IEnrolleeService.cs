@@ -13,13 +13,14 @@ namespace Prime.Services
     public interface IEnrolleeService
     {
         Task<bool> EnrolleeExistsAsync(int enrolleeId);
-        Task<bool> UserIdExistsAsync(Guid userId);
+        Task<bool> UsernameExistsAsync(string username);
         Task<bool> GpidExistsAsync(string gpid);
-        Task<EnrolleeStub> GetEnrolleeStubAsync(Guid userId);
+        Task<EnrolleeStub> GetEnrolleeStubAsync(string username);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
-        Task<string> GetActiveGpidAsync(Guid userId);
+        Task<string> GetActiveGpidAsync(string username);
+        Task<HpdidLookup> GetActiveGpidDetailAsync(string username);
         Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId);
-        Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
+        Task<PaginatedList<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null, ClaimsPrincipal user = null);
         Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId);
         Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
@@ -27,6 +28,7 @@ namespace Prime.Services
         Task<AccessAgreementNoteViewModel> GetAccessAgreementNoteAsync(int enrolleeId);
         Task<CareSettingViewModel> GetCareSettingsAsync(int enrolleeId);
         Task<IEnumerable<CertificationViewModel>> GetCertificationsAsync(int enrolleeId);
+        Task<IEnumerable<EnrolleeDeviceProviderViewModel>> GetEnrolleeDeviceProvidersAsync(int enrolleeId);
         Task<IEnumerable<EnrolleeRemoteUserViewModel>> GetEnrolleeRemoteUsersAsync(int enrolleeId);
         Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId);
         Task<IEnumerable<RemoteAccessLocationViewModel>> GetRemoteAccessLocationsAsync(int enrolleeId);
@@ -36,6 +38,7 @@ namespace Prime.Services
         Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType);
         Task<IEnumerable<EnrolmentStatusAdminViewModel>> GetEnrolmentStatusesAsync(int enrolleeId);
         Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck);
+        Task<bool> IsEnrolleeProfileCompleteAsync(int enrolleeId);
         Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId);
         Task<EnrolleeNoteViewModel> GetEnrolleeAdjudicatorNoteAsync(int enrolleeId, int noteId);
         Task<EnrolleeNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId);
@@ -43,6 +46,7 @@ namespace Prime.Services
         Task UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null);
         Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes);
         Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids);
+        Task<EnrolleeLookup> GpidLookupAsync(GpidLookupOptions option);
         Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters);
         Task<EnrolmentStatusReference> CreateEnrolmentStatusReferenceAsync(int statusId, int adminId);
         Task<EnrolmentStatusReference> AddAdjudicatorNoteToReferenceIdAsync(int statusId, int noteId);
@@ -68,5 +72,7 @@ namespace Prime.Services
         Task DeleteFutureEnrolleeAbsenceAsync(int enrolleeId, int absenceId);
         Task<string> GetAdjudicatorIdirForEnrolleeAsync(int enrolleeId);
         Task UpdateDateOfBirthAsync(int enrolleeId, DateTime dateOfBirth);
+        Task UpdateCertificationPrefix(int cretId, string prefix);
+        Task<IEnumerable<string>> FilterToUpdatedAsync(IEnumerable<string> hpdids, DateTimeOffset updatedSince);
     }
 }

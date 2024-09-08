@@ -3,13 +3,17 @@ import { Injectable } from '@angular/core';
 
 import { forkJoin, Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
+import moment from 'moment';
 
+import { Admin, AdminUser } from '@auth/shared/models/admin.model';
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { Address, AddressType, addressTypes } from '@lib/models/address.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { ApiResource } from '@core/resources/api-resource.service';
+import { PaginatedList } from '@core/models/paginated-list.model';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
@@ -18,31 +22,31 @@ import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { EnrolmentCard } from '@shared/models/enrolment-card.model';
-import { Admin } from '@auth/shared/models/admin.model';
-
-import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
-import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
-import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
-import { SelfDeclaration } from '@shared/models/self-declarations.model';
-import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
-import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
-import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
-import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
-import { EnrolleeNotification } from '../models/enrollee-notification.model';
-import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
-import { SiteNotification } from '../models/site-notification.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
 import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
-
-import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
-import moment from 'moment';
+import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
+
+import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
+import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
+import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
+import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { EnrolleeNotification } from '../models/enrollee-notification.model';
+import { SiteNotification } from '../models/site-notification.model';
+import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
+import { AdminStatusType } from '../models/admin-status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -55,12 +59,24 @@ export class AdjudicationResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public getEnrollees(params: { textSearch?: string, statusCode?: number, isLinkedPaperEnrolment?: boolean }): Observable<EnrolleeListViewModel[]> {
+  public getEnrollees(params: {
+    textSearch?: string,
+    statusCode?: number,
+    isLinkedPaperEnrolment?: boolean,
+    isRenewedManualEnrolment?: boolean,
+    page?: number,
+    sortOrder?: string,
+    assignedTo?: number,
+    appliedDateStart?: string,
+    appliedDateEnd?: string,
+    renewalDateStart?: string,
+    renewalDateEnd?: string
+  }): Observable<PaginatedList<EnrolleeListViewModel>> {
     const httpParams = this.apiResourceUtilsService.makeHttpParams(params);
-    return this.apiResource.get<EnrolleeListViewModel[]>('enrollees', httpParams)
+    return this.apiResource.get<PaginatedList<EnrolleeListViewModel>>('enrollees', httpParams)
       .pipe(
-        map((response: ApiHttpResponse<EnrolleeListViewModel[]>) => response.result),
-        tap((enrollees: EnrolleeListViewModel[]) => this.logger.info('ENROLLEES', enrollees)),
+        map((response: ApiHttpResponse<PaginatedList<EnrolleeListViewModel>>) => response.result),
+        tap((enrollees: PaginatedList<EnrolleeListViewModel>) => this.logger.info('PAGINATED_ENROLLEES', enrollees)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolments could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrollees error has occurred: ', error);
@@ -77,6 +93,10 @@ export class AdjudicationResource {
         .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
       certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
         .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+      enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrolleeId}/device-providers`)
+        .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
+      unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrolleeId}/unlisted-certifications`)
+        .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
       enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
         .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
       oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`)
@@ -454,6 +474,7 @@ export class AdjudicationResource {
   // ---
 
   public createAdmin(admin: Admin): Observable<Admin> {
+    admin.status = AdminStatusType.ENABLED;
     return this.apiResource.post<Admin>('admins', admin)
       .pipe(
         map((response: ApiHttpResponse<Admin>) => response.result),
@@ -472,6 +493,57 @@ export class AdjudicationResource {
         tap((admins: Admin[]) => this.logger.info('ADMINS', admins)),
         catchError((error: any) => {
           this.logger.error('[Adjudication] AdjudicationResource::getAdjudicators error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAdminUsers(): Observable<AdminUser[]> {
+    return this.apiResource.get<AdminUser[]>('admins/adminusers')
+      .pipe(
+        map((response: ApiHttpResponse<AdminUser[]>) => response.result),
+        tap((admins: AdminUser[]) => this.logger.info('ADMIN USERS', admins)),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::getAdjudicators error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAdjudicatorByUserId(userId: string): Observable<Admin> {
+    return this.apiResource.get<Admin>(`admins/${userId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Admin>) => response.result),
+        tap((admin: Admin) => this.logger.info('ADMIN', admin)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
+          this.logger.error('[Adjudication] AdjudicationResource::getAdjudicatorByUserId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public enableAdmin(adminId: number): Observable<Admin> {
+    return this.apiResource.put<Admin>(`admins/${adminId}/enable`)
+      .pipe(
+        map((response: ApiHttpResponse<Admin>) => response.result),
+        tap((admin: Admin) => this.logger.info('ADMIN', admin)),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::enableAdmin error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public disableAdmin(adminId: number): Observable<Admin> {
+    return this.apiResource.put<Admin>(`admins/${adminId}/disable`)
+      .pipe(
+        map((response: ApiHttpResponse<Admin>) => response.result),
+        tap((admin: Admin) => this.logger.info('ADMIN', admin)),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::disableAdmin error has occurred: ', error);
           throw error;
         })
       );
@@ -650,6 +722,10 @@ export class AdjudicationResource {
       enrollee.certifications = [];
     }
 
+    if (!enrollee.unlistedCertifications) {
+      enrollee.unlistedCertifications = [];
+    }
+
     if (!enrollee.oboSites) {
       enrollee.oboSites = [];
     }
@@ -714,8 +790,8 @@ export class AdjudicationResource {
     const selfDeclarations = {
       hasConviction: 'Has Conviction',
       hasRegistrationSuspended: 'Has Registration Suspended',
+      hasPharmaNetSuspended: 'Has PharmaNet Suspended',
       hasDisciplinaryAction: 'Has Disciplinary Action',
-      hasPharmaNetSuspended: 'Has PharmaNet Suspended'
     };
     const keys = Object.keys(selfDeclarations);
 
@@ -725,7 +801,8 @@ export class AdjudicationResource {
         if (profileSnapshot[key]) {
           profileSnapshot.selfDeclarations.push({
             selfDeclarationDetails: profileSnapshot[`${key}Details`],
-            selfDeclarationTypeCode: index + 1
+            selfDeclarationTypeCode: index + 1,
+            answered: true,
           });
         }
 
@@ -746,5 +823,31 @@ export class AdjudicationResource {
       });
       delete profileSnapshot[`enrolleeOrganizationTypes`];
     }
+
+    // set answered property
+    if (profileSnapshot.selfDeclarations) {
+      profileSnapshot.selfDeclarations.forEach(sd => {
+        sd.answered = !!sd.id;
+      });
+    }
+
+    // create an ordered list of self declaratoin types
+    let orderedSelfDeclarationType = [
+      Number(SelfDeclarationTypeEnum.HAS_CONVICTION),
+      Number(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED),
+      Number(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED),
+      Number(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION)];
+
+    // add unanswered self declaration questions and order the questions
+    let orderedSelfDeclarations = [];
+    for (var i = 0; i < 4; i++) {
+      if (!isNaN(orderedSelfDeclarationType[i]) && !profileSnapshot.selfDeclarations.find(s => s.selfDeclarationTypeCode === orderedSelfDeclarationType[i])) {
+        let unansweredSelfDeclaration = new SelfDeclaration(orderedSelfDeclarationType[i], null, null, null, false, null, null);
+        orderedSelfDeclarations.push(unansweredSelfDeclaration);
+      } else {
+        orderedSelfDeclarations.push(profileSnapshot.selfDeclarations.find(s => s.selfDeclarationTypeCode === orderedSelfDeclarationType[i]));
+      }
+    }
+    profileSnapshot.selfDeclarations = orderedSelfDeclarations;
   }
 }

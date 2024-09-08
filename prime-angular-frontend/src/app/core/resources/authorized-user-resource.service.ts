@@ -20,10 +20,10 @@ export class AuthorizedUserResource {
     private apiResource: ApiResource,
     private logger: ConsoleLoggerService,
     private toastService: ToastService
-  ) {}
+  ) { }
 
-  public getAuthorizedUserByUserId(userId: string): Observable<AuthorizedUser | null> {
-    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${userId}`)
+  public getAuthorizedUserByUsername(username: string): Observable<AuthorizedUser | null> {
+    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${username}`)
       .pipe(
         map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
         tap((authorizedUser: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', authorizedUser)),
@@ -68,6 +68,19 @@ export class AuthorizedUserResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized user could not be retrieved');
           this.logger.error('[Core] AuthorizedUserResource::getAuthorizedUserSites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAuthorizedUserSiteCount(authorizedUserId: number): Observable<number> {
+    return this.apiResource.get<number>(`parties/authorized-users/${authorizedUserId}/site-count`)
+      .pipe(
+        map((response: ApiHttpResponse<number>) => response.result),
+        tap((siteCount: number) => this.logger.info('siteCount', siteCount)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Authorized user site count could not be retrieved');
+          this.logger.error('[Core] AuthorizedUserResource::getAuthorizedUserSiteCount error has occurred: ', error);
           throw error;
         })
       );
@@ -136,6 +149,19 @@ export class AuthorizedUserResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized user could not be deleted');
           this.logger.error('[Core] AuthorizedUserResource::deleteAuthorizedUser error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public disableAuthorizedUser(authorizedUserId: number): NoContent {
+    return this.apiResource.put<NoContent>(`parties/authorized-users/${authorizedUserId}/disable`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Authorized user has been disabled')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Authorized user could not be disabled');
+          this.logger.error('[Core] AuthorizedUserResource::disableAuthorizedUser error has occurred: ', error);
           throw error;
         })
       );

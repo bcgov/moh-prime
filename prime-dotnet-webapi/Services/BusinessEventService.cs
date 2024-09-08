@@ -39,6 +39,20 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        public async Task<BusinessEvent> CreateEmailEventAsync(string description)
+        {
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.Email, description);
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create email business event.");
+            }
+
+            return businessEvent;
+        }
+
         public async Task<BusinessEvent> CreateEmailEventAsync(int enrolleeId, string description)
         {
             var businessEvent = await CreateBusinessEvent(BusinessEventType.Email, enrolleeId, description);
@@ -123,6 +137,53 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        public async Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, int partyId, string description)
+        {
+            var businessEvent = await CreateSiteBusinessEvent(BusinessEventType.Email, siteId, partyId, description);
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create site email business event.");
+            }
+
+            return businessEvent;
+        }
+
+        public async Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, string username, string description)
+        {
+            var partyId = await _context.Parties
+                .Where(p => p.Username == username)
+                .Select(p => p.Id)
+                .SingleOrDefaultAsync();
+
+            return await CreateSiteEmailEventAsync(siteId, partyId, description);
+        }
+
+        public async Task<BusinessEvent> CreateSiteEmailEventAsync(int siteId, string description)
+        {
+            var site = await _context.Sites
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            var partyId = site switch
+            {
+                CommunitySite c => await _context.CommunitySites
+                    .AsNoTracking()
+                    .Where(site => site.Id == siteId)
+                    .Select(site => site.Organization.SigningAuthorityId)
+                    .SingleAsync(),
+                HealthAuthoritySite h => await _context.HealthAuthoritySites
+                    .AsNoTracking()
+                    .Where(site => site.Id == siteId)
+                    .Select(site => site.AuthorizedUser.PartyId)
+                    .SingleAsync(),
+                _ => throw new NotImplementedException($"Unknown Site Type in {nameof(CreateSiteEmailEventAsync)}: {site.GetType()}")
+            };
+
+            return await CreateSiteEmailEventAsync(siteId, partyId, description);
+        }
+
         public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, string description)
         {
             var site = await _context.Sites
@@ -146,10 +207,20 @@ namespace Prime.Services
             return await CreateSiteEventAsync(siteId, partyId, description);
         }
 
+        public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, string username, string description)
+        {
+            var partyId = await _context.Parties
+                .Where(p => p.Username == username)
+                .Select(p => p.Id)
+                .SingleOrDefaultAsync();
+
+            return await CreateSiteEventAsync(siteId, partyId, description);
+        }
+
         public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int partyId, string description)
         {
-            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
-            Admin admin = await _adminService.GetAdminAsync(userId);
+            var username = _httpContext.HttpContext.User.GetPrimeUsername();
+            Admin admin = await _adminService.GetAdminAsync(username);
             int? adminId = admin?.Id;
 
             var businessEvent = new BusinessEvent
@@ -173,16 +244,26 @@ namespace Prime.Services
             return businessEvent;
         }
 
-        public async Task<BusinessEvent> CreatePharmanetApiCallEventAsync(int enrolleeId, string licencePrefix, string licenceNumber, string description)
+        public async Task<BusinessEvent> CreatePharmanetApiCallEventAsync(int enrolleeId, string licencePrefix, string licenceNumber, string description, bool overrideWithDesc)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.PharmanetApiCall, enrolleeId,
-                $"Called Pharmanet API with licence prefix {licencePrefix} and licence number {licenceNumber}:  {description}");
+            string message;
+
+            if (overrideWithDesc)
+            {
+                message = description;
+            }
+            else
+            {
+                message = $"Called PharmaNet API with licence prefix {licencePrefix} and licence number {licenceNumber}:  {description}";
+            }
+
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.PharmanetApiCall, enrolleeId, message);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not create Pharmanet API call event.");
+                throw new InvalidOperationException("Could not create PharmaNet API call event.");
             }
 
             return businessEvent;
@@ -204,8 +285,8 @@ namespace Prime.Services
 
         private async Task<BusinessEvent> CreateBusinessEvent(int BusinessEventTypeCode, int enrolleeId, string description)
         {
-            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
-            Admin admin = await _adminService.GetAdminAsync(userId);
+            var username = _httpContext.HttpContext.User.GetPrimeUsername();
+            Admin admin = await _adminService.GetAdminAsync(username);
             int? adminId = admin?.Id;
 
             var businessEvent = new BusinessEvent
@@ -220,10 +301,27 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        private async Task<BusinessEvent> CreateBusinessEvent(int BusinessEventTypeCode, string description)
+        {
+            var username = _httpContext.HttpContext.User.GetPrimeUsername();
+            Admin admin = await _adminService.GetAdminAsync(username);
+            int? adminId = admin?.Id;
+
+            var businessEvent = new BusinessEvent
+            {
+                AdminId = adminId,
+                BusinessEventTypeCode = BusinessEventTypeCode,
+                Description = description,
+                EventDate = DateTimeOffset.Now
+            };
+
+            return businessEvent;
+        }
+
         private async Task<BusinessEvent> CreateSiteBusinessEvent(int BusinessEventTypeCode, int siteId, int partyId, string description)
         {
-            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
-            Admin admin = await _adminService.GetAdminAsync(userId);
+            var username = _httpContext.HttpContext.User.GetPrimeUsername();
+            Admin admin = await _adminService.GetAdminAsync(username);
             int? adminId = admin?.Id;
 
             var businessEvent = new BusinessEvent

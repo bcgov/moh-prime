@@ -60,6 +60,7 @@ namespace Prime
             services.AddScoped<IBannerService, BannerService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<IClientLogService, ClientLogService>();
+            services.AddScoped<IVendorAPILogService, VendorAPILogService>();
             services.AddScoped<ICommunitySiteService, CommunitySiteService>();
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IDocumentService, DocumentService>();
@@ -92,6 +93,8 @@ namespace Prime
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
+            services.AddScoped<IReportingService, ReportingService>();
+            services.AddScoped<IDeviceProviderService, DeviceProviderService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
@@ -218,11 +221,16 @@ namespace Prime
                 client.BaseAddress = new Uri(PrimeConfiguration.Current.VerifiableCredentialApi.Url.EnsureTrailingSlash());
                 client.DefaultRequestHeaders.Add("x-api-key", PrimeConfiguration.Current.VerifiableCredentialApi.Key);
             });
+
+            services.AddHttpClient<IOrgBookClient, OrgBookClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
+            // See https://stackoverflow.com/questions/69961449/net6-and-datetime-problem-cannot-write-datetime-with-kind-utc-to-postgresql-ty/70142836#70142836
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

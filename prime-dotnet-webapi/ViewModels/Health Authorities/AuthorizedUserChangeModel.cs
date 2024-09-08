@@ -11,6 +11,7 @@ namespace Prime.ViewModels.Parties
         [JsonIgnore]
         public Party Party { get; set; }
         public Guid UserId { get; set; }
+        public string Username { get; set; }
         public string HPDID { get; set; }
         public string FirstName { get; set; }
         public string GivenNames { get; set; }
@@ -58,6 +59,7 @@ namespace Prime.ViewModels.Parties
             party.JobRoleTitle = JobRoleTitle;
 
             party.UserId = user.GetPrimeUserId();
+            party.Username = user.GetPrimeUsername();
             party.FirstName = user.GetFirstName();
             party.LastName = user.GetLastName();
             party.DateOfBirth = user.GetDateOfBirth().Value;
@@ -102,7 +104,7 @@ namespace Prime.ViewModels.Parties
         public bool Validate(ClaimsPrincipal user)
         {
             return UserId == user.GetPrimeUserId()
-               && HPDID == user.FindFirstValue(Claims.PreferredUsername)
+               && HPDID == user.GetHpdid()
                && FirstName == user.FindFirstValue(Claims.GivenName)
                && LastName == user.FindFirstValue(Claims.FamilyName)
                && GivenNames == user.FindFirstValue(Claims.GivenNames)

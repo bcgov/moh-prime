@@ -3,7 +3,7 @@
           mode="full"
           (back)="onBack()">
 
-  <app-page-header>License Classes</app-page-header>
+  <app-page-header>Licence Classes</app-page-header>
 
 
   <table mat-table
@@ -33,7 +33,11 @@
       <td mat-cell
           class="pl-2"
           *matCellDef="let row;">
+        {{ row.collegeLicenseGroupingCode ?
+        (row.collegeLicenseGroupingCode | configCode: 'collegeLicenseGroupings' | default) + ' - '
+        : ''}}
         {{ row.licenseCode | configCode: 'licenses' | default }}
+        {{ row.discontinued ? " - *Discontinued*" : ""}}
       </td>
     </ng-container>
 
@@ -118,6 +122,20 @@
           class="pl-3"
           *matCellDef="let row;">
         {{ PrescriberIdTypeEnum[row.prescriberIdType] }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="allowRequestRemoteAccess">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header pl-3">
+        ARRA
+      </th>
+      <td mat-cell
+          class="pl-3"
+          *matCellDef="let row;">
+        {{ row.allowRequestRemoteAccess }}
       </td>
     </ng-container>
 

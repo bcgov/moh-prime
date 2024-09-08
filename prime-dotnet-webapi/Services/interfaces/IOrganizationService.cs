@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.ViewModels;
 
 namespace Prime.Services
@@ -10,7 +9,6 @@ namespace Prime.Services
     public interface IOrganizationService
     {
         Task<bool> OrganizationExistsAsync(int organizationId);
-        Task<IEnumerable<OrganizationSearchViewModel>> GetOrganizationsAsync(OrganizationSearchOptions search);
         Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
         Task<Organization> GetOrganizationAsync(int organizationId);
         Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId);
@@ -22,7 +20,7 @@ namespace Prime.Services
         Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);
         Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int careSettingCode, int signingAuthorityId);
         Task AcceptOrgAgreementAsync(int organizationId, int agreementId);
-        Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid);
+        Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid, string filename = "");
         Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId);
         Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId);
         Task FinalizeTransferAsync(int organizationId);
@@ -31,5 +29,6 @@ namespace Prime.Services
         Task RemoveUnsignedOrganizationAgreementsAsync(int organizationId);
         Task<bool> IsOrganizationTransferCompleteAsync(int organizationId);
         Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(int organizationId);
+        Task<int> UpdateMissingRegistrationIds();
     }
 }

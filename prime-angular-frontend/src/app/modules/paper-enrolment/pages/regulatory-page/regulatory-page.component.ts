@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,17 +18,19 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
+import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
 @Component({
   selector: 'app-regulatory-page',
   templateUrl: './regulatory-page.component.html',
   styleUrls: ['./regulatory-page.component.scss']
 })
-export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
+export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: RegulatoryFormState;
   public routeUtils: RouteUtils;
   public enrollee: HttpEnrollee;
   public isDeviceProvider: boolean;
+  public hasUnlistedCertification: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -44,6 +46,25 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
+  public onUnlistedCertification({ checked }: ToggleContentChange) {
+    if (!checked) {
+      this.hasUnlistedCertification = false;
+      this.formState.json.unlistedCertifications = [];
+    } else {
+      this.hasUnlistedCertification = true;
+      if (!this.formState.unlistedCertifications.length) {
+        this.formState.addEmptyUnlistedCollegeCertification();
+      }
+    }
+  }
+
+  public removeUnlistedCertification(index: number): void {
+    this.formState.unlistedCertifications.removeAt(index);
+    if (!this.formState.unlistedCertifications.length) {
+      this.hasUnlistedCertification = false;
+    }
+  }
+
   public onBack(): void {
     const backRoutePath = (this.enrollee.profileCompleted)
       ? PaperEnrolmentRoutes.OVERVIEW
@@ -53,11 +74,12 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm().subscribe(() => this.initForm());
-  }
-
-  public ngOnDestroy(): void {
-    this.formState.removeIncompleteCertifications(true);
+    this.patchForm().subscribe(() => {
+      this.initForm();
+      if (this.formState.json.unlistedCertifications.length > 0) {
+        this.hasUnlistedCertification = true;
+      }
+    });
   }
 
   protected createFormInstance(): void {
@@ -84,28 +106,33 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
           if (enrollee) {
             this.enrollee = enrollee;
             // Attempt to patch the form if not already patched
-            const { certifications, deviceProviderIdentifier } = enrollee;
+            const { certifications, enrolleeDeviceProviders, unlistedCertifications } = enrollee;
             this.isDeviceProvider = enrollee.enrolleeCareSettings.some((careSetting) =>
               careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
             this.enableDeviceProviderValidator();
-            this.formState.patchValue({ certifications, deviceProviderIdentifier });
+            this.formState.patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications });
           }
         })
       );
   }
 
-  protected performSubmission(): Observable<number> {
+  protected performSubmission(): Observable<void> {
     this.formState.removeIncompleteCertifications(true);
+    this.formState.removeIncompleteUnlistedCertifications();
     this.formState.form.markAsPristine();
 
     const certifications = this.formState.json.certifications;
-    const deviceProviderIdentifier = this.formState.json.deviceProviderIdentifier;
+    const unlistedCertifications = this.formState.json.unlistedCertifications;
+    const enrolleeDeviceProviders = this.formState.json.enrolleeDeviceProviders;
     const oboSites = this.removeOboSites(this.enrollee.oboSites);
 
     return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, certifications)
       .pipe(
         exhaustMap(() =>
-          this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, deviceProviderIdentifier)
+          this.paperEnrolmentResource.updateUnlistedCertifications(this.enrollee.id, unlistedCertifications)
+        ),
+        exhaustMap(() =>
+          this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, enrolleeDeviceProviders)
         ),
         exhaustMap(() =>
           (this.enrollee.oboSites.length !== oboSites.length)
@@ -116,13 +143,18 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected afterSubmitIsSuccessful(): void {
+    if (!this.hasUnlistedCertification) {
+      this.formState.unlistedCertifications.clear();
+    }
+
     const collegeCertifications = this.formState.collegeCertifications;
+    const unlistedCertifications = this.formState.unlistedCertifications.value;
     const isDeviceProviderWithNoIdentifier = this.isDeviceProvider && !this.formState.deviceProviderIdentifier.value;
 
     // Force obo sites to always be checked regardless of the profile being
     // completed so validations are applied prior to overview pushing the
     // responsibility of validation to obo sites
-    const nextRoutePath = (!collegeCertifications.length || isDeviceProviderWithNoIdentifier)
+    const nextRoutePath = (!collegeCertifications.length && !unlistedCertifications.length || isDeviceProviderWithNoIdentifier)
       ? PaperEnrolmentRoutes.OBO_SITES
       : (this.enrollee.profileCompleted)
         ? PaperEnrolmentRoutes.OVERVIEW

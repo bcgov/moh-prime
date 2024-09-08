@@ -120,8 +120,10 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
           siteId: ras.siteId,
           doingBusinessAs: ras.siteDoingBusinessAs,
           physicalAddress: ras.siteAddress,
-          siteVendors: [{ vendorCode: ras.vendorCodes[0] }]
         });
+        const siteVendors = remoteAccessSite.get("siteVendors") as FormArray;
+        siteVendors.push(this.fb.group({ vendorCode: ras.vendorCodes[0] }));
+
         this.remoteAccessSites.push(remoteAccessSite);
       }
     });
@@ -209,7 +211,8 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       .collegeCertifications
       .map(c => ({
         collegeCode: c.collegeCode,
-        licenceNumber: c.licenseNumber
+        licenceNumber: c.licenseNumber,
+        practitionerId: c.practitionerId
       }));
 
     this.siteResource.getSitesByRemoteUserInfo(certSearch)

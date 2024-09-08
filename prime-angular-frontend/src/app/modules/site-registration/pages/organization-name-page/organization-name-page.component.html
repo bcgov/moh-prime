@@ -1,6 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+  <app-site-progress-indicator [noContent]="true"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="formState.form"
@@ -37,9 +37,12 @@
                 {{ orgBookOrganization }}
               </mat-option>
             </mat-autocomplete>
-            <mat-error>Required</mat-error>
+            <mat-error *ngIf="formState.name.hasError('required')">
+              Required</mat-error>
+            <mat-error *ngIf="formState.name.hasError('duplicate')">
+              Duplicate Organization - Organization can be added only once.
+            </mat-error>
           </mat-form-field>
-
         </div>
       </div>
 

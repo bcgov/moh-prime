@@ -9,6 +9,7 @@ namespace Prime.ViewModels.Parties
     {
         public int Id { get; set; }
         public Guid UserId { get; set; }
+        public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string GivenNames { get; set; }
@@ -24,5 +25,6 @@ namespace Prime.ViewModels.Parties
         public string JobRoleTitle { get; set; }
         public HealthAuthorityCode HealthAuthorityCode { get; set; }
         public AccessStatusType Status { get; set; }
+        public DateTimeOffset SubmittedDate { get; set; }
     }
 }

@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.ViewModels;
 
 namespace Prime.Services
@@ -23,6 +22,7 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IPartyService _partyService;
+        private readonly IOrgBookClient _orgBookClient;
 
         public OrganizationService(
             ApiDbContext context,
@@ -31,7 +31,8 @@ namespace Prime.Services
             IDocumentManagerClient documentClient,
             IMapper mapper,
             IOrganizationClaimService organizationClaimService,
-            IPartyService partyService)
+            IPartyService partyService,
+            IOrgBookClient orgBookClient)
             : base(context, logger)
         {
             _businessEventService = businessEventService;
@@ -39,6 +40,7 @@ namespace Prime.Services
             _mapper = mapper;
             _organizationClaimService = organizationClaimService;
             _partyService = partyService;
+            _orgBookClient = orgBookClient;
         }
 
         public async Task<bool> OrganizationExistsAsync(int organizationId)
@@ -46,34 +48,6 @@ namespace Prime.Services
             return await _context.Organizations
                 .AsNoTracking()
                 .AnyAsync(e => e.Id == organizationId);
-        }
-
-        public async Task<IEnumerable<OrganizationSearchViewModel>> GetOrganizationsAsync(OrganizationSearchOptions searchOptions)
-        {
-            searchOptions ??= new OrganizationSearchOptions();
-
-            var results = await _context.Organizations
-                .AsNoTracking()
-                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
-                    .Search(
-                        o => o.Name,
-                        o => o.DisplayId.ToString(),
-                        o => o.SigningAuthority.FirstName + " " + o.SigningAuthority.LastName)
-                    .SearchCollections(
-                        o => o.Sites.Select(s => s.DoingBusinessAs),
-                        o => o.Sites.Select(s => s.PEC))
-                    .Containing(searchOptions.TextSearch)
-                )
-                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider, new { careSettingCode = searchOptions.CareSettingCode })
-                .DecompileAsync()
-                .ToListAsync();
-
-            return results
-                .Select(r => new OrganizationSearchViewModel
-                {
-                    Organization = r,
-                    MatchedOn = r.MatchedOn(searchOptions.TextSearch)
-                });
         }
 
         public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId)
@@ -115,12 +89,6 @@ namespace Prime.Services
 
         public async Task<int> CreateOrganizationAsync(int partyId)
         {
-            var organizations = await GetOrganizationsByPartyIdAsync(partyId);
-            if (organizations.Count() != 0)
-            {
-                throw new InvalidOperationException("Could not create Organization. Only one organization can exist for a party.");
-            }
-
             var organization = new Organization
             {
                 SigningAuthorityId = partyId
@@ -328,12 +296,15 @@ namespace Prime.Services
             }
         }
 
-        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid)
+        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid, string filename = "")
         {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SignedOrgAgreements);
-            if (string.IsNullOrWhiteSpace(filename))
+            if (filename == "")
             {
-                return null;
+                filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SignedOrgAgreements);
+                if (string.IsNullOrWhiteSpace(filename))
+                {
+                    return null;
+                }
             }
 
             var signedAgreement = new SignedAgreementDocument
@@ -412,6 +383,31 @@ namespace Prime.Services
 
             _context.RemoveRange(pendingAgreements);
             await _context.SaveChangesAsync();
+        }
+
+        // update organization registration ID calling OrgBook API with organization name in PRIME, then return the number of organizations updated
+        public async Task<int> UpdateMissingRegistrationIds()
+        {
+            var targetOrganizations = await _context.Organizations.Where(o => o.RegistrationId == null)
+                .OrderBy(o => o.Id)
+                .ToListAsync();
+            int numUpdated = 0;
+            if (targetOrganizations.Any())
+            {
+                foreach (var org in targetOrganizations)
+                {
+                    string registrationId = await _orgBookClient.GetOrgBookRegistrationIdAsync(org.Name);
+                    if (registrationId != null)
+                    {
+                        org.RegistrationId = registrationId;
+                        numUpdated++;
+                        _logger.LogInformation($"Organization (ID:{org.Id}) registration ID is set to {registrationId}.");
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            return numUpdated;
         }
     }
 }

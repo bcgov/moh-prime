@@ -15,6 +15,7 @@ import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { EnrolleeBannerPageComponent } from './enrollee-banner-page.component';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 describe('EnrolleeBannerPageComponent', () => {
   let component: EnrolleeBannerPageComponent;
@@ -62,5 +63,14 @@ describe('EnrolleeBannerPageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('testing onBack()', () => {
+    it('should be called with [\'../\', AdjudicationRoutes.BANNERS]', () => {
+      const spyOnRouteRelativeTo = spyOn((component as any).routeUtils, 'routeRelativeTo');
+
+      component.onBack();
+      expect(spyOnRouteRelativeTo).toHaveBeenCalledWith(['../', AdjudicationRoutes.BANNERS])
+    });
   });
 });

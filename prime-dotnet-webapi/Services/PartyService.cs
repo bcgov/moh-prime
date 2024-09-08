@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
+using Prime.HttpClients;
 using Prime.Models;
 using Prime.ViewModels.Parties;
 
@@ -16,14 +17,17 @@ namespace Prime.Services
     public class PartyService : BaseService, IPartyService
     {
         private readonly IMapper _mapper;
+        private readonly IPrimeKeycloakAdministrationClient _keycloakClient;
 
         public PartyService(
             ApiDbContext context,
+            IPrimeKeycloakAdministrationClient keycloakClient,
             ILogger<PartyService> logger,
             IMapper mapper)
             : base(context, logger)
         {
             _mapper = mapper;
+            _keycloakClient = keycloakClient;
         }
 
         public async Task<bool> PartyExistsAsync(int partyId, PartyType? withType = null)
@@ -34,12 +38,12 @@ namespace Prime.Services
                 .AnyAsync(p => p.Id == partyId);
         }
 
-        public async Task<bool> PartyExistsForUserIdAsync(Guid userId, PartyType? withType = null)
+        public async Task<bool> PartyExistsForUsernameAsync(string username, PartyType? withType = null)
         {
             return await _context.Parties
                 .AsNoTracking()
                 .If(withType.HasValue, q => q.WithPartyType(withType.Value))
-                .AnyAsync(p => p.UserId == userId);
+                .AnyAsync(p => p.Username == username);
         }
 
         public async Task<Party> GetPartyAsync(int partyId, PartyType? withType = null)
@@ -49,11 +53,11 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.Id == partyId);
         }
 
-        public async Task<Party> GetPartyForUserIdAsync(Guid userId, PartyType? withType = null)
+        public async Task<Party> GetPartyForUsernameAsync(string username, PartyType? withType = null)
         {
             return await GetBasePartyQuery()
                 .If(withType.HasValue, q => q.WithPartyType(withType.Value))
-                .SingleOrDefaultAsync(p => p.UserId == userId);
+                .SingleOrDefaultAsync(p => p.Username == username);
         }
 
         /// <summary>
@@ -63,7 +67,7 @@ namespace Prime.Services
         public async Task<int> CreateOrUpdatePartyAsync(IPartyChangeModel changeModel, ClaimsPrincipal user)
         {
             var currentParty = await GetBasePartyQuery()
-                .SingleOrDefaultAsync(p => p.UserId == user.GetPrimeUserId());
+                .SingleOrDefaultAsync(p => p.Username == user.GetPrimeUsername());
 
             if (currentParty == null)
             {
@@ -200,6 +204,50 @@ namespace Prime.Services
                     .ThenInclude(pa => pa.Address)
                 .Include(p => p.PartyEnrolments)
                 .Include(p => p.PartyCertifications);
+        }
+
+        public async Task<int> UpdatePartyHpdid(int limit)
+        {
+            //query party ID where HPDID is null
+            var partyIds = await _context.Parties
+                .Where(p => p.HPDID == null)
+                .OrderBy(p => p.Id)
+                .Select(p => p.Id)
+                .Take(limit)
+                .ToListAsync();
+
+            var counter = 0;
+            foreach (var pId in partyIds)
+            {
+                //for each party ID, get the party record
+                var party = await _context.Parties.Where(p => p.Id == pId).FirstOrDefaultAsync();
+                //get the user object from keycloak
+                var partyUser = await _keycloakClient.GetUser(party.UserId);
+                if (partyUser == null)
+                {
+                    _logger.LogError($"Party user ID '{party.UserId}' not found in Keycloak.");
+                    continue;
+                }
+                //assign keycloak username to HPDID
+                party.HPDID = partyUser.UserName;
+
+                ++counter;
+            }
+
+            if (counter > 0)
+            {
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    _logger.LogError($"UpdatePartyHpdid failed to save. Error: {ex.Message}");
+                    return -1;
+                }
+            }
+
+            return counter;
         }
     }
 }

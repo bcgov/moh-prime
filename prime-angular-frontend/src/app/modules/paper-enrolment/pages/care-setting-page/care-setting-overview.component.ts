@@ -34,6 +34,11 @@ import { CareSettingForm } from './care-setting-form.model';
                              [makeBold]="true">
         None
       </app-enrollee-property>
+
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.CARE_SETTING)">Edit Care Setting
+      </button>
     </app-page-section>
 
     <app-page-section *ngIf="careSettings?.enrolleeHealthAuthorities.length">
@@ -53,6 +58,11 @@ import { CareSettingForm } from './care-setting-form.model';
           <div class="mb-3">{{ healthAuthority.healthAuthorityCode | configCode: 'healthAuthorities' }}</div>
         </app-enrollee-property>
       </ng-container>
+
+      <button mat-flat-button
+          color="primary"
+          (click)="onRoute(PaperEnrolmentRoutes.CARE_SETTING)">Edit Health Authority
+      </button>
     </app-page-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],

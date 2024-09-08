@@ -10,6 +10,7 @@ import { Admin } from '@auth/shared/models/admin.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AdminStatusType } from '@adjudication/shared/models/admin-status.enum';
 
 export class AssignAction {
   public action: AssignActionEnum;
@@ -67,7 +68,7 @@ export class ClaimNoteComponent implements OnInit {
       .subscribe((admin: Admin) => {
         const output = new AssignAction();
         output.action = AssignActionEnum.Assign;
-        output.adjudicatorId = this.adjudicators$.value.find(a => a.userId === admin.userId).id;
+        output.adjudicatorId = this.adjudicators$.value.find(a => a.username === admin.username).id;
         output.note = this.note.value;
         this.dialogRef.close({ output });
       });
@@ -97,13 +98,13 @@ export class ClaimNoteComponent implements OnInit {
           value: '',
           disabled: false,
         },
-        [Validators.required]
+        []
       ]
     });
   }
 
   private getAdjudicators(): void {
     this.adjudicationResource.getAdjudicators()
-      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));
+      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators.filter(a => a.status !== AdminStatusType.DISABLED)));
   }
 }

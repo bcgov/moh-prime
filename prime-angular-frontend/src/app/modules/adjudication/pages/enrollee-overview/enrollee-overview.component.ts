@@ -13,7 +13,6 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -22,6 +21,7 @@ import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -48,6 +48,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     protected adjudicationResource: AdjudicationResource,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentService: EnrolmentService,
     permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService,
@@ -114,7 +115,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
             map((plrInfo: PlrInfo[]) => this.plrInfo = plrInfo),
             catchError(_ => of([])))),
         exhaustMap(() =>
-          this.isPaperEnrollee(this.enrollee) ?
+          this.enrolmentService.isPaperEnrollee(this.enrollee) ?
             this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id) :
             of(null))
       ).subscribe((documents: EnrolleeAdjudicationDocument[]) => this.documents = documents);
@@ -123,6 +124,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
     const {
       userId,
+      username,
       firstName,
       lastName,
       givenNames,
@@ -135,6 +137,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       verifiedAddress,
       mailingAddress,
       physicalAddress,
+      additionalAddresses,
       email,
       smsPhone,
       phone,
@@ -146,6 +149,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     return {
       enrollee: {
         userId,
+        username,
         firstName,
         lastName,
         givenNames,
@@ -158,6 +162,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
         verifiedAddress,
         mailingAddress,
         physicalAddress,
+        additionalAddresses,
         email,
         smsPhone,
         phone,
@@ -169,9 +174,5 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       careSettings: enrollee.enrolleeCareSettings,
       ...remainder
     };
-  }
-
-  private isPaperEnrollee(enrollee: Enrollee): boolean {
-    return (enrollee?.gpid?.startsWith(PAPER_ENROLLEE_GPID_PREFIX));
   }
 }

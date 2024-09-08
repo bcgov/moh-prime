@@ -3,13 +3,14 @@
   <app-page-header>Terms of Access</app-page-header>
 
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
-                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
+                                    [inProgress]="isInitialEnrolment"
+                                    [isCentered]="true"></app-enrolment-progress-indicator>
 
-  <ng-container *ngIf="currentPage > 0; else preamble">
-    <ng-container *ngIf="identityProvider === IdentityProviderEnum.BCSC; else uploadTOA">
-      <app-access-term [accessTerms]="accessTerm"></app-access-term>
-    </ng-container>
+  <!-- <ng-container *ngIf="currentPage > 0; else preamble"> -->
+  <ng-container *ngIf="identityProvider === IdentityProviderEnum.BCSC; else uploadTOA">
+    <app-access-term [accessTerms]="accessTerm"></app-access-term>
   </ng-container>
+  <!-- </ng-container> -->
 
   <ng-template #uploadTOA>
     <ng-container>
@@ -43,25 +44,25 @@
       <ng-container appPageSubheaderTitle>Next Steps</ng-container>
     </app-page-subheader>
     <p *ngIf="isInitialEnrolment; else renewal">
-      You have been approved for PharmaNet access, and to complete your enrolment,
+      To complete your enrolment,
       you must accept the PharmaNet User Terms of Access. These terms are specific
       to the type of access you have been granted.
     </p>
     <ng-template #renewal>
       <p>
-        Your renewal has been processed. To complete your renewal, you must accept thePharmaNet User Terms of Access.
-        These terms are specific to the type of accessyou have been granted.
+        Your renewal has been processed. To complete your renewal, you must accept the PharmaNet User Terms of Access.
+        These terms are specific to the type of access you have been granted.
       </p>
     </ng-template>
     <p>
       Read the PharmaNet User Terms of Access carefully, as you must comply with them at all times in relation
       to your use of PharmaNet. You are encouraged to print or save a copy of the PharmaNet User Terms of Access or
-      return to PRIME to view your Terms of Access at any time.
+      return to PRIME to view your terms of access at any time.
     </p>
 
   </ng-template>
 
-  <div *ngIf="hasReadAgreement && identityProvider === IdentityProviderEnum.BCSC"
+  <div *ngIf="identityProvider === IdentityProviderEnum.BCSC"
        class="footer my-3 pb-2">
     <mat-checkbox class="mr-4"
                   [formControl]="agreed">
@@ -69,7 +70,7 @@
     </mat-checkbox>
   </div>
 
-  <div *ngIf="!hasReadAgreement"
+  <!-- <div *ngIf="!hasReadAgreement"
        class="row">
     <div class="col text-right">
 
@@ -80,11 +81,10 @@
       </button>
 
     </div>
-  </div>
+  </div> -->
 
   <ng-container *ngIf="identityProvider === IdentityProviderEnum.BCSC; else saveUpload">
-    <div *ngIf="hasReadAgreement"
-         class="row">
+    <div class="row">
       <div class="col-12 text-md-right">
 
         <button mat-flat-button

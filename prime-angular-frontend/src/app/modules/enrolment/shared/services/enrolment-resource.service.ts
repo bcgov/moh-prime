@@ -21,6 +21,7 @@ import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { EnrolmentStatusAdmin } from '@shared/models/enrolment-status-admin.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
@@ -30,6 +31,10 @@ import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.model';
+import { EmailsForCareSetting } from '@shared/models/email-for-care-setting.model';
+import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
+import { DeviceProviderSite } from "@shared/models/device-provider-site.model";
 
 @Injectable({
   providedIn: 'root'
@@ -42,9 +47,9 @@ export class EnrolmentResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public enrollee(userId: string): Observable<Enrolment> {
+  public enrollee(username: string): Observable<Enrolment> {
     const selfDeclarationDocumentsParams = this.apiResourceUtilsService.makeHttpParams({ includeHidden: false });
-    return this.apiResource.get<HttpEnrollee>(`enrollees/${userId}`)
+    return this.apiResource.get<HttpEnrollee>(`enrollees/${username}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee) => this.logger.info('ENROLLEE', enrollee)),
@@ -54,6 +59,8 @@ export class EnrolmentResource {
               .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
             certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrollee.id}/certifications`)
               .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+            enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrollee.id}/device-providers`)
+              .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
             enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrollee.id}/remote-users`)
               .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
             oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrollee.id}/obo-sites`)
@@ -177,6 +184,22 @@ export class EnrolmentResource {
       );
   }
 
+  public returnToEditing(enrolleeId: number): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/status-actions/return-to-editing`)
+      .pipe(
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => {
+          this.toastService.openErrorToast('Enrolment is now editable');
+          this.logger.info('UPDATED_ENROLLEE', enrollee);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment status could not be updated');
+          this.logger.error('[Enrolment] EnrolmentResource::returnToEditing error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getCurrentStatus(enrolleeId: number): Observable<EnrolmentStatusAdmin> {
     return this.apiResource.get<EnrolmentStatusAdmin>(`enrollees/${enrolleeId}/current-status`)
       .pipe(
@@ -190,19 +213,32 @@ export class EnrolmentResource {
       );
   }
 
+  public getSelfDeclarationVersion(targetDate: string, isDeviceProvider: boolean): Observable<SelfDeclarationVersion[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ targetDate, isDeviceProvider });
+    return this.apiResource.get<SelfDeclarationVersion[]>(`lookups/self-declaration-question`, params)
+      .pipe(
+        map((response: ApiHttpResponse<SelfDeclarationVersion[]>) => response.result),
+        tap((selfDeclarationVersions: SelfDeclarationVersion[]) => this.logger.info('SELF_DECLARATION_VERSION', selfDeclarationVersions)),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getSelfDeclarationVersion error has occurred: ', error);
+          // release to allow the application to render
+          return of(null);
+        })
+      )
+  }
+
   // ---
   // Provisioner Access
   // ---
 
   public sendProvisionerAccessLink(
-    emails: string = null, enrolleeId: number, careSettingCode: number
-  ): Observable<EnrolmentCertificateAccessToken> {
-    const payload = { data: emails };
+    emailPairs: EmailsForCareSetting[] = [], enrolleeId: number
+  ): Observable<EnrolmentCertificateAccessToken[]> {
     return this.apiResource
-      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link/${careSettingCode}`, payload)
+      .post<EnrolmentCertificateAccessToken[]>(`enrollees/${enrolleeId}/provisioner-access/send-link`, emailPairs)
       .pipe(
-        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
-        tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
+        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken[]>) => response.result),
+        tap((token: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKEN', token)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Email could not be sent');
           this.logger.error('[Enrolment] EnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);
@@ -289,6 +325,18 @@ export class EnrolmentResource {
       );
   }
 
+  public getCurrentAgreementGroupForAnEnrollee(enrolleeId: number): Observable<AgreementTypeGroup> {
+    return this.apiResource.get<AgreementTypeGroup>(`enrollees/${enrolleeId}/agreements/current/agreement-group`)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementTypeGroup>) => response.result),
+        tap((group: AgreementTypeGroup) => this.logger.info('AGREEMENT_GROUP', group)),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getCurrentAgreementGroupForAnEnrollee error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getQrCode(enrolleeId: number): Observable<string> {
     return this.apiResource.get<string>(`enrollees/${enrolleeId}/qrCode`)
       .pipe(
@@ -365,7 +413,7 @@ export class EnrolmentResource {
       );
   }
 
-  public deleteEnrolleeAdjudicationDocument(enrolleeId: number, documentId: number) {
+  public deleteEnrolleeAdjudicationDocument(enrolleeId: number, documentId: number): Observable<EnrolleeAdjudicationDocument> {
     return this.apiResource.delete<EnrolleeAdjudicationDocument>(
       `enrollees/${enrolleeId}/adjudication-documents/${documentId}`)
       .pipe(
@@ -474,6 +522,29 @@ export class EnrolmentResource {
       );
   }
 
+  public getAcceptedTermsOfAccessToken(enrolleeId: number): Observable<string> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/agreement`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee terms of access could not be downloaded.');
+          this.logger.error('[Enrolment] EnrolmentResource::getAcceptedTermsOfAccessToken error has occurred: ', error);
+          throw error;
+        }),
+      );
+  }
+
+  public getDeviceProviderSite(deviceProviderId: number): Observable<DeviceProviderSite> {
+    return this.apiResource.get<DeviceProviderSite>(`sites/device-provider-site/${deviceProviderId}`)
+      .pipe(
+        map((response: ApiHttpResponse<DeviceProviderSite>) => response.result),
+        tap((site: DeviceProviderSite) => this.logger.info('DEVICE_PROVIDER_SITE', site)),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getDeviceProviderSite device provider site not found: ', error);
+          throw error;
+        })
+      );
+  }
   // ---
   // Enrollee and Enrolment Adapters
   // ---
@@ -507,8 +578,9 @@ export class EnrolmentResource {
     const selfDeclarations = {
       hasConviction: 'Has Conviction',
       hasRegistrationSuspended: 'Has Registration Suspended',
+      hasRegistrationSuspendedDeviceProvider: 'Has Registration Suspended for Device Provider',
       hasDisciplinaryAction: 'Has Disciplinary Action',
-      hasPharmaNetSuspended: 'Has PharmaNet Suspended'
+      hasPharmaNetSuspended: 'Has PharmaNet Suspended',
     };
     const keys = Object.keys(selfDeclarations);
 
@@ -574,6 +646,7 @@ export class EnrolmentResource {
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
     const {
       userId,
+      username,
       firstName,
       lastName,
       givenNames,
@@ -596,6 +669,7 @@ export class EnrolmentResource {
     return {
       enrollee: {
         userId,
+        username,
         firstName,
         lastName,
         givenNames,
@@ -611,13 +685,15 @@ export class EnrolmentResource {
         email,
         smsPhone,
         phone,
-        phoneExtension
+        phoneExtension,
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
       careSettings: enrollee.enrolleeCareSettings,
       enrolleeRemoteUsers: enrollee.enrolleeRemoteUsers,
       remoteAccessSites: enrollee.remoteAccessSites,
+      selfDeclarationCompletedDate: enrollee.selfDeclarationCompletedDate,
+      requireRedoSelfDeclaration: enrollee.requireRedoSelfDeclaration,
       ...remainder
     };
   }

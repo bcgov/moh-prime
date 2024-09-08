@@ -14,6 +14,7 @@ import {
   OrgBookDetailHttpResponse,
   OrgBookRelatedHttpResponse
 } from '@registration/shared/models/orgbook.model';
+import { WebApiLoggerService } from '@core/services/web-api-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,8 @@ export class OrgBookResource {
     private http: HttpClient,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private utilsService: UtilsService,
-    private logger: ConsoleLoggerService
+    private logger: ConsoleLoggerService,
+    private webApiLogger: WebApiLoggerService
   ) { }
 
   public autocomplete(orgName: string, inactive: boolean = false): Observable<OrgBookAutocompleteHttpResponse> {
@@ -56,7 +58,8 @@ export class OrgBookResource {
         map((response: OrgBookFacetHttpResponse) => response),
         tap((response: OrgBookFacetHttpResponse) => this.logger.info('ORGBOOK_FACET', response)),
         catchError((error: any) => {
-          this.logger.error('[Adjudication] OrgBookResource::getOrganizationFacet error has occurred: ', error);
+          this.logger.error('[SiteRegistration] OrgBookResource::getOrganizationFacet error has occurred: ', error);
+          this.webApiLogger.error('[SiteRegistration] OrgBookResource::getOrganizationFacet error has occurred', error).subscribe();
           throw error;
         })
       );

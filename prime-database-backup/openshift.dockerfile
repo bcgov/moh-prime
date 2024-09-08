@@ -1,4 +1,4 @@
-FROM postgres:10.6
+FROM postgres:12.4
 USER 0
 ARG PGPASSWORD
 ARG PGDATABASE
@@ -11,8 +11,6 @@ ENV PGPASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
 ENV PGDATABASE "${POSTGRESQL_DATABASE}"
 ENV PGHOST "${POSTGRESQL_HOST}"
 ENV PGUSERNAME "${POSTGRESQL_USER}"
-ENV MONGO_HOST "${MONGO_HOST}"
-ENV MONGO_DATABASE "${MONGO_DATABASE}"
 
 RUN mkdir -p /opt/backup
 
@@ -22,15 +20,11 @@ COPY . /opt
 COPY . /opt/backup
 COPY backup.cron /etc/cron.d
 
-RUN echo "Checking workdir..." && \
-    apt-get update -yqq && \ 
-    apt-get install -y inetutils-ping nano net-tools cron gnupg wget apt-transport-https ca-certificates libcurl4-openssl-dev
 
-RUN wget -qO - http://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
-    echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
-    apt-get update && \
-    apt-get install -y mongodb-org-tools && \
-    ls -alh /opt
+RUN echo "Checking workdir..." && \
+    apt-get update -yqq
+
+RUN apt-get -y install nano net-tools gnupg wget ca-certificates apt-transport-https cron inetutils-ping libcurl4-openssl-dev 
 
 RUN chmod -R 755 /opt/backup && \
     touch /var/log/cron.log && \

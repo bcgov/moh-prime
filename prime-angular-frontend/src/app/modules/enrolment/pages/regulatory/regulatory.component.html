@@ -13,9 +13,9 @@
              class="mb-3">
 
       <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
+        <ng-container appPageSubheaderTitle>What is your role?</ng-container>
         <ng-container appPageSubheaderSummary>
-          Provide your Device Provider ID if you have one.
+          Please select “None” to continue if your role is not listed.
         </ng-container>
       </app-page-subheader>
 
@@ -23,25 +23,81 @@
         <div class="col col-sm-10 py-3">
 
           <mat-form-field class="w-100">
+            <mat-label>Your Role</mat-label>
+            <mat-select formControlName="deviceProviderRoleCode">
+              <mat-option *ngFor="let role of deviceProviderRoles"
+                          [value]="role.code">
+                {{ role.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formState.deviceProviderIdentifier.hasError('required')">
+              Required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Enter the device provider registration number you were issued by the Ministry of Health. You will know it as
+          P1-90XXX (last three characters are numbers).
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3">
+          <mat-form-field class="w-100">
+            <mat-label>Device Provider ID</mat-label>
+            <input matInput
+                   maxlength="8"
+                   placeholder=""
+                   formControlName="deviceProviderId"
+                   appToUppercase>
+            <mat-error *ngIf="formState.deviceProviderId.hasError('deviceProviderId')">
+              Must be in format P1-90XXX (last three characters are numbers)
+            </mat-error>
+            <mat-error *ngIf="formState.deviceProviderId.hasError('required')">
+              Required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Certificate Number</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Enter your OPC certificate number, if you have one.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3">
+
+          <mat-form-field class="w-100">
+            <mat-label>OPC Certificate</mat-label>
             <input matInput
                    maxlength="5"
-                   placeholder="Device Provider ID"
-                   formControlName="deviceProviderIdentifier">
-            <mat-error
-                       *ngIf="formState.deviceProviderIdentifier.hasError('numeric') || formState.deviceProviderIdentifier.hasError('length')">
-              Must be 5 digits in length
+                   placeholder=""
+                   formControlName="certificationNumber">
+            <mat-error *ngIf="formState.certificationNumber.hasError('numeric')">
+              Must be numeric
+            </mat-error>
+            <mat-error *ngIf="formState.certificationNumber.hasError('required')">
+              Required
             </mat-error>
           </mat-form-field>
         </div>
       </div>
     </section>
 
-    <section class="mb-3">
+    <section *ngIf="hasOtherCareSetting"
+             class="mb-3">
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
         <ng-container appPageSubheaderSummary>
-          Provide details for all your active College licenses. This is the licence that indicates your authority to
+          Provide details for all your active college licences. This is the licence that indicates your authority to
           deliver health care directly to patients in B.C. If you do not have a licence from one of the colleges listed
           here, select <strong>None</strong>.
         </ng-container>
@@ -53,7 +109,7 @@
                  class="mb-4">
         <ng-container #alertContent
                       class="alert-content">
-          Only physicians and nurse practitioners are permitted to access PharmaNet remotely,
+          Only physicians and practicing nurse practitioners are permitted to access PharmaNet remotely,
           and your remote user information will be deleted from your enrolment if you choose a different license type.
         </ng-container>
       </app-alert>
@@ -91,6 +147,7 @@
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
-                   (back)="onBack(EnrolmentRoutes.CARE_SETTING)"></app-page-footer>
+                   (back)="onBack(EnrolmentRoutes.CARE_SETTING)"
+                   (continue)="onBack()"></app-page-footer>
 
 </app-enrollee-page>

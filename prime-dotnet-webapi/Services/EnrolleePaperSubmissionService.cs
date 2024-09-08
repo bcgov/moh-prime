@@ -14,6 +14,7 @@ using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.ViewModels.PaperEnrollees;
+using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
 {
@@ -72,14 +73,28 @@ namespace Prime.Services
             var enrollee = _mapper.Map<Enrollee>(viewModel);
 
             enrollee.UserId = Guid.NewGuid();
+            // TODO: enrollee.Username?
             enrollee.GPID = Gpid.NewGpid(Enrollee.PaperGpidPrefix);
-            enrollee.Addresses = new[]
+            var enrolleeAddresses = new List<EnrolleeAddress>()
             {
                 new EnrolleeAddress
                 {
                     Address = _mapper.Map<PhysicalAddress>(viewModel.PhysicalAddress)
-                }
+                },
             };
+
+            foreach (var additionalAddress in viewModel.AdditionalAddresses)
+            {
+                enrolleeAddresses.Add(
+                    new EnrolleeAddress
+                    {
+                        Address = _mapper.Map<AdditionalAddress>(additionalAddress)
+                    }
+                );
+            }
+
+            enrollee.Addresses = enrolleeAddresses;
+
             enrollee.Submissions = new[]
             {
                 new Submission
@@ -110,8 +125,27 @@ namespace Prime.Services
                 .ThenInclude(a => a.Address)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
+            var additionalAddresses = enrollee.Addresses
+                .Where(ea => ea.Address.GetType() == typeof(AdditionalAddress));
+
             _mapper.Map(viewModel, enrollee);
             _mapper.Map(viewModel.PhysicalAddress, enrollee.PhysicalAddress);
+
+            foreach (var additionalAddress in additionalAddresses)
+            {
+                _context.Remove(additionalAddress);
+                _context.Remove(additionalAddress.Address);
+            }
+
+            foreach (var newAdditionalAddress in viewModel.AdditionalAddresses)
+            {
+                enrollee.Addresses.Add(
+                    new EnrolleeAddress
+                    {
+                        Address = _mapper.Map<AdditionalAddress>(newAdditionalAddress)
+                    }
+                );
+            }
 
             await _context.SaveChangesAsync();
         }
@@ -162,9 +196,30 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateUnlistedCertificationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeUnlistedCertificationViewModel> viewModels)
+        {
+            var newCerts = _mapper.Map<IEnumerable<UnlistedCertification>>(viewModels);
+
+            await ReplaceCollection(enrolleeId, newCerts);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<PaperEnrolleeUnlistedCertificationViewModel>> GetUnlistedCertificationsAsync(int enrolleeId)
+        {
+            return await _context.Set<UnlistedCertification>()
+                .Where(uc => uc.EnrolleeId == enrolleeId)
+                .ProjectTo<PaperEnrolleeUnlistedCertificationViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
         public async Task UpdateSelfDeclarationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> viewModels)
         {
             var newDeclarations = _mapper.Map<IEnumerable<SelfDeclaration>>(viewModels);
+
+            //update self declaration completed date
+            var enrollee = await _context.Enrollees.Where(e => e.Id == enrolleeId).FirstOrDefaultAsync();
+            enrollee.SelfDeclarationCompletedDate = DateTimeOffset.Now;
 
             await ReplaceCollection(enrolleeId, newDeclarations);
 

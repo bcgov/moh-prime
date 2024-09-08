@@ -6,7 +6,7 @@ metadata:
     tags: cronjob
   name: retrieve-pnet-logs-cronjob-template
 objects:
-  - apiVersion: batch/v1beta1
+  - apiVersion: batch/v1
     kind: CronJob
     metadata:
       name: '${CRON_NAME}'
@@ -27,23 +27,23 @@ objects:
                     function get_now_timestamp() {
                       # Return formatted timestamp (UTC time)
                       local  __resultvar=$1
-                      local  now_ts="$(date +'%T')" 
+                      local  now_ts="$(date +'%T')"
                       eval $__resultvar="${now_ts}"
                     }
 
 
                     function exec_sql_no_resultset() {
-                      # $1 parameter - SQL to execute 
-                      # No result set will be returned 
-                      
-                      # Quote parameter to handle spaces in SQL string 
+                      # $1 parameter - SQL to execute
+                      # No result set will be returned
+
+                      # Quote parameter to handle spaces in SQL string
                       psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c "$1"
                     }
 
 
                     function drop_db_indices() {
                       # Drop most indices on PharmanetTransactionLog table for better performance
-                      # during importing of data 
+                      # during importing of data
 
                       echo -e "-------- Dropping indices --------"
                       exec_sql_no_resultset 'DROP INDEX public."IX_PharmanetTransactionLog_PharmacyId";'
@@ -63,10 +63,10 @@ objects:
                       while [ $db_status -ne 0 ]
                       do
                         echo -e "-------- get_last_tx_id calling psql --------"
-                        tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')   
+                        tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
                         db_status=$?
                         echo -e "Last psql status:  _${db_status}_"
-                        # If error encountered, wait, let database server recover before trying again 
+                        # If error encountered, wait, let database server recover before trying again
                         if [ $db_status -ne 0 ]; then sleep 10; fi
                       done
 
@@ -97,7 +97,7 @@ objects:
                       echo -e "-------- STARTING CRON at $(date +"%B %d, %Y %T") UTC --------\n"
 
                       echo -e "Connecting to database host:  _${PGHOST}_"
-                      echo -e "API client name:  _${PRIME_ODR_API_CLIENT_NAME}_"
+                      echo -e "API client name:  _${PRIME_ODR_API_CLIENT_NAME}_ for _${PRIME_ODR_API_URL}_"
                       echo -e "Fetch size:  _${PRIME_ODR_API_FETCH_SIZE}_"
                       echo
 
@@ -108,7 +108,7 @@ objects:
                       do
                         ((num_iterations=num_iterations+1))
                         echo -e "-------- Iteration #${num_iterations} --------\n"
-                        
+
                         get_last_tx_id LAST_TX_ID
                         echo -e "Last transaction id:  _${LAST_TX_ID}_\n"
 
@@ -124,7 +124,7 @@ objects:
                           python3 /opt/scripts/parse_api_response.py | \
                           exec_sql_no_resultset "\copy \"PharmanetTransactionLog\"(\"TransactionId\", \"TxDateTime\", \"UserId\", \"SourceIpAddress\", \"LocationIpAddress\", \"PharmacyId\", \"ProviderSoftwareId\", \"ProviderSoftwareVersion\", \"PractitionerId\", \"CollegePrefix\", \"TransactionType\", \"TransactionSubType\", \"TransactionOutcome\") FROM STDIN (FORMAT CSV)"
 
-                        HAS_MORE=$(cat /tmp/isThereMoreData.txt)     
+                        HAS_MORE=$(cat /tmp/isThereMoreData.txt)
                         echo
                       done
                       create_db_indices
@@ -172,7 +172,7 @@ objects:
                     - name: script-volume
                       mountPath: /opt/scripts
                       mode: 0555
-                  image: public.ecr.aws/h0h9t7p1/farma-retriever:12
+                  image: image-registry.apps.silver.devops.gov.bc.ca/9c33a9-prod/python-curl-psql:latest
                   limits:
                     cpu: 500m
                     memory: 2Gi
@@ -206,16 +206,16 @@ objects:
             json_as_dict = json.load(sys.stdin);
         except JSONDecodeError:
             print('Non-JSON response from API.', file=sys.stderr)
-            # Remove in case it exists from previous loop iteration 
+            # Remove in case it exists from previous loop iteration
             os.remove(IS_THERE_MORE_DATA_FILE_LOCATION)
             sys.exit(1)
 
         output = csv.writer(sys.stdout);
-        # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process 
+        # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process
         print(f"Converting JSON to CSV at {datetime.datetime.now()} ...", file=sys.stderr)
         num_pnet_logs = 0
         # Note that the columns in the CSV output need to match the invocation of the Postgres COPY command
-        # Ultimately the `pnetTransactions` JSON fields need to be in the expected order 
+        # Ultimately the `pnetTransactions` JSON fields need to be in the expected order
         for row in json_as_dict['pnetTransactions']:
             # Remove any leading and trailing whitespace
             if row['providerSoftwareId'] is not None:
@@ -224,11 +224,11 @@ objects:
                 row['providerSoftwareVer'] = row['providerSoftwareVer'].strip()
             output.writerow(row.values());
             num_pnet_logs += 1
-        # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process 
+        # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process
         print(f'{num_pnet_logs} PharmanetTransactionLog(s) in JSON', file=sys.stderr)
 
         isThereMoreData = json_as_dict['isThereMoreData']
-        # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process 
+        # Using Standard Error despite following not being an error so as to not interfere with Standard Output/Input expected by downstream process
         print(f"Writing to file:  Is there more data?  {isThereMoreData}", file=sys.stderr)
         # Let external process know whether there are more results according to JSON response
         f = open(IS_THERE_MORE_DATA_FILE_LOCATION, "w")

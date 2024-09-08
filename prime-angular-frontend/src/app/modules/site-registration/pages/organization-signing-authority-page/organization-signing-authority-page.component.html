@@ -1,6 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+  <app-site-progress-indicator [noContent]="true"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="formState.form"
@@ -12,9 +12,9 @@
         <ng-container appPageSubheader2Title>Signing Authority Information</ng-container>
         <ng-container appPageSubheader2Summary>
           This information comes from your BC Services Card. If you have a name that is different than your legal name,
-          enter your full preferred name.
+          enter your full alternate name.
           <small class="font-italic d-block">
-            Entering a preferred name will not change your BC Services Card name.
+            Entering an alternate name will not change your BC Services Card name.
           </small>
         </ng-container>
         <ng-container appPageSubheader2MoreInfo>
@@ -27,16 +27,16 @@
       <app-bcsc-profile [user]="bcscUser"
                         [showAddress]="false"></app-bcsc-profile>
 
-      <app-toggle-content label="Provide your preferred name, if you have one."
+      <app-toggle-content label="Provide your alternate name, if you have one."
                           [checked]="hasPreferredName"
                           (toggle)="onPreferredNameChange($event)">
 
         <section>
           <app-page-subheader2>
-            <ng-container appPageSubheader2Title>Preferred Name</ng-container>
+            <ng-container appPageSubheader2Title>Alternate Name</ng-container>
             <ng-container appPageSubheader2Summary>
               If you have a name that is different than your legal name that people know you by, enter your full
-              preferred name.
+              alternate name.
             </ng-container>
           </app-page-subheader2>
 

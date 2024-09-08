@@ -25,17 +25,29 @@ namespace PrimeTests.UnitTests
         }
 
         [Theory]
-        [InlineData(1, false)]
-        [InlineData(3, false)]
-        [InlineData(5, false)]
-        [InlineData(6, false)]
-        [InlineData(11, true)]
-        [InlineData(12, true)]
-        [InlineData(13, true)]
-        [InlineData(14, true)]
-        [InlineData(15, true)]
-        [InlineData(16, true)]
-        [InlineData(17, true)]
+        [InlineData(11, false)]
+        [InlineData(12, false)]
+        [InlineData(13, false)]
+        [InlineData(14, false)]
+        [InlineData(15, false)]
+        [InlineData(16, false)]
+        [InlineData(17, false)]
+        [InlineData(19, false)]
+        [InlineData(20, true)]
+        [InlineData(21, true)]
+        [InlineData(22, true)]
+        [InlineData(23, true)]
+        [InlineData(24, true)]
+        [InlineData(25, false)]
+        [InlineData(26, false)]
+        [InlineData(27, false)]
+        [InlineData(28, true)]
+        [InlineData(29, true)]
+        [InlineData(30, false)]
+        [InlineData(31, true)]
+        [InlineData(32, true)]
+        [InlineData(33, true)]
+        [InlineData(34, true)]
         public async void TestCurrentToaRule(int agreementVersionId, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
@@ -301,6 +313,7 @@ namespace PrimeTests.UnitTests
                 typeof(string),
                 typeof(bool?),
                 typeof(bool),
+                typeof(DateTimeOffset?),
                 typeof(VerifiedAddress),
                 typeof(PhysicalAddress),
                 typeof(MailingAddress),
@@ -308,6 +321,7 @@ namespace PrimeTests.UnitTests
                 typeof(ICollection<OboSite>),
                 typeof(ICollection<EnrolleeCareSetting>),
                 typeof(ICollection<EnrolleeHealthAuthority>),
+                typeof(ICollection<EnrolleeDeviceProvider>),
                 typeof(ICollection<EnrolleeRemoteUser>),
                 typeof(ICollection<RemoteAccessSite>),
                 typeof(ICollection<RemoteAccessLocation>),

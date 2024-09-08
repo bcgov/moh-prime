@@ -28,6 +28,7 @@ export class MockAuthorizedUserService implements IAuthorizedUserService {
       healthAuthorityCode: HealthAuthorityEnum.FRASER_HEALTH,
       phone: faker.phone.phoneNumber(),
       status: AccessStatusEnum.UNDER_REVIEW,
+      submittedDate: faker.date.past().toISOString(),
     });
   }
 

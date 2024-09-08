@@ -60,7 +60,9 @@ namespace Prime.HttpClients.Mail
                 if (response.IsSuccessStatusCode)
                 {
                     var statusResponse = JsonConvert.DeserializeObject<IEnumerable<StatusResponse>>(responseString);
-                    return statusResponse.Single().Status;
+                    // The IEnumerable can contain no elements if CHES API is asked about a `msgId` that wasn't sent
+                    // with the current CHES credentials
+                    return statusResponse.SingleOrDefault()?.Status;
                 }
                 else
                 {
@@ -81,6 +83,10 @@ namespace Prime.HttpClients.Mail
             try
             {
                 HttpResponseMessage response = await _client.GetAsync("health");
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError($"CHES Healthcheck returned {response.StatusCode}");
+                }
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)

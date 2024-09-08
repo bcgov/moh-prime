@@ -5,12 +5,13 @@ import { catchError, map } from 'rxjs/operators';
 
 import {
   Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig,
-  LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig
+  LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig, DeviceProviderRoleConfig
 } from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
+import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 
 export interface IConfigService extends Configuration {
   load(): Observable<Configuration>;
@@ -24,7 +25,8 @@ export class ConfigService implements IConfigService {
 
   constructor(
     protected apiResource: ApiResource,
-    protected utilsService: UtilsService
+    protected utilsService: UtilsService,
+    protected apiResourceUtilsService: ApiResourceUtilsService,
   ) { }
 
   public get practices(): PracticeConfig[] {
@@ -112,6 +114,11 @@ export class ConfigService implements IConfigService {
       .sort(this.utilsService.sortByKey<Config<number>>('name'));
   }
 
+  public get deviceProviderRoles(): DeviceProviderRoleConfig[] {
+    return [...this.configuration.deviceProviderRoles]
+      .sort(this.utilsService.sortByKey<DeviceProviderRoleConfig>('weight'));
+  }
+
   /**
    * @description
    * Load the runtime configuration.
@@ -151,4 +158,5 @@ export class ConfigService implements IConfigService {
         })
       );
   }
+
 }

@@ -109,7 +109,7 @@ namespace Prime.Services.EmailInternal
                         Day = h.Day,
                         StartTime = h.StartTime,
                         EndTime = h.EndTime
-                    }),
+                    }).OrderBy(h => h.Day).ToList(),
                     Vendors = s.SiteVendors.Select(sv => new VendorViewModel
                     {
                         Name = sv.Vendor.Name,
@@ -121,7 +121,8 @@ namespace Prime.Services.EmailInternal
                         Certification = new CertViewModel
                         {
                             CollegeName = ru.RemoteUserCertification.College.Name,
-                            LicenceNumber = ru.RemoteUserCertification.LicenseNumber
+                            LicenceNumber = ru.RemoteUserCertification.LicenseNumber,
+                            PharmanetId = ru.RemoteUserCertification.PractitionerId
                         }
                     }),
                     SigningAuthority = new ContactViewModel

@@ -18,7 +18,6 @@ namespace Prime.Models
         [StringLength(255)]
         public string HPDID { get; set; }
 
-        [Required]
         public string FirstName { get; set; }
 
         public string GivenNames { get; set; }
@@ -35,6 +34,11 @@ namespace Prime.Models
         public DateTime DateOfBirth { get; set; }
 
         public string JobRoleTitle { get; set; }
+
+        /// <summary>
+        /// HPDID associated with BCSC, with suffix, e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc"
+        /// </summary>
+        public string Username { get; set; }
 
         [JsonIgnore]
         public ICollection<PartyAddress> Addresses { get; set; }

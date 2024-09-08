@@ -20,6 +20,8 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/classes/abstract-community-site-registration-page.class';
 import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
+import { LicenseNumberLabelPipe } from '@shared/pipes/license-number-label.pipe';
+import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
 
 @UntilDestroy()
 @Component({
@@ -32,6 +34,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public isSubmitted: boolean;
   public hasNoRemoteUserError: boolean;
   public hasNoEmailError: boolean;
   public lastRemoteUserRemoved: boolean;
@@ -44,6 +47,8 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     protected siteService: SiteService,
     protected siteFormStateService: SiteFormStateService,
     protected siteResource: SiteResource,
+    protected licenseNumberLabelPipe: LicenseNumberLabelPipe,
+    protected collegeNamePipe: CollegeNamePipe,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -59,9 +64,17 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     const remoteUserCertification = remoteUser.controls?.remoteUserCertification as FormGroup;
     return [
       {
-        key: 'College Licence',
-        value: remoteUserCertification.value.licenseNumber
-      }
+        key: 'College',
+        value: this.collegeNamePipe.transform(remoteUserCertification.value.collegeCode),
+      },
+      {
+        key: this.licenseNumberLabelPipe.transform(remoteUserCertification.value.collegeCode),
+        value: remoteUserCertification.value.licenseNumber,
+      },
+      {
+        key: 'PharmaNet ID',
+        value: remoteUserCertification.value.practitionerId,
+      },
     ];
   }
 
@@ -110,6 +123,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
+    this.isSubmitted = site?.submittedDate ? true : false;
 
     // Inform the parent not to patch the form as there are outstanding changes
     // to the remote users that need to be persisted
@@ -165,20 +179,6 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
 
   protected onSubmitFormIsInvalid(): void {
     this.hasNoRemoteUserError = true;
-  }
-
-  protected submissionRequest(): NoContent {
-    const payload = this.siteFormStateService.json;
-    const site = this.siteService.site;
-
-    return this.siteResource.updateSite(payload)
-      .pipe(
-        exhaustMap(() =>
-          (site.submittedDate)
-            ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
-            : of(noop())
-        )
-      );
   }
 
   protected afterSubmitIsSuccessful(): void {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace Prime.Configuration.Auth
 {
@@ -27,6 +29,8 @@ namespace Prime.Configuration.Auth
                 {
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
+                // See https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/8.0/securitytoken-events#recommended-action
+                options.UseSecurityTokenValidators = true;
             })
             .AddJwtBearer(Schemes.MohJwt, options =>
             {
@@ -37,6 +41,8 @@ namespace Prime.Configuration.Auth
                 {
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
+                // See https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/8.0/securitytoken-events#recommended-action
+                options.UseSecurityTokenValidators = true;
             });
 
             services.AddAuthorization(options =>
@@ -54,33 +60,35 @@ namespace Prime.Configuration.Auth
                     && identity.IsAuthenticated)
             {
                 identity.AddClaim(new Claim(ClaimTypes.Name, accessToken.Subject));
+                identity.AddClaim(new Claim(ClaimTypes.Sid, (string)accessToken.Payload.GetValueOrDefault(Claims.PreferredUsername)));
 
                 FlattenRealmAccessRoles(identity);
-            }
 
+                if (context.Request.Path.ToString().Contains("gpid-detail"))
+                {
+                    JwtPayload payload = ((JwtSecurityToken)context.SecurityToken).Payload;
+                    Log.Logger.Debug($"Token for gpid-detail:  Issuer: {payload.Iss}, Authorized Party: {payload.Azp}, Audiences: [{string.Join(",", payload.Aud.ToArray())}], Expires at: {payload.Expiration}, resource_access: {identity.Claims.SingleOrDefault(claim => claim.Type == Claims.ResourceAccess)?.Value}");
+                }
+            }
             return Task.CompletedTask;
         }
 
         /// <summary>
-        /// Flattens the Realm Access claim, as Microsoft Identity Model doesn't support nested claims
+        /// Flattens the Resource Access claim, as Microsoft Identity Model doesn't support nested claims
         /// </summary>
         private static void FlattenRealmAccessRoles(ClaimsIdentity identity)
         {
-            var realmAccessClaim = identity.Claims
-                .SingleOrDefault(claim => claim.Type == Claims.RealmAccess)
+            var resourceAccessClaim = identity.Claims
+                .SingleOrDefault(claim => claim.Type == Claims.ResourceAccess)
                 ?.Value;
 
-            if (realmAccessClaim != null)
+            if (resourceAccessClaim != null)
             {
-                var realmAccess = JsonConvert.DeserializeObject<RealmAccess>(realmAccessClaim);
-
-                identity.AddClaims(realmAccess.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
+                var clientsToRoles = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string[]>>>(resourceAccessClaim);
+                Dictionary<string, string[]> rolesToRolesList = clientsToRoles.GetValueOrDefault(PrimeConfiguration.Current.PrimeKeycloak.KeycloakClientId);
+                string[] roles = rolesToRolesList.GetValueOrDefault("roles");
+                identity.AddClaims(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             }
-        }
-
-        private class RealmAccess
-        {
-            public string[] Roles { get; set; }
         }
     }
 }

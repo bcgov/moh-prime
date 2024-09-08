@@ -65,6 +65,7 @@ namespace Prime.Services
 
             var agreements = await _context.Agreements
                 .AsNoTracking()
+                .Include(at => at.SignedAgreement)
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .OrderByDescending(at => at.CreatedDate)
                 .If(filters.OnlyLatest, q => q.Take(1))
@@ -191,12 +192,37 @@ namespace Prime.Services
                         .ThenInclude(l => l.LicenseDetails)
                 .Include(e => e.EnrolleeCareSettings)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (!enrollee.ProfileCompleted)
+            {
+                //return false if the profile is not even completed yet.
+                return false;
+            }
+
             var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
 
             var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
             return expectedAgreementType != null && currentAgreementType != null &&
                 currentAgreementType.Value.IsOnBehalfOfAgreement() && expectedAgreementType.Value.IsRegulatedUserAgreement();
         }
+
+        public async Task<AgreementGroup?> GetCurrentAgreementGroupForAnEnrolleeAsync(int enrolleeId)
+        {
+            var currentAgreementType = await GetCurrentAgreementTypeAsync(enrolleeId);
+
+            if (currentAgreementType == null)
+            {
+                return null;
+            }
+
+            if (currentAgreementType.Value.IsOnBehalfOfAgreement())
+            {
+                return AgreementGroup.OnBehalfOf;
+            }
+
+            return AgreementGroup.RegulatedUser;
+        }
+
 
         private async Task<AgreementType?> GetCurrentAgreementTypeAsync(int enrolleeId)
         {
@@ -206,6 +232,20 @@ namespace Prime.Services
                 .Where(a => a.AcceptedDate != null)
                 .Select(a => (AgreementType?)a.AgreementVersion.AgreementType)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task DeleteObsoleteEnrolleeAgreementAsync(int enrolleeId)
+        {
+            var agreement = await GetCurrentAgreementAsync(enrolleeId);
+            if (agreement.AcceptedDate == null)
+            {
+                _context.Remove(agreement);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new InvalidOperationException("Current Agreement was expected to be unaccepted.");
+            }
         }
     }
 }

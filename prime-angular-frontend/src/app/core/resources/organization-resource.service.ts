@@ -14,7 +14,6 @@ import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/m
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 import { Organization } from '@registration/shared/models/organization.model';
-import { OrganizationSearchListViewModel } from '@registration/shared/models/site-registration.model';
 import { OrganizationClaimFormModel } from '@registration/shared/models/organization-claim-form.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
@@ -30,8 +29,8 @@ export class OrganizationResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public getSigningAuthorityByUserId(userId: string): Observable<Party | null> {
-    return this.apiResource.get<Party>(`parties/signing-authorities/${userId}`)
+  public getSigningAuthorityByUsername(username: string): Observable<Party | null> {
+    return this.apiResource.get<Party>(`parties/signing-authorities/${username}`)
       .pipe(
         map((response: ApiHttpResponse<Party>) => response.result),
         tap((party: Party) => this.logger.info('SIGNING_AUTHORITY', party)),
@@ -41,7 +40,7 @@ export class OrganizationResource {
           }
 
           this.toastService.openErrorToast('Signing authority could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getSigningAuthorityByUserId error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getSigningAuthorityByUsername error has occurred: ', error);
           throw error;
         })
       );
@@ -98,12 +97,12 @@ export class OrganizationResource {
    * Get the organization for a signing authority by user ID, and provide null when
    * a signing authority could not be found.
    */
-  public getSigningAuthorityOrganizationByUserId(userId: string): Observable<Organization | null> {
-    return this.apiResource.get<Organization[]>(`parties/signing-authorities/${userId}/organizations`)
+  public getSigningAuthorityOrganizationByUsername(username: string): Observable<Organization[] | null> {
+    return this.apiResource.get<Organization[]>(`parties/signing-authorities/${username}/organizations`)
       .pipe(
         map((response: ApiHttpResponse<Organization[]>) => response.result),
-        map((organizations: Organization[]) => (organizations?.length) ? organizations[0] : null),
-        tap((organization: Organization) => this.logger.info('ORGANIZATION', organization)),
+        map((organizations: Organization[]) => (organizations?.length) ? organizations : null),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           if (error.status === 404) {
             // No organization exists for the provided user ID
@@ -111,23 +110,7 @@ export class OrganizationResource {
           }
 
           this.toastService.openErrorToast('Organizations could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getOrganizationByUserId error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getOrganizations(
-    queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum }
-  ): Observable<OrganizationSearchListViewModel[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
-    return this.apiResource.get<OrganizationSearchListViewModel[]>('organizations', params)
-      .pipe(
-        map((response: ApiHttpResponse<OrganizationSearchListViewModel[]>) => response.result),
-        tap((organizations: OrganizationSearchListViewModel[]) => this.logger.info('ORGANIZATIONS', organizations)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organizations could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getOrganizations error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getSigningAuthorityOrganizationByUsername error has occurred: ', error);
           throw error;
         })
       );
@@ -146,7 +129,7 @@ export class OrganizationResource {
       );
   }
 
-  public getOrganizationClaim(queryParam: { pec?: string, userId?: string }): Observable<boolean> {
+  public getOrganizationClaim(queryParam: { pec?: string, username?: string }): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
     return this.apiResource.get<boolean>(`organizations/claims`, params)
       .pipe(
@@ -349,7 +332,7 @@ export class OrganizationResource {
    */
   public getOrganizationAgreementForSigning(
     organizationId: number,
-    agreementType: AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT | AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT
+    agreementType: AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT | AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT | AgreementType.DEVICE_PROVIDER_ORGANIZATION_AGREEMENT
   ) {
     const params = this.apiResourceUtilsService.makeHttpParams({ agreementType });
     return this.apiResource.get<string>(`organizations/${organizationId}/signable`, params)

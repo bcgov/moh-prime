@@ -12,10 +12,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { Role } from '@auth/shared/enum/role.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -29,6 +27,7 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
   styleUrls: ['./care-setting.component.scss']
 })
 export class CareSettingComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
+
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
   public healthAuthorities: Config<number>[];
@@ -105,13 +104,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     // should be removed as well
     this.enrolmentFormStateService.removeUnselectedHAOboSites();
 
-    super.onSubmit();
-  }
+    this.enrolmentFormStateService.removeDeviceProvider();
 
-  public disableCareSetting(careSettingCode: number): boolean {
-    return (careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
-      ? !this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER)
-      : false;
+    super.onSubmit();
   }
 
   public addCareSetting() {
@@ -131,12 +126,25 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       // All the currently chosen care settings
       const selectedCareSettingCodes = this.careSettings.value
         .map((cs: CareSetting) => cs.careSettingCode);
+
       // Current care setting selected
       const currentCareSetting = this.careSettingTypes
         .find(cs => cs.code === careSetting.get('careSettingCode').value);
       // Filter the list of possible care settings using the selected care setting
-      const filteredCareSettingTypes = this.careSettingTypes
+      let filteredCareSettingTypes = this.careSettingTypes
         .filter((c: Config<number>) => !selectedCareSettingCodes.includes(c.code));
+
+      if (selectedCareSettingCodes[0] === CareSettingEnum.DEVICE_PROVIDER
+        && !currentCareSetting) {
+        // Remove other options if device provider is first selected
+        filteredCareSettingTypes = [];
+      } else if (selectedCareSettingCodes[0] && selectedCareSettingCodes[0] !== CareSettingEnum.DEVICE_PROVIDER
+        && (!currentCareSetting || currentCareSetting.code != selectedCareSettingCodes[0])) {
+        // if the currenct selected care setting is not the first dropdown, remove device provider
+        filteredCareSettingTypes = filteredCareSettingTypes.filter(t => t.code !== CareSettingEnum.DEVICE_PROVIDER);
+      }
+
+
 
       if (currentCareSetting) {
         // Add the current careSetting to the list of filtered
@@ -239,11 +247,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     const form = this.enrolmentFormStateService.oboSitesForm;
     const oboSites = form.get('oboSites') as FormArray;
 
-    oboSites.value?.forEach((site: OboSite, index: number) => {
-      if (site.careSettingCode === careSettingCode) {
-        oboSites.removeAt(index);
+    for (var i = oboSites.length - 1; i >= 0; i--) {
+      if (oboSites.value[i].careSettingCode === careSettingCode) {
+        oboSites.removeAt(i);
       }
-    });
+    }
 
     const clear = (fa: FormArray) => {
       fa.clear();

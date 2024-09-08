@@ -28,6 +28,7 @@ namespace Prime.Services
         private readonly IEmailDocumentsService _emailDocumentService;
         private readonly IEmailRenderingService _emailRenderingService;
         private readonly ISmtpEmailClient _smtpEmailClient;
+        private readonly IBusinessEventService _businessEventService;
 
         public EmailService(
             ApiDbContext context,
@@ -35,6 +36,7 @@ namespace Prime.Services
             IChesClient chesClient,
             IEmailDocumentsService emailDocumentService,
             IEmailRenderingService emailRenderingService,
+            IBusinessEventService businessEventService,
             ISmtpEmailClient smtpEmailClient)
             : base(context, logger)
         {
@@ -42,6 +44,7 @@ namespace Prime.Services
             _emailDocumentService = emailDocumentService;
             _emailRenderingService = emailRenderingService;
             _smtpEmailClient = smtpEmailClient;
+            _businessEventService = businessEventService;
         }
 
         public async Task SendReminderEmailAsync(int enrolleeId)
@@ -55,7 +58,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendProvisionerLinkAsync(IEnumerable<string> emails, EnrolmentCertificateAccessToken token, int careSettingCode)
+        public async Task SendProvisionerLinkAsync(string[] emails, EnrolmentCertificateAccessToken token, int careSettingCode)
         {
             var enrolleeDto = await _context.Enrollees
                 .Where(e => e.Id == token.EnrolleeId)
@@ -78,11 +81,11 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode)
+        public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode, bool isNew = false)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(businessLicenceId);
 
-            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode, siteId);
+            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode, siteId, isNew);
             email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(siteId);
             await Send(email);
 
@@ -115,15 +118,15 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendRemoteUsersUpdatedAsync(CommunitySite site)
+        public async Task SendRemoteUsersUpdatedAsync(CommunitySite site, List<string> remoteUserChanges = null)
         {
-            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.Id);
+            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.BusinessLicence.Id);
             var viewModel = new RemoteUsersUpdatedEmailViewModel
             {
                 SiteStreetAddress = site.PhysicalAddress.Street,
                 OrganizationName = site.Organization.Name,
                 SitePec = site.PEC,
-                RemoteUserNames = site.RemoteUsers.Select(ru => $"{ru.FirstName} {ru.LastName}"),
+                RemoteUsers = remoteUserChanges != null ? remoteUserChanges : site.RemoteUsers.Select(ru => $"{ru.FirstName} {ru.LastName}"),
                 DocumentUrl = downloadUrl
             };
 
@@ -148,6 +151,7 @@ namespace Prime.Services
                 PrimeUrl = PrimeConfiguration.Current.FrontendUrl
             };
 
+            // This code assumes that there is nothing remote user-specific in the email body
             var email = await _emailRenderingService.RenderRemoteUserNotificationEmailAsync(recipients.First(), viewModel);
             await Send(email);
 
@@ -216,7 +220,21 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendEnrolleeRenewalEmails()
+        public async Task SendHealthAuthoritySiteApprovedAsync(HealthAuthoritySite site)
+        {
+            var viewModel = new SiteApprovalEmailViewModel
+            {
+                DoingBusinessAs = site.SiteName,
+                Pec = site.PEC,
+                HealthAuthority = site.HealthAuthorityOrganization.Name,
+                Vendor = site.HealthAuthorityVendor.Vendor.Name
+            };
+
+            var email = await _emailRenderingService.RenderHealthAuthoritySiteApprovedEmailAsync(viewModel, site.Id);
+            await Send(email);
+        }
+
+        public async Task<IEnumerable<int>> SendEnrolleeRenewalEmails()
         {
             var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
 
@@ -224,42 +242,72 @@ namespace Prime.Services
 
             var enrollees = await _context.Enrollees
                 .Where(e => e.ExpiryDate.HasValue
+                    && e.CurrentStatus.StatusCode == (int)StatusType.Editable
                     && !e.EnrolleeAbsences.Any(ea => ea.StartTimestamp <= now
                         && (ea.EndTimestamp >= now || ea.EndTimestamp == null)))
                 .Select(e => new
                 {
+                    e.Id,
                     e.FirstName,
                     e.LastName,
                     e.Email,
-                    e.ExpiryDate
+                    e.ExpiryDate,
+                    e.ExpiryReason
                 })
                 .DecompileAsync()
                 .ToListAsync();
 
+            var emailedEnrolleeIds = new List<int>();
             foreach (var enrollee in enrollees)
             {
+                if (!Email.IsValidEmail(enrollee.Email))
+                {
+                    _logger.LogWarning($"The email address {enrollee.Email} is likely a Data Issue.");
+                    continue;
+                }
+
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
 
                 if (reminderEmailsIntervals.Contains(expiryDays))
                 {
-                    var email = await _emailRenderingService.RenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    Email email = null;
+                    if (enrollee.ExpiryReason != ExpiryReasonType.ForcedRenewal)
+                    {
+                        email = await _emailRenderingService.RenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    }
+                    else
+                    {
+                        email = await _emailRenderingService.RenderForcedRenewalEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    }
                     await Send(email);
+                    emailedEnrolleeIds.Add(enrollee.Id);
                 }
                 if (expiryDays == -1)
                 {
-                    var email = await _emailRenderingService.RenderRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    Email email = null;
+                    if (enrollee.ExpiryReason != ExpiryReasonType.ForcedRenewal)
+                    {
+                        email = await _emailRenderingService.RenderRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    }
+                    else
+                    {
+                        email = await _emailRenderingService.RenderForcedRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    }
                     await Send(email);
+                    emailedEnrolleeIds.Add(enrollee.Id);
                 }
             }
+
+            return emailedEnrolleeIds.AsEnumerable();
         }
 
-
-        public async Task SendEnrolleeUnsignedToaReminderEmails()
+        public async Task<IEnumerable<int>> SendEnrolleeUnsignedToaReminderEmails()
         {
             var enrollees = await _context.Enrollees
                 .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa)
                 .Select(e => new
                 {
+                    e.Id,
                     e.FirstName,
                     e.LastName,
                     e.Email,
@@ -268,6 +316,7 @@ namespace Prime.Services
                 .DecompileAsync()
                 .ToListAsync();
 
+            var emailedEnrolleeIds = new List<int>();
             foreach (var enrollee in enrollees)
             {
                 // Approved/became RequiresToa more than 5 days ago
@@ -275,8 +324,11 @@ namespace Prime.Services
                 {
                     var email = await _emailRenderingService.RenderUnsignedToaEmailAsync(enrollee.Email, new EnrolleeUnsignedToaEmailViewModel(enrollee.FirstName, enrollee.LastName));
                     await Send(email);
+                    emailedEnrolleeIds.Add(enrollee.Id);
                 }
             }
+
+            return emailedEnrolleeIds.AsEnumerable();
         }
 
         public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
@@ -361,6 +413,21 @@ namespace Prime.Services
 
         private async Task Send(Email email)
         {
+            var doNotEmail = await _context.DoNotEmail
+                .Where(e => e.Email.ToLower() == string.Join(",", email.To).ToLower())
+                .Select(e => new
+                {
+                    e.Email,
+                    e.Id
+                })
+                .SingleOrDefaultAsync();
+
+            if (doNotEmail != null)
+            {
+                await _businessEventService.CreateEmailEventAsync($"The address {string.Join(",", email.To)} has been blocked as do-not-email");
+                return;
+            }
+
             if (!PrimeConfiguration.IsProduction())
             {
                 email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
@@ -378,8 +445,15 @@ namespace Prime.Services
             }
 
             // Allways fall back to smtp
-            await _smtpEmailClient.SendAsync(email);
-            await CreateEmailLog(email, SendType.Smtp);
+            try
+            {
+                await _smtpEmailClient.SendAsync(email);
+                await CreateEmailLog(email, SendType.Smtp);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to send email to {email.To}, using SMTP", e);
+            }
         }
 
         private async Task CreateEmailLog(Email email, string sendType, Guid? msgId = null)

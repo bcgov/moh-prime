@@ -31,10 +31,11 @@ export class SiteRegistrationLoginPageComponent implements OnInit {
   public onLogin() {
     // Route to COLLECTION_NOTICE which determines the direction of routing
     const redirectRoute = SiteRoutes.routePath(`${this.redirectRoutePath}${SiteRoutes.COLLECTION_NOTICE}`);
+
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
-      idpHint: IdentityProviderEnum.BCSC,
+      idpHint: IdentityProviderEnum.BCSC_MOH,
       redirectUri
     });
   }

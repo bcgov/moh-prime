@@ -21,7 +21,8 @@ hr.divider {
   margin-bottom: .5rem;
 }
 
-div.add-site {
+div.add-site,
+div.add-org {
   text-align: right;
   margin-bottom: 1rem;
 }
@@ -33,6 +34,7 @@ div.add-site {
     margin-left: -1rem;
     padding-top: .2rem;
   }
+
   .mat-card-content {
     div {
       color: theme-palette(blue, light);
@@ -48,6 +50,7 @@ div.add-site {
       }
     }
   }
+
   .mat-card-actions {
     text-align: right;
   }
@@ -63,4 +66,9 @@ div.add-site {
 
 .green-icon {
   color: theme-palette(green);
+}
+
+.org_agreement_link {
+  color: blue;
+  cursor: pointer;
 }

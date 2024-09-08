@@ -31,7 +31,6 @@
                 <mat-label>Care Setting</mat-label>
                 <mat-select formControlName="careSettingCode">
                   <mat-option *ngFor="let careSettingType of filterCareSettingTypes(careSetting)"
-                              [disabled]="disableCareSetting(careSettingType.code)"
                               [value]="careSettingType.code">
                     {{ careSettingType.name }}
                   </mat-option>
@@ -87,6 +86,7 @@
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
-                   (back)="onBack(EnrolmentRoutes.BCSC_DEMOGRAPHIC)"></app-page-footer>
+                   (back)="onBack(EnrolmentRoutes.BCSC_DEMOGRAPHIC)"
+                   (continue)="onBack(EnrolmentRoutes.OVERVIEW)"></app-page-footer>
 
 </app-enrollee-page>

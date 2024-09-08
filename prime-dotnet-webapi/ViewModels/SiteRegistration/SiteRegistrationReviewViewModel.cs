@@ -46,6 +46,7 @@ namespace Prime.ViewModels.SiteRegistration.ReviewDocument
     {
         public string CollegeName { get; set; }
         public string LicenceNumber { get; set; }
+        public string PharmanetId { get; set; }
     }
 
     public class ContactViewModel

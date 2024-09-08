@@ -1,6 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isSubmitted"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="formState.form"
@@ -17,46 +17,70 @@
 
       <div class="row">
         <div class="col">
-          <app-doing-business-as-form-field label="Site Name (e.g. facility name, clinic name, or pharmacy name)"
+          <app-doing-business-as-form-field label="Site Name (e.g., facility name, clinic name, or pharmacy name)"
                                             [doingBusinessAs]="formState.siteName"></app-doing-business-as-form-field>
         </div>
       </div>
 
       <div class="row">
         <div class="col">
-
           <mat-form-field class="w-100">
-            <mat-label>Site ID/PEC Code</mat-label>
             <input matInput
-                   [formControl]="formState.pec">
-            <mat-error *ngIf="formState.pec.hasError('assignable')">
-              Site ID/PEC Code exists in another Health Authority
-            </mat-error>
+                   placeholder="Site Mnemonic (Optional)"
+                   [formControl]="formState.mnemonic">
           </mat-form-field>
-
         </div>
       </div>
 
       <div class="row">
         <div class="col">
 
-          <mat-form-field class="w-100">
-            <mat-label>Security Group</mat-label>
-            <mat-select [formControl]="formState.securityGroupCode">
-              <mat-option *ngFor="let securityGroup of securityGroups"
-                          [value]="securityGroup.code">
-                {{ securityGroup.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="formState.securityGroupCode.hasError('required')">
-              Required
-            </mat-error>
-          </mat-form-field>
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Summary>
+              Site ID/PEC Code
+            </ng-container>
+          </app-page-subheader2>
+
+          <mat-slide-toggle #hasSiteID
+                            class="my-2 mb-3"
+                            color="primary"
+                            (change)="onToggleChange($event)"
+                            [checked]="formState.pec.value">
+            Do you have a Site ID for this location?
+          </mat-slide-toggle>
+
+          <div *ngIf="hasSiteID?.checked">
+            <mat-form-field class="w-100">
+              <mat-label></mat-label>
+              <input matInput
+                     [formControl]="formState.pec"
+                     appToUppercase />
+              <mat-error *ngIf="formState.pec.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="formState.pec.hasError('assignable')">
+                Site ID/PEC Code exists in another organization
+              </mat-error>
+            </mat-form-field>
+          </div>
 
         </div>
       </div>
-    </section>
 
+      <div class="row">
+        <div class="col">
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Summary>
+              Provide your site’s street or physical address. Do not use a PO Box.
+            </ng-container>
+          </app-page-subheader2>
+
+          <app-address-form [form]="formState.physicalAddress"
+                            [formControlNames]="formControlNames"
+                            [inBc]="true"
+                            [showManualButton]="true"
+                            [showAddressFields]="showAddressFields"></app-address-form>
+        </div>
+      </div>
+    </section>
   </form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"

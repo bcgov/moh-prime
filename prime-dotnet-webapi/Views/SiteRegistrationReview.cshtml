@@ -5,11 +5,13 @@
   Layout = "~/Views/Partials/_BaseLayout.cshtml";
 }
 
-@section Title { Site Registration Review }
+@section Title {
+Site Registration Review
+}
 
 @section Theme {
-@await Html.PartialAsync("~/Views/Partials/_BootstrapTheme.cshtml")
-@await Html.PartialAsync("~/Views/Partials/_FontTheme.cshtml")
+  @await Html.PartialAsync("~/Views/Partials/_BootstrapTheme.cshtml")
+  @await Html.PartialAsync("~/Views/Partials/_FontTheme.cshtml")
 }
 
 <h1 class="mb-4">SITE REGISTRATION REVIEW</h1>
@@ -86,7 +88,7 @@
 {
   <div class="ml-2 mb-2">
     <h5>@businessHour.Day</h5>
-    <span class="ml-2">@businessHour.StartTime - @businessHour.EndTime</span>
+    <span class="ml-2">@businessHour.StartTime - @(businessHour.EndTime.ToString().Equals("1.00:00:00") ? "24:00:00" : businessHour.EndTime)</span>
   </div>
 }
 
@@ -125,10 +127,20 @@
     <span class="ml-2">@user.Certification.CollegeName</span>
   </div>
 
-  <div class="ml-2 mb-2">
-    <h5>Licence Number</h5>
-    <span class="ml-2">@user.Certification.LicenceNumber</span>
-  </div>
+  @if (user.Certification.LicenceNumber != null)
+  {
+    <div class="ml-2 mb-2">
+      <h5>Licence Number</h5>
+      <span class="ml-2">@user.Certification.LicenceNumber</span>
+    </div>
+  }
+  @if (user.Certification.PharmanetId != null)
+  {
+    <div class="ml-2 mb-2">
+      <h5>PharmaNet ID/Prescriber ID</h5>
+      <span class="ml-2">@user.Certification.PharmanetId</span>
+    </div>
+  }
 }
 
 <h2 class="mb-3">Signing Authority</h2>

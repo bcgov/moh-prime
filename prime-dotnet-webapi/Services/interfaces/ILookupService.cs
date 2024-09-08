@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Prime.Models.Api;
+using Prime.Models;
 
 namespace Prime.Services
 {
@@ -7,5 +10,7 @@ namespace Prime.Services
     {
         Task<LookupEntity> GetLookupsAsync();
         Task<int> GetCareSettingCountAsync();
+        Task<List<SelfDeclarationVersion>> GetSelfDeclarationVersion(DateTimeOffset targetDate, bool isDeviceProvider);
+        Task<List<HealthAuthority>> GetHealthAuthorityByPasscode(string passcode);
     }
 }

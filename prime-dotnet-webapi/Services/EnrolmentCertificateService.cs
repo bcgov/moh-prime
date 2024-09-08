@@ -26,6 +26,16 @@ namespace Prime.Services
                         .ThenInclude(org => org.CareSetting)
                 .Include(t => t.Enrollee)
                     .ThenInclude(e => e.Agreements)
+                        .ThenInclude(a => a.AgreementVersion)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.Certifications)
+                        .ThenInclude(c => c.License)
+                            .ThenInclude(l => l.LicenseDetails)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(t => t.EnrolleeDeviceProviders)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(t => t.EnrolleeHealthAuthorities)
+                        .ThenInclude(a => a.HealthAuthority)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)
@@ -37,19 +47,21 @@ namespace Prime.Services
 
             if (token.Active)
             {
-                return EnrolmentCertificate.Create(token.Enrollee);
+                return EnrolmentCertificate.Create(token, token.Enrollee);
             }
 
             return null;
         }
 
-        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(int enrolleeId)
+        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenWithCareSettingAsync(int enrolleeId, int careSettingCode, int? healthAuthorityCode)
         {
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
                 EnrolleeId = enrolleeId,
                 ViewCount = 0,
                 Expires = DateTimeOffset.Now.Add(EnrolmentCertificateAccessToken.Lifespan),
+                CareSettingCode = careSettingCode,
+                HealthAuthorityCode = healthAuthorityCode,
                 Active = true
             };
 
@@ -59,10 +71,11 @@ namespace Prime.Services
             return token;
         }
 
-        public async Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUserIdAsync(Guid userId)
+
+        public async Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUsernameAsync(string username)
         {
             return await _context.EnrolmentCertificateAccessTokens
-                .Where(t => t.Enrollee.UserId == userId
+                .Where(t => t.Enrollee.Username == username
                     && t.Active)
                 .ToListAsync();
         }

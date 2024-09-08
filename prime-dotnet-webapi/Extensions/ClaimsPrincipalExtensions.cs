@@ -19,6 +19,17 @@ namespace Prime
             return userId == null ? Guid.Empty : new Guid(userId);
         }
 
+        /// <summary>
+        /// Returns the username (e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc") of the logged in user.
+        /// If there is no logged in user, this will return null
+        /// </summary>
+        public static string GetPrimeUsername(this ClaimsPrincipal User)
+        {
+            return User?.Identity is ClaimsIdentity identity
+                ? identity.Claims.Where(c => c.Type == ClaimTypes.Sid).FirstOrDefault()?.Value
+                : null;
+        }
+
         public static bool IsAdministrant(this ClaimsPrincipal User)
         {
             return User.IsInRole(Roles.PrimeAdministrant);
@@ -100,6 +111,22 @@ namespace Prime
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// If BCSC was used to authenticate, we want IdentityProvider to equal "bcsc"
+        /// regardless of the IDP alias in a particular instance of KeyCloak
+        /// </summary>
+        public static string GetIdentityProvider(this ClaimsPrincipal user)
+        {
+            var idp = user.FindFirstValue(Claims.IdentityProvider);
+            return (AuthConstants.BCServicesCardMoHIdpAlias == idp) ? AuthConstants.BCServicesCard : idp;
+        }
+
+        public static string GetHpdid(this ClaimsPrincipal user)
+        {
+            // e.g. from MoH KeyCloak   "bcsc_guid": "GTCOCHH2VAJDTODKBY27KSPV554DN4IS"
+            return user.FindFirstValue(Claims.BcscGuid)?.ToLower();
         }
     }
 }

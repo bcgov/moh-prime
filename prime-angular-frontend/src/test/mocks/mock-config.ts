@@ -9,146 +9,175 @@ export class MockConfig {
         {
           'code': 1,
           'name': 'College of Physicians and Surgeons of BC (CPSBC)',
+          'weight': 10,
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 1,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 2,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 3,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 4,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 5,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 6,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 7,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 8,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 9,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 10,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 11,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 12,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 13,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 14,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 15,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 16,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 17,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 18,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 19,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 20,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 21,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 22,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 23,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 24,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 59,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 65,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 66,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 1,
               'licenseCode': 67,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -156,46 +185,55 @@ export class MockConfig {
         {
           'code': 2,
           'name': 'College of Pharmacists of BC (CPBC)',
+          'weight': 11,
           'collegeLicenses': [
             {
               'collegeCode': 2,
               'licenseCode': 25,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 26,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 27,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 28,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 29,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 30,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 31,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 2,
               'licenseCode': 68,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -203,136 +241,163 @@ export class MockConfig {
         {
           'code': 3,
           'name': 'BC College of Nurses and Midwives (BCCNM)',
+          'weight': 12,
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 32,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 33,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 34,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 35,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 36,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 37,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 39,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 40,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 41,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 42,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 43,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 45,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 46,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 47,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 48,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 49,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 51,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 52,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 53,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 54,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 55,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 60,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 61,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 62,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 63,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             },
             {
               'collegeCode': 3,
               'licenseCode': 69,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ],
           'collegePractices': [
@@ -357,11 +422,13 @@ export class MockConfig {
         {
           'code': 4,
           'name': 'College of Chiropractors of BC',
+          'weight': 14,
           'collegeLicenses': [
             {
               'collegeCode': 4,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -369,11 +436,13 @@ export class MockConfig {
         {
           'code': 5,
           'name': 'College of Dental Hygenists of BC',
+          'weight': 15,
           'collegeLicenses': [
             {
               'collegeCode': 5,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -381,11 +450,13 @@ export class MockConfig {
         {
           'code': 6,
           'name': 'College of Dental Technicians of BC',
+          'weight': 16,
           'collegeLicenses': [
             {
               'collegeCode': 6,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -393,11 +464,13 @@ export class MockConfig {
         {
           'code': 7,
           'name': 'College of Dental Surgeons of BC',
+          'weight': 16,
           'collegeLicenses': [
             {
               'collegeCode': 7,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -405,11 +478,13 @@ export class MockConfig {
         {
           'code': 8,
           'name': 'College of Denturists of BC',
+          'weight': 17,
           'collegeLicenses': [
             {
               'collegeCode': 8,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -417,11 +492,13 @@ export class MockConfig {
         {
           'code': 9,
           'name': 'College of Dietitians of BC',
+          'weight': 18,
           'collegeLicenses': [
             {
               'collegeCode': 9,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -429,11 +506,13 @@ export class MockConfig {
         {
           'code': 10,
           'name': 'College of Massage Therapists of BC',
+          'weight': 19,
           'collegeLicenses': [
             {
               'collegeCode': 10,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -441,11 +520,13 @@ export class MockConfig {
         {
           'code': 11,
           'name': 'College of Naturopathic Physicians of BC',
+          'weight': 20,
           'collegeLicenses': [
             {
               'collegeCode': 11,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -453,11 +534,13 @@ export class MockConfig {
         {
           'code': 12,
           'name': 'College of Occupational Therapists of BC',
+          'weight': 21,
           'collegeLicenses': [
             {
               'collegeCode': 12,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -465,11 +548,13 @@ export class MockConfig {
         {
           'code': 13,
           'name': 'College of Opticians of BC',
+          'weight': 22,
           'collegeLicenses': [
             {
               'collegeCode': 13,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -477,11 +562,13 @@ export class MockConfig {
         {
           'code': 14,
           'name': 'College of Optometrists of BC',
+          'weight': 23,
           'collegeLicenses': [
             {
               'collegeCode': 14,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -489,11 +576,13 @@ export class MockConfig {
         {
           'code': 15,
           'name': 'College of Physical Therapists of BC',
+          'weight': 24,
           'collegeLicenses': [
             {
               'collegeCode': 15,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -501,11 +590,13 @@ export class MockConfig {
         {
           'code': 16,
           'name': 'College of Psychologists of BC',
+          'weight': 25,
           'collegeLicenses': [
             {
               'collegeCode': 16,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -513,11 +604,13 @@ export class MockConfig {
         {
           'code': 17,
           'name': 'College of Speech and Hearing Health Professionals of BC',
+          'weight': 26,
           'collegeLicenses': [
             {
               'collegeCode': 17,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -525,11 +618,13 @@ export class MockConfig {
         {
           'code': 18,
           'name': 'College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC',
+          'weight': 27,
           'collegeLicenses': [
             {
               'collegeCode': 18,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ],
           'collegePractices': []
@@ -566,13 +661,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Full - Family',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 1,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -584,13 +681,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Full - Specialty',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 2,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -602,13 +701,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Special',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 3,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -620,13 +721,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Osteopathic',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 4,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -638,13 +741,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Provisional - Family',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 5,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -656,13 +761,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Provisional - Specialty',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 6,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -674,13 +781,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Academic',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 7,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -692,13 +801,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Conditional - Practice Limitations',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 8,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -710,13 +821,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Conditional - Practice Setting',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 9,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -728,13 +841,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Conditional - Disciplined',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 10,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -746,13 +861,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Educational - Medical Student',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 11,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -764,13 +881,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Resident',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 12,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -782,13 +901,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Resident Elective',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 13,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -800,13 +921,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Fellow',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 14,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -818,13 +941,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Trainee',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 15,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -836,13 +961,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Clinical Observership',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 16,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -854,13 +981,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Visitor',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 17,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -872,13 +1001,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Emergency - Family',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 18,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -890,13 +1021,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Emergency - Specialty',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 19,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -908,13 +1041,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Retired - Life ',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 20,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -926,13 +1061,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporarily Inactive',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 21,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -944,13 +1081,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Surgical Assistant',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 22,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -962,13 +1101,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Administrative',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 23,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -980,13 +1121,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Assessment',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 24,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -998,13 +1141,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Full Pharmacist',
           'collegeLicenses': [
             {
               'collegeCode': 2,
               'licenseCode': 25,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1016,13 +1161,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Limited Pharmacist',
           'collegeLicenses': [
             {
               'collegeCode': 2,
               'licenseCode': 26,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1034,13 +1181,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Temporary Pharmacist',
           'collegeLicenses': [
             {
               'collegeCode': 2,
               'licenseCode': 27,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1052,13 +1201,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Student Pharmacist',
           'collegeLicenses': [
             {
               'collegeCode': 2,
               'licenseCode': 28,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1070,13 +1221,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Pharmacy Technician',
           'collegeLicenses': [
             {
               'collegeCode': 2,
               'licenseCode': 29,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1088,13 +1241,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Pharmacist',
           'collegeLicenses': [
             {
               'collegeCode': 2,
               'licenseCode': 30,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1106,13 +1261,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Pharmacy Technician',
           'collegeLicenses': [
             {
               'collegeCode': 2,
               'licenseCode': 31,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1124,13 +1281,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Practicing Registered Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 32,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1142,13 +1301,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Registered Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 33,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1160,13 +1321,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Registered Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 34,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1178,13 +1341,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Practicing Licensed Graduate Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 35,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1196,13 +1361,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Licensed Graduate Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 36,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1214,13 +1381,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Licensed Graduate Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 37,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1232,13 +1401,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Temporary Registered Nurse (Emergency)',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 39,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1250,13 +1421,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Employed Student Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 40,
-              'collegeLicenseGroupingCode': 2
+              'collegeLicenseGroupingCode': 2,
+              'discontinued': false
             }
           ]
         },
@@ -1268,13 +1441,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Practicing Registered Psychiatric Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 41,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             }
           ]
         },
@@ -1286,13 +1461,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Registered Psychiatric Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 42,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             }
           ]
         },
@@ -1304,13 +1481,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Registered Psychiatric Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 43,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             }
           ]
         },
@@ -1322,13 +1501,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Temporary Registered Psychiatric Nurse (Emergency)',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 45,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             }
           ]
         },
@@ -1340,13 +1521,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Employed Student Psychiatric Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 46,
-              'collegeLicenseGroupingCode': 3
+              'collegeLicenseGroupingCode': 3,
+              'discontinued': false
             }
           ]
         },
@@ -1358,13 +1541,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': 2,
           'name': 'Practicing Nurse Practitioner',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 47,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             }
           ]
         },
@@ -1376,13 +1561,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Provisional Nurse Practitioner',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 48,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             }
           ]
         },
@@ -1394,13 +1581,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Nurse Practitioner',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 49,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             }
           ]
         },
@@ -1412,13 +1601,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': true,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': true,
           'prescriberIdType': 2,
           'name': 'Temporary Nurse Practitioner (Emergency)',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 51,
-              'collegeLicenseGroupingCode': 4
+              'collegeLicenseGroupingCode': 4,
+              'discontinued': false
             }
           ]
         },
@@ -1430,13 +1621,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Practicing Licensed Practical Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 52,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             }
           ]
         },
@@ -1448,13 +1641,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Licensed Practical Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 53,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             }
           ]
         },
@@ -1466,13 +1661,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Licensed Practical Nurse',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 54,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             }
           ]
         },
@@ -1484,13 +1681,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporary Licensed Practical Nurse (Emergency)',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 55,
-              'collegeLicenseGroupingCode': 1
+              'collegeLicenseGroupingCode': 1,
+              'discontinued': false
             }
           ]
         },
@@ -1502,13 +1701,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Podiatric Surgeon',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 59,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1520,13 +1721,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Practising Midwife',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 60,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ]
         },
@@ -1538,13 +1741,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Midwife',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 61,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ]
         },
@@ -1556,13 +1761,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporary Midwife (Emergency)',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 62,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ]
         },
@@ -1574,13 +1781,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practising Midwife',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 63,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ]
         },
@@ -1592,83 +1801,99 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': false,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Not Displayed',
           'collegeLicenses': [
             {
               'collegeCode': 4,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 5,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 6,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 7,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 8,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 9,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 10,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 11,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 12,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 13,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 14,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 15,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 16,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 17,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             },
             {
               'collegeCode': 18,
               'licenseCode': 64,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1680,13 +1905,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Educational - Podiatric Surgeon Student (Elective)',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 65,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1698,13 +1925,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Educational - Podiatric Surgeon Resident (Elective)',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 66,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1716,13 +1945,15 @@ export class MockConfig {
           'validate': true,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Conditional - Podiatric Surgeon Disciplined',
           'collegeLicenses': [
             {
               'collegeCode': 1,
               'licenseCode': 67,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1734,13 +1965,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporary Pharmacy Technician',
           'collegeLicenses': [
             {
               'collegeCode': 2,
               'licenseCode': 68,
-              'collegeLicenseGroupingCode': null
+              'collegeLicenseGroupingCode': null,
+              'discontinued': false
             }
           ]
         },
@@ -1752,13 +1985,15 @@ export class MockConfig {
           'validate': false,
           'namedInImReg': false,
           'licensedToProvideCare': true,
+          'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Student Midwife',
           'collegeLicenses': [
             {
               'collegeCode': 3,
               'licenseCode': 69,
-              'collegeLicenseGroupingCode': 5
+              'collegeLicenseGroupingCode': 5,
+              'discontinued': false
             }
           ]
         }
@@ -2495,6 +2730,113 @@ export class MockConfig {
           'code': 3,
           'name': 'Vancouver Coastal Health'
         }
+      ],
+      'deviceProviderRoles': [
+        {
+          'deviceProviderRoleCode': 1,
+          'code': 1,
+          'name': 'Certified Prosthetist',
+          'weight': 1,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 2,
+          'code': 2,
+          'name': 'Certified Orthotist',
+          'weight': 2,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 3,
+          'code': 3,
+          'name': 'Certified Prosthetist Orthotist',
+          'weight': 1,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 4,
+          'code': 4,
+          'name': 'Registered Prosthetic Technician',
+          'weight': 4,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 5,
+          'code': 5,
+          'name': 'Registered Orthotic Technician',
+          'weight': 5,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 6,
+          'code': 6,
+          'name': 'Registered Prosthetic Orthotic Technician',
+          'weight': 6,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 7,
+          'code': 7,
+          'name': 'Orthotic Resident',
+          'weight': 7,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 8,
+          'code': 8,
+          'name': 'Prosthetic Resident',
+          'weight': 8,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 9,
+          'code': 9,
+          'name': 'Orthotic Intern',
+          'weight': 9,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 10,
+          'code': 10,
+          'name': 'Prosthetic Intern',
+          'weight': 10,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 11,
+          'code': 11,
+          'name': 'Compression Garment Fitter',
+          'weight': 1,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 12,
+          'code': 12,
+          'name': 'Breast prosthetic Fitter',
+          'weight': 1,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 13,
+          'code': 13,
+          'name': 'Ocularist',
+          'weight': 13,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 14,
+          'code': 14,
+          'name': 'Anaplastologist',
+          'weight': 14,
+          'certified': false
+        },
+        {
+          'deviceProviderRoleCode': 5,
+          'code': 15,
+          'name': 'None',
+          'weight': 15,
+          'certified': false
+        },
       ],
       'facilities': [
         {

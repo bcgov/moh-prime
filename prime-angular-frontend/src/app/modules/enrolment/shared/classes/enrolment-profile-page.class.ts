@@ -118,7 +118,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
       : true;
   }
 
-  public onBack(route: string) {
+  public onBack(route: string = '') {
     this.routeUtils.routeTo([EnrolmentRoutes.MODULE_PATH, this.isProfileComplete
       ? EnrolmentRoutes.OVERVIEW
       : route]);
@@ -168,7 +168,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * @description
    * Patch the form with enrollee information.
    */
-  protected patchForm(): Observable<any> {
+  protected patchForm(forcedPatch?: boolean): Observable<any> {
     // Will be null if enrolment has not been created
     const enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
@@ -199,7 +199,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
           return of([bcscUser, enrolment]);
         }),
         exhaustMap(([bcscUser, updatedEnrolment]: [BcscUser, Enrolment]) => {
-          return from(this.enrolmentFormStateService.setForm(updatedEnrolment))
+          return from(this.enrolmentFormStateService.setForm(updatedEnrolment, forcedPatch))
             .pipe(map(() => [bcscUser, updatedEnrolment]));
         })
       );
@@ -302,12 +302,13 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
   protected getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
-        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
+        map(({ userId, username, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
             // Providing only the minimum required fields for creating an enrollee
             userId,
+            username,
             hpdid,
             firstName,
             lastName,

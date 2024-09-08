@@ -15,7 +15,6 @@ import { SiteRegistrationTypeEnum } from '@health-auth/shared/enums/site-registr
 })
 export class HealthAuthSiteRegLoginPageComponent implements OnInit {
   public title: string;
-  public disableLogin: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,22 +25,18 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
     this.title = route.snapshot.data.title;
   }
 
-  public onLogin(type: SiteRegistrationTypeEnum) {
-    if (this.disableLogin) {
-      return;
-    }
+  public onLogin() {
 
     // Route to COLLECTION_NOTICE which determines the direction of routing
     const redirectRoute = HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.COLLECTION_NOTICE);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
-      idpHint: IdentityProviderEnum.BCSC,
+      idpHint: IdentityProviderEnum.BCSC_MOH,
       redirectUri
     });
   }
 
   public ngOnInit(): void {
-    this.disableLogin = this.config.environmentName === 'prod';
   }
 }

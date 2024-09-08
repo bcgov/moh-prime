@@ -1,5 +1,6 @@
 using System;
 using Prime.Models;
+using System.Collections.Generic;
 
 namespace Prime.ViewModels
 {
@@ -35,6 +36,8 @@ namespace Prime.ViewModels
 
         public AddressViewModel VerifiedAddress { get; set; }
 
+        public ICollection<AdditionalAddress> AdditionalAddresses { get; set; }
+
         public string Email { get; set; }
 
         public string SmsPhone { get; set; }
@@ -47,6 +50,8 @@ namespace Prime.ViewModels
 
         public bool ProfileCompleted { get; set; }
 
+        public bool RequireRedoSelfDeclaration { get; set; }
+
         public bool AlwaysManual { get; set; }
 
         public EnrolmentStatusViewModel CurrentStatus { get; set; }
@@ -58,6 +63,8 @@ namespace Prime.ViewModels
         public DateTimeOffset? ApprovedDate { get; set; }
 
         public DateTimeOffset? ExpiryDate { get; set; }
+
+        public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
 
         public int DisplayId { get; set; }
 
@@ -94,6 +101,11 @@ namespace Prime.ViewModels
                 return HasNewestAgreement ? "Yes" : "No";
             }
         }
+
+        /// <summary>
+        /// e.g. "gtcochh2vajdtodkby27kspv554dn4is@bcsc"
+        /// </summary>
+        public string Username { get; set; }
     }
 }
 

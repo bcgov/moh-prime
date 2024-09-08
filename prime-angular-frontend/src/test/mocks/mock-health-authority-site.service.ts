@@ -15,21 +15,24 @@ export class MockHealthAuthoritySiteService {
   constructor() {
     const siteId = faker.random.number();
     const address = new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode());
+    const aHealthAuthorityVendor = {
+      id: faker.random.number(),
+      healthAuthorityOrganizationId: faker.random.number(),
+      vendorCode: faker.random.number()
+    };
     const healthAuthoritySite = HealthAuthoritySite.toHealthAuthoritySite({
       id: siteId,
       healthAuthorityOrganizationId: HealthAuthorityEnum.INTERIOR_HEALTH,
-      healthAuthorityVendor: {
-        id: faker.random.number(),
-        healthAuthorityOrganizationId: faker.random.number(),
-        vendorCode: faker.random.number()
-      },
+      healthAuthorityVendor: aHealthAuthorityVendor,
       healthAuthorityCareType: {
         id: faker.random.number(),
         healthAuthorityOrganizationId: faker.random.number(),
-        careType: faker.random.words(1)
+        careType: faker.random.words(1),
+        vendors: [aHealthAuthorityVendor]
       },
       siteName: faker.random.words(2),
       pec: faker.random.number().toString(),
+      mnemonic: faker.random.words(5),
       securityGroupCode: faker.random.number(),
       physicalAddress: address,
       businessHours: null,

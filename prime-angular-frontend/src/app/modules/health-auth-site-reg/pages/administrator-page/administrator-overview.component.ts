@@ -14,7 +14,15 @@ import { AdministratorForm } from './administrator-form.model';
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.ADMINISTRATOR"
                           (route)="onRoute($event)">
-      {{ administratorName ? (administratorName | default) : (pharmanetAdministrator | fullname) }}
+      <app-party-review *ngIf="pharmanetAdministrator"
+                        [party]="pharmanetAdministrator"></app-party-review>
+    </app-overview-section>
+    <app-overview-section title="Technical Support"
+                          [showEditRedirect]="showEditRedirect"
+                          [editRoute]="HealthAuthSiteRegRoutes.ADMINISTRATOR"
+                          (route)="onRoute($event)">
+      <app-party-review *ngIf="technicalSupportContact"
+                        [party]="technicalSupportContact"></app-party-review>
     </app-overview-section>
   `,
   styles: [],
@@ -23,7 +31,8 @@ import { AdministratorForm } from './administrator-form.model';
 export class AdministratorOverviewComponent extends AbstractOverview implements OnInit {
   @Input() administrator: AdministratorForm;
   @Input() pharmanetAdministrators: Contact[];
-  @Input() administratorName: string;
+  @Input() technicalSupports: Contact[];
+
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(
@@ -36,6 +45,10 @@ export class AdministratorOverviewComponent extends AbstractOverview implements 
   public get pharmanetAdministrator(): Contact {
     return this.pharmanetAdministrators
       ?.find(pa => pa.id === this.administrator.healthAuthorityPharmanetAdministratorId) ?? null;
+  }
+
+  public get technicalSupportContact(): Contact {
+    return this.technicalSupports?.find(pa => pa.id === this.administrator.healthAuthorityTechnicalSupportId) ?? null;
   }
 
   public ngOnInit(): void { }

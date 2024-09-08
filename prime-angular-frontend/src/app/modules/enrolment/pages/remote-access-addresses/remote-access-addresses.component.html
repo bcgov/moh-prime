@@ -35,7 +35,7 @@
 
                   <mat-form-field class="w-100">
                     <input matInput
-                           placeholder="Internet Provider at this location (e.g. Shaw, Telus)"
+                           placeholder="Internet Provider at this location (e.g., Shaw, Telus)"
                            formControlName="internetProvider">
                     <mat-error>Required</mat-error>
                   </mat-form-field>
@@ -69,6 +69,7 @@
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
-                   (back)="onBack(EnrolmentRoutes.REMOTE_ACCESS)"></app-page-footer>
+                   (back)="onBack(EnrolmentRoutes.REMOTE_ACCESS)"
+                   (continue)="onBack()"></app-page-footer>
 
 </app-enrollee-page>

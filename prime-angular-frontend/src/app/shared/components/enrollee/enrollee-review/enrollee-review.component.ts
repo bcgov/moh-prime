@@ -14,6 +14,9 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
+import { ConfigService } from '@config/config.service';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -36,7 +39,8 @@ export class EnrolleeReviewComponent {
 
   constructor(
     private authService: AuthService,
-    private enrolmentService: EnrolmentService
+    private enrolmentService: EnrolmentService,
+    private configService: ConfigService,
   ) {
     this.showEditRedirect = false;
     this.admin = false;
@@ -77,8 +81,24 @@ export class EnrolleeReviewComponent {
       : [];
   }
 
-  public get hasDeviceProviderIdentifier(): boolean {
-    return (this.enrolment && !!this.enrolment.deviceProviderIdentifier);
+  public get hasDeviceProvider(): boolean {
+    return (this.enrolment && !!this.enrolment.enrolleeDeviceProviders?.length);
+  }
+
+  public get enrolleeDeviceProvider(): EnrolleeDeviceProvider {
+    return (this.hasDeviceProvider)
+      ? this.enrolment.enrolleeDeviceProviders[0]
+      : null;
+  }
+
+  public get hasUnlistedCertification(): boolean {
+    return (this.enrolment && !!this.enrolment.unlistedCertifications.length);
+  }
+
+  public get unlistedCertifications(): UnlistedCertification[] {
+    return (this.hasUnlistedCertification)
+      ? this.enrolment.unlistedCertifications
+      : [];
   }
 
   public get hasCareSetting(): boolean {
@@ -98,6 +118,16 @@ export class EnrolleeReviewComponent {
       : null;
 
     return (healthAuthorities?.length) ? healthAuthorities : [];
+  }
+
+  public getLicenceClassCategory(certification: CollegeCertification): string {
+    let grouping = this.configService.licenses.find(l => l.code === certification.licenseCode).collegeLicenses.map(cl => cl.collegeLicenseGroupingCode);
+
+    if (grouping && grouping.length > 0 && grouping[0]) {
+      return `${this.configService.collegeLicenseGroupings.find(g => g.code === grouping[0]).name} - `;
+    } else {
+      return '';
+    }
   }
 
   public get isRequestingRemoteAccess(): boolean {
@@ -131,4 +161,9 @@ export class EnrolleeReviewComponent {
     event?.preventDefault();
     this.route.emit(routePath);
   }
+
+  public isPaperEnrollee(enrollee): boolean {
+    return this.enrolmentService.isPaperEnrollee(enrollee);
+  }
+
 }

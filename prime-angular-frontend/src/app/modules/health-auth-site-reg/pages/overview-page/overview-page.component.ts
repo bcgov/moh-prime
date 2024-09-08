@@ -42,6 +42,7 @@ export class OverviewPageComponent implements OnInit {
   public showEditRedirect: boolean;
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
+  public isCompleted: boolean;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(
@@ -107,7 +108,7 @@ export class OverviewPageComponent implements OnInit {
       return;
     }
 
-    const { pharmanetAdministrators, technicalSupports } = this.healthAuthorityService.healthAuthority;
+    const { pharmanetAdministrators, technicalSupports, vendors } = this.healthAuthorityService.healthAuthority;
     this.pharmanetAdministrators = pharmanetAdministrators;
     this.technicalSupports = technicalSupports;
 
@@ -128,6 +129,9 @@ export class OverviewPageComponent implements OnInit {
       // Replace site with the version from the form for the user
       // to review which maintains a subset of immutable properties
       healthAuthoritySite = this.healthAuthoritySiteFormStateService.json;
+      // set the vendor code, since the json does not have vendor code
+      let vendorCode = vendors.find((v) => v.id === healthAuthoritySite.healthAuthorityVendor.id).vendorCode;
+      healthAuthoritySite.healthAuthorityVendor.vendorCode = vendorCode;
     }
 
     // Store a local copy of the site for overview
@@ -140,6 +144,8 @@ export class OverviewPageComponent implements OnInit {
     // NOTE: Initializes the form state service for workflow
     // updates when not already patched and contains changes
     this.healthAuthoritySiteFormStateService.setForm(healthAuthoritySite);
+
+    this.isCompleted = healthAuthoritySite?.submittedDate ? true : false;
   }
 
   private nextRoute(): void {
