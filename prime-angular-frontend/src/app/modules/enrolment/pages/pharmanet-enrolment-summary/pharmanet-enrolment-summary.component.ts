@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { exhaustMap } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import { EMPTY } from 'rxjs';
 
 import { Config } from '@config/config.model';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -189,37 +189,52 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public sendProvisionerAccessLink() {
-    const data: DialogOptions = {
-      title: 'Confirm Email',
-      message: `Are you sure you want to send your Approval Notification?`,
-      actionText: 'Send',
-    };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) => {
-          if (result) {
-            let emailPairs = this.careSettingConfigs.map((config) => {
-              return {
-                emails: config.formArray.value.map(email => email.email),
-                careSettingCode: config.settingCode,
-                healthAuthorityCode: config.healthAuthorityCode,
-              }
-            });
-            return this.enrolmentResource.sendProvisionerAccessLink(emailPairs, this.enrolment.id);
-          } else {
-            return EMPTY;
-          }
-        })
-      )
-      .subscribe(() => {
-        let emails = new Array<string>();
-        this.careSettingConfigs.forEach((config) => {
-          emails.push(config.formArray.value.map(email => email.email));
+
+    if (!this.atLeastOneEmailFilled()) {
+      const data: DialogOptions = {
+        title: 'Missing Email',
+        message: `Please enter at least one email for the Approval Notification.`,
+        cancelText: 'Close',
+        actionType: 'warn',
+        actionHide: true,
+      };
+      this.dialog.open(ConfirmDialogComponent, { data }).afterClosed();
+
+    } else {
+      const data: DialogOptions = {
+        title: 'Confirm Email',
+        message: `Are you sure you want to send your Approval Notification?`,
+        actionText: 'Send',
+      };
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) => {
+            if (result) {
+              let emailPairs = this.careSettingConfigs.map((config) => {
+                return {
+                  emails: config.formArray.value.map(email => email.email),
+                  careSettingCode: config.settingCode,
+                  healthAuthorityCode: config.healthAuthorityCode,
+                }
+              });
+              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0]), this.enrolment.id);
+            } else {
+              return EMPTY;
+            }
+          })
+        )
+        .subscribe(() => {
+          let emails = new Array<string>();
+          this.careSettingConfigs.forEach((config) => {
+            if (config.formArray.value[0].email) {
+              emails.push(config.formArray.value.map(email => email.email));
+            }
+          });
+          this.toastService.openSuccessToast(`Email was successfully sent to ${emails.join(", ")}`);
+          this.emailForm.reset();
         });
-        this.toastService.openSuccessToast(`Email was successfully sent to ${emails.join(", ")}`);
-        this.emailForm.reset();
-      });
+    }
   }
 
   //No long in used at the moment.
@@ -415,11 +430,13 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   protected addEmail(emailsArray: FormArray, email?: string): void {
+
     const emailForm = this.fb.group({
       email: ['', []]
     });
     emailForm.patchValue({ email });
     emailsArray.push(emailForm);
+
   }
 
   protected createFormInstance(): void {
@@ -443,15 +460,31 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   private buildEmailGroup(): FormGroup {
     return this.fb.group({
-      communityHealthEmails: this.fb.array([], [Validators.required]),
-      pharmacistEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityFraserEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityInteriorEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityIslandEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityNorthernEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityPHSAEmails: this.fb.array([], [Validators.required]),
-      healthAuthorityVancouverCoastalEmails: this.fb.array([], [Validators.required]),
-      deviceProviderEmails: this.fb.array([], [Validators.required]),
+      communityHealthEmails: this.fb.array([], []),
+      pharmacistEmails: this.fb.array([], []),
+      healthAuthorityFraserEmails: this.fb.array([], []),
+      healthAuthorityInteriorEmails: this.fb.array([], []),
+      healthAuthorityIslandEmails: this.fb.array([], []),
+      healthAuthorityNorthernEmails: this.fb.array([], []),
+      healthAuthorityPHSAEmails: this.fb.array([], []),
+      healthAuthorityVancouverCoastalEmails: this.fb.array([], []),
+      deviceProviderEmails: this.fb.array([], []),
     });
+  }
+
+  public atLeastOneEmailFilled(): boolean {
+    let emailFilled = false;
+
+    Object.keys(this.emailForm.controls).forEach((emailArrayKey) => {
+      const emailArray = this.emailForm.controls[emailArrayKey] as FormArray;
+      Object.keys(emailArray.controls).forEach((emailKey) => {
+        let emailControl = emailArray.controls[emailKey] as FormGroup;
+        if (emailControl.controls['email'].value && emailControl.controls['email'].value !== "") {
+          emailFilled = true;
+        }
+      });
+    });
+
+    return emailFilled;
   }
 }
