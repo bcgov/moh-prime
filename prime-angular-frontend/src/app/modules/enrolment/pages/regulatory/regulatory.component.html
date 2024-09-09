@@ -125,6 +125,7 @@
                                             [index]="i"
                                             [total]="formState.certifications.controls.length"
                                             [selectedColleges]="selectedCollegeCodes"
+                                            (licenceCodeSelected)="licenceCodeSelected($event)"
                                             (remove)="removeCertification($event)">
             </app-college-certification-form>
 
@@ -147,6 +148,7 @@
              formArrayName="unlistedCertifications">
           <app-toggle-content label="This user has a college licence not listed in the dropdown"
                               [checked]="hasUnlistedCertification"
+                              [disabled]="disableUnlistedCertificationToggle"
                               (toggle)="onUnlistedCertification($event)">
 
             <ng-container *ngFor="let unlistedCertificate of formState.unlistedCertifications.controls; let i = index;"

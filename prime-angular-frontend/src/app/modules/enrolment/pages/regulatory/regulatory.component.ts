@@ -13,7 +13,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { DeviceProviderRoleConfig } from '@config/config.model';
+import { DeviceProviderRoleConfig, LicenseConfig } from '@config/config.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -43,6 +43,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   public deviceProviderRoles: DeviceProviderRoleConfig[];
   public deviceProviderSite: DeviceProviderSite;
   public hasUnlistedCertification: boolean;
+  public unlistedCertificationRequired: boolean;
+  public disableUnlistedCertificationToggle: boolean;
+  public multijurisdictionalLicenceCode: LicenseConfig[];
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -70,8 +74,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       formUtilsService,
       authService
     );
-
+    this.hasUnlistedCertification = false;
     this.cannotRequestRemoteAccess = false;
+    this.disableUnlistedCertificationToggle = false;
     this.deviceProviderRoles = this.configService.deviceProviderRoles;
   }
 
@@ -96,6 +101,22 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.formState.certifications.removeAt(index);
   }
 
+  public licenceCodeSelected(code: number) {
+    if (this.multijurisdictionalLicenceCode.some(l => l.code === code)) {
+      this.hasUnlistedCertification = true;
+      this.disableUnlistedCertificationToggle = true;
+      if (!this.formState.unlistedCertifications.length) {
+        this.formState.addEmptyUnlistedCollegeCertification();
+      }
+    } else {
+      this.hasUnlistedCertification = false;
+      this.disableUnlistedCertificationToggle = false;
+      if (this.formState.unlistedCertifications.length) {
+        this.formState.json.unlistedCertifications = [];
+      }
+    }
+  }
+
   public ngOnInit() {
     this.isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
@@ -108,10 +129,12 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
         this.hasUnlistedCertification = true;
       }
     });
+    this.multijurisdictionalLicenceCode = this.configService.licenses.filter(l => l.multijurisdictional);
   }
 
   public ngOnDestroy() {
     this.removeIncompleteCertifications(true);
+    this.removeIncompleteUnlistedCertification();
   }
 
   protected createFormInstance() {
@@ -221,6 +244,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   protected afterSubmitIsSuccessful() {
     this.removeIncompleteCertifications(true);
+    this.removeIncompleteUnlistedCertification();
   }
 
   protected nextRouteAfterSubmit() {
@@ -259,6 +283,16 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     if (!noEmptyCert && !this.formState.certifications.controls.length) {
       this.addEmptyCollegeCertification();
     }
+  }
+
+  private removeIncompleteUnlistedCertification() {
+    this.formState.unlistedCertifications.controls
+      .forEach((control: FormGroup, index: number) => {
+        // Remove if college code is "None" or the group is invalid
+        if (!control.get('collegeName').value || (control.invalid && !this.enrolmentService.isProfileComplete)) {
+          this.formState.unlistedCertifications.removeAt(index);
+        }
+      });
   }
 
   /**
