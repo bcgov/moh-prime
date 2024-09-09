@@ -64,20 +64,17 @@ namespace TestPrimeE2E.Admin
 
             LoginWithIdirAccount();
 
-            // TODO: Eliminate Sleep which sometimes seems needed before can move onto Site Registrations ... loading Enrollees?
-            System.Threading.Thread.Sleep(2000);
-
             // Click on left menu item "Site Registrations"
-            _driver.FindPatiently("(//mat-list-item/div)[2]").Click();
+            _driver.FindPatiently("//app-dashboard-route-menu-item[2]/mat-list-item/span").Click();
 
             // Click on tab "Health Authorities"
-            _driver.ClickWithJavaScript("(//div[@role='tab'])[3]");
+            _driver.ClickWithJavaScript("(//div[@role='tab'])[4]/div");
 
             // Click on triple vertical dots for the row of target Health Authority
             ClickHamburgerMenuInTable(TestParameters.HealthAuthority);
             ClickHamburgerMenuItem("Add/Update Organization Information");
 
-            _driver.ClickWithJavaScript(GetButtonXPath("Add Organization Information"));
+            ClickPlusSignButton("Add Organization Information");
 
             string expectedTitle = "Health Authority Care Types";
             string actualTitle = _driver.FindPatiently("//h2[contains(@class, 'title')]").Text;
@@ -103,7 +100,7 @@ namespace TestPrimeE2E.Admin
             // Privacy Office fields
             FillFormField("email", privacyOfficeAsPerson.Email);
             FillFormField("phone", GetVancouverPhoneNum(privacyOfficeAsPerson));
-            ClickButton("Add address manually");
+            ClickPlusSignButton("Add address manually");
             SelectDropdownItem("countryCode", "Canada");
             SelectDropdownItem("provinceCode", "British Columbia");
             FillFormField("street", privacyOfficeAddress.StreetAddress());
@@ -131,16 +128,13 @@ namespace TestPrimeE2E.Admin
                 FillFormField("jobRoleTitle", techSupportNames.JobTitle());
                 FillFormField("email", techSupportPerson.Email);
                 FillFormField("phone", GetVancouverPhoneNum(techSupportPerson));
-                // Expected to tab 3 times to interact with "Add address manually" button, but instead 4 times works
-                _driver.TabAndInteract(GetFormFieldXPath("phone"), 4, Keys.Enter);
+                ClickPlusSignButton("Add address manually");
                 EnterAddress(techSupportAddress);
                 CheckLogThenScreenshot(expectedTitle);
                 ClickButton("Save and Continue");
             }
 
             // On "Technical Support Contact(s)" screen
-            // TODO: Why is button found but do not advance to next screen without Sleep?
-            System.Threading.Thread.Sleep(2000);
             ClickButton("Continue");
 
             if (_driver.FindPatiently("//span[@class='mat-button-wrapper' and contains(text(), 'Add PharmaNet Administrator')]") == null)
@@ -164,8 +158,6 @@ namespace TestPrimeE2E.Admin
             }
 
             // On "PharmaNet Administrator(s)" screen
-            // TODO: Why is button found but do not advance to next screen without Sleep?
-            System.Threading.Thread.Sleep(2000);
             ClickButton("Continue");
         }
     }

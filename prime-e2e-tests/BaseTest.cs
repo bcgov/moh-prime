@@ -22,6 +22,8 @@ namespace TestPrimeE2E
         {
             ChromeOptions options = new ChromeOptions();
             options.SetLoggingPreference(LogType.Browser, LogLevel.Severe);
+            // To avoid `ElementNotInteractableException : element not interactable` errors
+            options.AddArgument("--start-maximized");
             _driver = new ChromeDriver(options);
             _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
         }
@@ -76,6 +78,13 @@ namespace TestPrimeE2E
             _driver.FindPatiently(GetButtonXPath(buttonLabel)).Click();
         }
 
+
+        protected void ClickPlusSignButton(string buttonLabel)
+        {
+            _driver.FindPatiently($"//button/span[@class='mat-button-wrapper' and contains(text(), '{buttonLabel}')]").Click();
+        }
+
+        
         protected string GetButtonXPath(string buttonLabel)
         {
             return $"//span[@class='mat-button-wrapper' and contains(text(), '{buttonLabel}')]";
