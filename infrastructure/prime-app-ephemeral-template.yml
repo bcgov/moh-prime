@@ -198,7 +198,7 @@ objects:
             "url": "",
             "realm": "",
             "clientId": ""
-          }      
+          }
         }
       }
 
@@ -688,6 +688,8 @@ objects:
                   name: pharmanet-api
               - configMapRef:
                   name: verifiable-credential
+              - configMapRef:
+                  name: provider-enrolment-team
               - secretRef:
                   name: canada-post-addresscomplete-secrets
               - secretRef:
@@ -839,7 +841,7 @@ objects:
                   name: keycloak
                   key: JWT_WELL_KNOWN_CONFIG
             - name: SQLALCHEMY_DATABASE_URI
-              value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
+              value: "postgresql://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
           envFrom:
             - configMapRef:
                 name: document-manager
@@ -888,7 +890,7 @@ objects:
                     name: keycloak
                     key: JWT_WELL_KNOWN_CONFIG
               - name: SQLALCHEMY_DATABASE_URI
-                value: "postgres://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
+                value: "postgresql://$(PGUSER):$(PGPASSWORD)@$(PGHOST):5432/$(PGDATABASE)"
             envFrom:
               - configMapRef:
                   name: document-manager
@@ -997,7 +999,7 @@ objects:
                 memory: 100Mi
               requests:
                 cpu: 5m
-                memory: 50Mi 
+                memory: 50Mi
             readinessProbe:
               exec:
                 command:

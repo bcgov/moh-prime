@@ -149,6 +149,9 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -1635,6 +1638,13 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 3,
+                            LicenseCode = 175,
+                            CollegeLicenseGroupingCode = 2,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 3,
                             LicenseCode = 41,
                             CollegeLicenseGroupingCode = 3,
                             Discontinued = false
@@ -1664,6 +1674,13 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 3,
                             LicenseCode = 46,
+                            CollegeLicenseGroupingCode = 3,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 3,
+                            LicenseCode = 176,
                             CollegeLicenseGroupingCode = 3,
                             Discontinued = false
                         },
@@ -1720,6 +1737,13 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 3,
                             LicenseCode = 55,
+                            CollegeLicenseGroupingCode = 1,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 3,
+                            LicenseCode = 177,
                             CollegeLicenseGroupingCode = 1,
                             Discontinued = false
                         },
@@ -6999,133 +7023,151 @@ namespace Prime.Migrations
                         {
                             Code = 32,
                             Name = "Practicing Registered Nurse",
-                            Weight = 6
+                            Weight = 11
                         },
                         new
                         {
                             Code = 33,
                             Name = "Provisional Registered Nurse",
-                            Weight = 7
+                            Weight = 12
                         },
                         new
                         {
                             Code = 39,
                             Name = "Temporary Registered Nurse (Emergency)",
-                            Weight = 9
+                            Weight = 13
+                        },
+                        new
+                        {
+                            Code = 175,
+                            Name = "RN – Multijurisdictional",
+                            Weight = 14
                         },
                         new
                         {
                             Code = 34,
                             Name = "Non-Practicing Registered Nurse",
-                            Weight = 10
+                            Weight = 15
                         },
                         new
                         {
                             Code = 40,
                             Name = "Employed Student Nurse",
-                            Weight = 11
+                            Weight = 16
                         },
                         new
                         {
                             Code = 35,
                             Name = "Practicing Licensed Graduate Nurse",
-                            Weight = 12
+                            Weight = 17
                         },
                         new
                         {
                             Code = 36,
                             Name = "Provisional Licensed Graduate Nurse",
-                            Weight = 13
+                            Weight = 18
                         },
                         new
                         {
                             Code = 37,
                             Name = "Non-Practicing Licensed Graduate Nurse",
-                            Weight = 14
+                            Weight = 19
                         },
                         new
                         {
                             Code = 41,
                             Name = "Practicing Registered Psychiatric Nurse",
-                            Weight = 15
+                            Weight = 21
                         },
                         new
                         {
                             Code = 42,
                             Name = "Provisional Registered Psychiatric Nurse",
-                            Weight = 16
+                            Weight = 22
                         },
                         new
                         {
                             Code = 45,
                             Name = "Temporary Registered Psychiatric Nurse (Emergency)",
-                            Weight = 18
+                            Weight = 23
+                        },
+                        new
+                        {
+                            Code = 176,
+                            Name = "RPN – Multijurisdictional",
+                            Weight = 24
                         },
                         new
                         {
                             Code = 43,
                             Name = "Non-Practicing Registered Psychiatric Nurse",
-                            Weight = 19
+                            Weight = 25
                         },
                         new
                         {
                             Code = 46,
                             Name = "Employed Student Psychiatric Nurse",
-                            Weight = 20
+                            Weight = 26
                         },
                         new
                         {
                             Code = 52,
                             Name = "Practicing Licensed Practical Nurse",
-                            Weight = 21
+                            Weight = 31
                         },
                         new
                         {
                             Code = 53,
                             Name = "Provisional Licensed Practical Nurse",
-                            Weight = 22
+                            Weight = 32
                         },
                         new
                         {
                             Code = 55,
                             Name = "Temporary Licensed Practical Nurse (Emergency)",
-                            Weight = 23
+                            Weight = 33
+                        },
+                        new
+                        {
+                            Code = 177,
+                            Name = "LPN – Multijurisdictional",
+                            Weight = 34
                         },
                         new
                         {
                             Code = 54,
                             Name = "Non-Practicing Licensed Practical Nurse",
-                            Weight = 25
+                            Weight = 35
                         },
                         new
                         {
                             Code = 60,
                             Name = "Practising Midwife",
-                            Weight = 28
+                            Weight = 41
                         },
                         new
                         {
                             Code = 61,
                             Name = "Provisional Midwife",
-                            Weight = 29
+                            Weight = 42
                         },
                         new
                         {
                             Code = 62,
                             Name = "Temporary Midwife (Emergency)",
-                            Weight = 30
+                            Weight = 43
                         },
                         new
                         {
                             Code = 63,
                             Name = "Non-Practising Midwife",
-                            Weight = 31
+                            Weight = 44
                         },
                         new
                         {
                             Code = 69,
                             Name = "Student Midwife",
-                            Weight = 32
+                            Weight = 45
                         },
                         new
                         {
@@ -13318,6 +13360,59 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false
+                        },
+                        new
+                        {
+                            Id = 367,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 8, 27, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 175,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            NonPrescribingPrefix = "RX",
+                            Prefix = "R9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 368,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 8, 27, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 176,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            NonPrescribingPrefix = "YX",
+                            Prefix = "Y9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 369,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 8, 27, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 177,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "L9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
                         });
                 });
 
