@@ -13,6 +13,7 @@ using Prime.Models;
 using Prime.Models.HealthAuthorities;
 using Prime.Models.Plr;
 using Prime.Models.VerifiableCredentials;
+using System.Runtime.CompilerServices;
 
 namespace Prime
 {
@@ -35,6 +36,15 @@ namespace Prime
             optionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: true);
 
             return new ApiDbContext(optionsBuilder.Options, null);
+        }
+    }
+
+    public static class PRIMEInitializer
+    {
+        [ModuleInitializer]
+        public static void Initialize()
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
     }
 
@@ -125,6 +135,7 @@ namespace Prime
         // PLR Integration
         public DbSet<PlrProvider> PlrProviders { get; set; }
         public DbSet<PharmanetTransactionLog> PharmanetTransactionLogs { get; set; }
+        public DbSet<PharmanetTransactionLogTemp> PharmanetTransactionLogTemps { get; set; }
         public DbSet<CollegeForPlrRoleType> CollegeForPlrRoleTypes { get; set; }
         public DbSet<Practitioner> Practitioner { get; set; }
 

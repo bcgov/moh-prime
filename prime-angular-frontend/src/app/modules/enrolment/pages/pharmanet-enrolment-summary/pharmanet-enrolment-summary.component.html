@@ -155,6 +155,7 @@
                  let-setting="setting"
                  let-settingPlural="settingPlural"
                  let-settingCode="settingCode"
+                 let-healthAuthorityCode="healthAuthorityCode"
                  let-formArray="formArray"
                  let-formArrayName="formArrayName"
                  let-subheaderContent="subheaderContent">
@@ -173,9 +174,9 @@
                           [formGroupName]="i">
               <app-email-form [form]="email"
                               [index]="i"
-                              [validate]="true"
+                              [validateFormat]="true"
                               [showRemoveButton]="i>0"
-                              (remove)="removeEmail(settingCode, $event)">
+                              (remove)="removeEmail(settingCode, healthAuthorityCode, $event)">
               </app-email-form>
             </ng-container>
           </div>
@@ -184,7 +185,7 @@
             <button mat-button
                     type="button"
                     color="primary"
-                    (click)="addEmptyEmailInput(settingCode)">
+                    (click)="addEmptyEmailInput(settingCode, healthAuthorityCode)">
               <mat-icon>add</mat-icon>
               Add email of PharmaNet administrator
             </button>

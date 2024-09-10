@@ -226,7 +226,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
       status,
       businessLicence,
       flagged,
-      isNew
+      isNew,
+      missingBusinessLicence
     } = site;
 
     return {
@@ -244,7 +245,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
       status,
       businessLicence,
       flagged,
-      isNew
+      isNew,
+      missingBusinessLicence
     };
   }
 }

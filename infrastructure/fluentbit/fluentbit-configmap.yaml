@@ -1,0 +1,189 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  build: ${APP_NAME}
+  template: ${APP_NAME}-template-bc
+metadata:
+  name: ${APP_NAME}-template-bc
+objects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: frontend-${APP_NAME}-config
+      namespace: ${NAMESPACE}
+      labels: 
+        app.kubernetes.io/part-of: ${OC_ENV}
+    data:
+      fluent-bit.conf: |
+        [SERVICE]
+          Flush         5
+          Daemon        Off
+          # define the log format (see additional config map key/value)
+          Parsers_File  parsers.conf
+          Log_Level     info
+          HTTP_Server   On
+          HTTP_Listen   0.0.0.0
+          HTTP_Port     2020
+          Health_Check  On
+
+        [INPUT]
+          # get logs from file written by nginx app
+          Name        tail
+          Path        /tmp/error_fluentbit.log
+          Tag         app
+      
+        [FILTER]
+          # filter logs based on certain keyword(s)
+          name   grep
+          match  app
+          Logical_Op or
+          regex  log error
+          regex  log crit
+          regex  log alert
+          regex  log emerg
+          # In case fatal message happens
+          regex  log fatal
+          
+        [FILTER]
+          # Ignore "No such file or directory" error, exclude from fluentbit output
+          name     grep
+          match    app
+          Exclude  log No\ssuch\sfile\sor\sdirectory
+          Exclude  worker\sprocess\s\d+\sexited\son\ssignal\s9
+        
+        [FILTER]
+          name          parser
+          match         app
+          Key_Name      log
+          Parser        parser
+          Preserve_Key  On
+
+        [FILTER]
+          # modify log entry to include namespace and container name
+          name    record_modifier
+          match   app
+          # add namespace
+          Record namespace ${NAMESPACE}
+          # add container name
+          Record container ${OC_ENV}-frontend
+
+        [FILTER]
+          Name          rewrite_tag
+          Match         app
+          Rule          $level ([a-zA-Z]*)$ $TAG.$level true
+          Emitter_Name  re_emitted
+
+
+        [OUTPUT]
+          name                 slack
+          match                app
+          webhook              ${SLACK_ERROR_NOTIFICATION_WEBHOOK}
+
+        [OUTPUT]
+          Name    stdout
+          Match   app
+          Format  json_lines
+      parsers.conf: |
+        [PARSER]
+          Name             parser
+          Format regex
+          Regex  (?<timestamp>\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) \[(?<level>.*)\]\ (?<process_id>\d*)#(?<thread_id>\d*): (?<message>.*)
+          Time_Key time
+          Time_Format %d/%b/%Y:%H:%M:%S %z
+          Types thread_id:integer process_id:integer
+
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: webapi-${APP_NAME}-config
+      namespace: ${NAMESPACE}
+      labels: 
+        app.kubernetes.io/part-of: ${OC_ENV}
+    data:
+      fluent-bit.conf: |
+        [SERVICE]
+          Flush         5
+          Daemon        Off
+          # define the log format (see additional config map key/value)
+          Parsers_File  parsers.conf
+          Log_Level     info
+          HTTP_Server   On
+          HTTP_Listen   0.0.0.0
+          HTTP_Port     2020
+          Health_Check  On
+
+        [INPUT]
+          # get logs from file written by webapi app
+          Name        tail
+          Path        /opt/app-root/app/logs/*.log
+          Tag         app
+
+        [FILTER]
+          # filter logs based on certain keyword(s)
+          name   grep
+          match  app
+          Logical_Op or
+          regex log \bERR\b
+          regex log FTL
+
+        [FILTER]
+          name          parser
+          match         app
+          Key_Name      log
+          Parser        parser
+          Preserve_Key  On
+
+        [FILTER]
+          # modify log entry to include namespace and container name
+          name    record_modifier
+          match   app
+          # add namespace
+          Record namespace ${NAMESPACE}
+          # add container name
+          Record container ${OC_ENV}-webapi
+
+        [FILTER]
+          Name          rewrite_tag
+          Match         app
+          Rule          $level ([a-zA-Z]*)$ $TAG.$level true
+          Emitter_Name  re_emitted
+
+
+        [OUTPUT]
+          name                 slack
+          match                app
+          webhook              ${SLACK_ERROR_NOTIFICATION_WEBHOOK}
+
+        [OUTPUT]
+          Name    stdout
+          Match   app
+          Format  json_lines
+
+      parsers.conf: |
+        [PARSER]
+          Name   parser
+          Format regex
+          Regex  \[(?<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})(?<level>.*)]\ (?<message>.*)
+          Time_Key time
+
+parameters:
+  - name: APP_NAME
+    description: Application name
+    displayName: Application name
+    required: true
+    value: fluentbit
+  - name: NAMESPACE
+    description: Namespace
+    displayName: Namespace
+    required: true
+    value: 9c33a9-dev
+  - name: OC_ENV
+    description: OpenShift Environment
+    displayName: OpenShift Environment
+    required: true
+    value: dev
+  - name: SLACK_ERROR_NOTIFICATION_WEBHOOK
+    description: Slack error notification Webhook URL
+    displayName: Slack Webhook URL
+    required: true
+    value: ""

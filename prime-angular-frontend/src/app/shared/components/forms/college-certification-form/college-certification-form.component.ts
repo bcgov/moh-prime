@@ -16,6 +16,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { LicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -60,6 +61,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   public CollegeLicenceClassEnum = CollegeLicenceClassEnum;
   public PrescriberIdTypeEnum = PrescriberIdTypeEnum;
 
+  public licenseGrouping = LicenseGrouping;
+
   constructor(
     private configService: ConfigService,
     private viewportService: ViewportService,
@@ -67,13 +70,16 @@ export class CollegeCertificationFormComponent implements OnInit {
     private enrolmentService: EnrolmentService
   ) {
     this.remove = new EventEmitter<number>();
-    // filter the college licenses that have been discontinued
-    this.licenses = this.configService.licenses.map(l => {
+    // copy the master list of license lookup from configService to local
+    this.licenses = this.configService.licenses.map(x => Object.assign({}, x));
+
+    // filter the college licenses that have been discontinued (collegeLicenses.discontinued = true)
+    // so that they will not appear in the dropdown
+    this.licenses.forEach(l => {
       l.collegeLicenses = l.collegeLicenses.filter(cl => !cl.discontinued);
-      return l;
     });
-    // filter the licenses that have no college license (possibly by action above)
     this.licenses = this.licenses.filter(l => l.collegeLicenses.length !== 0);
+
     var collegeCodes: Array<number> = [];
     this.configService.licenses.forEach(l => {
       l.collegeLicenses.forEach(cl => {
@@ -163,13 +169,8 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.remove.emit(this.index);
   }
 
-  public shouldShowPractices(): boolean {
-    // Only display Advanced Practices for certain nursing licences
-    return CollegeCertification.hasPractice(this.collegeCode.value, this.licenseCode.value);
-  }
-
   public showLicenceClass(): boolean {
-    return this.filteredLicenses.some(l => l.name !== 'Not Displayed');
+    return this.filteredLicenses && this.filteredLicenses.some(l => l.name !== 'Not Displayed');
   }
 
   /**
@@ -229,7 +230,9 @@ export class CollegeCertificationFormComponent implements OnInit {
           )
         )
         .subscribe((collegeLicenseGroupingCode: number) => {
-          this.setNursingCategoryValidators();
+          if (this.licenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
+            this.setNursingCategoryValidators();
+          }
           this.loadLicensesByCategory(collegeLicenseGroupingCode);
         });
     } else {
@@ -250,13 +253,17 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
   }
 
+
   private setCollegeCertification(collegeCode: number): void {
     if (!collegeCode) {
       this.removeValidations();
       return;
     }
 
-    if ((collegeCode === CollegeLicenceClassEnum.BCCNM || collegeCode === CollegeLicenceClassEnum.OralHealth) && !this.condensed) {
+    if ((collegeCode === CollegeLicenceClassEnum.BCCNM ||
+      collegeCode === CollegeLicenceClassEnum.OralHealth ||
+      collegeCode === CollegeLicenceClassEnum.HealthCareProfessionals ||
+      collegeCode === CollegeLicenceClassEnum.ComplementaryHealthProfessionals) && !this.condensed) {
       this.formUtilsService.setValidators(this.category, [Validators.required]);
       return;
     }
@@ -436,7 +443,6 @@ export class CollegeCertificationFormComponent implements OnInit {
     return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
   }
 
-
   private checkLicenseIfDiscontinued() {
     if (this.collegeCode.value && this.licenseCode.value) {
       this.licenseClassDiscontinued = this.isCertificationDiscontinued(this.collegeCode.value, this.licenseCode.value);
@@ -445,6 +451,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
   }
 
+  // check the license master list from configService if the license and college pair is discontinued.
   private isCertificationDiscontinued(collegeCode: number, licenseCode: number): boolean {
     let license = this.configService.licenses.find(l => l.code === licenseCode);
     return license.collegeLicenses.find(cl => cl.collegeCode === collegeCode && cl.licenseCode === licenseCode).discontinued;

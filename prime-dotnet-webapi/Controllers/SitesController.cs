@@ -26,6 +26,7 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly ICommunitySiteService _communitySiteService;
+        private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly IDocumentService _documentService;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
@@ -37,6 +38,7 @@ namespace Prime.Controllers
             IAdminService adminService,
             IBusinessEventService businessEventService,
             ICommunitySiteService communitySiteService,
+            IHealthAuthoritySiteService healthAuthoritySiteService,
             IDocumentService documentService,
             IEmailService emailService,
             IMapper mapper,
@@ -53,6 +55,7 @@ namespace Prime.Controllers
             _organizationService = organizationService;
             _siteService = siteService;
             _deviceProviderService = deviceProviderService;
+            _healthAuthoritySiteService = healthAuthoritySiteService;
         }
 
         // GET: api/Sites
@@ -726,6 +729,34 @@ namespace Prime.Controllers
             return Ok(await _siteService.PecAssignableAsync(siteId, pec));
         }
 
+        // GET: api/sites/1/pec/abc/exists-within-ha
+        /// <summary>
+        /// Check if a given PEC exists in other site within the same health authority.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="pec"></param>
+        /// <returns></returns>
+        [HttpGet("{siteId}/pec/{pec}/exists-within-ha", Name = nameof(PecExistsWithinHA))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> PecExistsWithinHA(int siteId, string pec)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            if (string.IsNullOrWhiteSpace(pec))
+            {
+                return BadRequest("PEC cannot be empty.");
+            }
+
+            return Ok(await _siteService.PecExistsWithinHAAsync(siteId, pec));
+        }
+
         // PUT: api/Sites/5/pec
         /// <summary>
         /// Update the PEC code.
@@ -940,6 +971,9 @@ namespace Prime.Controllers
             else
             {
                 await _siteService.ApproveSite(siteId);
+                var haSite = await _healthAuthoritySiteService.GetHealthAuthoritySiteAsync(siteId);
+                await _emailService.SendHealthAuthoritySiteApprovedAsync(haSite);
+                await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent HA site approval email to Connections");
             }
 
             return Ok();
