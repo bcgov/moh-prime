@@ -20,5 +20,10 @@ namespace Prime.Services
         /// </summary>
         Task<bool> IsOboToRuAgreementTypeChangeAsync(int enrolleeId);
         Task<AgreementGroup?> GetCurrentAgreementGroupForAnEnrolleeAsync(int enrolleeId);
+        /// <summary>
+        /// An agreement that was never accepted can be deleted.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        Task DeleteObsoleteEnrolleeAgreementAsync(int enrolleeId);
     }
 }
