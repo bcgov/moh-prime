@@ -146,13 +146,13 @@ jobs:
           cc_test_reporter_version: latest  # optional
 
       - name: Download frontend artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: frontend
           # path: frontend/
 
       - name: Download backend artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: backend
           # path: backend/
