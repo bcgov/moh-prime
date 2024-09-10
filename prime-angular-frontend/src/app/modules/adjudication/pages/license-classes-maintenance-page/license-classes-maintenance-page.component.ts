@@ -22,6 +22,7 @@ export class LicenseMaintenanceConfig implements IWeightedConfig {
   prescriberIdType?: PrescriberIdTypeEnum;
   weight: number;
   collegeLicenseGroupingCode: number;
+  multijurisdictional?: boolean;
 }
 
 @Component({
