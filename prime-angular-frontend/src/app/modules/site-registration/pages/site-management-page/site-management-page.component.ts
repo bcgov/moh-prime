@@ -42,6 +42,7 @@ export class SiteManagementPageComponent implements OnInit {
   public organizationAgreements: OrganizationAgreementViewModel[];
   public routeUtils: RouteUtils;
   public careSettingCodesPendingTransfer: CareSettingEnum[];
+  public userId: string;
 
   public AgreementType = AgreementType;
   public CareSettingEnum = CareSettingEnum;
@@ -228,10 +229,11 @@ export class SiteManagementPageComponent implements OnInit {
         exhaustMap((user: BcscUser) =>
           forkJoin([
             this.organizationResource.getSigningAuthorityOrganizationByUsername(user.username),
-            this.organizationResource.getSigningAuthorityOrganizationClaimByUsername(user.username)
+            this.organizationResource.getSigningAuthorityOrganizationClaimByUsername(user.username),
+            of(user)
           ])
         ),
-        map(([organizations, organizationClaims]: [Organization[], Organization[]]) => {
+        map(([organizations, organizationClaims, user]: [Organization[], Organization[], BcscUser]) => {
           if (organizationClaims) {
             organizations = organizations.concat(organizationClaims);
           }
@@ -246,6 +248,8 @@ export class SiteManagementPageComponent implements OnInit {
                 : expiryDates;
             }, []);
           this.organizations = organizations;
+          this.userId = user.userId;
+
           return this.organization = organization;
         }),
         exhaustMap((organization: Organization) =>

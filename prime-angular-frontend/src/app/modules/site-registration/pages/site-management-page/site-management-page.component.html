@@ -100,7 +100,7 @@
                       [properties]="getOrganizationProperties(organization)">
     </app-summary-card>
 
-    <div *ngIf="organization.hasClaim">
+    <div *ngIf="organization.hasClaim && userId !== organization.signingAuthority.userId">
       <div class="mb-4">
         <app-alert type="success"
                    icon="check_circle_outline">
@@ -123,6 +123,17 @@
           </ng-container>
         </app-page-subheader2>
       </section>
+    </div>
+
+    <div *ngIf="organization.hasClaim && userId === organization.signingAuthority.userId">
+      <div class="mb-4">
+        <app-alert type="info">
+          <ng-container #alertTitle
+                        class="alert-title">
+            This Organization has been claimed.
+          </ng-container>
+        </app-alert>
+      </div>
     </div>
 
     <div *ngIf="!organization.hasClaim">
