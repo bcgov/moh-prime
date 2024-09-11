@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
@@ -26,6 +27,10 @@ namespace Prime.Models
         [Required]
         public string IDIR { get; set; }
 
+        [Required]
+        [DefaultValue(AdminStatusType.Enabled)]
+        public AdminStatusType Status { get; set; }
+
         /// <summary>
         /// e.g. "jsmith@idir"
         /// </summary>
@@ -33,6 +38,9 @@ namespace Prime.Models
 
         [JsonIgnore]
         public IEnumerable<Enrollee> Enrollees { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<Site> Sites { get; set; }
 
         [JsonIgnore]
         public IEnumerable<EnrolleeNote> AdjudicatorNotes { get; set; }
