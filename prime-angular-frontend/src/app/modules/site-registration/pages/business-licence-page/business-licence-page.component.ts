@@ -146,7 +146,6 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     if (site.doingBusinessAs && site.businessLicence && site.businessLicence.expiryDate === null) {
       this.showExpiryDate = false;
     } else {
-      //this.formState.businessLicenceExpiry.patchValue(site.businessLicence.expiryDate);
       this.showExpiryDate = true;
     }
   }
