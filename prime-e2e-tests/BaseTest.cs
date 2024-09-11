@@ -32,18 +32,14 @@ namespace TestPrimeE2E
         protected void LoginWithBCSC()
         {
             _driver.FindPatiently("//span[@class='mat-button-wrapper'][1]").Click();
-            _driver.FindPatientlyById("image_virtual_device_div_id").Click();
-            _driver.FindPossibleStaleById("csn").SendKeys(TestParameters.BcscId);
-            _driver.FindPatientlyById("continue").Click();
-            _driver.FindPatientlyById("passcode").SendKeys(TestParameters.BcscPassword);
-            _driver.FindPatientlyById("btnSubmit").Click();
+            // "Next" past PRIME's Collection of Personal Information Notice dialog 
+            _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[2]/span[1]").Click();
+
+            _driver.FindPatientlyById("image_test_with_username_password_device_div_id").Click();
+            _driver.FindPatientlyById("username").SendKeys(TestParameters.BcscId);
+            _driver.FindPatientlyById("password").SendKeys(TestParameters.BcscPassword);
+            _driver.FindPatientlyById("submit-btn").Click();
             _driver.TakeScreenshot("BCSC_SignIn_Completion");
-            var submitButton = _driver.FindPatientlyById("btnSubmit");
-            // Sometimes screen is not displayed to user?
-            if (submitButton != null)
-            {
-                submitButton.Click();
-            }
         }
 
 
