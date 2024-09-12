@@ -14,12 +14,15 @@ export class BusinessLicenceExpiryComponent implements OnInit {
   @Input() public form: FormGroup;
   @Input() public showExpiryDate: boolean;
 
+  public hasExpiryDate: boolean;
+
   public minExpiryDate: moment.Moment;
 
   @ViewChild('expiryDateSlide') public expiryDateSlideToggle: MatSlideToggle;
 
   constructor() {
     this.minExpiryDate = moment();
+    this.hasExpiryDate = !this.showExpiryDate;
   }
 
   public ngOnInit(): void {
