@@ -93,8 +93,8 @@ export class SiteManagementPageComponent implements OnInit {
   public getWithinRenewalPeriodSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
     return {
       icon: 'notification_important',
-      text: 'This site requires renewal.',
-      label: 'Renew Site',
+      text: 'This site requires update.',
+      label: 'Update Site',
       route: () => this.viewSite(this.healthAuthorityId, healthAuthoritySite)
     };
   }
