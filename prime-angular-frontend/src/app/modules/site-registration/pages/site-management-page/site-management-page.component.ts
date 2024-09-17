@@ -150,8 +150,8 @@ export class SiteManagementPageComponent implements OnInit {
   public getRenewalRequiredSiteNotificationProperties(organizationId: number, site: SiteListViewModel) {
     return {
       icon: 'notification_important',
-      text: 'This site requires renewal including this year\'s business licence.',
-      label: 'Renew Site',
+      text: 'Please update your business licence.',
+      label: 'Update Site',
       route: () => this.viewSite(organizationId, site)
     };
   }
