@@ -199,7 +199,7 @@ export class NextStepsComponent extends BaseEnrolmentProfilePage implements OnIn
 
               let emailPairs = this.careSettingConfigs.map((config) => {
                 return {
-                  emails: config.formArray.value.map(email => email.email),
+                  emails: config.formArray.value.map(email => email.email).filter(e => e),
                   careSettingCode: config.settingCode,
                   healthAuthorityCode: config.settingCode === CareSettingEnum.HEALTH_AUTHORITY ? config.healthAuthorityCode : null,
                 }
