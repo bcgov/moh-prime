@@ -213,7 +213,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             if (result) {
               let emailPairs = this.careSettingConfigs.map((config) => {
                 return {
-                  emails: config.formArray.value.map(email => email.email),
+                  emails: config.formArray.value.map(email => email.email).filter(e => e),
                   careSettingCode: config.settingCode,
                   healthAuthorityCode: config.healthAuthorityCode,
                 }
@@ -227,8 +227,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         .subscribe(() => {
           let emails = new Array<string>();
           this.careSettingConfigs.forEach((config) => {
-            if (config.formArray.value[0].email) {
-              emails.push(config.formArray.value.map(email => email.email));
+            if (config.formArray.value.map(email => email.email).filter(e => e)[0]) {
+              emails.push(config.formArray.value.map(email => email.email).filter(e => e));
             }
           });
           this.toastService.openSuccessToast(`Email was successfully sent to ${emails.join(", ")}`);
