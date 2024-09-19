@@ -190,7 +190,7 @@ namespace Prime.Controllers
                 await _vendorAPILogService.UpdateLogAsync(logId, SerializeObjectForLog(result));
                 var enrolleeStub = await _enrolleeService.GetEnrolleeStubAsync(User.GetPrimeUsername());
                 await _businessEventService.CreateEnrolleeEventAsync(enrolleeStub.Id,
-                    $"First-time provisioning API (aka GetGpidDetail) returned data to calling entity {TranslateAuthorizedParty(authorizedParty)}");
+                    $"\"First-Time Provisioning API\" (aka GetGpidDetail) returned data to calling entity {TranslateAuthorizedParty(authorizedParty)}");
                 return Ok(result);
             }
 
@@ -289,7 +289,7 @@ namespace Prime.Controllers
         }
 
         /// <summary>
-        /// Translate given to something PRIME administrator would understand
+        /// Translate given <paramref name="authorizedParty"/> to something PRIME administrator would understand
         /// </summary>
         /// <param name="authorizedParty"></param>
         /// <returns></returns>
@@ -300,7 +300,9 @@ namespace Prime.Controllers
                 case "PRIME-POS-GPID":
                     return "Medinet";
                 case "PRIME-APPLICATION-LOCAL":
-                    return "PRIME (testing)";
+                    return "PRIME (testing in `dev`)";
+                case "PRIME-APPLICATION-TEST":
+                    return "PRIME (testing in `test`)";
                 default:
                     return "N/A";
             }
