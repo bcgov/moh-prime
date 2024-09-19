@@ -289,7 +289,7 @@ namespace Prime.Controllers
         }
 
         /// <summary>
-        /// Translate given to something PRIME administrator would understand
+        /// Translate given <paramref name="authorizedParty"/> to something PRIME administrator would understand
         /// </summary>
         /// <param name="authorizedParty"></param>
         /// <returns></returns>
