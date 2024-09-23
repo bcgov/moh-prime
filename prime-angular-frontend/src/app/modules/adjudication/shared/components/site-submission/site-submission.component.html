@@ -126,11 +126,12 @@
   </ng-container>
 </app-page-section>
 
-<app-page-section *ngIf="submission?.remoteUsers">
+<app-page-section *ngIf="submission?.remoteUsers &&
+  submission?.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE">
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Remote Users</ng-container>
   </app-page-subheader>
-  <ng-container *ngFor="let remoteUser of submission.remoteUsers;">
+  <ng-container *ngFor=" let remoteUser of submission.remoteUsers;">
     <ng-container>
       <app-enrollee-property *ngIf="remoteUser?.firstName"
                              title="First Name">

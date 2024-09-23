@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { HttpSite, SiteSubmission } from '@shared/models/site-submission.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-site-submission',
@@ -13,6 +14,7 @@ export class SiteSubmissionComponent implements OnInit {
   @Input() public siteSubmissionId: number;
 
   public submission: HttpSite;
+  public CareSettingEnum = CareSettingEnum;
 
   constructor(
     private siteResource: SiteResource,
