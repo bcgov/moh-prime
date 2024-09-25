@@ -2838,6 +2838,16 @@ export class MockConfig {
           'certified': false
         },
       ],
+      'siteCloseReasons': [
+        {
+          'code': 1,
+          'name': 'Reason 1'
+        },
+        {
+          'code': 2,
+          'name': 'Reason 2'
+        }
+      ],
       'facilities': [
         {
           'code': 4,
