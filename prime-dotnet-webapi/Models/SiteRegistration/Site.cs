@@ -40,7 +40,7 @@ namespace Prime.Models
 
         public bool Flagged { get; set; }
 
-        public bool IsNew {get; set;}
+        public bool IsNew { get; set; }
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
@@ -49,6 +49,10 @@ namespace Prime.Models
         public DateTimeOffset? ApprovedDate { get; set; }
 
         public ICollection<RemoteUser> RemoteUsers { get; set; }
+
+        public DateTimeOffset? ClosedDate { get; set; }
+
+        public int? SiteCloseReasonCode { get; set; }
 
         public int? AdjudicatorId { get; set; }
 

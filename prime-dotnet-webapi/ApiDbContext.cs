@@ -100,6 +100,7 @@ namespace Prime
         public DbSet<Credential> Credentials { get; set; }
         public DbSet<OrganizationClaim> OrganizationClaims { get; set; }
         public DbSet<IndividualDeviceProvider> IndividualDeviceProviders { get; set; }
+        public DbSet<SiteCloseReason> SiteCloseReasons { get; set; }
 
         // Health Authorities
         public DbSet<HealthAuthoritySite> HealthAuthoritySites { get; set; }

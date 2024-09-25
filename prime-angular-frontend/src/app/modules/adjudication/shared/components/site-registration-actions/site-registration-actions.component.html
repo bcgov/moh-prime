@@ -72,6 +72,22 @@
       <mat-icon>flag</mat-icon>
       <span>{{siteRegistration?.isNew ? 'Unflag' : 'Flag'}} "Is New"</span>
     </button>
+
+    <button mat-menu-item
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            *ngIf="isActionAllowed(SiteAdjudicationAction.CLOSE)"
+            (click)="onClose()">
+      <mat-icon>close</mat-icon>
+      <span>Close Site</span>
+    </button>
+
+    <button mat-menu-item
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            *ngIf="isActionAllowed(SiteAdjudicationAction.OPEN)"
+            (click)="onOpen()">
+      <mat-icon>folder_open</mat-icon>
+      <span>Open Site</span>
+    </button>
     <mat-divider></mat-divider>
 
     <button mat-menu-item
@@ -89,7 +105,6 @@
         <span>Delete Organization</span>
       </button>
     </ng-container>
-
   </mat-menu>
 
 </ng-container>

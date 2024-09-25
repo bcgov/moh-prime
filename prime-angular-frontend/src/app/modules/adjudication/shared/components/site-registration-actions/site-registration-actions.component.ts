@@ -23,6 +23,8 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public unreject: EventEmitter<number>;
   @Output() public escalate: EventEmitter<number>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
+  @Output() public close: EventEmitter<number>;
+  @Output() public open: EventEmitter<number>;
   @Output() public enableEditing: EventEmitter<number>;
   @Output() public flag: EventEmitter<{ siteId: number, flagged: boolean }>;
   @Output() public isNew: EventEmitter<{ siteId: number, isNew: boolean }>;
@@ -42,6 +44,8 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.unreject = new EventEmitter<number>();
     this.escalate = new EventEmitter<number>();
     this.enableEditing = new EventEmitter<number>();
+    this.close = new EventEmitter<number>();
+    this.open = new EventEmitter<number>();
     this.flag = new EventEmitter<{ siteId: number, flagged: boolean }>();
     this.isNew = new EventEmitter<{ siteId: number, isNew: boolean }>();
   }
@@ -153,6 +157,14 @@ export class SiteRegistrationActionsComponent implements OnInit {
     }
   }
 
+  public onClose() {
+    this.close.emit(this.siteRegistration.id);
+  }
+
+  public onOpen() {
+    this.open.emit(this.siteRegistration.id);
+  }
+
   /**
    * @description
    * Check whether the given action is valid according to the status of the
@@ -161,13 +173,16 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public isActionAllowed(action: SiteAdjudicationAction): boolean {
     switch (this.siteRegistration.status) {
       case SiteStatusType.EDITABLE:
-        return (action === SiteAdjudicationAction.REJECT);
+        return (action === SiteAdjudicationAction.REJECT
+          || action === SiteAdjudicationAction.CLOSE);
       case SiteStatusType.IN_REVIEW:
         return (action === SiteAdjudicationAction.REQUEST_CHANGES
           || action === SiteAdjudicationAction.APPROVE
           || action === SiteAdjudicationAction.REJECT);
       case SiteStatusType.LOCKED:
         return (action === SiteAdjudicationAction.UNREJECT);
+      case SiteStatusType.CLOSED:
+        return (action === SiteAdjudicationAction.OPEN)
       default:
         return false;
     }
