@@ -1,5 +1,5 @@
 FROM postgres:12.4
-USER 0
+USER root
 ARG PGPASSWORD
 ARG PGDATABASE
 ARG PGHOST
@@ -22,7 +22,6 @@ COPY backup.cron /etc/cron.d
 
 
 RUN echo "Checking workdir..." && \
-    USER root && \
     apt-get update -yqq
 
 RUN apt-get -y install nano net-tools gnupg wget ca-certificates apt-transport-https cron inetutils-ping libcurl4-openssl-dev
