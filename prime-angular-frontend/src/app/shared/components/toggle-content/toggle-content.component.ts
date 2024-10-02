@@ -12,6 +12,7 @@ export class ToggleContentComponent implements OnInit {
   @Input() public color: 'primary' | 'accent' | 'warn';
   @Input() public label: string;
   @Input() public checked: boolean;
+  @Input() public disabled: boolean;
   @Output() public toggle: EventEmitter<ToggleContentChange>;
 
   constructor() {
