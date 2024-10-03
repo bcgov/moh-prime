@@ -131,7 +131,7 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Remote Users</ng-container>
   </app-page-subheader>
-  <ng-container *ngIf="!submission?.remoteUsers">
+  <ng-container *ngIf="!submission?.remoteUsers || submission?.remoteUsers.length === 0">
     None
   </ng-container>
   <ng-container *ngFor=" let remoteUser of submission.remoteUsers;">
