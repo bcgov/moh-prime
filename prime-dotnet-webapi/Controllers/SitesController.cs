@@ -1391,7 +1391,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/site-submissions", Name = nameof(GetSiteSubmissions))]
-        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -1410,7 +1410,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="siteSubmissionId"></param>
         [HttpGet("{siteId}/site-submission/{siteSubmissionId}", Name = nameof(GetSiteSubmission))]
-        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
