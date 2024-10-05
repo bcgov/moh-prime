@@ -227,10 +227,10 @@
               color="primary"
               title="View/Update Remote Practitioner"
               *ngIf="site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE"
-              [disabled]="isPendingTransfer() || !site.completed || site.status === SiteStatusType.IN_REVIEW"
+              [disabled]="isPendingTransfer() || !site.completed || site.status === SiteStatusType.IN_REVIEW || site.status === SiteStatusType.LOCKED"
               (click)="viewSiteRemoteUsers(organizationId, site)">
         <mat-icon>folder_shared</mat-icon>
-        <span class="pl-1">Remote Access</span>
+        <span class="pl-1">Remote Practitioner</span>
       </button>
     </div>
   </ng-template>
