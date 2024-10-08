@@ -109,6 +109,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       });
   }
 
+  public showRequestRemoteAccessButton(): boolean {
+    return this.canRequestRemoteAccess() && this.currentStatus === this.EnrolmentStatus.EDITABLE && this.enrolment.appliedDate != null;
+  }
+
   public canRequestRemoteAccess(): boolean {
     const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
@@ -167,7 +171,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
             // to review, but maintain a subset of immutable properties
             const { selfDeclarationDocuments,
               selfDeclarationCompletedDate,
-              requireRedoSelfDeclaration } = enrolment;
+              requireRedoSelfDeclaration,
+              appliedDate } = enrolment;
 
             const stateSelfDeclarationCompletedDate = this.enrolmentFormStateService.selfDeclarationCompletedDate;
 
@@ -178,6 +183,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
                 stateSelfDeclarationCompletedDate : selfDeclarationCompletedDate,
               requireRedoSelfDeclaration: !stateSelfDeclarationCompletedDate && requireRedoSelfDeclaration,
               expiryDate: this.enrolmentService.enrolment.expiryDate,
+              appliedDate,
             };
             enrolment.enrollee.gpid = this.enrolmentService.enrolment.enrollee.gpid;
           }
