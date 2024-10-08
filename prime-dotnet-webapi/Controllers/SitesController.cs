@@ -945,7 +945,7 @@ namespace Prime.Controllers
 
                 if (communitySite.ActiveBeforeRegistration)
                 {
-                    /* do not send "Site Active Before registration email" to SA and dot not create related event
+                    /* do not send "Site Active Before registration email" to SA and do not create related event
                     await _emailService.SendSiteActiveBeforeRegistrationAsync(siteId, communitySite.Organization.SigningAuthority.Email);
                     await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site active before registration notification");
                     */
