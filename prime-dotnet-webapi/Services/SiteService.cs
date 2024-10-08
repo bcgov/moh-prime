@@ -541,7 +541,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task CloseSite(int siteId, int siteCloseReasonCode)
+        public async Task CloseSite(int siteId, int siteCloseReasonCode, string note)
         {
             var site = await _context.Sites
                 .Where(s => s.Id == siteId)
@@ -564,10 +564,10 @@ namespace Prime.Services
                 .Select(r => r.Name)
                 .FirstOrDefaultAsync();
 
-            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been closed (Reason: {reasonString})");
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been closed (Reason: {reasonString}, Note: {note})");
         }
 
-        public async Task OpenSite(int siteId)
+        public async Task OpenSite(int siteId, string note)
         {
             var site = await _context.Sites
                 .Where(s => s.Id == siteId)
@@ -575,7 +575,15 @@ namespace Prime.Services
 
             site.SiteCloseReasonCode = null;
             site.ClosedDate = null;
-            site.AddStatus(SiteStatusType.Editable);
+
+            var siteStatusList = await _context.SiteStatuses
+                .Where(ss => ss.SiteId == siteId)
+                .OrderByDescending(ss => ss.Id)
+                .ToArrayAsync();
+
+            var previousStatus = siteStatusList[1];
+            // open site with the previous status/state
+            site.AddStatus(previousStatus.StatusType);
 
             _context.Update(site);
 
@@ -585,7 +593,7 @@ namespace Prime.Services
                 throw new InvalidOperationException($"Could not submit the site.");
             }
 
-            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been re-opened");
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been re-opened (Note: {note})");
         }
     }
 }

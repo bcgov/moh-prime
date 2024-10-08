@@ -4,5 +4,5 @@ export enum SiteStatusType {
   LOCKED = 3,
   EDITABLE_NOT_APPROVED = 4,
   FLAGGED = 5,
-  CLOSED = 7
+  CLOSED = 7,
 }

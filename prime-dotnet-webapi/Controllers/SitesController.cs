@@ -1381,19 +1381,19 @@ namespace Prime.Controllers
             return Ok(site);
         }
 
-        // PUT: api/Sites/5/close
+        // POST: api/Sites/5/close
         /// <summary>
         /// Close a site
         /// </summary>
         /// <param name="siteId"></param>
-        /// <param name="siteCloseReasonCode"></param>
-        [HttpPut("{siteId}/close/{siteCloseReasonCode}", Name = nameof(CloseSite))]
+        /// <param name="closeSiteUpdateModel"></param>
+        [HttpPost("{siteId}/close", Name = nameof(CloseSite))]
         [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CloseSite(int siteId, int siteCloseReasonCode)
+        public async Task<ActionResult> CloseSite(int siteId, CloseSiteUpdateModel closeSiteUpdateModel)
         {
             if (!await _siteService.SiteExistsAsync(siteId))
             {
@@ -1406,23 +1406,24 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            await _siteService.CloseSite(siteId, siteCloseReasonCode);
+            await _siteService.CloseSite(siteId, closeSiteUpdateModel.SiteCloseReasonCode, closeSiteUpdateModel.Note);
 
             return Ok();
         }
 
-        // PUT: api/Sites/5/open
+        // POST: api/Sites/5/open
         /// <summary>
         /// Open a site
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPut("{siteId}/open", Name = nameof(OpenSite))]
+        /// <param name="openSiteUpdateModel"></param>
+        [HttpPost("{siteId}/open", Name = nameof(OpenSite))]
         [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> OpenSite(int siteId)
+        public async Task<ActionResult> OpenSite(int siteId, OpenSiteUpdateModel openSiteUpdateModel)
         {
             if (!await _siteService.SiteExistsAsync(siteId))
             {
@@ -1435,7 +1436,7 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            await _siteService.OpenSite(siteId);
+            await _siteService.OpenSite(siteId, openSiteUpdateModel.Note);
 
             return Ok();
         }

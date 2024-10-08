@@ -25,6 +25,7 @@
                 placeholder="Note"
                 rows="10"
                 formControlName="note"></textarea>
+      <mat-error *ngIf="note.hasError('required')">Required</mat-error>
     </mat-form-field>
   </form>
   <div class="mt-4">

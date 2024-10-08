@@ -17770,12 +17770,17 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
-                            Name = "Reason 1"
+                            Name = "Licence cancelled"
                         },
                         new
                         {
                             Code = 2,
-                            Name = "Reason 2"
+                            Name = "Closed by Organization"
+                        },
+                        new
+                        {
+                            Code = 3,
+                            Name = "Other"
                         });
                 });
 

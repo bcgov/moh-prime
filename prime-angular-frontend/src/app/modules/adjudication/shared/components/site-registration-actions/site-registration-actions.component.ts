@@ -178,7 +178,8 @@ export class SiteRegistrationActionsComponent implements OnInit {
       case SiteStatusType.IN_REVIEW:
         return (action === SiteAdjudicationAction.REQUEST_CHANGES
           || action === SiteAdjudicationAction.APPROVE
-          || action === SiteAdjudicationAction.REJECT);
+          || action === SiteAdjudicationAction.REJECT
+          || action === SiteAdjudicationAction.CLOSE);
       case SiteStatusType.LOCKED:
         return (action === SiteAdjudicationAction.UNREJECT);
       case SiteStatusType.CLOSED:

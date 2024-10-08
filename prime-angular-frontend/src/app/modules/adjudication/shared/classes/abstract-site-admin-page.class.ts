@@ -21,7 +21,8 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
-import { CloseSiteComponent } from '@shared/components/dialogs/content/close-site/close-site.component';
+import { CloseSiteComponent } from '@shared/components/dialogs/content/close-site-note/close-site-note.component';
+import { OpenSiteNoteComponent } from '@shared/components/dialogs/content/open-site-note/open-site-note.component';
 
 export abstract class AbstractSiteAdminPage {
   public abstract busy: Subscription;
@@ -241,8 +242,18 @@ export abstract class AbstractSiteAdminPage {
   }
 
   public onOpen(siteId: number): void {
-    this.busy = this.siteResource.openSite(siteId)
-      .subscribe(() => this.onRefresh());
+
+    const data: DialogOptions = {
+      title: 'Open a Closed Site',
+      actionText: 'Open Site',
+      actionType: 'warn',
+      data: {
+        siteId: siteId,
+      }
+    };
+
+    this.busy = this.dialog.open(OpenSiteNoteComponent, { data }).afterClosed()
+      .subscribe((result: { reload: boolean }) => (result?.reload) ? this.getDataset(this.route.snapshot.queryParams) : noop);
   }
 
   public onEnableEditing(siteId: number): void {

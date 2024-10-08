@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CloseSiteComponent } from './close-site.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { OpenSiteNoteComponent } from './open-site-note.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-describe('CloseSiteComponent', () => {
-  let component: CloseSiteComponent;
-  let fixture: ComponentFixture<CloseSiteComponent>;
+describe('OpenSiteNoteComponent', () => {
+  let component: OpenSiteNoteComponent;
+  let fixture: ComponentFixture<OpenSiteNoteComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,7 +22,7 @@ describe('CloseSiteComponent', () => {
         BrowserAnimationsModule,
         NgxMaterialModule
       ],
-      declarations: [CloseSiteComponent],
+      declarations: [OpenSiteNoteComponent],
       providers: [
         {
           provide: APP_CONFIG,
@@ -51,7 +51,7 @@ describe('CloseSiteComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CloseSiteComponent);
+    fixture = TestBed.createComponent(OpenSiteNoteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

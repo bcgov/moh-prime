@@ -22,6 +22,7 @@ namespace Prime.Engines
                 (SiteRegistrationAction.Unreject, SiteStatusType.Locked) => true,
                 // Close
                 (SiteRegistrationAction.Close, SiteStatusType.Editable) => true,
+                (SiteRegistrationAction.Close, SiteStatusType.InReview) => true,
                 // Open
                 (SiteRegistrationAction.Open, SiteStatusType.Closed) => true,
                 _ => false

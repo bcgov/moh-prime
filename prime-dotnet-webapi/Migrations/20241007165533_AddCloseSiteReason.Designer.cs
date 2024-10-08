@@ -12,8 +12,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20240919220351_CloseSiteChanges")]
-    partial class CloseSiteChanges
+    [Migration("20241007165533_AddCloseSiteReason")]
+    partial class AddCloseSiteReason
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17773,12 +17773,17 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 1,
-                            Name = "Reason 1"
+                            Name = "Licence cancelled"
                         },
                         new
                         {
                             Code = 2,
-                            Name = "Reason 2"
+                            Name = "Closed by Organization"
+                        },
+                        new
+                        {
+                            Code = 3,
+                            Name = "Other"
                         });
                 });
 

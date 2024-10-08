@@ -607,8 +607,8 @@ export class SiteResource {
       );
   }
 
-  public closeSite(siteId: number, siteCodeReasonCode: number): NoContent {
-    return this.apiResource.put<NoContent>(`sites/${siteId}/close/${siteCodeReasonCode}`)
+  public closeSite(siteId: number, siteCloseReasonCode: number, note: string): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/close`, { note, siteCloseReasonCode })
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -618,8 +618,8 @@ export class SiteResource {
       );
   }
 
-  public openSite(siteId: number): NoContent {
-    return this.apiResource.put<NoContent>(`sites/${siteId}/open`)
+  public openSite(siteId: number, note: string): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/open`, { note })
       .pipe(
         NoContentResponse,
         catchError((error: any) => {

@@ -9,10 +9,11 @@ namespace Prime.Configuration.Database
         {
             get
             {
-                return new[] {
-                    new SiteCloseReason { Code = 1, Name = "Reason 1" },
-                    new SiteCloseReason { Code = 2, Name = "Reason 2" },
-                };
+                return [
+                    new SiteCloseReason { Code = 1, Name = "Licence cancelled" },
+                    new SiteCloseReason { Code = 2, Name = "Closed by Organization" },
+                    new SiteCloseReason { Code = 3, Name = "Other" },
+                ];
             }
         }
     }

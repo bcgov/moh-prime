@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Prime.Migrations
 {
     /// <inheritdoc />
-    public partial class CloseSiteChanges : Migration
+    public partial class AddCloseSiteReason : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,8 +44,9 @@ namespace Prime.Migrations
                 columns: new[] { "Code", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Reason 1" },
-                    { 2, "Reason 2" }
+                    { 1, "Licence cancelled" },
+                    { 2, "Closed by Organization" },
+                    { 3, "Other" }
                 });
 
             migrationBuilder.InsertData(

@@ -4,5 +4,5 @@ export enum SiteAdjudicationAction {
   REJECT = 3,
   UNREJECT = 4,
   CLOSE = 7,
-  OPEN = 8
+  OPEN = 8,
 }

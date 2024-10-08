@@ -131,7 +131,8 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
 import { EmailFormComponent } from './components/forms/email-form/email-form.component';
 import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
 import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
-import { CloseSiteComponent } from './components/dialogs/content/close-site/close-site.component';
+import { CloseSiteComponent } from './components/dialogs/content/close-site-note/close-site-note.component';
+import { OpenSiteNoteComponent } from './components/dialogs/content/open-site-note/open-site-note.component';
 
 @NgModule({
   declarations: [
@@ -245,6 +246,7 @@ import { CloseSiteComponent } from './components/dialogs/content/close-site/clos
     SelfDeclarationTermComponent,
     TransferHASiteComponent,
     CloseSiteComponent,
+    OpenSiteNoteComponent,
   ],
   imports: [
     CommonModule,
