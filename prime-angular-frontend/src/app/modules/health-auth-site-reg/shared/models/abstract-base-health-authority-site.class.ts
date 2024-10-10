@@ -35,6 +35,10 @@ export abstract class AbstractBaseHealthAuthoritySite implements BaseHealthAutho
     return HealthAuthoritySiteUtils.isLocked(this);
   }
 
+  public isClosed(): boolean {
+    return HealthAuthoritySiteUtils.isClosed(this);
+  }
+
   public isApproved(): boolean {
     return HealthAuthoritySiteUtils.isApproved(this);
   }

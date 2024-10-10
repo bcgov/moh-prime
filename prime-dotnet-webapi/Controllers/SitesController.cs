@@ -1382,5 +1382,65 @@ namespace Prime.Controllers
             var site = await _deviceProviderService.GetDeviceProviderSiteAsync(deviceProviderId);
             return Ok(site);
         }
+
+        // POST: api/Sites/5/close
+        /// <summary>
+        /// Close a site
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="closeSiteUpdateModel"></param>
+        [HttpPost("{siteId}/close", Name = nameof(CloseSite))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> CloseSite(int siteId, CloseSiteUpdateModel closeSiteUpdateModel)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Close, status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            await _siteService.CloseSite(siteId, closeSiteUpdateModel.SiteCloseReasonCode, closeSiteUpdateModel.Note);
+
+            return Ok();
+        }
+
+        // POST: api/Sites/5/open
+        /// <summary>
+        /// Open a site
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="openSiteUpdateModel"></param>
+        [HttpPost("{siteId}/open", Name = nameof(OpenSite))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> OpenSite(int siteId, OpenSiteUpdateModel openSiteUpdateModel)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Open, status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            await _siteService.OpenSite(siteId, openSiteUpdateModel.Note);
+
+            return Ok();
+        }
     }
 }

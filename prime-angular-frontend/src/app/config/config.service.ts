@@ -119,6 +119,11 @@ export class ConfigService implements IConfigService {
       .sort(this.utilsService.sortByKey<DeviceProviderRoleConfig>('weight'));
   }
 
+  public get siteCloseReasons(): Config<number>[] {
+    return [...this.configuration.siteCloseReasons]
+      .sort(this.utilsService.sortByKey<Config<number>>('name'));
+  }
+
   /**
    * @description
    * Load the runtime configuration.

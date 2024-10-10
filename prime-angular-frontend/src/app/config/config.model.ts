@@ -17,6 +17,7 @@ export interface Configuration {
   securityGroups: Config<number>[];
   collegeLicenseGroupings: CollegeLicenseGroupingConfig[];
   deviceProviderRoles: DeviceProviderRoleConfig[];
+  siteCloseReasons: Config<number>[];
 }
 
 export class Config<T> {

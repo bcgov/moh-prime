@@ -24,7 +24,7 @@ COPY backup.cron /etc/cron.d
 RUN echo "Checking workdir..." && \
     apt-get update -yqq
 
-RUN apt-get -y install nano net-tools gnupg wget ca-certificates apt-transport-https cron inetutils-ping libcurl4-openssl-dev 
+RUN apt-get -y install nano net-tools gnupg wget ca-certificates apt-transport-https cron inetutils-ping libcurl4-openssl-dev
 
 RUN chmod -R 755 /opt/backup && \
     touch /var/log/cron.log && \

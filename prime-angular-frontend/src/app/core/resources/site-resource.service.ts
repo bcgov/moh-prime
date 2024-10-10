@@ -606,4 +606,26 @@ export class SiteResource {
         })
       );
   }
+
+  public closeSite(siteId: number, siteCloseReasonCode: number, note: string): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/close`, { note, siteCloseReasonCode })
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::closeSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public openSite(siteId: number, note: string): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/open`, { note })
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::openSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }

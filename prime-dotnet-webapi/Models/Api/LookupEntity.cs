@@ -22,5 +22,6 @@ namespace Prime.Models.Api
         public List<CareType> CareTypes { get; set; }
         public List<SecurityGroup> SecurityGroups { get; set; }
         public List<DeviceProviderRole> DeviceProviderRoles { get; set; }
+        public List<SiteCloseReason> SiteCloseReasons { get; set; }
     }
 }

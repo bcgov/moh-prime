@@ -22,6 +22,10 @@ export class HealthAuthoritySiteUtils {
     return healthAuthoritySite.status === SiteStatusType.LOCKED;
   }
 
+  public static isClosed(healthAuthoritySite: BaseHealthAuthoritySite): boolean {
+    return healthAuthoritySite.status === SiteStatusType.CLOSED;
+  }
+
   public static isApproved(healthAuthoritySite: BaseHealthAuthoritySite): boolean {
     return healthAuthoritySite.status === SiteStatusType.EDITABLE
       && !!healthAuthoritySite.approvedDate;

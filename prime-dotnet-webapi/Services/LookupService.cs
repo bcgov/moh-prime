@@ -105,6 +105,9 @@ namespace Prime.Services
                 DeviceProviderRoles = await _context.Set<DeviceProviderRole>()
                     .AsNoTracking()
                     .ToListAsync(),
+                SiteCloseReasons = await _context.Set<SiteCloseReason>()
+                    .AsNoTracking()
+                    .ToListAsync(),
             };
         }
 

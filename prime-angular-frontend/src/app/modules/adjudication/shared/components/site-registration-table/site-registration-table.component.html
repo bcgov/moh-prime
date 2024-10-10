@@ -93,7 +93,7 @@
         [class.editable]="row.status === SiteStatusType.EDITABLE && !row.approvedDate"
         [class.under-review]="row.status === SiteStatusType.IN_REVIEW"
         [class.approved]="row.status === SiteStatusType.EDITABLE && !!row.approvedDate"
-        [class.declined]="row.status === SiteStatusType.LOCKED">
+        [class.declined]="row.status === SiteStatusType.LOCKED || row.status === SiteStatusType.CLOSED">
       <div class="d-flex align-items-center">
         <span class="mr-1">{{ SiteStatusType[row.status] | case : 'snake' : 'space' | capitalize : true | default: 'Editable' }}</span>
         <mat-icon *ngIf="row?.flagged"

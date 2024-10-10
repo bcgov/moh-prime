@@ -87,6 +87,7 @@ namespace Prime
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Site> Sites { get; set; }
+        public DbSet<SiteStatus> SiteStatuses { get; set; }
         public DbSet<SiteVendor> SiteVendors { get; set; }
         public DbSet<CommunitySite> CommunitySites { get; set; }
         public DbSet<Contact> Contacts { get; set; }
@@ -100,6 +101,7 @@ namespace Prime
         public DbSet<Credential> Credentials { get; set; }
         public DbSet<OrganizationClaim> OrganizationClaims { get; set; }
         public DbSet<IndividualDeviceProvider> IndividualDeviceProviders { get; set; }
+        public DbSet<SiteCloseReason> SiteCloseReasons { get; set; }
 
         // Health Authorities
         public DbSet<HealthAuthoritySite> HealthAuthoritySites { get; set; }

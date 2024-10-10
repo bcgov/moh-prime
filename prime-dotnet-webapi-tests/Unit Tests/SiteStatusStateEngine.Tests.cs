@@ -27,7 +27,8 @@ namespace PrimeTests.UnitTests
             var expectedAllowed = new[]
             {
                 SiteRegistrationAction.Submit,
-                SiteRegistrationAction.Reject
+                SiteRegistrationAction.Reject,
+                SiteRegistrationAction.Close
             }.Contains(action);
 
             // Act
@@ -51,6 +52,20 @@ namespace PrimeTests.UnitTests
 
             // Act
             var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.InReview);
+        }
+
+        [Theory]
+        [MemberData(nameof(SiteRegistrationActionData))]
+        public void TestAllowableStatusChange_Closed(SiteRegistrationAction action)
+        {
+            // Arrange
+            var expectedAllowed = new[]
+            {
+                SiteRegistrationAction.Open
+            }.Contains(action);
+
+            // Act
+            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Closed);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);

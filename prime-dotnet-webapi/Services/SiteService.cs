@@ -540,5 +540,60 @@ namespace Prime.Services
                 .Select(s => s.PEC)
                 .SingleOrDefaultAsync();
         }
+
+        public async Task CloseSite(int siteId, int siteCloseReasonCode, string note)
+        {
+            var site = await _context.Sites
+                .Where(s => s.Id == siteId)
+                .SingleOrDefaultAsync();
+
+            site.SiteCloseReasonCode = siteCloseReasonCode;
+            site.ClosedDate = DateTimeOffset.Now;
+            site.AddStatus(SiteStatusType.Closed);
+
+            _context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not submit the site.");
+            }
+
+            var reasonString = await _context.SiteCloseReasons.AsNoTracking()
+                .Where(r => r.Code == siteCloseReasonCode)
+                .Select(r => r.Name)
+                .FirstOrDefaultAsync();
+
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been closed (Reason: {reasonString}, Note: {note})");
+        }
+
+        public async Task OpenSite(int siteId, string note)
+        {
+            var site = await _context.Sites
+                .Where(s => s.Id == siteId)
+                .SingleOrDefaultAsync();
+
+            site.SiteCloseReasonCode = null;
+            site.ClosedDate = null;
+
+            var siteStatusList = await _context.SiteStatuses
+                .Where(ss => ss.SiteId == siteId)
+                .OrderByDescending(ss => ss.Id)
+                .ToArrayAsync();
+
+            var previousStatus = siteStatusList[1];
+            // open site with the previous status/state
+            site.AddStatus(previousStatus.StatusType);
+
+            _context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not submit the site.");
+            }
+
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been re-opened (Note: {note})");
+        }
     }
 }
