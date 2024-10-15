@@ -25,5 +25,6 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public string PharmanetAdministratorName { get; set; }
         public string TechnicalSupportName { get; set; }
         public IEnumerable<BusinessDayViewModel> BusinessHours { get; set; }
+        public SiteSubmission CurrentSubmission { get; set; }
     }
 }

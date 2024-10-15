@@ -92,6 +92,7 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
       ...healthAuthCareTypeFormState,
       ...hoursOperationFormState,
       ...administratorFormState,
+      currentSubmission: null
     });
   }
 

@@ -85,6 +85,8 @@ export class MockCommunitySiteService {
       isNew: false,
       individualDeviceProviders: [],
       deviceProviderId: null,
+      currentSubmission: null,
+      siteSubmissions: [],
       missingBusinessLicence: false
     });
   }

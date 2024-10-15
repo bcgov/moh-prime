@@ -26,6 +26,7 @@ namespace Prime.Controllers
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly IAuthorizedUserService _authorizedUserService;
         private readonly ISiteService _siteService;
+        private readonly ISiteSubmissionService _siteSubmissionService;
 
         public HealthAuthoritySitesController(
             IEmailService emailService,
@@ -33,7 +34,8 @@ namespace Prime.Controllers
             IHealthAuthorityService healthAuthorityService,
             IHealthAuthoritySiteService healthAuthoritySiteService,
             ISiteService siteService,
-            IAuthorizedUserService authorizedUserService
+            IAuthorizedUserService authorizedUserService,
+            ISiteSubmissionService siteSubmissionService
         )
         {
             _emailService = emailService;
@@ -42,6 +44,7 @@ namespace Prime.Controllers
             _healthAuthoritySiteService = healthAuthoritySiteService;
             _siteService = siteService;
             _authorizedUserService = authorizedUserService;
+            _siteSubmissionService = siteSubmissionService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -273,6 +276,7 @@ namespace Prime.Controllers
 
             await _healthAuthoritySiteService.UpdateSiteAsync(siteId, updateModel, authorizedUser.Id);
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+            await _siteSubmissionService.CreateHealthAuthoritySiteSubmissionAsync(siteId);
             await _businessEventService.CreateSiteEmailEventAsync(siteId, User.GetPrimeUsername(), "Health Authority Site has been updated and submitted");
 
             await _emailService.SendHealthAuthoritySiteRegistrationSubmissionAsync(siteId);
