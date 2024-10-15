@@ -225,6 +225,81 @@ export abstract class AbstractSiteAdminPage {
       .subscribe(() => this.onRefresh());
   }
 
+  public onArchive(siteId: number): void {
+    const data: DialogOptions = {
+      title: 'Archive Site Registration',
+      message: 'Are you sure you want to archive this Site Registration?',
+      actionText: 'Archive Site',
+      actionType: 'warn',
+      component: NoteComponent
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) =>
+          (result)
+            ? of(result.output ?? null)
+            : EMPTY
+        ),
+        exhaustMap((note: string) =>
+          this.siteResource.archiveSite(siteId, note)
+            .pipe(
+              map(() => this.updateSite(siteId, { status: SiteStatusType.ARCHIVED })),
+              map(() => note)
+            )
+        )
+      )
+      .subscribe(() => this.onRefresh());
+  }
+
+  public onRestore(siteId: number): void {
+
+    this.siteResource.canRestoreSite(siteId)
+      .subscribe((value: boolean) => {
+
+        if (value) {
+          const data: DialogOptions = {
+            title: 'Restore Archived Site Registration',
+            message: 'Are you sure you want to restore this Site Registration?',
+            actionText: 'Restore Site',
+            actionType: 'warn',
+            component: NoteComponent
+          };
+
+          this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+            .afterClosed()
+            .pipe(
+              exhaustMap((result: { output: string }) =>
+                (result)
+                  ? of(result.output ?? null)
+                  : EMPTY
+              ),
+              exhaustMap((note: string) =>
+                this.siteResource.restoreArchivedSite(siteId, note)
+                  .pipe(
+                    map(() => this.updateSite(siteId, { status: SiteStatusType.EDITABLE })),
+                    map(() => note)
+                  )
+              )
+            )
+            .subscribe(() => this.onRefresh());
+        } else {
+          const data: DialogOptions = {
+            title: 'Restore Archived Site Registration',
+            message: 'Site ID has been used in a different site. This Site can\'t be restored.',
+            cancelText: "Close",
+            actionType: 'warn',
+            actionHide: true
+          };
+
+          this.dialog.open(ConfirmDialogComponent, { data })
+            .afterClosed()
+            .subscribe();
+        }
+      });
+  }
+
   public onEnableEditing(siteId: number): void {
     this.busy = this.siteResource.enableEditingSite(siteId)
       .subscribe(() => this.onRefresh());
