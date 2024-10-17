@@ -3,5 +3,6 @@ export enum SiteStatusType {
   IN_REVIEW = 2,
   LOCKED = 3,
   EDITABLE_NOT_APPROVED = 4,
-  FLAGGED = 5
+  FLAGGED = 5,
+  ARCHIVED = 8,
 }

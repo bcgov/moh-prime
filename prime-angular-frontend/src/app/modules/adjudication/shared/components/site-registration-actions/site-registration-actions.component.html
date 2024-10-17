@@ -72,6 +72,23 @@
       <mat-icon>flag</mat-icon>
       <span>{{siteRegistration?.isNew ? 'Unflag' : 'Flag'}} "Is New"</span>
     </button>
+
+    <button mat-menu-item
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            *ngIf="isActionAllowed(SiteAdjudicationAction.ARCHIVE)"
+            (click)="onArchive()">
+      <mat-icon>archive</mat-icon>
+      <span>Archive Site</span>
+    </button>
+
+    <button mat-menu-item
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            *ngIf="isActionAllowed(SiteAdjudicationAction.RESTORE)"
+            (click)="onRestore()">
+      <mat-icon>unarchive</mat-icon>
+      <span>Restore Site</span>
+    </button>
+
     <mat-divider></mat-divider>
 
     <button mat-menu-item

@@ -606,4 +606,37 @@ export class SiteResource {
         })
       );
   }
+
+  public archiveSite(siteId: number, note: string): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/archive`, { note })
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::archiveSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public restoreArchivedSite(siteId: number, note: string): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/restore`, { note })
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::restoreArchivedSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public canRestoreSite(siteId: number): Observable<boolean> {
+    return this.apiResource.get<boolean>(`sites/${siteId}/can-restore`)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::canRestoreSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }
