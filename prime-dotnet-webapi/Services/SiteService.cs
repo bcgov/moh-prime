@@ -605,7 +605,7 @@ namespace Prime.Services
                 .Where(s => s.PEC == site.PEC && s.Id != site.Id).Select(s => s)
                 .ToListAsync();
 
-            return sites.Where(s => s.Status == SiteStatusType.Editable).Any();
+            return !sites.Where(s => s.Status == SiteStatusType.Editable).Any();
         }
     }
 }
