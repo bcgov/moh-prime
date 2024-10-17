@@ -13,6 +13,7 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 interface SelfDeclarationComposite {
   selfDeclarationTypeCode: SelfDeclarationTypeEnum;
@@ -54,10 +55,17 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
 
   constructor(
     private enrolmentResource: EnrolmentResource,
+    private enrolmentFormStateService: EnrolmentFormStateService,
     private utilsService: UtilsService,
     private router: Router
   ) {
     this.route = new EventEmitter<void>();
+  }
+
+  public requireUpdateIfChangedToDeviceProvider(): boolean {
+    //check if the care setting has been changed to Device Provider or from Device Provider to other care setting
+    return this.enrolmentFormStateService.json.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
+      && this.selfDeclarationComposites.some(sd => sd.selfDeclarationQuestion === undefined);
   }
 
   public isAdjudication(): boolean {
@@ -79,9 +87,9 @@ export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
   public ngOnInit(): void {
     if (this.selfDeclarationQuestions.size === 0) {
 
-      const isDeviceProvider = this.enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-      let targetDate = this.enrolment.selfDeclarationCompletedDate ?
-        this.enrolment.selfDeclarationCompletedDate : this.enrolment.currentStatus.statusDate;
+      const isDeviceProvider = this.enrolment?.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+      let targetDate = this.enrolment?.selfDeclarationCompletedDate ?
+        this.enrolment?.selfDeclarationCompletedDate : this.enrolment.currentStatus.statusDate;
       this.enrolmentResource.getSelfDeclarationVersion(moment(targetDate).utc().format(), isDeviceProvider).subscribe(
         (versions) => {
           versions.forEach(v => {
