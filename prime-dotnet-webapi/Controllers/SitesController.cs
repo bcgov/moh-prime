@@ -1463,7 +1463,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> CanBeRestore(int siteId)
         {
-            return Ok(!await _siteService.CanBeRestore(siteId));
+            var result = await _siteService.CanBeRestore(siteId);
+            return Ok(result);
         }
     }
 }
