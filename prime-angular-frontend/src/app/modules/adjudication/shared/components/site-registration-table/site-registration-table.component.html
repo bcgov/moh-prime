@@ -109,7 +109,17 @@
         *matHeaderCellDef
         scope="col"> Site ID </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.pec | default }} </td>
+        *matCellDef="let row;">
+      <div class="d-flex align-items-center">
+        {{ row.pec | default }}
+        <mat-icon *ngIf="row?.duplicatePecSiteCount && row?.duplicatePecSiteCount > 0"
+                  [matTooltip]="getDuplicatePecText(row)"
+                  class="pec-alert"
+                  (click)="onPecFilter(row.pec)"
+                  matTooltipPosition="after">info
+        </mat-icon>
+      </div>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="remoteUsers">

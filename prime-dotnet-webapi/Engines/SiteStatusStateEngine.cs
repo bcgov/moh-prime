@@ -22,6 +22,7 @@ namespace Prime.Engines
                 (SiteRegistrationAction.Unreject, SiteStatusType.Locked) => true,
                 // Archive
                 (SiteRegistrationAction.Archive, SiteStatusType.Editable) => true,
+                (SiteRegistrationAction.Archive, SiteStatusType.InReview) => true,
                 // Restore
                 (SiteRegistrationAction.Restore, SiteStatusType.Archived) => true,
 

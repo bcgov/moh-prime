@@ -21,6 +21,7 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
+import { SiteActionEnum, SiteArchiveRestoreComponent } from '@shared/components/dialogs/content/site-archive-restore/site-archive-restore.component';
 
 export abstract class AbstractSiteAdminPage {
   public abstract busy: Subscription;
@@ -198,7 +199,7 @@ export abstract class AbstractSiteAdminPage {
       message: 'Are you sure you want to reject this Site Registration?',
       actionText: 'Reject Site Registration',
       actionType: 'warn',
-      component: NoteComponent
+      component: NoteComponent,
     };
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
@@ -227,30 +228,16 @@ export abstract class AbstractSiteAdminPage {
 
   public onArchive(siteId: number): void {
     const data: DialogOptions = {
-      title: 'Archive Site Registration',
-      message: 'Are you sure you want to archive this Site Registration?',
-      actionText: 'Archive Site',
-      actionType: 'warn',
-      component: NoteComponent
+      data: {
+        siteId: siteId,
+        action: SiteActionEnum.Archive,
+      }
     };
 
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+    this.busy = this.dialog.open(SiteArchiveRestoreComponent, { data })
       .afterClosed()
-      .pipe(
-        exhaustMap((result: { output: string }) =>
-          (result)
-            ? of(result.output ?? null)
-            : EMPTY
-        ),
-        exhaustMap((note: string) =>
-          this.siteResource.archiveSite(siteId, note)
-            .pipe(
-              map(() => this.updateSite(siteId, { status: SiteStatusType.ARCHIVED })),
-              map(() => note)
-            )
-        )
-      )
-      .subscribe(() => this.onRefresh());
+      .subscribe((result: { reload: boolean }) => (result?.reload) ?
+        this.getDataset(this.route.snapshot.queryParams) : noop);
   }
 
   public onRestore(siteId: number): void {
@@ -260,33 +247,20 @@ export abstract class AbstractSiteAdminPage {
 
         if (value) {
           const data: DialogOptions = {
-            title: 'Restore Archived Site Registration',
-            message: 'Are you sure you want to restore this Site Registration?',
-            actionText: 'Restore Site',
-            actionType: 'warn',
-            component: NoteComponent
+            data: {
+              siteId: siteId,
+              action: SiteActionEnum.Restore,
+            }
           };
 
-          this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+          this.busy = this.dialog.open(SiteArchiveRestoreComponent, { data })
             .afterClosed()
-            .pipe(
-              exhaustMap((result: { output: string }) =>
-                (result)
-                  ? of(result.output ?? null)
-                  : EMPTY
-              ),
-              exhaustMap((note: string) =>
-                this.siteResource.restoreArchivedSite(siteId, note)
-                  .pipe(
-                    map(() => this.updateSite(siteId, { status: SiteStatusType.EDITABLE })),
-                    map(() => note)
-                  )
-              )
-            )
-            .subscribe(() => this.onRefresh());
+            .subscribe((result: { reload: boolean }) => (result?.reload) ?
+              this.getDataset(this.route.snapshot.queryParams) : noop);
+
         } else {
           const data: DialogOptions = {
-            title: 'Restore Archived Site Registration',
+            title: 'Restore Archived Site',
             message: 'Site ID has been used in a different site. This Site can\'t be restored.',
             cancelText: "Close",
             actionType: 'warn',
