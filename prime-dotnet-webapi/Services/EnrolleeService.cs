@@ -18,6 +18,8 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Models.VerifiableCredentials;
 using Prime.ViewModels;
+using Prime.Migrations;
+using RazorEngine.Compilation.ImpromptuInterface;
 
 namespace Prime.Services
 {
@@ -369,6 +371,7 @@ namespace Prime.Services
             UpdateRemoteAccessLocations(enrollee, updateModel);
 
             UpdateOboSites(enrollee, updateModel);
+            await UpdateUnlistedCertification(enrollee, updateModel);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -573,6 +576,47 @@ namespace Prime.Services
             }
         }
 
+        private async Task UpdateUnlistedCertification(Enrollee enrollee, EnrolleeUpdateModel enrolleeUpdateModel)
+        {
+            var enrolleeUnlistedCertifications = await _context.UnlistedCertifications
+                .Where(uc => uc.EnrolleeId == enrollee.Id).ToListAsync();
+
+            if (enrolleeUpdateModel.UnlistedCertifications != null && enrolleeUpdateModel.UnlistedCertifications.Count > 0)
+            {
+                foreach (var unlistedCert in enrolleeUpdateModel.UnlistedCertifications)
+                {
+                    var matchingUnlistedCert = enrolleeUnlistedCertifications.Where(uc => uc.LicenceClass == unlistedCert.LicenceClass &&
+                        uc.CollegeName == unlistedCert.CollegeName &&
+                        uc.LicenceNumber == unlistedCert.LicenceNumber &&
+                        uc.RenewalDate == unlistedCert.RenewalDate).SingleOrDefault();
+
+                    if (matchingUnlistedCert == null)
+                    {
+                        await _context.AddAsync(new Models.UnlistedCertification
+                        {
+                            EnrolleeId = enrollee.Id,
+                            CollegeName = unlistedCert.CollegeName,
+                            LicenceNumber = unlistedCert.LicenceNumber,
+                            RenewalDate = unlistedCert.RenewalDate,
+                            LicenceClass = unlistedCert.LicenceClass
+                        });
+                    }
+                    else
+                    {
+                        enrolleeUnlistedCertifications.Remove(matchingUnlistedCert);
+                    }
+                }
+                if (enrolleeUnlistedCertifications.Count > 0)
+                {
+                    enrolleeUnlistedCertifications.ForEach(uc => _context.Remove(uc));
+                }
+            }
+            else
+            {
+                enrolleeUnlistedCertifications.ForEach(uc => _context.Remove(uc));
+            }
+        }
+
         private void UpdateOboSites(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
         {
             // Wholesale replace the obo sites
@@ -693,6 +737,14 @@ namespace Prime.Services
                 .Where(c => c.EnrolleeId == enrolleeId)
                 .ProjectTo<CertificationViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<UnlistedCertificationViewModel>> GetUnlistedCertificationsAsync(int enrolleeId)
+        {
+            return await _context.UnlistedCertifications
+            .Where(c => c.EnrolleeId == enrolleeId)
+            .ProjectTo<UnlistedCertificationViewModel>(_mapper.ConfigurationProvider)
+            .ToListAsync();
         }
 
         public async Task<IEnumerable<EnrolleeDeviceProviderViewModel>> GetEnrolleeDeviceProvidersAsync(int enrolleeId)
