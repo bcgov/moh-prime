@@ -192,7 +192,7 @@
               color="primary"
               title="Download Organization Agreement"
               [matMenuTriggerFor]="subMenu"
-              [disabled]="!organizationAgreements?.length">
+              [disabled]="!organizationAgreements?.length || isPendingTransfer()">
         <mat-icon>cloud_download</mat-icon>
         <span class="icon-text">Downloads</span>
       </button>
