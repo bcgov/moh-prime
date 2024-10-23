@@ -183,7 +183,7 @@
               [disabled]="isPendingTransfer()"
               (click)="viewOrganization(organization)">
         <mat-icon>description</mat-icon>
-        <span class="pl-1">Organization Info</span>
+        <span class="icon-text">Organization Info</span>
       </button>
 
       <button mat-button
@@ -194,7 +194,7 @@
               [matMenuTriggerFor]="subMenu"
               [disabled]="!organizationAgreements?.length">
         <mat-icon>cloud_download</mat-icon>
-        <span class="pl-1">Downloads</span>
+        <span class="icon-text">Downloads</span>
       </button>
     </div>
 
@@ -219,18 +219,18 @@
               [disabled]="isPendingTransfer()"
               (click)="viewSite(organizationId, site)">
         <mat-icon>description</mat-icon>
-        <span class="pl-1">Site Info</span>
+        <span class="icon-text">Site Info</span>
       </button>
       <button mat-button
               class="title_button"
               type="button"
               color="primary"
-              title="View/Update Remote Practitioner"
+              title="View/Update Remote Practitioners"
               *ngIf="site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE"
               [disabled]="isPendingTransfer() || !site.completed || site.status === SiteStatusType.IN_REVIEW || site.status === SiteStatusType.LOCKED"
               (click)="viewSiteRemoteUsers(organizationId, site)">
         <mat-icon>folder_shared</mat-icon>
-        <span class="pl-1">Remote Practitioner</span>
+        <span class="icon-text">Remote Practitioners</span>
       </button>
     </div>
   </ng-template>
