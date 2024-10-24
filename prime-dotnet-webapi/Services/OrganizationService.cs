@@ -82,7 +82,7 @@ namespace Prime.Services
         public async Task<Organization> GetOrganizationByPecAsync(string pec)
         {
             return await GetBaseOrganizationQuery()
-                .Include(o => o.Sites)
+                .Include(o => o.Sites.Where(s => s.ArchivedDate == null))
                 .Where(o => o.Sites.Any(s => s.PEC == pec))
                 .SingleOrDefaultAsync();
         }

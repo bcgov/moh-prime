@@ -21,13 +21,31 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SiteRegistrationActionData))]
-        public void TestAllowableStatusChange_Active(SiteRegistrationAction action)
+        public void TestAllowableStatusChange_Actived(SiteRegistrationAction action)
+        {
+            // Arrange
+            var expectedAllowed = new[]
+            {
+                SiteRegistrationAction.Restore,
+            }.Contains(action);
+
+            // Act
+            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Archived);
+
+            // Assert
+            Assert.Equal(expectedAllowed, allowed);
+        }
+
+        [Theory]
+        [MemberData(nameof(SiteRegistrationActionData))]
+        public void TestAllowableStatusChange_Archive(SiteRegistrationAction action)
         {
             // Arrange
             var expectedAllowed = new[]
             {
                 SiteRegistrationAction.Submit,
-                SiteRegistrationAction.Reject
+                SiteRegistrationAction.Reject,
+                SiteRegistrationAction.Archive
             }.Contains(action);
 
             // Act
@@ -46,7 +64,8 @@ namespace PrimeTests.UnitTests
             {
                 SiteRegistrationAction.Approve,
                 SiteRegistrationAction.Reject,
-                SiteRegistrationAction.RequestChange
+                SiteRegistrationAction.RequestChange,
+                SiteRegistrationAction.Archive
             }.Contains(action);
 
             // Act

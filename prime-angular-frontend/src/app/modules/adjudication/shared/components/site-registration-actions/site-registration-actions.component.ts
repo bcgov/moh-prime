@@ -22,6 +22,8 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public reject: EventEmitter<number>;
   @Output() public unreject: EventEmitter<number>;
   @Output() public escalate: EventEmitter<number>;
+  @Output() public archive: EventEmitter<number>;
+  @Output() public restore: EventEmitter<number>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
   @Output() public enableEditing: EventEmitter<number>;
   @Output() public flag: EventEmitter<{ siteId: number, flagged: boolean }>;
@@ -41,6 +43,8 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.reject = new EventEmitter<number>();
     this.unreject = new EventEmitter<number>();
     this.escalate = new EventEmitter<number>();
+    this.archive = new EventEmitter<number>();
+    this.restore = new EventEmitter<number>();
     this.enableEditing = new EventEmitter<number>();
     this.flag = new EventEmitter<{ siteId: number, flagged: boolean }>();
     this.isNew = new EventEmitter<{ siteId: number, isNew: boolean }>();
@@ -80,6 +84,14 @@ export class SiteRegistrationActionsComponent implements OnInit {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
       this.escalate.emit(this.siteRegistration.id);
     }
+  }
+
+  public onArchive() {
+    this.archive.emit(this.siteRegistration.id);
+  }
+
+  public onRestore() {
+    this.restore.emit(this.siteRegistration.id);
   }
 
   public onContactSigningAuthority() {
@@ -161,13 +173,17 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public isActionAllowed(action: SiteAdjudicationAction): boolean {
     switch (this.siteRegistration.status) {
       case SiteStatusType.EDITABLE:
-        return (action === SiteAdjudicationAction.REJECT);
+        return (action === SiteAdjudicationAction.REJECT
+          || action === SiteAdjudicationAction.ARCHIVE);
       case SiteStatusType.IN_REVIEW:
         return (action === SiteAdjudicationAction.REQUEST_CHANGES
           || action === SiteAdjudicationAction.APPROVE
-          || action === SiteAdjudicationAction.REJECT);
+          || action === SiteAdjudicationAction.REJECT
+          || action === SiteAdjudicationAction.ARCHIVE);
       case SiteStatusType.LOCKED:
         return (action === SiteAdjudicationAction.UNREJECT);
+      case SiteStatusType.ARCHIVED:
+        return (action === SiteAdjudicationAction.RESTORE);
       default:
         return false;
     }
