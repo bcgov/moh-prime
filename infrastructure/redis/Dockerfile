@@ -8,8 +8,7 @@ FROM rhel8/redis-6
 #  * $REDIS_PASSWORD - Database password
 
 EXPOSE 6379
-USER 1001
-
+USER root 
 # Add Tini
 ENV TINI_VERSION v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
