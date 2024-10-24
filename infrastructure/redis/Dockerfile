@@ -1,4 +1,4 @@
-FROM ubi9/s2i-core:rhel9.4.0
+FROM ubi9/s2i-core
 
 # Redis image based on Software Collections packages
 #
