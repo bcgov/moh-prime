@@ -56,6 +56,7 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 30 },
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 31 },
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 68 },
+                    new CollegeLicense { CollegeCode = 2, LicenseCode = 178 },
 
                     // Nurses
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 32,  CollegeLicenseGroupingCode = 2 },

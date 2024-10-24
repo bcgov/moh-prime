@@ -47,14 +47,15 @@ namespace Prime.Configuration.Database
                     new License { Code = 67, Weight = 34, Name = "Conditional - Podiatric Surgeon Disciplined"         },
 
                     // Pharmacy
-                    new License { Code = 25, Weight = 1, Name = "Full Pharmacist"                    },
-                    new License { Code = 26, Weight = 2, Name = "Limited Pharmacist"                 },
-                    new License { Code = 28, Weight = 3, Name = "Student Pharmacist"                 },
-                    new License { Code = 27, Weight = 4, Name = "Temporary Pharmacist"               },
-                    new License { Code = 30, Weight = 5, Name = "Non-Practicing Pharmacist"          },
-                    new License { Code = 29, Weight = 6, Name = "Pharmacy Technician"                },
-                    new License { Code = 31, Weight = 7, Name = "Non-Practicing Pharmacy Technician" },
-                    new License { Code = 68, Weight = 8, Name = "Temporary Pharmacy Technician"      },
+                    new License { Code = 25, Weight = 10, Name = "Full Pharmacist"                    },
+                    new License { Code = 26, Weight = 20, Name = "Limited Pharmacist"                 },
+                    new License { Code = 28, Weight = 30, Name = "Student Pharmacist"                 },
+                    new License { Code = 27, Weight = 40, Name = "Temporary Pharmacist"               },
+                    new License { Code = 178, Weight = 45, Name = "Temporary Limited Pharmacist"      },
+                    new License { Code = 30, Weight = 50, Name = "Non-Practicing Pharmacist"          },
+                    new License { Code = 29, Weight = 60, Name = "Pharmacy Technician"                },
+                    new License { Code = 31, Weight = 70, Name = "Non-Practicing Pharmacy Technician" },
+                    new License { Code = 68, Weight = 80, Name = "Temporary Pharmacy Technician"      },
 
                     // Nursing
                     new License { Code = 47,  Weight = 1,  Name = "Practicing Nurse Practitioner"                          },
