@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { EMPTY } from 'rxjs';
 
 import { noop, of } from 'rxjs';
 import { exhaustMap, map, pairwise, startWith, tap } from 'rxjs/operators';
@@ -23,6 +24,8 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { CareSettingPageFormState } from './care-setting-page-form-state.class';
 import { NoContent } from '@core/resources/abstract-resource';
 import { IStep } from '@shared/components/progress-indicator/progress-indicator.component';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -170,15 +173,41 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
   }
 
   protected submissionRequest(): NoContent {
-    if (this.formState.json.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER) {
-      this.siteFormStateService.deviceProviderFormState.clearIndividualDeviceProviders();
-    }
-    if (this.formState.json.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
-      this.siteFormStateService.businessLicenceFormState.resetSiteId();
+
+    const sitePayload = this.siteFormStateService.json;
+    const request$ = this.siteResource.updateSite(sitePayload);
+
+
+    if (this.formState.json.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
+      && this.vendorConfig.find(v => v.code === this.formState.vendorCode.value).name === 'CareConnect'
+    ) {
+      const data: DialogOptions = {
+        title: 'Save & Continue',
+        message: `I confirm I've contacted CareConnect.`,
+        actionText: 'Yes, I\'ve contacted CareConnect',
+        actionType: 'warn'
+      };
+
+      return this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((confirmation: boolean) => {
+            if (confirmation) {
+              return request$;
+            }
+            return EMPTY;
+          })
+        );
+    } else {
+      if (this.formState.json.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
+        this.siteFormStateService.businessLicenceFormState.resetSiteId();
+      }
+      if (this.formState.json.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER) {
+        this.siteFormStateService.deviceProviderFormState.clearIndividualDeviceProviders();
+      }
     }
 
-    const payload = this.siteFormStateService.json;
-    return this.siteResource.updateSite(payload);
+    return request$;
   }
 
   protected onSubmitFormIsValid(): void {
