@@ -183,7 +183,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
     ) {
       const data: DialogOptions = {
         title: 'Save & Continue',
-        message: `I confirm I've contacted CareConnect.`,
+        message: `I confirm I have contacted CareConnect.`,
         actionText: 'Yes, I\'ve contacted CareConnect',
         actionType: 'warn'
       };
