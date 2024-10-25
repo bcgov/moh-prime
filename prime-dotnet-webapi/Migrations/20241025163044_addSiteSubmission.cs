@@ -7,24 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Prime.Migrations
 {
     /// <inheritdoc />
-    public partial class AddSiteSubmission : Migration
+    public partial class addSiteSubmission : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropCheckConstraint(
-                name: "CHK_Agreement_EitherPartyOrEnrollee",
-                table: "Agreement");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Discriminator",
-                table: "HealthAuthorityContact",
-                type: "character varying(55)",
-                maxLength: 55,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "text");
-
             migrationBuilder.CreateTable(
                 name: "SiteSubmission",
                 columns: table => new
@@ -50,11 +37,6 @@ namespace Prime.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.AddCheckConstraint(
-                name: "CHK_Agreement_EitherPartyOrEnrollee",
-                table: "Agreement",
-                sql: "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\r\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
-
             migrationBuilder.CreateIndex(
                 name: "IX_SiteSubmission_SiteId",
                 table: "SiteSubmission",
@@ -66,24 +48,6 @@ namespace Prime.Migrations
         {
             migrationBuilder.DropTable(
                 name: "SiteSubmission");
-
-            migrationBuilder.DropCheckConstraint(
-                name: "CHK_Agreement_EitherPartyOrEnrollee",
-                table: "Agreement");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Discriminator",
-                table: "HealthAuthorityContact",
-                type: "text",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(55)",
-                oldMaxLength: 55);
-
-            migrationBuilder.AddCheckConstraint(
-                name: "CHK_Agreement_EitherPartyOrEnrollee",
-                table: "Agreement",
-                sql: "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END\n                     + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
         }
     }
 }

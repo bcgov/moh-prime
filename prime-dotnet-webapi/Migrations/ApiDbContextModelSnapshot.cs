@@ -19716,7 +19716,7 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Site", b =>
                 {
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
-                        .WithMany()
+                        .WithMany("Sites")
                         .HasForeignKey("AdjudicatorId");
 
                     b.HasOne("Prime.Models.CareSetting", "CareSetting")
@@ -20025,6 +20025,8 @@ namespace Prime.Migrations
                     b.Navigation("Enrollees");
 
                     b.Navigation("EnrolmentStatusReference");
+
+                    b.Navigation("Sites");
                 });
 
             modelBuilder.Entity("Prime.Models.Agreement", b =>
