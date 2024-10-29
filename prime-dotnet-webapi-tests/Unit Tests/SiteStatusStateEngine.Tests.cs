@@ -21,7 +21,7 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SiteRegistrationActionData))]
-        public void TestAllowableStatusChange_Actived(SiteRegistrationAction action)
+        public void TestAllowableActionOnArchived(SiteRegistrationAction action)
         {
             // Arrange
             var expectedAllowed = new[]
@@ -38,7 +38,7 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SiteRegistrationActionData))]
-        public void TestAllowableStatusChange_Archive(SiteRegistrationAction action)
+        public void TestAllowableActionOnEditable(SiteRegistrationAction action)
         {
             // Arrange
             var expectedAllowed = new[]
@@ -57,7 +57,7 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SiteRegistrationActionData))]
-        public void TestAllowableStatusChange_InReview(SiteRegistrationAction action)
+        public void TestAllowableActionOnInReview(SiteRegistrationAction action)
         {
             // Arrange
             var expectedAllowed = new[]
