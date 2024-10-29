@@ -193,6 +193,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
         .pipe(
           exhaustMap((confirmation: boolean) => {
             if (confirmation) {
+              this.siteFormStateService.businessLicenceFormState.resetSiteId();
               return request$;
             }
             return EMPTY;
