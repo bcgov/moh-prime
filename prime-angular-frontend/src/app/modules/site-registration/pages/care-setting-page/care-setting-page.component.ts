@@ -182,7 +182,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
       && this.vendorConfig.find(v => v.code === this.formState.vendorCode.value).name === 'CareConnect'
     ) {
       const data: DialogOptions = {
-        title: 'Save & Continue',
+        title: 'Save and Continue confirmation',
         message: `I confirm I have contacted CareConnect.`,
         actionText: 'Yes, I\'ve contacted CareConnect',
         actionType: 'warn'
