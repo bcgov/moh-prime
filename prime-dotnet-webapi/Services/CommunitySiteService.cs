@@ -44,7 +44,7 @@ namespace Prime.Services
 
             if (organizationId != null)
             {
-                query = query.Where(s => s.OrganizationId == organizationId);
+                query = query.Where(s => s.OrganizationId == organizationId && s.Organization.DeletedDate == null);
             }
 
             return await query.ToListAsync();
@@ -56,6 +56,7 @@ namespace Prime.Services
 
             var query = _context.CommunitySites
                 .AsNoTracking()
+                .Where(s => s.DeletedDate == null && s.Organization.DeletedDate == null)
                 .If(searchOptions.CareSettingCode.HasValue, q => q
                     .Where(s => s.CareSettingCode == searchOptions.CareSettingCode)
                 )
@@ -111,7 +112,7 @@ namespace Prime.Services
         public async Task<CommunitySite> GetSiteAsync(int siteId)
         {
             return await GetBaseSiteQuery()
-                .SingleOrDefaultAsync(s => s.Id == siteId);
+                .SingleOrDefaultAsync(s => s.Id == siteId && s.DeletedDate == null);
         }
 
         public async Task<List<Vendor>> GetVendorsAsync()
@@ -658,6 +659,7 @@ namespace Prime.Services
         private IQueryable<CommunitySite> GetBaseSiteQuery()
         {
             return _context.CommunitySites
+                .Where(s => s.DeletedDate == null)
                 .Include(s => s.Provisioner)
                 .Include(s => s.SiteVendors)
                     .ThenInclude(v => v.Vendor)

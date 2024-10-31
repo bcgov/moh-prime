@@ -40,7 +40,7 @@ namespace Prime.Models
 
         public bool Flagged { get; set; }
 
-        public bool IsNew {get; set;}
+        public bool IsNew { get; set; }
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
@@ -53,6 +53,8 @@ namespace Prime.Models
         public int? AdjudicatorId { get; set; }
 
         public Admin Adjudicator { get; set; }
+
+        public DateTimeOffset? DeletedDate { get; set; }
 
         [JsonIgnore]
         public ICollection<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }

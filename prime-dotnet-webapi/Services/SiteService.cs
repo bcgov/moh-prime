@@ -38,7 +38,7 @@ namespace Prime.Services
 
         public async Task<bool> SiteExistsAsync(int siteId)
         {
-            return await _context.Sites.AnyAsync(s => s.Id == siteId);
+            return await _context.Sites.AnyAsync(s => s.Id == siteId && s.DeletedDate == null);
         }
 
         public async Task<SiteStatusType> GetSiteCurrentStatusAsync(int siteId)
@@ -195,19 +195,9 @@ namespace Prime.Services
             {
                 await _businessEventService.CreateSiteEventAsync(siteId, "Site Deleted");
 
-                if (site.PhysicalAddress != null)
-                {
-                    _context.Addresses.Remove(site.PhysicalAddress);
-                }
+                site.DeletedDate = DateTime.UtcNow;
 
-                if (site is CommunitySite communitySite)
-                {
-                    await DeleteContactFromSite(communitySite.AdministratorPharmaNetId);
-                    await DeleteContactFromSite(communitySite.TechnicalSupportId);
-                    await DeleteContactFromSite(communitySite.PrivacyOfficerId);
-                }
-
-                _context.Sites.Remove(site);
+                _context.Update(site);
                 await _context.SaveChangesAsync();
             }
         }
@@ -324,24 +314,6 @@ namespace Prime.Services
                 .Select(group => group.First());
 
             return _mapper.Map<IEnumerable<RemoteAccessSearchViewModel>>(searchResults);
-        }
-
-        private async Task DeleteContactFromSite(int? contactId)
-        {
-            if (contactId == null)
-            {
-                return;
-            }
-
-            var contact = await _context.Contacts
-                .Include(contact => contact.PhysicalAddress)
-                .SingleAsync(contact => contact.Id == contactId);
-
-            if (contact.PhysicalAddress != null)
-            {
-                _context.Addresses.Remove(contact.PhysicalAddress);
-            }
-            _context.Contacts.Remove(contact);
         }
 
         public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)

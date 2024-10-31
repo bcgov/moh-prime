@@ -56,7 +56,8 @@ namespace Prime.Services
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(sa => sa.Addresses)
                         .ThenInclude(pa => pa.Address)
-                .Where(o => o.SigningAuthorityId == partyId)
+                .Include(o => o.Sites.Where(s => s.DeletedDate == null))
+                .Where(o => o.SigningAuthorityId == partyId && o.DeletedDate == null)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
@@ -65,7 +66,7 @@ namespace Prime.Services
         public async Task<Organization> GetOrganizationAsync(int organizationId)
         {
             return await GetBaseOrganizationQuery()
-                .Include(o => o.Sites)
+                .Include(o => o.Sites.Where(s => s.DeletedDate == null))
                     .ThenInclude(s => s.SiteStatuses)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
@@ -74,7 +75,7 @@ namespace Prime.Services
         {
             return await _context.Organizations
                 .AsNoTracking()
-                .Where(o => o.Id == organizationId)
+                .Where(o => o.Id == organizationId && o.DeletedDate == null)
                 .Select(o => o.SigningAuthorityId)
                 .SingleOrDefaultAsync();
         }
@@ -82,7 +83,7 @@ namespace Prime.Services
         public async Task<Organization> GetOrganizationByPecAsync(string pec)
         {
             return await GetBaseOrganizationQuery()
-                .Include(o => o.Sites)
+                .Include(o => o.Sites.Where(s => s.DeletedDate == null))
                 .Where(o => o.Sites.Any(s => s.PEC == pec))
                 .SingleOrDefaultAsync();
         }
@@ -153,7 +154,15 @@ namespace Prime.Services
                 return;
             }
 
-            _context.Organizations.Remove(organization);
+            var deletedDate = DateTime.UtcNow;
+            organization.DeletedDate = deletedDate;
+
+            foreach (var site in organization.Sites)
+            {
+                site.DeletedDate = deletedDate;
+            }
+
+            _context.Update(organization);
 
             await _context.SaveChangesAsync();
         }
@@ -162,7 +171,7 @@ namespace Prime.Services
         {
             return await GetBaseOrganizationQuery()
                 .AsNoTracking()
-                .SingleOrDefaultAsync(o => o.Id == organizationId);
+                .SingleOrDefaultAsync(o => o.Id == organizationId && o.DeletedDate == null);
         }
 
         /// <summary>
