@@ -596,7 +596,7 @@ namespace Prime.Services
             await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been restored (Note: {note})");
         }
 
-        public async Task<bool> CanBeRestore(int siteId)
+        public async Task<bool> CanBeRestored(int siteId)
         {
             //check if the site id is used by other site with editable status
             var site = await _context.Sites.Where(s => s.Id == siteId).Select(s => s).FirstAsync();

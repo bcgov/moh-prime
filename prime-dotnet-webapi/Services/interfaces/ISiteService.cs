@@ -54,6 +54,6 @@ namespace Prime.Services
         Task<List<Site>> GetSiteByPecAsync(string pec);
         Task ArchiveSite(int siteId, string note);
         Task RestoreArchivedSite(int siteId, string note);
-        Task<bool> CanBeRestore(int siteId);
+        Task<bool> CanBeRestored(int siteId);
     }
 }

@@ -1439,7 +1439,7 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            if (!await _siteService.CanBeRestore(siteId))
+            if (!await _siteService.CanBeRestored(siteId))
             {
                 return BadRequest("Site ID has been used in other site.");
             }
@@ -1454,15 +1454,15 @@ namespace Prime.Controllers
         /// Return is the site can be restored
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpGet("{siteId}/can-restore", Name = nameof(CanBeRestore))]
+        [HttpGet("{siteId}/can-restore", Name = nameof(CanBeRestored))]
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CanBeRestore(int siteId)
+        public async Task<ActionResult> CanBeRestored(int siteId)
         {
-            var result = await _siteService.CanBeRestore(siteId);
+            var result = await _siteService.CanBeRestored(siteId);
             return Ok(result);
         }
     }
