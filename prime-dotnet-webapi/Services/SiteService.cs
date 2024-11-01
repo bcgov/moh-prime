@@ -602,10 +602,11 @@ namespace Prime.Services
             var site = await _context.Sites.Where(s => s.Id == siteId).Select(s => s).FirstAsync();
 
             var sites = await _context.Sites
-                .Where(s => s.PEC == site.PEC && s.Id != site.Id).Select(s => s)
+                    .Include(s => s.SiteStatuses)
+                .Where(s => s.PEC == site.PEC).Select(s => s)
                 .ToListAsync();
 
-            return !sites.Where(s => s.Status == SiteStatusType.Editable).Any();
+            return sites.Count() == 0 || !sites.Where(s => s.Status == SiteStatusType.Editable || s.Status == SiteStatusType.InReview).Any();
         }
     }
 }
