@@ -1391,7 +1391,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="siteNoteUpdateModel"></param>
         [HttpPost("{siteId}/archive", Name = nameof(ArchiveSite))]
-        [Authorize(Roles = Roles.EditSite)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -1421,7 +1421,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="siteNoteUpdateModel"></param>
         [HttpPost("{siteId}/restore", Name = nameof(RestoreSite))]
-        [Authorize(Roles = Roles.EditSite)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -1455,7 +1455,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/can-restore", Name = nameof(CanBeRestore))]
-        [Authorize(Roles = Roles.EditSite)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
