@@ -14,7 +14,6 @@ using LinqKit;
 using System.Security.Claims;
 using Prime.HttpClients;
 using DelegateDecompiler.EntityFrameworkCore;
-using RazorEngine.Compilation.ImpromptuInterface.InvokeExt;
 
 namespace Prime.Services
 {
@@ -542,7 +541,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<List<Site>> GetSiteByPecAsync(string pec)
+        public async Task<List<Site>> GetSitesByPecAsync(string pec)
         {
             return await _context.Sites.Where(s => s.PEC == pec)
                 .Select(s => s).ToListAsync();

@@ -51,7 +51,7 @@ namespace Prime.Services
         Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId);
         Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId);
         Task<string> GetSitePecAsync(int siteId);
-        Task<List<Site>> GetSiteByPecAsync(string pec);
+        Task<List<Site>> GetSitesByPecAsync(string pec);
         Task ArchiveSite(int siteId, string note);
         Task RestoreArchivedSite(int siteId, string note);
         Task<bool> CanBeRestored(int siteId);
