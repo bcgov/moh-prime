@@ -28,5 +28,5 @@ export interface OrganizationSearchListViewModel {
 export interface SiteRegistrationListViewModel extends OrganizationListViewModelPartial, SiteListViewModelPartial {
   signingAuthorityName: string;
   organizationName: string;
-
+  duplicatePecSiteCount: number;
 }
