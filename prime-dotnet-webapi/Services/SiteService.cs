@@ -100,7 +100,7 @@ namespace Prime.Services
 
             return !await _context.Sites
                 .AsNoTracking()
-                .Where(s => s.PEC != "BC00000")
+                .Where(s => s.PEC != "BC00000" && s.ArchivedDate == null)
                 .AnyAsync(site => site.PEC == pec);
         }
 
@@ -539,6 +539,78 @@ namespace Prime.Services
                 .Where(s => s.Id == siteId)
                 .Select(s => s.PEC)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<List<Site>> GetSitesByPecAsync(string pec)
+        {
+            return await _context.Sites.Where(s => s.PEC == pec)
+                .Select(s => s).ToListAsync();
+        }
+
+        public async Task ArchiveSite(int siteId, string note)
+        {
+            var site = await _context.Sites
+                .Where(s => s.Id == siteId)
+                .SingleOrDefaultAsync();
+
+            site.AddStatus(SiteStatusType.Archived);
+            site.ArchivedDate = DateTime.Now;
+
+            _context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not archive the site.");
+            }
+
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been archived (Note: {note})");
+        }
+
+        public async Task RestoreArchivedSite(int siteId, string note)
+        {
+            var site = await _context.Sites
+                .Where(s => s.Id == siteId)
+                .SingleOrDefaultAsync();
+
+
+            var siteStatusList = await _context.SiteStatuses
+                .Where(ss => ss.SiteId == siteId)
+                .OrderByDescending(ss => ss.Id)
+                .ToArrayAsync();
+
+            var previousStatus = siteStatusList[1];
+            // restore site with the previous status/state
+            site.AddStatus(previousStatus.StatusType);
+
+            site.ArchivedDate = null;
+            _context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not restore the site.");
+            }
+
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been restored (Note: {note})");
+        }
+
+        public async Task<bool> CanBeRestored(int siteId)
+        {
+            //check if the site ID (PEC) is used by other site with editable status
+            var site = await _context.Sites.Where(s => s.Id == siteId).Select(s => s).FirstAsync();
+
+            if (site.PEC == null)
+            {
+                return true;
+            }
+
+            var sites = await _context.Sites
+                    .Include(s => s.SiteStatuses)
+                .Where(s => s.PEC == site.PEC).Select(s => s)
+                .ToListAsync();
+
+            return sites.Count() == 0 || !sites.Where(s => s.Status == SiteStatusType.Editable || s.Status == SiteStatusType.InReview).Any();
         }
     }
 }
