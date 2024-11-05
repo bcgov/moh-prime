@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,9 +12,11 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241011163959_ArchvedSiteChange")]
+    partial class ArchvedSiteChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1577,12 +1580,6 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 2,
                             LicenseCode = 68,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 2,
-                            LicenseCode = 178,
                             Discontinued = false
                         },
                         new
@@ -6957,55 +6954,49 @@ namespace Prime.Migrations
                         {
                             Code = 25,
                             Name = "Full Pharmacist",
-                            Weight = 10
+                            Weight = 1
                         },
                         new
                         {
                             Code = 26,
                             Name = "Limited Pharmacist",
-                            Weight = 20
+                            Weight = 2
                         },
                         new
                         {
                             Code = 28,
                             Name = "Student Pharmacist",
-                            Weight = 30
+                            Weight = 3
                         },
                         new
                         {
                             Code = 27,
                             Name = "Temporary Pharmacist",
-                            Weight = 40
-                        },
-                        new
-                        {
-                            Code = 178,
-                            Name = "Temporary Limited Pharmacist",
-                            Weight = 45
+                            Weight = 4
                         },
                         new
                         {
                             Code = 30,
                             Name = "Non-Practicing Pharmacist",
-                            Weight = 50
+                            Weight = 5
                         },
                         new
                         {
                             Code = 29,
                             Name = "Pharmacy Technician",
-                            Weight = 60
+                            Weight = 6
                         },
                         new
                         {
                             Code = 31,
                             Name = "Non-Practicing Pharmacy Technician",
-                            Weight = 70
+                            Weight = 7
                         },
                         new
                         {
                             Code = 68,
                             Name = "Temporary Pharmacy Technician",
-                            Weight = 80
+                            Weight = 8
                         },
                         new
                         {
@@ -13422,22 +13413,6 @@ namespace Prime.Migrations
                             NamedInImReg = true,
                             Prefix = "L9",
                             PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 370,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2024, 10, 22, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 178,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
