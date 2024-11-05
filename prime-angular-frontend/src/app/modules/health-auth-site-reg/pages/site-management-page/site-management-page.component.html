@@ -81,7 +81,7 @@
                             { key: 'Vendor', value: healthAuthoritySite?.healthAuthorityVendor?.vendorCode | configCode : 'vendors', _50: true },
                             { key: healthAuthoritySite?.submittedDate ? 'Last Submitted by' : 'Last Updated by', value: getLastUpdatedUser(healthAuthoritySite?.authorizedUserName, healthAuthoritySite?.updatedTimeStamp)},
                       ]">
-      <ng-container *ngIf="healthAuthoritySite.isIncomplete() && !healthAuthoritySite.isArchived()"
+      <ng-container *ngIf="healthAuthoritySite.isIncomplete()"
                     [ngTemplateOutlet]="notification"
                     [ngTemplateOutletContext]="{
                       props: {
@@ -107,15 +107,6 @@
                       props: {
                         icon: 'not_interested',
                         text: 'Declined'
-                      }
-                    }">
-      </ng-container>
-      <ng-container *ngIf="healthAuthoritySite.isArchived()"
-                    [ngTemplateOutlet]="notification"
-                    [ngTemplateOutletContext]="{
-                      props: {
-                        icon: 'not_interested',
-                        text: 'Archived'
                       }
                     }">
       </ng-container>

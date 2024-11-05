@@ -130,15 +130,6 @@
                         }
                       }">
         </ng-container>
-        <ng-container *ngIf="isArchived(site)"
-                      [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{
-                        props: {
-                        icon: 'not_interested',
-                        text: 'Archived'
-                        }
-                        }">
-        </ng-container>
         <ng-container *ngIf="isApproved(site) && !requiresRenewal(site)"
                       [ngTemplateOutlet]="success_notification"
                       [ngTemplateOutletContext]="{
@@ -230,8 +221,7 @@
       </button>
       <button *ngIf="site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE"
               mat-menu-item
-              [disabled]="!site.completed || site.status === SiteStatusType.IN_REVIEW
-              || site.status === SiteStatusType.ARCHIVED"
+              [disabled]="!site.completed || site.status === SiteStatusType.IN_REVIEW"
               (click)="viewSiteRemoteUsers(organizationId, site)">
         <span>View/Update Remote Practitioners</span>
       </button>

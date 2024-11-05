@@ -598,8 +598,13 @@ namespace Prime.Services
 
         public async Task<bool> CanBeRestored(int siteId)
         {
-            //check if the site id is used by other site with editable status
+            //check if the site ID (PEC) is used by other site with editable status
             var site = await _context.Sites.Where(s => s.Id == siteId).Select(s => s).FirstAsync();
+
+            if (site.PEC == null)
+            {
+                return true;
+            }
 
             var sites = await _context.Sites
                     .Include(s => s.SiteStatuses)
