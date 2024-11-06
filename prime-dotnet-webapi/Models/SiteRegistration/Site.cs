@@ -48,6 +48,8 @@ namespace Prime.Models
 
         public DateTimeOffset? ApprovedDate { get; set; }
 
+        public DateTimeOffset? ArchivedDate { get; set; }
+
         public ICollection<RemoteUser> RemoteUsers { get; set; }
 
         public int? AdjudicatorId { get; set; }
