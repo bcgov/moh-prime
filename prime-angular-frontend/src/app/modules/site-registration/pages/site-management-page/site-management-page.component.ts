@@ -181,6 +181,10 @@ export class SiteManagementPageComponent implements OnInit {
     return site.status === SiteStatusType.LOCKED;
   }
 
+  public isArchived(site: SiteListViewModel): boolean {
+    return site.status === SiteStatusType.ARCHIVED;
+  }
+
   public getLockedSiteNotificationProperties() {
     return {
       icon: 'not_interested',
