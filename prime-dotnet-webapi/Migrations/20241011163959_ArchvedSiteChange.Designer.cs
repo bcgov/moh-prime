@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,9 +12,11 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241011163959_ArchvedSiteChange")]
+    partial class ArchvedSiteChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -6036,9 +6039,6 @@ namespace Prime.Migrations
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DeletedDateTime")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("HealthAuthorityCareTypeId")
                         .HasColumnType("integer");
