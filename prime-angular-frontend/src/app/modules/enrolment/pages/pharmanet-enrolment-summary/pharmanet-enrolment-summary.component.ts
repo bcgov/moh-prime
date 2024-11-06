@@ -377,7 +377,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             healthAuthorityCode: null,
             formArray: this.pharmacistEmails,
             formArrayName: 'pharmacistEmails',
-            subheaderContent: `Send your approval to your community pharmacy's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+            subheaderContent: `Send your approval to your community pharmacy's PharmaNet administrator (e.g. pharmacy manager or software vendor). If you work in more than one community pharmacy, make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           });
         }
           break;
@@ -390,7 +390,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
               healthAuthorityCode: eha.healthAuthorityCode,
               formArray: this.getEmailsGroup(careSetting.careSettingCode, eha.healthAuthorityCode),
               formArrayName: this.getHAFormArrayName(eha.healthAuthorityCode),
-              subheaderContent: `Send your approval to your health authority's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+              subheaderContent: `Send your approval to your health authority's PharmaNet administrator (e.g. PharmaNet support, general IT department, or PharmaNet software vendor). If you work in more than one clinic/facility make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
             });
           });
         }
@@ -403,7 +403,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             healthAuthorityCode: null,
             formArray: this.deviceProviderEmails,
             formArrayName: 'deviceProviderEmails',
-            subheaderContent: `Send your approval to your device provider's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+            subheaderContent: `Send your approval to your device provider's PharmaNet administrator (e.g. office manager or PharmaNet software vendor). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
           });
         }
           break;
