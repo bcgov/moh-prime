@@ -1404,7 +1404,6 @@ namespace Prime.Controllers
             return Ok(submissions.OrderByDescending(s => s.CreatedDate));
         }
 
-
         // GET: api/sites/5/site-submission/6
         /// <summary>
         /// Gets the site submission.
@@ -1421,6 +1420,88 @@ namespace Prime.Controllers
         {
             var submission = await _siteSubmissionService.GetSiteSubmissionAsync(siteId, siteSubmissionId);
             return Ok(submission);
+        }
+
+        // POST: api/Sites/5/archive
+        /// <summary>
+        /// Archive a site
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="siteNoteUpdateModel"></param>
+        [HttpPost("{siteId}/archive", Name = nameof(ArchiveSite))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> ArchiveSite(int siteId, SiteNoteUpdateModel siteNoteUpdateModel)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Archive, status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            await _siteService.ArchiveSite(siteId, siteNoteUpdateModel.Note);
+
+            return Ok();
+        }
+
+        // POST: api/Sites/5/restore
+        /// <summary>
+        /// Restore a archived site
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="siteNoteUpdateModel"></param>
+        [HttpPost("{siteId}/restore", Name = nameof(RestoreSite))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> RestoreSite(int siteId, SiteNoteUpdateModel siteNoteUpdateModel)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Restore, status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            if (!await _siteService.CanBeRestored(siteId))
+            {
+                return BadRequest("Site ID has been used in other site.");
+            }
+
+            await _siteService.RestoreArchivedSite(siteId, siteNoteUpdateModel.Note);
+
+            return Ok();
+        }
+
+        // GET: api/Sites/5/can-restore
+        /// <summary>
+        /// Return is the site can be restored
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/can-restore", Name = nameof(CanBeRestored))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> CanBeRestored(int siteId)
+        {
+            var result = await _siteService.CanBeRestored(siteId);
+            return Ok(result);
         }
     }
 }
