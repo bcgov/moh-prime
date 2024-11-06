@@ -40,13 +40,15 @@ namespace Prime.Models
 
         public bool Flagged { get; set; }
 
-        public bool IsNew {get; set;}
+        public bool IsNew { get; set; }
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
         public ICollection<SiteStatus> SiteStatuses { get; set; }
 
         public DateTimeOffset? ApprovedDate { get; set; }
+
+        public DateTimeOffset? ArchivedDate { get; set; }
 
         public ICollection<RemoteUser> RemoteUsers { get; set; }
 
