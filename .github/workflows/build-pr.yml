@@ -4,7 +4,6 @@ on:
   push:
     paths-ignore: # do NOT trigger on changes to backup service.
     - prime-database-backup/**
-    - .github/workflows/build-deploy-backup-dev.yml
     branches-ignore:
     - 'develop'
     - 'test'
@@ -13,7 +12,6 @@ on:
   pull_request:
     paths-ignore:
     - prime-database-backup/**
-    - .github/workflows/build-deploy-backup-dev.yml
     branches-ignore:
     - 'develop'
     - 'test'
