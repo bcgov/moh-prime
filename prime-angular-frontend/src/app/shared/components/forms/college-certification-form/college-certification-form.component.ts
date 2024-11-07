@@ -68,7 +68,7 @@ export class CollegeCertificationFormComponent implements OnInit {
    * 21 - College of Health and Care Professionals of BC
    * 22 - College of Complementary Health Professionals of BC
    */
-  public amalgamatedColleges: number[] =
+  public allowDupAmalgamatedColleges: number[] =
     [CollegeLicenceClassEnum.HealthCareProfessionals, CollegeLicenceClassEnum.ComplementaryHealthProfessionals];
 
   constructor(
@@ -161,7 +161,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public get filteredColleges(): CollegeConfig[] {
     return this.colleges.filter((college: CollegeConfig) =>
       // Allow the currently chosen value to persist
-      this.collegeCode.value === college.code || !this.selectedColleges?.includes(college.code) || this.amalgamatedColleges.includes(college.code)
+      this.collegeCode.value === college.code || !this.selectedColleges?.includes(college.code) || this.allowDupAmalgamatedColleges.includes(college.code)
     );
   }
 
