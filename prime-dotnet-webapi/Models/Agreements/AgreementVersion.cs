@@ -42,9 +42,8 @@ namespace Prime.Models
                         return "On-behalf-of User - Device Provider";
                     case AgreementType.PrescriberOBOTOA:
                         return "On-behalf-of User (can prescribe independently)";
-                    // TODO: TBD
-                    // case AgreementType.PharmacyTechnicianTOA:
-                    //     break;
+                    case AgreementType.PharmacyTechnicianTOA:
+                        return "Independent User - without OBOs, Pharmacy";
                     default:
                         return "N/A";
                 }
