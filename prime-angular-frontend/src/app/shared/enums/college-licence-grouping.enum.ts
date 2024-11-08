@@ -25,6 +25,14 @@ export enum CollegeLicenceGroupingEnum {
   HealthProfessionOfTraditionalChineseMedicineAcupuncture = 24
 }
 
+export const NursingLicenseGrouping: number[] = [
+  CollegeLicenceGroupingEnum.LPN,
+  CollegeLicenceGroupingEnum.RN,
+  CollegeLicenceGroupingEnum.RPN,
+  CollegeLicenceGroupingEnum.NP,
+  CollegeLicenceGroupingEnum.MW,
+]
+
 export const LicenseGrouping: number[] = [
   CollegeLicenceGroupingEnum.LPN,
   CollegeLicenceGroupingEnum.RN,

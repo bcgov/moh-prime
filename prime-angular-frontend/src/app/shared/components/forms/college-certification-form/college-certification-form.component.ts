@@ -16,7 +16,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { LicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
+import { LicenseGrouping, NursingLicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -63,6 +63,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public PrescriberIdTypeEnum = PrescriberIdTypeEnum;
 
   public licenseGrouping = LicenseGrouping;
+  public nursingLicenseGrouping = NursingLicenseGrouping;
 
   /**
    * 21 - College of Health and Care Professionals of BC
@@ -242,7 +243,7 @@ export class CollegeCertificationFormComponent implements OnInit {
           )
         )
         .subscribe((collegeLicenseGroupingCode: number) => {
-          if (this.licenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
+          if (this.nursingLicenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
             this.setNursingCategoryValidators();
           }
           this.loadLicensesByCategory(collegeLicenseGroupingCode);
