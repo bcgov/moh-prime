@@ -85,6 +85,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       .map((certification: CollegeCertification) => +certification.collegeCode);
   }
 
+  public get selectedLicenseCodes(): number[] {
+    return this.formState.certifications.value
+      .map((certification: CollegeCertification) => +certification.licenseCode);
+  }
+
   public addEmptyCollegeCertification() {
     this.formState.addCollegeCertification();
   }
