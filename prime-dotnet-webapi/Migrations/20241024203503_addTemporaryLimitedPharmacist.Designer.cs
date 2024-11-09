@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,9 +12,11 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241024203503_addTemporaryLimitedPharmacist")]
+    partial class addTemporaryLimitedPharmacist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -17677,9 +17680,6 @@ namespace Prime.Migrations
                     b.Property<DateTimeOffset?>("ApprovedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset?>("ArchivedDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int?>("CareSettingCode")
                         .HasColumnType("integer");
 
@@ -17934,43 +17934,6 @@ namespace Prime.Migrations
                     b.ToTable("SiteStatus");
                 });
 
-            modelBuilder.Entity("Prime.Models.SiteSubmission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ProfileSnapshot")
-                        .IsRequired()
-                        .HasColumnType("json");
-
-                    b.Property<int>("SiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SiteId");
-
-                    b.ToTable("SiteSubmission");
-                });
-
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
                 {
                     b.Property<int>("Id")
@@ -18051,11 +18014,6 @@ namespace Prime.Migrations
                         {
                             Code = 6,
                             Name = "Disabled"
-                        },
-                        new
-                        {
-                            Code = 8,
-                            Name = "Archived"
                         });
                 });
 
@@ -19857,17 +19815,6 @@ namespace Prime.Migrations
                     b.Navigation("Site");
                 });
 
-            modelBuilder.Entity("Prime.Models.SiteSubmission", b =>
-                {
-                    b.HasOne("Prime.Models.Site", "Site")
-                        .WithMany("SiteSubmissions")
-                        .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Site");
-                });
-
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
                 {
                     b.HasOne("Prime.Models.CommunitySite", "Site")
@@ -20254,8 +20201,6 @@ namespace Prime.Migrations
                     b.Navigation("SiteRegistrationReviewDocuments");
 
                     b.Navigation("SiteStatuses");
-
-                    b.Navigation("SiteSubmissions");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>
