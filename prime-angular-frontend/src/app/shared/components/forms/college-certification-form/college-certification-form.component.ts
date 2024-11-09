@@ -28,6 +28,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public index: number;
   @Input() public total: number;
   @Input() public selectedColleges: number[];
+  @Input() public selectedLicenses: number[];
   @Input() public collegeFilterPredicate: (collegeConfig: CollegeConfig) => boolean;
   @Input() public licenceFilterPredicate: (licenceConfig: LicenseConfig) => boolean;
   @Input() public condensed: boolean;
@@ -62,6 +63,13 @@ export class CollegeCertificationFormComponent implements OnInit {
   public PrescriberIdTypeEnum = PrescriberIdTypeEnum;
 
   public licenseGrouping = LicenseGrouping;
+
+  /**
+   * 21 - College of Health and Care Professionals of BC
+   * 22 - College of Complementary Health Professionals of BC
+   */
+  public allowDupAmalgamatedColleges: number[] =
+    [CollegeLicenceClassEnum.HealthCareProfessionals, CollegeLicenceClassEnum.ComplementaryHealthProfessionals];
 
   constructor(
     private configService: ConfigService,
@@ -134,7 +142,11 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   public getGrouping(collegeCode: string): CollegeLicenseGroupingConfig[] {
-    let groupingCodes = this.colleges.find((c) => c.code === +collegeCode).collegeLicenses.map((l) => l.collegeLicenseGroupingCode);
+    const college = this.colleges.find((c) => c.code === +collegeCode);
+    const selectedGroupCodes = college.collegeLicenses
+      .filter((l) => this.selectedLicenses.includes(l.licenseCode) && l.licenseCode !== this.licenseCode.value).map((l) => l.collegeLicenseGroupingCode);
+    const groupingCodes = college.collegeLicenses.filter((l) => !selectedGroupCodes.includes(l.collegeLicenseGroupingCode))
+      .map((l) => l.collegeLicenseGroupingCode);
     return this.licenseGroups.filter((g) => groupingCodes.some((gc) => gc === g.code));
   }
 
@@ -149,7 +161,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public get filteredColleges(): CollegeConfig[] {
     return this.colleges.filter((college: CollegeConfig) =>
       // Allow the currently chosen value to persist
-      this.collegeCode.value === college.code || !this.selectedColleges?.includes(college.code)
+      this.collegeCode.value === college.code || !this.selectedColleges?.includes(college.code) || this.allowDupAmalgamatedColleges.includes(college.code)
     );
   }
 
