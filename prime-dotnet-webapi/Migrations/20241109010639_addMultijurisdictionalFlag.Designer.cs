@@ -12,8 +12,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20240906160249_UpdateForUnlistedCollegeLicence")]
-    partial class UpdateForUnlistedCollegeLicence
+    [Migration("20241109010639_addMultijurisdictionalFlag")]
+    partial class addMultijurisdictionalFlag
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1580,6 +1580,12 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 2,
                             LicenseCode = 68,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 2,
+                            LicenseCode = 178,
                             Discontinued = false
                         },
                         new
@@ -6954,49 +6960,55 @@ namespace Prime.Migrations
                         {
                             Code = 25,
                             Name = "Full Pharmacist",
-                            Weight = 1
+                            Weight = 10
                         },
                         new
                         {
                             Code = 26,
                             Name = "Limited Pharmacist",
-                            Weight = 2
+                            Weight = 20
                         },
                         new
                         {
                             Code = 28,
                             Name = "Student Pharmacist",
-                            Weight = 3
+                            Weight = 30
                         },
                         new
                         {
                             Code = 27,
                             Name = "Temporary Pharmacist",
-                            Weight = 4
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 178,
+                            Name = "Temporary Limited Pharmacist",
+                            Weight = 45
                         },
                         new
                         {
                             Code = 30,
                             Name = "Non-Practicing Pharmacist",
-                            Weight = 5
+                            Weight = 50
                         },
                         new
                         {
                             Code = 29,
                             Name = "Pharmacy Technician",
-                            Weight = 6
+                            Weight = 60
                         },
                         new
                         {
                             Code = 31,
                             Name = "Non-Practicing Pharmacy Technician",
-                            Weight = 7
+                            Weight = 70
                         },
                         new
                         {
                             Code = 68,
                             Name = "Temporary Pharmacy Technician",
-                            Weight = 8
+                            Weight = 80
                         },
                         new
                         {
@@ -13766,6 +13778,23 @@ namespace Prime.Migrations
                             AllowRequestRemoteAccess = false,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 10, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 178,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "P1",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 371,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2024, 9, 6, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 175,
                             LicensedToProvideCare = true,
@@ -13781,7 +13810,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 371,
+                            Id = 372,
                             AllowRequestRemoteAccess = false,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -13800,7 +13829,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 372,
+                            Id = 373,
                             AllowRequestRemoteAccess = false,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -13818,7 +13847,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Id = 373,
+                            Id = 374,
                             AllowRequestRemoteAccess = true,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -18068,6 +18097,9 @@ namespace Prime.Migrations
                     b.Property<DateTimeOffset?>("ApprovedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTimeOffset?>("ArchivedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int?>("CareSettingCode")
                         .HasColumnType("integer");
 
@@ -18402,6 +18434,11 @@ namespace Prime.Migrations
                         {
                             Code = 6,
                             Name = "Disabled"
+                        },
+                        new
+                        {
+                            Code = 8,
+                            Name = "Archived"
                         });
                 });
 
