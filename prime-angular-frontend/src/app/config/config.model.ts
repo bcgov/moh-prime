@@ -48,6 +48,7 @@ export class LicenseConfig extends Config<number> implements IWeightedConfig {
   validate: boolean;
   manual: boolean;
   prescriberIdType: PrescriberIdTypeEnum;
+  multijurisdictional: boolean;
 }
 
 export interface CollegeLicenseConfig {

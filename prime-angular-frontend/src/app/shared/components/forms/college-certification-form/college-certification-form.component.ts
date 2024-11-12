@@ -34,6 +34,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public condensed: boolean;
   @Input() public defaultOption: boolean;
   @Output() public remove: EventEmitter<number>;
+  @Output() public licenceCodeSelected: EventEmitter<number>;
   public isPrescribing: boolean;
   public colleges: CollegeConfig[];
   public licenses: LicenseConfig[];
@@ -78,6 +79,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     private enrolmentService: EnrolmentService
   ) {
     this.remove = new EventEmitter<number>();
+    this.licenceCodeSelected = new EventEmitter<number>();
     // copy the master list of license lookup from configService to local
     this.licenses = this.configService.licenses.map(x => Object.assign({}, x));
 
@@ -227,9 +229,9 @@ export class CollegeCertificationFormComponent implements OnInit {
         .subscribe((licenseCode: number) => {
           if (licenseCode) {
             this.setPractitionerInformation(licenseCode);
+            this.licenceCodeSelected.emit(licenseCode);
           }
         });
-
       const initialNursingCategory = +this.category.value ?? null;
       this.category.valueChanges
         .pipe(
