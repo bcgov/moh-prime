@@ -108,7 +108,7 @@ namespace Prime.Services
         {
             return await GetBaseOrganizationQuery()
                 .Include(o => o.Sites)
-                .Where(o => o.Sites.Any(s => s.PEC == pec))
+                .Where(o => o.Sites.Any(s => s.PEC == pec && s.ArchivedDate == null))
                 .SingleOrDefaultAsync();
         }
 
