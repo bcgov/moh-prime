@@ -459,7 +459,7 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 369, LicenseCode = 177, Prefix = "L9", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = NewMultijurisdictionalBccnmLicenceClasses, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Add Temporary Limited Pharmacist
-                    new LicenseDetail { Id = 370, LicenseCode = 178, Prefix = "P1", Manual = false, Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = AddTemporaryLimitedPharmacistLicenceClasses, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 370, LicenseCode = 178, Prefix = "P1", Manual = true, Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = AddTemporaryLimitedPharmacistLicenceClasses, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }
