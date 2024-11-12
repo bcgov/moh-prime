@@ -209,7 +209,24 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
               super.handleSubmission();
             }
           });
+      } else if (this.cannotRequestRemoteAccess) {
+        const data: DialogOptions = {
+          title: 'Remote Access Removal',
+          message: 'With this change you are no longer eligible to use remote access.' +
+            ' Please notify the PharmaNet Administrator of your site and stop using the remote access.',
+          actionText: "Continue"
+        };
+
+        this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+          .afterClosed()
+          .subscribe((result: boolean) => {
+            if (result) {
+              this.removeRemoteAccessData();
+              super.handleSubmission();
+            }
+          });
       } else {
+
         super.handleSubmission();
       }
     } else {
