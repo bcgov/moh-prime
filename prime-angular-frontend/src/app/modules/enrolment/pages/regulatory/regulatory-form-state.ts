@@ -105,7 +105,8 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
       deviceProviderIdentifier: [null, []],
       deviceProviderId: [null, []],
       deviceProviderRoleCode: [null, []],
-      certificationNumber: [null, []]
+      certificationNumber: [null, []],
+      unlistedCertifications: this.fb.array([]),
     });
   }
 
