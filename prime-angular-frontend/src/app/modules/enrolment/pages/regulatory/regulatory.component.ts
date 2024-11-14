@@ -201,7 +201,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
           .subscribe((result: boolean) => {
             if (result) {
               // Enrollees can not have certifications and jobs
-              this.removeOboSites();
+              this.removeCertificationsAndOboSites();
               // Remove remote access data when enrollee is no longer eligible, e.g., licence type changes
               if (this.cannotRequestRemoteAccess) {
                 this.removeRemoteAccessData();
@@ -210,6 +210,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
             }
           });
       } else {
+        if (this.formState.certifications.value.some(c => c.collegeCode !== '')) {
+          this.enrolmentFormStateService.patchOboSitesForm(null);
+        }
         super.handleSubmission();
       }
     } else {
@@ -264,7 +267,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
    * Remove obo sites from the enrolment as enrollees can not have
    * certificate(s), as well as, OBO site(s).
    */
-  private removeOboSites() {
+  private removeCertificationsAndOboSites() {
     this.removeIncompleteCertifications(true);
 
     if (this.formState.certifications.length || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value !== 15)) {
