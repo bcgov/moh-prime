@@ -16,7 +16,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { LicenseGrouping, NursingLicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
+import { LicenseGrouping, NonNursingLicenseGrouping, NursingLicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -64,6 +64,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public licenseGrouping = LicenseGrouping;
   public nursingLicenseGrouping = NursingLicenseGrouping;
+  public nonNursingLicenseGrouping = NonNursingLicenseGrouping;
 
   /**
    * 21 - College of Health and Care Professionals of BC
@@ -245,6 +246,8 @@ export class CollegeCertificationFormComponent implements OnInit {
         .subscribe((collegeLicenseGroupingCode: number) => {
           if (this.nursingLicenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
             this.setNursingCategoryValidators();
+          } else if (this.nonNursingLicenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
+            this.setGroupingLicenseValidators();
           }
           this.loadLicensesByCategory(collegeLicenseGroupingCode);
         });
@@ -336,15 +339,24 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.renewalDate.reset(null);
       }
       this.practiceCode.reset(null);
-    } else {
-      this.prescriberIdType = PrescriberIdTypeEnum.NA;
     }
+
+    this.prescriberIdType = PrescriberIdTypeEnum.NA;
     this.removeValidations();
   }
 
   private setNursingCategoryValidators(): void {
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
     this.formUtilsService.setValidators(this.practitionerId, [Validators.required, FormControlValidators.alphanumeric]);
+
+    if (!this.condensed) {
+      this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
+      this.formUtilsService.setValidators(this.renewalDate, [Validators.required, FormControlValidators.mustBeFutureDate]);
+    }
+  }
+
+  private setGroupingLicenseValidators(): void {
+    this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
 
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
