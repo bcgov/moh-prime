@@ -62,7 +62,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public CollegeLicenceClassEnum = CollegeLicenceClassEnum;
   public PrescriberIdTypeEnum = PrescriberIdTypeEnum;
 
-  public licenseGrouping = LicenseGrouping;
+  public licenseGrouping = [...NursingLicenseGrouping, ...NonNursingLicenseGrouping];
   public nursingLicenseGrouping = NursingLicenseGrouping;
   public nonNursingLicenseGrouping = NonNursingLicenseGrouping;
 
