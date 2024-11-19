@@ -247,7 +247,7 @@ export class CollegeCertificationFormComponent implements OnInit {
           if (this.nursingLicenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
             this.setNursingCategoryValidators();
           } else if (this.nonNursingLicenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
-            this.setGroupingLicenseValidators();
+            this.setNonNursingLicenseGroupingValidators();
           }
           this.loadLicensesByCategory(collegeLicenseGroupingCode);
         });
@@ -355,7 +355,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
   }
 
-  private setGroupingLicenseValidators(): void {
+  private setNonNursingLicenseGroupingValidators(): void {
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
 
     if (!this.condensed) {
