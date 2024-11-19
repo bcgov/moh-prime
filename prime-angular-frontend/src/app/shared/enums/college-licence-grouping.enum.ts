@@ -54,32 +54,3 @@ export const NonNursingLicenseGrouping: number[] = [
   CollegeLicenceGroupingEnum.HealthProfessionOfNaturopathicMedicine,
   CollegeLicenceGroupingEnum.HealthProfessionOfTraditionalChineseMedicineAcupuncture
 ]
-
-export const LicenseGrouping: number[] = [
-  CollegeLicenceGroupingEnum.LPN,
-  CollegeLicenceGroupingEnum.RN,
-  CollegeLicenceGroupingEnum.RPN,
-  CollegeLicenceGroupingEnum.NP,
-  CollegeLicenceGroupingEnum.MW,
-  CollegeLicenceGroupingEnum.CertifiedDentalAssistant,
-  CollegeLicenceGroupingEnum.DentalHygienist,
-  CollegeLicenceGroupingEnum.DentalTechnician,
-  CollegeLicenceGroupingEnum.DentalTherapist,
-  CollegeLicenceGroupingEnum.Dentist,
-  CollegeLicenceGroupingEnum.Denturist,
-  CollegeLicenceGroupingEnum.HealthProfessionOfDietetics,
-  CollegeLicenceGroupingEnum.HealthProfessionOfOccupationalTherapy,
-  CollegeLicenceGroupingEnum.HealthProfessionOfOpticianry,
-  CollegeLicenceGroupingEnum.HealthProfessionOfOptomety,
-  CollegeLicenceGroupingEnum.HealthProfessionOfPhysicalTherapy,
-  CollegeLicenceGroupingEnum.HealthProfessionOfPsychology,
-  CollegeLicenceGroupingEnum.HealthProfessionOfAudiology,
-  CollegeLicenceGroupingEnum.HealthProfessionOfHearingInstrumentDispensing,
-  CollegeLicenceGroupingEnum.HealthProfessionOfSpeechLanguagePathology,
-  CollegeLicenceGroupingEnum.HealthProfessionOfChiropractic,
-  CollegeLicenceGroupingEnum.HealthProfessionOfMassageTherapy,
-  CollegeLicenceGroupingEnum.HealthProfessionOfNaturopathicMedicine,
-  CollegeLicenceGroupingEnum.HealthProfessionOfTraditionalChineseMedicineAcupuncture
-]
-
-
