@@ -6,8 +6,9 @@ export interface SiteSubmission {
 }
 
 /**
- * Create new interfaces for the site submission only.
- * do not reuse other classes or interfaces
+ * Create new interfaces for the site submission only,
+ * do not reuse other classes or interfaces.
+ * So that it will not have conflict changes to site view model etc.
  */
 export interface HttpSite {
   // common site properties
