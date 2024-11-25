@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { SiteSubmission } from '@shared/models/site-submission.model';
