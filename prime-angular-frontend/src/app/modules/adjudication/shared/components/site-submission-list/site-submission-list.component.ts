@@ -38,14 +38,14 @@ export class SiteSubmissionListComponent implements OnInit {
 
   public refreshSubmissionList() {
     this.siteResource.getSiteSubmissions(this.siteId)
-      .subscribe(siteSubmission => {
-        this.submissions = siteSubmission.filter(ss => +moment(ss.createdDate).format('YYYY') === this.selectedYear);
+      .subscribe(siteSubmissions => {
+        this.submissions = siteSubmissions.filter(ss => +moment(ss.createdDate).format('YYYY') === this.selectedYear);
       });
   }
 
 
-  private getYears() {
-    const initialYear = 2020; // Year deployed to production
+  private getYears(): void {
+    const initialYear = 2020; // Year PRIME deployed to production
     const currentYear = this.getCurrentYear();
     this.years = [];
 
