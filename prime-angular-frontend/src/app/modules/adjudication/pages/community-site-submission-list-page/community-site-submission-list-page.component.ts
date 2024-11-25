@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { TechnicalSupportPageComponent } from '@registration/pages/technical-support-page/technical-support-page.component';
 
 @Component({
   selector: 'app-community-site-submission-list-page',
