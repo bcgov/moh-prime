@@ -1,0 +1,9 @@
+@import 'palette';
+
+.text-green {
+  color: theme_palette(green);
+}
+
+.text-italic {
+  font-style: italic;
+}
