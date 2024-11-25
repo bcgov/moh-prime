@@ -62,6 +62,7 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.ArchivedDate);
             Ignore(x => x.Mnemonic);
             Ignore(x => x.DeletedDate);
+            Ignore(x => x.SiteSubmissions);
 
             FinishWith((f, x) =>
             {

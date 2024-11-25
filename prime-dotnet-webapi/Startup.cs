@@ -91,6 +91,7 @@ namespace Prime
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<ISoapService, SoapService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
+            services.AddScoped<ISiteSubmissionService, SiteSubmissionService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
             services.AddScoped<IReportingService, ReportingService>();
