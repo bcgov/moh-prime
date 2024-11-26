@@ -561,6 +561,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
+  public removeRemoteAccess() {
+    this.remoteAccessForm = this.buildRemoteAccessForm();
+    this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
+  }
+
   private buildSelfDeclarationForm(): FormGroup {
     return this.fb.group({
       hasConviction: [null, [FormControlValidators.requiredBoolean]],

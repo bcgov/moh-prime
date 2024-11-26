@@ -25,12 +25,15 @@ export enum CollegeLicenceGroupingEnum {
   HealthProfessionOfTraditionalChineseMedicineAcupuncture = 24
 }
 
-export const LicenseGrouping: number[] = [
+export const NursingLicenseGrouping: number[] = [
   CollegeLicenceGroupingEnum.LPN,
   CollegeLicenceGroupingEnum.RN,
   CollegeLicenceGroupingEnum.RPN,
   CollegeLicenceGroupingEnum.NP,
   CollegeLicenceGroupingEnum.MW,
+]
+
+export const NonNursingLicenseGrouping: number[] = [
   CollegeLicenceGroupingEnum.CertifiedDentalAssistant,
   CollegeLicenceGroupingEnum.DentalHygienist,
   CollegeLicenceGroupingEnum.DentalTechnician,
@@ -51,5 +54,3 @@ export const LicenseGrouping: number[] = [
   CollegeLicenceGroupingEnum.HealthProfessionOfNaturopathicMedicine,
   CollegeLicenceGroupingEnum.HealthProfessionOfTraditionalChineseMedicineAcupuncture
 ]
-
-
