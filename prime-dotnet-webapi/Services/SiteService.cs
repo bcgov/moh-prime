@@ -54,7 +54,7 @@ namespace Prime.Services
         {
             var siteDto = await _context.Sites
                 .AsNoTracking()
-                .Where(site => site.Id == siteId)
+                .Where(site => site.Id == siteId && site.DeletedDate == null)
                 .Select(site => new
                 {
                     site.PEC,
@@ -70,7 +70,7 @@ namespace Prime.Services
             if (siteDto.healthAuthorityId.HasValue)
             {
                 var sites = await _context.Sites
-                    .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
+                    .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority && s.DeletedDate == null)
                     .AnyAsync();
 
                 // add exception for checking duplicate site ID
@@ -100,7 +100,7 @@ namespace Prime.Services
 
             return !await _context.Sites
                 .AsNoTracking()
-                .Where(s => s.PEC != "BC00000" && s.ArchivedDate == null)
+                .Where(s => s.PEC != "BC00000" && s.ArchivedDate == null && s.DeletedDate == null)
                 .AnyAsync(site => site.PEC == pec);
         }
 
