@@ -6,6 +6,7 @@ import { AbstractBaseHealthAuthoritySite } from './abstract-base-health-authorit
 import { BaseHealthAuthoritySite } from './base-health-authority-site.model';
 import { HealthAuthorityCareType } from './health-authority-care-type.model';
 import { HealthAuthorityVendor } from './health-authority-vendor.model';
+import { SiteSubmission } from '@shared/models/site-submission.model';
 
 export interface HealthAuthorityAdminSiteDto extends BaseHealthAuthoritySite {
   healthAuthorityVendor: HealthAuthorityVendor;
@@ -19,6 +20,7 @@ export interface HealthAuthorityAdminSiteDto extends BaseHealthAuthoritySite {
   healthAuthorityTechnicalSupportId: number;
   readonly pharmanetAdministratorName: string;
   readonly technicalSupportName: string;
+  currentSubmission: SiteSubmission;
 }
 
 export class HealthAuthoritySiteAdmin extends AbstractBaseHealthAuthoritySite implements HealthAuthorityAdminSiteDto {
@@ -40,7 +42,8 @@ export class HealthAuthoritySiteAdmin extends AbstractBaseHealthAuthoritySite im
     public readonly status: SiteStatusType,
 
     public readonly pharmanetAdministratorName: string,
-    public readonly technicalSupportName: string
+    public readonly technicalSupportName: string,
+    public readonly currentSubmission: SiteSubmission,
   ) {
     super(id, healthAuthorityOrganizationId, completed, submittedDate, approvedDate, status);
 
@@ -55,5 +58,6 @@ export class HealthAuthoritySiteAdmin extends AbstractBaseHealthAuthoritySite im
     this.healthAuthorityTechnicalSupportId = healthAuthorityTechnicalSupportId;
     this.pharmanetAdministratorName = pharmanetAdministratorName;
     this.technicalSupportName = technicalSupportName;
+    this.currentSubmission = currentSubmission;
   }
 }

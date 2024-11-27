@@ -32,6 +32,7 @@ namespace Prime.Controllers
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
+        private readonly ISiteSubmissionService _siteSubmissionService;
         private readonly IDeviceProviderService _deviceProviderService;
 
         public SitesController(
@@ -44,6 +45,7 @@ namespace Prime.Controllers
             IMapper mapper,
             IOrganizationService organizationService,
             ISiteService siteService,
+            ISiteSubmissionService siteSubmissionService,
             IDeviceProviderService deviceProviderService)
         {
             _adminService = adminService;
@@ -56,6 +58,7 @@ namespace Prime.Controllers
             _siteService = siteService;
             _deviceProviderService = deviceProviderService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
+            _siteSubmissionService = siteSubmissionService;
         }
 
         // GET: api/Sites
@@ -372,6 +375,7 @@ namespace Prime.Controllers
 
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
             await _siteService.SubmitRegistrationAsync(siteId);
+            await _siteSubmissionService.CreateCommunitySiteSubmissionAsync(siteId);
 
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode, site.IsNew);
             await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site registration submission notification");
@@ -1383,6 +1387,40 @@ namespace Prime.Controllers
             return Ok(site);
         }
 
+        // GET: api/sites/5/site-submissions
+        /// <summary>
+        /// Gets the site submissions.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/site-submissions", Name = nameof(GetSiteSubmissions))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<SiteSubmission>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSiteSubmissions(int siteId)
+        {
+            var submissions = await _siteSubmissionService.GetSiteSubmissionsAsync(siteId);
+            return Ok(submissions.OrderByDescending(s => s.CreatedDate));
+        }
+
+        // GET: api/sites/5/site-submission/6
+        /// <summary>
+        /// Gets the site submission.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="siteSubmissionId"></param>
+        [HttpGet("{siteId}/site-submission/{siteSubmissionId}", Name = nameof(GetSiteSubmission))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<SiteSubmission>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSiteSubmission(int siteId, int siteSubmissionId)
+        {
+            var submission = await _siteSubmissionService.GetSiteSubmissionAsync(siteId, siteSubmissionId);
+            return Ok(submission);
+        }
 
         // POST: api/Sites/5/archive
         /// <summary>
