@@ -98,7 +98,7 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<CommunitySiteListViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<CommunitySiteAdminListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAllSites([FromQuery] OrganizationSearchOptions search)
         {
             var paginatedList = await _communitySiteService.GetSitesAsync(search);
