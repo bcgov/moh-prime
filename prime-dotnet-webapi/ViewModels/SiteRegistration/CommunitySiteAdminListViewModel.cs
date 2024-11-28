@@ -22,5 +22,6 @@ namespace Prime.ViewModels
         public int RemoteUserCount { get; set; }
         public bool Flagged { get; set; }
         public bool IsNew { get; set; }
+        public int DuplicatePecSiteCount { get; set; }
     }
 }
