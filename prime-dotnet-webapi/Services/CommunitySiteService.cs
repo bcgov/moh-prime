@@ -116,10 +116,10 @@ namespace Prime.Services
             }
         }
 
-        private async Task<int> GetDuplicatePecCount(int? careSettingCode, string pec, int orgSiteId)
+        private async Task<int> GetDuplicatePecCount(int? careSettingCode, string pec, int originalSiteId)
         {
             return await _context.Sites
-                    .Where(s => s.PEC == pec && s.CareSettingCode == careSettingCode && orgSiteId != s.Id)
+                    .Where(s => s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id)
                     .CountAsync();
         }
 
