@@ -303,7 +303,8 @@ namespace Prime.Services
             IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications
                 .AsNoTracking()
                 .AsExpandable()
-                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate.HasValue)
+                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate.HasValue &&
+                    ruc.RemoteUser.Site.DeletedDate == null && ruc.RemoteUser.Site.ArchivedDate == null)
                 .Where(matchesAnyCert)
                 .ProjectTo<RemoteAccessSearchDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
