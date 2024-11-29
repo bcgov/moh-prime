@@ -70,7 +70,8 @@
   </app-overview-section>
 
   <app-overview-section title="Site Business Licence"
-                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
+                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW &&
+                          site.status !== SiteStatusType.LOCKED && !site.approvedDate"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
 
@@ -164,7 +165,8 @@
   <app-overview-section *ngIf="site?.physicalAddress?.street !== null && site?.physicalAddress?.city !== null &&
                           site?.physicalAddress?.provinceCode !== null && site?.physicalAddress?.postal !== null"
                         title="Site Address"
-                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
+                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW
+                          && site.status !== SiteStatusType.LOCKED && !site.approvedDate"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Address">

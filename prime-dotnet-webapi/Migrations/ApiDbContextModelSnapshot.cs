@@ -1581,6 +1581,12 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            CollegeCode = 2,
+                            LicenseCode = 178,
+                            Discontinued = false
+                        },
+                        new
+                        {
                             CollegeCode = 3,
                             LicenseCode = 32,
                             CollegeLicenseGroupingCode = 2,
@@ -6951,49 +6957,55 @@ namespace Prime.Migrations
                         {
                             Code = 25,
                             Name = "Full Pharmacist",
-                            Weight = 1
+                            Weight = 10
                         },
                         new
                         {
                             Code = 26,
                             Name = "Limited Pharmacist",
-                            Weight = 2
+                            Weight = 20
                         },
                         new
                         {
                             Code = 28,
                             Name = "Student Pharmacist",
-                            Weight = 3
+                            Weight = 30
                         },
                         new
                         {
                             Code = 27,
                             Name = "Temporary Pharmacist",
-                            Weight = 4
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 178,
+                            Name = "Temporary Limited Pharmacist",
+                            Weight = 45
                         },
                         new
                         {
                             Code = 30,
                             Name = "Non-Practicing Pharmacist",
-                            Weight = 5
+                            Weight = 50
                         },
                         new
                         {
                             Code = 29,
                             Name = "Pharmacy Technician",
-                            Weight = 6
+                            Weight = 60
                         },
                         new
                         {
                             Code = 31,
                             Name = "Non-Practicing Pharmacy Technician",
-                            Weight = 7
+                            Weight = 70
                         },
                         new
                         {
                             Code = 68,
                             Name = "Temporary Pharmacy Technician",
-                            Weight = 8
+                            Weight = 80
                         },
                         new
                         {
@@ -13413,6 +13425,38 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
+                        },
+                        new
+                        {
+                            Id = 370,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 10, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 178,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            NamedInImReg = true,
+                            Prefix = "P1",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 371,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 11, 12, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 29,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "T9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
                         });
                 });
 
@@ -17906,6 +17950,43 @@ namespace Prime.Migrations
                     b.ToTable("SiteStatus");
                 });
 
+            modelBuilder.Entity("Prime.Models.SiteSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ProfileSnapshot")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("SiteSubmission");
+                });
+
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
                 {
                     b.Property<int>("Id")
@@ -19792,6 +19873,17 @@ namespace Prime.Migrations
                     b.Navigation("Site");
                 });
 
+            modelBuilder.Entity("Prime.Models.SiteSubmission", b =>
+                {
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithMany("SiteSubmissions")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
+                });
+
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
                 {
                     b.HasOne("Prime.Models.CommunitySite", "Site")
@@ -20178,6 +20270,8 @@ namespace Prime.Migrations
                     b.Navigation("SiteRegistrationReviewDocuments");
 
                     b.Navigation("SiteStatuses");
+
+                    b.Navigation("SiteSubmissions");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>
