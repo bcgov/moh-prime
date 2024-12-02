@@ -34,10 +34,13 @@
     <ng-container *ngFor="let licence of certificate.licences">
       <app-enrollee-property title="Licence"
                              [makeBold]="true">
+        <app-enrollee-property title="College Name"
+                               [makeBold]="true">
+          {{ licence.collegeCode | configCode: 'colleges' }}
+        </app-enrollee-property>
         <app-enrollee-property title="College ID"
                                [makeBold]="true">
-          {{ licence.practRefId | default: 'Not Applicable' }} -
-          {{ licence.collegeCode | configCode: 'colleges' }}
+          {{ licence.practRefId | default: 'None' }}
         </app-enrollee-property>
         <app-enrollee-property [title]="licence.collegeCode === CollegeLicenceClassEnum.CPSBC ? 'CPSID Number' :
                                 (licence.collegeCode === CollegeLicenceClassEnum.CDSBC
