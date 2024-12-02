@@ -65,6 +65,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
     this.formState.businessLicenceGuid.patchValue(document.documentGuid);
     this.uploadedFile = true;
     this.hasNoBusinessLicenceError = false;
+    this.formState.filename.patchValue(document.filename);
   }
 
   public onRemoveDocument(_: string): void {
@@ -123,9 +124,10 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
   protected performSubmission(): Observable<void> {
     // Transfer business licence renewal updates
     // to the form state service for submission
-    const { businessLicenceGuid, businessLicenceExpiry } = this.siteFormStateService.businessLicenceFormState;
+    const { businessLicenceGuid, businessLicenceExpiry, filename } = this.siteFormStateService.businessLicenceFormState;
     businessLicenceGuid.patchValue(this.formState.businessLicenceGuid.value);
     businessLicenceExpiry.patchValue(this.formState.businessLicenceExpiry.value);
+    filename.patchValue(this.formState.filename.value);
 
     this.siteFormStateService.businessLicenceFormState.flagBusinessLicenceUpdated();
 
