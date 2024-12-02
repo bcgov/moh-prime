@@ -100,7 +100,7 @@
       <ng-container *ngIf="site.businessLicence?.businessLicenceDocument; else deferredLicence">
         <app-enrollee-property title="Expiry"
                                [hasError]="site.businessLicence?.expiryDate && withinRenewalPeriod"
-                               [errorMessage]="'Business licence expiry date is required'">
+                               [errorMessage]="'Please upldate business licence'">
           {{ site.businessLicence?.expiryDate | formatDate | default }}
         </app-enrollee-property>
 
