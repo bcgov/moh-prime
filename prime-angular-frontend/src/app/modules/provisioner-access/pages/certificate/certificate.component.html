@@ -40,7 +40,7 @@
         </app-enrollee-property>
         <app-enrollee-property title="College ID"
                                [makeBold]="true">
-          {{ licence.practRefId | default: 'none' }}
+          {{ licence.practRefId | default: 'None' }}
         </app-enrollee-property>
         <app-enrollee-property [title]="licence.collegeCode === CollegeLicenceClassEnum.CPSBC ? 'CPSID Number' :
                                 (licence.collegeCode === CollegeLicenceClassEnum.CDSBC
