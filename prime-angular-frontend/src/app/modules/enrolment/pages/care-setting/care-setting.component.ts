@@ -95,6 +95,10 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       this.setHealthAuthorityValidator();
     }
 
+    if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE)) {
+      this.enrolmentFormStateService.removeRemoteAccess();
+    }
+
     // Remove device provider identifier if Device Provider is no longer selected
     if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
       this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.reset();

@@ -13441,6 +13441,22 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
+                        },
+                        new
+                        {
+                            Id = 371,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 11, 12, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 29,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            NamedInImReg = true,
+                            Prefix = "T9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
                         });
                 });
 
@@ -17934,6 +17950,43 @@ namespace Prime.Migrations
                     b.ToTable("SiteStatus");
                 });
 
+            modelBuilder.Entity("Prime.Models.SiteSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ProfileSnapshot")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("SiteSubmission");
+                });
+
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
                 {
                     b.Property<int>("Id")
@@ -19820,6 +19873,17 @@ namespace Prime.Migrations
                     b.Navigation("Site");
                 });
 
+            modelBuilder.Entity("Prime.Models.SiteSubmission", b =>
+                {
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithMany("SiteSubmissions")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
+                });
+
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
                 {
                     b.HasOne("Prime.Models.CommunitySite", "Site")
@@ -20206,6 +20270,8 @@ namespace Prime.Migrations
                     b.Navigation("SiteRegistrationReviewDocuments");
 
                     b.Navigation("SiteStatuses");
+
+                    b.Navigation("SiteSubmissions");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>

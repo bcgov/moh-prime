@@ -172,19 +172,11 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
       const { textSearch, careType, statusId, vendorId, assignToMe } = queryParams;
       this.healthAuthResource.getHealthAuthoritySitesByQuery({ textSearch, careType, statusId, vendorId, assignToMe })
         .subscribe((sites: HealthAuthoritySiteAdminList[]) => {
-          sites.forEach((s: HealthAuthoritySiteAdminList) => {
-            s.duplicatePecSiteCount = sites.filter((innerSite: HealthAuthoritySiteAdminList) => innerSite.id !== s.id
-              && innerSite.pec && innerSite.pec === s.pec).length;
-          });
           this.healthAuthoritySites = sites;
         })
     } else {
       this.busy = this.getPaginatedSites({ careSettingCode, ...queryParams })
         .subscribe((paginatedList: PaginatedList<SiteRegistrationListViewModel>) => {
-          paginatedList.results.forEach((s: SiteRegistrationListViewModel) => {
-            s.duplicatePecSiteCount = paginatedList.results.filter((innerSite: SiteRegistrationListViewModel) => innerSite.id !== s.id
-              && innerSite.pec && innerSite.pec === s.pec).length;
-          });
           this.dataSource.data = paginatedList.results;
           this.pagination = paginatedList;
         });
