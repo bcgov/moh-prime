@@ -187,6 +187,10 @@ export class SiteManagementPageComponent implements OnInit {
     return this.organization?.pendingTransfer || this.organization?.hasClaim;
   }
 
+  public isPendingTransfer(): boolean {
+    return this.organization?.pendingTransfer;
+  }
+
   public isLocked(site: SiteListViewModel): boolean {
     return site.status === SiteStatusType.LOCKED;
   }
