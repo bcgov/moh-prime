@@ -84,6 +84,7 @@ namespace Prime
         public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
         public DbSet<EnrolleeAbsence> EnrolleeAbsences { get; set; }
         public DbSet<Certification> Certifications { get; set; }
+        public DbSet<UnlistedCertification> UnlistedCertifications { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }

@@ -35,6 +35,7 @@ import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.
 import { EmailsForCareSetting } from '@shared/models/email-for-care-setting.model';
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 import { DeviceProviderSite } from "@shared/models/device-provider-site.model";
+import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,8 @@ export class EnrolmentResource {
               .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
             certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrollee.id}/certifications`)
               .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+            unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrollee.id}/unlisted-certifications`)
+              .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
             enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrollee.id}/device-providers`)
               .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
             enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrollee.id}/remote-users`)

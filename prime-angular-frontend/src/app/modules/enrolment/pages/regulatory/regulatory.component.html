@@ -125,6 +125,7 @@
                                             [index]="i"
                                             [total]="formState.certifications.controls.length"
                                             [selectedColleges]="selectedCollegeCodes"
+                                            (licenceCodeSelected)="licenceCodeSelected($event)"
                                             [selectedLicenses]="selectedLicenseCodes"
                                             (remove)="removeCertification($event)">
             </app-college-certification-form>
@@ -141,7 +142,38 @@
 
         </div>
       </div>
+      <div class="row">
 
+        <div class="col col-sm-10 py-3"
+             formArrayName="unlistedCertifications">
+          <app-toggle-content label="This user has a college licence not listed in the dropdown"
+                              [checked]="hasUnlistedCertification"
+                              [disabled]="disableUnlistedCertificationToggle"
+                              (toggle)="onUnlistedCertification($event)">
+
+            <ng-container *ngFor="let unlistedCertificate of formState.unlistedCertifications.controls; let i = index;"
+                          [formGroupName]="i">
+              <app-unlisted-college-licence-form [form]="unlistedCertificate"
+                                                 [index]="i"
+                                                 [total]="formState.unlistedCertifications.controls.length"
+                                                 [formState]="formState"
+                                                 [validate]="hasUnlistedCertification"
+                                                 (remove)="removeUnlistedCertification($event)">
+
+              </app-unlisted-college-licence-form>
+            </ng-container>
+
+            <button mat-button
+                    type="button"
+                    color="primary"
+                    (click)="formState.addEmptyUnlistedCollegeCertification()">
+              <mat-icon>add</mat-icon>
+              Add additional licences not listed in the dropdown
+            </button>
+
+          </app-toggle-content>
+        </div>
+      </div>
     </section>
 
   </form>

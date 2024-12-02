@@ -332,6 +332,31 @@ namespace Prime.Controllers
             return Ok(await _enrolleeService.GetCertificationsAsync(enrolleeId));
         }
 
+        // GET: api/enrollees/5/unlisted-certifications
+        /// <summary>
+        /// Gets an Enrollee's Unlisted Certifications.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/unlisted-certifications", Name = nameof(GetUnlistedCertifications))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<UnlistedCertificationViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetUnlistedCertifications(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleeService.GetUnlistedCertificationsAsync(enrolleeId));
+        }
+
         // GET: api/enrollees/5/device-provider
         /// <summary>
         /// Gets an Enrollee's device providers.
