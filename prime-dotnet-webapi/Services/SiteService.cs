@@ -38,7 +38,7 @@ namespace Prime.Services
 
         public async Task<bool> SiteExistsAsync(int siteId)
         {
-            return await _context.Sites.AnyAsync(s => s.Id == siteId);
+            return await _context.Sites.AnyAsync(s => s.Id == siteId && s.DeletedDate == null);
         }
 
         public async Task<SiteStatusType> GetSiteCurrentStatusAsync(int siteId)
@@ -54,7 +54,7 @@ namespace Prime.Services
         {
             var siteDto = await _context.Sites
                 .AsNoTracking()
-                .Where(site => site.Id == siteId)
+                .Where(site => site.Id == siteId && site.DeletedDate == null)
                 .Select(site => new
                 {
                     site.PEC,
@@ -70,7 +70,7 @@ namespace Prime.Services
             if (siteDto.healthAuthorityId.HasValue)
             {
                 var sites = await _context.Sites
-                    .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
+                    .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority && s.DeletedDate == null)
                     .AnyAsync();
 
                 // add exception for checking duplicate site ID
@@ -100,7 +100,7 @@ namespace Prime.Services
 
             return !await _context.Sites
                 .AsNoTracking()
-                .Where(s => s.PEC != "BC00000" && s.ArchivedDate == null)
+                .Where(s => s.PEC != "BC00000" && s.ArchivedDate == null && s.DeletedDate == null)
                 .AnyAsync(site => site.PEC == pec);
         }
 
@@ -195,19 +195,9 @@ namespace Prime.Services
             {
                 await _businessEventService.CreateSiteEventAsync(siteId, "Site Deleted");
 
-                if (site.PhysicalAddress != null)
-                {
-                    _context.Addresses.Remove(site.PhysicalAddress);
-                }
+                site.DeletedDate = DateTime.UtcNow;
 
-                if (site is CommunitySite communitySite)
-                {
-                    await DeleteContactFromSite(communitySite.AdministratorPharmaNetId);
-                    await DeleteContactFromSite(communitySite.TechnicalSupportId);
-                    await DeleteContactFromSite(communitySite.PrivacyOfficerId);
-                }
-
-                _context.Sites.Remove(site);
+                _context.Update(site);
                 await _context.SaveChangesAsync();
             }
         }
@@ -313,7 +303,8 @@ namespace Prime.Services
             IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications
                 .AsNoTracking()
                 .AsExpandable()
-                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate.HasValue)
+                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate.HasValue &&
+                    ruc.RemoteUser.Site.DeletedDate == null && ruc.RemoteUser.Site.ArchivedDate == null)
                 .Where(matchesAnyCert)
                 .ProjectTo<RemoteAccessSearchDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -324,24 +315,6 @@ namespace Prime.Services
                 .Select(group => group.First());
 
             return _mapper.Map<IEnumerable<RemoteAccessSearchViewModel>>(searchResults);
-        }
-
-        private async Task DeleteContactFromSite(int? contactId)
-        {
-            if (contactId == null)
-            {
-                return;
-            }
-
-            var contact = await _context.Contacts
-                .Include(contact => contact.PhysicalAddress)
-                .SingleAsync(contact => contact.Id == contactId);
-
-            if (contact.PhysicalAddress != null)
-            {
-                _context.Addresses.Remove(contact.PhysicalAddress);
-            }
-            _context.Contacts.Remove(contact);
         }
 
         public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
