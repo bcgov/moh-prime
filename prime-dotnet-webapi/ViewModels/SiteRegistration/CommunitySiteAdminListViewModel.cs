@@ -23,5 +23,6 @@ namespace Prime.ViewModels
         public bool Flagged { get; set; }
         public bool IsNew { get; set; }
         public int DuplicatePecSiteCount { get; set; }
+        public bool HasClaim { get; set; }
     }
 }
