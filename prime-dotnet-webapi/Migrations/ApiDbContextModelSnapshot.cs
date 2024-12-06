@@ -18613,6 +18613,11 @@ namespace Prime.Migrations
                         {
                             Code = 21,
                             Name = "Unable to link enrollee to paper enrolment"
+                        },
+                        new
+                        {
+                            Code = 22,
+                            Name = "Enrollee has unlisted (typically non-BC) licences"
                         });
                 });
 

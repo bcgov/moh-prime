@@ -12,8 +12,8 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20241118233818_addMultijurisdictionalFlag")]
-    partial class addMultijurisdictionalFlag
+    [Migration("20241205193810_EnableNonBCLicenceClasses")]
+    partial class EnableNonBCLicenceClasses
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18371,6 +18371,43 @@ namespace Prime.Migrations
                     b.ToTable("SiteStatus");
                 });
 
+            modelBuilder.Entity("Prime.Models.SiteSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ProfileSnapshot")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("SiteSubmission");
+                });
+
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
                 {
                     b.Property<int>("Id")
@@ -18579,6 +18616,11 @@ namespace Prime.Migrations
                         {
                             Code = 21,
                             Name = "Unable to link enrollee to paper enrolment"
+                        },
+                        new
+                        {
+                            Code = 22,
+                            Name = "Enrollee has unlisted (typically non-BC) licences"
                         });
                 });
 
@@ -20260,6 +20302,17 @@ namespace Prime.Migrations
                     b.Navigation("Site");
                 });
 
+            modelBuilder.Entity("Prime.Models.SiteSubmission", b =>
+                {
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithMany("SiteSubmissions")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
+                });
+
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
                 {
                     b.HasOne("Prime.Models.CommunitySite", "Site")
@@ -20646,6 +20699,8 @@ namespace Prime.Migrations
                     b.Navigation("SiteRegistrationReviewDocuments");
 
                     b.Navigation("SiteStatuses");
+
+                    b.Navigation("SiteSubmissions");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>

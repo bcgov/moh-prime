@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Prime.Migrations
 {
     /// <inheritdoc />
-    public partial class addMultijurisdictionalFlag : Migration
+    public partial class EnableNonBCLicenceClasses : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -2430,6 +2430,11 @@ namespace Prime.Migrations
                     { 374, false, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2024, 11, 12, 8, 0, 0, 0, DateTimeKind.Utc), 177, true, true, true, true, null, "L9", 2, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), true },
                     { 375, true, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2024, 11, 12, 8, 0, 0, 0, DateTimeKind.Utc), 89, true, true, true, true, null, "91", null, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), true }
                 });
+
+            migrationBuilder.InsertData(
+                table: "StatusReasonLookup",
+                columns: new[] { "Code", "Name" },
+                values: new object[] { 22, "Enrollee has unlisted (typically non-BC) licences" });
         }
 
         /// <inheritdoc />
@@ -2454,6 +2459,11 @@ namespace Prime.Migrations
                 table: "LicenseDetail",
                 keyColumn: "Id",
                 keyValue: 375);
+
+            migrationBuilder.DeleteData(
+                table: "StatusReasonLookup",
+                keyColumn: "Code",
+                keyValue: 22);
 
             migrationBuilder.DropColumn(
                 name: "LicenceClass",
