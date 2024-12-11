@@ -646,7 +646,7 @@ namespace Prime.Services
         {
             return await _context.CommunitySites
                 .AsNoTracking()
-                .AnyAsync(s => s.Id == siteId);
+                .AnyAsync(s => s.Id == siteId && s.DeletedDate == null);
         }
 
         public async Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId)

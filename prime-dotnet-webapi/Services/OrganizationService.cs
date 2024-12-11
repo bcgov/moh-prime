@@ -47,7 +47,7 @@ namespace Prime.Services
         {
             return await _context.Organizations
                 .AsNoTracking()
-                .AnyAsync(e => e.Id == organizationId);
+                .AnyAsync(o => o.Id == organizationId && o.DeletedDate == null);
         }
 
         public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId)

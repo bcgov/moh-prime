@@ -92,6 +92,7 @@ namespace Prime.Services
         {
             var siteList = await _context.HealthAuthoritySites
                 .AsNoTracking()
+                .Where(has => has.DeletedDate == null)
                 .If(healthAuthorityId.HasValue, q => q.Where(site => site.HealthAuthorityOrganizationId == healthAuthorityId))
                 .If(healthAuthoritySiteId.HasValue, q => q.Where(site => site.Id == healthAuthoritySiteId))
                 .Include(has => has.SiteSubmissions)
