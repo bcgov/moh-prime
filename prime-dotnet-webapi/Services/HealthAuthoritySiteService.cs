@@ -55,7 +55,7 @@ namespace Prime.Services
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
-                .AnyAsync(s => s.Id == siteId && s.HealthAuthorityOrganizationId == healthAuthorityId);
+                .AnyAsync(s => s.Id == siteId && s.HealthAuthorityOrganizationId == healthAuthorityId && s.DeletedDate == null);
         }
 
         public async Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId)
@@ -129,6 +129,7 @@ namespace Prime.Services
 
             var query = _context.HealthAuthoritySites
                 .AsNoTracking()
+                .Where(s => s.DeletedDate == null)
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch),
                     q => q.Search(
                         s => s.SiteName,
@@ -179,6 +180,7 @@ namespace Prime.Services
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
+                .Where(s => s.DeletedDate == null)
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
@@ -191,7 +193,7 @@ namespace Prime.Services
                 .Include(s => s.HealthAuthorityOrganization)
                 .Include(s => s.HealthAuthorityVendor)
                     .ThenInclude(v => v.Vendor)
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .FirstOrDefaultAsync();
         }
 
@@ -199,6 +201,7 @@ namespace Prime.Services
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
+                .Where(s => s.DeletedDate == null)
                 .ProjectTo<HealthAuthoritySiteAdminViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .SingleOrDefaultAsync(has => has.Id == siteId);

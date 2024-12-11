@@ -69,7 +69,7 @@ namespace Prime.Services
             var orgId = (int)authorizedUser.HealthAuthorityCode;
 
             return await _context.HealthAuthoritySites
-                .Where(has => has.HealthAuthorityOrganizationId == orgId && has.ArchivedDate == null)
+                .Where(has => has.HealthAuthorityOrganizationId == orgId && has.DeletedDate == null && has.ArchivedDate == null)
                 .ProjectTo<HealthAuthoritySiteListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();

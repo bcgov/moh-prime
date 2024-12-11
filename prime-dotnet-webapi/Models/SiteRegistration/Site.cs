@@ -57,6 +57,8 @@ namespace Prime.Models
 
         public Admin Adjudicator { get; set; }
 
+        public DateTimeOffset? DeletedDate { get; set; }
+
         [JsonIgnore]
         public ICollection<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
 
