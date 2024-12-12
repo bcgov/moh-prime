@@ -43,6 +43,7 @@ export class OverviewPageComponent implements OnInit {
   public routeUtils: RouteUtils;
   public siteErrors: ValidationErrors;
   public isBusinessLicenceUpdated: boolean;
+  public uploadedFilename: string;
   public isCompleted: boolean;
 
   public SiteRoutes = SiteRoutes;
@@ -205,6 +206,8 @@ export class OverviewPageComponent implements OnInit {
 
     this.isBusinessLicenceUpdated = this.siteFormStateService.businessLicenceFormState.isBusinessLicenceUpdated
       || (this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value && !this.site.businessLicence?.businessLicenceDocument);
+
+    this.uploadedFilename = this.siteFormStateService.businessLicenceFormState.filename.value;
 
     this.siteErrors = this.getSiteErrors(site);
   }
