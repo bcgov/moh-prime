@@ -97,7 +97,8 @@
     </app-enrollee-property>
 
     <ng-container *ngIf="!admin; else businessLicenceListView">
-      <ng-container *ngIf="site.businessLicence?.businessLicenceDocument; else deferredLicence">
+      <ng-container
+                    *ngIf="(site.businessLicence?.businessLicenceDocument || businessLicenceUpdated); else deferredLicence">
         <app-enrollee-property title="Expiry"
                                [hasError]="site.businessLicence?.expiryDate && withinRenewalPeriod"
                                [errorMessage]="'Please update business licence'">
