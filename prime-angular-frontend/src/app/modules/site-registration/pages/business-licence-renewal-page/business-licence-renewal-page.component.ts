@@ -124,10 +124,11 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
   protected performSubmission(): Observable<void> {
     // Transfer business licence renewal updates
     // to the form state service for submission
-    const { businessLicenceGuid, businessLicenceExpiry, filename } = this.siteFormStateService.businessLicenceFormState;
+    const { businessLicenceGuid, businessLicenceExpiry, filename, deferredLicenceReason } = this.siteFormStateService.businessLicenceFormState;
     businessLicenceGuid.patchValue(this.formState.businessLicenceGuid.value);
     businessLicenceExpiry.patchValue(this.formState.businessLicenceExpiry.value);
     filename.patchValue(this.formState.filename.value);
+    deferredLicenceReason.patchValue("");
 
     this.siteFormStateService.businessLicenceFormState.flagBusinessLicenceUpdated();
 
