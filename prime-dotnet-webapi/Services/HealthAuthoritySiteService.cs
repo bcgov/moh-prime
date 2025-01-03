@@ -160,7 +160,21 @@ namespace Prime.Services
                 .DecompileAsync()
                 .OrderBy(s => s.SiteName);
 
-            return await query.ToListAsync();
+            var matchingHASites = await query.ToListAsync();
+            // check for duplicate site id
+            foreach (var site in matchingHASites)
+            {
+                site.DuplicatePecSiteCount = await GetDuplicatePecCount(site.PEC, site.HealthAuthorityOrganizationId, site.Id);
+            }
+
+            return matchingHASites;
+        }
+
+        private async Task<int> GetDuplicatePecCount(string pec, int originalHASiteId, int originalSiteId)
+        {
+            return await _context.HealthAuthoritySites
+                    .Where(s => s.PEC != null && s.PEC == pec && s.HealthAuthorityOrganizationId == originalHASiteId && originalSiteId != s.Id)
+                    .CountAsync();
         }
 
         public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
