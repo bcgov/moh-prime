@@ -1,6 +1,5 @@
 using System.Linq;
 using AutoMapper;
-
 using Prime.Models;
 
 namespace Prime.ViewModels.Profiles
@@ -24,6 +23,7 @@ namespace Prime.ViewModels.Profiles
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
                 .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count));
             CreateMap<CommunitySite, CommunitySiteAdminListViewModel>()
+                .ForMember(dest => dest.HasClaim, opt => opt.MapFrom(src => src.Organization.Claims.Count() != 0))
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
                 .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count))
                 .ForMember(dest => dest.DisplayId, opt => opt.MapFrom(src => src.Organization.DisplayId))
