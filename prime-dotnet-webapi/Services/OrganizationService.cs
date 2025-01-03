@@ -68,7 +68,7 @@ namespace Prime.Services
             return await GetBaseOrganizationQuery()
                 .Include(o => o.Sites.Where(s => s.DeletedDate == null))
                     .ThenInclude(s => s.SiteStatuses)
-                .SingleOrDefaultAsync(o => o.Id == organizationId);
+                .SingleOrDefaultAsync(o => o.Id == organizationId && o.DeletedDate == null);
         }
 
         public async Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId)
