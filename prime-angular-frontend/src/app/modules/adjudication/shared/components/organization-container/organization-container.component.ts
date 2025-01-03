@@ -13,6 +13,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { EMPTY, exhaustMap, noop, of, Subscription } from 'rxjs';
+import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
 @Component({
   selector: 'app-organization-container',
@@ -26,6 +27,7 @@ export class OrganizationContainerComponent implements OnInit {
   public busy: Subscription;
   public organizations: OrganizationAdminView[];
   public AdjudicationRoutes = AdjudicationRoutes;
+  public SearchFormStatusType = SearchFormStatusType;
 
   protected routeUtils: RouteUtils;
 

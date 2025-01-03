@@ -5,6 +5,7 @@
 
   <app-search-form *ngIf="!hideSearchBar"
                    localStoragePrefix="organization"
+                   [statusType]="SearchFormStatusType.None"
                    (search)="onSearch($event)"
                    (refresh)="onRefresh()">
   </app-search-form>
