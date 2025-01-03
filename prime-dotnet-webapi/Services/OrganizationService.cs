@@ -62,6 +62,31 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<OrganizationAdminListViewModel>> GetOrganizationAdminListViewAsynce(string searchText)
+        {
+            return await _context.Organizations
+                .AsNoTracking()
+                .If(!string.IsNullOrWhiteSpace(searchText), q => q
+                    .Search(e => e.Name,
+                    e => e.DoingBusinessAs,
+                    e => e.SigningAuthority.FirstName,
+                    e => e.SigningAuthority.LastName)
+                    .Containing(searchText))
+                .ProjectTo<OrganizationAdminListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .ToListAsync();
+        }
+
+        public async Task<OrganizationAdminListViewModel> GetOrganizationAdminListViewByIdAsynce(int id)
+        {
+            return await _context.Organizations
+                .AsNoTracking()
+                .Where(o => o.Id == id)
+                .ProjectTo<OrganizationAdminListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<Organization> GetOrganizationAsync(int organizationId)
         {
             return await GetBaseOrganizationQuery()

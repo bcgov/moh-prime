@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
@@ -56,6 +56,8 @@ import { SiteEventsPageComponent } from './pages/health-authorities/site-events-
 import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
 import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
 import { AdminUsersPageComponent } from './pages/admin-users-page/admin-users-page.component';
+import { OrganizationsComponent } from './pages/organizations/organizations.component';
+import { OrganizationSitesComponent } from './pages/organization-sites/organization-sites.component';
 
 const routes: Routes = [
   {
@@ -407,6 +409,26 @@ const routes: Routes = [
                 redirectTo: AdjudicationRoutes.ORGANIZATION_INFORMATION,
                 pathMatch: 'full'
               }
+            ]
+          }
+        ]
+      },
+      {
+        path: AdjudicationRoutes.ORGANIZATIONS,
+        children: [
+          {
+            path: '',
+            component: OrganizationsComponent,
+            data: { title: 'Organizations' }
+          },
+          {
+            path: ':id',
+            children: [
+              {
+                path: AdjudicationRoutes.ORGANIZATION_SITES,
+                component: OrganizationSitesComponent,
+                data: { title: 'Organization Sites' }
+              },
             ]
           }
         ]

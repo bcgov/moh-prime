@@ -20,6 +20,10 @@ export class AdjudicationRoutes {
   public static TOA = 'toa';
   public static LICENSE_CLASSES = 'license-classes';
 
+  // For Organizations section
+  public static ORGANIZATIONS = 'organizations';
+  public static ORGANIZATION_SITES = 'sites';
+
   // SITE_REGISTRATIONS is an alias for ORGANIZATIONS in the routing hierarchy
   public static SITE_REGISTRATIONS = 'site-registrations';
   // SITE_REGISTRATION is an alias for SITES in the routing hierarchy
