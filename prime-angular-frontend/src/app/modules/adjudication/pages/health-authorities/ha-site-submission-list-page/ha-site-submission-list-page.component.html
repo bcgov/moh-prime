@@ -1,0 +1,9 @@
+<app-health-authority-site-container [content]="content"
+                                     [hasActions]="hasActions">
+  <app-page-header>Site Submission List</app-page-header>
+</app-health-authority-site-container>
+
+<ng-template #content>
+  <app-site-submission-list [siteId]="siteId"
+                            [currentSubmissionId]="currentSubmissionId"></app-site-submission-list>
+</ng-template>

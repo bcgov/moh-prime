@@ -78,6 +78,14 @@ namespace Prime.Services
                 .DecompileAsync();
 
             var paginatedList = await PaginatedList<CommunitySiteAdminListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
+
+
+            //check for duplicate site id
+            foreach (var site in paginatedList)
+            {
+                site.DuplicatePecSiteCount = await GetDuplicatePecCount(site.CareSettingCode, site.PEC, site.Id);
+            }
+
             GroupSitesToOrgVisually(paginatedList);
             return paginatedList;
         }
@@ -108,6 +116,13 @@ namespace Prime.Services
                     currentOrgId = orgSiteViewModel.OrganizationId;
                 }
             }
+        }
+
+        private async Task<int> GetDuplicatePecCount(int? careSettingCode, string pec, int originalSiteId)
+        {
+            return await _context.Sites
+                    .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id)
+                    .CountAsync();
         }
 
         public async Task<CommunitySite> GetSiteAsync(int siteId)
@@ -682,7 +697,8 @@ namespace Prime.Services
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)
-                .Include(s => s.SiteStatuses);
+                .Include(s => s.SiteStatuses)
+                .Include(s => s.SiteSubmissions);
         }
     }
 }
