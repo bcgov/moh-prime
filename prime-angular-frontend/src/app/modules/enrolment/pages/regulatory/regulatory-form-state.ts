@@ -83,7 +83,9 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
       return;
     }
 
+    //clear the form array before patching the value
     this.removeCollegeCertifications();
+    this.removeUnlistedCertifications();
 
     if (certifications.length) {
       certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
@@ -148,6 +150,10 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
 
   public removeCollegeCertifications() {
     this.certifications.clear();
+  }
+
+  public removeUnlistedCertifications() {
+    this.unlistedCertifications.clear();
   }
 
   public collegeHasGrouping(collegeCode: number): boolean {

@@ -109,17 +109,13 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   public licenceCodeSelected(code: number) {
     if (this.multijurisdictionalLicenceCode.some(l => l.code === code)) {
-      this.hasUnlistedCertification = true;
       this.disableUnlistedCertificationToggle = true;
+      this.hasUnlistedCertification = true;
       if (!this.formState.unlistedCertifications.length) {
         this.formState.addEmptyUnlistedCollegeCertification();
       }
     } else {
-      this.hasUnlistedCertification = false;
       this.disableUnlistedCertificationToggle = false;
-      if (this.formState.unlistedCertifications.length) {
-        this.formState.json.unlistedCertifications = [];
-      }
     }
   }
 
@@ -131,9 +127,6 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.createFormInstance();
     this.patchForm().subscribe(() => {
       this.initForm();
-      if (this.formState.json.unlistedCertifications.length > 0) {
-        this.hasUnlistedCertification = true;
-      }
     });
     this.multijurisdictionalLicenceCode = this.configService.licenses.filter(l => l.multijurisdictional);
   }
@@ -149,6 +142,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected initForm() {
+
+    if (this.formState.unlistedCertifications.length) {
+      this.hasUnlistedCertification = true;
+    }
     this.setupDeviceProvider();
 
     // Always have at least one certification ready for
@@ -361,10 +358,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
   }
 
-  public onUnlistedCertification({ checked }: ToggleContentChange) {
+  public toggleUnlistedCertification({ checked }: ToggleContentChange) {
     if (!checked) {
       this.hasUnlistedCertification = false;
-      this.formState.json.unlistedCertifications = [];
+      this.formState.unlistedCertifications.clear();
     } else {
       this.hasUnlistedCertification = true;
       if (!this.formState.unlistedCertifications.length) {
