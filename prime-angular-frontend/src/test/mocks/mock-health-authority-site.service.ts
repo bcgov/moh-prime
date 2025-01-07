@@ -41,7 +41,8 @@ export class MockHealthAuthoritySiteService {
       completed: true,
       submittedDate: faker.date.past(2).toDateString(),
       approvedDate: faker.date.past(2).toDateString(),
-      status: SiteStatusType.EDITABLE
+      status: SiteStatusType.EDITABLE,
+      currentSubmission: null
     });
     this._site = new BehaviorSubject<HealthAuthoritySite>(healthAuthoritySite);
   }
