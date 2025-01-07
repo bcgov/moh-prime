@@ -26,6 +26,9 @@ namespace Prime.Configuration.Database
         public static readonly DateTime RemoteAccessChangeJan23rd2024 = new(2024, 1, 23, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime ProvisionalPhysiciansMay3rd2024 = new(2024, 5, 3, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime NewCollegeLicenseChangeJune252024 = new(2024, 6, 25, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime NewMultijurisdictionalBccnmLicenceClasses = new(2024, 8, 27, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime AddTemporaryLimitedPharmacistLicenceClasses = new(2024, 10, 22, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime UpdatePharmacyTechnician = new(2024, 11, 12, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -451,6 +454,16 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 365, LicenseCode = 173, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeJune252024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 366, LicenseCode = 174, Prefix = "",   Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, EffectiveDate = NewCollegeLicenseChangeJune252024, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
+                    // New "Multijurisdictional" BCCNM licence classes
+                    new LicenseDetail { Id = 367, LicenseCode = 175, Prefix = "R9", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "RX", EffectiveDate = NewMultijurisdictionalBccnmLicenceClasses, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id = 368, LicenseCode = 176, Prefix = "Y9", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "YX", EffectiveDate = NewMultijurisdictionalBccnmLicenceClasses, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id = 369, LicenseCode = 177, Prefix = "L9", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = NewMultijurisdictionalBccnmLicenceClasses, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Add Temporary Limited Pharmacist
+                    new LicenseDetail { Id = 370, LicenseCode = 178, Prefix = "P1", Manual = false, Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = AddTemporaryLimitedPharmacistLicenceClasses, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Set Pharmacy Technician to manual review
+                    new LicenseDetail { Id = 371, LicenseCode = 29, Prefix = "T9", Manual = true, Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,  EffectiveDate = UpdatePharmacyTechnician, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }

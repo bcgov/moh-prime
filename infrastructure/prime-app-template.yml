@@ -234,7 +234,7 @@ objects:
               - name: log-storage
                 mountPath: /tmp/
             terminationMessagePolicy: File
-            
+
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -730,6 +730,8 @@ objects:
                   name: pharmanet-api
               - configMapRef:
                   name: verifiable-credential
+              - configMapRef:
+                  name: provider-enrolment-team
               - secretRef:
                   name: canada-post-addresscomplete-secrets
               - secretRef:
@@ -1078,7 +1080,7 @@ objects:
                 memory: 512Mi
               requests:
                 cpu: 5m
-                memory: 50Mi 
+                memory: 50Mi
             env:
               - name: REDIS_PASSWORD
                 valueFrom:

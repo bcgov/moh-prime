@@ -6,6 +6,8 @@ namespace Prime.Models.Api
         Approve = 2,
         Reject = 3,
         RequestChange = 4,
-        Unreject = 5
+        Unreject = 5,
+        Archive = 8,
+        Restore = 9,
     }
 }

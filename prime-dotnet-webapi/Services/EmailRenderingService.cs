@@ -13,7 +13,7 @@ namespace Prime.Services.EmailInternal
         private const string PrimeEmail = "no-reply-prime@gov.bc.ca";
         private const string PrimeSupportEmail = "primesupport@gov.bc.ca";
         private const string MohEmail = "HLTH.HnetConnection@gov.bc.ca";
-        private const string ProviderEnrolmentTeamEmail = "Lori.Haggstrom@gov.bc.ca";
+        //private const string ProviderEnrolmentTeamEmail = "Lori.Haggstrom@gov.bc.ca";
 
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailTemplateService _emailTemplateService;
@@ -252,7 +252,7 @@ namespace Prime.Services.EmailInternal
             return new Email
             (
                 from: PrimeEmail,
-                to: ProviderEnrolmentTeamEmail,
+                to: PrimeConfiguration.Current.ProviderEnrolmentTeam.EmailAddress.Split(";"),
                 subject: emailTemplate.Subject,
                 body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
             );
