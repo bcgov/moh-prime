@@ -33,6 +33,7 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
   @Output() public notify: EventEmitter<{ siteId: number }>;
   @Output() public reload: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
+  @Output() public pecFilter: EventEmitter<string>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
   @ViewChild('secondaryPaginator', { static: true }) public secondaryPaginator: MatPaginator;
@@ -71,7 +72,7 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
     this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.routeUtils = new RouteUtils(activatedRoute, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
-
+    this.pecFilter = new EventEmitter<string>();
   }
 
   public onAssign(siteId: number): void {
@@ -105,6 +106,22 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
         return 'Locked';
       default:
         return 'Editable';
+    }
+  }
+
+  public displayMissingBusinessLicence(row: SiteRegistrationListViewModel): string {
+    if (row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+      if (row.missingBusinessLicence === undefined) {
+        row.missingBusinessLicence = row.businessLicence === null ||
+          row.businessLicence.businessLicenceDocument === null
+      }
+      if (row.missingBusinessLicence) {
+        return "Yes"
+      } else {
+        return "No"
+      }
+    } else {
+      return "N/A";
     }
   }
 
@@ -155,6 +172,14 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
           return 0;
       }
     });
+  }
+
+  public getDuplicatePecText(row: SiteRegistrationListViewModel) {
+    return `${row.duplicatePecSiteCount + 1} sites share the same site ID`;
+  }
+
+  public onPecFilter(pec: string) {
+    this.pecFilter.emit(pec);
   }
 }
 

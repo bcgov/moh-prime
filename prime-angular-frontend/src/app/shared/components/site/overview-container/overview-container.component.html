@@ -70,7 +70,8 @@
   </app-overview-section>
 
   <app-overview-section title="Site Business Licence"
-                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
+                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW &&
+                          site.status !== SiteStatusType.LOCKED && !site.approvedDate"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
 
@@ -96,15 +97,17 @@
     </app-enrollee-property>
 
     <ng-container *ngIf="!admin; else businessLicenceListView">
-      <ng-container *ngIf="site.businessLicence?.businessLicenceDocument; else deferredLicence">
-
+      <ng-container
+                    *ngIf="(site.businessLicence?.businessLicenceDocument || businessLicenceUpdated); else deferredLicence">
         <app-enrollee-property title="Expiry"
-                               [hasError]="!site.businessLicence?.expiryDate && withinRenewalPeriod"
-                               [errorMessage]="'Business licence expiry date is required'">
+                               [hasError]="site.businessLicence?.expiryDate && withinRenewalPeriod"
+                               [errorMessage]="'Please update business licence'">
           {{ site.businessLicence?.expiryDate | formatDate | default }}
         </app-enrollee-property>
 
-        <app-enrollee-property title="Filename">
+        <app-enrollee-property title="Filename"
+                               [hasError]="!site.businessLicence?.expiryDate && withinRenewalPeriod && !businessLicenceUpdated"
+                               [errorMessage]="'Please update business licence'">
           <ng-container *ngIf="!businessLicenceUpdated; else businessLicenceUpdatedMessage">
             <button mat-stroked-button
                     color="primary"
@@ -114,7 +117,7 @@
             </button>
           </ng-container>
           <ng-template #businessLicenceUpdatedMessage>
-            New business licence document has been uploaded for submission
+            (New) {{filename}}
           </ng-template>
         </app-enrollee-property>
         <app-enrollee-property *ngIf="site.businessLicence.deferredLicenceReason"
@@ -163,7 +166,8 @@
   <app-overview-section *ngIf="site?.physicalAddress?.street !== null && site?.physicalAddress?.city !== null &&
                           site?.physicalAddress?.provinceCode !== null && site?.physicalAddress?.postal !== null"
                         title="Site Address"
-                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
+                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW
+                          && site.status !== SiteStatusType.LOCKED && !site.approvedDate"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Address">
@@ -189,7 +193,7 @@
   </app-overview-section>
 
   <app-overview-section title="Hours of Operation"
-                        [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && !site.approvedDate"
+                        [showEditRedirect]="showEditRedirect && site.status === SiteStatusType.EDITABLE"
                         [editRoute]="SiteRoutes.HOURS_OPERATION"
                         (route)="onRouteRelative($event)">
     <ng-container *ngFor="let businessDay of site?.businessHours">

@@ -11,6 +11,8 @@ import { BusinessLicenceDocument } from '@registration/shared/models/business-li
 import { BusinessLicenceForm } from './business-licence-form.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { SiteService } from '@registration/shared/services/site.service';
+import { Site } from '@registration/shared/models/site.model';
 
 export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceForm> {
   private siteId: number;
@@ -21,10 +23,15 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
     private fb: FormBuilder,
     private siteResource: SiteResource,
     private formUtilsService: FormUtilsService,
+    private siteService: SiteService,
   ) {
     super();
     this.businessLicenceUpdated = false;
     this.buildForm();
+  }
+
+  public get filename(): FormControl {
+    return this.formInstance.get('filename') as FormControl;
   }
 
   public get businessLicenceGuid(): FormControl {
@@ -121,6 +128,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
+      filename: [null, []],
       businessLicenceGuid: [
         // Will never be patched when the form is built, and is
         // only updated based on a document upload occurring.
@@ -195,7 +203,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       const careSettingCode = form.get("careSettingCode");
 
       if ((careSettingCode.value === CareSettingEnum.COMMUNITY_PHARMACIST || careSettingCode.value === CareSettingEnum.DEVICE_PROVIDER) &&
-        !(isNewWOSiteId.value || isNewWSiteId.value || activeBeforeRegistration.value)) {
+        !(isNewWOSiteId.value || isNewWSiteId.value || activeBeforeRegistration.value) && this.siteService.site?.approvedDate === null) {
         return { 'checkboxRequired': true };
       }
 

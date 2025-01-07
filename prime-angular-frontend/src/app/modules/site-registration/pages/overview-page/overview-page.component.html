@@ -3,11 +3,12 @@
   <app-site-progress-indicator [noContent]="this.overviewType === 'organization'"
                                [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <app-expiry-alert [expiryDates]="siteExpiryDate">
+  <app-expiry-alert [expiryDates]="siteExpiryDate"
+                    *ngIf="!isBusinessLicenceUpdated">
     <!-- Work around for ngProjectAs not passing class reference to alert when applied to ng-content -->
     <ng-container #alertTitle
                   class="alert-title">
-      This site requires renewal.
+      This site requires update.
     </ng-container>
     <ng-container #alertContent
                   class="alert-content">
@@ -37,7 +38,8 @@
                           [organization]="organization"
                           [site]="site"
                           [siteErrors]="siteErrors"
-                          [businessLicenceUpdated]="isBusinessLicenceUpdated"></app-overview-container>
+                          [businessLicenceUpdated]="isBusinessLicenceUpdated"
+                          [filename]="uploadedFilename"></app-overview-container>
 
   <ng-container *ngIf="showSubmissionAction; else showBack">
     <div class="footer mb-4">

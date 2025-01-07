@@ -73,11 +73,25 @@ namespace Prime.Services
                     .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
                     .AnyAsync();
 
+                // add exception for checking duplicate site ID
+                // only VCH and PHSA can share same site ID
+                var exceptionHAList = new List<int>();
+
+                if (siteDto.healthAuthorityId == (int)HealthAuthorityCode.VancouverCoastalHealth)
+                {
+                    exceptionHAList.Add((int)HealthAuthorityCode.ProvincialHealthServicesAuthority);
+                }
+                else if (siteDto.healthAuthorityId == (int)HealthAuthorityCode.ProvincialHealthServicesAuthority)
+                {
+                    exceptionHAList.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
+                }
+
                 var otherHealthAuthoritySites = await _context.HealthAuthoritySites
                     .AsNoTracking()
                     .Where(
                         s => s.PEC == pec
                         && s.HealthAuthorityOrganizationId != siteDto.healthAuthorityId
+                        && !exceptionHAList.Contains(s.HealthAuthorityOrganizationId)
                         )
                     .AnyAsync();
 
@@ -86,7 +100,7 @@ namespace Prime.Services
 
             return !await _context.Sites
                 .AsNoTracking()
-                .Where(s => s.PEC != "BC00000")
+                .Where(s => s.PEC != "BC00000" && s.ArchivedDate == null)
                 .AnyAsync(site => site.PEC == pec);
         }
 
@@ -135,10 +149,12 @@ namespace Prime.Services
             var site = await _context.Sites
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
+            var eventMessage = $"Site ID changed from {site.PEC} to {pecCode}";
+
             site.PEC = pecCode;
 
             await _context.SaveChangesAsync();
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
+            await _businessEventService.CreateSiteEventAsync(site.Id, eventMessage);
         }
 
         public async Task UpdateVendor(int siteId, int vendorCode, string rationale)
@@ -290,8 +306,8 @@ namespace Prime.Services
             {
                 // For BCCNM (college code = 3), matching license number to practitioner ID.
                 matchesAnyCert.Or(ruc => ruc.CollegeCode == searchedCert.CollegeCode &&
-                    ((ruc.LicenseNumber == searchedCert.LicenceNumber && searchedCert.CollegeCode != 3) ||
-                    (ruc.PractitionerId == searchedCert.PractitionerId && searchedCert.CollegeCode == 3)));
+                    ((ruc.LicenseNumber == searchedCert.LicenceNumber && searchedCert.CollegeCode != CollegeCode.BCCNM) ||
+                    (ruc.PractitionerId == searchedCert.PractitionerId && searchedCert.CollegeCode == CollegeCode.BCCNM)));
             }
 
             IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications
@@ -523,6 +539,78 @@ namespace Prime.Services
                 .Where(s => s.Id == siteId)
                 .Select(s => s.PEC)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<List<Site>> GetSitesByPecAsync(string pec)
+        {
+            return await _context.Sites.Where(s => s.PEC == pec)
+                .Select(s => s).ToListAsync();
+        }
+
+        public async Task ArchiveSite(int siteId, string note)
+        {
+            var site = await _context.Sites
+                .Where(s => s.Id == siteId)
+                .SingleOrDefaultAsync();
+
+            site.AddStatus(SiteStatusType.Archived);
+            site.ArchivedDate = DateTime.Now;
+
+            _context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not archive the site.");
+            }
+
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been archived (Note: {note})");
+        }
+
+        public async Task RestoreArchivedSite(int siteId, string note)
+        {
+            var site = await _context.Sites
+                .Where(s => s.Id == siteId)
+                .SingleOrDefaultAsync();
+
+
+            var siteStatusList = await _context.SiteStatuses
+                .Where(ss => ss.SiteId == siteId)
+                .OrderByDescending(ss => ss.Id)
+                .ToArrayAsync();
+
+            var previousStatus = siteStatusList[1];
+            // restore site with the previous status/state
+            site.AddStatus(previousStatus.StatusType);
+
+            site.ArchivedDate = null;
+            _context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not restore the site.");
+            }
+
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been restored (Note: {note})");
+        }
+
+        public async Task<bool> CanBeRestored(int siteId)
+        {
+            //check if the site ID (PEC) is used by other site with editable status
+            var site = await _context.Sites.Where(s => s.Id == siteId).Select(s => s).FirstAsync();
+
+            if (site.PEC == null)
+            {
+                return true;
+            }
+
+            var sites = await _context.Sites
+                    .Include(s => s.SiteStatuses)
+                .Where(s => s.PEC == site.PEC).Select(s => s)
+                .ToListAsync();
+
+            return sites.Count() == 0 || !sites.Where(s => s.Status == SiteStatusType.Editable || s.Status == SiteStatusType.InReview).Any();
         }
     }
 }

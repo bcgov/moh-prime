@@ -90,13 +90,22 @@ namespace Prime.Services
 
         public async Task<IEnumerable<HealthAuthoritySiteAdminListViewModel>> GetSitesAsync(int? healthAuthorityId = null, int? healthAuthoritySiteId = null)
         {
-            return await _context.HealthAuthoritySites
+            var siteList = await _context.HealthAuthoritySites
                 .AsNoTracking()
                 .If(healthAuthorityId.HasValue, q => q.Where(site => site.HealthAuthorityOrganizationId == healthAuthorityId))
                 .If(healthAuthoritySiteId.HasValue, q => q.Where(site => site.Id == healthAuthoritySiteId))
-                .ProjectTo<HealthAuthoritySiteAdminListViewModel>(_mapper.ConfigurationProvider)
+                .Include(has => has.SiteSubmissions)
+                .Include(has => has.HealthAuthorityVendor)
+                    .ThenInclude(hav => hav.Vendor)
+                .Include(has => has.HealthAuthorityOrganization)
+                .Include(has => has.HealthAuthorityCareType)
+                .Include(has => has.AuthorizedUser)
+                    .ThenInclude(au => au.Party)
+                .Include(has => has.Adjudicator)
+                .Include(has => has.SiteStatuses)
                 .DecompileAsync()
                 .ToListAsync();
+            return _mapper.Map<List<HealthAuthoritySiteAdminListViewModel>>(siteList);
         }
 
         public async Task<IEnumerable<HealthAuthoritySiteAdminListViewModel>> GetSitesAsync(HealthAuthoritySiteSearchOptions searchOptions)
@@ -149,7 +158,21 @@ namespace Prime.Services
                 .DecompileAsync()
                 .OrderBy(s => s.SiteName);
 
-            return await query.ToListAsync();
+            var matchingHASites = await query.ToListAsync();
+            // check for duplicate site id
+            foreach (var site in matchingHASites)
+            {
+                site.DuplicatePecSiteCount = await GetDuplicatePecCount(site.PEC, site.HealthAuthorityOrganizationId, site.Id);
+            }
+
+            return matchingHASites;
+        }
+
+        private async Task<int> GetDuplicatePecCount(string pec, int originalHASiteId, int originalSiteId)
+        {
+            return await _context.HealthAuthoritySites
+                    .Where(s => s.PEC != null && s.PEC == pec && s.HealthAuthorityOrganizationId == originalHASiteId && originalSiteId != s.Id)
+                    .CountAsync();
         }
 
         public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
@@ -159,6 +182,17 @@ namespace Prime.Services
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
+        }
+
+        public async Task<HealthAuthoritySite> GetHealthAuthoritySiteAsync(int siteId)
+        {
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Include(s => s.HealthAuthorityOrganization)
+                .Include(s => s.HealthAuthorityVendor)
+                    .ThenInclude(v => v.Vendor)
+                .Where(s => s.Id == siteId)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<HealthAuthoritySiteAdminViewModel> GetAdminSiteAsync(int siteId)
