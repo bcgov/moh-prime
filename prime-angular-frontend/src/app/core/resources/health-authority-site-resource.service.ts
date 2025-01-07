@@ -76,7 +76,7 @@ export class HealthAuthoritySiteResource {
           return { ...healthAuthoritySite, businessHours };
         }),
         map((healthAuthoritySiteDto: HealthAuthoritySiteDto) => HealthAuthoritySite.toHealthAuthoritySite(healthAuthoritySiteDto)),
-        tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE', healthAuthoritySite)),
+        tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTHORITY_SITE 1', healthAuthoritySite)),
         catchError((error: any) => {
           if (error.status === HttpStatusCode.NotFound) {
             return of(null);

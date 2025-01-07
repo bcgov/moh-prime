@@ -56,6 +56,10 @@ import { SiteEventsPageComponent } from './pages/health-authorities/site-events-
 import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
 import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
 import { CareTypeVendorPageComponent } from './pages/health-authorities/care-type-vendor-page/care-type-vendor-page.component';
+import { HaSiteSubmissionListPageComponent } from './pages/health-authorities/ha-site-submission-list-page/ha-site-submission-list-page.component';
+import { HaSiteSubmissionPageComponent } from './pages/health-authorities/ha-site-submission-page/ha-site-submission-page.component';
+import { CommunitySiteSubmissionPageComponent } from './pages/community-site-submission-page/community-site-submission-page.component';
+import { CommunitySiteSubmissionListPageComponent } from './pages/community-site-submission-list-page/community-site-submission-list-page.component';
 import { AdminUsersPageComponent } from './pages/admin-users-page/admin-users-page.component';
 
 const routes: Routes = [
@@ -312,7 +316,22 @@ const routes: Routes = [
                 path: AdjudicationRoutes.EVENT_LOG,
                 component: SiteEventsComponent,
                 data: { title: 'Event Log' }
-              }
+              },
+              {
+                path: AdjudicationRoutes.SITE_SUBMISSION_LIST,
+                children: [
+                  {
+                    path: '',
+                    component: CommunitySiteSubmissionListPageComponent,
+                    data: { title: 'Site Submission List' }
+                  },
+                  {
+                    path: `:ssid/${AdjudicationRoutes.SITE_SUBMISSION}`,
+                    component: CommunitySiteSubmissionPageComponent,
+                    data: { title: 'Site Submission' }
+                  }
+                ]
+              },
             ]
           },
           {
@@ -381,6 +400,7 @@ const routes: Routes = [
                   }
                 ]
               },
+
               {
                 // Site registrations is synonymous with site with regards
                 // to Health Authorities
@@ -405,7 +425,22 @@ const routes: Routes = [
                     path: AdjudicationRoutes.DOCUMENT_UPLOAD,
                     component: SiteDocumentsPageComponent,
                     data: { title: 'Adjudicator Documents' }
-                  }
+                  },
+                  {
+                    path: AdjudicationRoutes.SITE_SUBMISSION_LIST,
+                    children: [
+                      {
+                        path: '',
+                        component: HaSiteSubmissionListPageComponent,
+                        data: { title: 'Site Submission List' }
+                      },
+                      {
+                        path: `:ssid/${AdjudicationRoutes.SITE_SUBMISSION}`,
+                        component: HaSiteSubmissionPageComponent,
+                        data: { title: 'Site Submission' }
+                      }
+                    ]
+                  },
                 ]
               },
               {
