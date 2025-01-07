@@ -56,6 +56,7 @@ import { PageFooterComponent } from '@shared/components/pages/page-footer/page-f
 import { NotificationInfoSummaryDirective } from '@shared/components/forms/contact-information-form/notification-info-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
 import { UpperCaseInputDirective } from '@lib/modules/forms/to-uppercase.directive';
+import { TrimSpaceInputDirective } from '@lib/modules/forms/trim-space.directive';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alerts/alert/alert.component';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
@@ -130,6 +131,7 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
 import { EmailFormComponent } from './components/forms/email-form/email-form.component';
 import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
 import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
+import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-archive-restore/site-archive-restore.component';
 
 @NgModule({
   declarations: [
@@ -169,6 +171,7 @@ import { TransferHASiteComponent } from './components/dialogs/content/transfer-h
     PageSubheader2MoreInfoDirective,
     NotificationInfoSummaryDirective,
     UpperCaseInputDirective,
+    TrimSpaceInputDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
@@ -241,6 +244,7 @@ import { TransferHASiteComponent } from './components/dialogs/content/transfer-h
     EmailFormComponent,
     SelfDeclarationTermComponent,
     TransferHASiteComponent,
+    SiteArchiveRestoreComponent,
   ],
   imports: [
     CommonModule,
@@ -293,6 +297,7 @@ import { TransferHASiteComponent } from './components/dialogs/content/transfer-h
     PageSubheader2MoreInfoDirective,
     NotificationInfoSummaryDirective,
     UpperCaseInputDirective,
+    TrimSpaceInputDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,

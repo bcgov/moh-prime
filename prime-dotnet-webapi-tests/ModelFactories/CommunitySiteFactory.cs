@@ -59,7 +59,9 @@ namespace PrimeTests.ModelFactories
             // The following are populated in FinishWith section
             Ignore(x => x.SiteStatuses);
             Ignore(x => x.ApprovedDate);
+            Ignore(x => x.ArchivedDate);
             Ignore(x => x.Mnemonic);
+            Ignore(x => x.SiteSubmissions);
 
             FinishWith((f, x) =>
             {

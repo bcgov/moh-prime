@@ -43,7 +43,9 @@
                                            (escalate)="onEscalate($event)"
                                            (enableEditing)="onEnableEditing($event)"
                                            (flag)="onToggleFlagSite($event)"
-                                           (delete)="deleteSite($event)">
+                                           (delete)="deleteSite($event)"
+                                           (archive)="onArchive($event)"
+                                           (restore)="onRestore($event)">
             </app-site-registration-actions>
 
           </ng-template>
