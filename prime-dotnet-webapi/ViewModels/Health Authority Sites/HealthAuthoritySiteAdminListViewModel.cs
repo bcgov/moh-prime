@@ -23,5 +23,6 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public string AdjudicatorIdir { get; set; }
         public bool HasNotification { get; set; }
         public SiteSubmission CurrentSubmission { get; set; }
+        public int DuplicatePecSiteCount { get; set; }
     }
 }
