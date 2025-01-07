@@ -32,6 +32,7 @@ namespace Prime.Controllers
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
         private readonly ISiteService _siteService;
+        private readonly ISiteSubmissionService _siteSubmissionService;
         private readonly IDeviceProviderService _deviceProviderService;
 
         public SitesController(
@@ -44,6 +45,7 @@ namespace Prime.Controllers
             IMapper mapper,
             IOrganizationService organizationService,
             ISiteService siteService,
+            ISiteSubmissionService siteSubmissionService,
             IDeviceProviderService deviceProviderService)
         {
             _adminService = adminService;
@@ -56,6 +58,7 @@ namespace Prime.Controllers
             _siteService = siteService;
             _deviceProviderService = deviceProviderService;
             _healthAuthoritySiteService = healthAuthoritySiteService;
+            _siteSubmissionService = siteSubmissionService;
         }
 
         // GET: api/Sites
@@ -95,7 +98,7 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<CommunitySiteListViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<PaginatedResponse<CommunitySiteAdminListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAllSites([FromQuery] OrganizationSearchOptions search)
         {
             var paginatedList = await _communitySiteService.GetSitesAsync(search);
@@ -372,6 +375,7 @@ namespace Prime.Controllers
 
             await _communitySiteService.UpdateSiteAsync(siteId, _mapper.Map<CommunitySiteUpdateModel>(updatedSite));
             await _siteService.SubmitRegistrationAsync(siteId);
+            await _siteSubmissionService.CreateCommunitySiteSubmissionAsync(siteId);
 
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode, site.IsNew);
             await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent site registration submission notification");
@@ -418,6 +422,7 @@ namespace Prime.Controllers
                 var licenceDto = _mapper.Map<BusinessLicence>(existingLicence);
                 licenceDto.Id = 0;
                 licenceDto.ExpiryDate = newLicence.ExpiryDate;
+                licenceDto.DeferredLicenceReason = newLicence.DeferredLicenceReason;
 
                 var licence = await _communitySiteService.AddBusinessLicenceAsync(site.Id, licenceDto, newLicence.DocumentGuid.Value);
                 return licence != null;
@@ -1381,6 +1386,123 @@ namespace Prime.Controllers
         {
             var site = await _deviceProviderService.GetDeviceProviderSiteAsync(deviceProviderId);
             return Ok(site);
+        }
+
+        // GET: api/sites/5/site-submissions
+        /// <summary>
+        /// Gets the site submissions.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/site-submissions", Name = nameof(GetSiteSubmissions))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<SiteSubmission>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSiteSubmissions(int siteId)
+        {
+            var submissions = await _siteSubmissionService.GetSiteSubmissionsAsync(siteId);
+            return Ok(submissions.OrderByDescending(s => s.CreatedDate));
+        }
+
+        // GET: api/sites/5/site-submission/6
+        /// <summary>
+        /// Gets the site submission.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="siteSubmissionId"></param>
+        [HttpGet("{siteId}/site-submission/{siteSubmissionId}", Name = nameof(GetSiteSubmission))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<SiteSubmission>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSiteSubmission(int siteId, int siteSubmissionId)
+        {
+            var submission = await _siteSubmissionService.GetSiteSubmissionAsync(siteId, siteSubmissionId);
+            return Ok(submission);
+        }
+
+        // POST: api/Sites/5/archive
+        /// <summary>
+        /// Archive a site
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="siteNoteUpdateModel"></param>
+        [HttpPost("{siteId}/archive", Name = nameof(ArchiveSite))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> ArchiveSite(int siteId, SiteNoteUpdateModel siteNoteUpdateModel)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Archive, status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            await _siteService.ArchiveSite(siteId, siteNoteUpdateModel.Note);
+
+            return Ok();
+        }
+
+        // POST: api/Sites/5/restore
+        /// <summary>
+        /// Restore a archived site
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="siteNoteUpdateModel"></param>
+        [HttpPost("{siteId}/restore", Name = nameof(RestoreSite))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> RestoreSite(int siteId, SiteNoteUpdateModel siteNoteUpdateModel)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Restore, status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            if (!await _siteService.CanBeRestored(siteId))
+            {
+                return BadRequest("Site ID has been used in other site.");
+            }
+
+            await _siteService.RestoreArchivedSite(siteId, siteNoteUpdateModel.Note);
+
+            return Ok();
+        }
+
+        // GET: api/Sites/5/can-restore
+        /// <summary>
+        /// Return is the site can be restored
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/can-restore", Name = nameof(CanBeRestored))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> CanBeRestored(int siteId)
+        {
+            var result = await _siteService.CanBeRestored(siteId);
+            return Ok(result);
         }
     }
 }

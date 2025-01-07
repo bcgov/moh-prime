@@ -42,7 +42,7 @@
              [id]="CareSettingEnum.HEALTH_AUTHORITY">
       <ng-template matTabContent>
         <div class="mt-3">
-          <app-search-ha-form #searchHaForm
+          <app-search-ha-form #searchHaSiteForm
                               (search)="onSearch($event)"
                               (siteStatus)="onSiteStatusChange($event)"
                               (vendor)="onVendorChange($event)"
@@ -57,7 +57,7 @@
                                       (notify)="onNotify($event)"
                                       (route)="onRoute($event)"
                                       (reload)="onRefresh()"
-                                      (pecFilter)="onTextSearch($event)"></app-health-authority-table>
+                                      (pecFilter)="onTextSearchHaSite($event)"></app-health-authority-table>
         </div>
       </ng-template>
     </mat-tab>
@@ -67,7 +67,8 @@
                let-columns="columns"
                let-localStoragePrefix="localStoragePrefix">
     <div class="mt-3">
-      <app-search-form *ngIf="showSearchFilter"
+      <app-search-form #searchComSiteForm
+                       *ngIf="showSearchFilter"
                        [hideStatus]="false"
                        [statusType]="SearchFormStatusType.SiteStatuses"
                        [localStoragePrefix]="localStoragePrefix"
@@ -84,6 +85,7 @@
                                  (reassign)="onReassign($event)"
                                  (notify)="onNotify($event)"
                                  (route)="onRoute($event)"
-                                 (reload)="onRefresh()"></app-site-registration-table>
+                                 (reload)="onRefresh()"
+                                 (pecFilter)="onTextSearchComSite($event)"></app-site-registration-table>
   </ng-template>
 </app-page>

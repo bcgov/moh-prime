@@ -29,6 +29,9 @@ export class AdjudicationRoutes {
   public static SITE_REMOTE_USERS = 'remote-users';
   public static SITE_INFORMATION = 'site-information';
 
+  public static SITE_SUBMISSION_LIST = 'site-submission-list';
+  public static SITE_SUBMISSION = 'site-submission';
+
   public static HEALTH_AUTHORITIES = 'health-authorities';
   public static HEALTH_AUTH_CARE_TYPES = 'health-auth-care-types';
   public static HEALTH_AUTH_VENDORS = 'vendors';
