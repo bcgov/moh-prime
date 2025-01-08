@@ -174,7 +174,7 @@ namespace Prime.Services
         private async Task<int> GetDuplicatePecCount(string pec, int originalHASiteId, int originalSiteId)
         {
             return await _context.HealthAuthoritySites
-                    .Where(s => s.PEC != null && s.PEC == pec && s.HealthAuthorityOrganizationId == originalHASiteId && originalSiteId != s.Id)
+                    .Where(s => s.PEC != null && s.PEC == pec && s.HealthAuthorityOrganizationId == originalHASiteId && originalSiteId != s.Id && s.DeletedDate == null)
                     .CountAsync();
         }
 
