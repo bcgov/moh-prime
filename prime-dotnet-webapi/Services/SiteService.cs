@@ -44,7 +44,7 @@ namespace Prime.Services
         public async Task<SiteStatusType> GetSiteCurrentStatusAsync(int siteId)
         {
             return await _context.Sites
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => s.Status)
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
@@ -92,6 +92,7 @@ namespace Prime.Services
                         s => s.PEC == pec
                         && s.HealthAuthorityOrganizationId != siteDto.healthAuthorityId
                         && !exceptionHAList.Contains(s.HealthAuthorityOrganizationId)
+                        && s.DeletedDate == null
                         )
                     .AnyAsync();
 
@@ -106,18 +107,16 @@ namespace Prime.Services
 
         public async Task<bool> PecExistsWithinHAAsync(int siteId, string pec)
         {
-            var site = await _context.HealthAuthoritySites.Where(s => s.Id == siteId).SingleAsync();
+            var site = await _context.HealthAuthoritySites.Where(s => s.Id == siteId && s.DeletedDate == null).SingleAsync();
 
             return await _context.Sites
                 .Where(s => (s as HealthAuthoritySite).HealthAuthorityOrganizationId == site.HealthAuthorityOrganizationId
-                    && s.Id != siteId && s.PEC == pec).AnyAsync();
+                    && s.Id != siteId && s.PEC == pec && s.DeletedDate == null).AnyAsync();
         }
 
         public async Task UpdateCompletedAsync(int siteId, bool completed)
         {
-            var site = await _context.Sites
-                .SingleOrDefaultAsync(s => s.Id == siteId);
-
+            var site = await GetSiteAsync(siteId);
             if (site == null)
             {
                 throw new ArgumentException($"Could not set Completed on Site {siteId}, it doesn't exist.");
@@ -130,9 +129,7 @@ namespace Prime.Services
 
         public async Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null)
         {
-            var site = await _context.Sites
-                .SingleOrDefaultAsync(s => s.Id == siteId);
-
+            var site = await GetSiteAsync(siteId);
             if (site == null)
             {
                 throw new ArgumentException($"Could not Update Adjudicator on Site {siteId}, it doesn't exist.");
@@ -146,8 +143,7 @@ namespace Prime.Services
 
         public async Task UpdatePecCode(int siteId, string pecCode)
         {
-            var site = await _context.Sites
-                .SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
 
             var eventMessage = $"Site ID changed from {site.PEC} to {pecCode}";
 
@@ -159,7 +155,7 @@ namespace Prime.Services
 
         public async Task UpdateVendor(int siteId, int vendorCode, string rationale)
         {
-            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
+            var site = await GetSiteAsync(siteId);
 
             if (site.CareSettingCode.Value == (int)CareSettingType.HealthAuthority)
             {
@@ -187,10 +183,7 @@ namespace Prime.Services
 
         public async Task DeleteSiteAsync(int siteId)
         {
-            var site = await _context.Sites
-                .Include(site => site.PhysicalAddress)
-                .SingleOrDefaultAsync(s => s.Id == siteId);
-
+            var site = await GetSiteAsync(siteId);
             if (site != null)
             {
                 await _businessEventService.CreateSiteEventAsync(siteId, "Site Deleted");
@@ -204,7 +197,7 @@ namespace Prime.Services
 
         public async Task<Site> ApproveSite(int siteId)
         {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
 
             site.AddStatus(SiteStatusType.Editable);
             site.ApprovedDate = DateTimeOffset.Now;
@@ -217,7 +210,7 @@ namespace Prime.Services
 
         public async Task<Site> DeclineSite(int siteId)
         {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
             site.AddStatus(SiteStatusType.Locked);
             site.ApprovedDate = null;
             await _context.SaveChangesAsync();
@@ -229,7 +222,7 @@ namespace Prime.Services
 
         public async Task<Site> UnrejectSite(int siteId)
         {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
             site.AddStatus(SiteStatusType.InReview);
             await _context.SaveChangesAsync();
 
@@ -240,7 +233,7 @@ namespace Prime.Services
 
         public async Task<Site> EnableEditingSite(int siteId)
         {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
             site.ApprovedDate = null;
             site.AddStatus(SiteStatusType.Editable);
             await _context.SaveChangesAsync();
@@ -252,7 +245,7 @@ namespace Prime.Services
 
         public async Task<Site> SubmitRegistrationAsync(int siteId)
         {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
             site.SubmittedDate = DateTimeOffset.Now;
             site.AddStatus(SiteStatusType.InReview);
             _context.Update(site);
@@ -392,8 +385,7 @@ namespace Prime.Services
 
         public async Task UpdateSiteFlag(int siteId, bool flagged)
         {
-            var site = await _context.Sites
-                .SingleAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
 
             site.Flagged = flagged;
             await _context.SaveChangesAsync();
@@ -401,8 +393,7 @@ namespace Prime.Services
 
         public async Task UpdateSiteIsNew(int siteId, bool isNew)
         {
-            var site = await _context.Sites
-                .SingleAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
 
             site.IsNew = isNew;
             await _context.SaveChangesAsync();
@@ -500,7 +491,7 @@ namespace Prime.Services
                 .Include(e => e.Admin)
                 .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
                 .Where(e => e.SiteId == siteId
-                        || e.Organization.Sites.Any(s => s.Id == siteId))
+                        || e.Organization.Sites.Any(s => s.Id == siteId && s.DeletedDate == null))
                 .OrderByDescending(e => e.EventDate)
                 .ProjectTo<SiteBusinessEventViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -509,22 +500,21 @@ namespace Prime.Services
         public async Task<string> GetSitePecAsync(int siteId)
         {
             return await _context.Sites
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => s.PEC)
                 .SingleOrDefaultAsync();
         }
 
         public async Task<List<Site>> GetSitesByPecAsync(string pec)
         {
-            return await _context.Sites.Where(s => s.PEC == pec)
+            return await _context.Sites
+                .Where(s => s.PEC == pec && s.DeletedDate == null)
                 .Select(s => s).ToListAsync();
         }
 
         public async Task ArchiveSite(int siteId, string note)
         {
-            var site = await _context.Sites
-                .Where(s => s.Id == siteId)
-                .SingleOrDefaultAsync();
+            var site = await GetSiteAsync(siteId);
 
             site.AddStatus(SiteStatusType.Archived);
             site.ArchivedDate = DateTime.Now;
@@ -542,10 +532,7 @@ namespace Prime.Services
 
         public async Task RestoreArchivedSite(int siteId, string note)
         {
-            var site = await _context.Sites
-                .Where(s => s.Id == siteId)
-                .SingleOrDefaultAsync();
-
+            var site = await GetSiteAsync(siteId);
 
             var siteStatusList = await _context.SiteStatuses
                 .Where(ss => ss.SiteId == siteId)
@@ -571,7 +558,7 @@ namespace Prime.Services
         public async Task<bool> CanBeRestored(int siteId)
         {
             //check if the site ID (PEC) is used by other site with editable status
-            var site = await _context.Sites.Where(s => s.Id == siteId).Select(s => s).FirstAsync();
+            var site = await _context.Sites.Where(s => s.Id == siteId && s.DeletedDate == null).Select(s => s).FirstAsync();
 
             if (site.PEC == null)
             {
@@ -584,6 +571,18 @@ namespace Prime.Services
                 .ToListAsync();
 
             return sites.Count() == 0 || !sites.Where(s => s.Status == SiteStatusType.Editable || s.Status == SiteStatusType.InReview).Any();
+        }
+
+        public async Task<Site> GetSiteAsync(int siteId)
+        {
+            return await GetBaseSiteQuery()
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+        }
+
+        private IQueryable<Site> GetBaseSiteQuery()
+        {
+            return _context.Sites
+                .Where(s => s.DeletedDate == null);
         }
     }
 }

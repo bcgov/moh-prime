@@ -68,7 +68,7 @@ namespace Prime.Services
             return await GetBaseOrganizationQuery()
                 .Include(o => o.Sites.Where(s => s.DeletedDate == null))
                     .ThenInclude(s => s.SiteStatuses)
-                .SingleOrDefaultAsync(o => o.Id == organizationId && o.DeletedDate == null);
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
         public async Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId)
@@ -128,8 +128,7 @@ namespace Prime.Services
 
         public async Task<int> UpdateCompletedAsync(int organizationId)
         {
-            var organization = await GetBaseOrganizationQuery()
-                .SingleOrDefaultAsync(o => o.Id == organizationId);
+            var organization = await GetOrganizationOnlyAsync(organizationId);
 
             organization.Completed = true;
 
@@ -171,7 +170,7 @@ namespace Prime.Services
         {
             return await GetBaseOrganizationQuery()
                 .AsNoTracking()
-                .SingleOrDefaultAsync(o => o.Id == organizationId && o.DeletedDate == null);
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
         /// <summary>
@@ -183,7 +182,7 @@ namespace Prime.Services
         {
             var siteExists = await _context.CommunitySites
                 .AsNoTracking()
-                .Where(s => s.CareSettingCode == careSettingCode && s.OrganizationId == organizationId)
+                .Where(s => s.CareSettingCode == careSettingCode && s.OrganizationId == organizationId && s.DeletedDate == null)
                 .AnyAsync();
 
             if (!siteExists)
@@ -261,7 +260,7 @@ namespace Prime.Services
         public async Task<bool> IsOrganizationTransferCompleteAsync(int organizationId)
         {
             var signingAuthorityId = await _context.Organizations
-                .Where(o => o.Id == organizationId)
+                .Where(o => o.Id == organizationId && o.DeletedDate == null)
                 .Select(o => o.SigningAuthorityId)
                 .SingleOrDefaultAsync();
 
@@ -272,8 +271,7 @@ namespace Prime.Services
 
         public async Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(int organizationId)
         {
-            var organization = await _context.Organizations
-                .SingleAsync(o => o.Id == organizationId);
+            var organization = await GetOrganizationOnlyAsync(organizationId);
 
             var pendingCodes = await GetCareSettingCodesForPendingTransferAsync(organizationId, organization.SigningAuthorityId);
             if (pendingCodes.Any())
@@ -286,8 +284,7 @@ namespace Prime.Services
 
         public async Task FinalizeTransferAsync(int organizationId)
         {
-            var organization = await _context.Organizations
-                .SingleOrDefaultAsync(o => o.Id == organizationId);
+            var organization = await GetOrganizationOnlyAsync(organizationId);
 
             organization.PendingTransfer = false;
             await _context.SaveChangesAsync();
@@ -333,7 +330,7 @@ namespace Prime.Services
         public async Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId)
         {
             return await _context.Organizations
-                .Where(o => o.Id == organizationId)
+                .Where(o => o.Id == organizationId && o.DeletedDate == null)
                 .SelectMany(o => o.Agreements)
                 .Select(a => a.SignedAgreement)
                 .OrderByDescending(sa => sa.UploadedDate)
@@ -365,6 +362,7 @@ namespace Prime.Services
         private IQueryable<Organization> GetBaseOrganizationQuery()
         {
             return _context.Organizations
+                .Where(o => o.DeletedDate == null)
                 .Include(o => o.Agreements)
                     .ThenInclude(a => a.SignedAgreement)
                 .Include(o => o.SigningAuthority)
@@ -375,8 +373,7 @@ namespace Prime.Services
 
         public async Task SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId)
         {
-            var organization = await _context.Organizations
-                .SingleAsync(o => o.Id == organizationId);
+            var organization = await GetOrganizationOnlyAsync(organizationId);
 
             organization.SigningAuthorityId = newSigningAuthorityId;
 
@@ -397,7 +394,7 @@ namespace Prime.Services
         // update organization registration ID calling OrgBook API with organization name in PRIME, then return the number of organizations updated
         public async Task<int> UpdateMissingRegistrationIds()
         {
-            var targetOrganizations = await _context.Organizations.Where(o => o.RegistrationId == null)
+            var targetOrganizations = await _context.Organizations.Where(o => o.RegistrationId == null && o.DeletedDate == null)
                 .OrderBy(o => o.Id)
                 .ToListAsync();
             int numUpdated = 0;
@@ -417,6 +414,15 @@ namespace Prime.Services
             }
 
             return numUpdated;
+        }
+
+        private async Task<Organization> GetOrganizationOnlyAsync(int organizationId)
+        {
+            // Does not Include any related entities and
+            // is suitable for updates
+            return await _context.Organizations
+                .Where(o => o.DeletedDate == null)
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
     }
 }

@@ -127,7 +127,7 @@ namespace Prime.Services
         public async Task<CommunitySite> GetSiteAsync(int siteId)
         {
             return await GetBaseSiteQuery()
-                .SingleOrDefaultAsync(s => s.Id == siteId && s.DeletedDate == null);
+                .SingleOrDefaultAsync(s => s.Id == siteId);
         }
 
         public async Task<List<Vendor>> GetVendorsAsync()
@@ -226,7 +226,7 @@ namespace Prime.Services
         {
             return await _context.CommunitySites
                 .AsNoTracking()
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => new PermissionsRecord { Username = s.Organization.SigningAuthority.Username })
                 .SingleOrDefaultAsync();
         }
@@ -636,7 +636,7 @@ namespace Prime.Services
             return await _context.CommunitySites
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => s.BusinessLicence)
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
@@ -660,7 +660,7 @@ namespace Prime.Services
         public async Task UpdateSigningAuthorityForOrganization(int organizationId, int partyId)
         {
             var sites = await _context.CommunitySites
-                .Where(s => s.OrganizationId == organizationId)
+                .Where(s => s.OrganizationId == organizationId && s.DeletedDate == null)
                 .ToListAsync();
 
             foreach (var site in sites)
