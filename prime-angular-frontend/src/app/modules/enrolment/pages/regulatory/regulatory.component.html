@@ -149,7 +149,7 @@
           <app-toggle-content label="This user has a college licence not listed in the dropdown"
                               [checked]="hasUnlistedCertification"
                               [disabled]="disableUnlistedCertificationToggle"
-                              (toggle)="onUnlistedCertification($event)">
+                              (toggle)="toggleUnlistedCertification($event)">
 
             <ng-container *ngFor="let unlistedCertificate of formState.unlistedCertifications.controls; let i = index;"
                           [formGroupName]="i">
