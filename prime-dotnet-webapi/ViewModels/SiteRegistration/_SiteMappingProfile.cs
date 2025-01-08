@@ -17,7 +17,7 @@ namespace Prime.ViewModels.Profiles
                 .ForMember(dest => dest.SigningAuthorityName, opt => opt.MapFrom(src => $"{src.SigningAuthority.FirstName} {src.SigningAuthority.LastName}"))
                 .ForMember(dest => dest.SiteId, opt => opt.MapFrom(src => src.Sites.FirstOrDefault(s => s.PEC != null).Id))
                 .ForMember(dest => dest.HasClaim, opt => opt.MapFrom(src => src.Claims.Any()))
-                .ForMember(dest => dest.ValidSiteCount, opt => opt.MapFrom(src => src.Sites.Count(s => !s.CareSettingCode.HasValue)))
+                .ForMember(dest => dest.ValidSiteCount, opt => opt.MapFrom(src => src.Sites.Count(s => s.CareSettingCode != null)))
                 .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedTimeStamp.DateTime));
             CreateMap<CommunitySite, CommunitySiteListViewModel>()
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))

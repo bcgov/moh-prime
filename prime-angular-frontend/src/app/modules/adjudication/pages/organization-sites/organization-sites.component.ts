@@ -8,6 +8,7 @@ import { PaginatedList } from '@core/models/paginated-list.model';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { EmailUtils } from '@lib/utils/email-utils.class';
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
+import { OrganizationAdminView } from '@registration/shared/models/organization.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { AssignAction, AssignActionEnum, ClaimNoteComponent, ClaimType } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
@@ -15,7 +16,7 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
-import { concat, EMPTY, exhaustMap, map, noop, of, Subscription, take } from 'rxjs';
+import { concat, EMPTY, exhaustMap, forkJoin, map, noop, of, Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-organization-sites',
@@ -27,6 +28,7 @@ export class OrganizationSitesComponent implements OnInit {
   protected routeUtils: RouteUtils;
   protected busy: Subscription;
 
+  public organization: OrganizationAdminView;
   public communityPharmacies: MatTableDataSource<SiteRegistrationListViewModel>;
   public privateCommunityHealthPractices: MatTableDataSource<SiteRegistrationListViewModel>;
   public deviceProviders: MatTableDataSource<SiteRegistrationListViewModel>;
@@ -55,14 +57,19 @@ export class OrganizationSitesComponent implements OnInit {
   }
 
   protected getDataset(organizationId: number) {
-    this.busy = this.siteResource.getPaginatedSites({ organizationId: organizationId })
-      .subscribe((sites: PaginatedList<SiteRegistrationListViewModel>) => {
-        this.communityPharmacies.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
-        this.privateCommunityHealthPractices.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
-        this.deviceProviders.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-      });
-  }
+    this.busy = forkJoin([
+      this.adjudicationResource.getOrganizationById(organizationId),
+      this.siteResource.getPaginatedSites({ organizationId: organizationId })
+    ]).subscribe(([organization, sites]: [OrganizationAdminView, PaginatedList<SiteRegistrationListViewModel>]) => {
+      this.organization = organization;
 
+      this.communityPharmacies.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
+      this.privateCommunityHealthPractices.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
+      this.deviceProviders.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+
+      this.initizedSite();
+    });
+  }
   public onRoute(routePath: RoutePath): void {
     this.routeUtils.routeWithin(routePath);
   }
@@ -164,5 +171,22 @@ export class OrganizationSitesComponent implements OnInit {
         )
       )
       .subscribe(() => this.onReload());
+  }
+
+  private initizedSite() {
+    if (this.communityPharmacies && this.communityPharmacies.data.length > 0) {
+      this.setOrganizationInfo(this.communityPharmacies.data[0]);
+    }
+    if (this.privateCommunityHealthPractices && this.privateCommunityHealthPractices.data.length > 0) {
+      this.setOrganizationInfo(this.privateCommunityHealthPractices.data[0]);
+    }
+    if (this.deviceProviders && this.deviceProviders.data.length > 0) {
+      this.setOrganizationInfo(this.deviceProviders.data[0]);
+    }
+  }
+
+  private setOrganizationInfo(site: SiteRegistrationListViewModel) {
+    site.organizationName = this.organization.name;
+    site.signingAuthorityName = this.organization.signingAuthorityName;
   }
 }
