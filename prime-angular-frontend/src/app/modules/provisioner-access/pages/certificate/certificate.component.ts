@@ -75,4 +75,8 @@ export class CertificateComponent implements OnInit {
         }
       );
   }
+
+  public isPhysicianAssistant(prefix: string): boolean {
+    return prefix === "M9";
+  }
 }
