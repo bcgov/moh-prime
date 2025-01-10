@@ -42,8 +42,7 @@
                                [makeBold]="true">
           {{ licence.practRefId | default: 'None' }}
         </app-enrollee-property>
-        <app-enrollee-property *ngIf="!isPhysicianAssistant(licence.practRefId)"
-                               [title]="licence.collegeCode === CollegeLicenceClassEnum.CPSBC ? 'CPSID Number' :
+        <app-enrollee-property [title]="licence.collegeCode === CollegeLicenceClassEnum.CPSBC ? 'CPSID Number' :
                                 (licence.collegeCode === CollegeLicenceClassEnum.CDSBC
                                 || licence.collegeCode === CollegeLicenceClassEnum.CPBC
                                 || licence.collegeCode === CollegeLicenceClassEnum.OptometryBC) ? 'Registration Number' :
