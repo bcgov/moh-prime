@@ -1073,7 +1073,7 @@ objects:
         containers:
           - name: redis
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:latest
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:tini
             resources:
               limits:
                 cpu: 25m
