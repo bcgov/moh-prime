@@ -64,7 +64,7 @@
     "@angular/compiler-cli": "^13.3.12",
     "@angular/language-service": "^13.3.12",
     "@types/faker": "^4.1.12",
-    "@types/jasmine": "~3.10.3",
+    "@types/jasmine": "~3.10.18",
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "^12.11.1",
     "@types/smoothscroll-polyfill": "^0.3.1",
