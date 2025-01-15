@@ -362,6 +362,45 @@ namespace Prime.Controllers
             return Ok(updatedEnrollee);
         }
 
+        // POST: api/enrollees/5/submissions/change/agreement-type
+        /// <summary>
+        /// Assign a TOA agreement type to the latest submission.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="data"></param>
+        [HttpPost("{enrolleeId}/submissions/change/agreement-type", Name = nameof(ChangeToaAgreementType))]
+        [Authorize(Roles = Roles.ApproveEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> ChangeToaAgreementType(int enrolleeId, ChangeToaUpdateViewModel data)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+
+            var assignedToaType = (data.AgreementType == 0) ? null : (AgreementType?)data.AgreementType;
+
+            if (assignedToaType.HasValue && !Enum.IsDefined(typeof(AgreementType), data.AgreementType))
+            {
+                return NotFound($"Agreement type not found with id {data.AgreementType}.");
+            }
+
+            if (assignedToaType.HasValue && !data.AgreementType.IsEnrolleeAgreement())
+            {
+                return BadRequest("Agreement type must be a TOA.");
+            }
+
+            if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
+            {
+                return BadRequest("Assigned agreement type can not be updated when the current status is not 'Under Review'.");
+            }
+
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.ChangeToa, data);
+        }
+
         // PUT: api/enrollees/5/always-manual
         /// <summary>
         /// Sets an Enrollee's always manual flag, forcing them to always be sent to manual adjudication
