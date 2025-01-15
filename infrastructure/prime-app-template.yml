@@ -870,10 +870,13 @@ objects:
       matchLabels:
         name: ${SVC_NAME}-document-manager
     strategy:
-      type: RollingUpdate
-      rollingUpdate:
-        maxSurge: 25%
-        maxUnavailable: 25%
+      type: Recreate
+      rollingParams:
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "50%"
+        maxUnavailable: 0
     template:
       metadata:
         labels:
