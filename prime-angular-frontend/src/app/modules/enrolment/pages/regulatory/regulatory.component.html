@@ -146,11 +146,13 @@
 
         <div class="col col-sm-10 py-3"
              formArrayName="unlistedCertifications">
-          <app-toggle-content label="This user has a college licence not listed in the dropdown"
+          <app-toggle-content label="I have a college licence in another jurisdiction or one not listed in the dropdown"
                               [checked]="hasUnlistedCertification"
                               [disabled]="disableUnlistedCertificationToggle"
                               (toggle)="toggleUnlistedCertification($event)">
-
+            <p>
+              Please enter your college licence information without abbreviations.
+            </p>
             <ng-container *ngFor="let unlistedCertificate of formState.unlistedCertifications.controls; let i = index;"
                           [formGroupName]="i">
               <app-unlisted-college-licence-form [form]="unlistedCertificate"

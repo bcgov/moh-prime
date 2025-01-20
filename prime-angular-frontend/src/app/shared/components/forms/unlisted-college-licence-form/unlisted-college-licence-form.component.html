@@ -1,14 +1,13 @@
-
 <ng-container [formGroup]="form">
 
   <app-form-icon-group [show]="total >= 1"
-    (event)="removeUnlistedCertification()">
+                       (event)="removeUnlistedCertification()">
     <div class="row">
       <div class="col">
 
         <mat-form-field class="w-100">
           <input matInput
-          placeholder="College Name (Enter the college name in full, without abbreviations)"
+                 placeholder="College Name"
                  formControlName="collegeName"
                  maxlength="50">
           <mat-error *ngIf="collegeName.errors?.['required']">Required</mat-error>
@@ -21,7 +20,7 @@
 
         <mat-form-field class="w-100">
           <input matInput
-                 placeholder="Licence Class"
+                 placeholder="Licence Class from this College"
                  formControlName="licenceClass">
           <mat-error *ngIf="licenceNumber.hasError('required')">Required</mat-error>
         </mat-form-field>
@@ -32,7 +31,7 @@
 
         <mat-form-field class="w-100">
           <input matInput
-                 placeholder="College Licence"
+                 placeholder="College Licence Number"
                  formControlName="licenceNumber"
                  maxlength="7">
           <mat-error *ngIf="licenceNumber.hasError('required')">Required</mat-error>
@@ -64,6 +63,6 @@
 
       </div>
     </div>
-</app-form-icon-group>
+  </app-form-icon-group>
 
 </ng-container>
