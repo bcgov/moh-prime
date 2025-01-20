@@ -758,7 +758,10 @@ namespace Prime.Services
         public async Task<IEnumerable<EnrolleeRemoteUserViewModel>> GetEnrolleeRemoteUsersAsync(int enrolleeId)
         {
             return await _context.EnrolleeRemoteUsers
-                .Where(eru => eru.EnrolleeId == enrolleeId)
+                .Where(eru => eru.EnrolleeId == enrolleeId &&
+                    _context.RemoteUsers
+                    .Where(ru => ru.Site.DeletedDate == null)
+                    .Select(ru => ru.Id).Contains(eru.RemoteUserId))
                 .ProjectTo<EnrolleeRemoteUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -786,7 +789,7 @@ namespace Prime.Services
             // Currently, only maps from Community Sites as Remote Users are disabled on Health Authorities
             return await _context.RemoteAccessSites
                 .AsNoTracking()
-                .Where(ras => ras.EnrolleeId == enrolleeId)
+                .Where(ras => ras.EnrolleeId == enrolleeId && ras.Site.DeletedDate == null)
                 .ProjectTo<RemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }

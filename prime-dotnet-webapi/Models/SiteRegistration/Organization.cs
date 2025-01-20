@@ -39,6 +39,8 @@ namespace Prime.Models
 
         public bool PendingTransfer { get; set; }
 
+        public DateTimeOffset? DeletedDate { get; set; }
+
         [JsonIgnore]
         public ICollection<CommunitySite> Sites { get; set; }
 

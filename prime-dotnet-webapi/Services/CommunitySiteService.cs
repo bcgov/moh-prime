@@ -44,7 +44,7 @@ namespace Prime.Services
 
             if (organizationId != null)
             {
-                query = query.Where(s => s.OrganizationId == organizationId);
+                query = query.Where(s => s.OrganizationId == organizationId && s.Organization.DeletedDate == null);
             }
 
             return await query.ToListAsync();
@@ -56,6 +56,7 @@ namespace Prime.Services
 
             var query = _context.CommunitySites
                 .AsNoTracking()
+                .Where(s => s.DeletedDate == null && s.Organization.DeletedDate == null)
                 .If(searchOptions.CareSettingCode.HasValue, q => q
                     .Where(s => s.CareSettingCode == searchOptions.CareSettingCode)
                 )
@@ -225,7 +226,7 @@ namespace Prime.Services
         {
             return await _context.CommunitySites
                 .AsNoTracking()
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => new PermissionsRecord { Username = s.Organization.SigningAuthority.Username })
                 .SingleOrDefaultAsync();
         }
@@ -635,7 +636,7 @@ namespace Prime.Services
             return await _context.CommunitySites
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => s.BusinessLicence)
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
@@ -645,7 +646,7 @@ namespace Prime.Services
         {
             return await _context.CommunitySites
                 .AsNoTracking()
-                .AnyAsync(s => s.Id == siteId);
+                .AnyAsync(s => s.Id == siteId && s.DeletedDate == null);
         }
 
         public async Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId)
@@ -659,7 +660,7 @@ namespace Prime.Services
         public async Task UpdateSigningAuthorityForOrganization(int organizationId, int partyId)
         {
             var sites = await _context.CommunitySites
-                .Where(s => s.OrganizationId == organizationId)
+                .Where(s => s.OrganizationId == organizationId && s.DeletedDate == null)
                 .ToListAsync();
 
             foreach (var site in sites)
@@ -673,6 +674,7 @@ namespace Prime.Services
         private IQueryable<CommunitySite> GetBaseSiteQuery()
         {
             return _context.CommunitySites
+                .Where(s => s.DeletedDate == null)
                 .Include(s => s.Provisioner)
                 .Include(s => s.SiteVendors)
                     .ThenInclude(v => v.Vendor)
