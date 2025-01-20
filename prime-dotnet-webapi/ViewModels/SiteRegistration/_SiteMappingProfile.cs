@@ -12,7 +12,7 @@ namespace Prime.ViewModels.Profiles
             CreateMap<Organization, OrganizationListViewModel>()
                 .ForMember(dest => dest.HasAcceptedAgreement, opt => opt.MapFrom(src => src.Agreements.Any(a => a.AcceptedDate.HasValue)))
                 .ForMember(dest => dest.HasSubmittedSite, opt => opt.MapFrom(src => src.Sites.Any(s => s.SubmittedDate.HasValue)))
-                .ForMember(dest => dest.Sites, opt => opt.MapFrom(src => src.Sites.Where(s => (careSettingCode == null || s.CareSettingCode == careSettingCode) && s.ArchivedDate == null)));
+                .ForMember(dest => dest.Sites, opt => opt.MapFrom(src => src.Sites.Where(s => (careSettingCode == null || s.CareSettingCode == careSettingCode) && s.ArchivedDate == null && s.DeletedDate == null)));
             CreateMap<Organization, OrganizationAdminListViewModel>()
                 .ForMember(dest => dest.SigningAuthorityName, opt => opt.MapFrom(src => $"{src.SigningAuthority.FirstName} {src.SigningAuthority.LastName}"))
                 .ForMember(dest => dest.SiteId, opt => opt.MapFrom(src => src.Sites.FirstOrDefault(s => s.PEC != null).Id))
