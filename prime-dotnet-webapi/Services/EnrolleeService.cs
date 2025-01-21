@@ -18,8 +18,6 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Models.VerifiableCredentials;
 using Prime.ViewModels;
-using Prime.Migrations;
-using RazorEngine.Compilation.ImpromptuInterface;
 
 namespace Prime.Services
 {
@@ -583,22 +581,22 @@ namespace Prime.Services
 
             if (enrolleeUpdateModel.UnlistedCertifications != null && enrolleeUpdateModel.UnlistedCertifications.Count > 0)
             {
-                foreach (var unlistedCert in enrolleeUpdateModel.UnlistedCertifications)
+                foreach (var updateModelCert in enrolleeUpdateModel.UnlistedCertifications)
                 {
-                    var matchingUnlistedCert = enrolleeUnlistedCertifications.Where(uc => uc.LicenceClass == unlistedCert.LicenceClass &&
-                        uc.CollegeName == unlistedCert.CollegeName &&
-                        uc.LicenceNumber == unlistedCert.LicenceNumber &&
-                        uc.RenewalDate == unlistedCert.RenewalDate).SingleOrDefault();
+                    var matchingUnlistedCert = enrolleeUnlistedCertifications.Where(uc => uc.LicenceClass == updateModelCert.LicenceClass &&
+                        uc.CollegeName == updateModelCert.CollegeName &&
+                        uc.LicenceNumber == updateModelCert.LicenceNumber &&
+                        uc.RenewalDate == updateModelCert.RenewalDate).SingleOrDefault();
 
                     if (matchingUnlistedCert == null)
                     {
                         await _context.AddAsync(new Models.UnlistedCertification
                         {
                             EnrolleeId = enrollee.Id,
-                            CollegeName = unlistedCert.CollegeName,
-                            LicenceNumber = unlistedCert.LicenceNumber,
-                            RenewalDate = unlistedCert.RenewalDate,
-                            LicenceClass = unlistedCert.LicenceClass
+                            CollegeName = updateModelCert.CollegeName,
+                            LicenceNumber = updateModelCert.LicenceNumber,
+                            RenewalDate = updateModelCert.RenewalDate,
+                            LicenceClass = updateModelCert.LicenceClass
                         });
                     }
                     else
