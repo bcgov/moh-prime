@@ -55,6 +55,7 @@ namespace Prime.Services
                 new IdentityProviderRule(),
                 new NoAssignedAgreementRule(),
                 new IsPotentialPaperEnrolleeReturnee(_businessEventService, _enrolleePaperSubmissionService),
+                new UnlistedCertificationRule()
             };
 
             return await ProcessRules(rules, enrollee);
