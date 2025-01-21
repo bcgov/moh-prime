@@ -9,7 +9,7 @@
           <input matInput
                  placeholder="College Name"
                  formControlName="collegeName"
-                 maxlength="50">
+                 maxlength="160">
           <mat-error *ngIf="collegeName.errors?.['required']">Required</mat-error>
         </mat-form-field>
 
@@ -21,7 +21,8 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="Licence Class from this College"
-                 formControlName="licenceClass">
+                 formControlName="licenceClass"
+                 maxlength="100">
           <mat-error *ngIf="licenceNumber.hasError('required')">Required</mat-error>
         </mat-form-field>
       </div>
