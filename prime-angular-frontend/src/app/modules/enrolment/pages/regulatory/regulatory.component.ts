@@ -45,7 +45,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   public hasUnlistedCertification: boolean;
   public unlistedCertificationRequired: boolean;
   public disableUnlistedCertificationToggle: boolean;
-  public multijurisdictionalLicenceCode: LicenseConfig[];
+  public multijurisdictionalLicences: LicenseConfig[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -108,7 +108,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public licenceCodeSelected(code: number) {
-    if (this.multijurisdictionalLicenceCode.some(l => l.code === code)) {
+    if (this.multijurisdictionalLicences.some(l => l.code === code)) {
       this.disableUnlistedCertificationToggle = true;
       this.hasUnlistedCertification = true;
       if (!this.formState.unlistedCertifications.length) {
@@ -128,7 +128,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.patchForm().subscribe(() => {
       this.initForm();
     });
-    this.multijurisdictionalLicenceCode = this.configService.licenses.filter(l => l.multijurisdictional);
+    this.multijurisdictionalLicences = this.configService.licenses.filter(l => l.multijurisdictional);
   }
 
   public ngOnDestroy() {
