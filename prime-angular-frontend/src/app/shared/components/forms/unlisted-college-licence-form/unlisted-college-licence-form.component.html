@@ -33,7 +33,7 @@
           <input matInput
                  placeholder="College Licence Number"
                  formControlName="licenceNumber"
-                 maxlength="7">
+                 maxlength="10">
           <mat-error *ngIf="licenceNumber.hasError('required')">Required</mat-error>
           <mat-error *ngIf="licenceNumber.hasError('alphanumeric')">
             Must contain only alphanumeric characters
