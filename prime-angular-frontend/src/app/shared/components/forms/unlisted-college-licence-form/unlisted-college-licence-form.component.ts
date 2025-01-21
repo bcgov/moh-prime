@@ -48,22 +48,25 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
     return this.form.get('renewalDate') as FormControl;
   }
 
+  public get licenceClass(): FormControl {
+    return this.form.get('licenceClass') as FormControl;
+  }
+
   public removeUnlistedCertification(): void {
     this.remove.emit(this.index);
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (this.form && changes && !this.validate) {
-      this.removeValidations();
+    if (this.form) {
+      if (this.validate) {
+        this.setUnlistedCollegeCertificationValidators()
+      } else {
+        this.removeValidations();
+      }
     }
   }
 
   public ngOnInit(): void {
-    if (this.validate) {
-      this.setUnlistedCollegeCertificationValidators()
-    } else {
-      this.removeValidations();
-    }
   }
 
   private setUnlistedCollegeCertificationValidators(): void {
@@ -73,6 +76,7 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
       FormControlValidators.alphanumeric
     ]);
     this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
+    this.formUtilsService.setValidators(this.licenceClass, [Validators.required]);
   }
 
   private removeValidations(): void {
@@ -80,5 +84,6 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
     this.formUtilsService.setValidators(this.collegeName, []);
     this.formUtilsService.setValidators(this.licenceNumber, []);
     this.formUtilsService.setValidators(this.renewalDate, []);
+    this.formUtilsService.setValidators(this.licenceClass, []);
   }
 }

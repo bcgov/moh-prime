@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,9 +12,11 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241205193810_EnableNonBCLicenceClasses")]
+    partial class EnableNonBCLicenceClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -14042,9 +14045,6 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("DoingBusinessAs")
                         .HasColumnType("text");
 
@@ -18128,9 +18128,6 @@ namespace Prime.Migrations
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DoingBusinessAs")
                         .HasColumnType("text");

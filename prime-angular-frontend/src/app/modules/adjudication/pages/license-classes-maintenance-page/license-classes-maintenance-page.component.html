@@ -130,7 +130,7 @@
           *matHeaderCellDef
           scope="col"
           class="prefix-header pl-3">
-        ARRA
+        Remote Access
       </th>
       <td mat-cell
           class="pl-3"
@@ -138,7 +138,19 @@
         {{ row.allowRequestRemoteAccess }}
       </td>
     </ng-container>
-
+    <ng-container matColumnDef="multijurisdictional">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header pl-3">
+        Multijurisdictional
+      </th>
+      <td mat-cell
+          class="pl-3"
+          *matCellDef="let row;">
+        {{ row.multijurisdictional }}
+      </td>
+    </ng-container>
     <tr mat-header-row
         *matHeaderRowDef="columns; sticky: true"></tr>
     <tr mat-row

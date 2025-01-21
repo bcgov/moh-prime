@@ -32,5 +32,7 @@ namespace Prime.Models
         public bool AllowRequestRemoteAccess { get; set; }
 
         public string NonPrescribingPrefix { get; set; }
+
+        public bool Multijurisdictional { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 using System;
 
-namespace Prime.ViewModels.PaperEnrollees
+namespace Prime.ViewModels
 {
-    public class PaperEnrolleeUnlistedCertificationViewModel
+    public class UnlistedCertificationUpdateModel
     {
         public string CollegeName { get; set; }
         public string LicenceNumber { get; set; }
