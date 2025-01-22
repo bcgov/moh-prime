@@ -6,6 +6,8 @@ using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.HttpClients;
 using Prime.HttpClients.PharmanetCollegeApiDefinitions;
+using Microsoft.AspNetCore.Components.RenderTree;
+using System;
 
 namespace Prime.Services.Rules
 {
@@ -304,13 +306,23 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            // Passes rule if enrollee.Certifications is null or empty
-            foreach (var cert in enrollee.Certifications ?? Enumerable.Empty<Certification>())
+
+            if (enrollee.Certifications.Count() == 1 && enrollee.Certifications.First().LicenseCode == LicenseCode.PharmacyTechnician &&
+                enrollee.EnrolleeCareSettings.Count() == 1 && enrollee.EnrolleeCareSettings.First().CareSettingCode == (int)CareSettingType.CommunityPharmacy)
             {
-                if (cert.License.CurrentLicenseDetail.Manual)
+                //for Pharmacy Technician with only community pharmacy
+                return Task.FromResult(true);
+            }
+            else
+            {
+                // Passes rule if enrollee.Certifications is null or empty
+                foreach (var cert in enrollee.Certifications ?? Enumerable.Empty<Certification>())
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.LicenceClass);
-                    return Task.FromResult(false);
+                    if (cert.License.CurrentLicenseDetail.Manual)
+                    {
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.LicenceClass);
+                        return Task.FromResult(false);
+                    }
                 }
             }
 
