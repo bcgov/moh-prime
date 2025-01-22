@@ -41,6 +41,8 @@ namespace Prime.ViewModels
 
         public ICollection<Certification> Certifications { get; set; }
 
+        public ICollection<UnlistedCertificationUpdateModel> UnlistedCertifications { get; set; }
+
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
         public ICollection<RemoteAccessSiteUpdateModel> RemoteAccessSites { get; set; }

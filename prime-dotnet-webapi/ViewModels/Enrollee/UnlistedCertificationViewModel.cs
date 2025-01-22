@@ -1,9 +1,10 @@
 using System;
 
-namespace Prime.ViewModels.PaperEnrollees
+namespace Prime.ViewModels
 {
-    public class PaperEnrolleeUnlistedCertificationViewModel
+    public class UnlistedCertificationViewModel
     {
+        public int Id { get; set; }
         public string CollegeName { get; set; }
         public string LicenceNumber { get; set; }
         public string LicenceClass { get; set; }

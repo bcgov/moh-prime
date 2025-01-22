@@ -210,8 +210,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicFormState.patchValue(enrolment.enrollee)
       : this.bcscDemographicFormState.patchValue(enrolment.enrollee);
-    const { certifications, enrolleeDeviceProviders } = enrolment;
-    this.regulatoryFormState.patchValue({ certifications, enrolleeDeviceProviders });
+    const { certifications, enrolleeDeviceProviders, unlistedCertifications } = enrolment;
+    this.regulatoryFormState.patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications });
 
     const {
       careSettings,
