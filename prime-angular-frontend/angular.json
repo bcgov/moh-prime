@@ -49,7 +49,7 @@
               {
                 "glob": "models/**/*",
                 "input": "node_modules/tinymce",
-                "output": "/"
+                "output": "/tinymce"
               }
             ],
             "styles": [
